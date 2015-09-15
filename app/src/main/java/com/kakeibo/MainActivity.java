@@ -10,7 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 //import android.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
+    public static final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.input));
-        tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.List));
+        tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.list));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager)findViewById(R.id.pager);

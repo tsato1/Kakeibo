@@ -21,8 +21,6 @@ import java.util.Locale;
  */
 public class TabFragment1 extends Fragment
 {
-    private final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-
     private Button btnDate;
 
     @Override
@@ -77,7 +75,7 @@ public class TabFragment1 extends Fragment
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
                 String str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
-                        + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                        + " [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
             }
         }, calYear, calMonth-1, calDay);
@@ -90,7 +88,7 @@ public class TabFragment1 extends Fragment
         int calYear = cal.get(Calendar.YEAR);
         int calMonth = cal.get(Calendar.MONTH);
         int calDay = cal.get(Calendar.DAY_OF_MONTH);
-        btnDate.setText(calYear+"/"+calMonth+"/"+calDay+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
+        btnDate.setText(calYear+"/"+calMonth+"/"+calDay+" [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
     }
 
 }
