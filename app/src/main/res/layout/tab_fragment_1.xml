@@ -19,38 +19,14 @@
         android:layout_height="wrap_content"
         android:columnCount="4"
         android:rowCount="2">
-        <Button
-            android:id="@+id/btn_income"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income2"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income3"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income4"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income5"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income6"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income7"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
-        <Button
-            android:id="@+id/btn_income8"
-            android:drawableTop="@mipmap/ic_launcher"
-            android:text="@string/income"/>
+        <Button android:id="@+id/btn_category1"/>
+        <Button android:id="@+id/btn_category2"/>
+        <Button android:id="@+id/btn_category3"/>
+        <Button android:id="@+id/btn_category4"/>
+        <Button android:id="@+id/btn_category5"/>
+        <Button android:id="@+id/btn_category6"/>
+        <Button android:id="@+id/btn_category7"/>
+        <Button android:id="@+id/btn_category8"/>
     </GridLayout>
 
     <TableLayout
@@ -61,13 +37,35 @@
                 android:id="@+id/edt_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:inputType="number"
+                android:maxLength="10"
+                android:hint="Amount"/>
             <Button
                 android:id="@+id/btn_voice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="voice_tmp"/>
         </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Memo:"/>
+            <EditText
+                android:id="@+id/edt_memo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="20"
+                android:hint="max 20 characters"/>
+        </TableRow>
     </TableLayout>
+
+    <Button
+        android:id="@+id/btn_go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </LinearLayout>
