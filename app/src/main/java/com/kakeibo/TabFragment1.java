@@ -45,9 +45,8 @@ public class TabFragment1 extends Fragment
 
         findViews(view);
         setListeners();
-        reset();
-
         btnDate.setText(getTodaysDate());
+        reset();
 
         return view;
     }

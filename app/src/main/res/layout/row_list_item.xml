@@ -7,7 +7,7 @@
     android:minHeight="60dp"
     android:paddingRight="15dp"
     android:paddingLeft="15dp"
-    android:background="@color/ColorPrimaryTrans">
+    android:background="@color/ColorEmboss">
 
     <ImageView
         android:id="@+id/img_category"
@@ -29,6 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/ColorBlack"
+            android:textStyle="bold"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="5dp"
@@ -40,6 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/ColorBlack"
+            android:textStyle="bold"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="5dp"

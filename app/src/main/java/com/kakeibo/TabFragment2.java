@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class TabFragment2 extends Fragment {
     private ExpandableListAdapter expandableListAdapter;
     private ExpandableListView expandableListView;
 
-    private Button btnPrev, btnDate, btnNext;
+    private ImageButton btnPrev, btnNext;
+    private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
     private int income, expense, balance;
     public  int calMonth, calYear;
@@ -51,9 +54,9 @@ public class TabFragment2 extends Fragment {
     }
 
     void findViews(View view){
-        btnPrev = (Button)view.findViewById(R.id.btn_prev);
+        btnPrev = (ImageButton)view.findViewById(R.id.btn_prev);
         btnDate = (Button)view.findViewById(R.id.btn_date);
-        btnNext = (Button)view.findViewById(R.id.btn_next);
+        btnNext = (ImageButton)view.findViewById(R.id.btn_next);
         txvIncome = (TextView)view.findViewById(R.id.txv_income);
         txvExpense = (TextView)view.findViewById(R.id.txv_expense);
         txvBalance = (TextView)view.findViewById(R.id.txv_balance);
@@ -148,7 +151,7 @@ public class TabFragment2 extends Fragment {
     }
 
     public void loadItems(){
-        expandableListAdapter = new ExpandableListAdapter(getActivity(), dateHeaderList, childDataHashMap);
+
         dateHeaderList.clear();
         childDataHashMap.clear();
         income = expense = balance = 0;
@@ -207,7 +210,15 @@ public class TabFragment2 extends Fragment {
         txvIncome.setText(String.valueOf(income));
         txvExpense.setText(String.valueOf(expense));
         balance = income - expense;
-        txvBalance.setText(String.valueOf(balance));
+
+        if (balance < 0) {
+            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorRed));
+            txvBalance.setText(String.valueOf(balance));
+        }
+        else if (balance > 0) {
+            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorBlue));
+            txvBalance.setText("+" + String.valueOf(balance));
+        }
     }
 
     public void reset()
