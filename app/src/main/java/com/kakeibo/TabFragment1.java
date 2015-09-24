@@ -31,7 +31,6 @@ public class TabFragment1 extends Fragment
 {
     public  Button btnDate;
 
-    private Button btnGo;
     private ArrayList<Button> btnsCategory;
     private EditText edt_amount;
     private EditText edt_memo;
@@ -46,6 +45,7 @@ public class TabFragment1 extends Fragment
 
         findViews(view);
         setListeners();
+        reset();
 
         btnDate.setText(getTodaysDate());
 
@@ -55,7 +55,6 @@ public class TabFragment1 extends Fragment
     void findViews(View view)
     {
         btnDate = (Button)view.findViewById(R.id.btn_date);
-        btnGo = (Button)view.findViewById(R.id.btn_go);
 
         btnsCategory = new ArrayList<Button>();
         btnsCategory.add((Button) view.findViewById(R.id.btn_category1));
@@ -83,10 +82,14 @@ public class TabFragment1 extends Fragment
 
     void setListeners()
     {
-        btnDate.setOnClickListener(new ButtonClickListener());
-        btnGo.setOnClickListener(new ButtonClickListener());
-        for (int i = 0; i < 8; i++)
-        {
+        btnDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showYMDPickerDialog();
+            }
+        });
+
+        for (int i = 0; i < 8; i++) {
             btnsCategory.get(i).setOnClickListener(new ButtonClickListener());
         }
     }
@@ -107,16 +110,6 @@ public class TabFragment1 extends Fragment
         {
             switch (view.getId())
             {
-                case R.id.btn_date:
-                    showYMDPickerDialog();
-                    break;
-                case R.id.btn_go:
-                    if (checkBeforeSave()) {
-                        saveItem();
-                        reset();
-                        ((MainActivity)getActivity()).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                    }
-                    break;
                 case R.id.btn_category1:
                     //change color of the button
                     selectedCategory = btnsCategory.get(0).getText().toString();
@@ -144,6 +137,12 @@ public class TabFragment1 extends Fragment
                     break;
                 default:
                     break;
+            }
+
+            if (checkBeforeSave()) {
+                saveItem();
+                reset();
+                ((MainActivity)getActivity()).getViewPager().setCurrentItem(1); // 1 = Fragment2
             }
         }
     }

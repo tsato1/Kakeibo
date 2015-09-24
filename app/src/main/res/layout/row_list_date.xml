@@ -4,14 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="#000000">
+    android:background="@color/ColorPrimary">
 
     <TextView
         android:id="@+id/txv_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="12sp"
-        android:textColor="#f9f93d" />
+        android:textColor="@color/ColorBackground"/>
 
 </LinearLayout>

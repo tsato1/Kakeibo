@@ -3,36 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/ColorBackground">
 
     <Button
         android:id="@+id/btn_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="#000000"
         style="?android:attr/buttonBarButtonStyle"/>
-
-    <GridLayout
-        android:id="@+id/grd_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:rowCount="2">
-        <Button android:id="@+id/btn_category1"/>
-        <Button android:id="@+id/btn_category2"/>
-        <Button android:id="@+id/btn_category3"/>
-        <Button android:id="@+id/btn_category4"/>
-        <Button android:id="@+id/btn_category5"/>
-        <Button android:id="@+id/btn_category6"/>
-        <Button android:id="@+id/btn_category7"/>
-        <Button android:id="@+id/btn_category8"/>
-    </GridLayout>
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TableRow>
+        android:layout_height="wrap_content"
+        android:paddingRight="7dp"
+        android:paddingLeft="7dp">
+        <TableRow
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+            <ImageButton
+                android:id="@+id/btn_voice_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_action_microphone"
+                android:background="@drawable/button_voice"
+                style="?android:attr/buttonBarButtonStyle"/>
             <EditText
                 android:id="@+id/edt_amount"
                 android:layout_width="0dp"
@@ -40,32 +35,66 @@
                 android:layout_weight="1"
                 android:inputType="number"
                 android:maxLength="10"
-                android:hint="Amount"/>
-            <Button
-                android:id="@+id/btn_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="voice_tmp"/>
+                android:hint="Amount: type in numbers"/>
         </TableRow>
-        <TableRow>
-            <TextView
+        <TableRow
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+            <ImageButton
+                android:id="@+id/imv_voice_memo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Memo:"/>
+                android:src="@mipmap/ic_action_microphone"
+                android:background="@drawable/button_voice"
+                style="?android:attr/buttonBarButtonStyle"/>
             <EditText
                 android:id="@+id/edt_memo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLength="20"
-                android:hint="max 20 characters"/>
+                android:hint="Memo: max 20 characters"/>
         </TableRow>
     </TableLayout>
 
-    <Button
-        android:id="@+id/btn_go"
-        android:layout_width="wrap_content"
+    <GridLayout
+        android:id="@+id/grd_category"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
+        android:layout_gravity="center_horizontal"
+        android:columnCount="4"
+        android:rowCount="2">
+        <Button
+            android:id="@+id/btn_category1"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category2"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category3"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category4"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category5"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category6"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category7"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+        <Button
+            android:id="@+id/btn_category8"
+            android:drawableTop="@mipmap/ic_launcher"
+            style="?android:attr/buttonBarButtonStyle"/>
+    </GridLayout>
 </LinearLayout>

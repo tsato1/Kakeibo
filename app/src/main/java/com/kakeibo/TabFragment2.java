@@ -148,6 +148,7 @@ public class TabFragment2 extends Fragment {
     }
 
     public void loadItems(){
+        expandableListAdapter = new ExpandableListAdapter(getActivity(), dateHeaderList, childDataHashMap);
         dateHeaderList.clear();
         childDataHashMap.clear();
         income = expense = balance = 0;
