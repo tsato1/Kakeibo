@@ -151,7 +151,6 @@ public class TabFragment2 extends Fragment {
     }
 
     public void loadItems(){
-
         dateHeaderList.clear();
         childDataHashMap.clear();
         income = expense = balance = 0;
@@ -218,6 +217,10 @@ public class TabFragment2 extends Fragment {
         else if (balance > 0) {
             txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorBlue));
             txvBalance.setText("+" + String.valueOf(balance));
+        }
+        else {
+            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorBlack));
+            txvBalance.setText(String.valueOf(balance));
         }
     }
 
