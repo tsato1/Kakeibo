@@ -2,12 +2,15 @@ package com.kakeibo;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -81,19 +84,32 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+        String headerDate = headerTitle.substring(0, headerTitle.indexOf(","));
+        String headerBalance = headerTitle.substring(headerTitle.indexOf(",")+1);
+
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.row_list_date, null);
         }
 
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.txv_header);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle);
+        TextView txvHeaderDate = (TextView) convertView.findViewById(R.id.txv_header_date);
+        txvHeaderDate.setText(headerDate);
+
+        TextView txvHeaderBalance = (TextView) convertView.findViewById(R.id.txv_header_balance);
+        txvHeaderBalance.setText(headerBalance);
+        if (Integer.parseInt(headerBalance) < 0) {
+            txvHeaderBalance.setTextColor(ContextCompat.getColor(_context, R.color.ColorRed));
+        }
+        else if (Integer.parseInt(headerBalance) > 0) {
+            txvHeaderBalance.setTextColor(ContextCompat.getColor(_context, R.color.ColorBlue));
+            txvHeaderBalance.setText("+" + headerBalance);
+        }
+        else {
+            txvHeaderBalance.setTextColor(ContextCompat.getColor(_context, R.color.ColorBlack));
+        }
 
         return convertView;
     }

@@ -163,18 +163,28 @@ public class TabFragment2 extends Fragment {
         if (c.moveToFirst())
         {
             String day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D));
-
-            dateHeaderList.add(convertMtoMM()+"/"+day);
-
+            int balanceDay = 0;
             List<Item> tmpItemList = new ArrayList<Item>();
 
             do{
                 //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
 
+                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)).equals(day)){ // if the event day of an item increases
+                    dateHeaderList.add(convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
+                    childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList); // set the header of the old day
+                    balanceDay = 0;
+                    /*** change of the date ***/
+                    day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)); // set a new date
+                    tmpItemList = new ArrayList<Item>(); // empty the array list of items
+                    sameDateCounter++;
+                }
+
                 if(c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(getResources().getString(R.string.income))) {
                     income += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                    balanceDay += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                 } else {
                     expense += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                    balanceDay -= c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                 }
 
                 Item item = new Item(
@@ -186,18 +196,10 @@ public class TabFragment2 extends Fragment {
                         c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
                 );
 
-                /*** increment day by 1 if there is no item on that day ***/
-                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)).equals(day)){
-                    childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
-                    day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D));
-                    dateHeaderList.add(convertMtoMM()+"/"+day);
-                    tmpItemList = new ArrayList<Item>();
-                    sameDateCounter++;
-                }
-
                 tmpItemList.add(item);
             }while(c.moveToNext());
 
+            dateHeaderList.add(convertMtoMM() + "/" + day + ","+String.valueOf(balanceDay)); // set what to show on the header
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
         }
 
