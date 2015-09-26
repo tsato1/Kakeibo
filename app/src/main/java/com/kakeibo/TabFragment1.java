@@ -198,6 +198,7 @@ public class TabFragment1 extends Fragment
         Log.d("fragment1", "d = " + d + ", ym = " + ym);
 
         Item item = new Item(
+                "",
                 edt_amount.getText().toString(),
                 selectedCategory,
                 edt_memo.getText().toString(),

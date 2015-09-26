@@ -3,6 +3,8 @@ package com.kakeibo;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,14 +52,32 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.row_list_item, parent, false);
         }
 
-        ImageView categoryImageView = (ImageView)convertView.findViewById(R.id.img_category);
-        TextView categoryTextView = (TextView)convertView.findViewById(R.id.txv_category);
-        TextView amountTextView = (TextView)convertView.findViewById(R.id.txv_amount);
+        ImageView imvCategoryImage = (ImageView)convertView.findViewById(R.id.img_category);
+        TextView txvCategory = (TextView)convertView.findViewById(R.id.txv_category);
+        TextView txvMemo = (TextView)convertView.findViewById(R.id.txv_memo);
+        TextView txvAmount = (TextView)convertView.findViewById(R.id.txv_amount);
 
         Item item = (Item)baseItem;
-        //todo image set SupportingItemListAdapter.setCategoryImage(this._context, item, categoryImageView);
-        categoryTextView.setText(String.valueOf(item.getCategory()));
-        amountTextView.setText(String.valueOf(item.getAmount()));
+        //SupportingItemListAdapter.setCategoryImage(this._context, item, categoryImageView);
+        if (item.getMemo().length() >= 15) {
+            txvMemo.setText(item.getMemo().substring(0, 15) + "...");
+        }
+        else {
+            txvMemo.setText(item.getMemo());
+        }
+        txvCategory.setText(item.getCategory());
+        SpannableString spannableString;
+        if ("Income".equals(item.getCategory())) {
+            String string = "+" + item.getAmount();
+            spannableString = new SpannableString(string);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.ColorBlue)), 0, 1, 0);
+        } else {
+            String string = "-" + item.getAmount();
+            spannableString = new SpannableString(string);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.ColorRed)), 0, 1, 0);
+        }
+        txvAmount.setText(spannableString);
+        //amountTextView.setText(item.getAmount());
 
         return convertView;
     }

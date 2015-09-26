@@ -8,4 +8,9 @@
     <string name="list">LIST</string>
 
     <string name="income">Income</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
 </resources>

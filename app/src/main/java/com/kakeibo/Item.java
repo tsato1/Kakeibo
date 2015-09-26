@@ -7,6 +7,7 @@ import java.util.Calendar;
  */
 public class Item
 {
+    String id;
     String amount;
     String category;
     String memo;
@@ -14,14 +15,20 @@ public class Item
     String eventYM;
     String updateDate;
 
-    public Item(String amount, String category, String memo, String eventD, String eventYM, String updateDate)
+    public Item(String id, String amount, String category, String memo, String eventD, String eventYM, String updateDate)
     {
+        this.id = id;
         this.amount = amount;
         this.category = category;
         this.memo = memo;
         this.eventD = eventD;
         this.eventYM = eventYM;
         this.updateDate = updateDate;
+    }
+
+    public String getId()
+    {
+        return this.id;
     }
 
     public String getAmount()

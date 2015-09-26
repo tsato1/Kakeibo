@@ -2,20 +2,31 @@ package com.kakeibo;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,32 +36,35 @@ import java.util.List;
  * Created by T on 2015/09/14.
  */
 public class TabFragment2 extends Fragment {
+    private static final int MENUITEM_ID_DELETE = 1;
+
     private DBAdapter dbAdapter;
     private List<String> dateHeaderList;
     private HashMap<String, List<Item>> childDataHashMap;
     private ExpandableListAdapter expandableListAdapter;
     private ExpandableListView expandableListView;
 
-    private ImageButton btnPrev, btnNext;
+    private ImageButton btnPrev, btnNext, btnVoice, btnSearch;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
+    private EditText edtSearch;
     private int income, expense, balance;
     public  int calMonth, calYear;
 
-    private View view;
+    private View _view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.tab_fragment_2, container, false);
+        _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
-        findViews(view);
+        findViews(_view);
         setListeners();
         setLabel();
         setAdapters();
         loadItems();
         makeBalanceTable();
 
-        return view;
+        return _view;
     }
 
     void findViews(View view){
@@ -61,6 +75,10 @@ public class TabFragment2 extends Fragment {
         txvExpense = (TextView)view.findViewById(R.id.txv_expense);
         txvBalance = (TextView)view.findViewById(R.id.txv_balance);
         expandableListView = (ExpandableListView)view.findViewById(R.id.lsv_expandable);
+        //todo make a search box
+        //btnVoice = (ImageButton)view.findViewById(R.id.btn_voice_search);
+        //btnSearch = (ImageButton)view.findViewById(R.id.btn_search);
+        //edtSearch = (EditText)view.findViewById(R.id.edt_search);
     }
 
     void setListeners(){
@@ -68,20 +86,9 @@ public class TabFragment2 extends Fragment {
         btnDate.setOnClickListener(new ButtonClickListener());
         btnNext.setOnClickListener(new ButtonClickListener());
         expandableListView.setOnChildClickListener(new ChildClickListener());
-    }
-
-    public void setLabel()
-    {
-        int year = calYear;
-        int month = calMonth;
-        Log.d("Fragment2", "year = " + year + ", month = " + month);
-
-        String mon = String.valueOf(month);
-        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
-            mon = "0" + String.valueOf(month);
-        }
-        String str = (year+"/"+mon);
-        btnDate.setText(str);
+//        btnVoice.setOnClickListener(new ButtonClickListener());
+//        btnSearch.setOnClickListener(new ButtonClickListener());
+        expandableListView.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
     }
 
     class ChildClickListener implements ExpandableListView.OnChildClickListener {
@@ -90,17 +97,84 @@ public class TabFragment2 extends Fragment {
             Object child = (expandableListAdapter.getChild(groupPosition, childPosition));
             Item item = (Item)child;
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-            dialog.setMessage(
-                    "Category :\n " + item.getCategory() + "\n"
-                    + "Amount :\n " + item.getAmount() + "\n"
-                    + "Memo :\n " + item.getMemo() + "\n"
-                    + "Registration Date :\n " + item.getUpdateDate()
-            );
-            dialog.show();
+            LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.dialog_item_detail, (ViewGroup)view.findViewById(R.id.layout_root));
+
+            TextView txvCategory = (TextView) layout.findViewById(R.id.txv_detail_category);
+            TextView txvAmount = (TextView) layout.findViewById(R.id.txv_detail_amount);
+            TextView txvMemo = (TextView) layout.findViewById(R.id.txv_detail_memo);
+            TextView txvRegistrationDate = (TextView) layout.findViewById(R.id.txv_detail_registration);
+
+            txvCategory.setText("Category: " + item.getCategory());
+            SpannableString spannableString;
+            if ("Income".equals(item.getCategory())) {
+                String string = "Amount: " + "+" + item.getAmount();
+                spannableString = new SpannableString(string);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.ColorBlue)), 8, 9, 0);
+            } else {
+                String string = "Amount: " + "-" + item.getAmount();
+                spannableString = new SpannableString(string);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.ColorRed)), 8, 9, 0);
+            }
+            txvAmount.setText(spannableString);
+            txvMemo.setText("Memo: " + item.getMemo());
+            txvRegistrationDate.setText("Registered on " + item.getUpdateDate());
+
+            new AlertDialog.Builder(getActivity())
+                    .setIcon(R.mipmap.ic_mikan)
+                    .setTitle("Item Detail")
+                    .setView(layout)
+                    .show();
 
             return false;
         }
+    }
+
+    class ChildClickContextMenuListener implements ExpandableListView.OnCreateContextMenuListener {
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+            int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+            if(type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                menu.add(0, MENUITEM_ID_DELETE, 0, R.string.delete);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case MENUITEM_ID_DELETE:
+                ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuItem.getMenuInfo();
+                final int groupPosition = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+                final int childPosition = ExpandableListView.getPackedPositionChild(info.packedPosition);
+                final Item item = (Item)expandableListAdapter.getChild(groupPosition, childPosition);
+
+                new AlertDialog.Builder(getActivity())
+                        .setIcon(R.mipmap.ic_mikan)
+                        .setTitle("Do you really want to delete this item?")
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Log.d("groupPosition", String.valueOf(groupPosition));
+                                //Log.d("childPosition", String.valueOf(childPosition));
+                                dbAdapter.open();
+                                final int itemId = Integer.parseInt(item.getId());
+
+                                if(dbAdapter.deleteItem(itemId)) {
+                                    Toast.makeText(getActivity(), "The item was successfully deleted.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                loadItems();
+                                makeBalanceTable();
+                                dbAdapter.close();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                return true;
+        }
+        return super.onContextItemSelected(menuItem);
     }
 
     class ButtonClickListener implements View.OnClickListener {
@@ -120,7 +194,6 @@ public class TabFragment2 extends Fragment {
                         }
                     }
                     btnDate.setText(calYear + "/" + convertMtoMM());
-
                     loadItems();
                     makeBalanceTable();
                     break;
@@ -131,12 +204,14 @@ public class TabFragment2 extends Fragment {
                         calYear++;
                     }
                     btnDate.setText(calYear + "/" + convertMtoMM());
-
                     loadItems();
                     makeBalanceTable();
                     break;
-                default:
-                    break;
+//                case R.id.btn_voice_search:
+//                    break;
+//                case R.id.btn_search:
+//                    searchItem();
+//                    break;
             }
         }
     }
@@ -188,6 +263,7 @@ public class TabFragment2 extends Fragment {
                 }
 
                 Item item = new Item(
+                        c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
@@ -205,6 +281,61 @@ public class TabFragment2 extends Fragment {
 
         dbAdapter.close();
         expandableListAdapter.notifyDataSetChanged();
+    }
+
+    void searchItem() {
+        String searchItem = edtSearch.getText().toString();
+
+        if ("".equals(searchItem)) {
+            Toast.makeText(getActivity(), "Type a word", Toast.LENGTH_SHORT).show();
+        }
+
+        List<Item> searchResultList = new ArrayList<Item>();
+
+        dbAdapter.open();
+
+        Cursor c = dbAdapter.getAllItemsInMonth(btnDate.getText().toString());
+
+        if (c.moveToFirst()) {
+            do {
+                if (c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)).contains(searchItem)) {
+                    Item item = new Item(
+                            c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
+                    );
+
+                    searchResultList.add(item);
+                }
+            } while (c.moveToNext());
+        }
+
+        dbAdapter.close();
+
+        SearchListAdapter searchListAdapter = new SearchListAdapter(getActivity(), 0, searchResultList);
+        ListView listView = new ListView(getActivity());
+        listView.setAdapter(searchListAdapter);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setView(listView).create();
+        dialog.show();
+    }
+
+    public void setLabel()
+    {
+        int year = calYear;
+        int month = calMonth;
+        Log.d("Fragment2", "year = " + year + ", month = " + month);
+
+        String mon = String.valueOf(month);
+        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
+            mon = "0" + String.valueOf(month);
+        }
+        String str = (year+"/"+mon);
+        btnDate.setText(str);
     }
 
     public void makeBalanceTable(){
@@ -229,7 +360,7 @@ public class TabFragment2 extends Fragment {
     public void reset()
     {
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     String convertMtoMM() {
@@ -238,5 +369,21 @@ public class TabFragment2 extends Fragment {
             mon = "0" + String.valueOf(calMonth);
         }
         return mon;
+    }
+
+    /*** edittext on a dialog ***/
+    void editMemo() {
+        final EditText edtEdit = new EditText(getActivity());
+        new AlertDialog.Builder(getActivity())
+                .setIcon(R.mipmap.ic_mikan)
+                .setTitle("Edit Memo")
+                .setView(edtEdit)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(), "The change was successfully stored.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
     }
 }
