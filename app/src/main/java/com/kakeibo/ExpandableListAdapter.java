@@ -58,14 +58,39 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txvAmount = (TextView)convertView.findViewById(R.id.txv_amount);
 
         Item item = (Item)baseItem;
-        //SupportingItemListAdapter.setCategoryImage(this._context, item, categoryImageView);
+
+        /*** image ***/
+        String[] category = MainActivity.defaultCategory;
+        if(item.getCategory().equals(category[0])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_income);
+        } else if(item.getCategory().equals(category[1])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_meal);
+        } else if(item.getCategory().equals(category[2])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_util);
+        } else if(item.getCategory().equals(category[3])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_health);
+        } else if(item.getCategory().equals(category[4])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_edu);
+        } else if(item.getCategory().equals(category[5])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_cloth);
+        } else if(item.getCategory().equals(category[6])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_trans);
+        } else if(item.getCategory().equals(category[7])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_other);
+        }
+
+        /*** memo ***/
         if (item.getMemo().length() >= 15) {
             txvMemo.setText(item.getMemo().substring(0, 15) + "...");
         }
         else {
             txvMemo.setText(item.getMemo());
         }
+
+        /*** category ***/
         txvCategory.setText(item.getCategory());
+
+        /*** amount ***/
         SpannableString spannableString;
         if ("Income".equals(item.getCategory())) {
             String string = "+" + item.getAmount();
@@ -77,15 +102,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.ColorRed)), 0, 1, 0);
         }
         txvAmount.setText(spannableString);
-        //amountTextView.setText(item.getAmount());
 
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._childDataHashMap.get(this._dateHeaderList.get(groupPosition))
-                .size();
+        return this._childDataHashMap.get(this._dateHeaderList.get(groupPosition)).size();
     }
 
     @Override

@@ -40,13 +40,13 @@
         <TableRow
             android:paddingTop="2dp"
             android:paddingBottom="2dp">
-            <ImageButton
+            <!--<ImageButton
                 android:id="@+id/btn_voice_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_action_microphone"
                 android:background="@drawable/button_voice"
-                style="?android:attr/buttonBarButtonStyle"/>
+                style="?android:attr/buttonBarButtonStyle"/>-->
             <EditText
                 android:id="@+id/edt_amount"
                 android:layout_width="0dp"
@@ -59,13 +59,13 @@
         <TableRow
             android:paddingTop="2dp"
             android:paddingBottom="2dp">
-            <ImageButton
-                android:id="@+id/imv_voice_memo"
+            <!--<ImageButton
+                android:id="@+id/btn_voice_memo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_action_microphone"
                 android:background="@drawable/button_voice"
-                style="?android:attr/buttonBarButtonStyle"/>
+                style="?android:attr/buttonBarButtonStyle"/>-->
             <EditText
                 android:id="@+id/edt_memo"
                 android:layout_width="0dp"
@@ -87,28 +87,28 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_income"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_meal"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_util"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_health"
                 style="?android:attr/buttonBarButtonStyle"/>
         </TableRow>
         <TableRow>
@@ -117,28 +117,28 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_edu"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_cloth"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_trans"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@mipmap/ic_category_other"
                 style="?android:attr/buttonBarButtonStyle"/>
         </TableRow>
     </TableLayout>

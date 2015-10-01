@@ -32,11 +32,12 @@ import java.util.Locale;
 public class TabFragment1 extends Fragment
 {
     public  Button btnDate;
+    public EditText edt_amount;
+    public EditText edt_memo;
 
     private ImageButton btnPrev, btnNext;
+    private ImageButton btnVoiceAmount, btnVoiceMemo;
     private ArrayList<Button> btnsCategory;
-    private EditText edt_amount;
-    private EditText edt_memo;
     private String selectedCategory = "";
     private View view;
 
@@ -69,6 +70,9 @@ public class TabFragment1 extends Fragment
         btnsCategory.add((Button) view.findViewById(R.id.btn_category8));
         setButtonContent();
 
+//        btnVoiceAmount = (ImageButton) view.findViewById(R.id.btn_voice_amount);
+//        btnVoiceMemo = (ImageButton) view.findViewById(R.id.btn_voice_memo);
+
         edt_amount = (EditText)view.findViewById(R.id.edt_amount);
         edt_memo = (EditText)view.findViewById(R.id.edt_memo);
     }
@@ -86,6 +90,9 @@ public class TabFragment1 extends Fragment
         btnPrev.setOnClickListener(new DateButtonClickListener());
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
+
+//        btnVoiceAmount.setOnClickListener(new ButtonClickListener());
+//        btnVoiceMemo.setOnClickListener(new ButtonClickListener());
 
         for (int i = 0; i < 8; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
@@ -131,6 +138,26 @@ public class TabFragment1 extends Fragment
                     btnDate.setText(str);
                     break;
             }
+        }
+    }
+
+    class ButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+
+
+//            switch (view.getId()) {
+//                case R.id.btn_voice_amount:
+//                    //((MainActivity)getActivity()).speechText("How much?");
+//
+//
+//                    break;
+//                case R.id.btn_voice_memo:
+//                    //((MainActivity)getActivity()).speechText("Memo");
+//
+//
+//                    break;
+//            }
         }
     }
 
