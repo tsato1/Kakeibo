@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
                                                        adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
                                                        Calendar cal = Calendar.getInstance();
                                                        adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
-                                                       Log.d("testtest", String.valueOf(adapter.getFragment2().calMonth));
                                                        adapter.getFragment2().reset();
                                                        adapter.getFragment2().setLabel();
                                                        adapter.getFragment2().loadItems();
@@ -84,6 +83,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void onResume() {
+        super.onResume();
+    }
 
 
     // speech to text //

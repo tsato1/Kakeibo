@@ -43,6 +43,9 @@ public class TabFragment2 extends Fragment {
     private HashMap<String, List<Item>> childDataHashMap;
     private ExpandableListAdapter expandableListAdapter;
     private ExpandableListView expandableListView;
+    private List<String> categoryList;
+    private CategoryListAdapter categoryListAdapter;
+    private ListView categoryListView;
 
     private ImageButton btnPrev, btnNext, btnVoice, btnSearch;
     private Button btnDate;
@@ -75,6 +78,8 @@ public class TabFragment2 extends Fragment {
         txvExpense = (TextView)view.findViewById(R.id.txv_expense);
         txvBalance = (TextView)view.findViewById(R.id.txv_balance);
         expandableListView = (ExpandableListView)view.findViewById(R.id.lsv_expandable);
+        categoryListView = (ListView)view.findViewById(R.id.lsv_category);
+        categoryListView.setVisibility(View.GONE);
         //todo make a search box
         //btnVoice = (ImageButton)view.findViewById(R.id.btn_voice_search);
         //btnSearch = (ImageButton)view.findViewById(R.id.btn_search);
@@ -183,6 +188,13 @@ public class TabFragment2 extends Fragment {
             switch(view.getId())
             {
                 case R.id.btn_date:
+                    if (_view.findViewById(R.id.lsv_expandable).getVisibility() != View.GONE) {
+                        expandableListView.setVisibility(View.GONE);
+                        categoryListView.setVisibility(View.VISIBLE);
+                    } else {
+                        expandableListView.setVisibility(View.VISIBLE);
+                        categoryListView.setVisibility(View.GONE);
+                    }
                     break;
                 case R.id.btn_prev:
                     calMonth--;
@@ -223,6 +235,13 @@ public class TabFragment2 extends Fragment {
         childDataHashMap = new HashMap<String, List<Item>>();
         expandableListAdapter = new ExpandableListAdapter(getActivity(), dateHeaderList, childDataHashMap);
         expandableListView.setAdapter(expandableListAdapter);
+
+        categoryList = new ArrayList<String>();
+        for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
+            categoryList.add("0");
+        }
+        categoryListAdapter = new CategoryListAdapter(getActivity(), 0, categoryList);
+        categoryListView.setAdapter(categoryListAdapter);
     }
 
     public void loadItems(){
@@ -230,6 +249,11 @@ public class TabFragment2 extends Fragment {
         childDataHashMap.clear();
         income = expense = balance = 0;
         int sameDateCounter = 0;
+
+        categoryList.clear();
+        for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
+            categoryList.add("0");
+        }
 
         dbAdapter.open();
 
@@ -272,10 +296,40 @@ public class TabFragment2 extends Fragment {
                         c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
                 );
 
+                /************* For CategoryList *************/
+                int tmp = 0;
+                if (categoryList.size() != 0) {
+                    if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[0])) {
+                        tmp = Integer.parseInt(categoryList.get(0)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[1])) {
+                        tmp = Integer.parseInt(categoryList.get(1)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[2])) {
+                        tmp = Integer.parseInt(categoryList.get(2)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[3])) {
+                        tmp = Integer.parseInt(categoryList.get(3)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[4])) {
+                        tmp = Integer.parseInt(categoryList.get(4)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[5])) {
+                        tmp = Integer.parseInt(categoryList.get(5)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[6])) {
+                        tmp = Integer.parseInt(categoryList.get(6)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[7])) {
+                        tmp = Integer.parseInt(categoryList.get(7)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        categoryList.add(String.valueOf(tmp));
+                    }
+                }
+
                 tmpItemList.add(item);
             }while(c.moveToNext());
 
-            dateHeaderList.add(convertMtoMM() + "/" + day + ","+String.valueOf(balanceDay)); // set what to show on the header
+            dateHeaderList.add(convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
         }
 
