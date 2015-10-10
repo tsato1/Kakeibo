@@ -43,7 +43,7 @@ public class TabFragment2 extends Fragment {
     private HashMap<String, List<Item>> childDataHashMap;
     private ExpandableListAdapter expandableListAdapter;
     private ExpandableListView expandableListView;
-    private List<String> categoryList;
+    private List<Item> categoryList;
     private CategoryListAdapter categoryListAdapter;
     private ListView categoryListView;
 
@@ -117,7 +117,7 @@ public class TabFragment2 extends Fragment {
                 spannableString = new SpannableString(string);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.ColorBlue)), 8, 9, 0);
             } else {
-                String string = "Amount: " + "-" + item.getAmount();
+                String string = "Amount: " + item.getAmount();
                 spannableString = new SpannableString(string);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.ColorRed)), 8, 9, 0);
             }
@@ -188,6 +188,7 @@ public class TabFragment2 extends Fragment {
             switch(view.getId())
             {
                 case R.id.btn_date:
+                    loadItems();
                     if (_view.findViewById(R.id.lsv_expandable).getVisibility() != View.GONE) {
                         expandableListView.setVisibility(View.GONE);
                         categoryListView.setVisibility(View.VISIBLE);
@@ -236,10 +237,7 @@ public class TabFragment2 extends Fragment {
         expandableListAdapter = new ExpandableListAdapter(getActivity(), dateHeaderList, childDataHashMap);
         expandableListView.setAdapter(expandableListAdapter);
 
-        categoryList = new ArrayList<String>();
-        for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
-            categoryList.add("0");
-        }
+        categoryList = new ArrayList<Item>();
         categoryListAdapter = new CategoryListAdapter(getActivity(), 0, categoryList);
         categoryListView.setAdapter(categoryListAdapter);
     }
@@ -251,16 +249,12 @@ public class TabFragment2 extends Fragment {
         int sameDateCounter = 0;
 
         categoryList.clear();
-        for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
-            categoryList.add("0");
-        }
 
         dbAdapter.open();
 
         Cursor c = dbAdapter.getAllItemsInMonth(btnDate.getText().toString());
 
-        if (c.moveToFirst())
-        {
+        if (c.moveToFirst()) {
             String day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D));
             int balanceDay = 0;
             List<Item> tmpItemList = new ArrayList<Item>();
@@ -283,7 +277,7 @@ public class TabFragment2 extends Fragment {
                     balanceDay += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                 } else {
                     expense += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                    balanceDay -= c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                    balanceDay += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                 }
 
                 Item item = new Item(
@@ -297,44 +291,64 @@ public class TabFragment2 extends Fragment {
                 );
 
                 /************* For CategoryList *************/
-                int tmp = 0;
-                if (categoryList.size() != 0) {
-                    if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[0])) {
-                        tmp = Integer.parseInt(categoryList.get(0)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[1])) {
-                        tmp = Integer.parseInt(categoryList.get(1)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[2])) {
-                        tmp = Integer.parseInt(categoryList.get(2)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[3])) {
-                        tmp = Integer.parseInt(categoryList.get(3)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[4])) {
-                        tmp = Integer.parseInt(categoryList.get(4)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[5])) {
-                        tmp = Integer.parseInt(categoryList.get(5)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[6])) {
-                        tmp = Integer.parseInt(categoryList.get(6)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
-                    } else if (c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(MainActivity.defaultCategory[7])) {
-                        tmp = Integer.parseInt(categoryList.get(7)) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                        categoryList.add(String.valueOf(tmp));
+                boolean flag = false;
+                for (int i = 0; i < categoryList.size(); i++) {
+                    Item tmp = categoryList.get(i);
+                    if (tmp.getCategory().equals(c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)))) {
+                        int amount = Integer.parseInt(tmp.getAmount()) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                        tmp = new Item(categoryList.get(i).getId(),
+                                String.valueOf(amount),
+                                c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                                "", "", "", "");
+                        categoryList.remove(i);
+                        categoryList.add(tmp);
+                        flag = true;
+                        break;
                     }
                 }
 
+                if (flag == false) {
+                    int id = 0;
+                    String tmpCategory = c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY));
+
+                    for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
+                        if (tmpCategory.equals(MainActivity.defaultCategory[i])) {
+                            id = i;
+                            break;
+                        }
+                    }
+                    Item tmp = new Item(String.valueOf(id),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                            "", "", "", "");
+                    categoryList.add(tmp);
+                }
+                /*** for categoryList end ***/
+
                 tmpItemList.add(item);
-            }while(c.moveToNext());
+            }while (c.moveToNext());
 
             dateHeaderList.add(convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
         }
 
+        if (categoryList.size() > 0) categoryListSort();
         dbAdapter.close();
         expandableListAdapter.notifyDataSetChanged();
+    }
+
+    void categoryListSort() {
+        for (int i = 0; i < categoryList.size() - 1; i++) {
+            for (int j = categoryList.size() - 1; j > i; j--) {
+                int id_j = Integer.parseInt(categoryList.get(j).getId());
+                int id_j_1 = Integer.parseInt(categoryList.get(j-1).getId());
+                if (id_j < id_j_1) {
+                    Item tmp = categoryList.get(j);
+                    categoryList.set(j, categoryList.get(j-1));
+                    categoryList.set(j-1, tmp);
+                }
+            }
+        }
     }
 
     void searchItem() {
@@ -395,7 +409,7 @@ public class TabFragment2 extends Fragment {
     public void makeBalanceTable(){
         txvIncome.setText(String.valueOf(income));
         txvExpense.setText(String.valueOf(expense));
-        balance = income - expense;
+        balance = income + expense;
 
         if (balance < 0) {
             txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorRed));

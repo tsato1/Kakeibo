@@ -202,14 +202,14 @@ public class TabFragment1 extends Fragment
 
     boolean checkBeforeSave()
     {
-        if ("".equals(selectedCategory))
-        {
+        if ("".equals(selectedCategory)) {
             Toast.makeText(getActivity(), "Please select category.", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if ("".equals(edt_amount.getText().toString()))
-        {
+        } else if ("".equals(edt_amount.getText().toString())) {
             Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (Integer.parseInt(edt_amount.getText().toString()) == 0) {
+            Toast.makeText(getActivity(), "Amount cannot be 0.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -222,11 +222,21 @@ public class TabFragment1 extends Fragment
 
         String ym = btnDate.getText().toString().substring(0, 7);;
         String d = btnDate.getText().toString().substring(8, btnDate.getText().toString().indexOf(" "));
-        Log.d("fragment1", "d = " + d + ", ym = " + ym);
+        if (d.length() == 1) {
+            d = "0" + d;
+        }
+        //Log.d("fragment1", "d = " + d + ", ym = " + ym);
+
+        String amount = "";
+        if (!selectedCategory.equals(MainActivity.defaultCategory[0])) {
+            amount = "-" + edt_amount.getText().toString();
+        } else {
+            amount = edt_amount.getText().toString();
+        }
 
         Item item = new Item(
                 "",
-                edt_amount.getText().toString(),
+                amount,
                 selectedCategory,
                 edt_memo.getText().toString(),
                 d,
