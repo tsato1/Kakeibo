@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     public static final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-    public static final String[] defaultCategory = {"Income", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Other"};
+    public static final String[] defaultCategory = {"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Other"};
 
     ViewPager viewPager;
     PagerAdapter adapter;

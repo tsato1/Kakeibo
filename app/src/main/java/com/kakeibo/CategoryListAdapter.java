@@ -45,26 +45,32 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
             imvCategory.setImageResource(R.mipmap.ic_category_income);
             txvCategory.setText(MainActivity.defaultCategory[0]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[1])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_meal);
+            imvCategory.setImageResource(R.mipmap.ic_category_comm);
             txvCategory.setText(MainActivity.defaultCategory[1]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[2])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_util);
+            imvCategory.setImageResource(R.mipmap.ic_category_meal);
             txvCategory.setText(MainActivity.defaultCategory[2]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[3])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_health);
+            imvCategory.setImageResource(R.mipmap.ic_category_util);
             txvCategory.setText(MainActivity.defaultCategory[3]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[4])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_edu);
+            imvCategory.setImageResource(R.mipmap.ic_category_health);
             txvCategory.setText(MainActivity.defaultCategory[4]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[5])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_cloth);
+            imvCategory.setImageResource(R.mipmap.ic_category_edu);
             txvCategory.setText(MainActivity.defaultCategory[5]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[6])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_trans);
+            imvCategory.setImageResource(R.mipmap.ic_category_cloth);
             txvCategory.setText(MainActivity.defaultCategory[6]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[7])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_other);
+            imvCategory.setImageResource(R.mipmap.ic_category_trans);
             txvCategory.setText(MainActivity.defaultCategory[7]);
+        } else if (item.getCategory().equals(MainActivity.defaultCategory[8])) {
+            imvCategory.setImageResource(R.mipmap.ic_category_ent);
+            txvCategory.setText(MainActivity.defaultCategory[8]);
+        } else if (item.getCategory().equals(MainActivity.defaultCategory[9])) {
+            imvCategory.setImageResource(R.mipmap.ic_category_other);
+            txvCategory.setText(MainActivity.defaultCategory[9]);
         }
 
         /*** amount ***/

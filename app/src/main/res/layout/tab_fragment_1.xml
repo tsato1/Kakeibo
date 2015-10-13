@@ -94,21 +94,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_meal"
+                android:drawableTop="@mipmap/ic_category_comm"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_util"
+                android:drawableTop="@mipmap/ic_category_meal"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_health"
+                android:drawableTop="@mipmap/ic_category_util"
                 style="?android:attr/buttonBarButtonStyle"/>
         </TableRow>
         <TableRow>
@@ -117,28 +117,56 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_edu"
+                android:drawableTop="@mipmap/ic_category_health"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_cloth"
+                android:drawableTop="@mipmap/ic_category_edu"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_trans"
+                android:drawableTop="@mipmap/ic_category_cloth"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableTop="@mipmap/ic_category_trans"
+                style="?android:attr/buttonBarButtonStyle"/>
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/btn_category9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/ic_category_ent"
+                style="?android:attr/buttonBarButtonStyle"/>
+            <Button
+                android:id="@+id/btn_category10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:drawableTop="@mipmap/ic_category_other"
+                style="?android:attr/buttonBarButtonStyle"/>
+            <Button
+                android:id="@+id/btn_category11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"/>
+            <Button
+                android:id="@+id/btn_category12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 style="?android:attr/buttonBarButtonStyle"/>
         </TableRow>
     </TableLayout>

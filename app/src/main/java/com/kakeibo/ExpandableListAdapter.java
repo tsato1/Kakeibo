@@ -64,18 +64,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         if(item.getCategory().equals(category[0])) {
             imvCategoryImage.setImageResource(R.mipmap.ic_category_income);
         } else if(item.getCategory().equals(category[1])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_meal);
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_comm);
         } else if(item.getCategory().equals(category[2])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_util);
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_meal);
         } else if(item.getCategory().equals(category[3])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_health);
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_util);
         } else if(item.getCategory().equals(category[4])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_edu);
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_health);
         } else if(item.getCategory().equals(category[5])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_cloth);
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_edu);
         } else if(item.getCategory().equals(category[6])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_trans);
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_cloth);
         } else if(item.getCategory().equals(category[7])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_trans);
+        } else if(item.getCategory().equals(category[8])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_ent);
+        } else if(item.getCategory().equals(category[9])) {
             imvCategoryImage.setImageResource(R.mipmap.ic_category_other);
         }
 

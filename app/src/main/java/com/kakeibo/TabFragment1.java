@@ -68,6 +68,8 @@ public class TabFragment1 extends Fragment
         btnsCategory.add((Button) view.findViewById(R.id.btn_category6));
         btnsCategory.add((Button) view.findViewById(R.id.btn_category7));
         btnsCategory.add((Button) view.findViewById(R.id.btn_category8));
+        btnsCategory.add((Button) view.findViewById(R.id.btn_category9));
+        btnsCategory.add((Button) view.findViewById(R.id.btn_category10));
         setButtonContent();
 
 //        btnVoiceAmount = (ImageButton) view.findViewById(R.id.btn_voice_amount);
@@ -79,7 +81,7 @@ public class TabFragment1 extends Fragment
 
     void setButtonContent()
     {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 10; i++)
         {
             btnsCategory.get(i).setText(MainActivity.defaultCategory[i]);
         }
