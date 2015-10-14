@@ -80,6 +80,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         } else if(item.getCategory().equals(category[8])) {
             imvCategoryImage.setImageResource(R.mipmap.ic_category_ent);
         } else if(item.getCategory().equals(category[9])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_ins);
+        } else if(item.getCategory().equals(category[10])) {
+            imvCategoryImage.setImageResource(R.mipmap.ic_category_tax);
+        } else if(item.getCategory().equals(category[11])) {
             imvCategoryImage.setImageResource(R.mipmap.ic_category_other);
         }
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,7 +34,7 @@ public class TabFragment1 extends Fragment
 {
     public  Button btnDate;
     public EditText edt_amount;
-    public EditText edt_memo;
+    public AutoCompleteTextView edt_memo;
 
     private ImageButton btnPrev, btnNext;
     private ImageButton btnVoiceAmount, btnVoiceMemo;
@@ -70,18 +71,20 @@ public class TabFragment1 extends Fragment
         btnsCategory.add((Button) view.findViewById(R.id.btn_category8));
         btnsCategory.add((Button) view.findViewById(R.id.btn_category9));
         btnsCategory.add((Button) view.findViewById(R.id.btn_category10));
+        btnsCategory.add((Button) view.findViewById(R.id.btn_category11));
+        btnsCategory.add((Button) view.findViewById(R.id.btn_category12));
         setButtonContent();
 
 //        btnVoiceAmount = (ImageButton) view.findViewById(R.id.btn_voice_amount);
 //        btnVoiceMemo = (ImageButton) view.findViewById(R.id.btn_voice_memo);
 
         edt_amount = (EditText)view.findViewById(R.id.edt_amount);
-        edt_memo = (EditText)view.findViewById(R.id.edt_memo);
+        edt_memo = (AutoCompleteTextView)view.findViewById(R.id.edt_memo);
     }
 
     void setButtonContent()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < MainActivity.defaultCategory.length; i++)
         {
             btnsCategory.get(i).setText(MainActivity.defaultCategory[i]);
         }
@@ -96,7 +99,7 @@ public class TabFragment1 extends Fragment
 //        btnVoiceAmount.setOnClickListener(new ButtonClickListener());
 //        btnVoiceMemo.setOnClickListener(new ButtonClickListener());
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
         }
     }
@@ -190,7 +193,17 @@ public class TabFragment1 extends Fragment
                 case R.id.btn_category8:
                     selectedCategory = btnsCategory.get(7).getText().toString();
                     break;
-                default:
+                case R.id.btn_category9:
+                    selectedCategory = btnsCategory.get(8).getText().toString();
+                    break;
+                case R.id.btn_category10:
+                    selectedCategory = btnsCategory.get(9).getText().toString();
+                    break;
+                case R.id.btn_category11:
+                    selectedCategory = btnsCategory.get(10).getText().toString();
+                    break;
+                case R.id.btn_category12:
+                    selectedCategory = btnsCategory.get(11).getText().toString();
                     break;
             }
 

@@ -69,8 +69,14 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
             imvCategory.setImageResource(R.mipmap.ic_category_ent);
             txvCategory.setText(MainActivity.defaultCategory[8]);
         } else if (item.getCategory().equals(MainActivity.defaultCategory[9])) {
-            imvCategory.setImageResource(R.mipmap.ic_category_other);
+            imvCategory.setImageResource(R.mipmap.ic_category_ins);
             txvCategory.setText(MainActivity.defaultCategory[9]);
+        } else if (item.getCategory().equals(MainActivity.defaultCategory[10])) {
+            imvCategory.setImageResource(R.mipmap.ic_category_tax);
+            txvCategory.setText(MainActivity.defaultCategory[10]);
+        } else if (item.getCategory().equals(MainActivity.defaultCategory[11])) {
+            imvCategory.setImageResource(R.mipmap.ic_category_other);
+            txvCategory.setText(MainActivity.defaultCategory[11]);
         }
 
         /*** amount ***/

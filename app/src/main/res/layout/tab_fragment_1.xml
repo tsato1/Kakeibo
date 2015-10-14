@@ -66,7 +66,7 @@
                 android:src="@mipmap/ic_action_microphone"
                 android:background="@drawable/button_voice"
                 style="?android:attr/buttonBarButtonStyle"/>-->
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/edt_memo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -154,19 +154,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/ic_category_other"
+                android:drawableTop="@mipmap/ic_category_ins"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category11"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableTop="@mipmap/ic_category_tax"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_category12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableTop="@mipmap/ic_category_other"
                 style="?android:attr/buttonBarButtonStyle"/>
         </TableRow>
     </TableLayout>
