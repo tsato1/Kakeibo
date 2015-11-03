@@ -1,6 +1,10 @@
 <resources>
 
     <style name="Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--<item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>-->
         <item name="colorPrimary">@color/ColorPrimary</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
         <item name="colorAccent">@color/ColorAccent</item>

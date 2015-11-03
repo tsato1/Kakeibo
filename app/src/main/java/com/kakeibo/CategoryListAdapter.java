@@ -1,6 +1,8 @@
 package com.kakeibo;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.media.Image;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -93,6 +95,16 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.ColorRed)), 0, 1, 0);
             txvAmount.setText(spannableString);
         }
+
+        ImageView percentImageView;
+        percentImageView = (ImageView) convertView.findViewById(R.id.imv_percent);
+        percentImageView.setBackgroundColor(Color.parseColor(MainActivity.categoryColor[position]));
+
+        TextView percentTextView;
+        percentTextView = (TextView) convertView.findViewById(R.id.txv_percent);
+        String percent = item.getMemo();
+        if (percent.length() == 1) percent = "0" + percent;
+        percentTextView.setText(percent + "%");
 
         return convertView;
     }

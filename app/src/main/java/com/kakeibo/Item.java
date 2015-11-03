@@ -41,6 +41,10 @@ public class Item
         return this.category;
     }
 
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
     public String getMemo()
     {
         return this.memo;

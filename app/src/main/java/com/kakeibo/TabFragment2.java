@@ -21,10 +21,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.echo.holographlibrary.PieGraph;
+import com.echo.holographlibrary.PieSlice;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -45,7 +50,10 @@ public class TabFragment2 extends Fragment {
     private ExpandableListView expandableListView;
     private List<Item> categoryList;
     private CategoryListAdapter categoryListAdapter;
+    //private ScrollView subtotalScrollView;
+    private FrameLayout frameLayout;
     private ListView categoryListView;
+    private PieGraph graph;
 
     private ImageButton btnPrev, btnNext, btnVoice, btnSearch;
     private Button btnDate;
@@ -60,26 +68,32 @@ public class TabFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
-        findViews(_view);
+        findViews();
         setListeners();
         setLabel();
         setAdapters();
         loadItems();
         makeBalanceTable();
 
+        //subtotalScrollView.setVisibility(View.GONE);
+        frameLayout.setVisibility(View.GONE);
+
         return _view;
     }
 
-    void findViews(View view){
-        btnPrev = (ImageButton)view.findViewById(R.id.btn_prev);
-        btnDate = (Button)view.findViewById(R.id.btn_date);
-        btnNext = (ImageButton)view.findViewById(R.id.btn_next);
-        txvIncome = (TextView)view.findViewById(R.id.txv_income);
-        txvExpense = (TextView)view.findViewById(R.id.txv_expense);
-        txvBalance = (TextView)view.findViewById(R.id.txv_balance);
-        expandableListView = (ExpandableListView)view.findViewById(R.id.lsv_expandable);
-        categoryListView = (ListView)view.findViewById(R.id.lsv_category);
-        categoryListView.setVisibility(View.GONE);
+    void findViews(){
+        btnPrev = (ImageButton) _view.findViewById(R.id.btn_prev);
+        btnDate = (Button) _view.findViewById(R.id.btn_date);
+        btnNext = (ImageButton) _view.findViewById(R.id.btn_next);
+        txvIncome = (TextView) _view.findViewById(R.id.txv_income);
+        txvExpense = (TextView) _view.findViewById(R.id.txv_expense);
+        txvBalance = (TextView) _view.findViewById(R.id.txv_balance);
+        expandableListView = (ExpandableListView) _view.findViewById(R.id.lsv_expandable);
+        //subtotalScrollView = (ScrollView)view.findViewById(R.id.scv_subtotal);
+        frameLayout = (FrameLayout) _view.findViewById(R.id.scv_subtotal);
+        graph = (PieGraph) _view.findViewById(R.id.graph_subtotal);
+        categoryListView = (ListView) _view.findViewById(R.id.lsv_subtotal);
+
         //todo make a search box
         //btnVoice = (ImageButton)view.findViewById(R.id.btn_voice_search);
         //btnSearch = (ImageButton)view.findViewById(R.id.btn_search);
@@ -191,10 +205,12 @@ public class TabFragment2 extends Fragment {
                     loadItems();
                     if (_view.findViewById(R.id.lsv_expandable).getVisibility() != View.GONE) {
                         expandableListView.setVisibility(View.GONE);
-                        categoryListView.setVisibility(View.VISIBLE);
+                        //subtotalScrollView.setVisibility(View.VISIBLE);
+                        frameLayout.setVisibility(View.VISIBLE);
                     } else {
                         expandableListView.setVisibility(View.VISIBLE);
-                        categoryListView.setVisibility(View.GONE);
+                        //subtotalScrollView.setVisibility(View.GONE);
+                        frameLayout.setVisibility(View.GONE);
                     }
                     break;
                 case R.id.btn_prev:
@@ -323,7 +339,8 @@ public class TabFragment2 extends Fragment {
                             "", "", "", "");
                     categoryList.add(tmp);
                 }
-                /*** for categoryList end ***/
+
+                /*********** for categoryList end ************/
 
                 tmpItemList.add(item);
             }while (c.moveToNext());
@@ -332,23 +349,54 @@ public class TabFragment2 extends Fragment {
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
         }
 
-        if (categoryList.size() > 0) categoryListSort();
+        if (categoryList.size() > 0) {
+            categoryListSortByAmount();
+            calculatePercentage();
+        }
+        makePieGraph();
+
         dbAdapter.close();
         expandableListAdapter.notifyDataSetChanged();
+        categoryListAdapter.notifyDataSetChanged();
     }
 
-    void categoryListSort() {
+    void calculatePercentage() {
+        for (int i = 0; i < categoryList.size(); i++) {
+            int in = Math.abs(income);
+            int out = Math.abs(expense);
+            int sum = in + out;
+
+            categoryList.get(i).setMemo(String.valueOf(Math.abs(Integer.parseInt(categoryList.get(i).getAmount())) * 100 / sum));
+        }
+    }
+
+    void categoryListSortByAmount() {
         for (int i = 0; i < categoryList.size() - 1; i++) {
             for (int j = categoryList.size() - 1; j > i; j--) {
-                int id_j = Integer.parseInt(categoryList.get(j).getId());
-                int id_j_1 = Integer.parseInt(categoryList.get(j-1).getId());
-                if (id_j < id_j_1) {
+                int amount_j = Integer.parseInt(categoryList.get(j).getAmount());
+                int amount_j_1 = Integer.parseInt(categoryList.get(j-1).getAmount());
+                if (amount_j < amount_j_1) {
                     Item tmp = categoryList.get(j);
                     categoryList.set(j, categoryList.get(j-1));
                     categoryList.set(j-1, tmp);
                 }
             }
         }
+    }
+
+    private void makePieGraph() {
+        graph.removeSlices();
+        for (int i = 0; i < categoryList.size(); i++) {
+            PieSlice slice = new PieSlice();
+            if (categoryList.get(i).getCategory().equals(getString(R.string.income))) {
+                slice.setColor(ContextCompat.getColor(getContext(), R.color.ColorPrimary));
+            } else {
+                slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
+            }
+            slice.setValue(Integer.parseInt(categoryList.get(i).amount));
+            graph.addSlice(slice);
+        }
+        graph.setThickness(200);
     }
 
     void searchItem() {
@@ -396,7 +444,7 @@ public class TabFragment2 extends Fragment {
     {
         int year = calYear;
         int month = calMonth;
-        Log.d("Fragment2", "year = " + year + ", month = " + month);
+        //Log.d("Fragment2", "year = " + year + ", month = " + month);
 
         String mon = String.valueOf(month);
         if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)

@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
     public static final String[] defaultCategory = {"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other"};
+    public static final String[] categoryColor = {"#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
     ViewPager viewPager;
     PagerAdapter adapter;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         final TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.input));
@@ -63,7 +66,9 @@ public class MainActivity extends AppCompatActivity
                                                public void onTabSelected(TabLayout.Tab tab) {
                                                    viewPager.setCurrentItem(tab.getPosition());
 
-                                                   if (tab.getText().toString().equals("LIST")){
+                                                   if (tab.getText().toString().equals("INPUT")) {
+                                                       adapter.getFragment1().reset();
+                                                   } else {
                                                        adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
                                                        Calendar cal = Calendar.getInstance();
                                                        adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
@@ -85,15 +90,23 @@ public class MainActivity extends AppCompatActivity
                                                }
                                            }
         );
-
-
     }
 
     public void onResume() {
         super.onResume();
+        try {
+            adapter.getFragment1().reset();
+            adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
+            Calendar cal = Calendar.getInstance();
+            adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
+            adapter.getFragment2().reset();
+            adapter.getFragment2().setLabel();
+            adapter.getFragment2().loadItems();
+            adapter.getFragment2().makeBalanceTable();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
     // speech to text //
 //    public void speechText(String string) {
 //        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
