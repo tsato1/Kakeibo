@@ -1,6 +1,9 @@
 package com.kakeibo;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +29,31 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
 
         if (null == v) v = inflater.inflate(R.layout.row_list_search, null);
 
-        TextView txvSearchResult = (TextView)v.findViewById(R.id.txv_search_result);
-        txvSearchResult.setText(item.getMemo());
+        TextView txvEventDate = (TextView) v.findViewById(R.id.txv_event_date);
+        txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
+
+        TextView txvCategory = (TextView) v.findViewById(R.id.txv_category);
+        txvCategory.setText("Category:" + item.getCategory());
+
+        TextView txvAmount = (TextView) v.findViewById(R.id.txv_amount);
+        txvAmount.setText("Amount:" + item.getAmount());
+
+        TextView txvMemo = (TextView) v.findViewById(R.id.txv_memo);
+        SpannableString spannableString;
+        if ("Income".equals(item.getCategory())) {
+            String string = "Amount: " + "+" + item.getAmount();
+            spannableString = new SpannableString(string);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.ColorBlue)), 8, 9, 0);
+        } else {
+            String string = "Amount: " + item.getAmount();
+            spannableString = new SpannableString(string);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.ColorRed)), 8, 9, 0);
+        }
+        txvAmount.setText(spannableString);
+        txvMemo.setText("Memo: " + item.getMemo());
+
+        TextView txvUpdateDate = (TextView)v.findViewById(R.id.txv_update_date);
+        txvUpdateDate.setText("Registered on " + item.getUpdateDate());
 
         return v;
     }
