@@ -93,8 +93,13 @@ public class DBAdapter
 
     public Cursor getAllItemsInMonth (String ym)
     {
-        String query = "SELECT * FROM items WHERE event_ym = ? ORDER BY event_d";
+        String query = "SELECT * FROM items WHERE event_ym = ? ORDER BY event_d LIMIT 100";
         return db.rawQuery(query, new String[]{ym});
+    }
+
+    public Cursor getAllItemsInCategoryInMonth (String ym, String category) {
+        String query = "SELECT * FROM items WHERE event_ym = ? AND category = ? ORDER BY event_d LIMIT 200";
+        return db.rawQuery(query, new String[]{ym, category});
     }
 
     public void saveItem(Item item)

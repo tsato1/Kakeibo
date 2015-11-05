@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -107,6 +108,57 @@ public class TabFragment2 extends Fragment {
 //        btnVoice.setOnClickListener(new ButtonClickListener());
         btnSearch.setOnClickListener(new ButtonClickListener());
         expandableListView.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
+        categoryListView.setOnItemClickListener(new CategoryListItemClickListener());
+    }
+
+    class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListView lsvCat = (ListView) parent;
+            Item tmp = (Item) lsvCat.getItemAtPosition(position);
+
+            List<Item> searchResultList = new ArrayList<Item>();
+            searchResultList.clear();
+
+            dbAdapter.open();
+
+            Cursor c = dbAdapter.getAllItemsInCategoryInMonth(btnDate.getText().toString(), tmp.getCategory());
+            Log.d("trest", btnDate.getText().toString().substring(5));
+
+            if (c.moveToFirst()) {
+                do {
+                    Log.d("trest", "asdf");
+
+                    Item item = new Item(
+                            c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
+                    );
+
+                    searchResultList.add(item);
+                } while (c.moveToNext());
+            }
+
+            dbAdapter.close();
+
+            SearchListAdapter searchListAdapter = new SearchListAdapter(getActivity(), 0, searchResultList);
+            ListView listView = new ListView(getActivity());
+            listView.setAdapter(searchListAdapter);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setIcon(R.mipmap.ic_mikan);
+            dialog.setTitle(tmp.getCategory());
+            dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            dialog.setView(listView).create();
+            dialog.show();
+        }
     }
 
     class ChildClickListener implements ExpandableListView.OnChildClickListener {
@@ -512,6 +564,11 @@ public class TabFragment2 extends Fragment {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setIcon(R.mipmap.ic_mikan);
         dialog.setTitle("Search Result");
+        dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
         dialog.setView(listView).create();
         dialog.show();
     }
