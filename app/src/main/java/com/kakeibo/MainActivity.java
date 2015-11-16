@@ -68,14 +68,16 @@ public class MainActivity extends AppCompatActivity
 
                                                    if (tab.getText().toString().equals("INPUT")) {
                                                        adapter.getFragment1().reset();
-                                                   } else {
-                                                       adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
+                                                   } else if (tab.getText().toString().equals("LIST")){
                                                        Calendar cal = Calendar.getInstance();
+                                                       adapter.getFragment2().calMonth = cal.get(Calendar.MONTH) + 1;
                                                        adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
                                                        adapter.getFragment2().reset();
                                                        adapter.getFragment2().setLabel();
                                                        adapter.getFragment2().loadItems();
                                                        adapter.getFragment2().makeBalanceTable();
+                                                   } else {
+                                                       onResume();
                                                    }
                                                }
 
@@ -96,8 +98,9 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         try {
             adapter.getFragment1().reset();
-            adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
+            ///adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
             Calendar cal = Calendar.getInstance();
+            adapter.getFragment2().calMonth = cal.get(Calendar.MONTH) + 1;
             adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
             adapter.getFragment2().reset();
             adapter.getFragment2().setLabel();

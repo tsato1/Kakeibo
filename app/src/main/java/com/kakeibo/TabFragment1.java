@@ -266,6 +266,7 @@ public class TabFragment1 extends Fragment
 
         dbAdapter.open();
         dbAdapter.saveItem(item);
+        Toast.makeText(getActivity(), "The item was successfully saved.", Toast.LENGTH_SHORT).show();
         dbAdapter.close();
     }
 
