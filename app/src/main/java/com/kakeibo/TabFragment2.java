@@ -121,14 +121,10 @@ public class TabFragment2 extends Fragment {
             searchResultList.clear();
 
             dbAdapter.open();
-
             Cursor c = dbAdapter.getAllItemsInCategoryInMonth(btnDate.getText().toString(), tmp.getCategory());
-            Log.d("trest", btnDate.getText().toString().substring(5));
 
             if (c.moveToFirst()) {
                 do {
-                    Log.d("trest", "asdf");
-
                     Item item = new Item(
                             c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
@@ -608,6 +604,9 @@ public class TabFragment2 extends Fragment {
 
     public void reset()
     {
+        Calendar cal = Calendar.getInstance();
+        calMonth = cal.get(Calendar.MONTH) + 1;
+        calYear = cal.get(Calendar.YEAR);
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }

@@ -1,29 +1,18 @@
 package com.kakeibo;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
 //import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
@@ -54,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         final TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.input));
-        tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.list));
+        tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.report));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager)findViewById(R.id.pager);
@@ -66,12 +55,9 @@ public class MainActivity extends AppCompatActivity
                                                public void onTabSelected(TabLayout.Tab tab) {
                                                    viewPager.setCurrentItem(tab.getPosition());
 
-                                                   if (tab.getText().toString().equals("INPUT")) {
+                                                   if (tab.getText().toString().equals(R.string.input)) {
                                                        adapter.getFragment1().reset();
-                                                   } else if (tab.getText().toString().equals("LIST")){
-                                                       Calendar cal = Calendar.getInstance();
-                                                       adapter.getFragment2().calMonth = cal.get(Calendar.MONTH) + 1;
-                                                       adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
+                                                   } else if (tab.getText().toString().equals(R.string.report)){
                                                        adapter.getFragment2().reset();
                                                        adapter.getFragment2().setLabel();
                                                        adapter.getFragment2().loadItems();
@@ -98,10 +84,6 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         try {
             adapter.getFragment1().reset();
-            ///adapter.getFragment2().calMonth = Integer.parseInt(adapter.getFragment1().btnDate.getText().toString().substring(5, 7));
-            Calendar cal = Calendar.getInstance();
-            adapter.getFragment2().calMonth = cal.get(Calendar.MONTH) + 1;
-            adapter.getFragment2().calYear = cal.get(Calendar.YEAR);
             adapter.getFragment2().reset();
             adapter.getFragment2().setLabel();
             adapter.getFragment2().loadItems();
@@ -151,8 +133,6 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        }
 //    }
-
-
 
 
     public ViewPager getViewPager() {
