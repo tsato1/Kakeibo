@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity
         //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         final TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.input));
-        tabLayout.addTab(tabLayout.newTab().setText(com.kakeibo.R.string.report));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.input));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.report));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager)findViewById(R.id.pager);
