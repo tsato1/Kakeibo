@@ -54,6 +54,12 @@ public class TabFragment1 extends Fragment
         return view;
     }
 
+    @Override
+    public void onResume () {
+        super.onResume();
+        reset();
+    }
+
     void findViews(View view)
     {
         btnPrev = (ImageButton)view.findViewById(R.id.btn_prev);
@@ -209,8 +215,10 @@ public class TabFragment1 extends Fragment
 
             if (checkBeforeSave()) {
                 saveItem();
-                reset();
+                String date =btnDate.getText().toString();
                 ((MainActivity)getActivity()).getViewPager().setCurrentItem(1); // 1 = Fragment2
+                ((MainActivity)getActivity()).onItemSaved(date);
+                reset();
             }
         }
     }
@@ -259,10 +267,10 @@ public class TabFragment1 extends Fragment
                 getTodaysDate().toString()
         );
 
-        Log.d("stored item = ", edt_amount.getText().toString()
-        + " " + selectedCategory
-        + " " + edt_memo.getText().toString() + " " + d
-        + " " + ym +" " + getTodaysDate().toString());
+//        Log.d("stored item = ", edt_amount.getText().toString()
+//        + " " + selectedCategory
+//        + " " + edt_memo.getText().toString() + " " + d
+//        + " " + ym +" " + getTodaysDate().toString());
 
         dbAdapter.open();
         dbAdapter.saveItem(item);

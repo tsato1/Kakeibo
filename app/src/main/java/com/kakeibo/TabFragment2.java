@@ -71,15 +71,26 @@ public class TabFragment2 extends Fragment {
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
         findViews();
+        reset();
         setListeners();
-        setLabel();
         setAdapters();
+        setLabel();
         loadItems();
         makeBalanceTable();
 
         categoryLayout.setVisibility(View.GONE);
 
         return _view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        reset();
+        setLabel();
+        loadItems();
+        makeBalanceTable();
     }
 
     void findViews(){
@@ -400,7 +411,7 @@ public class TabFragment2 extends Fragment {
                 //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
 
                 if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)).equals(day)){ // if the event day of an item increases
-                    dateHeaderList.add(convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
+                    dateHeaderList.add(calYear + convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
                     childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList); // set the header of the old day
                     balanceDay = 0;
                     /*** change of the date ***/
@@ -466,7 +477,7 @@ public class TabFragment2 extends Fragment {
                 tmpItemList.add(item);
             }while (c.moveToNext());
 
-            dateHeaderList.add(convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
+            dateHeaderList.add(calYear + convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
         }
 
@@ -607,6 +618,7 @@ public class TabFragment2 extends Fragment {
         Calendar cal = Calendar.getInstance();
         calMonth = cal.get(Calendar.MONTH) + 1;
         calYear = cal.get(Calendar.YEAR);
+
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
@@ -632,5 +644,35 @@ public class TabFragment2 extends Fragment {
         }
         String str = (year+"/"+mon+"/"+day+" [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
         return str;
+    }
+
+    public void focusOnSavedItem(String y, String m, String d) {
+        calMonth = Integer.parseInt(m);
+        calYear = Integer.parseInt(y);
+
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        setLabel();
+        loadItems();
+        makeBalanceTable();
+
+        for (int i = 0; i < dateHeaderList.size(); i++) {
+            Log.d("testtest", dateHeaderList.get(i));
+            if (dateHeaderList.get(i).substring(4, 9).equals(m + "/" + d)) { // dateHeaderList.get(i) = 'yyyymm/dd, \\\' (\\\ = balance)
+                expandableListView.setVisibility(View.VISIBLE);
+                //subtotalScrollView.setVisibility(View.GONE);
+                categoryLayout.setVisibility(View.GONE);
+                searchLayout.setVisibility(View.VISIBLE);
+
+                expandableListView.expandGroup(i);
+                //todo highlight the last child
+
+                //childDataHashMap.get(dateHeaderList.get(i).substring(4, 9));
+
+            } else {
+                expandableListView.collapseGroup(i);
+            }
+        }
     }
 }

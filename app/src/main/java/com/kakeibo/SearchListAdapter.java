@@ -27,7 +27,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
     public View getView(int position, View v, ViewGroup parent) {
         Item item = (Item) getItem(position);
 
-        if (null == v) v = inflater.inflate(R.layout.row_list_search, null);
+        if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
         TextView txvEventDate = (TextView) v.findViewById(R.id.txv_event_date);
         txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());

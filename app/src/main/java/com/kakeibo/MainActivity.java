@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.util.Log;
+import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseInstallation;
+//import com.parse.Parse;
+//import com.parse.ParseInstallation;
 
 import java.util.Calendar;
 //import android.widget.Toolbar;
@@ -33,8 +35,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Parse.initialize(this, "NVRkrfw3G8YX9xIimvVKzgH16LZrqgU13gyjKra2", "GODP3rm78l2XVQyGLWQY2eKa56UB2r0UA0IS2vcW");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        //Parse.initialize(this, "NVRkrfw3G8YX9xIimvVKzgH16LZrqgU13gyjKra2", "GODP3rm78l2XVQyGLWQY2eKa56UB2r0UA0IS2vcW");
+        //ParseInstallation.getCurrentInstallation().saveInBackground();
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,16 +57,17 @@ public class MainActivity extends AppCompatActivity
                                                public void onTabSelected(TabLayout.Tab tab) {
                                                    viewPager.setCurrentItem(tab.getPosition());
 
-                                                   if (tab.getText().toString().equals(R.string.input)) {
-                                                       adapter.getFragment1().reset();
-                                                   } else if (tab.getText().toString().equals(R.string.report)){
-                                                       adapter.getFragment2().reset();
-                                                       adapter.getFragment2().setLabel();
-                                                       adapter.getFragment2().loadItems();
-                                                       adapter.getFragment2().makeBalanceTable();
-                                                   } else {
-                                                       onResume();
+                                                   if (adapter == null || viewPager == null) {
+                                                       viewPager = (ViewPager)findViewById(R.id.pager);
+                                                       adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                                                       viewPager.setAdapter(adapter);
                                                    }
+
+                                                   //if (tab.getText().toString().equals(R.string.input)) {
+                                                       adapter.getFragment1().onResume();
+                                                   //} else if (tab.getText().toString().equals(R.string.report)) {
+                                                       adapter.getFragment2().onResume();
+                                                   //}
                                                }
 
                                                @Override
@@ -80,18 +83,27 @@ public class MainActivity extends AppCompatActivity
         );
     }
 
+    @Override
     public void onResume() {
         super.onResume();
+    }
+
+    public void onItemSaved(String date) {
+        //Log.d("testtest", date);
+        String y = date.substring(0, 4);
+        String m = date.substring(5, 7);
+        String d = date.substring(8, date.indexOf(" "));
+        //Log.d("testtest", "y=" + y + " m=" + m + " d=" + d);
+        if (d.length() == 1) {
+            d = "0" + d;
+        }
+
         try {
-            adapter.getFragment1().reset();
-            adapter.getFragment2().reset();
-            adapter.getFragment2().setLabel();
-            adapter.getFragment2().loadItems();
-            adapter.getFragment2().makeBalanceTable();
+            adapter.getFragment2().focusOnSavedItem(y, m, d);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
+
     // speech to text //
 //    public void speechText(String string) {
 //        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

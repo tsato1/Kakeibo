@@ -14,7 +14,7 @@
         android:name="com.kakeibo.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.kakeibo.permission.C2D_MESSAGE" />
 
-    <meta-data android:name="com.parse.push.notification_icon" android:resource="@mipmap/ic_mikan"/>
+    <!--<meta-data android:name="com.parse.push.notification_icon" android:resource="@mipmap/ic_mikan"/>-->
 
     <application
         android:allowBackup="true"
@@ -33,7 +33,8 @@
             </intent-filter>
         </activity>
     </application>
-    <service android:name="com.parse.PushService" />
+
+    <!--<service android:name="com.parse.PushService" />
     <receiver android:name="com.parse.ParsePushBroadcastReceiver"
         android:exported="false">
         <intent-filter>
@@ -49,5 +50,5 @@
             <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
             <category android:name="com.kakeibo" />
         </intent-filter>
-    </receiver>
+    </receiver>-->
 </manifest>

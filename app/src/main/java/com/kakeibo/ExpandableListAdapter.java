@@ -1,7 +1,6 @@
 package com.kakeibo;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -12,8 +11,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,7 +47,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.row_list_item, parent, false);
+            convertView = infalInflater.inflate(R.layout.row_explist_child, parent, false);
         }
 
         ImageView imvCategoryImage = (ImageView)convertView.findViewById(R.id.img_category);
@@ -141,17 +139,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        String headerDate = headerTitle.substring(0, headerTitle.indexOf(","));
+        String headerYear = headerTitle.substring(0, 4);
+        String headerDate = headerTitle.substring(4, headerTitle.indexOf(","));
         String headerBalance = headerTitle.substring(headerTitle.indexOf(",")+1);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.row_list_date, null);
+            convertView = infalInflater.inflate(R.layout.row_explist_header, null);
         }
 
         TextView txvHeaderDate = (TextView) convertView.findViewById(R.id.txv_header_date);
-        txvHeaderDate.setText(headerDate);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(headerYear), Integer.parseInt(headerDate.substring(0, 2))-1, Integer.parseInt(headerDate.substring(3)));
+        txvHeaderDate.setText(headerDate + " [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
 
         TextView txvHeaderBalance = (TextView) convertView.findViewById(R.id.txv_header_balance);
         SpannableString spannableString;
