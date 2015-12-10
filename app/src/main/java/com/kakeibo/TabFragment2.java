@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -658,18 +659,13 @@ public class TabFragment2 extends Fragment {
         makeBalanceTable();
 
         for (int i = 0; i < dateHeaderList.size(); i++) {
-            Log.d("testtest", dateHeaderList.get(i));
             if (dateHeaderList.get(i).substring(4, 9).equals(m + "/" + d)) { // dateHeaderList.get(i) = 'yyyymm/dd, \\\' (\\\ = balance)
                 expandableListView.setVisibility(View.VISIBLE);
-                //subtotalScrollView.setVisibility(View.GONE);
                 categoryLayout.setVisibility(View.GONE);
                 searchLayout.setVisibility(View.VISIBLE);
 
                 expandableListView.expandGroup(i);
-                //todo highlight the last child
-
-                //childDataHashMap.get(dateHeaderList.get(i).substring(4, 9));
-
+                expandableListView.smoothScrollToPositionFromTop(i, 0);
             } else {
                 expandableListView.collapseGroup(i);
             }

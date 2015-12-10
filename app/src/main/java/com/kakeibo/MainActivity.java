@@ -63,11 +63,13 @@ public class MainActivity extends AppCompatActivity
                                                        viewPager.setAdapter(adapter);
                                                    }
 
-                                                   //if (tab.getText().toString().equals(R.string.input)) {
+                                                   if (adapter != null) {
+                                                       //if (tab.getText().toString().equals(R.string.input)) {
                                                        adapter.getFragment1().onResume();
-                                                   //} else if (tab.getText().toString().equals(R.string.report)) {
+                                                       //} else if (tab.getText().toString().equals(R.string.report)) {
                                                        adapter.getFragment2().onResume();
-                                                   //}
+                                                       //}
+                                                   }
                                                }
 
                                                @Override
