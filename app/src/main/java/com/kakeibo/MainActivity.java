@@ -1,5 +1,6 @@
 package com.kakeibo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
@@ -58,9 +59,8 @@ public class MainActivity extends AppCompatActivity
                                                    viewPager.setCurrentItem(tab.getPosition());
 
                                                    if (adapter == null || viewPager == null) {
-                                                       viewPager = (ViewPager)findViewById(R.id.pager);
-                                                       adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-                                                       viewPager.setAdapter(adapter);
+                                                       Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                                       startActivity(intent);
                                                    }
 
                                                    if (adapter != null) {
