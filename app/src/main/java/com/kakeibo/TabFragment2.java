@@ -506,9 +506,9 @@ public class TabFragment2 extends Fragment {
     void categoryListSortByAmount() {
         for (int i = 0; i < categoryList.size() - 1; i++) {
             for (int j = categoryList.size() - 1; j > i; j--) {
-                int amount_j = Integer.parseInt(categoryList.get(j).getAmount());
-                int amount_j_1 = Integer.parseInt(categoryList.get(j-1).getAmount());
-                if (amount_j < amount_j_1) {
+                int amount_j = Math.abs(Integer.parseInt(categoryList.get(j).getAmount()));
+                int amount_j_1 = Math.abs(Integer.parseInt(categoryList.get(j-1).getAmount()));
+                if (amount_j > amount_j_1) {
                     Item tmp = categoryList.get(j);
                     categoryList.set(j, categoryList.get(j-1));
                     categoryList.set(j-1, tmp);
@@ -526,7 +526,7 @@ public class TabFragment2 extends Fragment {
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
-            slice.setValue(Integer.parseInt(categoryList.get(i).amount));
+            slice.setValue(Math.abs(Integer.parseInt(categoryList.get(i).amount)));
             graph.addSlice(slice);
         }
         graph.setThickness(200);
