@@ -57,6 +57,9 @@ public class TabFragment1 extends Fragment
     @Override
     public void onResume () {
         super.onResume();
+        findViews(view);
+        setListeners();
+        btnDate.setText(getTodaysDate());
         reset();
     }
 

@@ -45,7 +45,7 @@ public class DBAdapter
             try{
                 db.execSQL(
                         "CREATE TABLE " + TABLE_ITEM + " ("
-                        + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        + COL_ID + " INTEGER PRIMARY KEY,"
                         + COL_AMOUNT + " TEXT NOT NULL,"
                         + COL_CATEGORY + " TEXT NOT NULL,"
                         + COL_MEMO + " TEXT NOT NULL,"

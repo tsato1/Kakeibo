@@ -12,11 +12,7 @@ import android.view.MenuItem;
 import android.util.Log;
 import android.widget.Toast;
 
-//import com.parse.Parse;
-//import com.parse.ParseInstallation;
-
 import java.util.Calendar;
-//import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -35,9 +31,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Parse.initialize(this, "NVRkrfw3G8YX9xIimvVKzgH16LZrqgU13gyjKra2", "GODP3rm78l2XVQyGLWQY2eKa56UB2r0UA0IS2vcW");
-        //ParseInstallation.getCurrentInstallation().saveInBackground();
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,17 +51,19 @@ public class MainActivity extends AppCompatActivity
                                                public void onTabSelected(TabLayout.Tab tab) {
                                                    viewPager.setCurrentItem(tab.getPosition());
 
-                                                   if (adapter == null || viewPager == null) {
+                                                   if (adapter == null
+                                                           || viewPager == null
+                                                           || adapter.getFragment1() == null
+                                                           || adapter.getFragment2() == null) {
+                                                       adapter.getItem(0);
+                                                       adapter.getItem(1);
                                                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
                                                        startActivity(intent);
                                                    }
 
                                                    if (adapter != null) {
-                                                       //if (tab.getText().toString().equals(R.string.input)) {
                                                        adapter.getFragment1().onResume();
-                                                       //} else if (tab.getText().toString().equals(R.string.report)) {
                                                        adapter.getFragment2().onResume();
-                                                       //}
                                                    }
                                                }
 
@@ -88,6 +83,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
     }
 
     public void onItemSaved(String date) {
@@ -158,19 +163,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
