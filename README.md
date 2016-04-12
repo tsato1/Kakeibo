@@ -1,4 +1,5 @@
 # *Kakeibo*
-Android App that allows budgeting and fincance much easier for you
+
+**Kakeibo** is an Android app that allows better budgeting and fincance management with simple user interface
 
 License to be added
