@@ -2,7 +2,7 @@
     <string name="app_name">Kakeibo</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_csv_export">CSV Export</string>
 
     <string name="input">INPUT</string>
     <string name="report">REPORT</string>
@@ -15,4 +15,6 @@
     <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="quit">Quit</string>
+
+    <string name="warning_no_sdcard">Please insert sdcard.</string>
 </resources>

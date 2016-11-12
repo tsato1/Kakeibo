@@ -14,7 +14,6 @@ import java.util.List;
 public class PagerAdapter extends FragmentPagerAdapter
 {
     int mNumOfTabs;
-    ArrayList<Fragment> fragmentList;
     TabFragment1 tab1;
     TabFragment2 tab2;
 

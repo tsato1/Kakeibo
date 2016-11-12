@@ -9,13 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.util.Calendar;
-
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TextToSpeach";
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
@@ -28,7 +23,7 @@ public class MainActivity extends AppCompatActivity
     private TextToSpeech tts;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -163,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -171,7 +166,9 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_csv_export) {
+            Intent csvIntent = new Intent(MainActivity.this, CSVExportActivity.class);
+            startActivity(csvIntent);
             return true;
         }
 
