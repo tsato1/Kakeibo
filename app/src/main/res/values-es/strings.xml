@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kakeibo</string>
+    <string name="delete">Eliminar</string>
+    <string name="edit">Editar</string>
+    <string name="income">Ingresos</string>
+    <string name="input">Entradas</string>
+    <string name="no">No</string>
+    <string name="ok"></string>
+    <string name="quit">Descartar</string>
+    <string name="save">Guardar</string>
+    <string name="yes">Si</string>
+</resources>
