@@ -43,11 +43,11 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         if ("Income".equals(item.getCategory())) {
             String string = "Amount: " + "+" + item.getAmount();
             spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.ColorBlue)), 8, 9, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 8, 9, 0);
         } else {
             String string = "Amount: " + item.getAmount();
             spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.ColorRed)), 8, 9, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 8, 9, 0);
         }
         txvAmount.setText(spannableString);
         txvMemo.setText("Memo: " + item.getMemo());

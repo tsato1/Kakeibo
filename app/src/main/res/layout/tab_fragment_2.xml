@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/ColorBackground">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -42,37 +42,37 @@
         <TableRow>
             <TextView
                 android:text="Income:"
-                android:textColor="@color/ColorBlack"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/txv_income"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textColor="@color/ColorBlack"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
         </TableRow>
         <TableRow>
             <TextView
                 android:text="Expense:"
-                android:textColor="@color/ColorBlack"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/txv_expense"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textColor="@color/ColorBlack"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
         </TableRow>
         <TableRow>
             <TextView
                 android:text="Balance:"
-                android:textColor="@color/ColorBlack"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/txv_balance"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textColor="@color/ColorBlack"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
         </TableRow>
     </TableLayout>
@@ -127,7 +127,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@mipmap/ic_action_search"
-            android:background="@color/ColorBackground"/>
+            android:background="@color/colorBackground"/>
     </LinearLayout>
 
 </LinearLayout>

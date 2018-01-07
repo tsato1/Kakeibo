@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="@color/ColorEmboss">
+    android:background="@color/colorEmboss">
 
     <TextView
         android:id="@+id/txv_header_date"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textColor="@color/ColorAccent"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold"/>
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="25dp"
-        android:textColor="@color/ColorBlack"
+        android:textColor="@color/colorBlack"
         android:textStyle="bold"/>
 
 </LinearLayout>

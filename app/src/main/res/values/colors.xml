@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ColorPrimary">#FF5722</color>
-    <color name="ColorPrimaryTrans">#55FF5722</color>
-    <color name="ColorPrimaryDark">#E64A19</color>
-    <color name="ColorAccent">#808000</color>
-    <color name="ColorBackground">#FFFFBB</color><!--cream-->
-    <color name="ColorEmboss">#11000001</color>
-    <color name="ColorBlack">#000000</color>
-    <color name="ColorRed">#FF0000</color>
-    <color name="ColorBlue">#12a1eb</color>
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryTrans">#55FF5722</color>
+    <color name="colorPrimaryDark">#E64A19</color>
+    <color name="colorAccent">#808000</color>
+    <color name="colorBackground">#FFFFBB</color><!--cream-->
+    <color name="colorEmboss">#11000001</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorBlue">#12a1eb</color>
 </resources>

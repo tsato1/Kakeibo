@@ -10,24 +10,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="@color/ColorBlack"/>
+        android:textColor="@color/colorBlack"/>
     <TextView
         android:id="@+id/txv_detail_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="@color/ColorBlack"/>
+        android:textColor="@color/colorBlack"/>
     <TextView
         android:id="@+id/txv_detail_memo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="@color/ColorBlack"/>
+        android:textColor="@color/colorBlack"/>
     <TextView
         android:id="@+id/txv_detail_registration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textStyle="bold"
-        android:textColor="@color/ColorBlack" />
+        android:textColor="@color/colorBlack" />
 </LinearLayout>

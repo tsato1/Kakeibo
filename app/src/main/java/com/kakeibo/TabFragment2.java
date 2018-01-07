@@ -188,11 +188,11 @@ public class TabFragment2 extends Fragment {
             if ("Income".equals(item.getCategory())) {
                 String string = "Amount: " + "+" + item.getAmount();
                 spannableString = new SpannableString(string);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.ColorBlue)), 8, 9, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorBlue)), 8, 9, 0);
             } else {
                 String string = "Amount: " + item.getAmount();
                 spannableString = new SpannableString(string);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.ColorRed)), 8, 9, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorRed)), 8, 9, 0);
             }
             txvAmount.setText(spannableString);
             txvMemo.setText("Memo: " + item.getMemo());
@@ -522,7 +522,7 @@ public class TabFragment2 extends Fragment {
         for (int i = 0; i < categoryList.size(); i++) {
             PieSlice slice = new PieSlice();
             if (categoryList.get(i).getCategory().equals(getString(R.string.income))) {
-                slice.setColor(ContextCompat.getColor(getContext(), R.color.ColorPrimary));
+                slice.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
@@ -601,15 +601,15 @@ public class TabFragment2 extends Fragment {
         balance = income + expense;
 
         if (balance < 0) {
-            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorRed));
+            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
             txvBalance.setText(String.valueOf(balance));
         }
         else if (balance > 0) {
-            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorBlue));
+            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBlue));
             txvBalance.setText("+" + String.valueOf(balance));
         }
         else {
-            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.ColorBlack));
+            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBlack));
             txvBalance.setText(String.valueOf(balance));
         }
     }

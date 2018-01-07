@@ -82,12 +82,12 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         if (Integer.parseInt(item.getAmount()) > 0) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.ColorBlue)), 0, 1, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
             txvAmount.setText(spannableString);
         } else {
             String string = item.getAmount();
             spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.ColorRed)), 0, 1, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
             txvAmount.setText(spannableString);
         }
 
