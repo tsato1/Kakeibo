@@ -4,11 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TextToSpeach";
@@ -18,62 +24,121 @@ public class MainActivity extends AppCompatActivity {
     public static final String[] defaultCategory = {"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other"};
     public static final String[] categoryColor = {"#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
-    ViewPager viewPager;
-    PagerAdapter adapter;
-    private TextToSpeech tts;
+//    ViewPager viewPager;
+//    PagerAdapter adapter;
+//    private TextToSpeech tts;
+
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
+    private TabFragment1 tab1;
+    private TabFragment2 tab2;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        final TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.input));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.report));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-        viewPager = (ViewPager)findViewById(R.id.pager);
-        adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                                               @Override
-                                               public void onTabSelected(TabLayout.Tab tab) {
-                                                   viewPager.setCurrentItem(tab.getPosition());
-
-                                                   if (adapter == null
-                                                           || viewPager == null
-                                                           || adapter.getFragment1() == null
-                                                           || adapter.getFragment2() == null) {
-                                                       adapter.getItem(0);
-                                                       adapter.getItem(1);
-                                                       Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                                                       startActivity(intent);
-                                                   }
-
-                                                   if (adapter != null) {
-                                                       adapter.getFragment1().onResume();
-                                                       adapter.getFragment2().onResume();
-                                                   }
-                                               }
-
-                                               @Override
-                                               public void onTabUnselected(TabLayout.Tab tab) {
-
-                                               }
-
-                                               @Override
-                                               public void onTabReselected(TabLayout.Tab tab) {
-
-                                               }
-                                           }
-        );
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
+
+    private void setupViewPager(ViewPager viewPager) {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        tab1 = new TabFragment1();
+        tab2 = new TabFragment2();
+        adapter.addFragment(tab1, getString(R.string.input));
+        adapter.addFragment(tab2, getString(R.string.report));
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        //getSupportActionBar().setDisplayShowHomeEnabled(false);
+//
+//        final TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.input));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.report));
+//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//
+//        viewPager = (ViewPager)findViewById(R.id.pager);
+//        adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+//        viewPager.setAdapter(adapter);
+//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//                                               @Override
+//                                               public void onTabSelected(TabLayout.Tab tab) {
+//                                                   viewPager.setCurrentItem(tab.getPosition());
+//
+//                                                   if (adapter == null
+//                                                           || viewPager == null
+//                                                           || adapter.getFragment1() == null
+//                                                           || adapter.getFragment2() == null) {
+//                                                       adapter.getItem(0);
+//                                                       adapter.getItem(1);
+//                                                       Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//                                                       startActivity(intent);
+//                                                   }
+//
+//                                                   if (adapter != null) {
+//                                                       adapter.getFragment1().onResume();
+//                                                       adapter.getFragment2().onResume();
+//                                                   }
+//                                               }
+//
+//                                               @Override
+//                                               public void onTabUnselected(TabLayout.Tab tab) {
+//
+//                                               }
+//
+//                                               @Override
+//                                               public void onTabReselected(TabLayout.Tab tab) {
+//
+//                                               }
+//                                           }
+//        );
+//    }
 
     @Override
     public void onResume() {
@@ -101,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            adapter.getFragment2().focusOnSavedItem(y, m, d);
+            tab2.focusOnSavedItem(y, m, d);
         } catch (Exception e) {
         }
     }
@@ -151,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
     public ViewPager getViewPager() {
         if (null == viewPager) {
-            viewPager = (ViewPager) findViewById(R.id.pager);
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
         }
         return viewPager;
     }
