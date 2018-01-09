@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weekName">
+        <item>DOM</item>
+        <item>LUN</item>
+        <item>MAR</item>
+        <item>MIÉR</item>
+        <item>JUE</item>
+        <item>VIER</item>
+        <item>SÁB</item>
+    </string-array>
+
+    <string-array name="defaultCategory">
+        <item>INGRE</item>
+        <item>COMPRAS</item>
+        <item>COMIDA</item>
+        <item>UTIL</item>
+        <item>SALUD</item>
+        <item>EDU</item>
+        <item>VESTIDO</item>
+        <item>TRANS</item>
+        <item>ENTRET</item>
+        <item>SEGURO</item>
+        <item>IMPUESTOS</item>
+        <item>OTROS</item>
+    </string-array>
+</resources>

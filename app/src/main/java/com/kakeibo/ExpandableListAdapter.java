@@ -61,7 +61,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         Item item = (Item)baseItem;
 
         /*** image ***/
-        String[] category = MainActivity.defaultCategory;
+        String[] category = _context.getResources().getStringArray(R.array.defaultCategory);
         if(item.getCategory().equals(category[0])) {
             imvCategoryImage.setImageResource(R.mipmap.ic_category_income);
         } else if(item.getCategory().equals(category[1])) {
@@ -155,7 +155,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txvHeaderDate = (TextView) convertView.findViewById(R.id.txv_header_date);
         Calendar cal = Calendar.getInstance();
         cal.set(Integer.parseInt(headerYear), Integer.parseInt(headerDate.substring(0, 2))-1, Integer.parseInt(headerDate.substring(3)));
-        txvHeaderDate.setText(headerDate + " [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
+        String[] weekName = _context.getResources().getStringArray(R.array.weekName);
+        txvHeaderDate.setText(headerDate + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
 
         TextView txvHeaderBalance = (TextView) convertView.findViewById(R.id.txv_header_balance);
         SpannableString spannableString;

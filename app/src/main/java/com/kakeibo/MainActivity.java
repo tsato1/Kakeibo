@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TextToSpeach";
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
-    public static final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-    public static final String[] defaultCategory = {"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other"};
+    //public static final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+    //public static final String[] defaultCategory = {"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other"};
     public static final String[] categoryColor = {"#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
 //    ViewPager viewPager;

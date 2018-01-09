@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weekName">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+
+    <string-array name="defaultCategory">
+        <item>Income</item>
+        <item>Comm</item>
+        <item>Meal</item>
+        <item>Util</item>
+        <item>Health</item>
+        <item>Edu</item>
+        <item>Cloth</item>
+        <item>Trans</item>
+        <item>Ent</item>
+        <item>Ins</item>
+        <item>Tax</item>
+        <item>Other</item>
+    </string-array>
+</resources>

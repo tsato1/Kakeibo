@@ -64,12 +64,17 @@ public class TabFragment2 extends Fragment {
     private EditText edtSearch;
     private int income, expense, balance;
     public  int calMonth, calYear;
+    private String[] weekName;
+    private String[] defaultCategory;
 
     private View _view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
+
+        weekName = getActivity().getResources().getStringArray(R.array.weekName);
+        defaultCategory = getActivity().getResources().getStringArray((R.array.defaultCategory));
 
         findViews();
         reset();
@@ -87,7 +92,6 @@ public class TabFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         reset();
         setLabel();
         loadItems();
@@ -281,7 +285,7 @@ public class TabFragment2 extends Fragment {
                                 if (checkBeforeSave(edtAmount)) {
                                     if(dbAdapter.deleteItem(itemId)) {
                                         String amount = "";
-                                        if (!item.getCategory().equals(MainActivity.defaultCategory[0])) {
+                                        if (!item.getCategory().equals(defaultCategory[0])) {
                                             amount = "-" + edtAmount.getText().toString();
                                         } else {
                                             amount = edtAmount.getText().toString();
@@ -460,8 +464,8 @@ public class TabFragment2 extends Fragment {
                     int id = 0;
                     String tmpCategory = c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY));
 
-                    for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
-                        if (tmpCategory.equals(MainActivity.defaultCategory[i])) {
+                    for (int i = 0; i < defaultCategory.length; i++) {
+                        if (tmpCategory.equals(defaultCategory[i])) {
                             id = i;
                             break;
                         }
@@ -643,7 +647,7 @@ public class TabFragment2 extends Fragment {
         if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
             mon = "0" + String.valueOf(month);
         }
-        String str = (year+"/"+mon+"/"+day+" [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
+        String str = (year+"/"+mon+"/"+day+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
         return str;
     }
 

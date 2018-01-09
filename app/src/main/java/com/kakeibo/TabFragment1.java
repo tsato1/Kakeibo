@@ -41,10 +41,15 @@ public class TabFragment1 extends Fragment
     private ArrayList<Button> btnsCategory;
     private String selectedCategory = "";
     private View view;
+    private String[] weekName;
+    private String[] defaultCategory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_1, container, false);
+
+        weekName = getActivity().getResources().getStringArray(R.array.weekName);
+        defaultCategory = getActivity().getResources().getStringArray(R.array.defaultCategory);
 
         findViews(view);
         setListeners();
@@ -69,7 +74,7 @@ public class TabFragment1 extends Fragment
         btnDate = (Button)view.findViewById(R.id.btn_date);
         btnNext = (ImageButton)view.findViewById(R.id.btn_next);
 
-        btnsCategory = new ArrayList<Button>();
+        btnsCategory = new ArrayList<>();
         btnsCategory.add((Button) view.findViewById(R.id.btn_category1));
         btnsCategory.add((Button) view.findViewById(R.id.btn_category2));
         btnsCategory.add((Button) view.findViewById(R.id.btn_category3));
@@ -93,9 +98,9 @@ public class TabFragment1 extends Fragment
 
     void setButtonContent()
     {
-        for (int i = 0; i < MainActivity.defaultCategory.length; i++)
+        for (int i = 0; i < defaultCategory.length; i++)
         {
-            btnsCategory.get(i).setText(MainActivity.defaultCategory[i]);
+            btnsCategory.get(i).setText(defaultCategory[i]);
         }
     }
 
@@ -108,7 +113,7 @@ public class TabFragment1 extends Fragment
 //        btnVoiceAmount.setOnClickListener(new ButtonClickListener());
 //        btnVoiceMemo.setOnClickListener(new ButtonClickListener());
 
-        for (int i = 0; i < MainActivity.defaultCategory.length; i++) {
+        for (int i = 0; i < defaultCategory.length; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
         }
     }
@@ -132,7 +137,7 @@ public class TabFragment1 extends Fragment
                     cal.add(Calendar.DATE, -1);
                     date = cal.getTime();
                     String str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
-                            + " [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                            + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
                 case R.id.btn_date:
@@ -148,7 +153,7 @@ public class TabFragment1 extends Fragment
                     cal.add(Calendar.DATE, 1);
                     date = cal.getTime();
                     str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
-                            + " [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                            + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
             }
@@ -254,7 +259,8 @@ public class TabFragment1 extends Fragment
         //Log.d("fragment1", "d = " + d + ", ym = " + ym);
 
         String amount = "";
-        if (!selectedCategory.equals(MainActivity.defaultCategory[0])) {
+
+        if (!selectedCategory.equals(defaultCategory[0])) {
             amount = "-" + edt_amount.getText().toString();
         } else {
             amount = edt_amount.getText().toString();
@@ -267,7 +273,7 @@ public class TabFragment1 extends Fragment
                 edt_memo.getText().toString(),
                 d,
                 ym,
-                getTodaysDate().toString()
+                getTodaysDate()
         );
 
 //        Log.d("stored item = ", edt_amount.getText().toString()
@@ -293,7 +299,7 @@ public class TabFragment1 extends Fragment
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
                 String str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
-                        + " [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                        + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
             }
         }, year, month-1, day);
@@ -311,7 +317,7 @@ public class TabFragment1 extends Fragment
         if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
             mon = "0" + String.valueOf(month);
         }
-        String str = (year+"/"+mon+"/"+day+" [" + MainActivity.weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
+        String str = (year+"/"+mon+"/"+day+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
         return str;
     }
 
