@@ -66,6 +66,7 @@ public class TabFragment2 extends Fragment {
     public  int calMonth, calYear;
     private String[] weekName;
     private String[] defaultCategory;
+    private String amountColon, memoColon, categoryColon, savedOnColon;
 
     private View _view;
 
@@ -75,6 +76,10 @@ public class TabFragment2 extends Fragment {
 
         weekName = getActivity().getResources().getStringArray(R.array.weekName);
         defaultCategory = getActivity().getResources().getStringArray((R.array.defaultCategory));
+        amountColon = getActivity().getResources().getString(R.string.amount_colon);
+        memoColon = getActivity().getResources().getString(R.string.memo_colon);
+        categoryColon = getActivity().getResources().getString(R.string.category_colon);
+        savedOnColon = getActivity().getResources().getString(R.string.saved_on_colon);
 
         findViews();
         reset();
@@ -187,24 +192,27 @@ public class TabFragment2 extends Fragment {
             TextView txvMemo = (TextView) layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = (TextView) layout.findViewById(R.id.txv_detail_registration);
 
-            txvCategory.setText("Category: " + item.getCategory());
+            String categoryText = categoryColon + item.getCategory();
+            txvCategory.setText(categoryText);
             SpannableString spannableString;
             if ("Income".equals(item.getCategory())) {
-                String string = "Amount: " + "+" + item.getAmount();
+                String string = amountColon + "+" + item.getAmount();
                 spannableString = new SpannableString(string);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorBlue)), 8, 9, 0);
             } else {
-                String string = "Amount: " + item.getAmount();
+                String string = amountColon + item.getAmount();
                 spannableString = new SpannableString(string);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorRed)), 8, 9, 0);
             }
             txvAmount.setText(spannableString);
-            txvMemo.setText("Memo: " + item.getMemo());
-            txvRegistrationDate.setText("Registered on " + item.getUpdateDate());
+            String memoText = memoColon + item.getMemo();
+            txvMemo.setText(memoText);
+            String savedOnText = savedOnColon = item.getUpdateDate();
+            txvRegistrationDate.setText(savedOnText);
 
             new AlertDialog.Builder(getActivity())
                     .setIcon(R.mipmap.ic_mikan)
-                    .setTitle("Item Detail")
+                    .setTitle(getActivity().getResources().getString(R.string.item_detail))
                     .setView(layout)
                     .show();
 
@@ -219,7 +227,6 @@ public class TabFragment2 extends Fragment {
             int type = ExpandableListView.getPackedPositionType(info.packedPosition);
             if(type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                 menu.setHeaderIcon(R.mipmap.ic_mikan);
-                menu.setHeaderTitle("Options");
                 menu.add(0, MENUITEM_ID_DELETE, 0, R.string.delete);
                 menu.add(0, MENUITEM_ID_EDIT, 1, R.string.edit);
             }
@@ -237,7 +244,7 @@ public class TabFragment2 extends Fragment {
             case MENUITEM_ID_DELETE:
                 new AlertDialog.Builder(getActivity())
                         .setIcon(R.mipmap.ic_mikan)
-                        .setTitle("Do you really want to delete this item?")
+                        .setTitle(getString(R.string.quest_do_you_want_to_delete_item))
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -247,7 +254,7 @@ public class TabFragment2 extends Fragment {
                                 final int itemId = Integer.parseInt(item.getId());
 
                                 if(dbAdapter.deleteItem(itemId)) {
-                                    Toast.makeText(getActivity(), "The item was successfully deleted.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_SHORT).show();
                                 }
 
                                 loadItems();
@@ -264,7 +271,8 @@ public class TabFragment2 extends Fragment {
                 TextView txvEventDate = (TextView) layout.findViewById(R.id.txv_event_date);
                 txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
                 TextView txvCategory = (TextView) layout.findViewById(R.id.txv_category);
-                txvCategory.setText("Category: " + item.getCategory());
+                String categoryText = getString(R.string.category_colon) + item.getCategory();
+                txvCategory.setText(categoryText);
                 final EditText edtAmount = (EditText) layout.findViewById(R.id.edt_amount);
                 edtAmount.setText(String.valueOf(Math.abs(Integer.parseInt(item.getAmount()))));
                 final EditText edtMemo = (EditText) layout.findViewById(R.id.edt_memo);
@@ -272,7 +280,7 @@ public class TabFragment2 extends Fragment {
 
                 new AlertDialog.Builder(getActivity())
                         .setIcon(R.mipmap.ic_mikan)
-                        .setTitle("Edit item")
+                        .setTitle(getString(R.string.title_edit_item))
                         .setView(layout)
                         .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
@@ -303,7 +311,7 @@ public class TabFragment2 extends Fragment {
 
                                         dbAdapter.saveItem(tmp);
 
-                                        Toast.makeText(getActivity(), "The change was successfully saved.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -321,10 +329,10 @@ public class TabFragment2 extends Fragment {
 
     boolean checkBeforeSave(EditText edt_amount) {
         if ("".equals(edt_amount.getText().toString())) {
-            Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
             return false;
         } else if (Integer.parseInt(edt_amount.getText().toString()) == 0) {
-            Toast.makeText(getActivity(), "Amount cannot be 0.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -540,7 +548,7 @@ public class TabFragment2 extends Fragment {
         String searchItem = edtSearch.getText().toString();
 
         if ("".equals(searchItem.trim())) {
-            Toast.makeText(getActivity(), "Search word is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.err_search_word_empty), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -575,7 +583,7 @@ public class TabFragment2 extends Fragment {
         listView.setAdapter(searchListAdapter);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setIcon(R.mipmap.ic_mikan);
-        dialog.setTitle("Search Result");
+        dialog.setTitle(getString(R.string.title_search_result));
         dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

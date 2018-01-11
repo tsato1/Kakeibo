@@ -2,11 +2,8 @@ package com.kakeibo;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -234,13 +230,13 @@ public class TabFragment1 extends Fragment
     boolean checkBeforeSave()
     {
         if ("".equals(selectedCategory)) {
-            Toast.makeText(getActivity(), "Please select category.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
             return false;
         } else if ("".equals(edt_amount.getText().toString())) {
-            Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
             return false;
         } else if (Integer.parseInt(edt_amount.getText().toString()) == 0) {
-            Toast.makeText(getActivity(), "Amount cannot be 0.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -283,7 +279,7 @@ public class TabFragment1 extends Fragment
 
         dbAdapter.open();
         dbAdapter.saveItem(item);
-        Toast.makeText(getActivity(), "The item was successfully saved.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show();
         dbAdapter.close();
     }
 

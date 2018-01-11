@@ -120,7 +120,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Search from Memo"
+            android:hint="@string/hint_search_in_memo"
             android:maxLength="30"/>
         <ImageButton
             android:id="@+id/btn_search"

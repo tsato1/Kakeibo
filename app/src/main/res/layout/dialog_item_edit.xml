@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Amount: "
+        android:text="@string/amount_colon"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"/>
     <EditText
@@ -31,11 +31,11 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:maxLength="10"
-        android:hint="Amount: type in numbers"/>
+        android:hint="@string/hint_amount_spent_or_earned"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Memo: "
+        android:text="@string/memo_colon"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"/>
     <EditText
@@ -43,5 +43,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="20"
-        android:hint="Memo: max 20 characters"/>
+        android:hint="@string/hint_memo_max_20_characters"/>
 </LinearLayout>

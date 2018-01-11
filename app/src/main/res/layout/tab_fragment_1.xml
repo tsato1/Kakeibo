@@ -55,7 +55,7 @@
                 android:layout_weight="1"
                 android:inputType="number"
                 android:maxLength="10"
-                android:hint="Amount: type in numbers"/>
+                android:hint="@string/hint_amount_spent_or_earned"/>
         </TableRow>
         <TableRow
             android:paddingTop="2dp"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLength="20"
-                android:hint="Memo: max 20 characters"/>
+                android:hint="@string/hint_memo_max_20_characters"/>
         </TableRow>
     </TableLayout>
 

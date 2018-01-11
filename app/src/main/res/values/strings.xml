@@ -16,6 +16,30 @@
     <string name="save">Save</string>
     <string name="quit">Quit</string>
     <string name="export">Export</string>
+    <string name="item_detail">Item Detail</string>
+
+    <string name="amount_colon">Amount: </string>
+    <string name="memo_colon">Memo: </string>
+    <string name="category_colon">Category: </string>
+    <string name="saved_on_colon">Saved on: </string>
 
     <string name="warning_no_sdcard">Please insert sdcard.</string>
+
+    <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
+    <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_search_in_memo">Search in memo</string>
+
+    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
+    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
+    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
+
+    <string name="err_please_select_category">Please select category.</string>
+    <string name="err_please_enter_amount">Please enter amount.</string>
+    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
+    <string name="err_search_word_empty">Search word is empty.</string>
+
+    <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
+
+    <string name="title_edit_item">Edit item</string>
+    <string name="title_search_result">Search Result</string>
 </resources>

@@ -17,14 +17,20 @@ import java.util.List;
  */
 public class SearchListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater inflater;
+    private Context _context;
 
     public SearchListAdapter (Context context, int resource, List<Item> objects) {
         super(context, resource, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        _context = context;
     }
 
     @Override
     public View getView(int position, View v, ViewGroup parent) {
+        String amountColon = _context.getResources().getString(R.string.amount_colon);
+        String memoColon = _context.getResources().getString(R.string.memo_colon);
+        String categoryColon = _context.getResources().getString(R.string.category_colon);
+        String savedOnColon = _context.getResources().getString(R.string.saved_on_colon);
         Item item = (Item) getItem(position);
 
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
@@ -33,27 +39,31 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
 
         TextView txvCategory = (TextView) v.findViewById(R.id.txv_category);
-        txvCategory.setText("Category:" + item.getCategory());
+        String categoryText = categoryColon + item.getCategory();
+        txvCategory.setText(categoryText);
 
         TextView txvAmount = (TextView) v.findViewById(R.id.txv_amount);
-        txvAmount.setText("Amount:" + item.getAmount());
+        String amountText = amountColon + item.getAmount();
+        txvAmount.setText(amountText);
 
         TextView txvMemo = (TextView) v.findViewById(R.id.txv_memo);
         SpannableString spannableString;
         if ("Income".equals(item.getCategory())) {
-            String string = "Amount: " + "+" + item.getAmount();
+            String string = amountColon + "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 8, 9, 0);
         } else {
-            String string = "Amount: " + item.getAmount();
+            String string = amountColon + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 8, 9, 0);
         }
         txvAmount.setText(spannableString);
-        txvMemo.setText("Memo: " + item.getMemo());
+        String memoText = memoColon + item.getMemo();
+        txvMemo.setText(memoText);
 
         TextView txvUpdateDate = (TextView)v.findViewById(R.id.txv_update_date);
-        txvUpdateDate.setText("Registered on " + item.getUpdateDate());
+        String updateDateText = savedOnColon + item.getUpdateDate();
+        txvUpdateDate.setText(updateDateText);
 
         return v;
     }
