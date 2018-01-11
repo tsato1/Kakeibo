@@ -12,16 +12,16 @@
 
     <string-array name="defaultCategory">
         <item>INGRE</item>
-        <item>COMPRAS</item>
+        <item>MERCAN</item>
         <item>COMIDA</item>
         <item>UTIL</item>
         <item>SALUD</item>
         <item>EDU</item>
-        <item>VESTIDO</item>
+        <item>VESTID</item>
         <item>TRANS</item>
         <item>ENTRET</item>
         <item>SEGURO</item>
-        <item>IMPUESTOS</item>
+        <item>IMPUES</item>
         <item>OTROS</item>
     </string-array>
 </resources>

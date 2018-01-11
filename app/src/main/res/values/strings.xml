@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_csv_export">CSV Export</string>
 
     <string name="input">INPUT</string>
@@ -14,10 +13,13 @@
     <string name="no">No</string>
     <string name="ok" translatable="false">OK</string>
     <string name="save">Save</string>
-    <string name="quit">Quit</string>
+    <string name="cancel">Cancel</string>
     <string name="export">Export</string>
     <string name="item_detail">Item Detail</string>
 
+    <string name="income_colon">Income:</string>
+    <string name="expense_colon">Expense:</string>
+    <string name="balance_colon">Balance:</string>
     <string name="amount_colon">Amount: </string>
     <string name="memo_colon">Memo: </string>
     <string name="category_colon">Category: </string>

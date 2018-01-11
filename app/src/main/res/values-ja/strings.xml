@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kakeibo</string>
+    <string name="action_csv_export">CSVエクスポート</string>
+    <string name="amount_colon">金額：</string>
+    <string name="category_colon">カテゴリー：</string>
+    <string name="delete">削除</string>
+    <string name="edit">編集</string>
+    <string name="err_amount_cannot_be_0">金額が０です．</string>
+    <string name="err_please_enter_amount">金額を入力して下さい．</string>
+    <string name="err_please_select_category">カテゴリーを選択して下さい．</string>
+    <string name="err_search_word_empty">検索ボックスが空です．</string>
+    <string name="export">エクスポート</string>
+    <string name="hint_amount_spent_or_earned">収入支出の金額</string>
+    <string name="hint_search_in_memo">メモを検索</string>
+    <string name="income">収入</string>
+    <string name="input">入力</string>
+    <string name="item_detail">アイテム詳細</string>
+    <string name="memo_colon">メモ：</string>
+    <string name="hint_memo_max_20_characters">何に使ったかの説明</string>
+    <string name="msg_change_successfully_saved">変更が適用されました．</string>
+    <string name="msg_item_successfully_deleted">アイテムが削除されました．</string>
+    <string name="msg_item_successfully_saved">アイテムが保存されました．</string>
+    <string name="no">いいえ</string>
+    <string name="quest_do_you_want_to_delete_item">このアイテムを削除してもよろしいですか？</string>
+    <string name="cancel">キャンセル</string>
+    <string name="report">レポート</string>
+    <string name="save">保存</string>
+    <string name="saved_on_colon">保存日時：</string>
+    <string name="title_edit_item">アイテムを編集</string>
+    <string name="title_search_result">検索結果</string>
+    <string name="warning_no_sdcard">SDカードを挿入して下さい．</string>
+    <string name="yes">はい</string>
+    <string name="balance_colon">収支：</string>
+    <string name="expense_colon">支出：</string>
+    <string name="income_colon">収入：</string>
+</resources>

@@ -41,37 +41,37 @@
         android:paddingBottom="4dp">
         <TableRow>
             <TextView
-                android:text="Income:"
+                android:text="@string/income_colon"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/txv_income"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
         </TableRow>
         <TableRow>
             <TextView
-                android:text="Expense:"
+                android:text="@string/expense_colon"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/txv_expense"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
         </TableRow>
         <TableRow>
             <TextView
-                android:text="Balance:"
+                android:text="@string/balance_colon"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/txv_balance"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
         </TableRow>
