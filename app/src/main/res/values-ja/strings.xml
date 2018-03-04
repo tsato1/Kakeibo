@@ -17,7 +17,7 @@
     <string name="input">入力</string>
     <string name="item_detail">アイテム詳細</string>
     <string name="memo_colon">メモ：</string>
-    <string name="hint_memo_max_20_characters">何に使ったかの説明</string>
+    <string name="hint_memo_max_20_characters">金額についてのメモ</string>
     <string name="msg_change_successfully_saved">変更が適用されました．</string>
     <string name="msg_item_successfully_deleted">アイテムが削除されました．</string>
     <string name="msg_item_successfully_saved">アイテムが保存されました．</string>

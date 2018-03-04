@@ -6,8 +6,8 @@
     <string name="income">Ingresos</string>
     <string name="input">ENTRADAS</string>
     <string name="no">No</string>
-    <string name="ok"></string>
-    <string name="cancel">Descartar</string>
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
     <string name="yes">Si</string>
     <string name="action_csv_export">CSV Exportar</string>
