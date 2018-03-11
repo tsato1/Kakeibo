@@ -26,7 +26,7 @@
     <string name="cancel">キャンセル</string>
     <string name="report">レポート</string>
     <string name="save">保存</string>
-    <string name="saved_on_colon">保存日時：</string>
+    <string name="updated_on_colon">変更日時：</string>
     <string name="title_edit_item">アイテムを編集</string>
     <string name="title_search_result">検索結果</string>
     <string name="warning_no_sdcard">SDカードを挿入して下さい．</string>

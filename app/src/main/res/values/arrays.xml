@@ -24,4 +24,19 @@
         <item>Tax</item>
         <item>Other</item>
     </string-array>
+
+    <integer-array name="categoryMipmaps">
+        <item>@mipmap/ic_category_income</item>
+        <item>@mipmap/ic_category_comm</item>
+        <item>@mipmap/ic_category_meal</item>
+        <item>@mipmap/ic_category_util</item>
+        <item>@mipmap/ic_category_health</item>
+        <item>@mipmap/ic_category_edu</item>
+        <item>@mipmap/ic_category_cloth</item>
+        <item>@mipmap/ic_category_trans</item>
+        <item>@mipmap/ic_category_ent</item>
+        <item>@mipmap/ic_category_ins</item>
+        <item>@mipmap/ic_category_tax</item>
+        <item>@mipmap/ic_category_other</item>
+    </integer-array>
 </resources>

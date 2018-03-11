@@ -26,11 +26,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _dateHeaderList; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Item>> _childDataHashMap;
+    private String[] defaultCategory;
 
     public ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
         this._context = context;
         this._dateHeaderList = dateHeaderList;
         this._childDataHashMap = childDataHashMap;
+
+        defaultCategory = context.getResources().getStringArray(R.array.defaultCategory);
     }
 
     @Override
@@ -53,40 +56,44 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.row_explist_child, parent, false);
         }
 
-        ImageView imvCategoryImage = (ImageView)convertView.findViewById(R.id.img_category);
+        ImageView imvCategory = (ImageView)convertView.findViewById(R.id.img_category);
         TextView txvCategory = (TextView)convertView.findViewById(R.id.txv_category);
         TextView txvMemo = (TextView)convertView.findViewById(R.id.txv_memo);
         TextView txvAmount = (TextView)convertView.findViewById(R.id.txv_amount);
 
         Item item = (Item)baseItem;
 
+        int[] arrayMipmaps = _context.getResources().getIntArray(R.array.categoryMipmaps);
+        imvCategory.setImageResource(arrayMipmaps[item.getCategoryCode()]);
+        txvCategory.setText(defaultCategory[item.getCategoryCode()]);
+
         /*** image ***/
-        String[] category = _context.getResources().getStringArray(R.array.defaultCategory);
-        if(item.getCategory().equals(category[0])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_income);
-        } else if(item.getCategory().equals(category[1])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_comm);
-        } else if(item.getCategory().equals(category[2])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_meal);
-        } else if(item.getCategory().equals(category[3])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_util);
-        } else if(item.getCategory().equals(category[4])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_health);
-        } else if(item.getCategory().equals(category[5])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_edu);
-        } else if(item.getCategory().equals(category[6])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_cloth);
-        } else if(item.getCategory().equals(category[7])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_trans);
-        } else if(item.getCategory().equals(category[8])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_ent);
-        } else if(item.getCategory().equals(category[9])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_ins);
-        } else if(item.getCategory().equals(category[10])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_tax);
-        } else if(item.getCategory().equals(category[11])) {
-            imvCategoryImage.setImageResource(R.mipmap.ic_category_other);
-        }
+//        String[] category = _context.getResources().getStringArray(R.array.defaultCategory);
+//        if(item.getCategory().equals(category[0])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_income);
+//        } else if(item.getCategory().equals(category[1])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_comm);
+//        } else if(item.getCategory().equals(category[2])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_meal);
+//        } else if(item.getCategory().equals(category[3])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_util);
+//        } else if(item.getCategory().equals(category[4])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_health);
+//        } else if(item.getCategory().equals(category[5])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_edu);
+//        } else if(item.getCategory().equals(category[6])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_cloth);
+//        } else if(item.getCategory().equals(category[7])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_trans);
+//        } else if(item.getCategory().equals(category[8])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_ent);
+//        } else if(item.getCategory().equals(category[9])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_ins);
+//        } else if(item.getCategory().equals(category[10])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_tax);
+//        } else if(item.getCategory().equals(category[11])) {
+//            imvCategoryImage.setImageResource(R.mipmap.ic_category_other);
+//        }
 
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
@@ -97,7 +104,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         /*** category ***/
-        txvCategory.setText(item.getCategory());
+        txvCategory.setText(defaultCategory[item.getCategoryCode()]);
 
         /*** amount ***/
         SpannableString spannableString;

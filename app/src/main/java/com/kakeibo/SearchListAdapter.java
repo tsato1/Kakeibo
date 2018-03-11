@@ -3,6 +3,7 @@ package com.kakeibo;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,14 @@ import java.util.List;
 public class SearchListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater inflater;
     private Context _context;
+    private String[] defaultCategory;
 
     public SearchListAdapter (Context context, int resource, List<Item> objects) {
         super(context, resource, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
+
+        defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
     }
 
     @Override
@@ -30,7 +34,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         String amountColon = _context.getResources().getString(R.string.amount_colon);
         String memoColon = _context.getResources().getString(R.string.memo_colon);
         String categoryColon = _context.getResources().getString(R.string.category_colon);
-        String savedOnColon = _context.getResources().getString(R.string.saved_on_colon);
+        String savedOnColon = _context.getResources().getString(R.string.updated_on_colon);
         Item item = (Item) getItem(position);
 
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
@@ -39,7 +43,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
 
         TextView txvCategory = (TextView) v.findViewById(R.id.txv_category);
-        String categoryText = categoryColon + item.getCategory();
+        String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
         txvCategory.setText(categoryText);
 
         TextView txvAmount = (TextView) v.findViewById(R.id.txv_amount);
@@ -47,17 +51,17 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         txvAmount.setText(amountText);
 
         TextView txvMemo = (TextView) v.findViewById(R.id.txv_memo);
-        SpannableString spannableString;
-        if ("Income".equals(item.getCategory())) {
-            String string = amountColon + "+" + item.getAmount();
-            spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 8, 9, 0);
+        SpannableString span1, span2;
+        if (0 == (item.getCategoryCode())) {
+            span1 = new SpannableString(amountColon);
+            span2 = new SpannableString("+" + item.getAmount());
+            span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 0, 1, 0);
         } else {
-            String string = amountColon + item.getAmount();
-            spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 8, 9, 0);
+            span1 = new SpannableString(amountColon);
+            span2 = new SpannableString(item.getAmount());
+            span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 0, 1, 0);
         }
-        txvAmount.setText(spannableString);
+        txvAmount.setText(TextUtils.concat(span1, span2));
         String memoText = memoColon + item.getMemo();
         txvMemo.setText(memoText);
 

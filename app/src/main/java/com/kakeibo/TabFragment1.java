@@ -33,9 +33,9 @@ public class TabFragment1 extends Fragment
     public AutoCompleteTextView edt_memo;
 
     private ImageButton btnPrev, btnNext;
-    private ImageButton btnVoiceAmount, btnVoiceMemo;
     private ArrayList<Button> btnsCategory;
     private String selectedCategory = "";
+    private int selectedCategoryCode = 0;
     private View view;
     private String[] weekName;
     private String[] defaultCategory;
@@ -85,9 +85,6 @@ public class TabFragment1 extends Fragment
         btnsCategory.add((Button) view.findViewById(R.id.btn_category12));
         setButtonContent();
 
-//        btnVoiceAmount = (ImageButton) view.findViewById(R.id.btn_voice_amount);
-//        btnVoiceMemo = (ImageButton) view.findViewById(R.id.btn_voice_memo);
-
         edt_amount = (EditText)view.findViewById(R.id.edt_amount);
         edt_memo = (AutoCompleteTextView)view.findViewById(R.id.edt_memo);
     }
@@ -105,9 +102,6 @@ public class TabFragment1 extends Fragment
         btnPrev.setOnClickListener(new DateButtonClickListener());
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
-
-//        btnVoiceAmount.setOnClickListener(new ButtonClickListener());
-//        btnVoiceMemo.setOnClickListener(new ButtonClickListener());
 
         for (int i = 0; i < defaultCategory.length; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
@@ -156,64 +150,56 @@ public class TabFragment1 extends Fragment
         }
     }
 
-    class ButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-
-
-//            switch (view.getId()) {
-//                case R.id.btn_voice_amount:
-//                    //((MainActivity)getActivity()).speechText("How much?");
-//
-//
-//                    break;
-//                case R.id.btn_voice_memo:
-//                    //((MainActivity)getActivity()).speechText("Memo");
-//
-//
-//                    break;
-//            }
-        }
-    }
-
     class CategoryButtonClickListener implements View.OnClickListener {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_category1:
                     selectedCategory = btnsCategory.get(0).getText().toString();
+                    selectedCategoryCode = 0;
                     break;
                 case R.id.btn_category2:
                     selectedCategory = btnsCategory.get(1).getText().toString();
+                    selectedCategoryCode = 1;
                     break;
                 case R.id.btn_category3:
                     selectedCategory = btnsCategory.get(2).getText().toString();
+                    selectedCategoryCode = 2;
                     break;
                 case R.id.btn_category4:
                     selectedCategory = btnsCategory.get(3).getText().toString();
+                    selectedCategoryCode = 3;
                     break;
                 case R.id.btn_category5:
                     selectedCategory = btnsCategory.get(4).getText().toString();
+                    selectedCategoryCode = 4;
                     break;
                 case R.id.btn_category6:
                     selectedCategory = btnsCategory.get(5).getText().toString();
+                    selectedCategoryCode = 5;
                     break;
                 case R.id.btn_category7:
                     selectedCategory = btnsCategory.get(6).getText().toString();
+                    selectedCategoryCode = 6;
                     break;
                 case R.id.btn_category8:
                     selectedCategory = btnsCategory.get(7).getText().toString();
+                    selectedCategoryCode = 7;
                     break;
                 case R.id.btn_category9:
                     selectedCategory = btnsCategory.get(8).getText().toString();
+                    selectedCategoryCode = 8;
                     break;
                 case R.id.btn_category10:
                     selectedCategory = btnsCategory.get(9).getText().toString();
+                    selectedCategoryCode = 9;
                     break;
                 case R.id.btn_category11:
                     selectedCategory = btnsCategory.get(10).getText().toString();
+                    selectedCategoryCode = 10;
                     break;
                 case R.id.btn_category12:
                     selectedCategory = btnsCategory.get(11).getText().toString();
+                    selectedCategoryCode = 11;
                     break;
             }
 
@@ -265,7 +251,7 @@ public class TabFragment1 extends Fragment
         Item item = new Item(
                 "",
                 amount,
-                selectedCategory,
+                selectedCategoryCode,
                 edt_memo.getText().toString(),
                 d,
                 ym,

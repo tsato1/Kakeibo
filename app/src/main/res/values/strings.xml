@@ -20,10 +20,10 @@
     <string name="income_colon">Income:</string>
     <string name="expense_colon">Expense:</string>
     <string name="balance_colon">Balance:</string>
-    <string name="amount_colon">Amount: </string>
-    <string name="memo_colon">Memo: </string>
-    <string name="category_colon">Category: </string>
-    <string name="saved_on_colon">Saved on: </string>
+    <string name="amount_colon">Amount:</string>
+    <string name="memo_colon">Memo:</string>
+    <string name="category_colon">Category:</string>
+    <string name="updated_on_colon">Saved on:</string>
 
     <string name="warning_no_sdcard">Please insert sdcard.</string>
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -53,7 +54,7 @@ public class TabFragment2 extends Fragment {
     private ListView categoryListView;
     private PieGraph graph;
     private LinearLayout searchLayout;
-    private ImageButton btnPrev, btnNext, btnVoice, btnSearch;
+    private ImageButton btnPrev, btnNext, btnSearch;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
     private EditText edtSearch;
@@ -74,7 +75,7 @@ public class TabFragment2 extends Fragment {
         amountColon = getActivity().getResources().getString(R.string.amount_colon);
         memoColon = getActivity().getResources().getString(R.string.memo_colon);
         categoryColon = getActivity().getResources().getString(R.string.category_colon);
-        savedOnColon = getActivity().getResources().getString(R.string.saved_on_colon);
+        savedOnColon = getActivity().getResources().getString(R.string.updated_on_colon);
 
         findViews();
         reset();
@@ -137,14 +138,14 @@ public class TabFragment2 extends Fragment {
             searchResultList.clear();
 
             dbAdapter.open();
-            Cursor c = dbAdapter.getAllItemsInCategoryInMonth(btnDate.getText().toString(), tmp.getCategory());
+            Cursor c = dbAdapter.getAllItemsInCategoryInMonth(btnDate.getText().toString(), tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
                 do {
                     Item item = new Item(
                             c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                            c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
@@ -162,7 +163,7 @@ public class TabFragment2 extends Fragment {
             listView.setAdapter(searchListAdapter);
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setIcon(R.mipmap.ic_mikan);
-            dialog.setTitle(tmp.getCategory());
+            dialog.setTitle(defaultCategory[tmp.getCategoryCode()]);
             dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -187,19 +188,19 @@ public class TabFragment2 extends Fragment {
             TextView txvMemo = (TextView) layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = (TextView) layout.findViewById(R.id.txv_detail_registration);
 
-            String categoryText = categoryColon + item.getCategory();
+            String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
             txvCategory.setText(categoryText);
-            SpannableString spannableString;
-            if ("Income".equals(item.getCategory())) {
-                String string = amountColon + "+" + item.getAmount();
-                spannableString = new SpannableString(string);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorBlue)), 8, 9, 0);
+            SpannableString span1, span2;
+            if (0 == (item.getCategoryCode())) {
+                span1 = new SpannableString(amountColon);
+                span2 = new SpannableString("+" + item.getAmount());
+                span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorBlue)), 0, 1, 0);
             } else {
-                String string = amountColon + item.getAmount();
-                spannableString = new SpannableString(string);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorRed)), 8, 9, 0);
+                span1 = new SpannableString(amountColon);
+                span2 = new SpannableString(item.getAmount());
+                span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorRed)), 0, 1, 0);
             }
-            txvAmount.setText(spannableString);
+            txvAmount.setText(TextUtils.concat(span1, span2));
             String memoText = memoColon + item.getMemo();
             txvMemo.setText(memoText);
             String savedOnText = savedOnColon = item.getUpdateDate();
@@ -266,7 +267,7 @@ public class TabFragment2 extends Fragment {
                 TextView txvEventDate = (TextView) layout.findViewById(R.id.txv_event_date);
                 txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
                 TextView txvCategory = (TextView) layout.findViewById(R.id.txv_category);
-                String categoryText = getString(R.string.category_colon) + item.getCategory();
+                String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
                 final EditText edtAmount = (EditText) layout.findViewById(R.id.edt_amount);
                 edtAmount.setText(String.valueOf(Math.abs(Integer.parseInt(item.getAmount()))));
@@ -288,7 +289,7 @@ public class TabFragment2 extends Fragment {
                                 if (checkBeforeSave(edtAmount)) {
                                     if(dbAdapter.deleteItem(itemId)) {
                                         String amount = "";
-                                        if (!item.getCategory().equals(defaultCategory[0])) {
+                                        if (item.getCategoryCode() != 0) {
                                             amount = "-" + edtAmount.getText().toString();
                                         } else {
                                             amount = edtAmount.getText().toString();
@@ -297,7 +298,7 @@ public class TabFragment2 extends Fragment {
                                         Item tmp = new Item(
                                                 "",
                                                 amount,
-                                                item.getCategory(),
+                                                item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventD(),
                                                 item.getEventYM(),
@@ -428,7 +429,7 @@ public class TabFragment2 extends Fragment {
                     sameDateCounter++;
                 }
 
-                if(c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)).equals(getResources().getString(R.string.income))) {
+                if(c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)) == 0) {
                     income += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                     balanceDay += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                 } else {
@@ -439,7 +440,7 @@ public class TabFragment2 extends Fragment {
                 Item item = new Item(
                         c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                        c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
@@ -450,11 +451,11 @@ public class TabFragment2 extends Fragment {
                 boolean flag = false;
                 for (int i = 0; i < categoryList.size(); i++) {
                     Item tmp = categoryList.get(i);
-                    if (tmp.getCategory().equals(c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)))) {
+                    if (tmp.getCategoryCode() == c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE))) {
                         int amount = Integer.parseInt(tmp.getAmount()) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
                         tmp = new Item(categoryList.get(i).getId(),
                                 String.valueOf(amount),
-                                c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                                c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                                 "", "", "", "");
                         categoryList.remove(i);
                         categoryList.add(tmp);
@@ -465,7 +466,7 @@ public class TabFragment2 extends Fragment {
 
                 if (flag == false) {
                     int id = 0;
-                    String tmpCategory = c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY));
+                    String tmpCategory = defaultCategory[c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE))];
 
                     for (int i = 0; i < defaultCategory.length; i++) {
                         if (tmpCategory.equals(defaultCategory[i])) {
@@ -475,7 +476,7 @@ public class TabFragment2 extends Fragment {
                     }
                     Item tmp = new Item(String.valueOf(id),
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                            c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                             "", "", "", "");
                     categoryList.add(tmp);
                 }
@@ -528,7 +529,7 @@ public class TabFragment2 extends Fragment {
         graph.removeSlices();
         for (int i = 0; i < categoryList.size(); i++) {
             PieSlice slice = new PieSlice();
-            if (categoryList.get(i).getCategory().equals(getString(R.string.income))) {
+            if (categoryList.get(i).getCategoryCode() == 0) {
                 slice.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
@@ -559,7 +560,7 @@ public class TabFragment2 extends Fragment {
                     Item item = new Item(
                             c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY)),
+                            c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),

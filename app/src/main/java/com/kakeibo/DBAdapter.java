@@ -15,7 +15,7 @@ public class DBAdapter
 {
     private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DATABASE_NAME = "kakeibo.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_ITEM = "items";
     public static final String COL_ID = "_id";
@@ -48,14 +48,13 @@ public class DBAdapter
         }
 
         @Override
-        public void onCreate(SQLiteDatabase db)
-        {
-            try{
+        public void onCreate(SQLiteDatabase db) {
+            try {
                 db.execSQL(
                         "CREATE TABLE " + TABLE_ITEM + " ("
                         + COL_ID + " INTEGER PRIMARY KEY,"
                         + COL_AMOUNT + " TEXT NOT NULL,"
-                        + COL_CATEGORY + " TEXT NOT NULL,"
+                        + COL_CATEGORY_CODE + " INTEGER DEFAULT 0,"
                         + COL_MEMO + " TEXT NOT NULL,"
                         + COL_EVENT_D + " TEXT NOT NULL,"
                         + COL_EVENT_YM + " TEXT NOT NULL,"
@@ -68,23 +67,24 @@ public class DBAdapter
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            if (oldVersion < 2) {
-                //upgradeVersion2(db);
-            }
-
             Log.d(TAG,"oldVersion="+oldVersion+" : newVersion="+newVersion);
+
+            if (oldVersion < 2) {
+                upgradeVersion2(db);
+            }
         }
 
         private void upgradeVersion2(SQLiteDatabase db) {
             db.execSQL(DATABASE_ALTER_STATEMENT_1);
 
-            Cursor c = db.query(DATABASE_NAME, new String[]{COL_CATEGORY, COL_CATEGORY_CODE} , null, null, null, null, null, null);
+            Cursor c = db.query(TABLE_ITEM, new String[]{COL_ID, COL_CATEGORY} , null, null, null, null, null, null);
             if (c.moveToFirst()) {
                 do {
                     String catName = c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY));
-                    ContentValues values = new ContentValues();
-
                     int colId = c.getInt(c.getColumnIndex(COL_ID));
+                    ContentValues values = new ContentValues();
+                    Log.e("oioi", catName);
+                    Log.e("heyhey", String.valueOf(colId));
                     String[] defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
                     int catCode = 0;
 
@@ -95,7 +95,7 @@ public class DBAdapter
                     }
 
                     values.put(COL_CATEGORY_CODE, catCode);
-                    db.update(DATABASE_NAME, values, COL_ID+"=?", new String[] {String.valueOf(colId)});
+                    db.update(TABLE_ITEM, values, COL_ID+"=?", new String[] {String.valueOf(colId)});
                 } while (c.moveToNext());
             }
             c.close();
@@ -130,27 +130,28 @@ public class DBAdapter
 
     public Cursor getAllItemsInMonth (String ym)
     {
-        String query = "SELECT * FROM items WHERE event_ym = ? ORDER BY event_d DESC LIMIT 100";
+        String query = "SELECT * FROM items WHERE event_ym = ? ORDER BY event_d DESC";
         return db.rawQuery(query, new String[]{ym});
     }
 
-    public Cursor getAllItemsInCategoryInMonth (String ym, String category) {
-        String query = "SELECT * FROM items WHERE event_ym = ? AND category = ? ORDER BY event_d DESC LIMIT 200";
-        return db.rawQuery(query, new String[]{ym, category});
+    public Cursor getAllItemsInCategoryInMonth (String ym, int categoryCode) {
+        String query = "SELECT * FROM items WHERE " + COL_EVENT_YM + " = ? AND " + COL_CATEGORY_CODE + " = ? ORDER BY event_d DESC";
+        return db.rawQuery(query, new String[]{ym, String.valueOf(categoryCode)});
     }
 
     public void saveItem(Item item)
     {
         ContentValues values = new ContentValues();
         values.put(COL_AMOUNT, item.getAmount());
-        values.put(COL_CATEGORY, item.getCategory());
+        values.put(COL_CATEGORY_CODE, item.getCategoryCode());
         values.put(COL_MEMO, item.getMemo());
         values.put(COL_EVENT_D, item.getEventD());
         values.put(COL_EVENT_YM, item.getEventYM());
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
-        //values.put(COL_CATEGORY_CODE, item.getCategoryCode());
 
         db.insertOrThrow(TABLE_ITEM, null, values);
+
+        Log.d(TAG, "An item saved");
     }
 }
 

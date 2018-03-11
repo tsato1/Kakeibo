@@ -21,7 +21,7 @@
     <string name="title_edit_item">Editar Elemento</string>
     <string name="memo_colon">"Nota: "</string>
     <string name="title_search_result">Resultados de la Búsqueda</string>
-    <string name="saved_on_colon">"Guardado en: "</string>
+    <string name="updated_on_colon">"Guardado en: "</string>
     <string name="quest_do_you_want_to_delete_item">¿SEGURO QUE QUIERES ELIMINAR ESTE ELEMENTO?</string>
     <string name="hint_memo_max_20_characters">Nota: Max 20 caracteres</string>
     <string name="hint_amount_spent_or_earned">Cantidad gastada o ganada</string>
