@@ -22,6 +22,7 @@
     <string name="msg_item_successfully_deleted">アイテムが削除されました．</string>
     <string name="msg_item_successfully_saved">アイテムが保存されました．</string>
     <string name="no">いいえ</string>
+    <string name="ok">OK</string>
     <string name="quest_do_you_want_to_delete_item">このアイテムを削除してもよろしいですか？</string>
     <string name="cancel">キャンセル</string>
     <string name="report">レポート</string>
