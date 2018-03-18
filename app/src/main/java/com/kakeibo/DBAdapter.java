@@ -20,49 +20,45 @@ public class DBAdapter
     private static final String TABLE_ITEM = "items";
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNT = "amount";
+    //public static final String COL_CURRENCY = "currency";
     private static final String COL_CATEGORY = "category"; // dropped on version 2
     public static final String COL_CATEGORY_CODE = "category_code";
     public static final String COL_MEMO = "memo";
+    //public static final String COL_LOCALE = "locale";
     private static final String COL_EVENT_D = "event_d"; // dropped on version 3
     private static final String COL_EVENT_YM = "event_ym"; // dropped on version 3
     public static final String COL_EVENT_DATE = "event_date";
     public static final String COL_UPDATE_DATE = "update_date";
 
     private static final String DATABASE_ALTER_STATEMENT_1 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
-    private static final String DATABASE_ALTER_STATEMENT_2 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
+    private static final String DATABASE_ALTER_STATEMENT_2 = "ALTER TABLE " + TABLE_ITEM +
+            //" ADD COLUMN " + COL_CURRENCY + " INTEGER DEFAULT 0" +
+            //" ADD COLUMN " + COL_LOCALE + " TEXT NOT NULL DEFAULT ''" +
+            " ADD COLUMN " + COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
     private static final String DATABASE_ALTER_STATEMENT_3 =
-            "BEGIN TRANSACTION;"+
-            "CREATE TEMPORARY TABLE backup("+
+            "ALTER TABLE " + TABLE_ITEM + " RENAME TO " + TABLE_ITEM + "_old;" +
+            "CREATE TABLE " + TABLE_ITEM+ " ( "+
+                    COL_ID + " INTEGER PRIMARY KEY," +
+                    COL_AMOUNT + " TEXT NOT NULL," +
+                    COL_CATEGORY_CODE + " INTEGER DEFAULT 0," +
+                    COL_MEMO + " TEXT NOT NULL," +
+                    COL_EVENT_DATE + " TEXT NOT NULL," +
+                    COL_UPDATE_DATE + " TEXT NOT NULL);" +
+            "INSERT INTO " + TABLE_ITEM + " (" +
                     COL_ID+","+
                     COL_AMOUNT+","+
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+");" +
-            "INSERT INTO backup SELECT "+
+                    COL_UPDATE_DATE+") "+
+                    " SELECT "+
                     COL_ID+","+
                     COL_AMOUNT+","+
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+";" +
-            "DROP TABLE "+TABLE_ITEM+";" +
-            "CREATE TABLE "+TABLE_ITEM+"("+
-                    COL_ID+","+
-                    COL_AMOUNT+","+
-                    COL_CATEGORY_CODE+","+
-                    COL_MEMO+","+
-                    COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+");" +
-            "INSERT INTO "+TABLE_ITEM+" SELECT "+
-                    COL_ID+","+
-                    COL_AMOUNT+","+
-                    COL_CATEGORY_CODE+","+
-                    COL_MEMO+","+
-                    COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+" FROM backup;" +
-            "DROP TABLE backup;"+
-            "COMMIT;";
+                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+"_old;" +
+            "DROP TABLE "+TABLE_ITEM+"_old;";
 
     protected final Context context;
     protected DatabaseHelper dbHelper;
@@ -138,7 +134,6 @@ public class DBAdapter
             c.close();
 
             db.execSQL(DATABASE_ALTER_STATEMENT_3);
-            db.close();
         }
 
         private void upgradeVersion2(SQLiteDatabase db) {
