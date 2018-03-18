@@ -31,36 +31,38 @@ public class DBAdapter
     private static final String DATABASE_ALTER_STATEMENT_1 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
     private static final String DATABASE_ALTER_STATEMENT_2 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
     private static final String DATABASE_ALTER_STATEMENT_3 =
+            "BEGIN TRANSACTION;"+
             "CREATE TEMPORARY TABLE backup("+
                     COL_ID+","+
                     COL_AMOUNT+","+
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+");\n" +
+                    COL_UPDATE_DATE+");" +
             "INSERT INTO backup SELECT "+
                     COL_ID+","+
                     COL_AMOUNT+","+
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+";\n" +
-            "DROP TABLE "+TABLE_ITEM+";\n" +
+                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+";" +
+            "DROP TABLE "+TABLE_ITEM+";" +
             "CREATE TABLE "+TABLE_ITEM+"("+
                     COL_ID+","+
                     COL_AMOUNT+","+
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+");\n" +
+                    COL_UPDATE_DATE+");" +
             "INSERT INTO "+TABLE_ITEM+" SELECT "+
                     COL_ID+","+
                     COL_AMOUNT+","+
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+" FROM backup;\n" +
-            "DROP TABLE backup;";
+                    COL_UPDATE_DATE+" FROM backup;" +
+            "DROP TABLE backup;"+
+            "COMMIT;";
 
     protected final Context context;
     protected DatabaseHelper dbHelper;
@@ -136,6 +138,7 @@ public class DBAdapter
             c.close();
 
             db.execSQL(DATABASE_ALTER_STATEMENT_3);
+            db.close();
         }
 
         private void upgradeVersion2(SQLiteDatabase db) {
