@@ -233,15 +233,15 @@ public class TabFragment1 extends Fragment
     {
         DBAdapter dbAdapter = new DBAdapter(getActivity());
 
-        String ym = btnDate.getText().toString().substring(0, 7);;
-        String d = btnDate.getText().toString().substring(8, btnDate.getText().toString().indexOf(" "));
-        if (d.length() == 1) {
-            d = "0" + d;
-        }
-        //Log.d("fragment1", "d = " + d + ", ym = " + ym);
+//        String ym = btnDate.getText().toString().substring(0, 7);;
+//        String d = btnDate.getText().toString().substring(8, btnDate.getText().toString().indexOf(" "));
+        String date = btnDate.getText().toString().split("//s+")[0];
+//        if (d.length() == 1) {
+//            d = "0" + d;
+//        }
+//        Log.d("fragment1", "d = " + d + ", ym = " + ym);
 
-        String amount = "";
-
+        String amount;
         if (!selectedCategory.equals(defaultCategory[0])) {
             amount = "-" + edt_amount.getText().toString();
         } else {
@@ -253,8 +253,7 @@ public class TabFragment1 extends Fragment
                 amount,
                 selectedCategoryCode,
                 edt_memo.getText().toString(),
-                d,
-                ym,
+                date,
                 getTodaysDate()
         );
 

@@ -15,19 +15,52 @@ public class DBAdapter
 {
     private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DATABASE_NAME = "kakeibo.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
-    public static final String TABLE_ITEM = "items";
+    private static final String TABLE_ITEM = "items";
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNT = "amount";
-    public static final String COL_CATEGORY = "category";
+    private static final String COL_CATEGORY = "category"; // dropped on version 2
     public static final String COL_CATEGORY_CODE = "category_code";
     public static final String COL_MEMO = "memo";
-    public static final String COL_EVENT_D = "event_d";
-    public static final String COL_EVENT_YM = "event_ym";
+    private static final String COL_EVENT_D = "event_d"; // dropped on version 3
+    private static final String COL_EVENT_YM = "event_ym"; // dropped on version 3
+    public static final String COL_EVENT_DATE = "event_date";
     public static final String COL_UPDATE_DATE = "update_date";
 
-    public static final String DATABASE_ALTER_STATEMENT_1 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
+    private static final String DATABASE_ALTER_STATEMENT_1 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
+    private static final String DATABASE_ALTER_STATEMENT_2 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
+    private static final String DATABASE_ALTER_STATEMENT_3 =
+            "CREATE TEMPORARY TABLE backup("+
+                    COL_ID+","+
+                    COL_AMOUNT+","+
+                    COL_CATEGORY_CODE+","+
+                    COL_MEMO+","+
+                    COL_EVENT_DATE+","+
+                    COL_UPDATE_DATE+");\n" +
+            "INSERT INTO backup SELECT "+
+                    COL_ID+","+
+                    COL_AMOUNT+","+
+                    COL_CATEGORY_CODE+","+
+                    COL_MEMO+","+
+                    COL_EVENT_DATE+","+
+                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+";\n" +
+            "DROP TABLE "+TABLE_ITEM+";\n" +
+            "CREATE TABLE "+TABLE_ITEM+"("+
+                    COL_ID+","+
+                    COL_AMOUNT+","+
+                    COL_CATEGORY_CODE+","+
+                    COL_MEMO+","+
+                    COL_EVENT_DATE+","+
+                    COL_UPDATE_DATE+");\n" +
+            "INSERT INTO "+TABLE_ITEM+" SELECT "+
+                    COL_ID+","+
+                    COL_AMOUNT+","+
+                    COL_CATEGORY_CODE+","+
+                    COL_MEMO+","+
+                    COL_EVENT_DATE+","+
+                    COL_UPDATE_DATE+" FROM backup;\n" +
+            "DROP TABLE backup;";
 
     protected final Context context;
     protected DatabaseHelper dbHelper;
@@ -56,8 +89,7 @@ public class DBAdapter
                         + COL_AMOUNT + " TEXT NOT NULL,"
                         + COL_CATEGORY_CODE + " INTEGER DEFAULT 0,"
                         + COL_MEMO + " TEXT NOT NULL,"
-                        + COL_EVENT_D + " TEXT NOT NULL,"
-                        + COL_EVENT_YM + " TEXT NOT NULL,"
+                        + COL_EVENT_DATE + " TEXT NOT NULL,"
                         + COL_UPDATE_DATE + " TEXT NOT NULL);"
                 );
             } catch (SQLException e) {
@@ -72,6 +104,38 @@ public class DBAdapter
             if (oldVersion < 2) {
                 upgradeVersion2(db);
             }
+            if (oldVersion < 3) {
+                upgradeVersion3(db);
+            }
+        }
+
+        private void upgradeVersion3(SQLiteDatabase db) {
+            db.execSQL(DATABASE_ALTER_STATEMENT_2);
+
+            Cursor c = db.query(TABLE_ITEM, new String[]{COL_ID, COL_EVENT_D, COL_EVENT_YM, COL_EVENT_D, COL_UPDATE_DATE},
+                    null, null, null, null, null, null);
+            if (c.moveToFirst()) {
+                do {
+                    String eventD = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D));
+                    String eventYM = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM));
+                    String eventDate;
+                    String updateDate = c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE));
+                    int colId = c.getInt(c.getColumnIndex(COL_ID));
+                    ContentValues values = new ContentValues();
+
+                    /*** event_date ***/
+                    eventDate = eventYM.replace('/','-') + "-" + eventD;
+                    /*** update_date ***/
+                    updateDate = updateDate.split("\\s+")[0].replace('/','-') + " 00:00:00";
+
+                    values.put(COL_EVENT_DATE, eventDate);
+                    values.put(COL_UPDATE_DATE, updateDate);
+                    db.update(TABLE_ITEM, values, COL_ID+"=?", new String[] {String.valueOf(colId)});
+                } while (c.moveToNext());
+            }
+            c.close();
+
+            db.execSQL(DATABASE_ALTER_STATEMENT_3);
         }
 
         private void upgradeVersion2(SQLiteDatabase db) {
@@ -83,8 +147,6 @@ public class DBAdapter
                     String catName = c.getString(c.getColumnIndex(DBAdapter.COL_CATEGORY));
                     int colId = c.getInt(c.getColumnIndex(COL_ID));
                     ContentValues values = new ContentValues();
-                    Log.e("oioi", catName);
-                    Log.e("heyhey", String.valueOf(colId));
                     String[] defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
                     int catCode = 0;
 
@@ -130,12 +192,20 @@ public class DBAdapter
 
     public Cursor getAllItemsInMonth (String ym)
     {
-        String query = "SELECT * FROM items WHERE event_ym = ? ORDER BY event_d DESC";
+        /*** todo conversion needed ***/
+        ym = ym.replace('/','-');
+        Log.d("test test", ym);
+        String query = "SELECT * FROM " + TABLE_ITEM +
+                " WHERE strftime('%y-%m', " + COL_EVENT_DATE + ") = ?" +
+                " ORDER BY " + COL_EVENT_DATE + " DESC";
         return db.rawQuery(query, new String[]{ym});
     }
 
     public Cursor getAllItemsInCategoryInMonth (String ym, int categoryCode) {
-        String query = "SELECT * FROM items WHERE " + COL_EVENT_YM + " = ? AND " + COL_CATEGORY_CODE + " = ? ORDER BY event_d DESC";
+        String query = "SELECT * FROM " + TABLE_ITEM +
+                " WHERE strftime('%y-%m', " + COL_EVENT_DATE + ") = ?" +
+                " AND " + COL_CATEGORY_CODE + " = ? " +
+                " ORDER BY " + COL_EVENT_DATE + " DESC";
         return db.rawQuery(query, new String[]{ym, String.valueOf(categoryCode)});
     }
 
@@ -145,13 +215,12 @@ public class DBAdapter
         values.put(COL_AMOUNT, item.getAmount());
         values.put(COL_CATEGORY_CODE, item.getCategoryCode());
         values.put(COL_MEMO, item.getMemo());
-        values.put(COL_EVENT_D, item.getEventD());
-        values.put(COL_EVENT_YM, item.getEventYM());
+        values.put(COL_EVENT_DATE, item.getEventDate());
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
 
         db.insertOrThrow(TABLE_ITEM, null, values);
 
-        Log.d(TAG, "An item saved");
+        Log.d(TAG, "saveItem() called");
     }
 }
 

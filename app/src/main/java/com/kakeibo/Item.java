@@ -11,18 +11,16 @@ public class Item
     String amount;
     int categoryCode;
     String memo;
-    String eventD;
-    String eventYM;
+    String eventDate;
     String updateDate;
 
-    public Item(String id, String amount, int categoryCode, String memo, String eventD, String eventYM, String updateDate)
+    public Item(String id, String amount, int categoryCode, String memo, String eventDate, String updateDate)
     {
         this.id = id;
         this.amount = amount;
         this.categoryCode = categoryCode;
         this.memo = memo;
-        this.eventD = eventD;
-        this.eventYM = eventYM;
+        this.eventDate = eventDate;
         this.updateDate = updateDate;
     }
 
@@ -50,14 +48,9 @@ public class Item
         return this.memo;
     }
 
-    public String getEventD()
+    public String getEventDate()
     {
-        return this.eventD;
-    }
-
-    public String getEventYM()
-    {
-        return this.eventYM;
+        return this.eventDate;
     }
 
     public String getUpdateDate()

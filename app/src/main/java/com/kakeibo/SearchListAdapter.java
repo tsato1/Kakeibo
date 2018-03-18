@@ -40,7 +40,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
         TextView txvEventDate = (TextView) v.findViewById(R.id.txv_event_date);
-        txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
+        txvEventDate.setText(item.getEventDate());
 
         TextView txvCategory = (TextView) v.findViewById(R.id.txv_category);
         String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];

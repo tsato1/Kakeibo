@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -147,8 +148,7 @@ public class TabFragment2 extends Fragment {
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
                             c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
                     );
 
@@ -265,7 +265,7 @@ public class TabFragment2 extends Fragment {
                 LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, (ViewGroup) _view.findViewById(R.id.layout_root));
                 TextView txvEventDate = (TextView) layout.findViewById(R.id.txv_event_date);
-                txvEventDate.setText(item.getEventYM() + "/" + item.getEventD());
+                txvEventDate.setText(item.getEventDate());
                 TextView txvCategory = (TextView) layout.findViewById(R.id.txv_category);
                 String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
@@ -300,8 +300,7 @@ public class TabFragment2 extends Fragment {
                                                 amount,
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
-                                                item.getEventD(),
-                                                item.getEventYM(),
+                                                item.getEventDate(),
                                                 getTodaysDate().toString()
                                         );
 
@@ -412,20 +411,20 @@ public class TabFragment2 extends Fragment {
         Cursor c = dbAdapter.getAllItemsInMonth(btnDate.getText().toString());
 
         if (c.moveToFirst()) {
-            String day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D));
+            String day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE));
             int balanceDay = 0;
-            List<Item> tmpItemList = new ArrayList<Item>();
+            List<Item> tmpItemList = new ArrayList();
 
             do {
                 //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
 
-                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)).equals(day)){ // if the event day of an item increases
+                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)).equals(day)){ // if the event day of an item increases
                     dateHeaderList.add(calYear + convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
                     childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList); // set the header of the old day
                     balanceDay = 0;
                     /*** change of the date ***/
-                    day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)); // set a new date
-                    tmpItemList = new ArrayList<Item>(); // empty the array list of items
+                    day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)); // set a new date
+                    tmpItemList = new ArrayList(); // empty the array list of items
                     sameDateCounter++;
                 }
 
@@ -442,8 +441,7 @@ public class TabFragment2 extends Fragment {
                         c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
                         c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
+                        c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)),
                         c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
                 );
 
@@ -456,7 +454,7 @@ public class TabFragment2 extends Fragment {
                         tmp = new Item(categoryList.get(i).getId(),
                                 String.valueOf(amount),
                                 c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
-                                "", "", "", "");
+                                "", "", "");
                         categoryList.remove(i);
                         categoryList.add(tmp);
                         flag = true;
@@ -477,7 +475,7 @@ public class TabFragment2 extends Fragment {
                     Item tmp = new Item(String.valueOf(id),
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
                             c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
-                            "", "", "", "");
+                            "", "", "");
                     categoryList.add(tmp);
                 }
 
@@ -562,8 +560,7 @@ public class TabFragment2 extends Fragment {
                             c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
                             c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_D)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_YM)),
+                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)),
                             c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
                     );
 
