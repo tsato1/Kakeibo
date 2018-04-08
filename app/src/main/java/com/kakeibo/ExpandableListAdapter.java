@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Created by T on 2015/09/16.
@@ -97,7 +100,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
-            txvMemo.setText(item.getMemo().substring(0, 15) + "...");
+            txvMemo.setText(item.getMemo().substring(0, 14) + "...");
         }
         else {
             txvMemo.setText(item.getMemo());
@@ -108,11 +111,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         /*** amount ***/
         SpannableString spannableString;
-        if (Integer.parseInt(item.getAmount()) > 0/***"Income".equals(item.getCategory())***/) {
+        if (parseInt(item.getAmount()) > 0/***"Income".equals(item.getCategory())***/) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-        } else if (Integer.parseInt(item.getAmount()) < 0){
+        } else if (parseInt(item.getAmount()) < 0){
             String string = item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
@@ -149,9 +152,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        String headerYear = headerTitle.substring(0, 4);
-        String headerDate = headerTitle.substring(4, headerTitle.indexOf(","));
-        String headerBalance = headerTitle.substring(headerTitle.indexOf(",")+1);
+        String[] arrHeaderInfo = headerTitle.split("[,]");
+        String headerYear = arrHeaderInfo[0];
+        String headerMonth = arrHeaderInfo[1];
+        String headerDay = arrHeaderInfo[2];
+        String headerDate = arrHeaderInfo[0]+"/"+arrHeaderInfo[1]+"/"+arrHeaderInfo[2]; //// TODO: 3/18/18 change based on locale 
+        String headerBalance = arrHeaderInfo[3];
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -161,7 +167,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txvHeaderDate = (TextView) convertView.findViewById(R.id.txv_header_date);
         Calendar cal = Calendar.getInstance();
-        cal.set(Integer.parseInt(headerYear), Integer.parseInt(headerDate.substring(0, 2))-1, Integer.parseInt(headerDate.substring(3)));
+        cal.set(parseInt(headerYear), parseInt(headerMonth)-1, parseInt(headerDay));
         String[] weekName = _context.getResources().getStringArray(R.array.weekName);
         txvHeaderDate.setText(headerDate + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
 

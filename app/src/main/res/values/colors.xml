@@ -9,4 +9,9 @@
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorBlue">#12a1eb</color>
+
+    <color name="colorThemeDarkBlue">#355555</color>
+    <color name="colorThemeDarkBlack">#33000000</color>
+    <color name="colorThemeDarkCream">#e3aaaa</color>
+
 </resources>

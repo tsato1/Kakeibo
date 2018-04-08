@@ -30,20 +30,23 @@ public class DBAdapter
     public static final String COL_EVENT_DATE = "event_date";
     public static final String COL_UPDATE_DATE = "update_date";
 
-    private static final String DATABASE_ALTER_STATEMENT_1 = "ALTER TABLE " + TABLE_ITEM + " ADD COLUMN " + COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
-    private static final String DATABASE_ALTER_STATEMENT_2 = "ALTER TABLE " + TABLE_ITEM +
-            //" ADD COLUMN " + COL_CURRENCY + " INTEGER DEFAULT 0" +
-            //" ADD COLUMN " + COL_LOCALE + " TEXT NOT NULL DEFAULT ''" +
-            " ADD COLUMN " + COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
-    private static final String DATABASE_ALTER_STATEMENT_3 =
-            "ALTER TABLE " + TABLE_ITEM + " RENAME TO " + TABLE_ITEM + "_old;" +
-            "CREATE TABLE " + TABLE_ITEM+ " ( "+
+    private static final String DATABASE_CREATE_TABLE_ITEM =
+            "CREATE TABLE " + TABLE_ITEM + " ("+
                     COL_ID + " INTEGER PRIMARY KEY," +
                     COL_AMOUNT + " TEXT NOT NULL," +
                     COL_CATEGORY_CODE + " INTEGER DEFAULT 0," +
                     COL_MEMO + " TEXT NOT NULL," +
                     COL_EVENT_DATE + " TEXT NOT NULL," +
-                    COL_UPDATE_DATE + " TEXT NOT NULL);" +
+                    COL_UPDATE_DATE + " TEXT NOT NULL);";
+    private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + TABLE_ITEM +
+            " ADD COLUMN " + COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
+    private static final String DATABASE_UPDATE_2_TO_3_1 = "ALTER TABLE " + TABLE_ITEM +
+            //" ADD COLUMN " + COL_CURRENCY + " INTEGER DEFAULT 0" +
+            //" ADD COLUMN " + COL_LOCALE + " TEXT NOT NULL DEFAULT ''" +
+            " ADD COLUMN " + COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
+    private static final String DATABASE_UPDATE_2_TO_3_2 =
+            "ALTER TABLE " + TABLE_ITEM + " RENAME TO " + TABLE_ITEM + "_old;";
+    private static final String DATABASE_UPDATE_2_TO_3_3 =
             "INSERT INTO " + TABLE_ITEM + " (" +
                     COL_ID+","+
                     COL_AMOUNT+","+
@@ -57,7 +60,8 @@ public class DBAdapter
                     COL_CATEGORY_CODE+","+
                     COL_MEMO+","+
                     COL_EVENT_DATE+","+
-                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+"_old;" +
+                    COL_UPDATE_DATE+" FROM "+TABLE_ITEM+"_old;";
+    private static final String DATABASE_UPDATE_2_TO_3_4 =
             "DROP TABLE "+TABLE_ITEM+"_old;";
 
     protected final Context context;
@@ -81,15 +85,7 @@ public class DBAdapter
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
-                db.execSQL(
-                        "CREATE TABLE " + TABLE_ITEM + " ("
-                        + COL_ID + " INTEGER PRIMARY KEY,"
-                        + COL_AMOUNT + " TEXT NOT NULL,"
-                        + COL_CATEGORY_CODE + " INTEGER DEFAULT 0,"
-                        + COL_MEMO + " TEXT NOT NULL,"
-                        + COL_EVENT_DATE + " TEXT NOT NULL,"
-                        + COL_UPDATE_DATE + " TEXT NOT NULL);"
-                );
+                db.execSQL(DATABASE_CREATE_TABLE_ITEM);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -108,7 +104,7 @@ public class DBAdapter
         }
 
         private void upgradeVersion3(SQLiteDatabase db) {
-            db.execSQL(DATABASE_ALTER_STATEMENT_2);
+            db.execSQL(DATABASE_UPDATE_2_TO_3_1);
 
             Cursor c = db.query(TABLE_ITEM, new String[]{COL_ID, COL_EVENT_D, COL_EVENT_YM, COL_EVENT_D, COL_UPDATE_DATE},
                     null, null, null, null, null, null);
@@ -133,11 +129,14 @@ public class DBAdapter
             }
             c.close();
 
-            db.execSQL(DATABASE_ALTER_STATEMENT_3);
+            db.execSQL(DATABASE_UPDATE_2_TO_3_2);
+            db.execSQL(DATABASE_CREATE_TABLE_ITEM);
+            db.execSQL(DATABASE_UPDATE_2_TO_3_3);
+            db.execSQL(DATABASE_UPDATE_2_TO_3_4);
         }
 
         private void upgradeVersion2(SQLiteDatabase db) {
-            db.execSQL(DATABASE_ALTER_STATEMENT_1);
+            db.execSQL(DATABASE_UPDATE_1_TO_2);
 
             Cursor c = db.query(TABLE_ITEM, new String[]{COL_ID, COL_CATEGORY} , null, null, null, null, null, null);
             if (c.moveToFirst()) {
@@ -188,23 +187,22 @@ public class DBAdapter
         return db.query(TABLE_ITEM, null, null, null, null, null, null);
     }
 
-    public Cursor getAllItemsInMonth (String ym)
+    public Cursor getAllItemsInMonth (String y, String m)
     {
-        /*** todo conversion needed ***/
-        ym = ym.replace('/','-');
-        Log.d("test test", ym);
+        String ym = "\'" + y + "-" + m + "\'";
         String query = "SELECT * FROM " + TABLE_ITEM +
-                " WHERE strftime('%y-%m', " + COL_EVENT_DATE + ") = ?" +
+                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " ORDER BY " + COL_EVENT_DATE + " DESC";
-        return db.rawQuery(query, new String[]{ym});
+        return db.rawQuery(query, new String[]{});
     }
 
-    public Cursor getAllItemsInCategoryInMonth (String ym, int categoryCode) {
+    public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
+        String ym = "'" + y + "-" + m + "'";
         String query = "SELECT * FROM " + TABLE_ITEM +
-                " WHERE strftime('%y-%m', " + COL_EVENT_DATE + ") = ?" +
+                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " AND " + COL_CATEGORY_CODE + " = ? " +
                 " ORDER BY " + COL_EVENT_DATE + " DESC";
-        return db.rawQuery(query, new String[]{ym, String.valueOf(categoryCode)});
+        return db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
     }
 
     public void saveItem(Item item)

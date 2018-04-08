@@ -2,7 +2,6 @@ package com.kakeibo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.kakeibo.pref.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -145,16 +146,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-    }
-
     public void onItemSaved(String date) {
         //Log.d("testtest", date);
         String y = date.substring(0, 4);
@@ -231,9 +222,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_csv_export) {
-            Intent csvIntent = new Intent(MainActivity.this, CSVExportActivity.class);
-            startActivity(csvIntent);
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

@@ -135,11 +135,14 @@ public class TabFragment2 extends Fragment {
             ListView lsvCat = (ListView) parent;
             Item tmp = (Item) lsvCat.getItemAtPosition(position);
 
-            List<Item> searchResultList = new ArrayList<Item>();
+            List<Item> searchResultList = new ArrayList<>();
             searchResultList.clear();
 
             dbAdapter.open();
-            Cursor c = dbAdapter.getAllItemsInCategoryInMonth(btnDate.getText().toString(), tmp.getCategoryCode());
+            String[] ym = btnDate.getText().toString().split("[/]");
+            String y = ym[0];
+            String m = ym[1];
+            Cursor c = dbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
                 do {
@@ -288,7 +291,7 @@ public class TabFragment2 extends Fragment {
 
                                 if (checkBeforeSave(edtAmount)) {
                                     if(dbAdapter.deleteItem(itemId)) {
-                                        String amount = "";
+                                        String amount;
                                         if (item.getCategoryCode() != 0) {
                                             amount = "-" + edtAmount.getText().toString();
                                         } else {
@@ -301,7 +304,7 @@ public class TabFragment2 extends Fragment {
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
-                                                getTodaysDate().toString()
+                                                getTodaysDate()
                                         );
 
                                         dbAdapter.saveItem(tmp);
@@ -359,7 +362,7 @@ public class TabFragment2 extends Fragment {
                         calMonth = 12;
                         calYear--;
                         if (calYear <= 0) {
-                            calYear = 2015;
+                            calYear = Calendar.getInstance().get(Calendar.YEAR);
                         }
                     }
                     btnDate.setText(calYear + "/" + convertMtoMM());
@@ -388,12 +391,12 @@ public class TabFragment2 extends Fragment {
     void setAdapters(){
         dbAdapter = new DBAdapter(getActivity());
 
-        dateHeaderList = new ArrayList<String>();
-        childDataHashMap = new HashMap<String, List<Item>>();
+        dateHeaderList = new ArrayList<>();
+        childDataHashMap = new HashMap<>();
         expandableListAdapter = new ExpandableListAdapter(getActivity(), dateHeaderList, childDataHashMap);
         expandableListView.setAdapter(expandableListAdapter);
 
-        categoryList = new ArrayList<Item>();
+        categoryList = new ArrayList<>();
         categoryListAdapter = new CategoryListAdapter(getActivity(), 0, categoryList);
         categoryListView.setAdapter(categoryListAdapter);
     }
@@ -408,22 +411,25 @@ public class TabFragment2 extends Fragment {
 
         dbAdapter.open();
 
-        Cursor c = dbAdapter.getAllItemsInMonth(btnDate.getText().toString());
+        String[] ym = btnDate.getText().toString().split("[/]");
+        String y = ym[0];
+        String m = ym[1];
+        Cursor c = dbAdapter.getAllItemsInMonth(y, m);
 
-        if (c.moveToFirst()) {
-            String day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE));
+        if (c!=null && c.moveToFirst()) {
+            String eventDate = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE));
             int balanceDay = 0;
             List<Item> tmpItemList = new ArrayList();
 
             do {
                 //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
 
-                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)).equals(day)){ // if the event day of an item increases
-                    dateHeaderList.add(calYear + convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
+                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
+                    dateHeaderList.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator
                     childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList); // set the header of the old day
                     balanceDay = 0;
                     /*** change of the date ***/
-                    day = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)); // set a new date
+                    eventDate = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)); // set a new date
                     tmpItemList = new ArrayList(); // empty the array list of items
                     sameDateCounter++;
                 }
@@ -484,7 +490,7 @@ public class TabFragment2 extends Fragment {
                 tmpItemList.add(item);
             }while (c.moveToNext());
 
-            dateHeaderList.add(calYear + convertMtoMM() + "/" + day + "," + String.valueOf(balanceDay)); // set what to show on the header
+            dateHeaderList.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // set what to show on the header
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
         }
 
@@ -546,11 +552,14 @@ public class TabFragment2 extends Fragment {
             return;
         }
 
-        List<Item> searchResultList = new ArrayList<Item>();
+        List<Item> searchResultList = new ArrayList<>();
 
         dbAdapter.open();
 
-        Cursor c = dbAdapter.getAllItemsInMonth(btnDate.getText().toString());
+        String[] ym = btnDate.getText().toString().split("[/]");
+        String y = ym[0];
+        String m = ym[1];
+        Cursor c = dbAdapter.getAllItemsInMonth(y, m);
 
         if (c.moveToFirst()) {
             do {

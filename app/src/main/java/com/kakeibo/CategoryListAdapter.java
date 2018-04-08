@@ -33,21 +33,21 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Item item = (Item)getItem(position);
+        Item item = getItem(position);
 
         if (null == convertView) {
-            convertView = layoutInflater_.inflate(R.layout.row_list_category, null);
+            convertView = layoutInflater_.inflate(R.layout.row_list_category, parent, false);
         }
 
-        ImageView imvCategory = (ImageView)convertView.findViewById(R.id.imv_category);
-        TextView txvCategory = (TextView)convertView.findViewById(R.id.txv_category);
+        ImageView imvCategory = convertView.findViewById(R.id.imv_category);
+        TextView txvCategory = convertView.findViewById(R.id.txv_category);
 
         int[] arrayMipmaps = _context.getResources().getIntArray(R.array.categoryMipmaps);
         imvCategory.setImageResource(arrayMipmaps[item.getCategoryCode()]);
         txvCategory.setText(defaultCategory[item.getCategoryCode()]);
 
         /*** amount ***/
-        TextView txvAmount = (TextView)convertView.findViewById(R.id.txv_amount);
+        TextView txvAmount = convertView.findViewById(R.id.txv_amount);
         SpannableString spannableString;
         if (Integer.parseInt(item.getAmount()) > 0) {
             String string = "+" + item.getAmount();
@@ -62,7 +62,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         }
 
         ImageView percentImageView;
-        percentImageView = (ImageView) convertView.findViewById(R.id.imv_percent);
+        percentImageView = convertView.findViewById(R.id.imv_percent);
         if (item.getCategoryCode() == 0) {
             percentImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         } else {
@@ -70,7 +70,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         }
 
         TextView percentTextView;
-        percentTextView = (TextView) convertView.findViewById(R.id.txv_percent);
+        percentTextView = convertView.findViewById(R.id.txv_percent);
         String percent = item.getMemo();
         if (percent.length() == 1) percent = "0" + percent;
         percentTextView.setText(percent + "%");

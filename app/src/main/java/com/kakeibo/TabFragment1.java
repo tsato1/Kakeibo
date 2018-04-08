@@ -233,13 +233,7 @@ public class TabFragment1 extends Fragment
     {
         DBAdapter dbAdapter = new DBAdapter(getActivity());
 
-//        String ym = btnDate.getText().toString().substring(0, 7);;
-//        String d = btnDate.getText().toString().substring(8, btnDate.getText().toString().indexOf(" "));
-        String date = btnDate.getText().toString().split("//s+")[0];
-//        if (d.length() == 1) {
-//            d = "0" + d;
-//        }
-//        Log.d("fragment1", "d = " + d + ", ym = " + ym);
+        String date = btnDate.getText().toString().split("\\s+")[0].replace('/', '-');
 
         String amount;
         if (!selectedCategory.equals(defaultCategory[0])) {
@@ -256,11 +250,6 @@ public class TabFragment1 extends Fragment
                 date,
                 getTodaysDate()
         );
-
-//        Log.d("stored item = ", edt_amount.getText().toString()
-//        + " " + selectedCategory
-//        + " " + edt_memo.getText().toString() + " " + d
-//        + " " + ym +" " + getTodaysDate().toString());
 
         dbAdapter.open();
         dbAdapter.saveItem(item);
@@ -287,18 +276,20 @@ public class TabFragment1 extends Fragment
         dialog.show();
     }
 
+//    String getTodaysDateYMDHM()
+//    {
+//        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+//        String str = (sdFormat.format(cal)+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
+//        return str;
+//    }
+
     String getTodaysDate()
     {
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        String mon = String.valueOf(month);
-        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
-            mon = "0" + String.valueOf(month);
-        }
-        String str = (year+"/"+mon+"/"+day+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
+        sdFormat.setCalendar(cal);
+        sdFormat.setTimeZone(cal.getTimeZone());
+        String str = (sdFormat.format(cal.getTime())+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
         return str;
     }
 
