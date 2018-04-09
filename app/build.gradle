@@ -8,8 +8,8 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.0.1"
+        versionCode 9
+        versionName "2.0.1"
     }
     buildTypes {
         release {
@@ -17,20 +17,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:preference-v7:27.1.0'
-    compile 'com.google.android.gms:play-services-auth:12.0.1'
-    compile 'pub.devrel:easypermissions:0.2.1'
-    compile('com.google.api-client:google-api-client-android:1.22.0') {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:preference-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.google.android.gms:play-services-auth:12.0.1'
+    implementation 'pub.devrel:easypermissions:0.2.1'
+    implementation('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile('com.google.apis:google-api-services-sheets:v4-rev35-1.22.0') {
+    implementation('com.google.apis:google-api-services-sheets:v4-rev35-1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile project(':HoloGraphLibrary')
+    implementation project(':HoloGraphLibrary')
 }

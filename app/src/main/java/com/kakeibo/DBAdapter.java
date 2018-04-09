@@ -192,7 +192,7 @@ public class DBAdapter
         String ym = "\'" + y + "-" + m + "\'";
         String query = "SELECT * FROM " + TABLE_ITEM +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
-                " ORDER BY " + COL_EVENT_DATE + " DESC";
+                " ORDER BY " + COL_EVENT_DATE;
         return db.rawQuery(query, new String[]{});
     }
 
@@ -201,7 +201,7 @@ public class DBAdapter
         String query = "SELECT * FROM " + TABLE_ITEM +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " AND " + COL_CATEGORY_CODE + " = ? " +
-                " ORDER BY " + COL_EVENT_DATE + " DESC";
+                " ORDER BY " + COL_EVENT_DATE;
         return db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
     }
 

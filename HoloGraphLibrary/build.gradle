@@ -40,6 +40,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.intellij:annotations:+@jar'
+    implementation 'com.android.support:support-v4:21.0.3'
+    implementation 'com.intellij:annotations:+@jar'
 }
