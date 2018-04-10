@@ -20,6 +20,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater inflater;
     private Context _context;
     private String[] defaultCategory;
+    private String[] weekName;
 
     public SearchListAdapter (Context context, int resource, List<Item> objects) {
         super(context, resource, objects);
@@ -27,6 +28,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         _context = context;
 
         defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
+        weekName = _context.getResources().getStringArray(R.array.weekName);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         txvMemo.setText(memoText);
 
         TextView txvUpdateDate = (TextView)v.findViewById(R.id.txv_update_date);
-        String updateDateText = savedOnColon + item.getUpdateDate();
+        String updateDateText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, "yyyy/MM/dd");
         txvUpdateDate.setText(updateDateText);
 
         return v;

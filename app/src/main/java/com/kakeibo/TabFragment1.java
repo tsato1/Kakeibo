@@ -49,7 +49,7 @@ public class TabFragment1 extends Fragment
 
         findViews(view);
         setListeners();
-        btnDate.setText(getTodaysDate());
+        btnDate.setText(Utilities.getTodaysDateWithDay(weekName));
         reset();
 
         return view;
@@ -60,7 +60,7 @@ public class TabFragment1 extends Fragment
         super.onResume();
         findViews(view);
         setListeners();
-        btnDate.setText(getTodaysDate());
+        btnDate.setText(Utilities.getTodaysDateWithDay(weekName));
         reset();
     }
 
@@ -233,7 +233,9 @@ public class TabFragment1 extends Fragment
     {
         DBAdapter dbAdapter = new DBAdapter(getActivity());
 
-        String date = btnDate.getText().toString().split("\\s+")[0].replace('/', '-');
+        String eventDate = btnDate.getText().toString()
+                .split("\\s+")[0].replace('/', '-');
+        String updateDate = Utilities.getTodaysDateWithHMS();
 
         String amount;
         if (!selectedCategory.equals(defaultCategory[0])) {
@@ -247,8 +249,8 @@ public class TabFragment1 extends Fragment
                 amount,
                 selectedCategoryCode,
                 edt_memo.getText().toString(),
-                date,
-                getTodaysDate()
+                eventDate,
+                updateDate
         );
 
         dbAdapter.open();
@@ -276,28 +278,11 @@ public class TabFragment1 extends Fragment
         dialog.show();
     }
 
-//    String getTodaysDateYMDHM()
-//    {
-//        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-//        String str = (sdFormat.format(cal)+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
-//        return str;
-//    }
-
-    String getTodaysDate()
-    {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
-        sdFormat.setCalendar(cal);
-        sdFormat.setTimeZone(cal.getTimeZone());
-        String str = (sdFormat.format(cal.getTime())+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
-        return str;
-    }
-
     void reset()
     {
         edt_amount.setText("");
         edt_memo.setText("");
-        btnDate.setText(getTodaysDate());
+        btnDate.setText(Utilities.getTodaysDateWithDay(weekName));
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

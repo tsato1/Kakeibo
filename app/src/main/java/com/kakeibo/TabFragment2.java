@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -140,8 +139,8 @@ public class TabFragment2 extends Fragment {
 
             dbAdapter.open();
             String[] ym = btnDate.getText().toString().split("[/]");
-            String y = ym[0];
-            String m = ym[1];
+            String y = ym[0];//String.valueOf(calYear);
+            String m = ym[1];//String.valueOf(calMonth); //todo
             Cursor c = dbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
@@ -206,7 +205,7 @@ public class TabFragment2 extends Fragment {
             txvAmount.setText(TextUtils.concat(span1, span2));
             String memoText = memoColon + item.getMemo();
             txvMemo.setText(memoText);
-            String savedOnText = savedOnColon = item.getUpdateDate();
+            String savedOnText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, "yyyy/MM/dd");
             txvRegistrationDate.setText(savedOnText);
 
             new AlertDialog.Builder(getActivity())
@@ -304,7 +303,7 @@ public class TabFragment2 extends Fragment {
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
-                                                getTodaysDate()
+                                                Utilities.getTodaysDateWithDay(weekName)
                                         );
 
                                         dbAdapter.saveItem(tmp);
@@ -365,7 +364,7 @@ public class TabFragment2 extends Fragment {
                             calYear = Calendar.getInstance().get(Calendar.YEAR);
                         }
                     }
-                    btnDate.setText(calYear + "/" + convertMtoMM());
+                    btnDate.setText(calYear + "/" + Utilities.convertMtoMM(calMonth));
                     loadItems();
                     makeBalanceTable();
                     break;
@@ -375,7 +374,7 @@ public class TabFragment2 extends Fragment {
                         calMonth = 1;
                         calYear++;
                     }
-                    btnDate.setText(calYear + "/" + convertMtoMM());
+                    btnDate.setText(calYear + "/" + Utilities.convertMtoMM(calMonth));
                     loadItems();
                     makeBalanceTable();
                     break;
@@ -419,7 +418,7 @@ public class TabFragment2 extends Fragment {
         if (c!=null && c.moveToFirst()) {
             String eventDate = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE));
             int balanceDay = 0;
-            List<Item> tmpItemList = new ArrayList();
+            List<Item> tmpItemList = new ArrayList<>();
 
             do {
                 //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
@@ -430,7 +429,7 @@ public class TabFragment2 extends Fragment {
                     balanceDay = 0;
                     /*** change of the date ***/
                     eventDate = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)); // set a new date
-                    tmpItemList = new ArrayList(); // empty the array list of items
+                    tmpItemList = new ArrayList<>(); // empty the array list of items
                     sameDateCounter++;
                 }
 
@@ -468,7 +467,7 @@ public class TabFragment2 extends Fragment {
                     }
                 }
 
-                if (flag == false) {
+                if (!flag) {
                     int id = 0;
                     String tmpCategory = defaultCategory[c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE))];
 
@@ -599,13 +598,12 @@ public class TabFragment2 extends Fragment {
     {
         int year = calYear;
         int month = calMonth;
-        //Log.d("Fragment2", "year = " + year + ", month = " + month);
 
-        String mon = String.valueOf(month);
-        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
-            mon = "0" + String.valueOf(month);
-        }
-        String str = (year+"/"+mon);
+//        String mon = String.valueOf(month);
+//        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
+//            mon = "0" + String.valueOf(month);
+//        }
+        String str = (year + "/" + Utilities.convertMtoMM(month)); //todo ymd dmy mdy
         btnDate.setText(str);
     }
 
@@ -638,29 +636,6 @@ public class TabFragment2 extends Fragment {
         imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    String convertMtoMM() {
-        String mon = String.valueOf(calMonth);
-        if (String.valueOf(calMonth).length() == 1) {  // convert m to mm (ex. 5 -> 05)
-            mon = "0" + String.valueOf(calMonth);
-        }
-        return mon;
-    }
-
-    String getTodaysDate()
-    {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        String mon = String.valueOf(month);
-        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
-            mon = "0" + String.valueOf(month);
-        }
-        String str = (year+"/"+mon+"/"+day+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
-        return str;
-    }
-
     public void focusOnSavedItem(String y, String m, String d) {
         calMonth = Integer.parseInt(m);
         calYear = Integer.parseInt(y);
@@ -673,7 +648,14 @@ public class TabFragment2 extends Fragment {
         makeBalanceTable();
 
         for (int i = 0; i < dateHeaderList.size(); i++) {
-            if (dateHeaderList.get(i).substring(4, 9).equals(m + "/" + d)) { // dateHeaderList.get(i) = 'yyyymm/dd, \\\' (\\\ = balance)
+            String[] header = dateHeaderList.get(i).split("[,]");
+            String ymdHeader = header[0] + "/" + header[1] + "/" + header[2];
+
+            //todo use shared pref for ymd
+            String ymdDBFormat = Utilities.convertDateFormat(ymdHeader, Utilities.DATE_FORMAT_YMD, Utilities.DATE_FORMAT_DB);
+            String[] ymd = ymdDBFormat.split("[-]");
+
+            if (ymd[1].equals(m) && ymd[2].equals(d)) {
                 expandableListView.setVisibility(View.VISIBLE);
                 categoryLayout.setVisibility(View.GONE);
                 searchLayout.setVisibility(View.VISIBLE);

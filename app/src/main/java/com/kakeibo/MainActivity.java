@@ -17,6 +17,16 @@ import com.kakeibo.pref.SettingsActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+//todo pie graph holograph library
+//todo language support in settings
+//todo yyyy mm dd in settings
+//todo currency
+
+//todo bring search fragment to different viewpager
+//todo add and subtract custom categories (discreet categories for income too)
+
+//todo locale
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TextToSpeach";
     private final int REQ_CODE_SPEECH_INPUT = 100;
