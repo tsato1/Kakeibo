@@ -1,10 +1,10 @@
 package com.kakeibo;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +12,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -26,22 +23,24 @@ import static java.lang.Integer.parseInt;
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
-    private List<String> _dateHeaderList; // header titles
+    private List<String> _lstDateHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<Item>> _childDataHashMap;
-    private String[] defaultCategory;
+    private HashMap<String, List<Item>> _hmpChildData;
+    private String[] _strDefaultCategory;
+    private TypedArray _trrMipmaps;
 
     public ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
         this._context = context;
-        this._dateHeaderList = dateHeaderList;
-        this._childDataHashMap = childDataHashMap;
+        this._lstDateHeader = dateHeaderList;
+        this._hmpChildData = childDataHashMap;
 
-        defaultCategory = context.getResources().getStringArray(R.array.defaultCategory);
+        _strDefaultCategory = context.getResources().getStringArray(R.array.defaultCategory);
+        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.categoryMipmaps);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._childDataHashMap.get(this._dateHeaderList.get(groupPosition))
+        return this._hmpChildData.get(this._lstDateHeader.get(groupPosition))
                 .get(childPosititon);
     }
 
@@ -65,38 +64,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txvAmount = (TextView)convertView.findViewById(R.id.txv_amount);
 
         Item item = (Item)baseItem;
+        imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
 
-        int[] arrayMipmaps = _context.getResources().getIntArray(R.array.categoryMipmaps);
-        imvCategory.setImageResource(arrayMipmaps[item.getCategoryCode()]);
-        txvCategory.setText(defaultCategory[item.getCategoryCode()]);
-
-        /*** image ***/
-//        String[] category = _context.getResources().getStringArray(R.array.defaultCategory);
-//        if(item.getCategory().equals(category[0])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_income);
-//        } else if(item.getCategory().equals(category[1])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_comm);
-//        } else if(item.getCategory().equals(category[2])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_meal);
-//        } else if(item.getCategory().equals(category[3])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_util);
-//        } else if(item.getCategory().equals(category[4])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_health);
-//        } else if(item.getCategory().equals(category[5])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_edu);
-//        } else if(item.getCategory().equals(category[6])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_cloth);
-//        } else if(item.getCategory().equals(category[7])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_trans);
-//        } else if(item.getCategory().equals(category[8])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_ent);
-//        } else if(item.getCategory().equals(category[9])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_ins);
-//        } else if(item.getCategory().equals(category[10])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_tax);
-//        } else if(item.getCategory().equals(category[11])) {
-//            imvCategoryImage.setImageResource(R.mipmap.ic_category_other);
-//        }
+        txvCategory.setText(_strDefaultCategory[item.getCategoryCode()]);
 
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
@@ -107,7 +77,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         /*** category ***/
-        txvCategory.setText(defaultCategory[item.getCategoryCode()]);
+        txvCategory.setText(_strDefaultCategory[item.getCategoryCode()]);
 
         /*** amount ***/
         SpannableString spannableString;
@@ -131,17 +101,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._childDataHashMap.get(this._dateHeaderList.get(groupPosition)).size();
+        return this._hmpChildData.get(this._lstDateHeader.get(groupPosition)).size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._dateHeaderList.get(groupPosition);
+        return this._lstDateHeader.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this._dateHeaderList.size();
+        return this._lstDateHeader.size();
     }
 
     @Override

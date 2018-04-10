@@ -18,55 +18,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 //todo pie graph holograph library
+
 //todo language support in settings
 //todo yyyy mm dd in settings
 //todo currency
+
+//todo store app version in db
+//todo add ads
 
 //todo bring search fragment to different viewpager
 //todo add and subtract custom categories (discreet categories for income too)
 
 //todo locale
 
+// versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TextToSpeach";
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
-    //public static final String[] weekName = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-    //public static final String[] defaultCategory = {"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other"};
     public static final String[] categoryColor = {"#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
-//    ViewPager viewPager;
-//    PagerAdapter adapter;
 //    private TextToSpeech tts;
 
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
-    private TabFragment1 tab1;
-    private TabFragment2 tab2;
+    private TabFragment1 tabFragment1;
+    private TabFragment2 tabFragment2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        tab1 = new TabFragment1();
-        tab2 = new TabFragment2();
-        adapter.addFragment(tab1, getString(R.string.input));
-        adapter.addFragment(tab2, getString(R.string.report));
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        tabFragment1 = new TabFragment1();
+        tabFragment2 = new TabFragment2();
+        adapter.addFragment(tabFragment1, getString(R.string.input));
+        adapter.addFragment(tabFragment2, getString(R.string.report));
         viewPager.setAdapter(adapter);
     }
 
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            tab2.focusOnSavedItem(y, m, d);
+            tabFragment2.focusOnSavedItem(y, m, d);
         } catch (Exception e) {
         }
     }

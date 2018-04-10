@@ -1,11 +1,11 @@
 package com.kakeibo;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +19,18 @@ import java.util.List;
  * Created by T on 2015/10/08.
  */
 public class CategoryListAdapter extends ArrayAdapter<Item> {
-    private LayoutInflater layoutInflater_;
+    private LayoutInflater _layoutInflater;
     private Context _context;
-    private String[] defaultCategory;
+    private String[] _strsDefaultCategory;
+    private TypedArray _trrMipmaps;
 
     public CategoryListAdapter(Context context, int id, List<Item> objects) {
         super(context, id, objects);
         this._context = context;
-        layoutInflater_ = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
+        _strsDefaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
+        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.categoryMipmaps);
     }
 
     @Override
@@ -36,15 +38,14 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         Item item = getItem(position);
 
         if (null == convertView) {
-            convertView = layoutInflater_.inflate(R.layout.row_list_category, parent, false);
+            convertView = _layoutInflater.inflate(R.layout.row_list_category, parent, false);
         }
 
         ImageView imvCategory = convertView.findViewById(R.id.imv_category);
         TextView txvCategory = convertView.findViewById(R.id.txv_category);
 
-        int[] arrayMipmaps = _context.getResources().getIntArray(R.array.categoryMipmaps);
-        imvCategory.setImageResource(arrayMipmaps[item.getCategoryCode()]);
-        txvCategory.setText(defaultCategory[item.getCategoryCode()]);
+        imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+        txvCategory.setText(_strsDefaultCategory[item.getCategoryCode()]);
 
         /*** amount ***/
         TextView txvAmount = convertView.findViewById(R.id.txv_amount);
