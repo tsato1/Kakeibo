@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
+import com.kakeibo.db.DBAdapter;
+import com.kakeibo.db.ItemsDBAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,7 +45,7 @@ public class TabFragment2 extends Fragment {
     private static final int MENUITEM_ID_DELETE = 1;
     private static final int MENUITEM_ID_EDIT = 2;
 
-    private DBAdapter dbAdapter;
+    private ItemsDBAdapter itemsDbAdapter;
     private List<String> dateHeaderList;
     private HashMap<String, List<Item>> childDataHashMap;
     private ExpandableListAdapter expandableListAdapter;
@@ -137,28 +139,28 @@ public class TabFragment2 extends Fragment {
             List<Item> searchResultList = new ArrayList<>();
             searchResultList.clear();
 
-            dbAdapter.open();
+            itemsDbAdapter.open();
             String[] ym = btnDate.getText().toString().split("[/]");
             String y = ym[0];//String.valueOf(calYear);
             String m = ym[1];//String.valueOf(calMonth); //todo
-            Cursor c = dbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
+            Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
                 do {
                     Item item = new Item(
-                            c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                            c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                     );
 
                     searchResultList.add(item);
                 } while (c.moveToNext());
             }
 
-            dbAdapter.close();
+            itemsDbAdapter.close();
 
             SearchListAdapter searchListAdapter = new SearchListAdapter(getActivity(), 0, searchResultList);
             ListView listView = new ListView(getActivity());
@@ -248,16 +250,16 @@ public class TabFragment2 extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 //Log.d("groupPosition", String.valueOf(groupPosition));
                                 //Log.d("childPosition", String.valueOf(childPosition));
-                                dbAdapter.open();
+                                itemsDbAdapter.open();
                                 final int itemId = Integer.parseInt(item.getId());
 
-                                if(dbAdapter.deleteItem(itemId)) {
+                                if(itemsDbAdapter.deleteItem(itemId)) {
                                     Toast.makeText(getActivity(), getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_SHORT).show();
                                 }
 
                                 loadItems();
                                 makeBalanceTable();
-                                dbAdapter.close();
+                                itemsDbAdapter.close();
                             }
                         })
                         .setNegativeButton(R.string.no, null)
@@ -285,11 +287,11 @@ public class TabFragment2 extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 //Log.d("groupPosition", String.valueOf(groupPosition));
                                 //Log.d("childPosition", String.valueOf(childPosition));
-                                dbAdapter.open();
+                                itemsDbAdapter.open();
                                 final int itemId = Integer.parseInt(item.getId());
 
                                 if (checkBeforeSave(edtAmount)) {
-                                    if(dbAdapter.deleteItem(itemId)) {
+                                    if(itemsDbAdapter.deleteItem(itemId)) {
                                         String amount;
                                         if (item.getCategoryCode() != 0) {
                                             amount = "-" + edtAmount.getText().toString();
@@ -306,7 +308,7 @@ public class TabFragment2 extends Fragment {
                                                 Utilities.getTodaysDateWithDay(weekName)
                                         );
 
-                                        dbAdapter.saveItem(tmp);
+                                        itemsDbAdapter.saveItem(tmp);
 
                                         Toast.makeText(getActivity(), getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
                                     }
@@ -314,7 +316,7 @@ public class TabFragment2 extends Fragment {
 
                                 loadItems();
                                 makeBalanceTable();
-                                dbAdapter.close();
+                                itemsDbAdapter.close();
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)
@@ -388,7 +390,7 @@ public class TabFragment2 extends Fragment {
     }
 
     void setAdapters(){
-        dbAdapter = new DBAdapter(getActivity());
+        itemsDbAdapter = new ItemsDBAdapter(getActivity());
 
         dateHeaderList = new ArrayList<>();
         childDataHashMap = new HashMap<>();
@@ -408,57 +410,57 @@ public class TabFragment2 extends Fragment {
 
         categoryList.clear();
 
-        dbAdapter.open();
+        itemsDbAdapter.open();
 
         String[] ym = btnDate.getText().toString().split("[/]");
         String y = ym[0];
         String m = ym[1];
-        Cursor c = dbAdapter.getAllItemsInMonth(y, m);
+        Cursor c = itemsDbAdapter.getAllItemsInMonth(y, m);
 
         if (c!=null && c.moveToFirst()) {
-            String eventDate = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE));
+            String eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE));
             int balanceDay = 0;
             List<Item> tmpItemList = new ArrayList<>();
 
             do {
                 //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
 
-                if (!c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
+                if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
                     dateHeaderList.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator
                     childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList); // set the header of the old day
                     balanceDay = 0;
                     /*** change of the date ***/
-                    eventDate = c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)); // set a new date
+                    eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)); // set a new date
                     tmpItemList = new ArrayList<>(); // empty the array list of items
                     sameDateCounter++;
                 }
 
-                if(c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)) == 0) {
-                    income += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                    balanceDay += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
+                    income += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                    balanceDay += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                 } else {
-                    expense += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
-                    balanceDay += c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                    expense += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                    balanceDay += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                 }
 
                 Item item = new Item(
-                        c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                        c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)),
-                        c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
 
                 /************* For CategoryList *************/
                 boolean flag = false;
                 for (int i = 0; i < categoryList.size(); i++) {
                     Item tmp = categoryList.get(i);
-                    if (tmp.getCategoryCode() == c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE))) {
-                        int amount = Integer.parseInt(tmp.getAmount()) + c.getInt(c.getColumnIndex(DBAdapter.COL_AMOUNT));
+                    if (tmp.getCategoryCode() == c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE))) {
+                        int amount = Integer.parseInt(tmp.getAmount()) + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                         tmp = new Item(categoryList.get(i).getId(),
                                 String.valueOf(amount),
-                                c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
+                                c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                                 "", "", "");
                         categoryList.remove(i);
                         categoryList.add(tmp);
@@ -469,7 +471,7 @@ public class TabFragment2 extends Fragment {
 
                 if (!flag) {
                     int id = 0;
-                    String tmpCategory = defaultCategory[c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE))];
+                    String tmpCategory = defaultCategory[c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE))];
 
                     for (int i = 0; i < defaultCategory.length; i++) {
                         if (tmpCategory.equals(defaultCategory[i])) {
@@ -478,8 +480,8 @@ public class TabFragment2 extends Fragment {
                         }
                     }
                     Item tmp = new Item(String.valueOf(id),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                            c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                             "", "", "");
                     categoryList.add(tmp);
                 }
@@ -499,7 +501,7 @@ public class TabFragment2 extends Fragment {
         }
         makePieGraph();
 
-        dbAdapter.close();
+        itemsDbAdapter.close();
         expandableListAdapter.notifyDataSetChanged();
         categoryListAdapter.notifyDataSetChanged();
     }
@@ -553,23 +555,23 @@ public class TabFragment2 extends Fragment {
 
         List<Item> searchResultList = new ArrayList<>();
 
-        dbAdapter.open();
+        itemsDbAdapter.open();
 
         String[] ym = btnDate.getText().toString().split("[/]");
         String y = ym[0];
         String m = ym[1];
-        Cursor c = dbAdapter.getAllItemsInMonth(y, m);
+        Cursor c = itemsDbAdapter.getAllItemsInMonth(y, m);
 
         if (c.moveToFirst()) {
             do {
-                if (c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)).contains(searchItem)) {
+                if (c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)).contains(searchItem)) {
                     Item item = new Item(
-                            c.getString(c.getColumnIndex(DBAdapter.COL_ID)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_AMOUNT)),
-                            c.getInt(c.getColumnIndex(DBAdapter.COL_CATEGORY_CODE)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_EVENT_DATE)),
-                            c.getString(c.getColumnIndex(DBAdapter.COL_UPDATE_DATE))
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                     );
 
                     searchResultList.add(item);
@@ -577,7 +579,7 @@ public class TabFragment2 extends Fragment {
             } while (c.moveToNext());
         }
 
-        dbAdapter.close();
+        itemsDbAdapter.close();
 
         SearchListAdapter searchListAdapter = new SearchListAdapter(getActivity(), 0, searchResultList);
         ListView listView = new ListView(getActivity());

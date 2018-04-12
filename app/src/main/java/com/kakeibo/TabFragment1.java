@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.kakeibo.db.ItemsDBAdapter;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -231,7 +233,7 @@ public class TabFragment1 extends Fragment
 
     void saveItem()
     {
-        DBAdapter dbAdapter = new DBAdapter(getActivity());
+        ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter(getActivity());
 
         String eventDate = btnDate.getText().toString()
                 .split("\\s+")[0].replace('/', '-');
@@ -253,10 +255,10 @@ public class TabFragment1 extends Fragment
                 updateDate
         );
 
-        dbAdapter.open();
-        dbAdapter.saveItem(item);
+        itemsDBAdapter.open();
+        itemsDBAdapter.saveItem(item);
         Toast.makeText(getActivity(), getResources().getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show();
-        dbAdapter.close();
+        itemsDBAdapter.close();
     }
 
     void showYMDPickerDialog()
