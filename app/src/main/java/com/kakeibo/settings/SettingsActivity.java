@@ -1,8 +1,9 @@
-package com.kakeibo.pref;
+package com.kakeibo.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -18,7 +19,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -138,7 +138,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 finish();
             }
         });
-
         setupActionBar();
     }
 
@@ -199,8 +198,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_key_currency"));
+            bindPreferenceSummaryToValue(findPreference("pref_key_date_format"));
+
+            final ListPreference listPreference = (ListPreference) findPreference("pref_key_currency");
+            SharedPreferences preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+            setListPreferenceData(listPreference);
+
+            listPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    setListPreferenceData(listPreference);
+                    return false;
+                }
+            });
+        }
+
+        protected static void setListPreferenceData(ListPreference lp) {
+            CharSequence[] entries = { "English", "French" };
+            CharSequence[] entryValues = {"1" , "2"};
+            lp.setEntries(entries);
+            lp.setDefaultValue("1");
+            lp.setEntryValues(entryValues);
         }
 
         @Override

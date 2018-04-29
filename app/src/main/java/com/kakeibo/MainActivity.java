@@ -12,18 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.kakeibo.pref.SettingsActivity;
+import com.kakeibo.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //todo pie graph holograph library
 
-//todo language support in settings
-//todo yyyy mm dd in settings
-//todo currency
-
-//todo store app version in db
 //todo add ads
 
 //todo bring search fragment to different viewpager

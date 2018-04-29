@@ -26,36 +26,36 @@ public class ItemsDBAdapter extends DBAdapter {
 
     private final Context _context;
     private SQLiteDatabase _db;
-    private DatabaseHelper _dbHelper;
 
     public ItemsDBAdapter (Context context) {
-        super(context);
         _context = context;
     }
 
     public ItemsDBAdapter open() throws SQLException {
-        this._dbHelper = new DatabaseHelper(this._context);
-        this._db = _dbHelper.getWritableDatabase();
+        _db = DBAdapter.getInstance().openDatabase();
         return this;
     }
 
     public void close() {
-        this._dbHelper.close();
+        DBAdapter.getInstance().closeDatabase();
     }
 
     public boolean deleteItem(int id)
     {
-        return _db.delete(TABLE_ITEM, COL_ID + "=" + id, null) > 0;
+        boolean out = _db.delete(TABLE_ITEM, COL_ID + "=" + id, null) > 0;
+        return out;
     }
 
     public boolean deleteAllItems()
     {
-        return _db.delete(TABLE_ITEM, null, null) > 0;
+        boolean out = _db.delete(TABLE_ITEM, null, null) > 0;
+        return out;
     }
 
     public Cursor getAllItems()
     {
-        return _db.query(TABLE_ITEM, null, null, null, null, null, null);
+        Cursor c = _db.query(TABLE_ITEM, null, null, null, null, null, null);
+        return c;
     }
 
     public Cursor getAllItemsInMonth (String y, String m)
@@ -64,7 +64,8 @@ public class ItemsDBAdapter extends DBAdapter {
         String query = "SELECT * FROM " + TABLE_ITEM +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " ORDER BY " + COL_EVENT_DATE;
-        return _db.rawQuery(query, new String[]{});
+        Cursor c = _db.rawQuery(query, new String[]{});
+        return c;
     }
 
     public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
@@ -73,7 +74,9 @@ public class ItemsDBAdapter extends DBAdapter {
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " AND " + COL_CATEGORY_CODE + " = ? " +
                 " ORDER BY " + COL_EVENT_DATE;
-        return _db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
+        Cursor c = _db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
+
+        return c;
     }
 
     public void saveItem(Item item)
@@ -84,9 +87,8 @@ public class ItemsDBAdapter extends DBAdapter {
         values.put(COL_MEMO, item.getMemo());
         values.put(COL_EVENT_DATE, item.getEventDate());
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
-
         _db.insertOrThrow(TABLE_ITEM, null, values);
 
-        //Log.d(TAG, "saveItem() called");
+        Log.d(TAG, "saveItem() called");
     }
 }

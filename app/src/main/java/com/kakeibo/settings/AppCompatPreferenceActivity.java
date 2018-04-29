@@ -1,4 +1,4 @@
-package com.kakeibo.pref;
+package com.kakeibo.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

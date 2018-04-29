@@ -39,4 +39,22 @@
         <item>@mipmap/ic_category_tax</item>
         <item>@mipmap/ic_category_other</item>
     </integer-array>
+
+    <!-- pref -->
+    <string-array name="pref_list_date_format">
+        <item>YYYY/MM/DD</item>
+        <item>MM/DD/YYYY</item>
+        <item>DD/MM/YYYY</item>
+    </string-array>
+    <string-array name="pref_list_date_format_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+    <string-array name="pref_list_currency">
+        <item>$</item>
+    </string-array>
+    <string-array name="pref_list_date_currency_values">
+        <item>0</item>
+    </string-array>
 </resources>
