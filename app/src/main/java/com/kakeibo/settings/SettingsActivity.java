@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 
 import com.kakeibo.R;
 
+import java.util.Currency;
 import java.util.List;
 
 /**
@@ -40,6 +42,8 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+    public static final String PREF_KEY_DATE_FORMAT = "pref_key_date_format";
+    public static final String PREF_KEY_CURRENCY = "pref_key_currency";
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -135,7 +139,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
         setupActionBar();
@@ -198,11 +202,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("pref_key_currency"));
-            bindPreferenceSummaryToValue(findPreference("pref_key_date_format"));
 
-            final ListPreference listPreference = (ListPreference) findPreference("pref_key_currency");
-            SharedPreferences preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+            bindPreferenceSummaryToValue(findPreference(PREF_KEY_DATE_FORMAT));
+
+            bindPreferenceSummaryToValue(findPreference(PREF_KEY_CURRENCY));
+
+            final ListPreference listPreference = (ListPreference) findPreference(PREF_KEY_CURRENCY);
             setListPreferenceData(listPreference);
 
             listPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -215,8 +220,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         protected static void setListPreferenceData(ListPreference lp) {
-            CharSequence[] entries = { "English", "French" };
-            CharSequence[] entryValues = {"1" , "2"};
+            String str1 = Currency.getInstance("USD").getCurrencyCode();
+            CharSequence[] entries = { str1, "Yen", "Peso" };
+            CharSequence[] entryValues = {"1", "2" , "3"};
             lp.setEntries(entries);
             lp.setDefaultValue("1");
             lp.setEntryValues(entryValues);

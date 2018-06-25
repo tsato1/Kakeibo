@@ -1,6 +1,8 @@
 package com.kakeibo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.kakeibo.settings.SettingsActivity;
 
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
     private Context _context;
     private String[] defaultCategory;
     private String[] weekName;
+    private int mDateFormat;
+    private SharedPreferences mPref;
 
     public SearchListAdapter (Context context, int resource, List<Item> objects) {
         super(context, resource, objects);
@@ -29,6 +35,8 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
 
         defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
         weekName = _context.getResources().getStringArray(R.array.weekName);
+
+        loadSharedPreference();
     }
 
     @Override
@@ -41,18 +49,18 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
 
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
-        TextView txvEventDate = (TextView) v.findViewById(R.id.txv_event_date);
+        TextView txvEventDate = v.findViewById(R.id.txv_event_date);
         txvEventDate.setText(item.getEventDate());
 
-        TextView txvCategory = (TextView) v.findViewById(R.id.txv_category);
+        TextView txvCategory = v.findViewById(R.id.txv_category);
         String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
         txvCategory.setText(categoryText);
 
-        TextView txvAmount = (TextView) v.findViewById(R.id.txv_amount);
+        TextView txvAmount = v.findViewById(R.id.txv_amount);
         String amountText = amountColon + item.getAmount();
         txvAmount.setText(amountText);
 
-        TextView txvMemo = (TextView) v.findViewById(R.id.txv_memo);
+        TextView txvMemo = v.findViewById(R.id.txv_memo);
         SpannableString span1, span2;
         if (0 == (item.getCategoryCode())) {
             span1 = new SpannableString(amountColon);
@@ -67,10 +75,17 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         String memoText = memoColon + item.getMemo();
         txvMemo.setText(memoText);
 
-        TextView txvUpdateDate = (TextView)v.findViewById(R.id.txv_update_date);
-        String updateDateText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, "yyyy/MM/dd");
+        TextView txvUpdateDate = v.findViewById(R.id.txv_update_date);
+        String updateDateText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
         txvUpdateDate.setText(updateDateText);
 
         return v;
+    }
+
+    public void loadSharedPreference() {
+        PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(_context);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        mDateFormat = Integer.parseInt(f);
     }
 }

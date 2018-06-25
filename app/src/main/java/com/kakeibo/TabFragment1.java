@@ -2,7 +2,9 @@ package com.kakeibo;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.settings.SettingsActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +44,8 @@ public class TabFragment1 extends Fragment
     private View view;
     private String[] weekName;
     private String[] defaultCategory;
+    private SharedPreferences mPref;
+    private int mDateFormat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +56,8 @@ public class TabFragment1 extends Fragment
 
         findViews(view);
         setListeners();
-        btnDate.setText(Utilities.getTodaysDateWithDay(weekName));
+        loadSharedPreference();
+        btnDate.setText(Utilities.getTodaysDateWithDay(mDateFormat, weekName));
         reset();
 
         return view;
@@ -62,15 +68,16 @@ public class TabFragment1 extends Fragment
         super.onResume();
         findViews(view);
         setListeners();
-        btnDate.setText(Utilities.getTodaysDateWithDay(weekName));
+        loadSharedPreference();
+        btnDate.setText(Utilities.getTodaysDateWithDay(mDateFormat, weekName));
         reset();
     }
 
     void findViews(View view)
     {
-        btnPrev = (ImageButton)view.findViewById(R.id.btn_prev);
-        btnDate = (Button)view.findViewById(R.id.btn_date);
-        btnNext = (ImageButton)view.findViewById(R.id.btn_next);
+        btnPrev = view.findViewById(R.id.btn_prev);
+        btnDate = view.findViewById(R.id.btn_date);
+        btnNext = view.findViewById(R.id.btn_next);
 
         btnsCategory = new ArrayList<>();
         btnsCategory.add((Button) view.findViewById(R.id.btn_category1));
@@ -87,8 +94,8 @@ public class TabFragment1 extends Fragment
         btnsCategory.add((Button) view.findViewById(R.id.btn_category12));
         setButtonContent();
 
-        edt_amount = (EditText)view.findViewById(R.id.edt_amount);
-        edt_memo = (AutoCompleteTextView)view.findViewById(R.id.edt_memo);
+        edt_amount = view.findViewById(R.id.edt_amount);
+        edt_memo = view.findViewById(R.id.edt_memo);
     }
 
     void setButtonContent()
@@ -110,11 +117,19 @@ public class TabFragment1 extends Fragment
         }
     }
 
+    public void loadSharedPreference() {
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        mDateFormat = Integer.parseInt(f);
+    }
+
     class DateButtonClickListener implements View.OnClickListener {
         public void  onClick(View view) {
             String sourceDate = btnDate.getText().toString().substring(0, 10);
             //Log.d("sourceDate", sourceDate);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat format = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                    Locale.getDefault());
             Date date = null;
             Calendar cal = Calendar.getInstance();
 
@@ -128,7 +143,8 @@ public class TabFragment1 extends Fragment
                     cal.setTime(date);
                     cal.add(Calendar.DATE, -1);
                     date = cal.getTime();
-                    String str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
+                    String str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                            Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
@@ -144,7 +160,8 @@ public class TabFragment1 extends Fragment
                     cal.setTime(date);
                     cal.add(Calendar.DATE, 1);
                     date = cal.getTime();
-                    str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
+                    str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                            Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
@@ -235,8 +252,27 @@ public class TabFragment1 extends Fragment
     {
         ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter(getActivity());
 
-        String eventDate = btnDate.getText().toString()
-                .split("\\s+")[0].replace('/', '-');
+        String[] ymd = btnDate.getText().toString().split("\\s+")[0].split("/");
+        String y, m, d;
+
+        switch (mDateFormat) {
+            case 1: // MDY
+                y = ymd[2];
+                m = ymd[0];
+                d = ymd[1];
+                break;
+            case 2: // DMY
+                y = ymd[2];
+                m = ymd[1];
+                d = ymd[0];
+                break;
+            default:  // YMD
+                y = ymd[0];
+                m = ymd[1];
+                d = ymd[2];
+        }
+
+        String eventDate = y + "-" + m + "-" + d;
         String updateDate = Utilities.getTodaysDateWithHMS();
 
         String amount;
@@ -272,7 +308,8 @@ public class TabFragment1 extends Fragment
             public void onDateSet(DatePicker picker, int year, int month, int day){
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
-                String str = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date)
+                String str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                        Locale.getDefault()).format(date)
                         + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
             }
@@ -284,7 +321,7 @@ public class TabFragment1 extends Fragment
     {
         edt_amount.setText("");
         edt_memo.setText("");
-        btnDate.setText(Utilities.getTodaysDateWithDay(weekName));
+        btnDate.setText(Utilities.getTodaysDateWithDay(mDateFormat, weekName));
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

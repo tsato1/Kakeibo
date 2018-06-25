@@ -88,7 +88,7 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             db.execSQL(DATABASE_CREATE_TABLE_ITEM);
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
-            initKkbAppTable(db);
+            initKkbAppTable(db, DATABASE_VERSION);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -108,14 +108,11 @@ public class DBHelper extends SQLiteOpenHelper {
             upgradeVersion4(db);
 
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
-            initKkbAppTable(db);
+            initKkbAppTable(db, -1);
         }
     }
 
     private void upgradeVersion4(SQLiteDatabase db) {
-        //db.execSQL(DATABASE_UPDATE_3_TO_4_1);
-        //db.execSQL(DATABASE_UPDATE_3_TO_4_2);
-
         /*** changing UpdateDate format form M to MM ***/
         Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM, new String[]{ItemsDBAdapter.COL_ID, ItemsDBAdapter.COL_UPDATE_DATE},
                 null, null, null, null, null, null);
@@ -209,31 +206,31 @@ public class DBHelper extends SQLiteOpenHelper {
         c.close();
     }
 
-    private void initKkbAppTable(SQLiteDatabase db) {
+    private void initKkbAppTable(SQLiteDatabase db, int dbVersion) {
         SimpleDateFormat sdf = new SimpleDateFormat(Utilities.DATE_FORMAT_DB_HMS, Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String strDate = sdf.format(new Date());
 
-        ContentValues valuesAds = new ContentValues();
-        valuesAds.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_ADS);
-        valuesAds.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
-        valuesAds.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
-        valuesAds.put(KkbAppDBAdapter.COL_VAL_INT_1, 0); // 0=original user from version before ads
-        valuesAds.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
-        valuesAds.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
-        valuesAds.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
-        valuesAds.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
-        valuesAds.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
-        db.insertOrThrow(TABLE_KKBAPP, null, valuesAds);
+        ContentValues valuesDBVersion = new ContentValues();
+        valuesDBVersion.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_DB_VERSION);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_1, dbVersion); // 0=original user from version before ads
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
+        db.insertOrThrow(TABLE_KKBAPP, null, valuesDBVersion);
 
         ContentValues valuesCurrency = new ContentValues();
-        valuesCurrency.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_CURRENCY);
+        valuesCurrency.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_ADS);
         valuesCurrency.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
         valuesCurrency.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
         valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_1, -1);
         valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
         valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_1, Currency.getInstance("USD").getCurrencyCode());
+        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
         valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
         valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
         db.insertOrThrow(TABLE_KKBAPP, null, valuesCurrency);

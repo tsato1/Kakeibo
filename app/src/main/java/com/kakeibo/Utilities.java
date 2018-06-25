@@ -14,8 +14,9 @@ public class Utilities {
     private static final String TAG = Utilities.class.getSimpleName();
 
     public static final String DATE_FORMAT_YMD = "yyyy/MM/dd";
-    public static final String DATE_FORMAT_DMY = "dd/MM/yyyy";
     public static final String DATE_FORMAT_MDY = "MM/dd/yyyy";
+    public static final String DATE_FORMAT_DMY = "dd/MM/yyyy";
+    public static final String[] DATE_FORMATS = {DATE_FORMAT_YMD, DATE_FORMAT_MDY, DATE_FORMAT_DMY};
     public static final String DATE_FORMAT_DB = "yyyy-MM-dd";
     public static final String DATE_FORMAT_DB_HMS = "yyyy-MM-dd hh:mm:ss";
 
@@ -27,17 +28,15 @@ public class Utilities {
         return mon;
     }
 
-    public static String getTodaysDateWithDay(String[] weekName)
-    {
+    public static String getTodaysDateWithDay(int format, String[] weekName) {
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        SimpleDateFormat sdFormat = new SimpleDateFormat(DATE_FORMATS[format], Locale.getDefault());
         sdFormat.setCalendar(cal);
         sdFormat.setTimeZone(cal.getTimeZone());
         return sdFormat.format(cal.getTime())+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
     }
 
-    public static String getTodaysDateWithHMS()
-    {
+    public static String getTodaysDateWithHMS() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdFormat = new SimpleDateFormat(DATE_FORMAT_DB_HMS, Locale.getDefault());
         sdFormat.setCalendar(cal);
@@ -45,7 +44,7 @@ public class Utilities {
         return sdFormat.format(cal.getTime());
     }
 
-    public static String getDateFromDBDate(String dbDate, String[] weekName, String dateFormat) {
+    public static String getDateFromDBDate(String dbDate, String[] weekName, int dateFormat) {
         String[] ymd = dbDate.split("[ ]")[0].split("[-]");
 
         GregorianCalendar cal = new GregorianCalendar(
@@ -53,7 +52,7 @@ public class Utilities {
                 Integer.parseInt(ymd[1])-1,
                 Integer.parseInt(ymd[2]));
         Date date = cal.getTime();
-        return new SimpleDateFormat(dateFormat, Locale.getDefault()).format(date)
+        return new SimpleDateFormat(DATE_FORMATS[dateFormat], Locale.getDefault()).format(date)
                 + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
     }
 

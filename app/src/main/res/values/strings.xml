@@ -49,6 +49,7 @@
     <!-- Settings -->
     <!-- General settings -->
     <string name="pref_header_general">General</string>
+    <string name="pref_header_category">Category</string>
 
     <string name="pref_title_change_date_format">Change Date Format</string>
     <string name="pref_title_remove_ads">Remove Ads</string>

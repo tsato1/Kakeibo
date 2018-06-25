@@ -3,14 +3,17 @@ package com.kakeibo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,6 +35,7 @@ import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.DBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +69,8 @@ public class TabFragment2 extends Fragment {
     private String[] weekName;
     private String[] defaultCategory;
     private String amountColon, memoColon, categoryColon, savedOnColon;
-
+    private int mDateFormat;
+    private SharedPreferences mPref;
     private View _view;
 
     @Override
@@ -83,6 +88,7 @@ public class TabFragment2 extends Fragment {
         reset();
         setListeners();
         setAdapters();
+        loadSharedPreference();
         setLabel();
         loadItems();
         makeBalanceTable();
@@ -96,27 +102,28 @@ public class TabFragment2 extends Fragment {
     public void onResume() {
         super.onResume();
         reset();
+        loadSharedPreference();
         setLabel();
         loadItems();
         makeBalanceTable();
     }
 
     void findViews(){
-        btnPrev = (ImageButton) _view.findViewById(R.id.btn_prev);
-        btnDate = (Button) _view.findViewById(R.id.btn_date);
-        btnNext = (ImageButton) _view.findViewById(R.id.btn_next);
-        txvIncome = (TextView) _view.findViewById(R.id.txv_income);
-        txvExpense = (TextView) _view.findViewById(R.id.txv_expense);
-        txvBalance = (TextView) _view.findViewById(R.id.txv_balance);
-        expandableListView = (ExpandableListView) _view.findViewById(R.id.lsv_expandable);
-        categoryLayout = (FrameLayout) _view.findViewById(R.id.scv_subtotal);
-        graph = (PieGraph) _view.findViewById(R.id.graph_subtotal);
-        categoryListView = (ListView) _view.findViewById(R.id.lsv_subtotal);
+        btnPrev = _view.findViewById(R.id.btn_prev);
+        btnDate = _view.findViewById(R.id.btn_date);
+        btnNext = _view.findViewById(R.id.btn_next);
+        txvIncome = _view.findViewById(R.id.txv_income);
+        txvExpense = _view.findViewById(R.id.txv_expense);
+        txvBalance = _view.findViewById(R.id.txv_balance);
+        expandableListView = _view.findViewById(R.id.lsv_expandable);
+        categoryLayout = _view.findViewById(R.id.scv_subtotal);
+        graph = _view.findViewById(R.id.graph_subtotal);
+        categoryListView = _view.findViewById(R.id.lsv_subtotal);
 
-        searchLayout = (LinearLayout) _view.findViewById(R.id.lnl_search);
-        //btnVoice = (ImageButton) _view.findViewById(R.id.btn_voice_search);
-        btnSearch = (ImageButton) _view.findViewById(R.id.btn_search);
-        edtSearch = (EditText) _view.findViewById(R.id.edt_search);
+        searchLayout = _view.findViewById(R.id.lnl_search);
+        //btnVoice = _view.findViewById(R.id.btn_voice_search);
+        btnSearch = _view.findViewById(R.id.btn_search);
+        edtSearch = _view.findViewById(R.id.edt_search);
     }
 
     void setListeners(){
@@ -140,10 +147,27 @@ public class TabFragment2 extends Fragment {
             searchResultList.clear();
 
             itemsDbAdapter.open();
+
             String[] ym = btnDate.getText().toString().split("[/]");
-            String y = ym[0];//String.valueOf(calYear);
-            String m = ym[1];//String.valueOf(calMonth); //todo
+            String y, m;
+            switch (mDateFormat) {
+                case 1: // MDY
+                case 2: // DMY
+                    y = ym[1];
+                    m = ym[0];
+                    break;
+                default:  // YMD
+                    y = ym[0];
+                    m = ym[1];
+            }
+
             Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
+
+            //probably disposable
+//            String[] ym = btnDate.getText().toString().split("[/]");
+//            String y = ym[0];//String.valueOf(calYear);
+//            String m = ym[1];//String.valueOf(calMonth);
+//            Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
                 do {
@@ -187,10 +211,10 @@ public class TabFragment2 extends Fragment {
             LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View layout = inflater.inflate(R.layout.dialog_item_detail, (ViewGroup)view.findViewById(R.id.layout_root));
 
-            TextView txvCategory = (TextView) layout.findViewById(R.id.txv_detail_category);
-            TextView txvAmount = (TextView) layout.findViewById(R.id.txv_detail_amount);
-            TextView txvMemo = (TextView) layout.findViewById(R.id.txv_detail_memo);
-            TextView txvRegistrationDate = (TextView) layout.findViewById(R.id.txv_detail_registration);
+            TextView txvCategory = layout.findViewById(R.id.txv_detail_category);
+            TextView txvAmount = layout.findViewById(R.id.txv_detail_amount);
+            TextView txvMemo = layout.findViewById(R.id.txv_detail_memo);
+            TextView txvRegistrationDate = layout.findViewById(R.id.txv_detail_registration);
 
             String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
             txvCategory.setText(categoryText);
@@ -207,7 +231,7 @@ public class TabFragment2 extends Fragment {
             txvAmount.setText(TextUtils.concat(span1, span2));
             String memoText = memoColon + item.getMemo();
             txvMemo.setText(memoText);
-            String savedOnText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, "yyyy/MM/dd");
+            String savedOnText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
             txvRegistrationDate.setText(savedOnText);
 
             new AlertDialog.Builder(getActivity())
@@ -268,14 +292,14 @@ public class TabFragment2 extends Fragment {
             case MENUITEM_ID_EDIT:
                 LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, (ViewGroup) _view.findViewById(R.id.layout_root));
-                TextView txvEventDate = (TextView) layout.findViewById(R.id.txv_event_date);
+                TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
                 txvEventDate.setText(item.getEventDate());
-                TextView txvCategory = (TextView) layout.findViewById(R.id.txv_category);
+                TextView txvCategory = layout.findViewById(R.id.txv_category);
                 String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
-                final EditText edtAmount = (EditText) layout.findViewById(R.id.edt_amount);
+                final EditText edtAmount = layout.findViewById(R.id.edt_amount);
                 edtAmount.setText(String.valueOf(Math.abs(Integer.parseInt(item.getAmount()))));
-                final EditText edtMemo = (EditText) layout.findViewById(R.id.edt_memo);
+                final EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
                 new AlertDialog.Builder(getActivity())
@@ -305,7 +329,7 @@ public class TabFragment2 extends Fragment {
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
-                                                Utilities.getTodaysDateWithDay(weekName)
+                                                Utilities.getTodaysDateWithDay(mDateFormat, weekName)
                                         );
 
                                         itemsDbAdapter.saveItem(tmp);
@@ -366,7 +390,7 @@ public class TabFragment2 extends Fragment {
                             calYear = Calendar.getInstance().get(Calendar.YEAR);
                         }
                     }
-                    btnDate.setText(calYear + "/" + Utilities.convertMtoMM(calMonth));
+                    btnDate.setText(setLabel(calYear, calMonth));
                     loadItems();
                     makeBalanceTable();
                     break;
@@ -376,7 +400,7 @@ public class TabFragment2 extends Fragment {
                         calMonth = 1;
                         calYear++;
                     }
-                    btnDate.setText(calYear + "/" + Utilities.convertMtoMM(calMonth));
+                    btnDate.setText(setLabel(calYear, calMonth));
                     loadItems();
                     makeBalanceTable();
                     break;
@@ -402,7 +426,7 @@ public class TabFragment2 extends Fragment {
         categoryListView.setAdapter(categoryListAdapter);
     }
 
-    public void loadItems(){
+    public void loadItems() {
         dateHeaderList.clear();
         childDataHashMap.clear();
         income = expense = balance = 0;
@@ -413,8 +437,18 @@ public class TabFragment2 extends Fragment {
         itemsDbAdapter.open();
 
         String[] ym = btnDate.getText().toString().split("[/]");
-        String y = ym[0];
-        String m = ym[1];
+        String y, m;
+        switch (mDateFormat) {
+            case 1: // MDY
+            case 2: // DMY
+                y = ym[1];
+                m = ym[0];
+                break;
+            default:  // YMD
+                y = ym[0];
+                m = ym[1];
+        }
+
         Cursor c = itemsDbAdapter.getAllItemsInMonth(y, m);
 
         if (c!=null && c.moveToFirst()) {
@@ -423,7 +457,7 @@ public class TabFragment2 extends Fragment {
             List<Item> tmpItemList = new ArrayList<>();
 
             do {
-                //Log.d("item(memo) = ", c.getString(c.getColumnIndex(DBAdapter.COL_MEMO)));
+                //Log.d("item(memo)", c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)));
 
                 if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
                     dateHeaderList.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator
@@ -489,7 +523,7 @@ public class TabFragment2 extends Fragment {
                 /*********** for categoryList end ************/
 
                 tmpItemList.add(item);
-            }while (c.moveToNext());
+            } while (c.moveToNext());
 
             dateHeaderList.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // set what to show on the header
             childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList);
@@ -558,8 +592,18 @@ public class TabFragment2 extends Fragment {
         itemsDbAdapter.open();
 
         String[] ym = btnDate.getText().toString().split("[/]");
-        String y = ym[0];
-        String m = ym[1];
+        String y, m;
+        switch (mDateFormat) {
+            case 1: // MDY
+            case 2: // DMY
+                y = ym[1];
+                m = ym[0];
+                break;
+            default:  // YMD
+                y = ym[0];
+                m = ym[1];
+        }
+
         Cursor c = itemsDbAdapter.getAllItemsInMonth(y, m);
 
         if (c.moveToFirst()) {
@@ -596,17 +640,50 @@ public class TabFragment2 extends Fragment {
         dialog.show();
     }
 
-    public void setLabel()
-    {
+    public void setLabel() {
         int year = calYear;
         int month = calMonth;
 
-//        String mon = String.valueOf(month);
-//        if (String.valueOf(month).length() == 1) {  // convert m to mm (ex. 5 -> 05)
-//            mon = "0" + String.valueOf(month);
-//        }
-        String str = (year + "/" + Utilities.convertMtoMM(month)); //todo ymd dmy mdy
+        String str;
+        switch (mDateFormat) {
+            case 1: // MDY
+            case 2: // DMY
+                str = (Utilities.convertMtoMM(month) + "/" + year);
+                break;
+            default:  // YMD
+                str = (year + "/" + Utilities.convertMtoMM(month));
+        }
+
         btnDate.setText(str);
+    }
+
+    private String setLabel(int y, int m) {
+        String str;
+        switch (mDateFormat) {
+            case 1: // MDY
+            case 2: // DMY
+                str = (Utilities.convertMtoMM(m) + "/" + y);
+                break;
+            default:  // YMD
+                str = (y + "/" + Utilities.convertMtoMM(m));
+        }
+
+        return str;
+    }
+
+    private String setLabel(String y, String m) {
+        String str;
+        m = m.length()==1? "0"+m: m;
+        switch (mDateFormat) {
+            case 1: // MDY
+            case 2: // DMY
+                str = m + "/" + y;
+                break;
+            default:  // YMD
+                str = y + "/" + m;
+        }
+
+        return str;
     }
 
     public void makeBalanceTable(){
@@ -620,7 +697,8 @@ public class TabFragment2 extends Fragment {
         }
         else if (balance > 0) {
             txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBlue));
-            txvBalance.setText("+" + String.valueOf(balance));
+            String str = "+" + String.valueOf(balance);
+            txvBalance.setText(str);
         }
         else {
             txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBlack));
@@ -628,8 +706,14 @@ public class TabFragment2 extends Fragment {
         }
     }
 
-    public void reset()
-    {
+    public void loadSharedPreference() {
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        mDateFormat = Integer.parseInt(f);
+    }
+
+    public void reset() {
         Calendar cal = Calendar.getInstance();
         calMonth = cal.get(Calendar.MONTH) + 1;
         calYear = cal.get(Calendar.YEAR);
@@ -641,23 +725,20 @@ public class TabFragment2 extends Fragment {
     public void focusOnSavedItem(String y, String m, String d) {
         calMonth = Integer.parseInt(m);
         calYear = Integer.parseInt(y);
+        String[] ymd = {y, m, d};
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-        setLabel();
+        loadSharedPreference();
+        btnDate.setText(setLabel(y, m));
         loadItems();
         makeBalanceTable();
 
         for (int i = 0; i < dateHeaderList.size(); i++) {
-            String[] header = dateHeaderList.get(i).split("[,]");
-            String ymdHeader = header[0] + "/" + header[1] + "/" + header[2];
+            String[] header = dateHeaderList.get(i).split("[,]"); // ex. "2018,04,30,-700"
 
-            //todo use shared pref for ymd
-            String ymdDBFormat = Utilities.convertDateFormat(ymdHeader, Utilities.DATE_FORMAT_YMD, Utilities.DATE_FORMAT_DB);
-            String[] ymd = ymdDBFormat.split("[-]");
-
-            if (ymd[1].equals(m) && ymd[2].equals(d)) {
+            if (header[1].equals(m) && header[2].equals(d)) {
                 expandableListView.setVisibility(View.VISIBLE);
                 categoryLayout.setVisibility(View.GONE);
                 searchLayout.setVisibility(View.VISIBLE);

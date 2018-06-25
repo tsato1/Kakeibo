@@ -12,9 +12,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Integer.parseInt;
 
@@ -126,8 +128,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String headerYear = arrHeaderInfo[0];
         String headerMonth = arrHeaderInfo[1];
         String headerDay = arrHeaderInfo[2];
-        String headerDate = arrHeaderInfo[0]+"/"+arrHeaderInfo[1]+"/"+arrHeaderInfo[2]; //// TODO: 3/18/18 change based on locale 
         String headerBalance = arrHeaderInfo[3];
+
+        String headerDate;
+        switch (MainActivity.sDateFormat) {
+            case 1: // MDY
+                headerDate = headerMonth+"/"+headerDay+"/"+headerYear;
+                break;
+            case 2: // DMY
+                headerDate = headerDay+"/"+headerMonth+"/"+headerYear;
+                break;
+            default: // YMD
+                headerDate = headerYear+"/"+headerMonth+"/"+headerDay;
+        }
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -135,13 +148,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.row_explist_header, null);
         }
 
-        TextView txvHeaderDate = (TextView) convertView.findViewById(R.id.txv_header_date);
+        TextView txvHeaderDate = convertView.findViewById(R.id.txv_header_date);
         Calendar cal = Calendar.getInstance();
         cal.set(parseInt(headerYear), parseInt(headerMonth)-1, parseInt(headerDay));
         String[] weekName = _context.getResources().getStringArray(R.array.weekName);
-        txvHeaderDate.setText(headerDate + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]");
 
-        TextView txvHeaderBalance = (TextView) convertView.findViewById(R.id.txv_header_balance);
+        String str = headerDate + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+        txvHeaderDate.setText(str);
+
+        TextView txvHeaderBalance = convertView.findViewById(R.id.txv_header_balance);
         SpannableString spannableString;
         if (Integer.parseInt(headerBalance) > 0) {
             String string = "+" + headerBalance;

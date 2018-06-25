@@ -24,7 +24,7 @@ public class KkbAppDBAdapter extends DBAdapter {
 
     public static final String COL_VAL_INT = "int";
     public static final String COL_VAL_STR = "str";
-    public static final String COL_VAL_CURRENCY = "currency";
+    public static final String COL_VAL_DB_VERSION = "db_version";
     public static final String COL_VAL_ADS = "ads";
 
     private final Context _context;
