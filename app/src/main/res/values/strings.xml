@@ -6,6 +6,7 @@
 
     <string name="input">INPUT</string>
     <string name="report">REPORT</string>
+    <string name="search">SEARCH</string>
 
     <string name="income">Income</string>
     <string name="delete">Delete</string>
@@ -25,6 +26,8 @@
     <string name="memo_colon">Memo:</string>
     <string name="category_colon">Category:</string>
     <string name="updated_on_colon">Saved on:</string>
+    <string name="from_colon">From:</string>
+    <string name="to_colon">To:</string>
 
     <string name="warning_no_sdcard">Please insert sdcard.</string>
 

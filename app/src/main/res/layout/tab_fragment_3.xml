@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/rtl_search_criteria"
+        layout="@layout/search_criteria"/>
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_action_search"
+        android:background="@color/colorBackground"
+        android:layout_below="@id/rtl_search_criteria"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>
+

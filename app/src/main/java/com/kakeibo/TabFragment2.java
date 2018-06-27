@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
-import com.kakeibo.db.DBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 
@@ -708,8 +707,8 @@ public class TabFragment2 extends Fragment {
 
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
-        mPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 

@@ -3,4 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="dialog_alert_default_padding">18dp</dimen>
+
+    <!-- search fragment -->
+    <dimen name="search_criteria_1_row_height">20dp</dimen>
+    <dimen name="search_criteria_txv_width">60dp</dimen>
 </resources>

@@ -44,7 +44,6 @@ public class TabFragment1 extends Fragment
     private View view;
     private String[] weekName;
     private String[] defaultCategory;
-    private SharedPreferences mPref;
     private int mDateFormat;
 
     @Override
@@ -119,8 +118,8 @@ public class TabFragment1 extends Fragment
 
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
-        mPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 

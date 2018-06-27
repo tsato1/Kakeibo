@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabFragment1 tabFragment1;
     private TabFragment2 tabFragment2;
+    private TabFragment3 tabFragment3;
     private SharedPreferences mPref;
     public static int sDateFormat;
 
@@ -63,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         tabFragment1 = new TabFragment1();
         tabFragment2 = new TabFragment2();
+        tabFragment3 = new TabFragment3();
         adapter.addFragment(tabFragment1, getString(R.string.input));
         adapter.addFragment(tabFragment2, getString(R.string.report));
+        adapter.addFragment(tabFragment3, getString(R.string.search));
         viewPager.setAdapter(adapter);
     }
 
@@ -183,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
     public ViewPager getViewPager() {
         if (null == viewPager) {
-            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            viewPager = findViewById(R.id.viewpager);
         }
         return viewPager;
     }
