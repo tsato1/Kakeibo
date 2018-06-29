@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"/>
 
@@ -19,7 +19,7 @@
         android:id="@+id/txv_header_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="25dp"
+        android:paddingEnd="25dp"
         android:textColor="@color/colorBlack"
         android:textStyle="bold"/>
 

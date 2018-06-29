@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -62,6 +63,7 @@ public class TabFragment2 extends Fragment {
     private ImageButton btnPrev, btnNext;//, btnSearch;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
+    private FloatingActionButton fabExport;
     //private EditText edtSearch;
     private int income, expense, balance;
     public  int calMonth, calYear;
@@ -117,6 +119,7 @@ public class TabFragment2 extends Fragment {
         categoryLayout = _view.findViewById(R.id.scv_subtotal);
         graph = _view.findViewById(R.id.graph_subtotal);
         categoryListView = _view.findViewById(R.id.lsv_subtotal);
+        fabExport = _view.findViewById(R.id.fab_export);
 
         //searchLayout = _view.findViewById(R.id.lnl_search);
         //btnVoice = _view.findViewById(R.id.btn_voice_search);
@@ -133,6 +136,7 @@ public class TabFragment2 extends Fragment {
         //btnSearch.setOnClickListener(new ButtonClickListener());
         expandableListView.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
         categoryListView.setOnItemClickListener(new CategoryListItemClickListener());
+        fabExport.setOnClickListener(new ButtonClickListener());
     }
 
     class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
@@ -404,8 +408,8 @@ public class TabFragment2 extends Fragment {
                     break;
                 //case R.id.btn_voice_search:
                     //break;
-                case R.id.btn_search:
-                    //searchItem();
+                case R.id.fab_export:
+                    //todo
                     break;
             }
         }
