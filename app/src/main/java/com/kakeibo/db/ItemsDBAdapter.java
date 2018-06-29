@@ -52,9 +52,26 @@ public class ItemsDBAdapter extends DBAdapter {
         return out;
     }
 
-    public Cursor getAllItems()
+    public Cursor getItems(String fromY, String fromM, String fromD, String toY, String toM, String toD, String memo)
     {
-        Cursor c = _db.query(TABLE_ITEM, null, null, null, null, null, null);
+        String fromYMD = "\'" + fromY + "-" + fromM + "-" + fromD + "\'";
+        String toYMD = "\'" + toY + "-" + toM + "-" + toD + "\'";
+        String query;
+
+        if ("".equals(memo)) {
+            query = "SELECT * FROM " + TABLE_ITEM +
+                    " WHERE " + COL_EVENT_DATE +
+                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d', " + toYMD + ")" +
+                    " ORDER BY " + COL_EVENT_DATE;
+        } else {
+            query = "SELECT * FROM " + TABLE_ITEM +
+                    " WHERE " + COL_EVENT_DATE +
+                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d', " + toYMD + ")" +
+                    " AND COL_MEMO = " + "\'" + memo + "\'" +
+                    " ORDER BY " + COL_EVENT_DATE;
+        }
+
+        Cursor c = _db.rawQuery(query, new String[]{});
         return c;
     }
 

@@ -51,12 +51,12 @@
         android:id="@+id/txv_memo"
         android:layout_width="@dimen/search_criteria_txv_width"
         android:layout_height="@dimen/search_criteria_1_row_height"
-        android:layout_alignBaseline="@id/edt_memo"
+        android:layout_alignBaseline="@id/edt_memo_search"
         android:layout_alignParentStart="true"
         android:layout_below="@id/txv_category"
         android:text="@string/memo_colon" />
     <EditText
-        android:id="@+id/edt_memo"
+        android:id="@+id/edt_memo_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_category"

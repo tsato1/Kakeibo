@@ -272,7 +272,7 @@ public class TabFragment1 extends Fragment
         }
 
         String eventDate = y + "-" + m + "-" + d;
-        String updateDate = Utilities.getTodaysDateWithHMS();
+        String updateDate = Utilities.getTodaysDate(Utilities.DATE_FORMAT_DB_HMS);
 
         String amount;
         if (!selectedCategory.equals(defaultCategory[0])) {

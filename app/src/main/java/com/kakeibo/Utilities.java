@@ -36,9 +36,9 @@ public class Utilities {
         return sdFormat.format(cal.getTime())+" [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
     }
 
-    public static String getTodaysDateWithHMS() {
+    public static String getTodaysDate(String format) {
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdFormat = new SimpleDateFormat(DATE_FORMAT_DB_HMS, Locale.getDefault());
+        SimpleDateFormat sdFormat = new SimpleDateFormat(format, Locale.getDefault());
         sdFormat.setCalendar(cal);
         sdFormat.setTimeZone(cal.getTimeZone());
         return sdFormat.format(cal.getTime());
