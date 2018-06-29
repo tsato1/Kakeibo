@@ -10,12 +10,15 @@
         android:layout_height="@dimen/search_criteria_1_row_height"
         android:layout_alignParentStart="true"
         android:layout_alignBaseline="@id/btn_from_date"
-        android:text="@string/from_colon" />
+        android:text="@string/from_colon"
+        android:textStyle="bold"/>
     <Button
         android:id="@+id/btn_from_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/txv_from_date" />
+        android:layout_toEndOf="@id/txv_from_date"
+        android:textStyle="bold"
+        style="?android:attr/buttonBarButtonStyle" />
 
     <TextView
         android:id="@+id/txv_to_date"
@@ -24,13 +27,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignBaseline="@id/btn_to_date"
         android:layout_below="@id/txv_from_date"
-        android:text="@string/to_colon" />
+        android:text="@string/to_colon"
+        android:textStyle="bold"/>
     <Button
         android:id="@+id/btn_to_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_from_date"
-        android:layout_toEndOf="@id/txv_to_date" />
+        android:layout_toEndOf="@id/txv_to_date"
+        android:textStyle="bold"
+        style="?android:attr/buttonBarButtonStyle"/>
 
     <TextView
         android:id="@+id/txv_category"
@@ -39,13 +45,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignBaseline="@id/btn_category"
         android:layout_below="@id/txv_to_date"
-        android:text="@string/category_colon" />
+        android:text="@string/category_colon"
+        android:textStyle="bold"/>
     <Button
         android:id="@+id/btn_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_to_date"
-        android:layout_toEndOf="@id/txv_to_date" />
+        android:layout_toEndOf="@id/txv_to_date"
+        android:textStyle="bold"
+        style="?android:attr/buttonBarButtonStyle"/>
 
     <TextView
         android:id="@+id/txv_memo"
@@ -54,7 +63,8 @@
         android:layout_alignBaseline="@id/edt_memo_search"
         android:layout_alignParentStart="true"
         android:layout_below="@id/txv_category"
-        android:text="@string/memo_colon" />
+        android:text="@string/memo_colon"
+        android:textStyle="bold"/>
     <EditText
         android:id="@+id/edt_memo_search"
         android:layout_width="match_parent"

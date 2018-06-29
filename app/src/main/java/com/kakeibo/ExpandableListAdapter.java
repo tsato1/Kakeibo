@@ -12,11 +12,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import static java.lang.Integer.parseInt;
 
@@ -60,10 +58,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.row_explist_child, parent, false);
         }
 
-        ImageView imvCategory = (ImageView)convertView.findViewById(R.id.img_category);
-        TextView txvCategory = (TextView)convertView.findViewById(R.id.txv_category);
-        TextView txvMemo = (TextView)convertView.findViewById(R.id.txv_memo);
-        TextView txvAmount = (TextView)convertView.findViewById(R.id.txv_amount);
+        ImageView imvCategory = convertView.findViewById(R.id.img_category);
+        TextView txvCategory = convertView.findViewById(R.id.txv_category);
+        TextView txvMemo = convertView.findViewById(R.id.txv_memo);
+        TextView txvAmount = convertView.findViewById(R.id.txv_amount);
 
         Item item = (Item)baseItem;
         imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
