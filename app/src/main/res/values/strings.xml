@@ -49,6 +49,13 @@
     <string name="title_edit_item">Edit item</string>
     <string name="title_search_result">Search Result</string>
 
+    <!-- Export -->
+    <string name="select_file">Select file</string>
+    <string name="file_created">Created file: %1$s.</string>
+    <string name="file_create_error">Error while trying to create the file.</string>
+    <string name="select_folder">Select a folder</string>
+    <string name="folder_not_selected">No folder selected, can not continue.</string>
+
     <!-- Settings -->
     <!-- General settings -->
     <string name="pref_header_general">General</string>
@@ -63,7 +70,7 @@
     <string name="pref_title_language">Language</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_header_data_sync">Data and Sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">

@@ -3,6 +3,7 @@ package com.kakeibo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -27,7 +28,6 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.settings.SettingsActivity;
 
 import java.util.ArrayList;
@@ -59,12 +60,10 @@ public class TabFragment2 extends Fragment {
     private FrameLayout categoryLayout;
     private ListView categoryListView;
     private PieGraph graph;
-    private LinearLayout searchLayout;
-    private ImageButton btnPrev, btnNext;//, btnSearch;
+    private ImageButton btnPrev, btnNext;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
     private FloatingActionButton fabExport;
-    //private EditText edtSearch;
     private int income, expense, balance;
     public  int calMonth, calYear;
     private String[] weekName;
@@ -120,11 +119,6 @@ public class TabFragment2 extends Fragment {
         graph = _view.findViewById(R.id.graph_subtotal);
         categoryListView = _view.findViewById(R.id.lsv_subtotal);
         fabExport = _view.findViewById(R.id.fab_export);
-
-        //searchLayout = _view.findViewById(R.id.lnl_search);
-        //btnVoice = _view.findViewById(R.id.btn_voice_search);
-        //btnSearch = _view.findViewById(R.id.btn_search);
-        //edtSearch = _view.findViewById(R.id.edt_search);
     }
 
     void setListeners(){
@@ -132,8 +126,6 @@ public class TabFragment2 extends Fragment {
         btnDate.setOnClickListener(new ButtonClickListener());
         btnNext.setOnClickListener(new ButtonClickListener());
         expandableListView.setOnChildClickListener(new ChildClickListener());
-//        btnVoice.setOnClickListener(new ButtonClickListener());
-        //btnSearch.setOnClickListener(new ButtonClickListener());
         expandableListView.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
         categoryListView.setOnItemClickListener(new CategoryListItemClickListener());
         fabExport.setOnClickListener(new ButtonClickListener());
@@ -164,12 +156,6 @@ public class TabFragment2 extends Fragment {
             }
 
             Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
-
-            //probably disposable
-//            String[] ym = btnDate.getText().toString().split("[/]");
-//            String y = ym[0];//String.valueOf(calYear);
-//            String m = ym[1];//String.valueOf(calMonth);
-//            Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
                 do {
@@ -375,12 +361,10 @@ public class TabFragment2 extends Fragment {
                         expandableListView.setVisibility(View.GONE);
                         //subtotalScrollView.setVisibility(View.VISIBLE);
                         categoryLayout.setVisibility(View.VISIBLE);
-                        //searchLayout.setVisibility(View.GONE);
                     } else {
                         expandableListView.setVisibility(View.VISIBLE);
                         //subtotalScrollView.setVisibility(View.GONE);
                         categoryLayout.setVisibility(View.GONE);
-                        //searchLayout.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.btn_prev:
@@ -406,10 +390,10 @@ public class TabFragment2 extends Fragment {
                     loadItems();
                     makeBalanceTable();
                     break;
-                //case R.id.btn_voice_search:
-                    //break;
                 case R.id.fab_export:
-                    //todo
+                    //startActivity(new Intent(getActivity(), ExportActivity.class));
+                    Log.d("asdf", "coming heres");
+                    startActivity(new Intent(getActivity(), CreateFileInFolderActivity.class));
                     break;
             }
         }
@@ -581,67 +565,6 @@ public class TabFragment2 extends Fragment {
         graph.setThickness(200);
     }
 
-//    void searchItem() {
-//        String searchItem = edtSearch.getText().toString();
-//
-//        if ("".equals(searchItem.trim())) {
-//            Toast.makeText(getActivity(), getString(R.string.err_search_word_empty), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        List<Item> searchResultList = new ArrayList<>();
-//
-//        itemsDbAdapter.open();
-//
-//        String[] ym = btnDate.getText().toString().split("[/]");
-//        String y, m;
-//        switch (mDateFormat) {
-//            case 1: // MDY
-//            case 2: // DMY
-//                y = ym[1];
-//                m = ym[0];
-//                break;
-//            default:  // YMD
-//                y = ym[0];
-//                m = ym[1];
-//        }
-//
-//        Cursor c = itemsDbAdapter.getAllItemsInMonth(y, m);
-//
-//        if (c.moveToFirst()) {
-//            do {
-//                if (c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)).contains(searchItem)) {
-//                    Item item = new Item(
-//                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-//                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
-//                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
-//                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
-//                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
-//                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
-//                    );
-//
-//                    searchResultList.add(item);
-//                }
-//            } while (c.moveToNext());
-//        }
-//
-//        itemsDbAdapter.close();
-//
-//        SearchListAdapter searchListAdapter = new SearchListAdapter(getActivity(), 0, searchResultList);
-//        ListView listView = new ListView(getActivity());
-//        listView.setAdapter(searchListAdapter);
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-//        dialog.setIcon(R.mipmap.ic_mikan);
-//        dialog.setTitle(getString(R.string.title_search_result));
-//        dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//            }
-//        });
-//        dialog.setView(listView).create();
-//        dialog.show();
-//    }
-
     public void setLabel() {
         int year = calYear;
         int month = calMonth;
@@ -744,8 +667,6 @@ public class TabFragment2 extends Fragment {
             if (header[1].equals(m) && header[2].equals(d)) {
                 expandableListView.setVisibility(View.VISIBLE);
                 categoryLayout.setVisibility(View.GONE);
-                //searchLayout.setVisibility(View.VISIBLE);
-
                 expandableListView.expandGroup(i);
                 expandableListView.smoothScrollToPositionFromTop(i, 0);
             } else {

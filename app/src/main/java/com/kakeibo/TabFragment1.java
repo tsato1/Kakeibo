@@ -79,18 +79,18 @@ public class TabFragment1 extends Fragment
         btnNext = view.findViewById(R.id.btn_next);
 
         btnsCategory = new ArrayList<>();
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category1));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category2));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category3));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category4));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category5));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category6));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category7));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category8));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category9));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category10));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category11));
-        btnsCategory.add((Button) view.findViewById(R.id.btn_category12));
+        btnsCategory.add(view.findViewById(R.id.btn_category1));
+        btnsCategory.add(view.findViewById(R.id.btn_category2));
+        btnsCategory.add(view.findViewById(R.id.btn_category3));
+        btnsCategory.add(view.findViewById(R.id.btn_category4));
+        btnsCategory.add(view.findViewById(R.id.btn_category5));
+        btnsCategory.add(view.findViewById(R.id.btn_category6));
+        btnsCategory.add(view.findViewById(R.id.btn_category7));
+        btnsCategory.add(view.findViewById(R.id.btn_category8));
+        btnsCategory.add(view.findViewById(R.id.btn_category9));
+        btnsCategory.add(view.findViewById(R.id.btn_category10));
+        btnsCategory.add(view.findViewById(R.id.btn_category11));
+        btnsCategory.add(view.findViewById(R.id.btn_category12));
         setButtonContent();
 
         edt_amount = view.findViewById(R.id.edt_amount);

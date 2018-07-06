@@ -43,19 +43,13 @@
         <TableRow
             android:paddingTop="2dp"
             android:paddingBottom="2dp">
-            <!--<ImageButton
-                android:id="@+id/btn_voice_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_action_microphone"
-                android:background="@drawable/button_voice"
-                style="?android:attr/buttonBarButtonStyle"/>-->
             <EditText
                 android:id="@+id/edt_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="number"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
                 android:maxLength="10"
                 android:hint="@string/hint_amount_spent_or_earned"/>
         </TableRow>

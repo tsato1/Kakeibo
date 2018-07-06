@@ -15,6 +15,9 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme.Base"
         tools:replace="android:theme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -27,8 +30,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CSVExportActivity"
-            android:label="CSVExport"
+            android:name=".export.CreateFileInFolderActivity"
+            android:label="Export"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyMaterialTheme.NoActionBar"/>
         <activity
@@ -36,10 +39,5 @@
             android:label="Settings"
             android:parentActivityName="com.kakeibo.MainActivity"
             android:theme="@style/MyMaterialTheme.NoActionBar"/>
-
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
     </application>
 </manifest>
