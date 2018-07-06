@@ -116,29 +116,4 @@
         android:layout_margin="@dimen/fab_default_padding"
         android:src="@drawable/baseline_cloud_upload_white_24dp"/>
 
-    <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
-        <!--&lt;!&ndash;android:id="@+id/lnl_search"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:orientation="horizontal">&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<ImageButton&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/btn_voice_search"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:src="@mipmap/ic_action_voice"/>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;<EditText&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/edt_search"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_weight="1"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:hint="@string/hint_search_in_memo"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:maxLength="30"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<ImageButton&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/btn_search"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="50dp"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="50dp"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:src="@mipmap/ic_action_search"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:background="@color/colorBackground"/>&ndash;&gt;-->
-    <!--</LinearLayout>-->
-
 </LinearLayout>
