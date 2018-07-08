@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.settings.UtilKeyboard;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class TabFragment3 extends Fragment {
+    private final static String TAG = TabFragment3.class.getSimpleName();
+
     private String[] weekName;
     private ItemsDBAdapter itemsDbAdapter;
     private Button btnFromDate, btnToDate;
@@ -65,7 +67,7 @@ public class TabFragment3 extends Fragment {
     private void loadSharedPreference() {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 
@@ -88,16 +90,16 @@ public class TabFragment3 extends Fragment {
     private void reset() {
         switch (mDateFormat) {
             case 1: // MDY
-                btnFromDate.setText(Utilities.getTodaysDate(Utilities.DATE_FORMAT_MDY));
-                btnToDate.setText(Utilities.getTodaysDate(Utilities.DATE_FORMAT_MDY));
+                btnFromDate.setText(Util.getTodaysDate(Util.DATE_FORMAT_MDY));
+                btnToDate.setText(Util.getTodaysDate(Util.DATE_FORMAT_MDY));
                 break;
             case 2: // DMY
-                btnFromDate.setText(Utilities.getTodaysDate(Utilities.DATE_FORMAT_DMY));
-                btnToDate.setText(Utilities.getTodaysDate(Utilities.DATE_FORMAT_DMY));
+                btnFromDate.setText(Util.getTodaysDate(Util.DATE_FORMAT_DMY));
+                btnToDate.setText(Util.getTodaysDate(Util.DATE_FORMAT_DMY));
                 break;
             default:  // YMD
-                btnFromDate.setText(Utilities.getTodaysDate(Utilities.DATE_FORMAT_YMD));
-                btnToDate.setText(Utilities.getTodaysDate(Utilities.DATE_FORMAT_YMD));
+                btnFromDate.setText(Util.getTodaysDate(Util.DATE_FORMAT_YMD));
+                btnToDate.setText(Util.getTodaysDate(Util.DATE_FORMAT_YMD));
         }
     }
 
@@ -127,7 +129,7 @@ public class TabFragment3 extends Fragment {
             public void onDateSet(DatePicker picker, int year, int month, int day){
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
-                String str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                String str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
                         Locale.getDefault()).format(date);
                 button.setText(str);
             }
@@ -217,5 +219,19 @@ public class TabFragment3 extends Fragment {
         });
         dialog.setView(listView).create();
         dialog.show();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Make sure that we are currently visible
+        if (this.isVisible()) {
+            // If we are becoming invisible, then...
+            if (!isVisibleToUser) {
+                //Log.d(TAG, "Not visible anymore.");
+                UtilKeyboard.hideSoftKeyboard(getActivity());
+            }
+        }
     }
 }

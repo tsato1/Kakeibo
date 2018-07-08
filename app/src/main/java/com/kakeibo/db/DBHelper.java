@@ -9,10 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.kakeibo.R;
-import com.kakeibo.Utilities;
+import com.kakeibo.Util;
 
 import java.text.SimpleDateFormat;
-import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -121,7 +120,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String oriDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE));
                 String[] dates = oriDate.split("[ ]"); // [0]=date, [1]=time
                 String[] ymd = dates[0].split("[-]");
-                String d = Utilities.convertMtoMM(Integer.parseInt(ymd[2]));
+                String d = Util.convertMtoMM(Integer.parseInt(ymd[2]));
                 String updDate = oriDate;
                 if (d.length() == 2) {
                     updDate = ymd[0]+"-"+ymd[1]+"-"+d+" "+dates[1];
@@ -207,7 +206,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void initKkbAppTable(SQLiteDatabase db, int dbVersion) {
-        SimpleDateFormat sdf = new SimpleDateFormat(Utilities.DATE_FORMAT_DB_HMS, Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(Util.DATE_FORMAT_DB_HMS, Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String strDate = sdf.format(new Date());
 

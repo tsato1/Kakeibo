@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.settings.UtilKeyboard;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +36,8 @@ import java.util.Locale;
  */
 public class TabFragment1 extends Fragment
 {
+    private final static String TAG = TabFragment1.class.getSimpleName();
+
     public  Button btnDate;
     public EditText edt_amount;
     public AutoCompleteTextView edt_memo;
@@ -56,7 +61,7 @@ public class TabFragment1 extends Fragment
         findViews(view);
         setListeners();
         loadSharedPreference();
-        btnDate.setText(Utilities.getTodaysDateWithDay(mDateFormat, weekName));
+        btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
         reset();
 
         return view;
@@ -68,7 +73,7 @@ public class TabFragment1 extends Fragment
         findViews(view);
         setListeners();
         loadSharedPreference();
-        btnDate.setText(Utilities.getTodaysDateWithDay(mDateFormat, weekName));
+        btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
         reset();
     }
 
@@ -119,7 +124,7 @@ public class TabFragment1 extends Fragment
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 
@@ -127,7 +132,7 @@ public class TabFragment1 extends Fragment
         public void  onClick(View view) {
             String sourceDate = btnDate.getText().toString().substring(0, 10);
             //Log.d("sourceDate", sourceDate);
-            SimpleDateFormat format = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+            SimpleDateFormat format = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
                     Locale.getDefault());
             Date date = null;
             Calendar cal = Calendar.getInstance();
@@ -142,7 +147,7 @@ public class TabFragment1 extends Fragment
                     cal.setTime(date);
                     cal.add(Calendar.DATE, -1);
                     date = cal.getTime();
-                    String str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                    String str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
@@ -159,7 +164,7 @@ public class TabFragment1 extends Fragment
                     cal.setTime(date);
                     cal.add(Calendar.DATE, 1);
                     date = cal.getTime();
-                    str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                    str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
@@ -227,6 +232,7 @@ public class TabFragment1 extends Fragment
                 ((MainActivity)getActivity()).getViewPager().setCurrentItem(1); // 1 = Fragment2
                 ((MainActivity)getActivity()).onItemSaved(date);
                 reset();
+                UtilKeyboard.hideSoftKeyboard(getActivity());
             }
         }
     }
@@ -272,7 +278,7 @@ public class TabFragment1 extends Fragment
         }
 
         String eventDate = y + "-" + m + "-" + d;
-        String updateDate = Utilities.getTodaysDate(Utilities.DATE_FORMAT_DB_HMS);
+        String updateDate = Util.getTodaysDate(Util.DATE_FORMAT_DB_HMS);
 
         String amount;
         if (!selectedCategory.equals(defaultCategory[0])) {
@@ -296,7 +302,7 @@ public class TabFragment1 extends Fragment
         itemsDBAdapter.close();
     }
 
-    void showYMDPickerDialog()
+    private void showYMDPickerDialog()
     {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -307,22 +313,35 @@ public class TabFragment1 extends Fragment
             public void onDateSet(DatePicker picker, int year, int month, int day){
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
-                String str = new SimpleDateFormat(Utilities.DATE_FORMATS[mDateFormat],
+                String str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
                         Locale.getDefault()).format(date)
                         + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
+
+                //todo get chosen date from here
             }
         }, year, month-1, day);
         dialog.show();
     }
 
-    void reset()
+    private void reset()
     {
         edt_amount.setText("");
         edt_memo.setText("");
-        btnDate.setText(Utilities.getTodaysDateWithDay(mDateFormat, weekName));
+        btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
+    }
 
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Make sure that we are currently visible
+        if (this.isVisible()) {
+            // If we are becoming invisible, then...
+            if (!isVisibleToUser) {
+                //Log.d(TAG, "Not visible anymore.");
+                UtilKeyboard.hideSoftKeyboard(getActivity());
+            }
+        }
     }
 }

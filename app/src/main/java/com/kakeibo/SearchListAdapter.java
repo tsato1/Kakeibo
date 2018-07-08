@@ -76,7 +76,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         txvMemo.setText(memoText);
 
         TextView txvUpdateDate = v.findViewById(R.id.txv_update_date);
-        String updateDateText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
+        String updateDateText = savedOnColon + Util.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
         txvUpdateDate.setText(updateDateText);
 
         return v;
@@ -85,7 +85,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(_context);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 }

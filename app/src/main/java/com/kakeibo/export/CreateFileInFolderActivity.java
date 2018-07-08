@@ -9,7 +9,7 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 import com.kakeibo.R;
-import com.kakeibo.Utilities;
+import com.kakeibo.Util;
 import com.kakeibo.settings.SettingsActivity;
 
 import java.io.OutputStream;
@@ -21,6 +21,8 @@ import java.io.Writer;
  */
 public class CreateFileInFolderActivity extends BaseExportActivity {
     private static final String TAG = CreateFileInFolderActivity.class.getSimpleName();
+
+    public static final String TMP_FILE_NAME = "tmp.csv";
 
     private int mIntDateFormat;
     private String mStrDateFormat;
@@ -51,11 +53,13 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                 .continueWithTask(task -> {
                     DriveContents contents = task.getResult();
                     OutputStream outputStream = contents.getOutputStream();
+                    String str = UtilFiles.getFileValue(TMP_FILE_NAME, this);
+
                     try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        writer.write("Hello World!");
+                        writer.write(str);
                     }
 
-                    String title = "Kakeibo_Export_" + Utilities.getTodaysDate(mStrDateFormat);
+                    String title = "Kakeibo_Export_" + Util.getTodaysDate(mStrDateFormat);
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                             .setTitle(title)
@@ -66,29 +70,30 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                     return getDriveResourceClient().createFile(parent, changeSet, contents);
                 })
                 .addOnSuccessListener(this,
-                        driveFile -> showMessage(getString(R.string.file_created,
-                                driveFile.getDriveId().encodeToString())))
+                        driveFile -> showMessage(getString(R.string.file_created)))
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to create file", e);
                     showMessage(getString(R.string.file_create_error));
                 });
+
+        finish();
     }
 
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mIntDateFormat = Integer.parseInt(f);
 
         switch (mIntDateFormat) {
             case 1: // MDY
-                mStrDateFormat = Utilities.getTodaysDate(Utilities.DATE_FORMAT_MDY);
+                mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_MDY) + " kk:mm:ss";
                 break;
             case 2: // DMY
-                mStrDateFormat = Utilities.getTodaysDate(Utilities.DATE_FORMAT_DMY);
+                mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_DMY) + " kk:mm:ss";
                 break;
             default:  // YMD
-                mStrDateFormat = Utilities.getTodaysDate(Utilities.DATE_FORMAT_YMD);
+                mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_YMD) + " kk:mm:ss";
         }
     }
 }

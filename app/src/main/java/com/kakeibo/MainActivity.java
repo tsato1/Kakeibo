@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -137,52 +136,9 @@ public class MainActivity extends AppCompatActivity {
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         sDateFormat = Integer.parseInt(f);
     }
-
-    // speech to text //
-//    public void speechText(String string) {
-//        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-//        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, string);
-//
-//        try
-//        {
-//            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-//        }
-//        catch (ActivityNotFoundException e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        switch (requestCode)
-//        {
-//            case REQ_CODE_SPEECH_INPUT:
-//            {
-//                if (resultCode == RESULT_OK && null != data)
-//                {
-//                    final ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-//                    Log.d("MainActivity.java", "You said: " + result.get(0));
-//                    new Thread(new Runnable() {
-//                        public void run() {
-//                            //adapter.getFragment1().edt_amount.setText(result.get(0));
-//                        }
-//                    }).start();
-//
-//                    //next step
-//                }
-//                break;
-//            }
-//        }
-//    }
-
 
     public ViewPager getViewPager() {
         if (null == viewPager) {

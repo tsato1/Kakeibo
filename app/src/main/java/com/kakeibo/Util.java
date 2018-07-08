@@ -10,15 +10,15 @@ import java.util.Locale;
  * Created by tsato on 9/24/16.
  */
 
-public class Utilities {
-    private static final String TAG = Utilities.class.getSimpleName();
+public class Util {
+    private static final String TAG = Util.class.getSimpleName();
 
     public static final String DATE_FORMAT_YMD = "yyyy/MM/dd";
     public static final String DATE_FORMAT_MDY = "MM/dd/yyyy";
     public static final String DATE_FORMAT_DMY = "dd/MM/yyyy";
     public static final String[] DATE_FORMATS = {DATE_FORMAT_YMD, DATE_FORMAT_MDY, DATE_FORMAT_DMY};
     public static final String DATE_FORMAT_DB = "yyyy-MM-dd";
-    public static final String DATE_FORMAT_DB_HMS = "yyyy-MM-dd hh:mm:ss";
+    public static final String DATE_FORMAT_DB_HMS = "yyyy-MM-dd kk:mm:ss";
 
     public static String convertMtoMM(int calMonth) {
         String mon = String.valueOf(calMonth);

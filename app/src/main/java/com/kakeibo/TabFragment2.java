@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -36,17 +37,22 @@ import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
+import com.kakeibo.export.UtilFiles;
 import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.settings.UtilKeyboard;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+
 /**
  * Created by T on 2015/09/14.
  */
 public class TabFragment2 extends Fragment {
+    private static final String TAG = TabFragment2.class.getSimpleName();
+
     private static final int MENUITEM_ID_DELETE = 1;
     private static final int MENUITEM_ID_EDIT = 2;
 
@@ -73,11 +79,11 @@ public class TabFragment2 extends Fragment {
     private View _view;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
-        weekName = getActivity().getResources().getStringArray(R.array.weekName);
-        defaultCategory = getActivity().getResources().getStringArray((R.array.defaultCategory));
+        weekName = getResources().getStringArray(R.array.weekName);
+        defaultCategory = getResources().getStringArray((R.array.defaultCategory));
         amountColon = getActivity().getResources().getString(R.string.amount_colon);
         memoColon = getActivity().getResources().getString(R.string.memo_colon);
         categoryColon = getActivity().getResources().getString(R.string.category_colon);
@@ -95,6 +101,12 @@ public class TabFragment2 extends Fragment {
         categoryLayout.setVisibility(View.GONE);
 
         return _view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // run the code making use of getActivity() from here //todo!!!!!!!!!!!!!!!!!!!
     }
 
     @Override
@@ -197,7 +209,7 @@ public class TabFragment2 extends Fragment {
             Item item = (Item)child;
 
             LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View layout = inflater.inflate(R.layout.dialog_item_detail, (ViewGroup)view.findViewById(R.id.layout_root));
+            final View layout = inflater.inflate(R.layout.dialog_item_detail, view.findViewById(R.id.layout_root));
 
             TextView txvCategory = layout.findViewById(R.id.txv_detail_category);
             TextView txvAmount = layout.findViewById(R.id.txv_detail_amount);
@@ -219,7 +231,7 @@ public class TabFragment2 extends Fragment {
             txvAmount.setText(TextUtils.concat(span1, span2));
             String memoText = memoColon + item.getMemo();
             txvMemo.setText(memoText);
-            String savedOnText = savedOnColon + Utilities.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
+            String savedOnText = savedOnColon + Util.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
             txvRegistrationDate.setText(savedOnText);
 
             new AlertDialog.Builder(getActivity())
@@ -239,8 +251,8 @@ public class TabFragment2 extends Fragment {
             int type = ExpandableListView.getPackedPositionType(info.packedPosition);
             if(type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                 menu.setHeaderIcon(R.mipmap.ic_mikan);
-                menu.add(0, MENUITEM_ID_DELETE, 0, R.string.delete);
-                menu.add(0, MENUITEM_ID_EDIT, 1, R.string.edit);
+                menu.add(0, MENUITEM_ID_EDIT, 0, R.string.edit);
+                menu.add(0, MENUITEM_ID_DELETE, 1, R.string.delete);
             }
         }
     }
@@ -317,7 +329,7 @@ public class TabFragment2 extends Fragment {
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
-                                                Utilities.getTodaysDateWithDay(mDateFormat, weekName)
+                                                Util.getTodaysDateWithDay(mDateFormat, weekName)
                                         );
 
                                         itemsDbAdapter.saveItem(tmp);
@@ -391,8 +403,6 @@ public class TabFragment2 extends Fragment {
                     makeBalanceTable();
                     break;
                 case R.id.fab_export:
-                    //startActivity(new Intent(getActivity(), ExportActivity.class));
-                    Log.d("asdf", "coming heres");
                     startActivity(new Intent(getActivity(), CreateFileInFolderActivity.class));
                     break;
             }
@@ -413,10 +423,23 @@ public class TabFragment2 extends Fragment {
     }
 
     public void loadItems() {
+        //Log.d(TAG, "loadItems()");
+
         dateHeaderList.clear();
         childDataHashMap.clear();
         income = expense = balance = 0;
         int sameDateCounter = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getResources().getString(R.string.event_date));
+        stringBuilder.append(",");
+        stringBuilder.append(getResources().getString(R.string.amount));
+        stringBuilder.append(",");
+        stringBuilder.append(getResources().getString(R.string.category));
+        stringBuilder.append(",");
+        stringBuilder.append(getResources().getString(R.string.memo));
+        stringBuilder.append(",");
+        stringBuilder.append(getResources().getString(R.string.updated_date));
+        stringBuilder.append("\n");
 
         categoryList.clear();
 
@@ -472,6 +495,17 @@ public class TabFragment2 extends Fragment {
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
 
+                stringBuilder.append(item.getEventDate());
+                stringBuilder.append(",");
+                stringBuilder.append(item.getAmount());
+                stringBuilder.append(",");
+                stringBuilder.append(defaultCategory[item.getCategoryCode()]);
+                stringBuilder.append(",");
+                stringBuilder.append(item.getMemo());
+                stringBuilder.append(",");
+                stringBuilder.append(item.getUpdateDate());
+                stringBuilder.append("\n");
+
                 /************* For CategoryList *************/
                 boolean flag = false;
                 for (int i = 0; i < categoryList.size(); i++) {
@@ -524,6 +558,9 @@ public class TabFragment2 extends Fragment {
         itemsDbAdapter.close();
         expandableListAdapter.notifyDataSetChanged();
         categoryListAdapter.notifyDataSetChanged();
+
+        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_NAME, stringBuilder.toString(), getActivity(), Context.MODE_PRIVATE);
+        stringBuilder.setLength(0);
     }
 
     void calculatePercentage() {
@@ -573,10 +610,10 @@ public class TabFragment2 extends Fragment {
         switch (mDateFormat) {
             case 1: // MDY
             case 2: // DMY
-                str = (Utilities.convertMtoMM(month) + "/" + year);
+                str = (Util.convertMtoMM(month) + "/" + year);
                 break;
             default:  // YMD
-                str = (year + "/" + Utilities.convertMtoMM(month));
+                str = (year + "/" + Util.convertMtoMM(month));
         }
 
         btnDate.setText(str);
@@ -587,10 +624,10 @@ public class TabFragment2 extends Fragment {
         switch (mDateFormat) {
             case 1: // MDY
             case 2: // DMY
-                str = (Utilities.convertMtoMM(m) + "/" + y);
+                str = (Util.convertMtoMM(m) + "/" + y);
                 break;
             default:  // YMD
-                str = (y + "/" + Utilities.convertMtoMM(m));
+                str = (y + "/" + Util.convertMtoMM(m));
         }
 
         return str;
@@ -634,7 +671,7 @@ public class TabFragment2 extends Fragment {
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Utilities.DATE_FORMAT_YMD);
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 
@@ -662,7 +699,7 @@ public class TabFragment2 extends Fragment {
         for (int i = 0; i < dateHeaderList.size(); i++) {
             String[] header = dateHeaderList.get(i).split("[,]"); // ex. "2018,04,30,-700"
 
-            Log.d("TabFragment2","focusOnSavedItem() y:"+y+" m:"+m+" d:"+d);
+            //Log.d("TabFragment2","focusOnSavedItem() y:"+y+" m:"+m+" d:"+d);
 
             if (header[1].equals(m) && header[2].equals(d)) {
                 expandableListView.setVisibility(View.VISIBLE);

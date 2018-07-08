@@ -18,6 +18,11 @@
     <string name="cancel">Cancel</string>
     <string name="export">Export</string>
     <string name="item_detail">Item Detail</string>
+    <string name="amount">Amount</string>
+    <string name="category">Category</string>
+    <string name="memo">Memo</string>
+    <string name="event_date">Event Date</string>
+    <string name="updated_date">Updated Date</string>
 
     <string name="income_colon">Income:</string>
     <string name="expense_colon">Expense:</string>
@@ -25,6 +30,7 @@
     <string name="amount_colon">Amount:</string>
     <string name="memo_colon">Memo:</string>
     <string name="category_colon">Category:</string>
+    <string name="event_date_colon">Event Date:</string>
     <string name="updated_on_colon">Saved on:</string>
     <string name="from_colon">From:</string>
     <string name="to_colon">To:</string>
@@ -51,7 +57,7 @@
 
     <!-- Export -->
     <string name="select_file">Select file</string>
-    <string name="file_created">Created file: %1$s.</string>
+    <string name="file_created">File saved on cloud.</string>
     <string name="file_create_error">Error while trying to create the file.</string>
     <string name="select_folder">Select a folder</string>
     <string name="folder_not_selected">No folder selected, can not continue.</string>
