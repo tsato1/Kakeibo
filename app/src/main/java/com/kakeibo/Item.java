@@ -1,7 +1,5 @@
 package com.kakeibo;
 
-import java.util.Calendar;
-
 /**
  * Created by T on 2015/09/15.
  */

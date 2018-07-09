@@ -22,7 +22,8 @@ import java.io.Writer;
 public class CreateFileInFolderActivity extends BaseExportActivity {
     private static final String TAG = CreateFileInFolderActivity.class.getSimpleName();
 
-    public static final String TMP_FILE_NAME = "tmp.csv";
+    public static final String TMP_FILE_ORDER_DATE = "tmp_order_date.csv";
+    public static final String TMP_FILE_ORDER_CATEGORY = "tmp_order_cat.csv";
 
     private int mIntDateFormat;
     private String mStrDateFormat;
@@ -53,7 +54,7 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                 .continueWithTask(task -> {
                     DriveContents contents = task.getResult();
                     OutputStream outputStream = contents.getOutputStream();
-                    String str = UtilFiles.getFileValue(TMP_FILE_NAME, this);
+                    String str = UtilFiles.getFileValue(TMP_FILE_ORDER_DATE, this);
 
                     try (Writer writer = new OutputStreamWriter(outputStream)) {
                         writer.write(str);

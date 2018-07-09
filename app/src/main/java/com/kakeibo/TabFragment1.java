@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.QueriesDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
@@ -62,7 +62,7 @@ public class TabFragment1 extends Fragment
         setListeners();
         loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
-        reset();
+        //reset(); // todo disposable??
 
         return view;
     }
@@ -74,7 +74,7 @@ public class TabFragment1 extends Fragment
         setListeners();
         loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
-        reset();
+        //reset(); //todo disposable??
     }
 
     void findViews(View view)
@@ -232,7 +232,6 @@ public class TabFragment1 extends Fragment
                 ((MainActivity)getActivity()).getViewPager().setCurrentItem(1); // 1 = Fragment2
                 ((MainActivity)getActivity()).onItemSaved(date);
                 reset();
-                UtilKeyboard.hideSoftKeyboard(getActivity());
             }
         }
     }

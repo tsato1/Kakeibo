@@ -16,13 +16,11 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,16 +34,15 @@ import android.widget.Toast;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.QueriesDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.export.UtilFiles;
 import com.kakeibo.settings.SettingsActivity;
-import com.kakeibo.settings.UtilKeyboard;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
 
 /**
  * Created by T on 2015/09/14.
@@ -559,7 +556,7 @@ public class TabFragment2 extends Fragment {
         expandableListAdapter.notifyDataSetChanged();
         categoryListAdapter.notifyDataSetChanged();
 
-        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_NAME, stringBuilder.toString(), getActivity(), Context.MODE_PRIVATE);
+        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_DATE, stringBuilder.toString(), getActivity(), Context.MODE_PRIVATE);
         stringBuilder.setLength(0);
     }
 
@@ -680,19 +677,20 @@ public class TabFragment2 extends Fragment {
         calMonth = cal.get(Calendar.MONTH) + 1;
         calYear = cal.get(Calendar.YEAR);
 
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); //todo disposable??
     }
 
     public void focusOnSavedItem(String y, String m, String d) {
         calMonth = Integer.parseInt(m);
         calYear = Integer.parseInt(y);
 
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);//todo disposable??
 
         loadSharedPreference();
         btnDate.setText(setLabel(y, m));
+
         loadItems();
         makeBalanceTable();
 
@@ -711,4 +709,5 @@ public class TabFragment2 extends Fragment {
             }
         }
     }
+
 }

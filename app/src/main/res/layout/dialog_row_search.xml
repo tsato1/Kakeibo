@@ -34,7 +34,6 @@
         android:id="@+id/txv_update_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:textColor="@color/colorBlack"
         android:textStyle="bold"/>
 </LinearLayout>

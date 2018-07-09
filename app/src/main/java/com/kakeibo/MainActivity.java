@@ -19,14 +19,14 @@ import com.kakeibo.settings.SettingsActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-//todo pie graph holograph library
 
 //todo add ads
 
-//todo bring search fragment to different viewpager
 //todo add and subtract custom categories (discreet categories for income too)
 
-//todo locale
+//todo locale - how to display yyyymmdd
+
+//todo get only one dot in edit_amount and handle text starting with dot
 
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {

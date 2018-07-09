@@ -41,16 +41,18 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
 
     @Override
     public View getView(int position, View v, ViewGroup parent) {
+        String eventDateColon = _context.getResources().getString(R.string.event_date_colon);
         String amountColon = _context.getResources().getString(R.string.amount_colon);
         String memoColon = _context.getResources().getString(R.string.memo_colon);
         String categoryColon = _context.getResources().getString(R.string.category_colon);
         String savedOnColon = _context.getResources().getString(R.string.updated_on_colon);
-        Item item = (Item) getItem(position);
+        Item item = getItem(position);
 
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
         TextView txvEventDate = v.findViewById(R.id.txv_event_date);
-        txvEventDate.setText(item.getEventDate());
+        String eventDateText = eventDateColon + Util.getDateFromDBDate(item.getEventDate(), weekName, mDateFormat);
+        txvEventDate.setText(eventDateText);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
         String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];

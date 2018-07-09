@@ -8,17 +8,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.kakeibo.Item;
+import com.kakeibo.Query;
+import com.kakeibo.Util;
 
 public class ItemsDBAdapter extends DBAdapter {
     private static final String TAG = ItemsDBAdapter.class.getSimpleName();
     public static final String TABLE_ITEM = "items";
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNT = "amount";
-    public static final String COL_CURRENCY = "currency";
     public static final String COL_CATEGORY = "category"; // dropped on version 2
     public static final String COL_CATEGORY_CODE = "category_code";
     public static final String COL_MEMO = "memo";
-    public static final String COL_LOCALE = "locale";
     public static final String COL_EVENT_D = "event_d"; // dropped on version 3
     public static final String COL_EVENT_YM = "event_ym"; // dropped on version 3
     public static final String COL_EVENT_DATE = "event_date";
@@ -26,9 +26,11 @@ public class ItemsDBAdapter extends DBAdapter {
 
     private final Context _context;
     private SQLiteDatabase _db;
+    private QueriesDBAdapter _queriesDBAdapter;
 
     public ItemsDBAdapter (Context context) {
         _context = context;
+        _queriesDBAdapter = new QueriesDBAdapter(context);
     }
 
     public ItemsDBAdapter open() throws SQLException {
@@ -67,9 +69,11 @@ public class ItemsDBAdapter extends DBAdapter {
             query = "SELECT * FROM " + TABLE_ITEM +
                     " WHERE " + COL_EVENT_DATE +
                     " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d', " + toYMD + ")" +
-                    " AND COL_MEMO = " + "\'" + memo + "\'" +
+                    " AND " + COL_MEMO + "= " + "\'" + memo + "\'" +
                     " ORDER BY " + COL_EVENT_DATE;
         }
+
+        saveQuery(QueriesDBAdapter.QUERY_TYPE_AUTO, query);
 
         Cursor c = _db.rawQuery(query, new String[]{});
         return c;
@@ -82,6 +86,7 @@ public class ItemsDBAdapter extends DBAdapter {
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " ORDER BY " + COL_EVENT_DATE;
         Cursor c = _db.rawQuery(query, new String[]{});
+
         return c;
     }
 
@@ -107,5 +112,17 @@ public class ItemsDBAdapter extends DBAdapter {
         _db.insertOrThrow(TABLE_ITEM, null, values);
 
         Log.d(TAG, "saveItem() called");
+    }
+
+    private void saveQuery(int type, String str) {
+        Query query = new Query(
+                "",
+                type,
+                str,
+                Util.getTodaysDate(Util.DATE_FORMAT_DB_HMS)
+        );
+        _queriesDBAdapter.open();
+        _queriesDBAdapter.saveItem(query);
+        _queriesDBAdapter.close();
     }
 }

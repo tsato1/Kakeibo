@@ -36,7 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
                     KkbAppDBAdapter.COL_VAL_STR_2 + " TEXT NOT NULL," +
                     KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL);";
 
-
     /*** items table ***/
     private static final String DATABASE_CREATE_TABLE_ITEM =
             "CREATE TABLE " + ItemsDBAdapter.TABLE_ITEM + " ("+
@@ -46,6 +45,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     ItemsDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);";
+
+    /*** queries table ***/
+    private static final String DATABASE_CREATE_TABLE_QUERIES =
+            "CREATE TABLE " + QueriesDBAdapter.TABLE_QUERIES + " (" +
+                    QueriesDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                    QueriesDBAdapter.COL_QUERY_TYPE + " INTEGER NOT NULL DEFAULT 0," +
+                    QueriesDBAdapter.COL_SQL + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
+
     private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
             " ADD COLUMN " + ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
     private static final String DATABASE_UPDATE_2_TO_3_1 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
@@ -86,6 +94,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             db.execSQL(DATABASE_CREATE_TABLE_ITEM);
+            db.execSQL(DATABASE_CREATE_TABLE_QUERIES);
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
             initKkbAppTable(db, DATABASE_VERSION);
         } catch (SQLException e) {
@@ -107,6 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
             upgradeVersion4(db);
 
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
+            db.execSQL(DATABASE_CREATE_TABLE_QUERIES);
             initKkbAppTable(db, -1);
         }
     }
