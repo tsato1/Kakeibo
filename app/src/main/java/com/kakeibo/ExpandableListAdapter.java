@@ -34,8 +34,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._lstDateHeader = dateHeaderList;
         this._hmpChildData = childDataHashMap;
 
-        _strDefaultCategory = context.getResources().getStringArray(R.array.defaultCategory);
-        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.categoryMipmaps);
+        _strDefaultCategory = context.getResources().getStringArray(R.array.default_category);
+        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txvHeaderDate = convertView.findViewById(R.id.txv_header_date);
         Calendar cal = Calendar.getInstance();
         cal.set(parseInt(headerYear), parseInt(headerMonth)-1, parseInt(headerDay));
-        String[] weekName = _context.getResources().getStringArray(R.array.weekName);
+        String[] weekName = _context.getResources().getStringArray(R.array.week_name);
 
         String str = headerDate + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
         txvHeaderDate.setText(str);

@@ -33,8 +33,8 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
 
-        defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
-        weekName = _context.getResources().getStringArray(R.array.weekName);
+        defaultCategory = _context.getResources().getStringArray(R.array.default_category);
+        weekName = _context.getResources().getStringArray(R.array.week_name);
 
         loadSharedPreference();
     }

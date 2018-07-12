@@ -1,13 +1,10 @@
 package com.kakeibo;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
-import com.kakeibo.db.QueriesDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
@@ -55,8 +51,8 @@ public class TabFragment1 extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
-        weekName = getActivity().getResources().getStringArray(R.array.weekName);
-        defaultCategory = getActivity().getResources().getStringArray(R.array.defaultCategory);
+        weekName = getActivity().getResources().getStringArray(R.array.week_name);
+        defaultCategory = getActivity().getResources().getStringArray(R.array.default_category);
 
         findViews(view);
         setListeners();

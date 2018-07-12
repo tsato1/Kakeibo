@@ -29,8 +29,8 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         this._context = context;
         _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        _strsDefaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
-        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.categoryMipmaps);
+        _strsDefaultCategory = _context.getResources().getStringArray(R.array.default_category);
+        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
     @Override

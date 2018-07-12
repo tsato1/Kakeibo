@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="weekName">
+    <string-array name="week_name">
         <item>Sun</item>
         <item>Mon</item>
         <item>Tue</item>
@@ -10,7 +10,7 @@
         <item>Sat</item>
     </string-array>
 
-    <string-array name="defaultCategory">
+    <string-array name="default_category">
         <item>Income</item>
         <item>Comm</item>
         <item>Meal</item>
@@ -25,20 +25,27 @@
         <item>Other</item>
     </string-array>
 
-    <integer-array name="categoryMipmaps">
-        <item>@mipmap/ic_category_income</item>
-        <item>@mipmap/ic_category_comm</item>
-        <item>@mipmap/ic_category_meal</item>
-        <item>@mipmap/ic_category_util</item>
-        <item>@mipmap/ic_category_health</item>
-        <item>@mipmap/ic_category_edu</item>
-        <item>@mipmap/ic_category_cloth</item>
-        <item>@mipmap/ic_category_trans</item>
-        <item>@mipmap/ic_category_ent</item>
-        <item>@mipmap/ic_category_ins</item>
-        <item>@mipmap/ic_category_tax</item>
-        <item>@mipmap/ic_category_other</item>
+    <integer-array name="category_drawables">
+        <item>@drawable/ic_category_income</item>
+        <item>@drawable/ic_category_comm</item>
+        <item>@drawable/ic_category_meal</item>
+        <item>@drawable/ic_category_util</item>
+        <item>@drawable/ic_category_health</item>
+        <item>@drawable/ic_category_edu</item>
+        <item>@drawable/ic_category_cloth</item>
+        <item>@drawable/ic_category_trans</item>
+        <item>@drawable/ic_category_ent</item>
+        <item>@drawable/ic_category_ins</item>
+        <item>@drawable/ic_category_tax</item>
+        <item>@drawable/ic_category_other</item>
     </integer-array>
+
+    <string-array name="search_criteria">
+        <item>Date Range</item>
+        <item>Amount Range</item>
+        <item>Category</item>
+        <item>Memo</item>
+    </string-array>
 
     <!-- pref -->
     <string-array name="pref_list_date_format">

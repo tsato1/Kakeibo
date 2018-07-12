@@ -63,13 +63,13 @@ public class ItemsDBAdapter extends DBAdapter {
         if ("".equals(memo)) {
             query = "SELECT * FROM " + TABLE_ITEM +
                     " WHERE " + COL_EVENT_DATE +
-                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d', " + toYMD + ")" +
+                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")" +
                     " ORDER BY " + COL_EVENT_DATE;
         } else {
             query = "SELECT * FROM " + TABLE_ITEM +
                     " WHERE " + COL_EVENT_DATE +
-                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d', " + toYMD + ")" +
-                    " AND " + COL_MEMO + "= " + "\'" + memo + "\'" +
+                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")" +
+                    " AND " + COL_MEMO + "=" + "\'" + memo + "\'" +
                     " ORDER BY " + COL_EVENT_DATE;
         }
 

@@ -196,7 +196,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String catName = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY));
                 int colId = c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_ID));
                 ContentValues values = new ContentValues();
-                String[] defaultCategory = _context.getResources().getStringArray(R.array.defaultCategory);
+                String[] defaultCategory = _context.getResources().getStringArray(R.array.default_category);
                 int catCode = 0;
 
                 for (int i=0; i<defaultCategory.length; ++i) {

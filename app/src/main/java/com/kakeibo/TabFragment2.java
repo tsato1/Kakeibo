@@ -34,7 +34,6 @@ import android.widget.Toast;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
-import com.kakeibo.db.QueriesDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.export.UtilFiles;
 import com.kakeibo.settings.SettingsActivity;
@@ -79,8 +78,8 @@ public class TabFragment2 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
-        weekName = getResources().getStringArray(R.array.weekName);
-        defaultCategory = getResources().getStringArray((R.array.defaultCategory));
+        weekName = getResources().getStringArray(R.array.week_name);
+        defaultCategory = getResources().getStringArray((R.array.default_category));
         amountColon = getActivity().getResources().getString(R.string.amount_colon);
         memoColon = getActivity().getResources().getString(R.string.memo_colon);
         categoryColon = getActivity().getResources().getString(R.string.category_colon);
@@ -368,11 +367,9 @@ public class TabFragment2 extends Fragment {
                     loadItems();
                     if (_view.findViewById(R.id.lsv_expandable).getVisibility() != View.GONE) {
                         expandableListView.setVisibility(View.GONE);
-                        //subtotalScrollView.setVisibility(View.VISIBLE);
                         categoryLayout.setVisibility(View.VISIBLE);
                     } else {
                         expandableListView.setVisibility(View.VISIBLE);
-                        //subtotalScrollView.setVisibility(View.GONE);
                         categoryLayout.setVisibility(View.GONE);
                     }
                     break;
