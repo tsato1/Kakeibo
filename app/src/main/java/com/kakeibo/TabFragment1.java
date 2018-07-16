@@ -1,9 +1,11 @@
 package com.kakeibo;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,43 +32,44 @@ import java.util.Locale;
 /**
  * Created by T on 2015/09/14.
  */
-public class TabFragment1 extends Fragment
-{
+public class TabFragment1 extends Fragment {
     private final static String TAG = TabFragment1.class.getSimpleName();
+
+    private Activity _activity;
+    private View _view;
+    private ImageButton btnPrev, btnNext;
+    private ArrayList<Button> btnsCategory;
+    private String selectedCategory = "";
+    private int selectedCategoryCode = 0;
+    private String[] weekName;
+    private String[] defaultCategory;
+    private int mDateFormat;
 
     public  Button btnDate;
     public EditText edt_amount;
     public AutoCompleteTextView edt_memo;
 
-    private ImageButton btnPrev, btnNext;
-    private ArrayList<Button> btnsCategory;
-    private String selectedCategory = "";
-    private int selectedCategoryCode = 0;
-    private View view;
-    private String[] weekName;
-    private String[] defaultCategory;
-    private int mDateFormat;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.tab_fragment_1, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        _activity = getActivity();
+        _view = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
-        weekName = getActivity().getResources().getStringArray(R.array.week_name);
-        defaultCategory = getActivity().getResources().getStringArray(R.array.default_category);
+        weekName = getResources().getStringArray(R.array.week_name);
+        defaultCategory = getResources().getStringArray(R.array.default_category);
 
-        findViews(view);
+        findViews(_view);
         setListeners();
         loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
         //reset(); // todo disposable??
 
-        return view;
+        return _view;
     }
 
     @Override
     public void onResume () {
         super.onResume();
-        findViews(view);
+        findViews(_view);
         setListeners();
         loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
@@ -335,7 +338,7 @@ public class TabFragment1 extends Fragment
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
                 //Log.d(TAG, "Not visible anymore.");
-                UtilKeyboard.hideSoftKeyboard(getActivity());
+                UtilKeyboard.hideSoftKeyboard(_activity);
             }
         }
     }

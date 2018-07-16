@@ -24,6 +24,7 @@
                 android:text="@string/memo"
                 android:textSize="@dimen/char_size_mid"/>
             <EditText
+                android:id="@+id/edt_card_memo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="20"

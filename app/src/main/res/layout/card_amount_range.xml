@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <EditText
+                    android:id="@+id/edt_amount_min"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -41,6 +42,7 @@
                     android:gravity="center"
                     android:text="@string/dash"/>
                 <EditText
+                    android:id="@+id/edt_amount_max"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
