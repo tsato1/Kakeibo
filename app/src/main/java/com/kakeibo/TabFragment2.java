@@ -1,5 +1,6 @@
 package com.kakeibo;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,6 +53,7 @@ public class TabFragment2 extends Fragment {
     private static final int MENUITEM_ID_DELETE = 1;
     private static final int MENUITEM_ID_EDIT = 2;
 
+    private Activity _activity;
     private ItemsDBAdapter itemsDbAdapter;
     private List<String> dateHeaderList;
     private HashMap<String, List<Item>> childDataHashMap;
@@ -76,14 +78,15 @@ public class TabFragment2 extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        _activity = getActivity();
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
         weekName = getResources().getStringArray(R.array.week_name);
         defaultCategory = getResources().getStringArray((R.array.default_category));
-        amountColon = getActivity().getResources().getString(R.string.amount_colon);
-        memoColon = getActivity().getResources().getString(R.string.memo_colon);
-        categoryColon = getActivity().getResources().getString(R.string.category_colon);
-        savedOnColon = getActivity().getResources().getString(R.string.updated_on_colon);
+        amountColon = getResources().getString(R.string.amount_colon);
+        memoColon = getResources().getString(R.string.memo_colon);
+        categoryColon = getResources().getString(R.string.category_colon);
+        savedOnColon = getResources().getString(R.string.updated_on_colon);
 
         findViews();
         reset();
@@ -182,10 +185,10 @@ public class TabFragment2 extends Fragment {
 
             itemsDbAdapter.close();
 
-            SearchListAdapter searchListAdapter = new SearchListAdapter(getActivity(), 0, searchResultList);
-            ListView listView = new ListView(getActivity());
-            listView.setAdapter(searchListAdapter);
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            CategoryDetailListAdapter categoryDetailListAdapter = new CategoryDetailListAdapter(_activity, 0, searchResultList);
+            ListView listView = new ListView(_activity);
+            listView.setAdapter(categoryDetailListAdapter);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
             dialog.setTitle(defaultCategory[tmp.getCategoryCode()]);
             dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -204,7 +207,7 @@ public class TabFragment2 extends Fragment {
             Object child = (expandableListAdapter.getChild(groupPosition, childPosition));
             Item item = (Item)child;
 
-            LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater)_activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View layout = inflater.inflate(R.layout.dialog_item_detail, view.findViewById(R.id.layout_root));
 
             TextView txvCategory = layout.findViewById(R.id.txv_detail_category);
@@ -218,11 +221,11 @@ public class TabFragment2 extends Fragment {
             if (0 == (item.getCategoryCode())) {
                 span1 = new SpannableString(amountColon);
                 span2 = new SpannableString("+" + item.getAmount());
-                span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorBlue)), 0, 1, 0);
+                span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorBlue)), 0, 1, 0);
             } else {
                 span1 = new SpannableString(amountColon);
                 span2 = new SpannableString(item.getAmount());
-                span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.colorRed)), 0, 1, 0);
+                span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorRed)), 0, 1, 0);
             }
             txvAmount.setText(TextUtils.concat(span1, span2));
             String memoText = memoColon + item.getMemo();
@@ -230,9 +233,9 @@ public class TabFragment2 extends Fragment {
             String savedOnText = savedOnColon + Util.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
             txvRegistrationDate.setText(savedOnText);
 
-            new AlertDialog.Builder(getActivity())
+            new AlertDialog.Builder(_activity)
                     .setIcon(R.mipmap.ic_mikan)
-                    .setTitle(getActivity().getResources().getString(R.string.item_detail))
+                    .setTitle(getResources().getString(R.string.item_detail))
                     .setView(layout)
                     .show();
 
@@ -262,7 +265,7 @@ public class TabFragment2 extends Fragment {
 
         switch(menuItem.getItemId()) {
             case MENUITEM_ID_DELETE:
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(_activity)
                         .setIcon(R.mipmap.ic_mikan)
                         .setTitle(getString(R.string.quest_do_you_want_to_delete_item))
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -274,7 +277,7 @@ public class TabFragment2 extends Fragment {
                                 final int itemId = Integer.parseInt(item.getId());
 
                                 if(itemsDbAdapter.deleteItem(itemId)) {
-                                    Toast.makeText(getActivity(), getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(_activity, getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_SHORT).show();
                                 }
 
                                 loadItems();
@@ -286,7 +289,7 @@ public class TabFragment2 extends Fragment {
                         .show();
                 return true;
             case MENUITEM_ID_EDIT:
-                LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater layoutInflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, (ViewGroup) _view.findViewById(R.id.layout_root));
                 TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
                 txvEventDate.setText(item.getEventDate());
@@ -298,7 +301,7 @@ public class TabFragment2 extends Fragment {
                 final EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(_activity)
                         .setIcon(R.mipmap.ic_mikan)
                         .setTitle(getString(R.string.title_edit_item))
                         .setView(layout)
@@ -330,7 +333,7 @@ public class TabFragment2 extends Fragment {
 
                                         itemsDbAdapter.saveItem(tmp);
 
-                                        Toast.makeText(getActivity(), getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(_activity, getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -348,10 +351,10 @@ public class TabFragment2 extends Fragment {
 
     boolean checkBeforeSave(EditText edt_amount) {
         if ("".equals(edt_amount.getText().toString())) {
-            Toast.makeText(getActivity(), getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
+            Toast.makeText(_activity, getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
             return false;
         } else if (Integer.parseInt(edt_amount.getText().toString()) == 0) {
-            Toast.makeText(getActivity(), getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
+            Toast.makeText(_activity, getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -397,22 +400,22 @@ public class TabFragment2 extends Fragment {
                     makeBalanceTable();
                     break;
                 case R.id.fab_export:
-                    startActivity(new Intent(getActivity(), CreateFileInFolderActivity.class));
+                    startActivity(new Intent(_activity, CreateFileInFolderActivity.class));
                     break;
             }
         }
     }
 
     void setAdapters(){
-        itemsDbAdapter = new ItemsDBAdapter(getActivity());
+        itemsDbAdapter = new ItemsDBAdapter(_activity);
 
         dateHeaderList = new ArrayList<>();
         childDataHashMap = new HashMap<>();
-        expandableListAdapter = new ExpandableListAdapter(getActivity(), dateHeaderList, childDataHashMap);
+        expandableListAdapter = new ExpandableListAdapter(_activity, dateHeaderList, childDataHashMap);
         expandableListView.setAdapter(expandableListAdapter);
 
         categoryList = new ArrayList<>();
-        categoryListAdapter = new CategoryListAdapter(getActivity(), 0, categoryList);
+        categoryListAdapter = new CategoryListAdapter(_activity, 0, categoryList);
         categoryListView.setAdapter(categoryListAdapter);
     }
 
@@ -553,7 +556,7 @@ public class TabFragment2 extends Fragment {
         expandableListAdapter.notifyDataSetChanged();
         categoryListAdapter.notifyDataSetChanged();
 
-        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_DATE, stringBuilder.toString(), getActivity(), Context.MODE_PRIVATE);
+        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_DATE, stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
         stringBuilder.setLength(0);
     }
 
@@ -648,23 +651,23 @@ public class TabFragment2 extends Fragment {
         balance = income + expense;
 
         if (balance < 0) {
-            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
+            txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorRed));
             txvBalance.setText(String.valueOf(balance));
         }
         else if (balance > 0) {
-            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBlue));
+            txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorBlue));
             String str = "+" + String.valueOf(balance);
             txvBalance.setText(str);
         }
         else {
-            txvBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBlack));
+            txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorBlack));
             txvBalance.setText(String.valueOf(balance));
         }
     }
 
     public void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
@@ -673,17 +676,11 @@ public class TabFragment2 extends Fragment {
         Calendar cal = Calendar.getInstance();
         calMonth = cal.get(Calendar.MONTH) + 1;
         calYear = cal.get(Calendar.YEAR);
-
-//        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); //todo disposable??
     }
 
     public void focusOnSavedItem(String y, String m, String d) {
         calMonth = Integer.parseInt(m);
         calYear = Integer.parseInt(y);
-
-//        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);//todo disposable??
 
         loadSharedPreference();
         btnDate.setText(setLabel(y, m));

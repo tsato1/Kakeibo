@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +24,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class SearchRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private final static String TAG = SearchRecycleViewAdapter.class.getSimpleName();
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private final static String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
     private Context _context;
     private ArrayList<Card> _lstCard;
     private int mDateFormat;
 
-    public SearchRecycleViewAdapter(Context context, ArrayList<Card> lstCard) {
+    SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCard) {
         _context = context;
         _lstCard = lstCard;
 
@@ -48,12 +48,14 @@ public class SearchRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
     /*** date range card ***/
     public class ViewHolderDateRange extends RecyclerView.ViewHolder {
         FrameLayout layout;
+        CardView cardView;
         Button btnFrom, btnTo;
 
         ViewHolderDateRange(View itemView) {
             super(itemView);
 
             layout = itemView.findViewById(R.id.frl_card_date_range);
+            cardView = itemView.findViewById(R.id.cdv_date_range);
             btnFrom = itemView.findViewById(R.id.btn_date_from);
             btnTo = itemView.findViewById(R.id.btn_date_to);
 
@@ -154,6 +156,7 @@ public class SearchRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return _lstCard.size();
     }
 
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
@@ -173,6 +176,16 @@ public class SearchRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
             default:
                 return null;
         }
+    }
+
+    public void removeItem(int position) {
+        _lstCard.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Card card, int position) {
+        _lstCard.add(position, card);
+        notifyItemInserted(position);
     }
 
     @Override

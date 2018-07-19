@@ -44,6 +44,7 @@
     <string name="amount_range">Amount Range</string>
     <string name="min">Min</string>
     <string name="max">Max</string>
+    <string name="undo">UNDO</string>
 
     <string name="warning_no_sdcard">Please insert sdcard.</string>
 

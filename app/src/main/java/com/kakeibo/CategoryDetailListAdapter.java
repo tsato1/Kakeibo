@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by T on 2015/09/24.
  */
-public class SearchListAdapter extends ArrayAdapter<Item> {
+public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater inflater;
     private Context _context;
     private String[] defaultCategory;
@@ -28,7 +28,7 @@ public class SearchListAdapter extends ArrayAdapter<Item> {
     private int mDateFormat;
     private SharedPreferences mPref;
 
-    public SearchListAdapter (Context context, int resource, List<Item> objects) {
+    public CategoryDetailListAdapter(Context context, int resource, List<Item> objects) {
         super(context, resource, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
