@@ -28,8 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_delete_sweep_white" />
+                            <entry key="outputName" value="ic_delete_sweep_black" />
                             <entry key="sourceFile" value="$USER_HOME$" />
                           </map>
                         </option>

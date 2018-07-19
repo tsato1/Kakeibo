@@ -98,12 +98,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     /*** amount range card ***/
     public class ViewHolderAmountRange extends RecyclerView.ViewHolder {
         FrameLayout layout;
+        CardView cardView;
         EditText edtMin, edtMax;
 
         ViewHolderAmountRange(View itemView) {
             super(itemView);
 
             layout = itemView.findViewById(R.id.frl_card_amount_range);
+            cardView = itemView.findViewById(R.id.cdv_amount_range);
             edtMin = itemView.findViewById((R.id.edt_amount_min));
             edtMax = itemView.findViewById(R.id.edt_amount_max);
         }
@@ -112,12 +114,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     /*** category card ***/
     public class ViewHolderCategory extends RecyclerView.ViewHolder {
         FrameLayout layout;
+        CardView cardView;
         Button btnCategory;
 
         ViewHolderCategory(View itemView) {
             super(itemView);
 
             layout = itemView.findViewById(R.id.frl_card_category);
+            cardView = itemView.findViewById(R.id.cdv_category);
             btnCategory = itemView.findViewById(R.id.btn_card_category);
         }
     }
@@ -125,12 +129,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     /*** memo card ***/
     public class ViewHolderMemo extends RecyclerView.ViewHolder {
         FrameLayout layout;
+        CardView cardView;
         EditText edtMemo;
 
         ViewHolderMemo(View itemView) {
             super(itemView);
 
             layout = itemView.findViewById(R.id.frl_card_memo);
+            cardView = itemView.findViewById(R.id.cdv_memo);
             edtMemo = itemView.findViewById(R.id.edt_card_memo);
         }
     }

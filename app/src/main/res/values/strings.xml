@@ -45,8 +45,8 @@
     <string name="min">Min</string>
     <string name="max">Max</string>
     <string name="undo">UNDO</string>
-
-    <string name="warning_no_sdcard">Please insert sdcard.</string>
+    <string name="swipe_to_delete">Swipe to Delete</string>
+    <string name="card_is_removed">Card is removed.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>

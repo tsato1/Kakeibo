@@ -5,28 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/rtl_card_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorAccent">
-
-        <ImageView
-            android:id="@+id/imv_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/card_view_vertical_margin"
-            android:src="@drawable/ic_delete_sweep_white"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/imv_delete"
-            android:text="@string/delete" />
-    </RelativeLayout>
+    <include layout="@layout/card_background"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cdv_date_range"

@@ -66,7 +66,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(_context);
         rcvSearchCriteria.setLayoutManager(layoutManager);
         rcvSearchCriteria.setItemAnimator(new DefaultItemAnimator());
-        rcvSearchCriteria.addItemDecoration(new DividerItemDecoration(_context, DividerItemDecoration.VERTICAL));
         rcvSearchCriteria.setAdapter(adpRecyclerView);
 
         ItemTouchHelper.SimpleCallback ithCallback =
@@ -135,24 +134,26 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         }
     }
 
+    //todo only one item can be generated -> check before search
+
     private void addCriterion(int which) {
         Card card;
 
         switch (which) {
             case Card.TYPE_DATE_RANGE:
-                card = new Card(Card.TYPE_DATE_RANGE, R.drawable.ic_add_white);
+                card = new Card(Card.TYPE_DATE_RANGE, 0);
                 break;
             case Card.TYPE_AMOUNT_RANGE:
-                card = new Card(Card.TYPE_AMOUNT_RANGE, R.drawable.ic_add_white);
+                card = new Card(Card.TYPE_AMOUNT_RANGE, 0);
                 break;
             case Card.TYPE_CATEGORY:
-                card = new Card(Card.TYPE_CATEGORY, R.drawable.ic_add_white);
+                card = new Card(Card.TYPE_CATEGORY, 0);
                 break;
             case Card.TYPE_MEMO:
-                card = new Card(Card.TYPE_MEMO, R.drawable.ic_add_white);
+                card = new Card(Card.TYPE_MEMO, 0);
                 break;
             default:
-                card = new Card(Card.TYPE_DATE_RANGE, R.drawable.ic_add_white);
+                card = new Card(Card.TYPE_DATE_RANGE, 0);
                 break;
         }
 
@@ -162,23 +163,32 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        String name = "";
+
         if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
-            String name = "temp";
-
-            Card cardItem = lstCard.get(viewHolder.getAdapterPosition());
-            int deleteIndex = viewHolder.getAdapterPosition();
-
-            adpRecyclerView.removeItem(deleteIndex);
-
-            Snackbar snackbar = Snackbar.make(frlRoot, name + " removed.", Snackbar.LENGTH_LONG);
-            snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adpRecyclerView.restoreItem(cardItem, deleteIndex);
-                }
-            }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
-            snackbar.show();
+            name = getResources().getString(R.string.date_range);
+        } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
+            name = getResources().getString(R.string.amount_range);
+        } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
+            name = getResources().getString(R.string.category);
+        } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderMemo) {
+            name = getResources().getString(R.string.memo);
         }
+
+        Card cardItem = lstCard.get(viewHolder.getAdapterPosition());
+        int deleteIndex = viewHolder.getAdapterPosition();
+
+        adpRecyclerView.removeItem(deleteIndex);
+
+        Snackbar snackbar = Snackbar.make(frlRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adpRecyclerView.restoreItem(cardItem, deleteIndex);
+            }
+        }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.show();
+
     }
 
     @Override

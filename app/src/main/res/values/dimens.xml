@@ -6,6 +6,7 @@
     <dimen name="card_view_vertical_padding">12dp</dimen>
     <dimen name="card_view_horizontal_margin">4dp</dimen>
     <dimen name="card_view_vertical_margin">4dp</dimen>
+    <dimen name="swipe_to_delete_margin_end">8dp</dimen>
     <dimen name="date_range_dash_width">50dp</dimen>
     <dimen name="fab_default_padding">16dp</dimen>
     <dimen name="dialog_alert_default_padding">18dp</dimen>

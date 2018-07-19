@@ -24,9 +24,9 @@ import java.util.List;
 
 //todo add and subtract custom categories (discreet categories for income too)
 
-//todo locale - how to display yyyymmdd
-
 //todo get only one dot in edit_amount and handle text starting with dot
+
+//todo functionality of log out
 
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
