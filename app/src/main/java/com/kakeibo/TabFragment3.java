@@ -12,10 +12,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,21 +25,24 @@ import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperListener {
     private final static String TAG = TabFragment3.class.getSimpleName();
 
     private Activity _activity;
     private Context _context;
-    private String[] weekName;
-    private String[] searchCriteria;
+    private static String[] weekName;
+    private static String[] searchCriteria;
     private FrameLayout frlRoot;
     private RecyclerView rcvSearchCriteria;
     private SearchRecyclerViewAdapter adpRecyclerView;
-    private ArrayList<Card> lstCard;
+    private ArrayList<Card> lstCards;     // for cards displayed
+    private ArrayList<String> lstChoices; // for choices shown in dialog upon tapping fab
     private FloatingActionButton fabSearch, fabAdd;
     private View _view;
     private int mDateFormat;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,18 +53,14 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
         weekName = getResources().getStringArray(R.array.week_name);
         searchCriteria = getResources().getStringArray(R.array.search_criteria);
+        lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
 
-//        itemsDbAdapter = new ItemsDBAdapter(getActivity());
-//
-//        loadSharedPreference();
+        loadSharedPreference();
         findViews();
         setListeners();
-//        reset();
 
-        lstCard = new ArrayList<>();
-        Card card = new Card(Card.TYPE_MEMO, R.drawable.ic_action_search);
-        lstCard.add(card);
-        adpRecyclerView = new SearchRecyclerViewAdapter(_context, lstCard);
+        lstCards = new ArrayList<>();
+        adpRecyclerView = new SearchRecyclerViewAdapter(_context, lstCards);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(_context);
         rcvSearchCriteria.setLayoutManager(layoutManager);
@@ -78,15 +77,14 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     @Override
     public void onResume() {
         super.onResume();
-//        loadSharedPreference();
-//        findViews();
-//        setListeners();
-//        reset();
+        loadSharedPreference();
+        findViews();
+        setListeners();
     }
 
     private void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
@@ -96,10 +94,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         rcvSearchCriteria = _view.findViewById(R.id.rcv_search_criteria);
         fabAdd = _view.findViewById(R.id.fab_add_criterion);
         fabSearch = _view.findViewById(R.id.fab_search);
-//        btnSearch = _view.findViewById(R.id.fab_search);
-//        btnFromDate = _view.findViewById(R.id.btn_from_date);
-//        btnToDate = _view.findViewById(R.id.btn_to_date);
-//        edtSearch = _view.findViewById(R.id.edt_memo_search);
     }
 
     private void setListeners() {
@@ -111,10 +105,12 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.fab_add_criterion:
+                    String[] arrToDisplay = lstChoices.toArray(new String[lstChoices.size()]);
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle(getResources().getString(R.string.add_search_criterion));
                     builder.setIcon(R.mipmap.ic_mikan);
-                    builder.setItems(searchCriteria, new DialogInterface.OnClickListener() {
+                    builder.setItems(arrToDisplay, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
                             addCriterion(which);
@@ -134,30 +130,17 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         }
     }
 
-    //todo only one item can be generated -> check before search
-
+    /*** removes a selected choice from fab and add card(criterion) for display ***/
     private void addCriterion(int which) {
-        Card card;
+        String str = lstChoices.remove(which);
 
-        switch (which) {
-            case Card.TYPE_DATE_RANGE:
-                card = new Card(Card.TYPE_DATE_RANGE, 0);
-                break;
-            case Card.TYPE_AMOUNT_RANGE:
-                card = new Card(Card.TYPE_AMOUNT_RANGE, 0);
-                break;
-            case Card.TYPE_CATEGORY:
-                card = new Card(Card.TYPE_CATEGORY, 0);
-                break;
-            case Card.TYPE_MEMO:
-                card = new Card(Card.TYPE_MEMO, 0);
-                break;
-            default:
-                card = new Card(Card.TYPE_DATE_RANGE, 0);
-                break;
+        int selected = 0;
+        for (int i=0; i< searchCriteria.length;i++) {
+            if(searchCriteria[i].equals(str)) selected = i;
         }
 
-        lstCard.add(card);
+        Card card = new Card(selected, 0);
+        lstCards.add(card);
         adpRecyclerView.notifyDataSetChanged();
     }
 
@@ -167,15 +150,31 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
         if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
             name = getResources().getString(R.string.date_range);
+            lstChoices.add(0, searchCriteria[0]);
         } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
             name = getResources().getString(R.string.amount_range);
+            if (lstChoices.size() == 0) {
+                lstChoices.add(searchCriteria[1]);
+            } else {
+                lstChoices.add(1, searchCriteria[1]);
+            }
         } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
             name = getResources().getString(R.string.category);
+            if (lstChoices.size() <= 1) {
+                lstChoices.add(searchCriteria[2]);
+            } else {
+                lstChoices.add(2, searchCriteria[2]);
+            }
         } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderMemo) {
             name = getResources().getString(R.string.memo);
+            if (lstChoices.size() <= 2) {
+                lstChoices.add(searchCriteria[3]);
+            } else {
+                lstChoices.add(3, searchCriteria[3]);
+            }
         }
 
-        Card cardItem = lstCard.get(viewHolder.getAdapterPosition());
+        Card cardItem = lstCards.get(viewHolder.getAdapterPosition());
         int deleteIndex = viewHolder.getAdapterPosition();
 
         adpRecyclerView.removeItem(deleteIndex);
@@ -185,6 +184,9 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             @Override
             public void onClick(View view) {
                 adpRecyclerView.restoreItem(cardItem, deleteIndex);
+                for (int i = 0; i < lstChoices.size(); i++) {
+                    if (lstChoices.get(i).equals(searchCriteria[cardItem.type])) lstChoices.remove(i);
+                }
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
