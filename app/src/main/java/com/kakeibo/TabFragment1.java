@@ -61,7 +61,6 @@ public class TabFragment1 extends Fragment {
         setListeners();
         loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
-        //reset(); // todo disposable??
 
         return _view;
     }
@@ -73,7 +72,6 @@ public class TabFragment1 extends Fragment {
         setListeners();
         loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
-        //reset(); //todo disposable??
     }
 
     void findViews(View view)
@@ -228,8 +226,8 @@ public class TabFragment1 extends Fragment {
             if (checkBeforeSave()) {
                 saveItem();
                 String date =btnDate.getText().toString();
-                ((MainActivity)getActivity()).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                ((MainActivity)getActivity()).onItemSaved(date);
+                ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
+                ((MainActivity)_activity).onItemSaved(date);
                 reset();
             }
         }

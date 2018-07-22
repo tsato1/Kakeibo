@@ -28,6 +28,8 @@ import java.util.List;
 
 //todo functionality of log out
 
+//todo google drive api for release version
+
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
 
@@ -131,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onSearch(String query) {
+
     }
 
     public void loadSharedPreference() {

@@ -103,12 +103,6 @@ public class TabFragment2 extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // run the code making use of getActivity() from here //todo!!!!!!!!!!!!!!!!!!!
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         reset();

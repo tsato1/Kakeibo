@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,12 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     private final static String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
     private Context _context;
-    private ArrayList<Card> _lstCard;
+    private ArrayList<Card> _lstCards;
     private int mDateFormat;
 
-    SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCard) {
+    SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCards) {
         _context = context;
-        _lstCard = lstCard;
+        _lstCards = lstCards;
 
         loadSharedPreference();
     }
@@ -143,7 +144,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
-        switch(_lstCard.get(position).type) {
+        switch(_lstCards.get(position).type) {
             case 0:
                 return Card.TYPE_DATE_RANGE;
             case 1:
@@ -159,7 +160,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        return _lstCard.size();
+        return _lstCards.size();
     }
 
     @NonNull
@@ -185,18 +186,18 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public void removeItem(int position) {
-        _lstCard.remove(position);
+        _lstCards.remove(position);
         notifyItemRemoved(position);
     }
 
     public void restoreItem(Card card, int position) {
-        _lstCard.add(position, card);
+        _lstCards.add(position, card);
         notifyItemInserted(position);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-//        Card object = _lstCard.get(position);
+//        Card object = _lstCards.get(position);
 //
 //        if (object == null) return;
 //

@@ -47,6 +47,14 @@
     <string name="undo">UNDO</string>
     <string name="swipe_to_delete">Swipe to Delete</string>
     <string name="card_is_removed">Card is removed.</string>
+    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the left button.</string>
+    <string name="err_please_choose_from_date">Please choose From Date.</string>
+    <string name="err_please_choose_to_date">Please choose To Date.</string>
+    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
+    <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
+    <string name="err_min_amount_greater">Min Amount has to be greater than Max Amount.</string>
+    <string name="err_please_choose_category">Please choose Category.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>

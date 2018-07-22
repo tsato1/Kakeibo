@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
@@ -42,7 +44,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private FloatingActionButton fabSearch, fabAdd;
     private View _view;
     private int mDateFormat;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,10 +125,96 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     builder.show();
                     break;
                 case R.id.fab_search:
-                    //searchItem();
+                    if (checkBeforeSearch()) {
+                        String query = buildQuery();
+                        ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
+                        ((MainActivity)_activity).onSearch(query);
+                    }
                     break;
             }
         }
+    }
+
+    private boolean checkBeforeSearch() {
+        if (lstCards.size() == 0) {
+            Toast.makeText(_activity, getResources().getString(R.string.err_no_search_criteria_found), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        int indexDateRangeCard = lstCards.indexOf(new Card(Card.TYPE_DATE_RANGE, 0));
+        if (indexDateRangeCard > -1) {
+            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexDateRangeCard);
+            if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
+                SearchRecyclerViewAdapter.ViewHolderDateRange viewHolderDateRange = (SearchRecyclerViewAdapter.ViewHolderDateRange) viewHolder;
+                String from = viewHolderDateRange.btnFrom.getText().toString();
+                String to = viewHolderDateRange.btnTo.getText().toString();
+
+                if ("".equals(from)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_from_date), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if ("".equals(to)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_to_date), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (Util.compareDate(from, to, mDateFormat) == -1) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_from_date_older), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
+
+        int indexAmountRangeCard = lstCards.indexOf(new Card(Card.TYPE_AMOUNT_RANGE, 0));
+        if (indexAmountRangeCard > -1) {
+            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexAmountRangeCard);
+            if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
+                SearchRecyclerViewAdapter.ViewHolderAmountRange viewHolderDateRange = (SearchRecyclerViewAdapter.ViewHolderAmountRange) viewHolder;
+                String min = viewHolderDateRange.edtMin.getText().toString();
+                String max = viewHolderDateRange.edtMax.getText().toString();
+
+                if ("".equals(min)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_min_amount), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if ("".equals(max)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_max_amount), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (Integer.parseInt(min) - Integer.parseInt(max) > 0) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_min_amount_greater), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
+
+        int indexCategoryCard = lstCards.indexOf(new Card(Card.TYPE_CATEGORY, 0));
+        if (indexCategoryCard > -1) {
+            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexCategoryCard);
+            if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
+                SearchRecyclerViewAdapter.ViewHolderCategory viewHolderCategory = (SearchRecyclerViewAdapter.ViewHolderCategory) viewHolder;
+                String category = viewHolderCategory.btnCategory.getText().toString();
+
+                if ("".equals(category)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_category), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
+
+        int indexMemoCard = lstCards.indexOf(new Card(Card.TYPE_MEMO, 0));
+        if (indexMemoCard > -1) {
+
+        }
+
+        return true;
+    }
+
+    private String buildQuery() {
+        String query = "";
+
+
+
+        return query;
     }
 
     /*** removes a selected choice from fab and add card(criterion) for display ***/
