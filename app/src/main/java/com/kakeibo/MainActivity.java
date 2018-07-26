@@ -135,8 +135,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onSearch(String query) {
-
+    public void onSearch(String query, String fromDate, String toDate) {
+        try {
+            tabFragment2.onSearch(query, fromDate, toDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadSharedPreference() {

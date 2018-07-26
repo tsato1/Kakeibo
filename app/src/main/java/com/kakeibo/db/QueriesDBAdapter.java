@@ -22,7 +22,7 @@ public class QueriesDBAdapter {
     private final Context _context;
     private SQLiteDatabase _db;
 
-    public QueriesDBAdapter(Context context) {
+    QueriesDBAdapter(Context context) {
         _context = context;
     }
 

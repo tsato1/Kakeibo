@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -75,6 +76,7 @@ public class TabFragment2 extends Fragment {
     private String amountColon, memoColon, categoryColon, savedOnColon;
     private int mDateFormat;
     private View _view;
+    private String _fromDate, _toDate;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -698,4 +700,12 @@ public class TabFragment2 extends Fragment {
         }
     }
 
+    public void onSearch(String query, String fromDate, String toDate) {
+        Log.d("asdf", fromDate + " " + toDate);
+        Log.d("asdf", query);
+
+//        _fromDate = fromDate;
+//        _toDate = toDate;
+//        loadItems(query);
+    }
 }

@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
@@ -44,6 +44,12 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private FloatingActionButton fabSearch, fabAdd;
     private View _view;
     private int mDateFormat;
+
+    private String _queryDateRange;
+    private String _queryAmountRange;
+    private String _queryCategory;
+    private String _queryMemo;
+    private String _fromDate, _toDate;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,14 +131,30 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     builder.show();
                     break;
                 case R.id.fab_search:
+                    reset();
                     if (checkBeforeSearch()) {
                         String query = buildQuery();
                         ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                        ((MainActivity)_activity).onSearch(query);
+                        ((MainActivity)_activity).onSearch(query, _fromDate, _toDate);
                     }
                     break;
             }
         }
+    }
+
+    private String buildQuery() {
+        return "SELECT * from " + ItemsDBAdapter.TABLE_ITEM +
+                _queryDateRange +
+                _queryAmountRange +
+                _queryCategory +
+                _queryMemo;
+    }
+
+    private void reset() {
+        _queryDateRange="";
+        _queryAmountRange="";
+        _queryCategory="";
+        _queryMemo="";
     }
 
     private boolean checkBeforeSearch() {
@@ -146,21 +168,25 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexDateRangeCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
                 SearchRecyclerViewAdapter.ViewHolderDateRange viewHolderDateRange = (SearchRecyclerViewAdapter.ViewHolderDateRange) viewHolder;
-                String from = viewHolderDateRange.btnFrom.getText().toString();
-                String to = viewHolderDateRange.btnTo.getText().toString();
+                _fromDate = viewHolderDateRange.btnFrom.getText().toString();
+                _toDate = viewHolderDateRange.btnTo.getText().toString();
 
-                if ("".equals(from)) {
+                if ("".equals(_fromDate)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_from_date), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if ("".equals(to)) {
+                if ("".equals(_toDate)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_to_date), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if (Util.compareDate(from, to, mDateFormat) == -1) {
+                if (Util.compareDate(_fromDate, _toDate, mDateFormat) == -1) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_from_date_older), Toast.LENGTH_SHORT).show();
                     return false;
                 }
+
+                _queryDateRange = " where " + ItemsDBAdapter.COL_EVENT_DATE + " between " +
+                        Util.convertDateFormat(_fromDate, mDateFormat, 4) + " and " +
+                        Util.convertDateFormat(_toDate, mDateFormat, 4);
             }
         }
 
@@ -184,6 +210,9 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_min_amount_greater), Toast.LENGTH_SHORT).show();
                     return false;
                 }
+
+                _queryAmountRange = " where " + ItemsDBAdapter.COL_AMOUNT + " between " +
+                        String.valueOf(min) + " and " + String.valueOf(max);
             }
         }
 
@@ -198,23 +227,23 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_category), Toast.LENGTH_SHORT).show();
                     return false;
                 }
+
+                _queryCategory = " where " + ItemsDBAdapter.COL_CATEGORY_CODE + "=" + category;
             }
         }
 
         int indexMemoCard = lstCards.indexOf(new Card(Card.TYPE_MEMO, 0));
         if (indexMemoCard > -1) {
+            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexMemoCard);
+            if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderMemo) {
+                SearchRecyclerViewAdapter.ViewHolderMemo viewHolderMemo = (SearchRecyclerViewAdapter.ViewHolderMemo) viewHolder;
+                String memo = viewHolderMemo.edtMemo.getText().toString();
 
+                _queryMemo = " where " + ItemsDBAdapter.COL_MEMO + "=" + memo;
+            }
         }
 
         return true;
-    }
-
-    private String buildQuery() {
-        String query = "";
-
-
-
-        return query;
     }
 
     /*** removes a selected choice from fab and add card(criterion) for display ***/
@@ -277,7 +306,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
-
     }
 
     @Override
