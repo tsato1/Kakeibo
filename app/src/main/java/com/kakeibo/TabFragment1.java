@@ -44,10 +44,11 @@ public class TabFragment1 extends Fragment {
     private String[] weekName;
     private String[] defaultCategory;
     private int mDateFormat;
+    private Query _query;
 
-    public  Button btnDate;
-    public EditText edt_amount;
-    public AutoCompleteTextView edt_memo;
+    private Button btnDate;
+    private EditText edtAmount;
+    private AutoCompleteTextView edtMemo;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +60,7 @@ public class TabFragment1 extends Fragment {
 
         findViews(_view);
         setListeners();
-        loadSharedPreference();
-        btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
+        loadSharedPreferences();
 
         return _view;
     }
@@ -68,9 +68,6 @@ public class TabFragment1 extends Fragment {
     @Override
     public void onResume () {
         super.onResume();
-        findViews(_view);
-        setListeners();
-        loadSharedPreference();
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
     }
 
@@ -95,8 +92,8 @@ public class TabFragment1 extends Fragment {
         btnsCategory.add(view.findViewById(R.id.btn_category12));
         setButtonContent();
 
-        edt_amount = view.findViewById(R.id.edt_amount);
-        edt_memo = view.findViewById(R.id.edt_memo);
+        edtAmount = view.findViewById(R.id.edt_amount);
+        edtMemo = view.findViewById(R.id.edt_memo);
     }
 
     void setButtonContent()
@@ -118,7 +115,7 @@ public class TabFragment1 extends Fragment {
         }
     }
 
-    public void loadSharedPreference() {
+    public void loadSharedPreferences() {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
@@ -225,9 +222,8 @@ public class TabFragment1 extends Fragment {
 
             if (checkBeforeSave()) {
                 saveItem();
-                String date =btnDate.getText().toString();
                 ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                ((MainActivity)_activity).onItemSaved(date);
+                ((MainActivity)_activity).onItemSaved(_query);
                 reset();
             }
         }
@@ -238,10 +234,10 @@ public class TabFragment1 extends Fragment {
         if ("".equals(selectedCategory)) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
             return false;
-        } else if ("".equals(edt_amount.getText().toString())) {
+        } else if ("".equals(edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
             return false;
-        } else if (Integer.parseInt(edt_amount.getText().toString()) == 0) {
+        } else if (Integer.parseInt(edtAmount.getText().toString()) == 0) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -278,16 +274,16 @@ public class TabFragment1 extends Fragment {
 
         String amount;
         if (!selectedCategory.equals(defaultCategory[0])) {
-            amount = "-" + edt_amount.getText().toString();
+            amount = "-" + edtAmount.getText().toString();
         } else {
-            amount = edt_amount.getText().toString();
+            amount = edtAmount.getText().toString();
         }
 
         Item item = new Item(
                 "",
                 amount,
                 selectedCategoryCode,
-                edt_memo.getText().toString(),
+                edtMemo.getText().toString(),
                 eventDate,
                 updateDate
         );
@@ -296,6 +292,10 @@ public class TabFragment1 extends Fragment {
         itemsDBAdapter.saveItem(item);
         Toast.makeText(getActivity(), getResources().getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show();
         itemsDBAdapter.close();
+
+        _query = new Query(Query.QUERY_TYPE_NEW);
+        _query.setValDate(y, m, d);
+        _query.buildQuery();
     }
 
     private void showYMDPickerDialog()
@@ -322,8 +322,8 @@ public class TabFragment1 extends Fragment {
 
     private void reset()
     {
-        edt_amount.setText("");
-        edt_memo.setText("");
+        edtAmount.setText("");
+        edtMemo.setText("");
         btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
     }
 

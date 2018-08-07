@@ -13,8 +13,8 @@ public class QueriesDBAdapter {
     public static final String TABLE_QUERIES = "queries";
     public static final String COL_ID = "_id";
     public static final String COL_QUERY_TYPE = "query_type";
-    public static final String COL_SQL = "sql";
-    public static final String COL_SAVED_DATE = "saved_date";
+    public static final String COL_QUERY = "query";
+    public static final String COL_CREATE_DATE = "create_date";
 
     public static final int QUERY_TYPE_AUTO = 0; // automatically saved
     public static final int QUERY_TYPE_MANU = 1; // manually saved
@@ -38,8 +38,8 @@ public class QueriesDBAdapter {
     public void saveItem(Query query) {
         ContentValues values = new ContentValues();
         values.put(COL_QUERY_TYPE, query.getType());
-        values.put(COL_SQL, query.getQuery());
-        values.put(COL_SAVED_DATE, query.getDate());
+        values.put(COL_QUERY, query.getQuery());
+        values.put(COL_CREATE_DATE, query.getCreateDate());
 
         SQLiteDatabase db = DBAdapter.getInstance().openDatabase();
         db.insertOrThrow(TABLE_QUERIES, null, values);

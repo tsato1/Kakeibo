@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
+import com.google.gson.Gson;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.export.UtilFiles;
@@ -51,9 +52,10 @@ import java.util.List;
 public class TabFragment2 extends Fragment {
     private static final String TAG = TabFragment2.class.getSimpleName();
 
-    private static final int MENUITEM_ID_DELETE = 1;
-    private static final int MENUITEM_ID_EDIT = 2;
+    private static final int MENU_ITEM_ID_DELETE = 0;
+    private static final int MENU_ITEM_ID_EDIT = 1;
 
+    private FrameLayout frlRoot;
     private Activity _activity;
     private ItemsDBAdapter itemsDbAdapter;
     private List<String> dateHeaderList;
@@ -68,15 +70,16 @@ public class TabFragment2 extends Fragment {
     private ImageButton btnPrev, btnNext;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
-    private FloatingActionButton fabExport;
+    private FloatingActionButton fabDiscard, fabExport;
     private int income, expense, balance;
-    public  int calMonth, calYear;
+    public  int _calMonth, _calYear;
     private String[] weekName;
     private String[] defaultCategory;
     private String amountColon, memoColon, categoryColon, savedOnColon;
     private int mDateFormat;
     private View _view;
-    private String _fromDate, _toDate;
+    private Query _query;
+    private SharedPreferences mPref;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,15 +94,8 @@ public class TabFragment2 extends Fragment {
         savedOnColon = getResources().getString(R.string.updated_on_colon);
 
         findViews();
-        reset();
         setListeners();
-        setAdapters();
-        loadSharedPreference();
-        setLabel();
-        loadItems();
-        makeBalanceTable();
-
-        categoryLayout.setVisibility(View.GONE);
+        loadSharedPreferences();
 
         return _view;
     }
@@ -107,14 +103,13 @@ public class TabFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        makeDefaultQuery();
         reset();
-        loadSharedPreference();
-        setLabel();
         loadItems();
-        makeBalanceTable();
     }
 
     void findViews(){
+        frlRoot = _view.findViewById(R.id.frl_root_fragment2);
         btnPrev = _view.findViewById(R.id.btn_prev);
         btnDate = _view.findViewById(R.id.btn_date);
         btnNext = _view.findViewById(R.id.btn_next);
@@ -125,17 +120,60 @@ public class TabFragment2 extends Fragment {
         categoryLayout = _view.findViewById(R.id.scv_subtotal);
         graph = _view.findViewById(R.id.graph_subtotal);
         categoryListView = _view.findViewById(R.id.lsv_subtotal);
+        fabDiscard = _view.findViewById(R.id.fab_discard);
         fabExport = _view.findViewById(R.id.fab_export);
+
+        categoryLayout.setVisibility(View.GONE);
     }
 
     void setListeners(){
         btnPrev.setOnClickListener(new ButtonClickListener());
         btnDate.setOnClickListener(new ButtonClickListener());
         btnNext.setOnClickListener(new ButtonClickListener());
+        btnDate.setOnLongClickListener(new ButtonLongClickListener());
         expandableListView.setOnChildClickListener(new ChildClickListener());
         expandableListView.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
         categoryListView.setOnItemClickListener(new CategoryListItemClickListener());
+        fabDiscard.setOnClickListener(new ButtonClickListener());
         fabExport.setOnClickListener(new ButtonClickListener());
+
+        itemsDbAdapter = new ItemsDBAdapter(_activity);
+        dateHeaderList = new ArrayList<>();
+        childDataHashMap = new HashMap<>();
+        expandableListAdapter = new ExpandableListAdapter(_activity, dateHeaderList, childDataHashMap);
+        expandableListView.setAdapter(expandableListAdapter);
+        categoryList = new ArrayList<>();
+        categoryListAdapter = new CategoryListAdapter(_activity, 0, categoryList);
+        categoryListView.setAdapter(categoryListAdapter);
+    }
+
+    private void loadSharedPreferences() {
+        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        mDateFormat = Integer.parseInt(f);
+        String json = mPref.getString(SettingsActivity.PREF_KEY_QUERY, "");
+        _query = new Gson().fromJson(json, Query.class);
+
+        if (_query == null) {
+            makeDefaultQuery();
+        }
+    }
+
+    private void makeDefaultQuery() {
+        String[] ymd = Util.getTodaysDate(Util.DATE_FORMAT_DB).split("-");
+        _calYear = Integer.parseInt(ymd[0]);
+        _calMonth = Integer.parseInt(ymd[1]);
+        _query = new Query(ymd[0], ymd[1], ymd[2]);
+        _query.buildQuery();
+    }
+
+    private void buildQuery() {
+        String y = String.valueOf(_calYear);
+        String m = Util.convertMtoMM(_calMonth);
+        _query = new Query(Query.QUERY_TYPE_NEW);
+        _query.setValDate(y, m, "");
+        _query.buildQuery();
     }
 
     class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
@@ -197,6 +235,24 @@ public class TabFragment2 extends Fragment {
         }
     }
 
+    class ButtonLongClickListener implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick (View view) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
+            dialog.setIcon(R.mipmap.ic_mikan);
+            dialog.setTitle(getString(R.string.title_search_criteria));
+            dialog.setMessage(_query.getSearchCriteria());
+            dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            dialog.show();
+
+            return true;
+        }
+    }
+
     class ChildClickListener implements ExpandableListView.OnChildClickListener {
         @Override
         public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
@@ -246,8 +302,8 @@ public class TabFragment2 extends Fragment {
             int type = ExpandableListView.getPackedPositionType(info.packedPosition);
             if(type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                 menu.setHeaderIcon(R.mipmap.ic_mikan);
-                menu.add(0, MENUITEM_ID_EDIT, 0, R.string.edit);
-                menu.add(0, MENUITEM_ID_DELETE, 1, R.string.delete);
+                menu.add(0, MENU_ITEM_ID_EDIT, 0, R.string.edit);
+                menu.add(0, MENU_ITEM_ID_DELETE, 1, R.string.delete);
             }
         }
     }
@@ -260,7 +316,7 @@ public class TabFragment2 extends Fragment {
         final Item item = (Item)expandableListAdapter.getChild(groupPosition, childPosition);
 
         switch(menuItem.getItemId()) {
-            case MENUITEM_ID_DELETE:
+            case MENU_ITEM_ID_DELETE:
                 new AlertDialog.Builder(_activity)
                         .setIcon(R.mipmap.ic_mikan)
                         .setTitle(getString(R.string.quest_do_you_want_to_delete_item))
@@ -277,14 +333,13 @@ public class TabFragment2 extends Fragment {
                                 }
 
                                 loadItems();
-                                makeBalanceTable();
                                 itemsDbAdapter.close();
                             }
                         })
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
-            case MENUITEM_ID_EDIT:
+            case MENU_ITEM_ID_EDIT:
                 LayoutInflater layoutInflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, (ViewGroup) _view.findViewById(R.id.layout_root));
                 TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
@@ -334,7 +389,6 @@ public class TabFragment2 extends Fragment {
                                 }
 
                                 loadItems();
-                                makeBalanceTable();
                                 itemsDbAdapter.close();
                             }
                         })
@@ -373,27 +427,42 @@ public class TabFragment2 extends Fragment {
                     }
                     break;
                 case R.id.btn_prev:
-                    calMonth--;
-                    if(calMonth <=0) {
-                        calMonth = 12;
-                        calYear--;
-                        if (calYear <= 0) {
-                            calYear = Calendar.getInstance().get(Calendar.YEAR);
+                    _calMonth--;
+                    if(_calMonth <=0) {
+                        _calMonth = 12;
+                        _calYear--;
+                        if (_calYear <= 0) {
+                            _calYear = Calendar.getInstance().get(Calendar.YEAR);
                         }
                     }
-                    btnDate.setText(setLabel(calYear, calMonth));
+                    btnDate.setText(getTextBtnDate());
+                    buildQuery();
                     loadItems();
-                    makeBalanceTable();
                     break;
                 case R.id.btn_next:
-                    calMonth++;
-                    if(calMonth > 12) {
-                        calMonth = 1;
-                        calYear++;
+                    _calMonth++;
+                    if(_calMonth > 12) {
+                        _calMonth = 1;
+                        _calYear++;
                     }
-                    btnDate.setText(setLabel(calYear, calMonth));
+                    btnDate.setText(getTextBtnDate());
+                    buildQuery();
                     loadItems();
-                    makeBalanceTable();
+                    break;
+                case R.id.fab_discard:
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
+                    dialog.setIcon(R.mipmap.ic_mikan);
+                    dialog.setTitle(getString(R.string.quest_do_you_want_to_discard_search));
+                    dialog.setMessage(getString(R.string.msg_going_back_to_report));
+                    dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            makeDefaultQuery();
+                            reset();
+                            loadItems();
+                        }
+                    });
+                    dialog.show();
                     break;
                 case R.id.fab_export:
                     startActivity(new Intent(_activity, CreateFileInFolderActivity.class));
@@ -402,21 +471,8 @@ public class TabFragment2 extends Fragment {
         }
     }
 
-    void setAdapters(){
-        itemsDbAdapter = new ItemsDBAdapter(_activity);
-
-        dateHeaderList = new ArrayList<>();
-        childDataHashMap = new HashMap<>();
-        expandableListAdapter = new ExpandableListAdapter(_activity, dateHeaderList, childDataHashMap);
-        expandableListView.setAdapter(expandableListAdapter);
-
-        categoryList = new ArrayList<>();
-        categoryListAdapter = new CategoryListAdapter(_activity, 0, categoryList);
-        categoryListView.setAdapter(categoryListAdapter);
-    }
-
     public void loadItems() {
-        //Log.d(TAG, "loadItems()");
+        Log.d(TAG, "loadItems() " + _query.getQuery());
 
         dateHeaderList.clear();
         childDataHashMap.clear();
@@ -438,20 +494,7 @@ public class TabFragment2 extends Fragment {
 
         itemsDbAdapter.open();
 
-        String[] ym = btnDate.getText().toString().split("[/]");
-        String y, m;
-        switch (mDateFormat) {
-            case 1: // MDY
-            case 2: // DMY
-                y = ym[1];
-                m = ym[0];
-                break;
-            default:  // YMD
-                y = ym[0];
-                m = ym[1];
-        }
-
-        Cursor c = itemsDbAdapter.getAllItemsInMonth(y, m);
+        Cursor c = itemsDbAdapter.getItemsByRawQuery(_query.getQuery());
 
         if (c!=null && c.moveToFirst()) {
             String eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE));
@@ -554,6 +597,8 @@ public class TabFragment2 extends Fragment {
 
         UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_DATE, stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
         stringBuilder.setLength(0);
+
+        makeBalanceTable();
     }
 
     void calculatePercentage() {
@@ -595,9 +640,9 @@ public class TabFragment2 extends Fragment {
         graph.setThickness(200);
     }
 
-    public void setLabel() {
-        int year = calYear;
-        int month = calMonth;
+    public String getTextBtnDate() {
+        int year = _calYear;
+        int month = _calMonth;
 
         String str;
         switch (mDateFormat) {
@@ -607,35 +652,6 @@ public class TabFragment2 extends Fragment {
                 break;
             default:  // YMD
                 str = (year + "/" + Util.convertMtoMM(month));
-        }
-
-        btnDate.setText(str);
-    }
-
-    private String setLabel(int y, int m) {
-        String str;
-        switch (mDateFormat) {
-            case 1: // MDY
-            case 2: // DMY
-                str = (Util.convertMtoMM(m) + "/" + y);
-                break;
-            default:  // YMD
-                str = (y + "/" + Util.convertMtoMM(m));
-        }
-
-        return str;
-    }
-
-    private String setLabel(String y, String m) {
-        String str;
-        m = m.length()==1? "0"+m: m;
-        switch (mDateFormat) {
-            case 1: // MDY
-            case 2: // DMY
-                str = m + "/" + y;
-                break;
-            default:  // YMD
-                str = y + "/" + m;
         }
 
         return str;
@@ -661,28 +677,48 @@ public class TabFragment2 extends Fragment {
         }
     }
 
-    public void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-        mDateFormat = Integer.parseInt(f);
-    }
-
     public void reset() {
-        Calendar cal = Calendar.getInstance();
-        calMonth = cal.get(Calendar.MONTH) + 1;
-        calYear = cal.get(Calendar.YEAR);
+        Log.d(TAG, "reset()");
+
+        switch (_query.getType()) {
+            case Query.QUERY_TYPE_NEW:
+                Calendar cal = Calendar.getInstance();
+                _calMonth = cal.get(Calendar.MONTH) + 1;
+                _calYear = cal.get(Calendar.YEAR);
+
+                btnDate.setText(getTextBtnDate());
+                btnNext.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.VISIBLE);
+                fabDiscard.setVisibility(View.INVISIBLE);
+                break;
+            case Query.QUERY_TYPE_SEARCH:
+                btnDate.setText(_query.getSearchCriteria());
+                btnNext.setVisibility(View.INVISIBLE);
+                btnPrev.setVisibility(View.INVISIBLE);
+                fabDiscard.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
-    public void focusOnSavedItem(String y, String m, String d) {
-        calMonth = Integer.parseInt(m);
-        calYear = Integer.parseInt(y);
+    public void focusOnSavedItem(Query query) {
+        String m = query.getValM();
+        String y = query.getValY();
+        String d = query.getValD();
+        _calMonth = Integer.parseInt(m);
+        _calYear = Integer.parseInt(y);
+        _query = query;
 
-        loadSharedPreference();
-        btnDate.setText(setLabel(y, m));
+        SharedPreferences.Editor editor = mPref.edit();
+        String json = new Gson().toJson(_query);
+        editor.putString(SettingsActivity.PREF_KEY_QUERY, json);
+        editor.apply();
+
+        btnDate.setText(getTextBtnDate());
+        btnNext.setVisibility(View.VISIBLE);
+        btnPrev.setVisibility(View.VISIBLE);
+        fabDiscard.setVisibility(View.INVISIBLE);
 
         loadItems();
-        makeBalanceTable();
 
         for (int i = 0; i < dateHeaderList.size(); i++) {
             String[] header = dateHeaderList.get(i).split("[,]"); // ex. "2018,04,30,-700"
@@ -700,12 +736,53 @@ public class TabFragment2 extends Fragment {
         }
     }
 
-    public void onSearch(String query, String fromDate, String toDate) {
-        Log.d("asdf", fromDate + " " + toDate);
-        Log.d("asdf", query);
+    public void onSearch(Query query) {
+        Log.d(TAG, "onSearch() " + query.getQuery());
 
-//        _fromDate = fromDate;
-//        _toDate = toDate;
-//        loadItems(query);
+        _query = query;
+
+//        StringBuilder stbCriteria = new StringBuilder();
+//        List<Card> lstCriteria = query.getListCardsCriteria();
+//
+//        Log.d("asdf", "type: " + query.getType() + " : " + lstCriteria.size());
+//        if (lstCriteria.contains(new Card(Card.TYPE_DATE_RANGE, 0))) {
+//            stbCriteria.append(getResources().getString(R.string.event_date_colon));
+//            stbCriteria.append(query.getValFromToDate());
+//            stbCriteria.append("\n");
+//            Log.d("asdf", "type date range");
+//        }
+//        if (lstCriteria.contains(new Card(Card.TYPE_AMOUNT_RANGE, 0))) {
+//            stbCriteria.append(getResources().getString(R.string.amount_colon));
+//            stbCriteria.append(query.getValFromToDate());
+//            stbCriteria.append("\n");
+//            Log.d("asdf", "type amount range");
+//        }
+//        if (lstCriteria.contains(new Card(Card.TYPE_CATEGORY, 0))) {
+//            stbCriteria.append(getResources().getString(R.string.category_colon));
+//            stbCriteria.append(query.getValCategory());
+//            stbCriteria.append("\n");
+//            Log.d("asdf", "type category");
+//        }
+//        if (lstCriteria.contains(new Card(Card.TYPE_MEMO, 0))) {
+//            stbCriteria.append(getResources().getString(R.string.memo_colon));
+//            stbCriteria.append(query.getValMemo());
+//            stbCriteria.append("\n");
+//            Log.d("asdf", "type memo");
+//        }
+
+//        String searchCriteria = stbCriteria.toString();
+//        _query.setSearchCriteria(searchCriteria);
+
+        SharedPreferences.Editor editor = mPref.edit();
+        String json = new Gson().toJson(_query);
+        editor.putString(SettingsActivity.PREF_KEY_QUERY, json);
+        editor.apply();
+
+        btnDate.setText(getResources().getString(R.string.title_search_result));
+        btnNext.setVisibility(View.INVISIBLE);
+        btnPrev.setVisibility(View.INVISIBLE);
+        fabDiscard.setVisibility(View.VISIBLE);
+
+        loadItems();
     }
 }

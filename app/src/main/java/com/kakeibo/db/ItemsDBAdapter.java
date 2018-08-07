@@ -11,6 +11,8 @@ import com.kakeibo.Item;
 import com.kakeibo.Query;
 import com.kakeibo.Util;
 
+import java.util.Calendar;
+
 public class ItemsDBAdapter extends DBAdapter {
     private static final String TAG = ItemsDBAdapter.class.getSimpleName();
     public static final String TABLE_ITEM = "items";
@@ -44,14 +46,12 @@ public class ItemsDBAdapter extends DBAdapter {
 
     public boolean deleteItem(int id)
     {
-        boolean out = _db.delete(TABLE_ITEM, COL_ID + "=" + id, null) > 0;
-        return out;
+        return _db.delete(TABLE_ITEM, COL_ID + "=" + id, null) > 0;
     }
 
     public boolean deleteAllItems()
     {
-        boolean out = _db.delete(TABLE_ITEM, null, null) > 0;
-        return out;
+        return _db.delete(TABLE_ITEM, null, null) > 0;
     }
 
     public Cursor getItems(String fromY, String fromM, String fromD, String toY, String toM, String toD, String memo)
@@ -73,10 +73,9 @@ public class ItemsDBAdapter extends DBAdapter {
                     " ORDER BY " + COL_EVENT_DATE;
         }
 
-        saveQuery(QueriesDBAdapter.QUERY_TYPE_AUTO, query);
+        //saveQuery(QueriesDBAdapter.QUERY_TYPE_AUTO, query);
 
-        Cursor c = _db.rawQuery(query, new String[]{});
-        return c;
+        return _db.rawQuery(query, new String[]{});
     }
 
     public Cursor getAllItemsInMonth (String y, String m)
@@ -85,9 +84,7 @@ public class ItemsDBAdapter extends DBAdapter {
         String query = "SELECT * FROM " + TABLE_ITEM +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " ORDER BY " + COL_EVENT_DATE;
-        Cursor c = _db.rawQuery(query, new String[]{});
-
-        return c;
+        return _db.rawQuery(query, new String[]{});
     }
 
     public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
@@ -96,9 +93,18 @@ public class ItemsDBAdapter extends DBAdapter {
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " AND " + COL_CATEGORY_CODE + " = ? " +
                 " ORDER BY " + COL_EVENT_DATE;
-        Cursor c = _db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
+        return _db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
+    }
 
-        return c;
+    public Cursor getItemsByRawQuery (String query) {
+        if (query==null) {
+            Calendar cal = Calendar.getInstance();
+            int m = cal.get(Calendar.MONTH) + 1;
+            int y = cal.get(Calendar.YEAR);
+
+            return getAllItemsInMonth(String.valueOf(y), Util.convertMtoMM(m));
+        }
+        return _db.rawQuery(query, new String[]{});
     }
 
     public void saveItem(Item item)
@@ -112,17 +118,5 @@ public class ItemsDBAdapter extends DBAdapter {
         _db.insertOrThrow(TABLE_ITEM, null, values);
 
         Log.d(TAG, "saveItem() called");
-    }
-
-    private void saveQuery(int type, String str) {
-        Query query = new Query(
-                "",
-                type,
-                str,
-                Util.getTodaysDate(Util.DATE_FORMAT_DB_HMS)
-        );
-        _queriesDBAdapter.open();
-        _queriesDBAdapter.saveItem(query);
-        _queriesDBAdapter.close();
     }
 }

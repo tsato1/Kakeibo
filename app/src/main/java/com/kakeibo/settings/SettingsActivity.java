@@ -44,6 +44,9 @@ import java.util.List;
 public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_DATE_FORMAT = "pref_key_date_format";
     public static final String PREF_KEY_CURRENCY = "pref_key_currency";
+    public static final String PREF_KEY_QUERY = "pref_key_query";
+    public static final String PREF_KEY_LIST_CARDS = "pref_key_list_cards";
+    public static final String PREF_KEY_LIST_CHOICES = "pref_key_list_choices";
 
     /**
      * A preference value change listener that updates the preference's summary

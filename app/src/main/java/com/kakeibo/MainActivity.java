@@ -30,6 +30,8 @@ import java.util.List;
 
 //todo google drive api for release version
 
+//todo save search
+
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
 
@@ -107,37 +109,37 @@ public class MainActivity extends AppCompatActivity {
         loadSharedPreference();
     }
 
-    public void onItemSaved(String date) {
-        String[] ymd = date.split(" ")[0].split("/");
-        String y, m, d;
-
-        switch (sDateFormat) {
-            case 1: // MDY
-                y = ymd[2];
-                m = ymd[0];
-                d = ymd[1];
-                break;
-            case 2: // DMY
-                y = ymd[2];
-                m = ymd[1];
-                d = ymd[0];
-                break;
-            default:  // YMD
-                y = ymd[0];
-                m = ymd[1];
-                d = ymd[2];
-        }
+    public void onItemSaved(Query query) {
+//        String[] ymd = date.split(" ")[0].split("/");
+//        String y, m, d;
+//
+//        switch (sDateFormat) {
+//            case 1: // MDY
+//                y = ymd[2];
+//                m = ymd[0];
+//                d = ymd[1];
+//                break;
+//            case 2: // DMY
+//                y = ymd[2];
+//                m = ymd[1];
+//                d = ymd[0];
+//                break;
+//            default:  // YMD
+//                y = ymd[0];
+//                m = ymd[1];
+//                d = ymd[2];
+//        }
 
         try {
-            tabFragment2.focusOnSavedItem(y, m, d);
+            tabFragment2.focusOnSavedItem(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void onSearch(String query, String fromDate, String toDate) {
+    public void onSearch(Query query) {
         try {
-            tabFragment2.onSearch(query, fromDate, toDate);
+            tabFragment2.onSearch(query);
         } catch (Exception e) {
             e.printStackTrace();
         }

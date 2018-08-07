@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.kakeibo.db.ItemsDBAdapter;
+import com.google.gson.Gson;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
@@ -32,10 +32,12 @@ import java.util.Arrays;
 public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperListener {
     private final static String TAG = TabFragment3.class.getSimpleName();
 
-    private Activity _activity;
-    private Context _context;
     private static String[] weekName;
     private static String[] searchCriteria;
+
+    private SharedPreferences mPref;
+    private Activity _activity;
+    private Context _context;
     private FrameLayout frlRoot;
     private RecyclerView rcvSearchCriteria;
     private SearchRecyclerViewAdapter adpRecyclerView;
@@ -44,12 +46,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private FloatingActionButton fabSearch, fabAdd;
     private View _view;
     private int mDateFormat;
-
-    private String _queryDateRange;
-    private String _queryAmountRange;
-    private String _queryCategory;
-    private String _queryMemo;
-    private String _fromDate, _toDate;
+    private Query _query;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,40 +57,12 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
         weekName = getResources().getStringArray(R.array.week_name);
         searchCriteria = getResources().getStringArray(R.array.search_criteria);
-        lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
 
-        loadSharedPreference();
         findViews();
         setListeners();
-
-        lstCards = new ArrayList<>();
-        adpRecyclerView = new SearchRecyclerViewAdapter(_context, lstCards);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(_context);
-        rcvSearchCriteria.setLayoutManager(layoutManager);
-        rcvSearchCriteria.setItemAnimator(new DefaultItemAnimator());
-        rcvSearchCriteria.setAdapter(adpRecyclerView);
-
-        ItemTouchHelper.SimpleCallback ithCallback =
-                new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(ithCallback).attachToRecyclerView(rcvSearchCriteria);
+        loadSharedPreferences();
 
         return _view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadSharedPreference();
-        findViews();
-        setListeners();
-    }
-
-    private void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-        mDateFormat = Integer.parseInt(f);
     }
 
     private void findViews() {
@@ -106,6 +75,40 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private void setListeners() {
         fabAdd.setOnClickListener(new ButtonClickListener());
         fabSearch.setOnClickListener(new ButtonClickListener());
+
+        lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
+        lstCards = new ArrayList<>();
+        adpRecyclerView = new SearchRecyclerViewAdapter(_context, lstCards);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(_context);
+        rcvSearchCriteria.setLayoutManager(layoutManager);
+        rcvSearchCriteria.setItemAnimator(new DefaultItemAnimator());
+        rcvSearchCriteria.setAdapter(adpRecyclerView);
+
+        ItemTouchHelper.SimpleCallback ithCallback =
+                new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(ithCallback).attachToRecyclerView(rcvSearchCriteria);
+    }
+
+    private void loadSharedPreferences() {
+        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        mDateFormat = Integer.parseInt(f);
+
+//        String json1 = mPref.getString(SettingsActivity.PREF_KEY_LIST_CARDS, "");
+//        Type typeCards = new TypeToken<ArrayList<Card>>() {}.getType();
+//        lstCards = new Gson().fromJson(json1, typeCards);
+//
+//        String json2 = mPref.getString(SettingsActivity.PREF_KEY_LIST_CHOICES, "");
+//        Type typeChoices = new TypeToken<ArrayList<String>>() {}.getType();
+//        lstChoices = new Gson().fromJson(json2, typeChoices);
+//
+//        if (lstCards == null) lstCards = new ArrayList<>();
+//        if (lstChoices == null) lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
+
+        //todo amount expense - (minus) remove
+
+        //todo category picker for card -> db
     }
 
     class ButtonClickListener implements View.OnClickListener {
@@ -131,30 +134,32 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     builder.show();
                     break;
                 case R.id.fab_search:
-                    reset();
+                    _query = new Query(Query.QUERY_TYPE_SEARCH);
+
                     if (checkBeforeSearch()) {
-                        String query = buildQuery();
+                        _query.buildQuery();
                         ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                        ((MainActivity)_activity).onSearch(query, _fromDate, _toDate);
+                        ((MainActivity)_activity).onSearch(_query);
                     }
                     break;
             }
         }
     }
 
-    private String buildQuery() {
-        return "SELECT * from " + ItemsDBAdapter.TABLE_ITEM +
-                _queryDateRange +
-                _queryAmountRange +
-                _queryCategory +
-                _queryMemo;
-    }
+    /*** removes a selected choice from fab and add card(criterion) for display ***/
+    private void addCriterion(int which) {
+        String str = lstChoices.remove(which);
 
-    private void reset() {
-        _queryDateRange="";
-        _queryAmountRange="";
-        _queryCategory="";
-        _queryMemo="";
+        int selected = 0;
+        for (int i=0; i< searchCriteria.length;i++) {
+            if(searchCriteria[i].equals(str)) selected = i;
+        }
+
+        Card card = new Card(selected, 0);
+        lstCards.add(card);
+        adpRecyclerView.notifyDataSetChanged();
+
+        saveSharedPreferences();
     }
 
     private boolean checkBeforeSearch() {
@@ -168,25 +173,23 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexDateRangeCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
                 SearchRecyclerViewAdapter.ViewHolderDateRange viewHolderDateRange = (SearchRecyclerViewAdapter.ViewHolderDateRange) viewHolder;
-                _fromDate = viewHolderDateRange.btnFrom.getText().toString();
-                _toDate = viewHolderDateRange.btnTo.getText().toString();
+                String fromDate = viewHolderDateRange.btnFrom.getText().toString();
+                String toDate = viewHolderDateRange.btnTo.getText().toString();
 
-                if ("".equals(_fromDate)) {
+                if ("".equals(fromDate)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_from_date), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if ("".equals(_toDate)) {
+                if ("".equals(toDate)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_to_date), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if (Util.compareDate(_fromDate, _toDate, mDateFormat) == -1) {
+                if (Util.compareDate(fromDate, toDate, mDateFormat) == -1) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_from_date_older), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                _queryDateRange = " where " + ItemsDBAdapter.COL_EVENT_DATE + " between " +
-                        Util.convertDateFormat(_fromDate, mDateFormat, 4) + " and " +
-                        Util.convertDateFormat(_toDate, mDateFormat, 4);
+                _query.setValDate(fromDate, toDate, mDateFormat);
             }
         }
 
@@ -206,13 +209,16 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_max_amount), Toast.LENGTH_SHORT).show();
                     return false;
                 }
+                if (0 == Integer.parseInt(min) || 0 == Integer.parseInt(max)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 if (Integer.parseInt(min) - Integer.parseInt(max) > 0) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_min_amount_greater), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                _queryAmountRange = " where " + ItemsDBAdapter.COL_AMOUNT + " between " +
-                        String.valueOf(min) + " and " + String.valueOf(max);
+                _query.setValAmount(min, max);
             }
         }
 
@@ -224,11 +230,11 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                 String category = viewHolderCategory.btnCategory.getText().toString();
 
                 if ("".equals(category)) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_category), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                _queryCategory = " where " + ItemsDBAdapter.COL_CATEGORY_CODE + "=" + category;
+                _query.setCategory(category);
             }
         }
 
@@ -239,25 +245,17 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                 SearchRecyclerViewAdapter.ViewHolderMemo viewHolderMemo = (SearchRecyclerViewAdapter.ViewHolderMemo) viewHolder;
                 String memo = viewHolderMemo.edtMemo.getText().toString();
 
-                _queryMemo = " where " + ItemsDBAdapter.COL_MEMO + "=" + memo;
+                if ("".equals(memo)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_memo_empty), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                _query.setMemo(memo);
             }
         }
 
+        _query.setListCards(lstCards);
         return true;
-    }
-
-    /*** removes a selected choice from fab and add card(criterion) for display ***/
-    private void addCriterion(int which) {
-        String str = lstChoices.remove(which);
-
-        int selected = 0;
-        for (int i=0; i< searchCriteria.length;i++) {
-            if(searchCriteria[i].equals(str)) selected = i;
-        }
-
-        Card card = new Card(selected, 0);
-        lstCards.add(card);
-        adpRecyclerView.notifyDataSetChanged();
     }
 
     @Override
@@ -306,17 +304,29 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
+
+        saveSharedPreferences();
+    }
+
+    private void saveSharedPreferences() {
+        SharedPreferences.Editor editor = mPref.edit();
+        String json1 = new Gson().toJson(lstCards);
+        String json2 = new Gson().toJson(lstChoices);
+        editor.putString(SettingsActivity.PREF_KEY_LIST_CARDS, json1);
+        editor.putString(SettingsActivity.PREF_KEY_LIST_CHOICES, json2);
+        editor.apply();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if (lstCards!=null && lstChoices!=null)
 
         // Make sure that we are currently visible
         if (this.isVisible()) {
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
-                //Log.d(TAG, "Not visible anymore.");
+                Log.d(TAG, "Not visible anymore.");
                 UtilKeyboard.hideSoftKeyboard(_activity);
             }
         }

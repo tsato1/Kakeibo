@@ -25,7 +25,7 @@
     <string name="quest_do_you_want_to_delete_item">¿SEGURO QUE QUIERES ELIMINAR ESTE ELEMENTO?</string>
     <string name="hint_memo_max_20_characters">Nota: Max 20 caracteres</string>
     <string name="hint_amount_spent_or_earned">Cantidad gastada o ganada</string>
-    <string name="err_search_word_empty">La palabra de búsqueda está vacía</string>
+    <string name="err_memo_empty">La palabra de búsqueda está vacía</string>
     <string name="err_please_select_category">Por favor seleccione categoría</string>
     <string name="err_please_enter_amount">Ingrese cantidad</string>
     <string name="err_amount_cannot_be_0">La cantidad no puede ser 0</string>

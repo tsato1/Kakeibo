@@ -45,6 +45,14 @@ public class Util {
         return sdFormat.format(cal.getTime());
     }
 
+    public static String getTodaysDate(int format) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdFormat = new SimpleDateFormat(DATE_FORMATS[format], Locale.getDefault());
+        sdFormat.setCalendar(cal);
+        sdFormat.setTimeZone(cal.getTimeZone());
+        return sdFormat.format(cal.getTime());
+    }
+
     public static String getDateFromDBDate(String dbDate, String[] weekName, int dateFormat) {
         String[] ymd = dbDate.split("[ ]")[0].split("[-]");
 
@@ -89,6 +97,7 @@ public class Util {
 //            }
         }
         else if ((fromFormat==0 || fromFormat==1 || fromFormat==2) && (toFormat==3 || toFormat==4)) {
+            /*** toFormat==3 ***/
             String[] ymd = date.split("/");
             String y, m, d;
 

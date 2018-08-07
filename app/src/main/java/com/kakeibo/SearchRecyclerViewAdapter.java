@@ -186,6 +186,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public void removeItem(int position) {
+        Log.d("asdf", "remove called");
         _lstCards.remove(position);
         notifyItemRemoved(position);
     }
@@ -197,23 +198,24 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-//        Card object = _lstCards.get(position);
-//
-//        if (object == null) return;
-//
-//        switch (object.type) {
-//            case Card.TYPE_DATE_RANGE:
-//                ViewHolderDateRange viewHolderDateRange = (ViewHolderDateRange)holder;
-//                break;
-//            case Card.TYPE_AMOUNT_RANGE:
-//                ViewHolderAmountRange viewHolderAmountRange = (ViewHolderAmountRange)holder;
-//                break;
-//            case Card.TYPE_CATEGORY:
-//                ViewHolderCategory viewHolderCategory = (ViewHolderCategory)holder;
-//                break;
-//            case Card.TYPE_MEMO:
-//                ViewHolderMemo viewHolderMemo = (ViewHolderMemo)holder;
-//                break;
-//        }
+        Card object = _lstCards.get(position);
+
+        if (object == null) return;
+
+        switch (object.type) {
+            case Card.TYPE_DATE_RANGE:
+                ViewHolderDateRange viewHolderDateRange = (ViewHolderDateRange)holder;
+                break;
+            case Card.TYPE_AMOUNT_RANGE:
+                ViewHolderAmountRange viewHolderAmountRange = (ViewHolderAmountRange)holder;
+                break;
+            case Card.TYPE_CATEGORY:
+                ViewHolderCategory viewHolderCategory = (ViewHolderCategory)holder;
+                break;
+            case Card.TYPE_MEMO:
+                ViewHolderMemo viewHolderMemo = (ViewHolderMemo)holder;
+                viewHolderMemo.edtMemo.getText().clear();
+                break;
+        }
     }
 }

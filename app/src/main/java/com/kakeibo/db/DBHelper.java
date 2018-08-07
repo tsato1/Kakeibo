@@ -51,8 +51,8 @@ public class DBHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + QueriesDBAdapter.TABLE_QUERIES + " (" +
                     QueriesDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     QueriesDBAdapter.COL_QUERY_TYPE + " INTEGER NOT NULL DEFAULT 0," +
-                    QueriesDBAdapter.COL_SQL + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
+                    QueriesDBAdapter.COL_QUERY + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_CREATE_DATE + " TEXT NOT NULL);";
 
     private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
             " ADD COLUMN " + ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";

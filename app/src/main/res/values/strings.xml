@@ -54,7 +54,6 @@
     <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
     <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
     <string name="err_min_amount_greater">Min Amount has to be greater than Max Amount.</string>
-    <string name="err_please_choose_category">Please choose Category.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
@@ -63,16 +62,19 @@
     <string name="msg_item_successfully_saved">The item was successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change was successfully saved.</string>
+    <string name="msg_going_back_to_report">It will go back to the report for this month.</string>
 
     <string name="err_please_select_category">Please select category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>
     <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_search_word_empty">Search word is empty.</string>
+    <string name="err_memo_empty">Search word in Memo is empty.</string>
 
     <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
+    <string name="quest_do_you_want_to_discard_search">Do you want to discard this search?</string>
 
     <string name="title_edit_item">Edit item</string>
     <string name="title_search_result">Search Result</string>
+    <string name="title_search_criteria">Search Criteria:</string>
 
     <!-- Export -->
     <string name="select_file">Select file</string>
