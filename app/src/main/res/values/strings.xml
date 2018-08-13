@@ -16,6 +16,7 @@
     <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="next">Next</string>
     <string name="export">Export</string>
     <string name="item_detail">Item Detail</string>
     <string name="amount">Amount</string>
@@ -37,6 +38,7 @@
 
     <!-- card view -->
     <string name="add_search_criterion">Add Search Criterion</string>
+    <string name="how_to_perform_search">How to perform Search</string>
     <string name="date_range">Date Range</string>
     <string name="from">From</string>
     <string name="dash">-</string>
@@ -63,6 +65,9 @@
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change was successfully saved.</string>
     <string name="msg_going_back_to_report">It will go back to the report for this month.</string>
+    <string name="ins_tap_plus_to_add_criteria">First, Tap the plus button on the left bottom to add criteria.
+        You can add as many criterion as you want</string>
+    <string name="ins_tap_search">Then tap the search button to search.</string>
 
     <string name="err_please_select_category">Please select category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>

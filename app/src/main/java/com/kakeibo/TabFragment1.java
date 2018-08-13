@@ -272,12 +272,7 @@ public class TabFragment1 extends Fragment {
         String eventDate = y + "-" + m + "-" + d;
         String updateDate = Util.getTodaysDate(Util.DATE_FORMAT_DB_HMS);
 
-        String amount;
-        if (!selectedCategory.equals(defaultCategory[0])) {
-            amount = "-" + edtAmount.getText().toString();
-        } else {
-            amount = edtAmount.getText().toString();
-        }
+        String amount = edtAmount.getText().toString();
 
         Item item = new Item(
                 "",
@@ -294,7 +289,7 @@ public class TabFragment1 extends Fragment {
         itemsDBAdapter.close();
 
         _query = new Query(Query.QUERY_TYPE_NEW);
-        _query.setValDate(y, m, d);
+        _query.setValDate(y, m, d, mDateFormat);
         _query.buildQuery();
     }
 

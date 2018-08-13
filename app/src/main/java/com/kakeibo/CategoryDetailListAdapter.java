@@ -70,7 +70,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 0, 1, 0);
         } else {
             span1 = new SpannableString(amountColon);
-            span2 = new SpannableString(item.getAmount());
+            span2 = new SpannableString("-" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 0, 1, 0);
         }
         txvAmount.setText(TextUtils.concat(span1, span2));
@@ -84,7 +84,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         return v;
     }
 
-    public void loadSharedPreference() {
+    void loadSharedPreference() {
         PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(_context);
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);

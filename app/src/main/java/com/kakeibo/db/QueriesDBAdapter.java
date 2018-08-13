@@ -13,7 +13,7 @@ public class QueriesDBAdapter {
     public static final String TABLE_QUERIES = "queries";
     public static final String COL_ID = "_id";
     public static final String COL_QUERY_TYPE = "query_type";
-    public static final String COL_QUERY = "query";
+    public static final String COL_QUERY = "sql";
     public static final String COL_CREATE_DATE = "create_date";
 
     public static final int QUERY_TYPE_AUTO = 0; // automatically saved

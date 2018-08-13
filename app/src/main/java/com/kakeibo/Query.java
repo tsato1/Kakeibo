@@ -43,11 +43,12 @@ public class Query {
         reset();
     }
 
-    Query (String y, String m, String d) {
+    Query (String y, String m, String d, int format) {
         this.type = QUERY_TYPE_NEW;
         valY = y;
         valM = m;
         valD = d;
+        setValDate(y, m, d, format);
         reset();
     }
 
@@ -91,6 +92,22 @@ public class Query {
         return valFromDate + "-" + valToDate;
     }
 
+    public String getValMinAmount() {
+        return valMinAmount;
+    }
+
+    public String getValMaxAmount() {
+        return valMaxAmount;
+    }
+
+    public String getValMinMaxAmount() {
+        if (valMinAmount.equals(valMaxAmount)) {
+            return valMinAmount;
+        }
+
+        return valMinAmount + "-" + valMaxAmount;
+    }
+
     public String getValCategory() {
         return valCategory;
     }
@@ -114,10 +131,6 @@ public class Query {
     public String getWhereClauseMemo() {
         return _whereClauseMemo;
     }
-
-//    public List<Card> getListCardsCriteria() {
-//        return _lstCards;
-//    }
 
     public String getSearchCriteria() {
         return searchCriteria;
@@ -145,12 +158,18 @@ public class Query {
         }
     }
 
-    public void setValDate(String y, String m, String d) {
+    public void setValDate(String y, String m, String d, int format) {
         valY = y;
         valM = m;
         valD = d;
 
+        String ymd = y + "-" + m + "-" + d;
+
+        valFromDate = Util.getDateFromDBDate(ymd, format);
+        valToDate = valFromDate;
+
         String ym = "\'" + y + "-" + m + "\'";
+
         _whereClauseDateRange = " strftime('%Y-%m', " + ItemsDBAdapter.COL_EVENT_DATE + ") = " + ym;
     }
 
@@ -190,10 +209,6 @@ public class Query {
         }
     }
 
-//    public void setSearchCriteria(String searchCriteria) {
-//        this.searchCriteria = searchCriteria;
-//    }
-
     public void buildQuery() {
         switch (type) {
             case QUERY_TYPE_NEW:
@@ -214,6 +229,8 @@ public class Query {
                     _whereClauseDateRange +
                     " ORDER BY " + ItemsDBAdapter.COL_EVENT_DATE;
         }
+
+        searchCriteria = "Date Range: " + getValFromToDate();
     }
 
     private void buildQuerySearch() {
@@ -226,7 +243,7 @@ public class Query {
         if (!_lstCards.isEmpty()) {
             stbQuery.append(" WHERE ");
             if (_lstCards.contains(new Card(Card.TYPE_DATE_RANGE, 0))) {
-                stbCriteria.append("Date Range:");
+                stbCriteria.append("Date Range: ");
                 stbCriteria.append(getValFromToDate());
                 stbCriteria.append("\n");
 
@@ -235,8 +252,8 @@ public class Query {
                 if(!_lstCards.isEmpty()) stbQuery.append(" AND ");
             }
             if (_lstCards.contains(new Card(Card.TYPE_AMOUNT_RANGE, 0))) {
-                stbCriteria.append("Amount Range:");
-                stbCriteria.append(getValFromToDate());
+                stbCriteria.append("Amount Range: ");
+                stbCriteria.append(getValMinMaxAmount());
                 stbCriteria.append("\n");
 
                 stbQuery.append(_whereClauseAmountRange);
@@ -244,7 +261,7 @@ public class Query {
                 if(!_lstCards.isEmpty()) stbQuery.append(" AND ");
             }
             if (_lstCards.contains(new Card(Card.TYPE_CATEGORY, 0))) {
-                stbCriteria.append("Category:");
+                stbCriteria.append("Category: ");
                 stbCriteria.append(getValCategory());
                 stbCriteria.append("\n");
 
@@ -253,10 +270,9 @@ public class Query {
                 if(!_lstCards.isEmpty()) stbQuery.append(" AND ");
             }
             if (_lstCards.contains(new Card(Card.TYPE_MEMO, 0))) {
-                stbCriteria.append("Memo:");
+                stbCriteria.append("Memo: ");
                 stbCriteria.append(getValMemo());
                 stbCriteria.append("\n");
-                Log.d("asdf", "coming " + getValMemo());
 
                 stbQuery.append(_whereClauseMemo);
             }

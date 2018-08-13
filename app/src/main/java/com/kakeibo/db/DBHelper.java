@@ -127,6 +127,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 null, null, null, null, null, null);
         if (c.moveToFirst()) {
             do {
+                /*** date ***/
                 String oriDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE));
                 String[] dates = oriDate.split("[ ]"); // [0]=date, [1]=time
                 String[] ymd = dates[0].split("[-]");
@@ -140,9 +141,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 values.put(ItemsDBAdapter.COL_UPDATE_DATE, updDate);
 
+                /*** flipping negative to positive***/
+                String amount = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                String newAmount = amount.replace("-", "");
+                values.put(ItemsDBAdapter.COL_AMOUNT, newAmount);
+
+                /*** reflecting the result to db ***/
                 db.update(ItemsDBAdapter.TABLE_ITEM, values,
                         ItemsDBAdapter.COL_ID+"=?",
                         new String[] {String.valueOf(colId)});
+
             } while (c.moveToNext());
         }
         c.close();

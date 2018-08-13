@@ -164,7 +164,7 @@ public class TabFragment2 extends Fragment {
         String[] ymd = Util.getTodaysDate(Util.DATE_FORMAT_DB).split("-");
         _calYear = Integer.parseInt(ymd[0]);
         _calMonth = Integer.parseInt(ymd[1]);
-        _query = new Query(ymd[0], ymd[1], ymd[2]);
+        _query = new Query(ymd[0], ymd[1], ymd[2], mDateFormat);
         _query.buildQuery();
     }
 
@@ -172,7 +172,7 @@ public class TabFragment2 extends Fragment {
         String y = String.valueOf(_calYear);
         String m = Util.convertMtoMM(_calMonth);
         _query = new Query(Query.QUERY_TYPE_NEW);
-        _query.setValDate(y, m, "");
+        _query.setValDate(y, m, "", mDateFormat);
         _query.buildQuery();
     }
 
@@ -270,13 +270,13 @@ public class TabFragment2 extends Fragment {
             String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
             txvCategory.setText(categoryText);
             SpannableString span1, span2;
-            if (0 == (item.getCategoryCode())) {
+            if (item.getCategoryCode() <= 0) {
                 span1 = new SpannableString(amountColon);
                 span2 = new SpannableString("+" + item.getAmount());
                 span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorBlue)), 0, 1, 0);
             } else {
                 span1 = new SpannableString(amountColon);
-                span2 = new SpannableString(item.getAmount());
+                span2 = new SpannableString("-" + item.getAmount());
                 span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorRed)), 0, 1, 0);
             }
             txvAmount.setText(TextUtils.concat(span1, span2));
@@ -359,19 +359,12 @@ public class TabFragment2 extends Fragment {
                         .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //Log.d("groupPosition", String.valueOf(groupPosition));
-                                //Log.d("childPosition", String.valueOf(childPosition));
                                 itemsDbAdapter.open();
                                 final int itemId = Integer.parseInt(item.getId());
 
                                 if (checkBeforeSave(edtAmount)) {
                                     if(itemsDbAdapter.deleteItem(itemId)) {
-                                        String amount;
-                                        if (item.getCategoryCode() != 0) {
-                                            amount = "-" + edtAmount.getText().toString();
-                                        } else {
-                                            amount = edtAmount.getText().toString();
-                                        }
+                                        String amount = edtAmount.getText().toString();
 
                                         Item tmp = new Item(
                                                 "",
@@ -519,7 +512,7 @@ public class TabFragment2 extends Fragment {
                     balanceDay += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                 } else {
                     expense += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                    balanceDay += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                    balanceDay -= c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                 }
 
                 Item item = new Item(
@@ -630,7 +623,7 @@ public class TabFragment2 extends Fragment {
         for (int i = 0; i < categoryList.size(); i++) {
             PieSlice slice = new PieSlice();
             if (categoryList.get(i).getCategoryCode() == 0) {
-                slice.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                slice.setColor(ContextCompat.getColor(_activity, R.color.colorPrimary));
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
@@ -660,7 +653,7 @@ public class TabFragment2 extends Fragment {
     public void makeBalanceTable(){
         txvIncome.setText(String.valueOf(income));
         txvExpense.setText(String.valueOf(expense));
-        balance = income + expense;
+        balance = income - expense;
 
         if (balance < 0) {
             txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorRed));
@@ -692,7 +685,7 @@ public class TabFragment2 extends Fragment {
                 fabDiscard.setVisibility(View.INVISIBLE);
                 break;
             case Query.QUERY_TYPE_SEARCH:
-                btnDate.setText(_query.getSearchCriteria());
+                btnDate.setText(getString(R.string.title_search_criteria));
                 btnNext.setVisibility(View.INVISIBLE);
                 btnPrev.setVisibility(View.INVISIBLE);
                 fabDiscard.setVisibility(View.VISIBLE);
@@ -741,44 +734,12 @@ public class TabFragment2 extends Fragment {
 
         _query = query;
 
-//        StringBuilder stbCriteria = new StringBuilder();
-//        List<Card> lstCriteria = query.getListCardsCriteria();
-//
-//        Log.d("asdf", "type: " + query.getType() + " : " + lstCriteria.size());
-//        if (lstCriteria.contains(new Card(Card.TYPE_DATE_RANGE, 0))) {
-//            stbCriteria.append(getResources().getString(R.string.event_date_colon));
-//            stbCriteria.append(query.getValFromToDate());
-//            stbCriteria.append("\n");
-//            Log.d("asdf", "type date range");
-//        }
-//        if (lstCriteria.contains(new Card(Card.TYPE_AMOUNT_RANGE, 0))) {
-//            stbCriteria.append(getResources().getString(R.string.amount_colon));
-//            stbCriteria.append(query.getValFromToDate());
-//            stbCriteria.append("\n");
-//            Log.d("asdf", "type amount range");
-//        }
-//        if (lstCriteria.contains(new Card(Card.TYPE_CATEGORY, 0))) {
-//            stbCriteria.append(getResources().getString(R.string.category_colon));
-//            stbCriteria.append(query.getValCategory());
-//            stbCriteria.append("\n");
-//            Log.d("asdf", "type category");
-//        }
-//        if (lstCriteria.contains(new Card(Card.TYPE_MEMO, 0))) {
-//            stbCriteria.append(getResources().getString(R.string.memo_colon));
-//            stbCriteria.append(query.getValMemo());
-//            stbCriteria.append("\n");
-//            Log.d("asdf", "type memo");
-//        }
-
-//        String searchCriteria = stbCriteria.toString();
-//        _query.setSearchCriteria(searchCriteria);
-
         SharedPreferences.Editor editor = mPref.edit();
         String json = new Gson().toJson(_query);
         editor.putString(SettingsActivity.PREF_KEY_QUERY, json);
         editor.apply();
 
-        btnDate.setText(getResources().getString(R.string.title_search_result));
+        btnDate.setText(getString(R.string.title_search_result));
         btnNext.setVisibility(View.INVISIBLE);
         btnPrev.setVisibility(View.INVISIBLE);
         fabDiscard.setVisibility(View.VISIBLE);

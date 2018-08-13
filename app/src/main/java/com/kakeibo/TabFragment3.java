@@ -95,20 +95,8 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
 
-//        String json1 = mPref.getString(SettingsActivity.PREF_KEY_LIST_CARDS, "");
-//        Type typeCards = new TypeToken<ArrayList<Card>>() {}.getType();
-//        lstCards = new Gson().fromJson(json1, typeCards);
-//
-//        String json2 = mPref.getString(SettingsActivity.PREF_KEY_LIST_CHOICES, "");
-//        Type typeChoices = new TypeToken<ArrayList<String>>() {}.getType();
-//        lstChoices = new Gson().fromJson(json2, typeChoices);
-//
-//        if (lstCards == null) lstCards = new ArrayList<>();
-//        if (lstChoices == null) lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
-
-        //todo amount expense - (minus) remove
-
         //todo category picker for card -> db
+        //todo instruction
     }
 
     class ButtonClickListener implements View.OnClickListener {
@@ -317,10 +305,33 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         editor.apply();
     }
 
+    private void createFloatingInstruction() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getResources().getString(R.string.how_to_perform_search));
+        builder.setIcon(R.mipmap.ic_mikan);
+        builder.setMessage(R.string.ins_tap_plus_to_add_criteria);
+        builder.setPositiveButton(R.string.next, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(getResources().getString(R.string.how_to_perform_search));
+                builder.setIcon(R.mipmap.ic_mikan);
+                builder.setMessage(R.string.ins_tap_search);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+            }
+        });
+        builder.show();
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (lstCards!=null && lstChoices!=null)
 
         // Make sure that we are currently visible
         if (this.isVisible()) {

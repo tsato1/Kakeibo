@@ -81,18 +81,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         /*** amount ***/
         SpannableString spannableString;
-        if (parseInt(item.getAmount()) > 0/***"Income".equals(item.getCategory())***/) {
+        if (item.getCategoryCode() <= 0) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-        } else if (parseInt(item.getAmount()) < 0){
-            String string = item.getAmount();
+        } else {
+            String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
-        } else {
-            String string = item.getAmount();
-            spannableString = new SpannableString(string);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlack)), 0, 1, 0);
         }
         txvAmount.setText(spannableString);
 
@@ -156,17 +152,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txvHeaderBalance = convertView.findViewById(R.id.txv_header_balance);
         SpannableString spannableString;
+        String tmp;
         if (Integer.parseInt(headerBalance) > 0) {
-            String string = "+" + headerBalance;
-            spannableString = new SpannableString(string);
+            tmp = "+" + headerBalance;
+            spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
         } else if (Integer.parseInt(headerBalance) < 0){
-            String string = headerBalance;
-            spannableString = new SpannableString(string);
+            tmp = headerBalance;
+            spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
         } else {
-            String string = headerBalance;
-            spannableString = new SpannableString(string);
+            tmp = headerBalance;
+            spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlack)), 0, 1, 0);
         }
         txvHeaderBalance.setText(spannableString);

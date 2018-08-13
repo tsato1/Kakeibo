@@ -3,6 +3,7 @@ package com.kakeibo;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -33,13 +34,16 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         Item item = getItem(position);
 
         if (null == convertView) {
             convertView = _layoutInflater.inflate(R.layout.row_list_category, parent, false);
         }
+
+        if (item == null) return convertView;
 
         ImageView imvCategory = convertView.findViewById(R.id.imv_category);
         TextView txvCategory = convertView.findViewById(R.id.txv_category);
@@ -50,13 +54,13 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         /*** amount ***/
         TextView txvAmount = convertView.findViewById(R.id.txv_amount);
         SpannableString spannableString;
-        if (Integer.parseInt(item.getAmount()) > 0) {
+        if (item.getCategoryCode() <= 0) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
             txvAmount.setText(spannableString);
         } else {
-            String string = item.getAmount();
+            String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
             txvAmount.setText(spannableString);
@@ -64,7 +68,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
 
         ImageView percentImageView;
         percentImageView = convertView.findViewById(R.id.imv_percent);
-        if (item.getCategoryCode() == 0) {
+        if (item.getCategoryCode() <= 0) {
             percentImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         } else {
             percentImageView.setBackgroundColor(Color.parseColor(MainActivity.categoryColor[position]));

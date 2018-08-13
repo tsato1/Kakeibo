@@ -65,6 +65,17 @@ public class Util {
                 + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
     }
 
+    public static String getDateFromDBDate(String dbDate, int dateFormat) {
+        String[] ymd = dbDate.split("[ ]")[0].split("[-]");
+
+        GregorianCalendar cal = new GregorianCalendar(
+                Integer.parseInt(ymd[0]),
+                Integer.parseInt(ymd[1])-1,
+                Integer.parseInt(ymd[2]));
+        Date date = cal.getTime();
+        return new SimpleDateFormat(DATE_FORMATS[dateFormat], Locale.getDefault()).format(date);
+    }
+
     /*** date1 < date2 returns -1
      *   date1 = date2 return 0
      *   date1 > date2 return 1 ***/
