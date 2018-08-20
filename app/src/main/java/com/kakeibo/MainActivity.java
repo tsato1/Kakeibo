@@ -11,10 +11,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.kakeibo.settings.SettingsActivity;
+
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +40,13 @@ import java.util.List;
 
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String[] categoryColor = {
             "#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872",
             "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
+
+    private InterstitialAd mInterstitialAd;
 
     private ViewPager viewPager;
     private TabFragment1 tabFragment1;
@@ -61,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         loadSharedPreference();
+        loadAds();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -103,15 +113,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadSharedPreference();
+    private void loadSharedPreference() {
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        sDateFormat = Integer.parseInt(f);
+    }
+
+    private void loadAds() {
+        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
+        mInterstitialAd = new InterstitialAd(this);
+        AdRequest.Builder request = new AdRequest.Builder();
+
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
+
+        mInterstitialAd.loadAd(request.build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
     }
 
     public void onItemSaved(Query query) {
         try {
             tabFragment2.focusOnSavedItem(query);
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                Log.d(TAG, "The interstitial wasn't loaded yet.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,16 +154,15 @@ public class MainActivity extends AppCompatActivity {
     public void onSearch(Query query) {
         try {
             tabFragment2.onSearch(query);
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                Log.d(TAG, "The interstitial wasn't loaded yet.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
-        mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-        sDateFormat = Integer.parseInt(f);
     }
 
     public ViewPager getViewPager() {

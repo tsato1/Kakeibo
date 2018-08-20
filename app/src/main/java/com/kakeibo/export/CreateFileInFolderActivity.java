@@ -1,9 +1,18 @@
 package com.kakeibo.export;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
@@ -28,10 +37,19 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     private int mIntDateFormat;
     private String mStrDateFormat;
 
+    private InterstitialAd mInterstitialAd;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_export);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         loadSharedPreference();
+        loadAds();
     }
 
     @Override
@@ -68,6 +86,12 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                             .setStarred(true)
                             .build();
 
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    } else {
+                        Log.d(TAG, "The interstitial wasn't loaded yet.");
+                    }
+
                     return getDriveResourceClient().createFile(parent, changeSet, contents);
                 })
                 .addOnSuccessListener(this,
@@ -96,5 +120,22 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
             default:  // YMD
                 mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_YMD) + " kk:mm:ss";
         }
+    }
+
+    private void loadAds() {
+        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
+        mInterstitialAd = new InterstitialAd(this);
+        AdRequest.Builder request = new AdRequest.Builder();
+
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
+        //mInterstitialAd.setAdUnitId("ca-app-pub-3282892636336089/5503106683");
+        mInterstitialAd.loadAd(request.build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
     }
 }

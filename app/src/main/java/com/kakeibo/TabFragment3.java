@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
@@ -146,8 +145,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         Card card = new Card(selected, 0);
         lstCards.add(card);
         adpRecyclerView.notifyDataSetChanged();
-
-        saveSharedPreferences();
     }
 
     private boolean checkBeforeSearch() {
@@ -292,17 +289,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
-
-        saveSharedPreferences();
-    }
-
-    private void saveSharedPreferences() {
-        SharedPreferences.Editor editor = mPref.edit();
-        String json1 = new Gson().toJson(lstCards);
-        String json2 = new Gson().toJson(lstChoices);
-        editor.putString(SettingsActivity.PREF_KEY_LIST_CARDS, json1);
-        editor.putString(SettingsActivity.PREF_KEY_LIST_CHOICES, json2);
-        editor.apply();
     }
 
     private void createFloatingInstruction() {

@@ -98,8 +98,7 @@
     <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
     <string name="pref_current_desc_free">Free Version: Ads appear every 20 min</string>
     <string name="pref_current_desc_pro">You are using Kakeibo! Pro</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_language">Language</string>
+    <string name="pref_title_category">Category</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data and Sync</string>

@@ -1,9 +1,9 @@
 package com.kakeibo.settings;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -19,7 +19,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,10 +42,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_DATE_FORMAT = "pref_key_date_format";
-    public static final String PREF_KEY_CURRENCY = "pref_key_currency";
-    public static final String PREF_KEY_QUERY = "pref_key_query";
-    public static final String PREF_KEY_LIST_CARDS = "pref_key_list_cards";
-    public static final String PREF_KEY_LIST_CHOICES = "pref_key_list_choices";
+    public static final String PREF_KEY_CATEGORY = "pref_key_category";
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -208,23 +204,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             bindPreferenceSummaryToValue(findPreference(PREF_KEY_DATE_FORMAT));
 
-            bindPreferenceSummaryToValue(findPreference(PREF_KEY_CURRENCY));
-
-            final ListPreference listPreference = (ListPreference) findPreference(PREF_KEY_CURRENCY);
-            setListPreferenceData(listPreference);
-
-            listPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    setListPreferenceData(listPreference);
-                    return false;
-                }
-            });
+//            final ListPreference listPreference = (ListPreference) findPreference(PREF_KEY_CATEGORY);
+//            setListPreferenceData(listPreference);
+//
+//            listPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//                    setListPreferenceData(listPreference);
+//                    return false;
+//                }
+//            });
         }
 
         protected static void setListPreferenceData(ListPreference lp) {
-            String str1 = Currency.getInstance("USD").getCurrencyCode();
-            CharSequence[] entries = { str1, "Yen", "Peso" };
+            CharSequence[] entries = {"asdf","asdf","asdf"};
             CharSequence[] entryValues = {"1", "2" , "3"};
             lp.setEntries(entries);
             lp.setDefaultValue("1");

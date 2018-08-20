@@ -1,5 +1,7 @@
 package com.kakeibo;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,6 +68,8 @@ public class Util {
     }
 
     public static String getDateFromDBDate(String dbDate, int dateFormat) {
+        Log.d(TAG, "getDateFromDBDate() dbDate: " + dbDate);
+
         String[] ymd = dbDate.split("[ ]")[0].split("[-]");
 
         GregorianCalendar cal = new GregorianCalendar(

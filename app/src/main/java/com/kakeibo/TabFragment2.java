@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
-import com.google.gson.Gson;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.export.UtilFiles;
@@ -97,16 +96,21 @@ public class TabFragment2 extends Fragment {
         setListeners();
         loadSharedPreferences();
 
-        return _view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         makeDefaultQuery();
         reset();
         loadItems();
+
+        return _view;
     }
+
+//    @Override
+//    public void onResume() {
+//        Log.d(TAG, "onResume() called");
+//        super.onResume();
+//        makeDefaultQuery();
+//        reset();
+//        loadItems();
+//    }
 
     void findViews(){
         frlRoot = _view.findViewById(R.id.frl_root_fragment2);
@@ -152,12 +156,6 @@ public class TabFragment2 extends Fragment {
         mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
-        String json = mPref.getString(SettingsActivity.PREF_KEY_QUERY, "");
-        _query = new Gson().fromJson(json, Query.class);
-
-        if (_query == null) {
-            makeDefaultQuery();
-        }
     }
 
     private void makeDefaultQuery() {
@@ -172,7 +170,7 @@ public class TabFragment2 extends Fragment {
         String y = String.valueOf(_calYear);
         String m = Util.convertMtoMM(_calMonth);
         _query = new Query(Query.QUERY_TYPE_NEW);
-        _query.setValDate(y, m, "", mDateFormat);
+        _query.setValDate(y, m, "01", mDateFormat);
         _query.buildQuery();
     }
 
@@ -701,11 +699,6 @@ public class TabFragment2 extends Fragment {
         _calYear = Integer.parseInt(y);
         _query = query;
 
-        SharedPreferences.Editor editor = mPref.edit();
-        String json = new Gson().toJson(_query);
-        editor.putString(SettingsActivity.PREF_KEY_QUERY, json);
-        editor.apply();
-
         btnDate.setText(getTextBtnDate());
         btnNext.setVisibility(View.VISIBLE);
         btnPrev.setVisibility(View.VISIBLE);
@@ -734,10 +727,7 @@ public class TabFragment2 extends Fragment {
 
         _query = query;
 
-        SharedPreferences.Editor editor = mPref.edit();
-        String json = new Gson().toJson(_query);
-        editor.putString(SettingsActivity.PREF_KEY_QUERY, json);
-        editor.apply();
+        //todo save query to db
 
         btnDate.setText(getString(R.string.title_search_result));
         btnNext.setVisibility(View.INVISIBLE);
