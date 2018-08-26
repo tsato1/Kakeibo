@@ -3,7 +3,6 @@ package com.kakeibo.export;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,7 +12,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.drive.CreateFileActivityOptions;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveFolder;
@@ -23,6 +21,7 @@ import com.google.android.gms.drive.OpenFileActivityOptions;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.kakeibo.R;
@@ -61,6 +60,11 @@ public abstract class BaseExportActivity extends Activity {
      * Tracks completion of the drive picker
      */
     private TaskCompletionSource<DriveId> mOpenItemTaskSource;
+
+    /**
+     *
+     */
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onStart() {
@@ -120,6 +124,7 @@ public abstract class BaseExportActivity extends Activity {
         requiredScopes.add(Drive.SCOPE_FILE);
         requiredScopes.add(Drive.SCOPE_APPFOLDER);
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
         if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes)) {
             initializeDriveClient(signInAccount);
         } else {
@@ -128,8 +133,8 @@ public abstract class BaseExportActivity extends Activity {
                             .requestScopes(Drive.SCOPE_FILE)
                             .requestScopes(Drive.SCOPE_APPFOLDER)
                             .build();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
-            startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+            mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
+            startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
         }
     }
 
@@ -214,5 +219,34 @@ public abstract class BaseExportActivity extends Activity {
 
     protected DriveResourceClient getDriveResourceClient() {
         return mDriveResourceClient;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+        signOut();
+    }
+
+    private void signOut() {
+        if (mGoogleSignInClient != null) {
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+        }
+    }
+
+    private void revokeAccess() {
+        mGoogleSignInClient.revokeAccess()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
     }
 }

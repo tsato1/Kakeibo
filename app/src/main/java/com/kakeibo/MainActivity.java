@@ -32,8 +32,6 @@ import java.util.List;
 
 //todo get only one dot in edit_amount and handle text starting with dot
 
-//todo functionality of log out
-
 //todo google drive api for release version
 
 //todo save search
@@ -125,8 +123,11 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         AdRequest.Builder request = new AdRequest.Builder();
 
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
-
+        if (BuildConfig.DEBUG) {
+            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
+        } else {
+            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
+        }
         mInterstitialAd.loadAd(request.build());
         mInterstitialAd.setAdListener(new AdListener() {
             @Override

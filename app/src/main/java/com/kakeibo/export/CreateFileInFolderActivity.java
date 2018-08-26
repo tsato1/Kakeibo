@@ -17,6 +17,7 @@ import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
+import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.Util;
 import com.kakeibo.settings.SettingsActivity;
@@ -43,13 +44,13 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+        loadAds();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         loadSharedPreference();
-        loadAds();
     }
 
     @Override
@@ -86,16 +87,18 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                             .setStarred(true)
                             .build();
 
+                    return getDriveResourceClient().createFile(parent, changeSet, contents);
+                })
+//                .addOnSuccessListener(this,
+//                        driveFile -> showMessage(getString(R.string.file_created)))
+                .addOnSuccessListener(aVoid -> {
+                    showMessage(getString(R.string.file_created));
                     if (mInterstitialAd.isLoaded()) {
                         mInterstitialAd.show();
                     } else {
                         Log.d(TAG, "The interstitial wasn't loaded yet.");
                     }
-
-                    return getDriveResourceClient().createFile(parent, changeSet, contents);
                 })
-                .addOnSuccessListener(this,
-                        driveFile -> showMessage(getString(R.string.file_created)))
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to create file", e);
                     showMessage(getString(R.string.file_create_error));
@@ -127,8 +130,12 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
         mInterstitialAd = new InterstitialAd(this);
         AdRequest.Builder request = new AdRequest.Builder();
 
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
-        //mInterstitialAd.setAdUnitId("ca-app-pub-3282892636336089/5503106683");
+        if (BuildConfig.DEBUG) {
+            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
+        } else {
+            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
+        }
+
         mInterstitialAd.loadAd(request.build());
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
