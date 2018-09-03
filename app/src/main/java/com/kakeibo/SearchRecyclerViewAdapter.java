@@ -2,9 +2,11 @@ package com.kakeibo;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +30,8 @@ import java.util.Locale;
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final static String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
+    private static String[] mCategories;
+
     private Context _context;
     private ArrayList<Card> _lstCards;
     private int mDateFormat;
@@ -44,6 +48,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_context);
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
+
+        mCategories = _context.getResources().getStringArray(R.array.default_category);
     }
 
     /*** date range card ***/
@@ -117,6 +123,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         FrameLayout layout;
         CardView cardView;
         Button btnCategory;
+        int selectedPosition = 0;
 
         ViewHolderCategory(View itemView) {
             super(itemView);
@@ -124,7 +131,24 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             layout = itemView.findViewById(R.id.frl_card_category);
             cardView = itemView.findViewById(R.id.cdv_category);
             btnCategory = itemView.findViewById(R.id.btn_card_category);
+            btnCategory.setOnClickListener(new ButtonClickListener());
         }
+
+        class ButtonClickListener implements View.OnClickListener {
+            public void onClick(View view) {
+                new AlertDialog.Builder(_context)
+                        .setSingleChoiceItems(mCategories, 0, null)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                                selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                                btnCategory.setText(mCategories[selectedPosition]);
+                            }
+                        })
+                        .show();
+            }
+        }
+
     }
 
     /*** memo card ***/
@@ -186,7 +210,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public void removeItem(int position) {
-        Log.d("asdf", "remove called");
+        Log.d(TAG, "removeItem() called");
         _lstCards.remove(position);
         notifyItemRemoved(position);
     }

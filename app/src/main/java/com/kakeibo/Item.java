@@ -6,13 +6,13 @@ package com.kakeibo;
 public class Item
 {
     String id;
-    String amount;
+    int amount;
     int categoryCode;
     String memo;
     String eventDate;
     String updateDate;
 
-    public Item(String id, String amount, int categoryCode, String memo, String eventDate, String updateDate)
+    public Item(String id, int amount, int categoryCode, String memo, String eventDate, String updateDate)
     {
         this.id = id;
         this.amount = amount;
@@ -27,7 +27,7 @@ public class Item
         return this.id;
     }
 
-    public String getAmount()
+    public int getAmount()
     {
         return this.amount;
     }

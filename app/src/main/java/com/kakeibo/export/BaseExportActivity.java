@@ -97,6 +97,7 @@ public abstract class BaseExportActivity extends Activity {
                     Log.d(TAG, "Sign-in successful");
                     initializeDriveClient(getAccountTask.getResult());
                 } else {
+                    Toast.makeText(this, getString(R.string.err_google_signin_failed), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Sign-in failed. 2");
                     finish();
                 }

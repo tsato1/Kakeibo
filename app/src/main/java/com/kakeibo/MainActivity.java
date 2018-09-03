@@ -30,11 +30,8 @@ import java.util.List;
 
 //todo add and subtract custom categories (discreet categories for income too)
 
-//todo get only one dot in edit_amount and handle text starting with dot
-
 //todo google drive api for release version
 
-//todo save search
 
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
@@ -141,12 +138,6 @@ public class MainActivity extends AppCompatActivity {
     public void onItemSaved(Query query) {
         try {
             tabFragment2.focusOnSavedItem(query);
-
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-            } else {
-                Log.d(TAG, "The interstitial wasn't loaded yet.");
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

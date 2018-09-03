@@ -55,6 +55,8 @@
     <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
     <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
     <string name="err_min_amount_greater">Min Amount has to be greater than Max Amount.</string>
+    <string name="err_use_one_dot">You cannot use two or more dots.</string>
+    <string name="err_google_signin_failed">Google Sign-in failed. Please try again.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
@@ -63,7 +65,6 @@
     <string name="msg_item_successfully_saved">The item was successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_going_back_to_report">It will go back to the report for this month.</string>
     <string name="ins_tap_plus_to_add_criteria">First, Tap the plus button on the left bottom to add criteria.
         You can add as many criterion as you want</string>
     <string name="ins_tap_search">Then tap the search button to search.</string>
@@ -74,11 +75,13 @@
     <string name="err_memo_empty">Search word in Memo is empty.</string>
 
     <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_do_you_want_to_discard_search">Do you want to discard this search?</string>
+    <string name="quest_save_this_search">Do you want to save this search?</string>
+    <string name="quest_export_this_report">Do you want to export this report on Google Drive?</string>
 
     <string name="title_edit_item">Edit item</string>
     <string name="title_search_result">Search Result</string>
     <string name="title_search_criteria">Search Criteria:</string>
+    <string name="title_returning_to_monthly_report">Returning to monthly report</string>
 
     <!-- Export -->
     <string name="select_file">Select file</string>

@@ -15,14 +15,22 @@ public class QueriesDBAdapter {
     public static final String COL_QUERY_TYPE = "query_type";
     public static final String COL_QUERY = "sql";
     public static final String COL_CREATE_DATE = "create_date";
-
-    public static final int QUERY_TYPE_AUTO = 0; // automatically saved
-    public static final int QUERY_TYPE_MANU = 1; // manually saved
+    public static final String COL_SEARCH_CRITERIA = "search_criteria";
+    public static final String COL_VAL_Y = "val_y";
+    public static final String COL_VAL_M = "val_m";
+    public static final String COL_VAL_D = "val_d";
+    public static final String COL_VAL_FROM_DATE = "val_from_date";
+    public static final String COL_VAL_TO_DATE = "val_to_date";
+    public static final String COL_VAL_MIN_AMOUNT = "val_min_amount";
+    public static final String COL_VAL_MAX_AMOUNT = "val_max_amount";
+    public static final String COL_VAL_CATEGORY_CODE = "val_category_code";
+    public static final String COL_VAL_CATEGORY = "val_category";
+    public static final String COL_VAL_MEMO = "val_memo";
 
     private final Context _context;
     private SQLiteDatabase _db;
 
-    QueriesDBAdapter(Context context) {
+    public QueriesDBAdapter(Context context) {
         _context = context;
     }
 
@@ -40,6 +48,17 @@ public class QueriesDBAdapter {
         values.put(COL_QUERY_TYPE, query.getType());
         values.put(COL_QUERY, query.getQuery());
         values.put(COL_CREATE_DATE, query.getCreateDate());
+        values.put(COL_SEARCH_CRITERIA, query.getSearchCriteria());
+        values.put(COL_VAL_Y, query.getValY());
+        values.put(COL_VAL_M, query.getValM());
+        values.put(COL_VAL_D, query.getValD());
+        values.put(COL_VAL_FROM_DATE, query.getValFromDate());
+        values.put(COL_VAL_TO_DATE, query.getValToDate());
+        values.put(COL_VAL_MIN_AMOUNT, query.getValMinAmount());
+        values.put(COL_VAL_MAX_AMOUNT, query.getValMaxAmount());
+        values.put(COL_VAL_CATEGORY_CODE, query.getValCategoryCode());
+        values.put(COL_VAL_CATEGORY, query.getValCategory());
+        values.put(COL_VAL_MEMO, query.getValMemo());
 
         SQLiteDatabase db = DBAdapter.getInstance().openDatabase();
         db.insertOrThrow(TABLE_QUERIES, null, values);

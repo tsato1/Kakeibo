@@ -40,7 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE_TABLE_ITEM =
             "CREATE TABLE " + ItemsDBAdapter.TABLE_ITEM + " ("+
                     ItemsDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
-                    ItemsDBAdapter.COL_AMOUNT + " TEXT NOT NULL," +
+                    //ItemsDBAdapter.COL_AMOUNT + " TEXT NOT NULL," +
+                    ItemsDBAdapter.COL_AMOUNT + " INTEGER DEFAULT 0," +
                     ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0," +
                     ItemsDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
@@ -52,7 +53,18 @@ public class DBHelper extends SQLiteOpenHelper {
                     QueriesDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     QueriesDBAdapter.COL_QUERY_TYPE + " INTEGER NOT NULL DEFAULT 0," +
                     QueriesDBAdapter.COL_QUERY + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_CREATE_DATE + " TEXT NOT NULL);";
+                    QueriesDBAdapter.COL_CREATE_DATE + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_SEARCH_CRITERIA + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_Y + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_M + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_D + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_FROM_DATE + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_TO_DATE + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_MIN_AMOUNT + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_MAX_AMOUNT + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_CATEGORY_CODE + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_CATEGORY + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_MEMO + " TEXT NOT NULL);";
 
     private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
             " ADD COLUMN " + ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
@@ -61,7 +73,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_UPDATE_2_TO_3_2 =
             "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM + " RENAME TO " + ItemsDBAdapter.TABLE_ITEM + "_old;";
     private static final String DATABASE_UPDATE_2_TO_3_3 =
-            "INSERT INTO " + ItemsDBAdapter.TABLE_ITEM + " (" +
+            "INSERT INTO " + ItemsDBAdapter.TABLE_ITEM +
+                    " (" +
                     ItemsDBAdapter.COL_ID+","+
                     ItemsDBAdapter.COL_AMOUNT+","+
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
@@ -70,18 +83,13 @@ public class DBHelper extends SQLiteOpenHelper {
                     ItemsDBAdapter.COL_UPDATE_DATE+") "+
                     " SELECT "+
                     ItemsDBAdapter.COL_ID+","+
-                    ItemsDBAdapter.COL_AMOUNT+","+
+                    "CAST ("+ItemsDBAdapter.COL_AMOUNT+" AS INTEGER),"+
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
                     ItemsDBAdapter.COL_MEMO+","+
                     ItemsDBAdapter.COL_EVENT_DATE+","+
                     ItemsDBAdapter.COL_UPDATE_DATE+" FROM "+ItemsDBAdapter.TABLE_ITEM+"_old;";
     private static final String DATABASE_UPDATE_2_TO_3_4 =
             "DROP TABLE "+ItemsDBAdapter.TABLE_ITEM+"_old;";
-//    private static final String DATABASE_UPDATE_3_TO_4_1 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
-//            " ADD COLUMN " + ItemsDBAdapter.COL_CURRENCY + " INTEGER DEFAULT 0;";
-//    private static final String DATABASE_UPDATE_3_TO_4_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
-//            " ADD COLUMN " + ItemsDBAdapter.COL_LOCALE + " INTEGER DEFAULT 0;";
-
 
     private final Context _context;
 
@@ -143,7 +151,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 /*** flipping negative to positive***/
                 String amount = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                String newAmount = amount.replace("-", "");
+                //String newAmount = amount.replace("-", "");
+                int newAmount = Math.abs(Integer.parseInt(amount));
                 values.put(ItemsDBAdapter.COL_AMOUNT, newAmount);
 
                 /*** reflecting the result to db ***/

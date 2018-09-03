@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +30,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Created by T on 2015/09/14.
@@ -94,6 +100,54 @@ public class TabFragment1 extends Fragment {
 
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);
+
+        edtAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String str = editable.toString();
+                int length = str.length();
+
+                if (length == 1 && str.charAt(0)=='.') {
+                    edtAmount.setText("");
+                    return ;
+                }
+
+                if (length > 1 && str.charAt(0)=='0' && str.charAt(1)!='.') {
+                    edtAmount.setText(str.substring(0, length-1));
+                    edtAmount.setSelection(edtAmount.getText().length());
+                    return ;
+                }
+
+                if(length > 1 && str.charAt(length-1)=='.' && secondTime(str)) {
+                    edtAmount.setText(str.substring(0, length-1));
+                    edtAmount.setSelection(edtAmount.getText().length());
+                    return ;
+                }
+
+                if (length > 1 && str.contains(".") && str.substring(str.indexOf('.')).length()>4) {
+                    edtAmount.setText(str.substring(0, length-1));
+                    edtAmount.setSelection(edtAmount.getText().length());
+                }
+            }
+
+            private boolean secondTime(String str) {
+                Set<Character> set = new HashSet<>();
+
+                for (int i = 0; i < str.length(); ++i) {
+                    if (set.contains(str.charAt(i)) && str.charAt(i)=='.') {
+                        return true;
+                    }
+                    set.add(str.charAt(i));
+                }
+                return false;
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        });
     }
 
     void setButtonContent()
@@ -234,10 +288,12 @@ public class TabFragment1 extends Fragment {
         if ("".equals(selectedCategory)) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
             return false;
-        } else if ("".equals(edtAmount.getText().toString())) {
+        }
+        if ("".equals(edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
             return false;
-        } else if (Integer.parseInt(edtAmount.getText().toString()) == 0) {
+        }
+        if ("0".equals(edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -276,7 +332,7 @@ public class TabFragment1 extends Fragment {
 
         Item item = new Item(
                 "",
-                amount,
+                Integer.parseInt(amount),
                 selectedCategoryCode,
                 edtMemo.getText().toString(),
                 eventDate,

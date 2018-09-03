@@ -25,16 +25,17 @@ public class Query {
     private List<Card> _lstCards;
 
     /*** Query type 0 ***/
-    private String valY;//event_date
-    private String valM;
-    private String valD;
+    private String valY="";//event_date
+    private String valM="";
+    private String valD="";
     /*** Query type 1 ***/
-    private String valFromDate;
-    private String valToDate;
-    private String valMinAmount;
-    private String valMaxAmount;
-    private String valCategory;
-    private String valMemo;
+    private String valFromDate="";
+    private String valToDate="";
+    private String valMinAmount="";
+    private String valMaxAmount="";
+    private String valCategoryCode ="";
+    private String valCategory="";
+    private String valMemo="";
 
     Query (int type){
         this.type = type;
@@ -108,6 +109,10 @@ public class Query {
         return valMinAmount + "-" + valMaxAmount;
     }
 
+    public String getValCategoryCode() {
+        return valCategoryCode;
+    }
+
     public String getValCategory() {
         return valCategory;
     }
@@ -177,14 +182,16 @@ public class Query {
         valMinAmount = min;
         valMaxAmount = max;
 
-        _whereClauseAmountRange = ItemsDBAdapter.COL_AMOUNT + " between " +
-                String.valueOf(min) + " and " + String.valueOf(max);
+        _whereClauseAmountRange = ItemsDBAdapter.COL_AMOUNT + " >= " +
+                String.valueOf(min) + " AND " +
+                ItemsDBAdapter.COL_AMOUNT + " <= " + String.valueOf(max);
     }
 
-    public void setCategory(String category) {
+    public void setCategory(String categoryCode, String category) {
+        valCategoryCode = categoryCode;
         valCategory = category;
 
-        _whereClauseCategory = ItemsDBAdapter.COL_CATEGORY_CODE + " = \'" + category + "\'";
+        _whereClauseCategory = ItemsDBAdapter.COL_CATEGORY_CODE + " = \'" + categoryCode + "\'";
     }
 
     public void setMemo(String memo) {

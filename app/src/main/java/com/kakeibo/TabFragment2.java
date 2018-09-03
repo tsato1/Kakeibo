@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.QueriesDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.export.UtilFiles;
 import com.kakeibo.settings.SettingsActivity;
@@ -53,6 +54,8 @@ public class TabFragment2 extends Fragment {
 
     private static final int MENU_ITEM_ID_DELETE = 0;
     private static final int MENU_ITEM_ID_EDIT = 1;
+
+    private static int REPORT_VIEW_TYPE = 0; // 0:by date, 1:category-wise price desc, 2: price desc
 
     private FrameLayout frlRoot;
     private Activity _activity;
@@ -79,6 +82,7 @@ public class TabFragment2 extends Fragment {
     private View _view;
     private Query _query;
     private SharedPreferences mPref;
+    private StringBuilder mStringBuilder;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,15 +106,6 @@ public class TabFragment2 extends Fragment {
 
         return _view;
     }
-
-//    @Override
-//    public void onResume() {
-//        Log.d(TAG, "onResume() called");
-//        super.onResume();
-//        makeDefaultQuery();
-//        reset();
-//        loadItems();
-//    }
 
     void findViews(){
         frlRoot = _view.findViewById(R.id.frl_root_fragment2);
@@ -140,7 +135,8 @@ public class TabFragment2 extends Fragment {
         categoryListView.setOnItemClickListener(new CategoryListItemClickListener());
         fabDiscard.setOnClickListener(new ButtonClickListener());
         fabExport.setOnClickListener(new ButtonClickListener());
-
+        
+        mStringBuilder = new StringBuilder();
         itemsDbAdapter = new ItemsDBAdapter(_activity);
         dateHeaderList = new ArrayList<>();
         childDataHashMap = new HashMap<>();
@@ -183,8 +179,6 @@ public class TabFragment2 extends Fragment {
             List<Item> searchResultList = new ArrayList<>();
             searchResultList.clear();
 
-            itemsDbAdapter.open();
-
             String[] ym = btnDate.getText().toString().split("[/]");
             String y, m;
             switch (mDateFormat) {
@@ -198,13 +192,14 @@ public class TabFragment2 extends Fragment {
                     m = ym[1];
             }
 
+            itemsDbAdapter.open();
             Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
 
             if (c.moveToFirst()) {
                 do {
                     Item item = new Item(
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
@@ -346,7 +341,7 @@ public class TabFragment2 extends Fragment {
                 String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
                 final EditText edtAmount = layout.findViewById(R.id.edt_amount);
-                edtAmount.setText(String.valueOf(Math.abs(Integer.parseInt(item.getAmount()))));
+                edtAmount.setText(String.valueOf(Math.abs(item.getAmount())));
                 final EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
@@ -366,7 +361,7 @@ public class TabFragment2 extends Fragment {
 
                                         Item tmp = new Item(
                                                 "",
-                                                amount,
+                                                Integer.parseInt(amount),
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
@@ -412,9 +407,11 @@ public class TabFragment2 extends Fragment {
                     if (_view.findViewById(R.id.lsv_expandable).getVisibility() != View.GONE) {
                         expandableListView.setVisibility(View.GONE);
                         categoryLayout.setVisibility(View.VISIBLE);
+                        REPORT_VIEW_TYPE = 1;
                     } else {
                         expandableListView.setVisibility(View.VISIBLE);
                         categoryLayout.setVisibility(View.GONE);
+                        REPORT_VIEW_TYPE = 0;
                     }
                     break;
                 case R.id.btn_prev:
@@ -441,11 +438,18 @@ public class TabFragment2 extends Fragment {
                     loadItems();
                     break;
                 case R.id.fab_discard:
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
-                    dialog.setIcon(R.mipmap.ic_mikan);
-                    dialog.setTitle(getString(R.string.quest_do_you_want_to_discard_search));
-                    dialog.setMessage(getString(R.string.msg_going_back_to_report));
-                    dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
+                    dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
+                    dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
+                    //todo saved search
+//                    dialog.setMessage(getString(R.string.quest_save_this_search));
+//                    dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            saveSearch();
+//                        }
+//                    });
+                    dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             makeDefaultQuery();
@@ -453,14 +457,92 @@ public class TabFragment2 extends Fragment {
                             loadItems();
                         }
                     });
-                    dialog.show();
+                    dialogSaveSearch.show();
                     break;
                 case R.id.fab_export:
-                    startActivity(new Intent(_activity, CreateFileInFolderActivity.class));
+                    AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
+                    dialogExport.setIcon(R.mipmap.ic_mikan);
+                    dialogExport.setTitle(getString(R.string.export));
+                    dialogExport.setMessage(getString(R.string.quest_export_this_report));
+                    dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (REPORT_VIEW_TYPE == 1) {
+                                createOutFileByCategory();
+                            }
+
+                            Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
+                            intent.putExtra("REPORT_VIEW_TYPE", REPORT_VIEW_TYPE);
+                            startActivity(intent);
+                        }
+                    });
+                    dialogExport.show();
                     break;
             }
         }
     }
+
+    private void createOutFileByCategory() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(_query.getValY()), Integer.parseInt(_query.getValM()), 1);
+        int noOfLastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        itemsDbAdapter.open();
+        Cursor c = itemsDbAdapter.getItems(_query.getValY(), _query.getValM(), "01",
+                _query.getValY(), _query.getValM(), String.valueOf(noOfLastDay), "",
+                ItemsDBAdapter.COL_CATEGORY_CODE, ItemsDBAdapter.ASC,
+                ItemsDBAdapter.COL_AMOUNT, ItemsDBAdapter.DESC);
+
+        mStringBuilder.setLength(0);
+        mStringBuilder.append(getResources().getString(R.string.category));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.amount));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.memo));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.event_date));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.updated_date));
+        mStringBuilder.append("\n");
+
+        if (c.moveToFirst()) {
+            do {
+                Item item = new Item(
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
+                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
+                );
+
+                mStringBuilder.append(defaultCategory[item.getCategoryCode()]);
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getAmount());
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getMemo());
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getEventDate());
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getUpdateDate());
+                mStringBuilder.append("\n");
+
+            } while (c.moveToNext());
+        }
+
+        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_CATEGORY, mStringBuilder.toString(), _activity, Context.MODE_PRIVATE);
+        mStringBuilder.setLength(0);
+
+        itemsDbAdapter.close();
+    }
+
+    /*** todo
+    private void saveSearch() {
+        QueriesDBAdapter queriesDBAdapter = new QueriesDBAdapter(getActivity());
+        queriesDBAdapter.open();
+        queriesDBAdapter.saveItem(_query);
+        queriesDBAdapter.close();
+    }***/
 
     public void loadItems() {
         Log.d(TAG, "loadItems() " + _query.getQuery());
@@ -469,17 +551,17 @@ public class TabFragment2 extends Fragment {
         childDataHashMap.clear();
         income = expense = balance = 0;
         int sameDateCounter = 0;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getResources().getString(R.string.event_date));
-        stringBuilder.append(",");
-        stringBuilder.append(getResources().getString(R.string.amount));
-        stringBuilder.append(",");
-        stringBuilder.append(getResources().getString(R.string.category));
-        stringBuilder.append(",");
-        stringBuilder.append(getResources().getString(R.string.memo));
-        stringBuilder.append(",");
-        stringBuilder.append(getResources().getString(R.string.updated_date));
-        stringBuilder.append("\n");
+        mStringBuilder.setLength(0);
+        mStringBuilder.append(getResources().getString(R.string.event_date));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.amount));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.category));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.memo));
+        mStringBuilder.append(",");
+        mStringBuilder.append(getResources().getString(R.string.updated_date));
+        mStringBuilder.append("\n");
 
         categoryList.clear();
 
@@ -515,32 +597,32 @@ public class TabFragment2 extends Fragment {
 
                 Item item = new Item(
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
 
-                stringBuilder.append(item.getEventDate());
-                stringBuilder.append(",");
-                stringBuilder.append(item.getAmount());
-                stringBuilder.append(",");
-                stringBuilder.append(defaultCategory[item.getCategoryCode()]);
-                stringBuilder.append(",");
-                stringBuilder.append(item.getMemo());
-                stringBuilder.append(",");
-                stringBuilder.append(item.getUpdateDate());
-                stringBuilder.append("\n");
+                mStringBuilder.append(item.getEventDate());
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getAmount());
+                mStringBuilder.append(",");
+                mStringBuilder.append(defaultCategory[item.getCategoryCode()]);
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getMemo());
+                mStringBuilder.append(",");
+                mStringBuilder.append(item.getUpdateDate());
+                mStringBuilder.append("\n");
 
                 /************* For CategoryList *************/
                 boolean flag = false;
                 for (int i = 0; i < categoryList.size(); i++) {
                     Item tmp = categoryList.get(i);
                     if (tmp.getCategoryCode() == c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE))) {
-                        int amount = Integer.parseInt(tmp.getAmount()) + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                        int amount = tmp.getAmount() + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                         tmp = new Item(categoryList.get(i).getId(),
-                                String.valueOf(amount),
+                                amount,
                                 c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                                 "", "", "");
                         categoryList.remove(i);
@@ -561,7 +643,7 @@ public class TabFragment2 extends Fragment {
                         }
                     }
                     Item tmp = new Item(String.valueOf(id),
-                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                             "", "", "");
                     categoryList.add(tmp);
@@ -586,8 +668,8 @@ public class TabFragment2 extends Fragment {
         expandableListAdapter.notifyDataSetChanged();
         categoryListAdapter.notifyDataSetChanged();
 
-        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_DATE, stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
-        stringBuilder.setLength(0);
+        UtilFiles.writeToFile(CreateFileInFolderActivity.TMP_FILE_ORDER_DATE, mStringBuilder.toString(), _activity, Context.MODE_PRIVATE);
+        mStringBuilder.setLength(0);
 
         makeBalanceTable();
     }
@@ -598,15 +680,15 @@ public class TabFragment2 extends Fragment {
             int out = Math.abs(expense);
             int sum = in + out;
 
-            categoryList.get(i).setMemo(String.valueOf(Math.abs(Integer.parseInt(categoryList.get(i).getAmount())) * 100 / sum));
+            categoryList.get(i).setMemo(String.valueOf(Math.abs(categoryList.get(i).getAmount()) * 100 / sum));
         }
     }
 
     void categoryListSortByAmount() {
         for (int i = 0; i < categoryList.size() - 1; i++) {
             for (int j = categoryList.size() - 1; j > i; j--) {
-                int amount_j = Math.abs(Integer.parseInt(categoryList.get(j).getAmount()));
-                int amount_j_1 = Math.abs(Integer.parseInt(categoryList.get(j-1).getAmount()));
+                int amount_j = Math.abs(categoryList.get(j).getAmount());
+                int amount_j_1 = Math.abs(categoryList.get(j-1).getAmount());
                 if (amount_j > amount_j_1) {
                     Item tmp = categoryList.get(j);
                     categoryList.set(j, categoryList.get(j-1));
@@ -625,7 +707,7 @@ public class TabFragment2 extends Fragment {
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
-            slice.setValue(Math.abs(Integer.parseInt(categoryList.get(i).amount)));
+            slice.setValue(Math.abs(categoryList.get(i).amount));
             graph.addSlice(slice);
         }
         graph.setThickness(200);
@@ -681,12 +763,14 @@ public class TabFragment2 extends Fragment {
                 btnNext.setVisibility(View.VISIBLE);
                 btnPrev.setVisibility(View.VISIBLE);
                 fabDiscard.setVisibility(View.INVISIBLE);
+                frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 break;
             case Query.QUERY_TYPE_SEARCH:
                 btnDate.setText(getString(R.string.title_search_criteria));
                 btnNext.setVisibility(View.INVISIBLE);
                 btnPrev.setVisibility(View.INVISIBLE);
                 fabDiscard.setVisibility(View.VISIBLE);
+                frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
                 break;
         }
     }
@@ -703,6 +787,7 @@ public class TabFragment2 extends Fragment {
         btnNext.setVisibility(View.VISIBLE);
         btnPrev.setVisibility(View.VISIBLE);
         fabDiscard.setVisibility(View.INVISIBLE);
+        frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
         loadItems();
 
@@ -714,6 +799,7 @@ public class TabFragment2 extends Fragment {
             if (header[1].equals(m) && header[2].equals(d)) {
                 expandableListView.setVisibility(View.VISIBLE);
                 categoryLayout.setVisibility(View.GONE);
+                REPORT_VIEW_TYPE = 0;
                 expandableListView.expandGroup(i);
                 expandableListView.smoothScrollToPositionFromTop(i, 0);
             } else {
@@ -727,12 +813,11 @@ public class TabFragment2 extends Fragment {
 
         _query = query;
 
-        //todo save query to db
-
         btnDate.setText(getString(R.string.title_search_result));
         btnNext.setVisibility(View.INVISIBLE);
         btnPrev.setVisibility(View.INVISIBLE);
         fabDiscard.setVisibility(View.VISIBLE);
+        frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
 
         loadItems();
     }

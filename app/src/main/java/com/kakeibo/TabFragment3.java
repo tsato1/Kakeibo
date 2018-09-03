@@ -94,7 +94,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
 
-        //todo category picker for card -> db
         //todo instruction
     }
 
@@ -213,13 +212,14 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
                 SearchRecyclerViewAdapter.ViewHolderCategory viewHolderCategory = (SearchRecyclerViewAdapter.ViewHolderCategory) viewHolder;
                 String category = viewHolderCategory.btnCategory.getText().toString();
+                int categoryCode = viewHolderCategory.selectedPosition;
 
                 if ("".equals(category)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                _query.setCategory(category);
+                _query.setCategory(String.valueOf(categoryCode), category);
             }
         }
 

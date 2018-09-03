@@ -35,6 +35,8 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     public static final String TMP_FILE_ORDER_DATE = "tmp_order_date.csv";
     public static final String TMP_FILE_ORDER_CATEGORY = "tmp_order_cat.csv";
 
+    private static int REPORT_VIEW_TYPE;
+
     private int mIntDateFormat;
     private String mStrDateFormat;
 
@@ -44,6 +46,8 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+
+        REPORT_VIEW_TYPE = getIntent().getIntExtra("REPORT_VIEW_TYPE", 0);
         loadAds();
     }
 
@@ -73,7 +77,13 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                 .continueWithTask(task -> {
                     DriveContents contents = task.getResult();
                     OutputStream outputStream = contents.getOutputStream();
-                    String str = UtilFiles.getFileValue(TMP_FILE_ORDER_DATE, this);
+
+                    String str = "";
+                    if (REPORT_VIEW_TYPE == 0) {
+                        str = UtilFiles.getFileValue(TMP_FILE_ORDER_DATE, this);
+                    } else if (REPORT_VIEW_TYPE == 1) {
+                        str = UtilFiles.getFileValue(TMP_FILE_ORDER_CATEGORY, this);
+                    }
 
                     try (Writer writer = new OutputStreamWriter(outputStream)) {
                         writer.write(str);

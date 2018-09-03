@@ -26,6 +26,9 @@ public class ItemsDBAdapter extends DBAdapter {
     public static final String COL_EVENT_DATE = "event_date";
     public static final String COL_UPDATE_DATE = "update_date";
 
+    public static final String ASC = "asc";
+    public static final String DESC = "desc";
+
     private final Context _context;
     private SQLiteDatabase _db;
     private QueriesDBAdapter _queriesDBAdapter;
@@ -54,7 +57,8 @@ public class ItemsDBAdapter extends DBAdapter {
         return _db.delete(TABLE_ITEM, null, null) > 0;
     }
 
-    public Cursor getItems(String fromY, String fromM, String fromD, String toY, String toM, String toD, String memo)
+    public Cursor getItems(String fromY, String fromM, String fromD, String toY, String toM, String toD, String memo,
+                           String order1, String direction1, String order2, String direction2)
     {
         String fromYMD = "\'" + fromY + "-" + fromM + "-" + fromD + "\'";
         String toYMD = "\'" + toY + "-" + toM + "-" + toD + "\'";
@@ -64,13 +68,13 @@ public class ItemsDBAdapter extends DBAdapter {
             query = "SELECT * FROM " + TABLE_ITEM +
                     " WHERE " + COL_EVENT_DATE +
                     " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")" +
-                    " ORDER BY " + COL_EVENT_DATE;
+                    " ORDER BY " + order1 + " " + direction1 + ", " + order2 + " " + direction2;
         } else {
             query = "SELECT * FROM " + TABLE_ITEM +
                     " WHERE " + COL_EVENT_DATE +
                     " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")" +
                     " AND " + COL_MEMO + "=" + "\'" + memo + "\'" +
-                    " ORDER BY " + COL_EVENT_DATE;
+                    " ORDER BY " + order1 + " " + direction1 + ", " + order2 + " " + direction2;
         }
 
         //saveQuery(QueriesDBAdapter.QUERY_TYPE_AUTO, query);

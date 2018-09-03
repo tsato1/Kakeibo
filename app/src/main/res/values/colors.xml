@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#E64A19</color>
     <color name="colorAccent">#808000</color>
     <color name="colorBackground">#FFFFBB</color><!--cream-->
+    <color name="colorBackground_search">#fffbe8</color>
     <color name="colorEmboss">#11000001</color>
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#FF0000</color>
