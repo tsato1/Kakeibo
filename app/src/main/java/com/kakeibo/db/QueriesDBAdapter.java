@@ -23,6 +23,7 @@ public class QueriesDBAdapter {
     public static final String COL_VAL_TO_DATE = "val_to_date";
     public static final String COL_VAL_MIN_AMOUNT = "val_min_amount";
     public static final String COL_VAL_MAX_AMOUNT = "val_max_amount";
+    public static final String COL_VAL_CURRENCY_CODE = "val_currency_code";
     public static final String COL_VAL_CATEGORY_CODE = "val_category_code";
     public static final String COL_VAL_CATEGORY = "val_category";
     public static final String COL_VAL_MEMO = "val_memo";
@@ -57,7 +58,6 @@ public class QueriesDBAdapter {
         values.put(COL_VAL_MIN_AMOUNT, query.getValMinAmount());
         values.put(COL_VAL_MAX_AMOUNT, query.getValMaxAmount());
         values.put(COL_VAL_CATEGORY_CODE, query.getValCategoryCode());
-        values.put(COL_VAL_CATEGORY, query.getValCategory());
         values.put(COL_VAL_MEMO, query.getValMemo());
 
         SQLiteDatabase db = DBAdapter.getInstance().openDatabase();

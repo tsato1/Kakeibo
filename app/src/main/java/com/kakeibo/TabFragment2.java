@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -36,15 +37,18 @@ import android.widget.Toast;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
-import com.kakeibo.db.QueriesDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.export.UtilFiles;
 import com.kakeibo.settings.SettingsActivity;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by T on 2015/09/14.
@@ -73,7 +77,7 @@ public class TabFragment2 extends Fragment {
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
     private FloatingActionButton fabDiscard, fabExport;
-    private int income, expense, balance;
+    private BigDecimal income, expense, balance;
     public  int _calMonth, _calYear;
     private String[] weekName;
     private String[] defaultCategory;
@@ -83,6 +87,7 @@ public class TabFragment2 extends Fragment {
     private Query _query;
     private SharedPreferences mPref;
     private StringBuilder mStringBuilder;
+    private Currency mCurrency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,6 +157,15 @@ public class TabFragment2 extends Fragment {
         mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
+        Locale locale = Locale.getDefault();
+        Currency currency = Currency.getInstance(locale);
+        String currencyCode;
+        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+            currencyCode = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+        } else {
+            currencyCode = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+        }
+        mCurrency = Currency.getInstance(currencyCode);
     }
 
     private void makeDefaultQuery() {
@@ -187,7 +201,7 @@ public class TabFragment2 extends Fragment {
                     y = ym[1];
                     m = ym[0];
                     break;
-                default:  // YMD
+                default: // YMD
                     y = ym[0];
                     m = ym[1];
             }
@@ -200,6 +214,7 @@ public class TabFragment2 extends Fragment {
                     Item item = new Item(
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
@@ -334,15 +349,16 @@ public class TabFragment2 extends Fragment {
                 return true;
             case MENU_ITEM_ID_EDIT:
                 LayoutInflater layoutInflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, (ViewGroup) _view.findViewById(R.id.layout_root));
+                final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, _view.findViewById(R.id.layout_root));
                 TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
                 txvEventDate.setText(item.getEventDate());
                 TextView txvCategory = layout.findViewById(R.id.txv_category);
                 String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
-                final EditText edtAmount = layout.findViewById(R.id.edt_amount);
-                edtAmount.setText(String.valueOf(Math.abs(item.getAmount())));
-                final EditText edtMemo = layout.findViewById(R.id.edt_memo);
+                EditText edtAmount = layout.findViewById(R.id.edt_amount);
+                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, mCurrency.getDefaultFractionDigits()));
+                edtAmount.setText(String.valueOf(item.getAmount()));
+                EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
                 new AlertDialog.Builder(_activity)
@@ -361,7 +377,8 @@ public class TabFragment2 extends Fragment {
 
                                         Item tmp = new Item(
                                                 "",
-                                                Integer.parseInt(amount),
+                                                new BigDecimal(amount),
+                                                item.getCurrencyCode(),
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
@@ -388,9 +405,6 @@ public class TabFragment2 extends Fragment {
     boolean checkBeforeSave(EditText edt_amount) {
         if ("".equals(edt_amount.getText().toString())) {
             Toast.makeText(_activity, getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (Integer.parseInt(edt_amount.getText().toString()) == 0) {
-            Toast.makeText(_activity, getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -484,12 +498,12 @@ public class TabFragment2 extends Fragment {
 
     private void createOutFileByCategory() {
         Calendar cal = Calendar.getInstance();
-        cal.set(Integer.parseInt(_query.getValY()), Integer.parseInt(_query.getValM()), 1);
+        cal.set(_query.getValY(), _query.getValM(), 1);
         int noOfLastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         itemsDbAdapter.open();
-        Cursor c = itemsDbAdapter.getItems(_query.getValY(), _query.getValM(), "01",
-                _query.getValY(), _query.getValM(), String.valueOf(noOfLastDay), "",
+        Cursor c = itemsDbAdapter.getItems(_query.getValY(), _query.getValM(), 1,
+                _query.getValY(), _query.getValM(),noOfLastDay, "",
                 ItemsDBAdapter.COL_CATEGORY_CODE, ItemsDBAdapter.ASC,
                 ItemsDBAdapter.COL_AMOUNT, ItemsDBAdapter.DESC);
 
@@ -510,6 +524,7 @@ public class TabFragment2 extends Fragment {
                 Item item = new Item(
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
@@ -549,7 +564,7 @@ public class TabFragment2 extends Fragment {
 
         dateHeaderList.clear();
         childDataHashMap.clear();
-        income = expense = balance = 0;
+        income = expense = balance = new BigDecimal(0);
         int sameDateCounter = 0;
         mStringBuilder.setLength(0);
         mStringBuilder.append(getResources().getString(R.string.event_date));
@@ -571,7 +586,7 @@ public class TabFragment2 extends Fragment {
 
         if (c!=null && c.moveToFirst()) {
             String eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE));
-            int balanceDay = 0;
+            BigDecimal balanceDay = new BigDecimal(0);
             List<Item> tmpItemList = new ArrayList<>();
 
             do {
@@ -580,29 +595,30 @@ public class TabFragment2 extends Fragment {
                 if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
                     dateHeaderList.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator
                     childDataHashMap.put(dateHeaderList.get(sameDateCounter), tmpItemList); // set the header of the old day
-                    balanceDay = 0;
+                    balanceDay = BigDecimal.valueOf(0);
                     /*** change of the date ***/
                     eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)); // set a new date
                     tmpItemList = new ArrayList<>(); // empty the array list of items
                     sameDateCounter++;
                 }
 
-                if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
-                    income += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                    balanceDay += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                } else {
-                    expense += c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                    balanceDay -= c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                }
-
                 Item item = new Item(
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
+
+                if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
+                    income = income.add(item.getAmount());
+                    balanceDay = balanceDay.add(item.getAmount());
+                } else {
+                    expense = expense.add(item.getAmount());
+                    balanceDay = balanceDay.subtract(item.getAmount());
+                }
 
                 mStringBuilder.append(item.getEventDate());
                 mStringBuilder.append(",");
@@ -620,9 +636,10 @@ public class TabFragment2 extends Fragment {
                 for (int i = 0; i < categoryList.size(); i++) {
                     Item tmp = categoryList.get(i);
                     if (tmp.getCategoryCode() == c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE))) {
-                        int amount = tmp.getAmount() + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                        int amount = tmp.getIntAmount() + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
                         tmp = new Item(categoryList.get(i).getId(),
                                 amount,
+                                c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
                                 c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                                 "", "", "");
                         categoryList.remove(i);
@@ -644,6 +661,7 @@ public class TabFragment2 extends Fragment {
                     }
                     Item tmp = new Item(String.valueOf(id),
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                             "", "", "");
                     categoryList.add(tmp);
@@ -676,20 +694,22 @@ public class TabFragment2 extends Fragment {
 
     void calculatePercentage() {
         for (int i = 0; i < categoryList.size(); i++) {
-            int in = Math.abs(income);
-            int out = Math.abs(expense);
-            int sum = in + out;
+            BigDecimal sum = income.add(expense);
+            BigDecimal out = categoryList.get(i).getAmount()
+                    .multiply(new BigDecimal(100))
+                    .divide(sum, RoundingMode.DOWN)
+                    .setScale(0, RoundingMode.DOWN);
 
-            categoryList.get(i).setMemo(String.valueOf(Math.abs(categoryList.get(i).getAmount()) * 100 / sum));
+            categoryList.get(i).setMemo(String.valueOf(out));
         }
     }
 
     void categoryListSortByAmount() {
         for (int i = 0; i < categoryList.size() - 1; i++) {
             for (int j = categoryList.size() - 1; j > i; j--) {
-                int amount_j = Math.abs(categoryList.get(j).getAmount());
-                int amount_j_1 = Math.abs(categoryList.get(j-1).getAmount());
-                if (amount_j > amount_j_1) {
+                BigDecimal amount_j = categoryList.get(j).getAmount();
+                BigDecimal amount_j_1 = categoryList.get(j-1).getAmount();
+                if (amount_j.compareTo(amount_j_1) > 0) {
                     Item tmp = categoryList.get(j);
                     categoryList.set(j, categoryList.get(j-1));
                     categoryList.set(j-1, tmp);
@@ -707,7 +727,7 @@ public class TabFragment2 extends Fragment {
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
-            slice.setValue(Math.abs(categoryList.get(i).amount));
+            slice.setValue(categoryList.get(i).getAmount().intValue());
             graph.addSlice(slice);
         }
         graph.setThickness(200);
@@ -733,13 +753,13 @@ public class TabFragment2 extends Fragment {
     public void makeBalanceTable(){
         txvIncome.setText(String.valueOf(income));
         txvExpense.setText(String.valueOf(expense));
-        balance = income - expense;
+        balance = income.subtract(expense);
 
-        if (balance < 0) {
+        if (balance.compareTo(new BigDecimal(0)) < 0) {
             txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorRed));
             txvBalance.setText(String.valueOf(balance));
         }
-        else if (balance > 0) {
+        else if (balance.compareTo(new BigDecimal(0)) > 0) {
             txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorBlue));
             String str = "+" + String.valueOf(balance);
             txvBalance.setText(str);
@@ -751,7 +771,7 @@ public class TabFragment2 extends Fragment {
     }
 
     public void reset() {
-        Log.d(TAG, "reset()");
+        //Log.d(TAG, "reset()");
 
         switch (_query.getType()) {
             case Query.QUERY_TYPE_NEW:
@@ -776,11 +796,11 @@ public class TabFragment2 extends Fragment {
     }
 
     public void focusOnSavedItem(Query query) {
-        String m = query.getValM();
-        String y = query.getValY();
-        String d = query.getValD();
-        _calMonth = Integer.parseInt(m);
-        _calYear = Integer.parseInt(y);
+        int m = query.getValM();
+        int y = query.getValY();
+        int d = query.getValD();
+        _calMonth = m;
+        _calYear = y;
         _query = query;
 
         btnDate.setText(getTextBtnDate());
@@ -796,7 +816,7 @@ public class TabFragment2 extends Fragment {
 
             //Log.d("TabFragment2","focusOnSavedItem() y:"+y+" m:"+m+" d:"+d);
 
-            if (header[1].equals(m) && header[2].equals(d)) {
+            if (Integer.parseInt(header[1]) == m && Integer.parseInt(header[2]) == d) {
                 expandableListView.setVisibility(View.VISIBLE);
                 categoryLayout.setVisibility(View.GONE);
                 REPORT_VIEW_TYPE = 0;
@@ -809,7 +829,7 @@ public class TabFragment2 extends Fragment {
     }
 
     public void onSearch(Query query) {
-        Log.d(TAG, "onSearch() " + query.getQuery());
+        //Log.d(TAG, "onSearch() " + query.getQuery());
 
         _query = query;
 

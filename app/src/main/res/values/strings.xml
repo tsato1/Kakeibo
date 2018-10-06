@@ -54,8 +54,7 @@
     <string name="err_from_date_older">From Date has to be younger than To Date.</string>
     <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
     <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
-    <string name="err_min_amount_greater">Min Amount has to be greater than Max Amount.</string>
-    <string name="err_use_one_dot">You cannot use two or more dots.</string>
+    <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
     <string name="err_google_signin_failed">Google Sign-in failed. Please try again.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
@@ -93,7 +92,6 @@
     <!-- Settings -->
     <!-- General settings -->
     <string name="pref_header_general">General</string>
-    <string name="pref_header_category">Category</string>
 
     <string name="pref_title_change_date_format">Change Date Format</string>
     <string name="pref_title_remove_ads">Remove Ads</string>
@@ -148,4 +146,5 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="action_csv_export">CSV Export</string>
 </resources>

@@ -12,6 +12,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private String[] _strDefaultCategory;
     private TypedArray _trrMipmaps;
 
-    public ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
+    ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
         this._context = context;
         this._lstDateHeader = dateHeaderList;
         this._hmpChildData = childDataHashMap;
@@ -153,11 +154,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txvHeaderBalance = convertView.findViewById(R.id.txv_header_balance);
         SpannableString spannableString;
         String tmp;
-        if (Integer.parseInt(headerBalance) > 0) {
+        if (new BigDecimal(headerBalance).compareTo(new BigDecimal(0)) > 0) {
             tmp = "+" + headerBalance;
             spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-        } else if (Integer.parseInt(headerBalance) < 0){
+        } else if (new BigDecimal(headerBalance).compareTo(new BigDecimal(0)) < 0){
             tmp = headerBalance;
             spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);

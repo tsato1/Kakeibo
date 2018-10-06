@@ -25,8 +25,7 @@ import com.google.android.gms.ads.MobileAds;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//todo add ads
+//todo test on version up
 
 //todo add and subtract custom categories (discreet categories for income too)
 

@@ -219,7 +219,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     return false;
                 }
 
-                _query.setCategory(String.valueOf(categoryCode), category);
+                _query.setCategory(categoryCode, category);
             }
         }
 

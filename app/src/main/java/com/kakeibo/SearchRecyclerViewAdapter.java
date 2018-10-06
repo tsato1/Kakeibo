@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,7 @@ import com.kakeibo.settings.SettingsActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -35,6 +37,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     private Context _context;
     private ArrayList<Card> _lstCards;
     private int mDateFormat;
+    private Currency mCurrency;
 
     SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCards) {
         _context = context;
@@ -50,6 +53,16 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         mDateFormat = Integer.parseInt(f);
 
         mCategories = _context.getResources().getStringArray(R.array.default_category);
+
+        Locale locale = Locale.getDefault();
+        Currency currency = Currency.getInstance(locale);
+        String currencyCode;
+        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+        } else {
+            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+        }
+        mCurrency = Currency.getInstance(currencyCode);
     }
 
     /*** date range card ***/
@@ -115,6 +128,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             cardView = itemView.findViewById(R.id.cdv_amount_range);
             edtMin = itemView.findViewById((R.id.edt_amount_min));
             edtMax = itemView.findViewById(R.id.edt_amount_max);
+
+            edtMin.addTextChangedListener(new AmountTextWatcher(edtMin, mCurrency.getDefaultFractionDigits()));
+            edtMax.addTextChangedListener(new AmountTextWatcher(edtMax, mCurrency.getDefaultFractionDigits()));
         }
     }
 

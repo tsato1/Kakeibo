@@ -3,13 +3,13 @@ package com.kakeibo;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +24,17 @@ import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Created by T on 2015/09/14.
@@ -46,7 +47,9 @@ public class TabFragment1 extends Fragment {
     private ImageButton btnPrev, btnNext;
     private ArrayList<Button> btnsCategory;
     private String selectedCategory = "";
-    private int selectedCategoryCode = 0;
+    private int selectedCategoryCode;
+    private Currency mCurrency;
+    private static int mFractionDigits = 0;
     private String[] weekName;
     private String[] defaultCategory;
     private int mDateFormat;
@@ -64,9 +67,9 @@ public class TabFragment1 extends Fragment {
         weekName = getResources().getStringArray(R.array.week_name);
         defaultCategory = getResources().getStringArray(R.array.default_category);
 
+        loadSharedPreferences();
         findViews(_view);
         setListeners();
-        loadSharedPreferences();
 
         return _view;
     }
@@ -101,59 +104,11 @@ public class TabFragment1 extends Fragment {
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);
 
-        edtAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String str = editable.toString();
-                int length = str.length();
-
-                if (length == 1 && str.charAt(0)=='.') {
-                    edtAmount.setText("");
-                    return ;
-                }
-
-                if (length > 1 && str.charAt(0)=='0' && str.charAt(1)!='.') {
-                    edtAmount.setText(str.substring(0, length-1));
-                    edtAmount.setSelection(edtAmount.getText().length());
-                    return ;
-                }
-
-                if(length > 1 && str.charAt(length-1)=='.' && secondTime(str)) {
-                    edtAmount.setText(str.substring(0, length-1));
-                    edtAmount.setSelection(edtAmount.getText().length());
-                    return ;
-                }
-
-                if (length > 1 && str.contains(".") && str.substring(str.indexOf('.')).length()>4) {
-                    edtAmount.setText(str.substring(0, length-1));
-                    edtAmount.setSelection(edtAmount.getText().length());
-                }
-            }
-
-            private boolean secondTime(String str) {
-                Set<Character> set = new HashSet<>();
-
-                for (int i = 0; i < str.length(); ++i) {
-                    if (set.contains(str.charAt(i)) && str.charAt(i)=='.') {
-                        return true;
-                    }
-                    set.add(str.charAt(i));
-                }
-                return false;
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        });
+        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, mCurrency.getDefaultFractionDigits()));
     }
 
-    void setButtonContent()
-    {
-        for (int i = 0; i < defaultCategory.length; i++)
-        {
+    void setButtonContent() {
+        for (int i = 0; i < defaultCategory.length; i++) {
             btnsCategory.get(i).setText(defaultCategory[i]);
         }
     }
@@ -174,6 +129,16 @@ public class TabFragment1 extends Fragment {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
+        Locale locale = Locale.getDefault();
+        Currency currency = Currency.getInstance(locale);
+        String currencyCode;
+        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+        } else {
+            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+        }
+        mCurrency = Currency.getInstance(currencyCode);
+        mFractionDigits = currency.getDefaultFractionDigits();
     }
 
     class DateButtonClickListener implements View.OnClickListener {
@@ -332,7 +297,8 @@ public class TabFragment1 extends Fragment {
 
         Item item = new Item(
                 "",
-                Integer.parseInt(amount),
+                new BigDecimal(amount),
+                mCurrency.getCurrencyCode(),
                 selectedCategoryCode,
                 edtMemo.getText().toString(),
                 eventDate,
@@ -356,7 +322,7 @@ public class TabFragment1 extends Fragment {
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dialog = new DatePickerDialog(_activity, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker picker, int year, int month, int day){
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();

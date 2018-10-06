@@ -25,15 +25,16 @@ public class Query {
     private List<Card> _lstCards;
 
     /*** Query type 0 ***/
-    private String valY="";//event_date
-    private String valM="";
-    private String valD="";
+    private int valY;//event_date
+    private int valM;
+    private int valD;
     /*** Query type 1 ***/
     private String valFromDate="";
     private String valToDate="";
     private String valMinAmount="";
     private String valMaxAmount="";
-    private String valCategoryCode ="";
+    private String valCurrencyCode = Util.DEFAULT_CURRENCY_CODE;
+    private int valCategoryCode = 0;
     private String valCategory="";
     private String valMemo="";
 
@@ -46,9 +47,9 @@ public class Query {
 
     Query (String y, String m, String d, int format) {
         this.type = QUERY_TYPE_NEW;
-        valY = y;
-        valM = m;
-        valD = d;
+        valY = Integer.parseInt(y);
+        valM = Integer.parseInt(m);
+        valD = Integer.parseInt(d);
         setValDate(y, m, d, format);
         reset();
     }
@@ -65,15 +66,15 @@ public class Query {
         return this.query;
     }
 
-    public String getValY() {
+    public int getValY() {
         return valY;
     }
 
-    public String getValM() {
+    public int getValM() {
         return valM;
     }
 
-    public String getValD() {
+    public int getValD() {
         return valD;
     }
 
@@ -109,7 +110,7 @@ public class Query {
         return valMinAmount + "-" + valMaxAmount;
     }
 
-    public String getValCategoryCode() {
+    public int getValCategoryCode() {
         return valCategoryCode;
     }
 
@@ -164,9 +165,9 @@ public class Query {
     }
 
     public void setValDate(String y, String m, String d, int format) {
-        valY = y;
-        valM = m;
-        valD = d;
+        valY = Integer.parseInt(y);
+        valM = Integer.parseInt(m);
+        valD = Integer.parseInt(d);
 
         String ymd = y + "-" + m + "-" + d;
 
@@ -187,7 +188,7 @@ public class Query {
                 ItemsDBAdapter.COL_AMOUNT + " <= " + String.valueOf(max);
     }
 
-    public void setCategory(String categoryCode, String category) {
+    public void setCategory(int categoryCode, String category) {
         valCategoryCode = categoryCode;
         valCategory = category;
 

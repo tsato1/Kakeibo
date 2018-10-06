@@ -18,6 +18,7 @@ public class ItemsDBAdapter extends DBAdapter {
     public static final String TABLE_ITEM = "items";
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNT = "amount";
+    public static final String COL_CURRENCY_CODE = "currency_code";
     public static final String COL_CATEGORY = "category"; // dropped on version 2
     public static final String COL_CATEGORY_CODE = "category_code";
     public static final String COL_MEMO = "memo";
@@ -57,7 +58,7 @@ public class ItemsDBAdapter extends DBAdapter {
         return _db.delete(TABLE_ITEM, null, null) > 0;
     }
 
-    public Cursor getItems(String fromY, String fromM, String fromD, String toY, String toM, String toD, String memo,
+    public Cursor getItems(int fromY, int fromM, int fromD, int toY, int toM, int toD, String memo,
                            String order1, String direction1, String order2, String direction2)
     {
         String fromYMD = "\'" + fromY + "-" + fromM + "-" + fromD + "\'";
@@ -114,13 +115,19 @@ public class ItemsDBAdapter extends DBAdapter {
     public void saveItem(Item item)
     {
         ContentValues values = new ContentValues();
-        values.put(COL_AMOUNT, item.getAmount());
+        values.put(COL_AMOUNT, Util.getIntAmount(item.getAmount(), item.getFractionDigits()));
+        values.put(COL_CURRENCY_CODE, item.getCurrencyCode());
         values.put(COL_CATEGORY_CODE, item.getCategoryCode());
         values.put(COL_MEMO, item.getMemo());
         values.put(COL_EVENT_DATE, item.getEventDate());
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
         _db.insertOrThrow(TABLE_ITEM, null, values);
 
-        Log.d(TAG, "saveItem() called");
+//        Log.d(TAG, "saveItem(): amount="+item.getAmount()
+//                +" intAmount="+item.getIntAmount()
+//                +" currency_code="+item.getCurrencyCode()
+//                +" category_code="+item.getCategoryCode()
+//                +" memo="+item.getMemo()
+//        );
     }
 }

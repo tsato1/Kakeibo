@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
 import com.kakeibo.R;
 import com.kakeibo.Util;
+import com.kakeibo.settings.SettingsActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -40,8 +43,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE_TABLE_ITEM =
             "CREATE TABLE " + ItemsDBAdapter.TABLE_ITEM + " ("+
                     ItemsDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
-                    //ItemsDBAdapter.COL_AMOUNT + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_AMOUNT + " INTEGER DEFAULT 0," +
+                    ItemsDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL, " +
                     ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0," +
                     ItemsDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
@@ -55,15 +58,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     QueriesDBAdapter.COL_QUERY + " TEXT NOT NULL," +
                     QueriesDBAdapter.COL_CREATE_DATE + " TEXT NOT NULL," +
                     QueriesDBAdapter.COL_SEARCH_CRITERIA + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_Y + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_M + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_D + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_Y + " INTEGER DEFAULT 0," +
+                    QueriesDBAdapter.COL_VAL_M + " INTEGER DEFAULT 0," +
+                    QueriesDBAdapter.COL_VAL_D + " INTEGER DEFAULT 0," +
                     QueriesDBAdapter.COL_VAL_FROM_DATE + " TEXT NOT NULL," +
                     QueriesDBAdapter.COL_VAL_TO_DATE + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_MIN_AMOUNT + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_MAX_AMOUNT + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_CATEGORY_CODE + " TEXT NOT NULL," +
-                    QueriesDBAdapter.COL_VAL_CATEGORY + " TEXT NOT NULL," +
+                    QueriesDBAdapter.COL_VAL_MIN_AMOUNT + " INTEGER DEFAULT 0," +
+                    QueriesDBAdapter.COL_VAL_MAX_AMOUNT + " INTEGER DEFAULT 0," +
+                    QueriesDBAdapter.COL_VAL_CURRENCY_CODE + " TEXT NOT NULL, " +
+                    QueriesDBAdapter.COL_VAL_CATEGORY_CODE + " INTEGER DEFAULT 0," +
                     QueriesDBAdapter.COL_VAL_MEMO + " TEXT NOT NULL);";
 
     private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
@@ -77,6 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     " (" +
                     ItemsDBAdapter.COL_ID+","+
                     ItemsDBAdapter.COL_AMOUNT+","+
+                    ItemsDBAdapter.COL_CURRENCY_CODE+","+
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
                     ItemsDBAdapter.COL_MEMO+","+
                     ItemsDBAdapter.COL_EVENT_DATE+","+
@@ -84,6 +88,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     " SELECT "+
                     ItemsDBAdapter.COL_ID+","+
                     "CAST ("+ItemsDBAdapter.COL_AMOUNT+" AS INTEGER),"+
+                    ItemsDBAdapter.COL_CURRENCY_CODE+","+
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
                     ItemsDBAdapter.COL_MEMO+","+
                     ItemsDBAdapter.COL_EVENT_DATE+","+
@@ -154,6 +159,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 //String newAmount = amount.replace("-", "");
                 int newAmount = Math.abs(Integer.parseInt(amount));
                 values.put(ItemsDBAdapter.COL_AMOUNT, newAmount);
+                Locale locale = Locale.getDefault();
+                Currency currency = Currency.getInstance(locale);
+                String currencyCode;
+                if (Build.VERSION.SDK_INT>Build.VERSION_CODES.M) {
+                    currencyCode = currency.getCurrencyCode();
+                } else {
+                    currencyCode = Util.DEFAULT_CURRENCY_CODE;
+                }
+                values.put(ItemsDBAdapter.COL_CURRENCY_CODE, currencyCode);
 
                 /*** reflecting the result to db ***/
                 db.update(ItemsDBAdapter.TABLE_ITEM, values,
@@ -248,17 +262,17 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
         db.insertOrThrow(TABLE_KKBAPP, null, valuesDBVersion);
-
-        ContentValues valuesCurrency = new ContentValues();
-        valuesCurrency.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_ADS);
-        valuesCurrency.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
-        valuesCurrency.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_1, -1);
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
-        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
-        db.insertOrThrow(TABLE_KKBAPP, null, valuesCurrency);
+//
+//        ContentValues valuesCurrency = new ContentValues();
+//        valuesCurrency.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_ADS);
+//        valuesCurrency.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
+//        valuesCurrency.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
+//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_1, -1);
+//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
+//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
+//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
+//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
+//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
+//        db.insertOrThrow(TABLE_KKBAPP, null, valuesCurrency);
     }
 }

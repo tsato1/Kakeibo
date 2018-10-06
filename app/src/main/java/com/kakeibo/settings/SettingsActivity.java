@@ -42,6 +42,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_DATE_FORMAT = "pref_key_date_format";
+    public static final String PREF_KEY_CURRENCY = "pref_key_currency";
     public static final String PREF_KEY_CATEGORY = "pref_key_category";
 
     /**
