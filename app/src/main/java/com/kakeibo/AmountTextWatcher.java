@@ -39,14 +39,12 @@ public class AmountTextWatcher implements TextWatcher {
         }
 
         if (length > 1 && str.charAt(0) == '0' && str.charAt(1) != '.') {
-            Log.d("asdf", "length > 1 && str.charAt(0) == '0' && str.charAt(1) != '.'");
             mEdtAmount.setText(str.substring(0, length - 1));
             mEdtAmount.setSelection(mEdtAmount.getText().length());
             return;
         }
 
         if (length > 1 && str.charAt(length - 1) == '.' && secondTime(str)) {
-            Log.d("asdf", "length > 1 && str.charAt(length - 1) == '.' && secondTime(str)");
             mEdtAmount.setText(str.substring(0, length - 1));
             mEdtAmount.setSelection(mEdtAmount.getText().length());
             return;
@@ -54,7 +52,6 @@ public class AmountTextWatcher implements TextWatcher {
 
         if (length > 1 && str.contains(".") &&
                 str.substring(str.indexOf('.')).length() > mFractionDigits + 1) {
-            Log.d("asdf", "last one");
             mEdtAmount.setText(str.substring(0, length - 1));
             mEdtAmount.setSelection(mEdtAmount.getText().length());
         }
