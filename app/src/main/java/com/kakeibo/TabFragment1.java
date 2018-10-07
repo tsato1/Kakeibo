@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.api.client.util.StringUtils;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
@@ -48,11 +50,11 @@ public class TabFragment1 extends Fragment {
     private ArrayList<Button> btnsCategory;
     private String selectedCategory = "";
     private int selectedCategoryCode;
-    private Currency mCurrency;
+//    private Currency mCurrency;
     private static int mFractionDigits = 0;
     private String[] weekName;
     private String[] defaultCategory;
-    private int mDateFormat;
+//    private int mDateFormat;
     private Query _query;
 
     private Button btnDate;
@@ -67,7 +69,7 @@ public class TabFragment1 extends Fragment {
         weekName = getResources().getStringArray(R.array.week_name);
         defaultCategory = getResources().getStringArray(R.array.default_category);
 
-        loadSharedPreferences();
+        //loadSharedPreferences();
         findViews(_view);
         setListeners();
 
@@ -77,8 +79,34 @@ public class TabFragment1 extends Fragment {
     @Override
     public void onResume () {
         super.onResume();
-        btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
+        btnDate.setText(Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
     }
+
+//    public void loadSharedPreferences() {
+//        /*** date format ***/
+//        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
+//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, "0");
+//        mDateFormat = Integer.parseInt(f);
+//
+//        /*** currency ***/
+//        Locale locale = Locale.getDefault();
+//        Currency currency = Currency.getInstance(locale);
+//        String value;
+//        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+//        } else {
+//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+//        }
+//
+//        if (value.matches("\\d+(?:\\.\\d+)?")) {
+//            String[] codes = getResources().getStringArray(R.array.pref_list_currency);
+//            mCurrency = Currency.getInstance(codes[Integer.parseInt(value)]);
+//        } else {
+//            mCurrency = Currency.getInstance(value);
+//        }
+//        mFractionDigits = currency.getDefaultFractionDigits();
+//    }
 
     void findViews(View view)
     {
@@ -104,7 +132,7 @@ public class TabFragment1 extends Fragment {
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);
 
-        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, mCurrency.getDefaultFractionDigits()));
+        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sCurrency.getDefaultFractionDigits()));
     }
 
     void setButtonContent() {
@@ -124,28 +152,11 @@ public class TabFragment1 extends Fragment {
         }
     }
 
-    public void loadSharedPreferences() {
-        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-        mDateFormat = Integer.parseInt(f);
-        Locale locale = Locale.getDefault();
-        Currency currency = Currency.getInstance(locale);
-        String currencyCode;
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-        } else {
-            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-        }
-        mCurrency = Currency.getInstance(currencyCode);
-        mFractionDigits = currency.getDefaultFractionDigits();
-    }
-
     class DateButtonClickListener implements View.OnClickListener {
         public void  onClick(View view) {
             String sourceDate = btnDate.getText().toString().substring(0, 10);
             //Log.d("sourceDate", sourceDate);
-            SimpleDateFormat format = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
+            SimpleDateFormat format = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
                     Locale.getDefault());
             Date date = null;
             Calendar cal = Calendar.getInstance();
@@ -160,7 +171,7 @@ public class TabFragment1 extends Fragment {
                     cal.setTime(date);
                     cal.add(Calendar.DATE, -1);
                     date = cal.getTime();
-                    String str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
+                    String str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
@@ -177,7 +188,7 @@ public class TabFragment1 extends Fragment {
                     cal.setTime(date);
                     cal.add(Calendar.DATE, 1);
                     date = cal.getTime();
-                    str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
+                    str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
@@ -273,7 +284,7 @@ public class TabFragment1 extends Fragment {
         String[] ymd = btnDate.getText().toString().split("\\s+")[0].split("/");
         String y, m, d;
 
-        switch (mDateFormat) {
+        switch (MainActivity.sDateFormat) {
             case 1: // MDY
                 y = ymd[2];
                 m = ymd[0];
@@ -298,7 +309,7 @@ public class TabFragment1 extends Fragment {
         Item item = new Item(
                 "",
                 new BigDecimal(amount),
-                mCurrency.getCurrencyCode(),
+                MainActivity.sCurrency.getCurrencyCode(),
                 selectedCategoryCode,
                 edtMemo.getText().toString(),
                 eventDate,
@@ -311,7 +322,7 @@ public class TabFragment1 extends Fragment {
         itemsDBAdapter.close();
 
         _query = new Query(Query.QUERY_TYPE_NEW);
-        _query.setValDate(y, m, d, mDateFormat);
+        _query.setValDate(y, m, d, MainActivity.sDateFormat);
         _query.buildQuery();
     }
 
@@ -326,7 +337,7 @@ public class TabFragment1 extends Fragment {
             public void onDateSet(DatePicker picker, int year, int month, int day){
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
-                String str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
+                String str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
                         Locale.getDefault()).format(date)
                         + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
@@ -341,7 +352,7 @@ public class TabFragment1 extends Fragment {
     {
         edtAmount.setText("");
         edtMemo.setText("");
-        btnDate.setText(Util.getTodaysDateWithDay(mDateFormat, weekName));
+        btnDate.setText(Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
     }
 
     @Override

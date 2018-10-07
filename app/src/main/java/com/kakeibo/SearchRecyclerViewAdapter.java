@@ -43,6 +43,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         _context = context;
         _lstCards = lstCards;
 
+        mCategories = _context.getResources().getStringArray(R.array.default_category);
+
         loadSharedPreference();
     }
 
@@ -52,17 +54,22 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
 
-        mCategories = _context.getResources().getStringArray(R.array.default_category);
-
+        /*** currency ***/
         Locale locale = Locale.getDefault();
         Currency currency = Currency.getInstance(locale);
-        String currencyCode;
+        String value;
         if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
         } else {
-            currencyCode = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
         }
-        mCurrency = Currency.getInstance(currencyCode);
+
+        if (value.matches("\\d+(?:\\.\\d+)?")) {
+            ArrayList<String> codes = Util.getAllCurrencies();
+            mCurrency = Currency.getInstance(codes.get(Integer.parseInt(value)));
+        } else {
+            mCurrency = Currency.getInstance(value);
+        }
     }
 
     /*** date range card ***/

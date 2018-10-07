@@ -30,30 +30,35 @@ public class AmountTextWatcher implements TextWatcher {
         int length = str.length();
 
         if (mFractionDigits == 0) {
+            if (length > 1 && str.charAt(length - 1) == '.') {
+                mEdtAmount.setText(str.substring(0, length - 1));
+                mEdtAmount.setSelection(mEdtAmount.getText().length());
+            }
             return;
         }
 
-        if (length == 1 && str.charAt(0) == '.') {
-            mEdtAmount.setText("");
-            return;
-        }
+        if (length == 1) {
+            if (str.charAt(0) == '.') {
+                mEdtAmount.setText("");
+            }
+        } else if (length > 1) {
+            if (str.charAt(0) == '0' && str.charAt(1) != '.') {
+                mEdtAmount.setText(str.substring(0, length - 1));
+                mEdtAmount.setSelection(mEdtAmount.getText().length());
+                return;
+            }
 
-        if (length > 1 && str.charAt(0) == '0' && str.charAt(1) != '.') {
-            mEdtAmount.setText(str.substring(0, length - 1));
-            mEdtAmount.setSelection(mEdtAmount.getText().length());
-            return;
-        }
+            if (str.charAt(length - 1) == '.' && secondTime(str)) {
+                mEdtAmount.setText(str.substring(0, length - 1));
+                mEdtAmount.setSelection(mEdtAmount.getText().length());
+                return;
+            }
 
-        if (length > 1 && str.charAt(length - 1) == '.' && secondTime(str)) {
-            mEdtAmount.setText(str.substring(0, length - 1));
-            mEdtAmount.setSelection(mEdtAmount.getText().length());
-            return;
-        }
-
-        if (length > 1 && str.contains(".") &&
-                str.substring(str.indexOf('.')).length() > mFractionDigits + 1) {
-            mEdtAmount.setText(str.substring(0, length - 1));
-            mEdtAmount.setSelection(mEdtAmount.getText().length());
+            if (str.contains(".") &&
+                    str.substring(str.indexOf('.')).length() > mFractionDigits + 1) {
+                mEdtAmount.setText(str.substring(0, length - 1));
+                mEdtAmount.setSelection(mEdtAmount.getText().length());
+            }
         }
     }
 

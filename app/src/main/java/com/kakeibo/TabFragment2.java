@@ -82,12 +82,12 @@ public class TabFragment2 extends Fragment {
     private String[] weekName;
     private String[] defaultCategory;
     private String amountColon, memoColon, categoryColon, savedOnColon;
-    private int mDateFormat;
+//    private int mDateFormat;
     private View _view;
     private Query _query;
     private SharedPreferences mPref;
     private StringBuilder mStringBuilder;
-    private Currency mCurrency;
+//    private Currency mCurrency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,13 +103,19 @@ public class TabFragment2 extends Fragment {
 
         findViews();
         setListeners();
-        loadSharedPreferences();
+        //loadSharedPreferences();
 
         makeDefaultQuery();
         reset();
-        loadItems();
 
         return _view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reset();
+        loadItems(); /*** <- to handle come back from settings ***/
     }
 
     void findViews(){
@@ -152,27 +158,35 @@ public class TabFragment2 extends Fragment {
         categoryListView.setAdapter(categoryListAdapter);
     }
 
-    private void loadSharedPreferences() {
-        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
-        mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-        mDateFormat = Integer.parseInt(f);
-        Locale locale = Locale.getDefault();
-        Currency currency = Currency.getInstance(locale);
-        String currencyCode;
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-            currencyCode = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-        } else {
-            currencyCode = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-        }
-        mCurrency = Currency.getInstance(currencyCode);
-    }
+//    private void loadSharedPreferences() {
+//        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
+//        mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
+//        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+//        mDateFormat = Integer.parseInt(f);
+//
+//        /*** currency ***/
+//        Locale locale = Locale.getDefault();
+//        Currency currency = Currency.getInstance(locale);
+//        String value;
+//        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+//            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+//        } else {
+//            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+//        }
+//
+//        if (value.matches("\\d+(?:\\.\\d+)?")) {
+//            String[] codes = getResources().getStringArray(R.array.pref_list_currency);
+//            mCurrency = Currency.getInstance(codes[Integer.parseInt(value)]);
+//        } else {
+//            mCurrency = Currency.getInstance(value);
+//        }
+//    }
 
     private void makeDefaultQuery() {
         String[] ymd = Util.getTodaysDate(Util.DATE_FORMAT_DB).split("-");
         _calYear = Integer.parseInt(ymd[0]);
         _calMonth = Integer.parseInt(ymd[1]);
-        _query = new Query(ymd[0], ymd[1], ymd[2], mDateFormat);
+        _query = new Query(ymd[0], ymd[1], ymd[2], MainActivity.sDateFormat);
         _query.buildQuery();
     }
 
@@ -180,7 +194,7 @@ public class TabFragment2 extends Fragment {
         String y = String.valueOf(_calYear);
         String m = Util.convertMtoMM(_calMonth);
         _query = new Query(Query.QUERY_TYPE_NEW);
-        _query.setValDate(y, m, "01", mDateFormat);
+        _query.setValDate(y, m, "01", MainActivity.sDateFormat);
         _query.buildQuery();
     }
 
@@ -195,7 +209,7 @@ public class TabFragment2 extends Fragment {
 
             String[] ym = btnDate.getText().toString().split("[/]");
             String y, m;
-            switch (mDateFormat) {
+            switch (MainActivity.sDateFormat) {
                 case 1: // MDY
                 case 2: // DMY
                     y = ym[1];
@@ -290,7 +304,7 @@ public class TabFragment2 extends Fragment {
             txvAmount.setText(TextUtils.concat(span1, span2));
             String memoText = memoColon + item.getMemo();
             txvMemo.setText(memoText);
-            String savedOnText = savedOnColon + Util.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
+            String savedOnText = savedOnColon + Util.getDateFromDBDate(item.getUpdateDate(), weekName, MainActivity.sDateFormat);
             txvRegistrationDate.setText(savedOnText);
 
             new AlertDialog.Builder(_activity)
@@ -356,7 +370,7 @@ public class TabFragment2 extends Fragment {
                 String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
-                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, mCurrency.getDefaultFractionDigits()));
+                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sCurrency.getDefaultFractionDigits()));
                 edtAmount.setText(String.valueOf(item.getAmount()));
                 EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
@@ -382,7 +396,7 @@ public class TabFragment2 extends Fragment {
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
-                                                Util.getTodaysDateWithDay(mDateFormat, weekName)
+                                                Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName)
                                         );
 
                                         itemsDbAdapter.saveItem(tmp);
@@ -738,7 +752,7 @@ public class TabFragment2 extends Fragment {
         int month = _calMonth;
 
         String str;
-        switch (mDateFormat) {
+        switch (MainActivity.sDateFormat) {
             case 1: // MDY
             case 2: // DMY
                 str = (Util.convertMtoMM(month) + "/" + year);

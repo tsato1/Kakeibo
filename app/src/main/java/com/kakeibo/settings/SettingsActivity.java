@@ -1,8 +1,9 @@
 package com.kakeibo.settings;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Ringtone;
@@ -19,15 +20,21 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.kakeibo.R;
+import com.kakeibo.Util;
+import com.kakeibo.db.ItemsDBAdapter;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -41,9 +48,11 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+    private static final String TAG = SettingsActivity.class.getSimpleName();
     public static final String PREF_KEY_DATE_FORMAT = "pref_key_date_format";
     public static final String PREF_KEY_CURRENCY = "pref_key_currency";
     public static final String PREF_KEY_CATEGORY = "pref_key_category";
+    public static final String PREF_KEY_DELETE_ALL_DATA = "pref_key_delete_all_data";
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -183,7 +192,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName);
+                || NotificationPreferenceFragment.class.getName().equals(fragmentName)
+                || InAPPDBPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -204,26 +214,45 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
 
             bindPreferenceSummaryToValue(findPreference(PREF_KEY_DATE_FORMAT));
+            bindPreferenceSummaryToValue(findPreference(PREF_KEY_CURRENCY));
 
-//            final ListPreference listPreference = (ListPreference) findPreference(PREF_KEY_CATEGORY);
-//            setListPreferenceData(listPreference);
-//
-//            listPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//                    setListPreferenceData(listPreference);
-//                    return false;
-//                }
-//            });
+            final ListPreference listPreference = (ListPreference) findPreference(PREF_KEY_CURRENCY);
+            setListPreferenceData(listPreference);
+
+            listPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    setListPreferenceData(listPreference);
+                    return false;
+                }
+            });
         }
 
         protected static void setListPreferenceData(ListPreference lp) {
-            CharSequence[] entries = {"asdf","asdf","asdf"};
-            CharSequence[] entryValues = {"1", "2" , "3"};
+            ArrayList<String> currencyCodes = Util.getAllCurrencies();
+            CharSequence[] entries = currencyCodes.toArray(new CharSequence[currencyCodes.size()]);
+
+            Locale locale = Locale.getDefault();
+            Currency currency = Currency.getInstance(locale);
+            int numericCode;
+            if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+                numericCode = currency.getNumericCode();
+            } else {
+                numericCode = Util.DEFAULT_NUMERIC_CODE;
+            }
+
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < currencyCodes.size(); ++i) {
+                list.add(String.valueOf(i));
+            }
+
+            CharSequence[] entryValues = list.toArray(new CharSequence[list.size()]);
             lp.setEntries(entries);
-            lp.setDefaultValue("1");
+            lp.setDefaultValue(String.valueOf(numericCode));
             lp.setEntryValues(entryValues);
         }
+
+
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -294,6 +323,79 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 default:
                     return super.onOptionsItemSelected(item);
             }
+        }
+    }
+
+    /**
+     * This fragment is about in-app data, including deleting all the data
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class InAPPDBPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_in_app_data);
+            setHasOptionsMenu(true);
+
+            Preference myPref = findPreference(PREF_KEY_DELETE_ALL_DATA);
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setIcon(R.mipmap.ic_mikan);
+                    dialog.setTitle(getString(R.string.pref_title_delete_all_items));
+                    dialog.setMessage(getString(R.string.pref_desc_delete_all_items));
+                    dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
+                            confirmation.setIcon(R.drawable.ic_warning_black_24dp);
+                            confirmation.setTitle(getString(R.string.pref_title_delete_all_items));
+                            confirmation.setMessage(getString(R.string.pref_warn_delete_all_items));
+                            confirmation.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteAllItems();
+                                }
+                            });
+                            confirmation.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            confirmation.show();
+                        }
+                    });
+                    dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    dialog.show();
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    getActivity().onBackPressed();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }
+
+        private void deleteAllItems() {
+            ItemsDBAdapter itemsDbAdapter = new ItemsDBAdapter(getActivity());
+            itemsDbAdapter.open();
+
+            if(itemsDbAdapter.deleteAllItems()) {
+                Toast.makeText(getActivity(), getString(R.string.pref_msg_all_delete_success), Toast.LENGTH_SHORT).show();
+            }
+
+            itemsDbAdapter.close();
         }
     }
 }

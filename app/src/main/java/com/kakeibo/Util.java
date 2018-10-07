@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -19,6 +21,7 @@ public class Util {
     private static final String TAG = Util.class.getSimpleName();
 
     public static final String DEFAULT_CURRENCY_CODE = "USD";
+    public static final int DEFAULT_NUMERIC_CODE = 840;
 
     public static final String DATE_FORMAT_YMD = "yyyy/MM/dd";
     public static final String DATE_FORMAT_MDY = "MM/dd/yyyy";
@@ -165,5 +168,24 @@ public class Util {
         String string = bigDecimal.stripTrailingZeros().toPlainString();
         int index = string.indexOf(".");
         return index < 0 ? 0 : string.length() - index - 1;
+    }
+
+    public static ArrayList<String> getAllCurrencies() {
+        Locale[] locs = Locale.getAvailableLocales();
+        ArrayList<String> currencyCodes = new ArrayList<>();
+
+        for(Locale loc : locs) {
+            try {
+                Currency currency = Currency.getInstance( loc );
+
+                if ( currency != null ) {
+                    currencyCodes.add( currency.getCurrencyCode() );
+                }
+            } catch(Exception exc) {
+                Log.e(TAG, "Locale not found");
+            }
+        }
+
+        return currencyCodes;
     }
 }

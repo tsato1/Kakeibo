@@ -75,4 +75,16 @@
     <string name="title_returning_to_monthly_report">月次レポートへ戻ります．</string>
     <string name="folder_not_selected">フォルダが選択されなかったためキャンセルされました．</string>
     <string name="pref_title_category">カテゴリー</string>
+    <string name="pref_header_notifications">通知</string>
+    <string name="pref_title_new_message_notifications">新着通知</string>
+    <string name="pref_title_ringtone">通知音</string>
+    <string name="pref_ringtone_silent">サイレント</string>
+    <string name="pref_title_system_sync_settings">システム同期設定</string>
+    <string name="pref_title_sync_frequency">同期頻度</string>
+    <string name="pref_title_vibrate">バイブレーション</string>
+    <string name="pref_header_in_app_data">端末内データ</string>
+    <string name="pref_title_delete_all_items">Kakeiboアイテム全消去</string>
+    <string name="pref_desc_delete_all_items">この端末に保存された全てのKakeiboアイテムが消去されます．事前にGoogleDriveにエクスポートをすることをお勧めします．全消去を実行してもよろしいですか．</string>
+    <string name="pref_title_currency">通貨</string>
+    <string name="pref_warn_delete_all_items">本当にアイテムを全消去してよろしいですか．</string>
 </resources>

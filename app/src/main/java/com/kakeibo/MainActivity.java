@@ -2,6 +2,7 @@ package com.kakeibo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -23,7 +24,9 @@ import com.kakeibo.settings.SettingsActivity;
 import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 //todo test on version up
 
@@ -40,14 +43,15 @@ public class MainActivity extends AppCompatActivity {
             "#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872",
             "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
-    private InterstitialAd mInterstitialAd;
+    public static int sDateFormat;
+    public static Currency sCurrency;
 
+    private InterstitialAd mInterstitialAd;
     private ViewPager viewPager;
     private TabFragment1 tabFragment1;
     private TabFragment2 tabFragment2;
     private TabFragment3 tabFragment3;
     private SharedPreferences mPref;
-    public static int sDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +67,13 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        loadSharedPreference();
         loadAds();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSharedPreference();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -112,6 +121,29 @@ public class MainActivity extends AppCompatActivity {
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
         sDateFormat = Integer.parseInt(f);
+
+
+//        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+//        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+//        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+//        mDateFormat = Integer.parseInt(f);
+
+        /*** currency ***/
+        Locale locale = Locale.getDefault();
+        Currency currency = Currency.getInstance(locale);
+        String value;
+        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+        } else {
+            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+        }
+
+        if (value.matches("\\d+(?:\\.\\d+)?")) {
+            ArrayList<String> codes = Util.getAllCurrencies();
+            sCurrency = Currency.getInstance(codes.get(Integer.parseInt(value)));
+        } else {
+            sCurrency = Currency.getInstance(value);
+        }
     }
 
     private void loadAds() {
