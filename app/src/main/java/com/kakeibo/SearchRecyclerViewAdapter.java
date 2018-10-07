@@ -36,8 +36,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     private Context _context;
     private ArrayList<Card> _lstCards;
-    private int mDateFormat;
-    private Currency mCurrency;
+//    private int mDateFormat;
+//    private Currency mCurrency;
 
     SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCards) {
         _context = context;
@@ -45,32 +45,32 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         mCategories = _context.getResources().getStringArray(R.array.default_category);
 
-        loadSharedPreference();
+        //loadSharedPreference();
     }
 
-    private void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_context);
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-        mDateFormat = Integer.parseInt(f);
-
-        /*** currency ***/
-        Locale locale = Locale.getDefault();
-        Currency currency = Currency.getInstance(locale);
-        String value;
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-        } else {
-            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-        }
-
-        if (value.matches("\\d+(?:\\.\\d+)?")) {
-            ArrayList<String> codes = Util.getAllCurrencies();
-            mCurrency = Currency.getInstance(codes.get(Integer.parseInt(value)));
-        } else {
-            mCurrency = Currency.getInstance(value);
-        }
-    }
+//    private void loadSharedPreference() {
+//        PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
+//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_context);
+//        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+//        mDateFormat = Integer.parseInt(f);
+//
+//        /*** currency ***/
+//        Locale locale = Locale.getDefault();
+//        Currency currency = Currency.getInstance(locale);
+//        String value;
+//        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
+//        } else {
+//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
+//        }
+//
+//        if (value.matches("\\d+(?:\\.\\d+)?")) {
+//            ArrayList<String> codes = Util.getAllCurrencies();
+//            mCurrency = Currency.getInstance(codes.get(Integer.parseInt(value)));
+//        } else {
+//            mCurrency = Currency.getInstance(value);
+//        }
+//    }
 
     /*** date range card ***/
     public class ViewHolderDateRange extends RecyclerView.ViewHolder {
@@ -113,7 +113,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 public void onDateSet(DatePicker picker, int year, int month, int day){
                     GregorianCalendar cal = new GregorianCalendar(year, month, day);
                     Date date = cal.getTime();
-                    String str = new SimpleDateFormat(Util.DATE_FORMATS[mDateFormat],
+                    String str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date);
                     button.setText(str);
                 }
@@ -136,8 +136,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             edtMin = itemView.findViewById((R.id.edt_amount_min));
             edtMax = itemView.findViewById(R.id.edt_amount_max);
 
-            edtMin.addTextChangedListener(new AmountTextWatcher(edtMin, mCurrency.getDefaultFractionDigits()));
-            edtMax.addTextChangedListener(new AmountTextWatcher(edtMax, mCurrency.getDefaultFractionDigits()));
+            edtMin.addTextChangedListener(new AmountTextWatcher(edtMin, MainActivity.sCurrency.getDefaultFractionDigits()));
+            edtMax.addTextChangedListener(new AmountTextWatcher(edtMax, MainActivity.sCurrency.getDefaultFractionDigits()));
         }
     }
 

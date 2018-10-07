@@ -38,7 +38,7 @@
     <string name="how_to_perform_search">How to perform Search</string>
     <string name="date_range">Date Range</string>
     <string name="from">From</string>
-    <string name="dash">-</string>
+    <string name="dash" translatable="false">-</string>
     <string name="to">To</string>
     <string name="amount_range">Amount Range</string>
     <string name="min">Min</string>
@@ -57,7 +57,6 @@
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
-    <string name="hint_search_in_memo">Search in memo</string>
 
     <string name="msg_item_successfully_saved">The item was successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>

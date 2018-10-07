@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,8 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
             txvAmount.setText(spannableString);
         }
+
+        Log.d("asdf",item.getAmount() + "");
 
         ImageView percentImageView;
         percentImageView = convertView.findViewById(R.id.imv_percent);

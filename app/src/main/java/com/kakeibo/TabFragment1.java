@@ -50,11 +50,8 @@ public class TabFragment1 extends Fragment {
     private ArrayList<Button> btnsCategory;
     private String selectedCategory = "";
     private int selectedCategoryCode;
-//    private Currency mCurrency;
-    private static int mFractionDigits = 0;
     private String[] weekName;
     private String[] defaultCategory;
-//    private int mDateFormat;
     private Query _query;
 
     private Button btnDate;
@@ -69,7 +66,6 @@ public class TabFragment1 extends Fragment {
         weekName = getResources().getStringArray(R.array.week_name);
         defaultCategory = getResources().getStringArray(R.array.default_category);
 
-        //loadSharedPreferences();
         findViews(_view);
         setListeners();
 
@@ -81,32 +77,6 @@ public class TabFragment1 extends Fragment {
         super.onResume();
         btnDate.setText(Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
     }
-
-//    public void loadSharedPreferences() {
-//        /*** date format ***/
-//        PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
-//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, "0");
-//        mDateFormat = Integer.parseInt(f);
-//
-//        /*** currency ***/
-//        Locale locale = Locale.getDefault();
-//        Currency currency = Currency.getInstance(locale);
-//        String value;
-//        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-//        } else {
-//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-//        }
-//
-//        if (value.matches("\\d+(?:\\.\\d+)?")) {
-//            String[] codes = getResources().getStringArray(R.array.pref_list_currency);
-//            mCurrency = Currency.getInstance(codes[Integer.parseInt(value)]);
-//        } else {
-//            mCurrency = Currency.getInstance(value);
-//        }
-//        mFractionDigits = currency.getDefaultFractionDigits();
-//    }
 
     void findViews(View view)
     {

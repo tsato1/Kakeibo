@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 //todo test on version up
+//todo currency really ok?
 
 //todo add and subtract custom categories (discreet categories for income too)
 

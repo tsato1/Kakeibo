@@ -11,8 +11,7 @@
     <string name="err_please_select_category">カテゴリーを選択して下さい．</string>
     <string name="err_memo_empty">検索ボックスが空です．</string>
     <string name="export">エクスポート</string>
-    <string name="hint_amount_spent_or_earned">収入支出の金額</string>
-    <string name="hint_search_in_memo">メモを検索</string>
+    <string name="hint_amount_spent_or_earned">収支金額</string>
     <string name="income">収入</string>
     <string name="input">入力</string>
     <string name="item_detail">アイテム詳細</string>
@@ -87,4 +86,9 @@
     <string name="pref_desc_delete_all_items">この端末に保存された全てのKakeiboアイテムが消去されます．事前にGoogleDriveにエクスポートをすることをお勧めします．全消去を実行してもよろしいですか．</string>
     <string name="pref_title_currency">通貨</string>
     <string name="pref_warn_delete_all_items">本当にアイテムを全消去してよろしいですか．</string>
+    <string name="from">下限</string>
+    <string name="to">上限</string>
+    <string name="min">下限</string>
+    <string name="max">上限</string>
+    <string name="pref_msg_all_delete_success">全アイテムが完全に削除されました．</string>
 </resources>

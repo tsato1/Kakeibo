@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="weekName">
+    <string-array name="week_name">
         <item>日</item>
         <item>月</item>
         <item>火</item>
@@ -10,7 +10,7 @@
         <item>土</item>
     </string-array>
 
-    <string-array name="defaultCategory">
+    <string-array name="default_category">
         <item>収入</item>
         <item>生活雑貨</item>
         <item>食事</item>
@@ -23,5 +23,12 @@
         <item>保険</item>
         <item>税金</item>
         <item>他</item>
+    </string-array>
+
+    <string-array name="search_criteria">
+        <item>日時範囲</item>
+        <item>金額範囲</item>
+        <item>カテゴリー</item>
+        <item>メモ</item>
     </string-array>
 </resources>

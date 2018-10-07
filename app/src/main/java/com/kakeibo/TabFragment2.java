@@ -82,12 +82,9 @@ public class TabFragment2 extends Fragment {
     private String[] weekName;
     private String[] defaultCategory;
     private String amountColon, memoColon, categoryColon, savedOnColon;
-//    private int mDateFormat;
     private View _view;
     private Query _query;
-    private SharedPreferences mPref;
     private StringBuilder mStringBuilder;
-//    private Currency mCurrency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,7 +100,6 @@ public class TabFragment2 extends Fragment {
 
         findViews();
         setListeners();
-        //loadSharedPreferences();
 
         makeDefaultQuery();
         reset();
@@ -158,30 +154,6 @@ public class TabFragment2 extends Fragment {
         categoryListView.setAdapter(categoryListAdapter);
     }
 
-//    private void loadSharedPreferences() {
-//        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
-//        mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
-//        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-//        mDateFormat = Integer.parseInt(f);
-//
-//        /*** currency ***/
-//        Locale locale = Locale.getDefault();
-//        Currency currency = Currency.getInstance(locale);
-//        String value;
-//        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-//            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-//        } else {
-//            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-//        }
-//
-//        if (value.matches("\\d+(?:\\.\\d+)?")) {
-//            String[] codes = getResources().getStringArray(R.array.pref_list_currency);
-//            mCurrency = Currency.getInstance(codes[Integer.parseInt(value)]);
-//        } else {
-//            mCurrency = Currency.getInstance(value);
-//        }
-//    }
-
     private void makeDefaultQuery() {
         String[] ymd = Util.getTodaysDate(Util.DATE_FORMAT_DB).split("-");
         _calYear = Integer.parseInt(ymd[0]);
@@ -222,7 +194,6 @@ public class TabFragment2 extends Fragment {
 
             itemsDbAdapter.open();
             Cursor c = itemsDbAdapter.getAllItemsInCategoryInMonth(y, m, tmp.getCategoryCode());
-
             if (c.moveToFirst()) {
                 do {
                     Item item = new Item(
@@ -238,7 +209,6 @@ public class TabFragment2 extends Fragment {
                     searchResultList.add(item);
                 } while (c.moveToNext());
             }
-
             itemsDbAdapter.close();
 
             CategoryDetailListAdapter categoryDetailListAdapter = new CategoryDetailListAdapter(_activity, 0, searchResultList);
@@ -396,7 +366,7 @@ public class TabFragment2 extends Fragment {
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
-                                                Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName)
+                                                Util.getTodaysDate(Util.DATE_FORMAT_DB_HMS)
                                         );
 
                                         itemsDbAdapter.saveItem(tmp);
@@ -651,6 +621,10 @@ public class TabFragment2 extends Fragment {
                     Item tmp = categoryList.get(i);
                     if (tmp.getCategoryCode() == c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE))) {
                         int amount = tmp.getIntAmount() + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+
+                        Log.d("asdf", "a: " + categoryList.get(i).getId()+" " +amount
+                        + " "+c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)));
+
                         tmp = new Item(categoryList.get(i).getId(),
                                 amount,
                                 c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
@@ -707,10 +681,10 @@ public class TabFragment2 extends Fragment {
     }
 
     void calculatePercentage() {
+        Log.d("asdf", income + " " + expense);
         for (int i = 0; i < categoryList.size(); i++) {
             BigDecimal sum = income.add(expense);
             BigDecimal out = categoryList.get(i).getAmount()
-                    .multiply(new BigDecimal(100))
                     .divide(sum, RoundingMode.DOWN)
                     .setScale(0, RoundingMode.DOWN);
 
@@ -744,7 +718,7 @@ public class TabFragment2 extends Fragment {
             slice.setValue(categoryList.get(i).getAmount().intValue());
             graph.addSlice(slice);
         }
-        graph.setThickness(200);
+        graph.setThickness(100);
     }
 
     public String getTextBtnDate() {

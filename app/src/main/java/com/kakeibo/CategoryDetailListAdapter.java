@@ -3,10 +3,12 @@ package com.kakeibo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     private int mDateFormat;
     private SharedPreferences mPref;
 
-    public CategoryDetailListAdapter(Context context, int resource, List<Item> objects) {
+    CategoryDetailListAdapter(Context context, int resource, List<Item> objects) {
         super(context, resource, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
@@ -40,7 +42,8 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     }
 
     @Override
-    public View getView(int position, View v, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View v, @NonNull ViewGroup parent) {
         String eventDateColon = _context.getResources().getString(R.string.event_date_colon);
         String amountColon = _context.getResources().getString(R.string.amount_colon);
         String memoColon = _context.getResources().getString(R.string.memo_colon);
@@ -84,7 +87,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         return v;
     }
 
-    void loadSharedPreference() {
+    private void loadSharedPreference() {
         PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(_context);
         String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
