@@ -5,11 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.kakeibo.Item;
-import com.kakeibo.Query;
-import com.kakeibo.Util;
+import com.kakeibo.util.UtilCurrency;
+import com.kakeibo.util.UtilDate;
 
 import java.util.Calendar;
 
@@ -107,7 +106,7 @@ public class ItemsDBAdapter extends DBAdapter {
             int m = cal.get(Calendar.MONTH) + 1;
             int y = cal.get(Calendar.YEAR);
 
-            return getAllItemsInMonth(String.valueOf(y), Util.convertMtoMM(m));
+            return getAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
         }
         return _db.rawQuery(query, new String[]{});
     }
@@ -115,7 +114,7 @@ public class ItemsDBAdapter extends DBAdapter {
     public void saveItem(Item item)
     {
         ContentValues values = new ContentValues();
-        values.put(COL_AMOUNT, Util.getIntAmount(item.getAmount(), item.getFractionDigits()));
+        values.put(COL_AMOUNT, UtilCurrency.getIntAmount(item.getAmount(), item.getFractionDigits()));
         values.put(COL_CURRENCY_CODE, item.getCurrencyCode());
         values.put(COL_CATEGORY_CODE, item.getCategoryCode());
         values.put(COL_MEMO, item.getMemo());

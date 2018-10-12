@@ -20,7 +20,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +27,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.kakeibo.R;
-import com.kakeibo.Util;
+import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.db.ItemsDBAdapter;
 
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
@@ -229,30 +227,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         protected static void setListPreferenceData(ListPreference lp) {
-            ArrayList<String> currencyCodes = Util.getAllCurrencies();
-            CharSequence[] entries = currencyCodes.toArray(new CharSequence[currencyCodes.size()]);
+            CharSequence[] entries = UtilCurrency.sCurrencyCodes.toArray
+                    (new CharSequence[UtilCurrency.sAllCurrencyLength]);
+            CharSequence[] entryValues = UtilCurrency.sCurrencyIndex.toArray
+                    (new CharSequence[UtilCurrency.sAllCurrencyLength]);
 
-            Locale locale = Locale.getDefault();
-            Currency currency = Currency.getInstance(locale);
-            int numericCode;
-            if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-                numericCode = currency.getNumericCode();
-            } else {
-                numericCode = Util.DEFAULT_NUMERIC_CODE;
-            }
-
-            ArrayList<String> list = new ArrayList<>();
-            for (int i = 0; i < currencyCodes.size(); ++i) {
-                list.add(String.valueOf(i));
-            }
-
-            CharSequence[] entryValues = list.toArray(new CharSequence[list.size()]);
             lp.setEntries(entries);
-            lp.setDefaultValue(String.valueOf(numericCode));
+            lp.setDefaultValue(UtilCurrency.sDefaultCurrencyIndex);
             lp.setEntryValues(entryValues);
         }
-
-
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

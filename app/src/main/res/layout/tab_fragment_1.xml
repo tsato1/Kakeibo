@@ -52,16 +52,22 @@
                 android:digits="0123456789."
                 android:maxLength="10"
                 android:hint="@string/hint_amount_spent_or_earned"/>
+            <Button
+                android:id="@+id/btn_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/buttonBarButtonStyle"/>
         </TableRow>
         <TableRow
             android:paddingTop="2dp"
             android:paddingBottom="2dp">
-            <AutoCompleteTextView
+            <EditText
                 android:id="@+id/edt_memo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLength="20"
+                android:inputType="text"
                 android:hint="@string/hint_memo_max_20_characters"/>
         </TableRow>
     </TableLayout>

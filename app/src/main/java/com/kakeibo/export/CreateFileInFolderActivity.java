@@ -1,11 +1,7 @@
 package com.kakeibo.export;
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -19,7 +15,7 @@ import com.google.android.gms.drive.MetadataChangeSet;
 
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
-import com.kakeibo.Util;
+import com.kakeibo.util.UtilDate;
 import com.kakeibo.settings.SettingsActivity;
 
 import java.io.OutputStream;
@@ -89,7 +85,7 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                         writer.write(str);
                     }
 
-                    String title = "Kakeibo_Export_" + Util.getTodaysDate(mStrDateFormat);
+                    String title = "Kakeibo_Export_" + UtilDate.getTodaysDate(mStrDateFormat);
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                             .setTitle(title)
@@ -120,18 +116,18 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
         mIntDateFormat = Integer.parseInt(f);
 
         switch (mIntDateFormat) {
             case 1: // MDY
-                mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_MDY) + " kk:mm:ss";
+                mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_MDY) + " kk:mm:ss";
                 break;
             case 2: // DMY
-                mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_DMY) + " kk:mm:ss";
+                mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DMY) + " kk:mm:ss";
                 break;
             default:  // YMD
-                mStrDateFormat = Util.getTodaysDate(Util.DATE_FORMAT_YMD) + " kk:mm:ss";
+                mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_YMD) + " kk:mm:ss";
         }
     }
 

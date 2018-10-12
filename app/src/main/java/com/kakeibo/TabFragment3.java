@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
+import com.kakeibo.util.UtilDate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,7 +92,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private void loadSharedPreferences() {
         PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
 
         //todo instruction
@@ -168,7 +169,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_to_date), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if (Util.compareDate(fromDate, toDate, mDateFormat) == -1) {
+                if (UtilDate.compareDate(fromDate, toDate, mDateFormat) == -1) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_from_date_older), Toast.LENGTH_SHORT).show();
                     return false;
                 }

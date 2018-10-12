@@ -17,12 +17,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 27
     buildToolsVersion '28.0.2'
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 21
+        targetSdkVersion 27
     }
 
     sourceSets {
@@ -41,6 +41,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:21.0.3'
+    implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.intellij:annotations:+@jar'
 }

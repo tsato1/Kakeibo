@@ -33,6 +33,8 @@
     <string name="event_date_colon">Event Date:</string>
     <string name="updated_on_colon">Saved on:</string>
 
+    <string name="search_for_currency">Search for currency</string>
+
     <!-- card view -->
     <string name="add_search_criterion">Add Search Criterion</string>
     <string name="how_to_perform_search">How to perform Search</string>

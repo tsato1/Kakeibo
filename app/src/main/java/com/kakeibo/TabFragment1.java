@@ -2,80 +2,76 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
-import android.os.Build;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.api.client.util.StringUtils;
 import com.kakeibo.db.ItemsDBAdapter;
-import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
+import com.kakeibo.util.UtilCurrency;
+import com.kakeibo.util.UtilDate;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Created by T on 2015/09/14.
  */
-public class TabFragment1 extends Fragment {
+public class TabFragment1 extends Fragment implements CurrencyPickerDialog.CurrencyPickerListener {
     private final static String TAG = TabFragment1.class.getSimpleName();
+    private final static String TAG_CURRENCY_PICKER_DIALOG = "TAG_CURRENCY_PICKER_DIALOG";
 
     private Activity _activity;
-    private View _view;
     private ImageButton btnPrev, btnNext;
+    private Button btnDate;
+    private EditText edtAmount;
+    private EditText edtMemo;
+    private Button btnCurrency;
     private ArrayList<Button> btnsCategory;
+
     private String selectedCategory = "";
     private int selectedCategoryCode;
     private String[] weekName;
     private String[] defaultCategory;
     private Query _query;
 
-    private Button btnDate;
-    private EditText edtAmount;
-    private AutoCompleteTextView edtMemo;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _activity = getActivity();
-        _view = inflater.inflate(R.layout.tab_fragment_1, container, false);
+        View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
         weekName = getResources().getStringArray(R.array.week_name);
         defaultCategory = getResources().getStringArray(R.array.default_category);
 
-        findViews(_view);
+        findViews(view);
         setListeners();
 
-        return _view;
+        return view;
     }
 
     @Override
     public void onResume () {
         super.onResume();
-        btnDate.setText(Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
+        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
     }
 
     void findViews(View view)
@@ -83,6 +79,7 @@ public class TabFragment1 extends Fragment {
         btnPrev = view.findViewById(R.id.btn_prev);
         btnDate = view.findViewById(R.id.btn_date);
         btnNext = view.findViewById(R.id.btn_next);
+        btnCurrency = view.findViewById(R.id.btn_currency);
 
         btnsCategory = new ArrayList<>();
         btnsCategory.add(view.findViewById(R.id.btn_category1));
@@ -101,8 +98,6 @@ public class TabFragment1 extends Fragment {
 
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);
-
-        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sCurrency.getDefaultFractionDigits()));
     }
 
     void setButtonContent() {
@@ -111,12 +106,13 @@ public class TabFragment1 extends Fragment {
         }
     }
 
-    void setListeners()
-    {
+    void setListeners() {
         btnPrev.setOnClickListener(new DateButtonClickListener());
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
-
+        btnCurrency.setOnClickListener(new CurrencyButtonClickListener());
+        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount,
+                MainActivity.sCurrency.getDefaultFractionDigits()));
         for (int i = 0; i < defaultCategory.length; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
         }
@@ -126,7 +122,7 @@ public class TabFragment1 extends Fragment {
         public void  onClick(View view) {
             String sourceDate = btnDate.getText().toString().substring(0, 10);
             //Log.d("sourceDate", sourceDate);
-            SimpleDateFormat format = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
+            SimpleDateFormat format = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                     Locale.getDefault());
             Date date = null;
             Calendar cal = Calendar.getInstance();
@@ -141,7 +137,7 @@ public class TabFragment1 extends Fragment {
                     cal.setTime(date);
                     cal.add(Calendar.DATE, -1);
                     date = cal.getTime();
-                    String str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
+                    String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
@@ -158,13 +154,39 @@ public class TabFragment1 extends Fragment {
                     cal.setTime(date);
                     cal.add(Calendar.DATE, 1);
                     date = cal.getTime();
-                    str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
+                    str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
             }
         }
+    }
+
+    class CurrencyButtonClickListener implements View.OnClickListener {
+        public void  onClick(View view) {
+            String[] arrCurrency = UtilCurrency.sCurrencyCodes.toArray(new String[UtilCurrency.sAllCurrencyLength]);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(_activity);
+            builder.setTitle(getString(R.string.pref_title_currency))
+                    .setIcon(R.mipmap.ic_mikan)
+                    .setSingleChoiceItems(arrCurrency, UtilCurrency.sDefaultCurrencyIndex, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .create().show();
+        }
+    }
+
+    @Override
+    public void onFinishCurrencyPickerDialog(String input) {
+        Log.d(TAG, "onFinishPickerDialog()");
     }
 
     class CategoryButtonClickListener implements View.OnClickListener {
@@ -272,7 +294,7 @@ public class TabFragment1 extends Fragment {
         }
 
         String eventDate = y + "-" + m + "-" + d;
-        String updateDate = Util.getTodaysDate(Util.DATE_FORMAT_DB_HMS);
+        String updateDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS);
 
         String amount = edtAmount.getText().toString();
 
@@ -307,7 +329,7 @@ public class TabFragment1 extends Fragment {
             public void onDateSet(DatePicker picker, int year, int month, int day){
                 GregorianCalendar cal = new GregorianCalendar(year, month, day);
                 Date date = cal.getTime();
-                String str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
+                String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                         Locale.getDefault()).format(date)
                         + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
@@ -322,7 +344,7 @@ public class TabFragment1 extends Fragment {
     {
         edtAmount.setText("");
         edtMemo.setText("");
-        btnDate.setText(Util.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
+        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
     }
 
     @Override

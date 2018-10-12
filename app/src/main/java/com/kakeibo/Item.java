@@ -1,5 +1,8 @@
 package com.kakeibo;
 
+import com.kakeibo.util.UtilCurrency;
+import com.kakeibo.util.UtilDate;
+
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -31,7 +34,7 @@ public class Item
     {
         this.id = id;
         Currency currency = Currency.getInstance(currencyCode);
-        this.amount = Util.getBDAmount(amount, currency.getDefaultFractionDigits());
+        this.amount = UtilCurrency.getBDAmount(amount, currency.getDefaultFractionDigits());
         this.currencyCode = currencyCode;
         this.categoryCode = categoryCode;
         this.memo = memo;
@@ -51,7 +54,7 @@ public class Item
 
     public int getIntAmount() {
         Currency currency = Currency.getInstance(currencyCode);
-        return Util.getIntAmount(amount, currency.getDefaultFractionDigits());
+        return UtilCurrency.getIntAmount(amount, currency.getDefaultFractionDigits());
     }
 
     public String getCurrencyCode() {

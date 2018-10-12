@@ -3,6 +3,8 @@ package com.kakeibo;
 import android.util.Log;
 
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.util.UtilCurrency;
+import com.kakeibo.util.UtilDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +35,13 @@ public class Query {
     private String valToDate="";
     private String valMinAmount="";
     private String valMaxAmount="";
-    private String valCurrencyCode = Util.DEFAULT_CURRENCY_CODE;
     private int valCategoryCode = 0;
     private String valCategory="";
     private String valMemo="";
 
     Query (int type){
         this.type = type;
-        this.createDate = Util.getTodaysDate(Util.DATE_FORMAT_DB);
+        this.createDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
         _lstCards = new ArrayList<>();
         reset();
     }
@@ -146,8 +147,8 @@ public class Query {
         valFromDate = fromDate;
         valToDate = toDate;
 
-        String[] fromDateDB = Util.convertDateFormat(fromDate, dateFormat, 3).split("-");
-        String[] toDateDB = Util.convertDateFormat(toDate, dateFormat, 3).split("-");
+        String[] fromDateDB = UtilDate.convertDateFormat(fromDate, dateFormat, 3).split("-");
+        String[] toDateDB = UtilDate.convertDateFormat(toDate, dateFormat, 3).split("-");
         String fromYMD = "\'" + fromDateDB[0] + "-" + fromDateDB[1] + "-" + fromDateDB[2] + "\'";
         String toYMD = "\'" + toDateDB[0] + "-" + toDateDB[1] + "-" + toDateDB[2] + "\'";
 
@@ -155,8 +156,8 @@ public class Query {
                 " strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")";
 
         /*** if _fromDate equals _toDate, cannot use between ***/
-        if (Util.compareDate(fromDate, toDate, dateFormat) == 0) {
-            String str = Util.convertDateFormat(fromDate, dateFormat, 3);
+        if (UtilDate.compareDate(fromDate, toDate, dateFormat) == 0) {
+            String str = UtilDate.convertDateFormat(fromDate, dateFormat, 3);
             String ymd = "\'" + str.split("-")[0] + "-" +
                     str.split("-")[1] + "-" +
                     str.split("-")[2] + "\'";
@@ -171,7 +172,7 @@ public class Query {
 
         String ymd = y + "-" + m + "-" + d;
 
-        valFromDate = Util.getDateFromDBDate(ymd, format);
+        valFromDate = UtilDate.getDateFromDBDate(ymd, format);
         valToDate = valFromDate;
 
         String ym = "\'" + y + "-" + m + "\'";

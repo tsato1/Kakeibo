@@ -3,9 +3,6 @@ package com.kakeibo;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -19,12 +16,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.util.UtilDate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -36,44 +32,16 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     private Context _context;
     private ArrayList<Card> _lstCards;
-//    private int mDateFormat;
-//    private Currency mCurrency;
 
     SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCards) {
         _context = context;
         _lstCards = lstCards;
 
         mCategories = _context.getResources().getStringArray(R.array.default_category);
-
-        //loadSharedPreference();
     }
 
-//    private void loadSharedPreference() {
-//        PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
-//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_context);
-//        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-//        mDateFormat = Integer.parseInt(f);
-//
-//        /*** currency ***/
-//        Locale locale = Locale.getDefault();
-//        Currency currency = Currency.getInstance(locale);
-//        String value;
-//        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-//        } else {
-//            value = pref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-//        }
-//
-//        if (value.matches("\\d+(?:\\.\\d+)?")) {
-//            ArrayList<String> codes = Util.getAllCurrencies();
-//            mCurrency = Currency.getInstance(codes.get(Integer.parseInt(value)));
-//        } else {
-//            mCurrency = Currency.getInstance(value);
-//        }
-//    }
-
     /*** date range card ***/
-    public class ViewHolderDateRange extends RecyclerView.ViewHolder {
+    class ViewHolderDateRange extends RecyclerView.ViewHolder {
         FrameLayout layout;
         CardView cardView;
         Button btnFrom, btnTo;
@@ -113,7 +81,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 public void onDateSet(DatePicker picker, int year, int month, int day){
                     GregorianCalendar cal = new GregorianCalendar(year, month, day);
                     Date date = cal.getTime();
-                    String str = new SimpleDateFormat(Util.DATE_FORMATS[MainActivity.sDateFormat],
+                    String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date);
                     button.setText(str);
                 }
@@ -123,7 +91,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     /*** amount range card ***/
-    public class ViewHolderAmountRange extends RecyclerView.ViewHolder {
+    class ViewHolderAmountRange extends RecyclerView.ViewHolder {
         FrameLayout layout;
         CardView cardView;
         EditText edtMin, edtMax;
@@ -142,7 +110,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     /*** category card ***/
-    public class ViewHolderCategory extends RecyclerView.ViewHolder {
+    class ViewHolderCategory extends RecyclerView.ViewHolder {
         FrameLayout layout;
         CardView cardView;
         Button btnCategory;
@@ -232,13 +200,13 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public void removeItem(int position) {
+    void removeItem(int position) {
         Log.d(TAG, "removeItem() called");
         _lstCards.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Card card, int position) {
+    void restoreItem(Card card, int position) {
         _lstCards.add(position, card);
         notifyItemInserted(position);
     }

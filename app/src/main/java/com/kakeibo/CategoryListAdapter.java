@@ -26,7 +26,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
     private String[] _strsDefaultCategory;
     private TypedArray _trrMipmaps;
 
-    public CategoryListAdapter(Context context, int id, List<Item> objects) {
+    CategoryListAdapter(Context context, int id, List<Item> objects) {
         super(context, id, objects);
         this._context = context;
         _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

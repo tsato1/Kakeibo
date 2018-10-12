@@ -1,9 +1,8 @@
-package com.kakeibo;
+package com.kakeibo.util;
 
 import android.util.Log;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,17 +10,15 @@ import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
 
 /**
  * Created by tsato on 9/24/16.
  */
 
-public class Util {
-    private static final String TAG = Util.class.getSimpleName();
-
-    public static final String DEFAULT_CURRENCY_CODE = "USD";
-    public static final int DEFAULT_NUMERIC_CODE = 840;
+public class UtilDate {
+    private static final String TAG = UtilDate.class.getSimpleName();
 
     public static final String DATE_FORMAT_YMD = "yyyy/MM/dd";
     public static final String DATE_FORMAT_MDY = "MM/dd/yyyy";
@@ -144,48 +141,5 @@ public class Util {
         }
 
         return out;
-    }
-
-    public static BigDecimal getBDAmount(int input /*** int from db ***/, int digit) {
-        return BigDecimal.valueOf(input, digit);
-    }
-
-    public static int getIntAmount(BigDecimal input, int digit) {
-        if (digit == 0) {
-            return input.intValue();
-        } else if (digit == 1) {
-            return input.multiply(BigDecimal.valueOf(10)).intValue();
-        } else if (digit == 2) {
-            return input.multiply(BigDecimal.valueOf(100)).intValue();
-        } else if (digit == 3) {
-            return input.multiply(BigDecimal.valueOf(1000)).intValue();
-        }
-
-        return 0;
-    }
-
-    int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
-        String string = bigDecimal.stripTrailingZeros().toPlainString();
-        int index = string.indexOf(".");
-        return index < 0 ? 0 : string.length() - index - 1;
-    }
-
-    public static ArrayList<String> getAllCurrencies() {
-        Locale[] locs = Locale.getAvailableLocales();
-        ArrayList<String> currencyCodes = new ArrayList<>();
-
-        for(Locale loc : locs) {
-            try {
-                Currency currency = Currency.getInstance( loc );
-
-                if ( currency != null ) {
-                    currencyCodes.add( currency.getCurrencyCode() );
-                }
-            } catch(Exception exc) {
-                Log.e(TAG, "Locale not found");
-            }
-        }
-
-        return currencyCodes;
     }
 }

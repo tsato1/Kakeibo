@@ -2,7 +2,6 @@ package com.kakeibo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -22,11 +21,12 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.kakeibo.settings.SettingsActivity;
 
 import com.google.android.gms.ads.MobileAds;
+import com.kakeibo.util.UtilCurrency;
+import com.kakeibo.util.UtilDate;
 
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 
 //todo test on version up
 //todo currency really ok?
@@ -120,31 +120,14 @@ public class MainActivity extends AppCompatActivity {
     private void loadSharedPreference() {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
         sDateFormat = Integer.parseInt(f);
 
-
-//        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
-//        mPref = PreferenceManager.getDefaultSharedPreferences(this);
-//        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
-//        mDateFormat = Integer.parseInt(f);
-
         /*** currency ***/
-        Locale locale = Locale.getDefault();
-        Currency currency = Currency.getInstance(locale);
-        String value;
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
-            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, currency.getCurrencyCode());
-        } else {
-            value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY, Util.DEFAULT_CURRENCY_CODE);
-        }
-
-        if (value.matches("\\d+(?:\\.\\d+)?")) {
-            ArrayList<String> codes = Util.getAllCurrencies();
-            sCurrency = Currency.getInstance(codes.get(Integer.parseInt(value)));
-        } else {
-            sCurrency = Currency.getInstance(value);
-        }
+        UtilCurrency.setUpCurrency();
+        String value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY,
+                String.valueOf(UtilCurrency.sDefaultCurrencyIndex));
+        sCurrency = Currency.getInstance(UtilCurrency.sCurrencyCodes.get(Integer.parseInt(value)));
     }
 
     private void loadAds() {

@@ -6,15 +6,13 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.util.Log;
 
 import com.kakeibo.R;
-import com.kakeibo.Util;
-import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.util.UtilCurrency;
+import com.kakeibo.util.UtilDate;
 
 import java.text.SimpleDateFormat;
-import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -144,7 +142,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String oriDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE));
                 String[] dates = oriDate.split("[ ]"); // [0]=date, [1]=time
                 String[] ymd = dates[0].split("[-]");
-                String d = Util.convertMtoMM(Integer.parseInt(ymd[2]));
+                String d = UtilDate.convertMtoMM(Integer.parseInt(ymd[2]));
                 String updDate = oriDate;
                 if (d.length() == 2) {
                     updDate = ymd[0]+"-"+ymd[1]+"-"+d+" "+dates[1];
@@ -156,23 +154,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 /*** flipping negative to positive***/
                 String amount = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                //String newAmount = amount.replace("-", "");
                 int newAmount = Math.abs(Integer.parseInt(amount));
                 values.put(ItemsDBAdapter.COL_AMOUNT, newAmount);
-                Locale locale = Locale.getDefault();
-                Currency currency = Currency.getInstance(locale);
-                String currencyCode;
-                if (Build.VERSION.SDK_INT>Build.VERSION_CODES.M) {
-                    currencyCode = currency.getCurrencyCode();
-                } else {
-                    currencyCode = Util.DEFAULT_CURRENCY_CODE;
-                }
-                values.put(ItemsDBAdapter.COL_CURRENCY_CODE, currencyCode);
+
+                /*** setting currency ***/
+                values.put(ItemsDBAdapter.COL_CURRENCY_CODE, UtilCurrency.CURRENCY_NONE);
 
                 /*** reflecting the result to db ***/
                 db.update(ItemsDBAdapter.TABLE_ITEM, values,
-                        ItemsDBAdapter.COL_ID+"=?",
-                        new String[] {String.valueOf(colId)});
+                        ItemsDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
 
             } while (c.moveToNext());
         }
@@ -247,7 +237,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void initKkbAppTable(SQLiteDatabase db, int dbVersion) {
-        SimpleDateFormat sdf = new SimpleDateFormat(Util.DATE_FORMAT_DB_HMS, Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(UtilDate.DATE_FORMAT_DB_HMS, Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         String strDate = sdf.format(new Date());
 

@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.util.UtilDate;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
         TextView txvEventDate = v.findViewById(R.id.txv_event_date);
-        String eventDateText = eventDateColon + Util.getDateFromDBDate(item.getEventDate(), weekName, mDateFormat);
+        String eventDateText = eventDateColon + UtilDate.getDateFromDBDate(item.getEventDate(), weekName, mDateFormat);
         txvEventDate.setText(eventDateText);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
@@ -81,7 +81,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         txvMemo.setText(memoText);
 
         TextView txvUpdateDate = v.findViewById(R.id.txv_update_date);
-        String updateDateText = savedOnColon + Util.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
+        String updateDateText = savedOnColon + UtilDate.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
         txvUpdateDate.setText(updateDateText);
 
         return v;
@@ -90,7 +90,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     private void loadSharedPreference() {
         PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(_context);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, Util.DATE_FORMAT_YMD);
+        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 }
