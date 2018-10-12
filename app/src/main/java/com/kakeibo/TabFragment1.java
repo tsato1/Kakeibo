@@ -6,13 +6,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -36,9 +34,8 @@ import java.util.Locale;
 /**
  * Created by T on 2015/09/14.
  */
-public class TabFragment1 extends Fragment implements CurrencyPickerDialog.CurrencyPickerListener {
+public class TabFragment1 extends Fragment {
     private final static String TAG = TabFragment1.class.getSimpleName();
-    private final static String TAG_CURRENCY_PICKER_DIALOG = "TAG_CURRENCY_PICKER_DIALOG";
 
     private Activity _activity;
     private ImageButton btnPrev, btnNext;
@@ -182,11 +179,6 @@ public class TabFragment1 extends Fragment implements CurrencyPickerDialog.Curre
                     })
                     .create().show();
         }
-    }
-
-    @Override
-    public void onFinishCurrencyPickerDialog(String input) {
-        Log.d(TAG, "onFinishPickerDialog()");
     }
 
     class CategoryButtonClickListener implements View.OnClickListener {
