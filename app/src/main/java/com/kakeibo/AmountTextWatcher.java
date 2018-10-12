@@ -15,7 +15,6 @@ public class AmountTextWatcher implements TextWatcher {
     AmountTextWatcher(EditText edtAmount, int fractionDigits) {
         mEdtAmount = edtAmount;
         mFractionDigits = fractionDigits;
-
     }
 
     @Override

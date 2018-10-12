@@ -56,18 +56,16 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         TextView txvAmount = convertView.findViewById(R.id.txv_amount);
         SpannableString spannableString;
         if (item.getCategoryCode() <= 0) {
-            String string = "+" + item.getAmount();
+            String string = "+" + item.getBigDecimalAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
             txvAmount.setText(spannableString);
         } else {
-            String string = "-" + item.getAmount();
+            String string = "-" + item.getBigDecimalAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
             txvAmount.setText(spannableString);
         }
-
-        Log.d("asdf",item.getAmount() + "");
 
         ImageView percentImageView;
         percentImageView = convertView.findViewById(R.id.imv_percent);

@@ -62,18 +62,18 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         txvCategory.setText(categoryText);
 
         TextView txvAmount = v.findViewById(R.id.txv_amount);
-        String amountText = amountColon + item.getAmount();
+        String amountText = amountColon + item.getBigDecimalAmount();
         txvAmount.setText(amountText);
 
         TextView txvMemo = v.findViewById(R.id.txv_memo);
         SpannableString span1, span2;
         if (0 == (item.getCategoryCode())) {
             span1 = new SpannableString(amountColon);
-            span2 = new SpannableString("+" + item.getAmount());
+            span2 = new SpannableString("+" + item.getBigDecimalAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 0, 1, 0);
         } else {
             span1 = new SpannableString(amountColon);
-            span2 = new SpannableString("-" + item.getAmount());
+            span2 = new SpannableString("-" + item.getBigDecimalAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 0, 1, 0);
         }
         txvAmount.setText(TextUtils.concat(span1, span2));

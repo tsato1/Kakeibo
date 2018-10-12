@@ -114,7 +114,7 @@ public class ItemsDBAdapter extends DBAdapter {
     public void saveItem(Item item)
     {
         ContentValues values = new ContentValues();
-        values.put(COL_AMOUNT, UtilCurrency.getIntAmount(item.getAmount(), item.getFractionDigits()));
+        values.put(COL_AMOUNT, item.getIntAmount());
         values.put(COL_CURRENCY_CODE, item.getCurrencyCode());
         values.put(COL_CATEGORY_CODE, item.getCategoryCode());
         values.put(COL_MEMO, item.getMemo());
@@ -122,7 +122,7 @@ public class ItemsDBAdapter extends DBAdapter {
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
         _db.insertOrThrow(TABLE_ITEM, null, values);
 
-//        Log.d(TAG, "saveItem(): amount="+item.getAmount()
+//        Log.d(TAG, "saveItem(): amount="+item.getBigDecimalAmount()
 //                +" intAmount="+item.getIntAmount()
 //                +" currency_code="+item.getCurrencyCode()
 //                +" category_code="+item.getCategoryCode()

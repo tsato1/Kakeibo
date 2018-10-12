@@ -14,15 +14,23 @@ public class Item
     private String id;
     private BigDecimal amount;
     private String currencyCode;
+    private int currencyFractionDigits;
     private int categoryCode;
     private String memo;
     private String eventDate;
     private String updateDate;
 
-    public Item(String id, BigDecimal amount, String currencyCode, int categoryCode, String memo, String eventDate, String updateDate)
-    {
+    Item(String id, BigDecimal amount, String currencyCode, int categoryCode, String memo, String eventDate, String updateDate) {
         this.id = id;
         this.amount = amount;
+
+        if (UtilCurrency.CURRENCY_NONE.equals(currencyCode)) {
+            this.currencyFractionDigits = 0;
+        } else {
+            Currency currency = Currency.getInstance(currencyCode);
+            this.currencyFractionDigits = currency.getDefaultFractionDigits();
+        }
+
         this.currencyCode = currencyCode;
         this.categoryCode = categoryCode;
         this.memo = memo;
@@ -30,11 +38,18 @@ public class Item
         this.updateDate = updateDate;
     }
 
-    public Item(String id, int amount, String currencyCode, int categoryCode, String memo, String eventDate, String updateDate)
-    {
+    Item(String id, int amount, String currencyCode, int categoryCode, String memo, String eventDate, String updateDate) {
         this.id = id;
-        Currency currency = Currency.getInstance(currencyCode);
-        this.amount = UtilCurrency.getBDAmount(amount, currency.getDefaultFractionDigits());
+
+        if (UtilCurrency.CURRENCY_NONE.equals(currencyCode)) {
+            this.amount = BigDecimal.valueOf(amount, 0);
+            this.currencyFractionDigits = 0;
+        } else {
+            Currency currency = Currency.getInstance(currencyCode);
+            this.amount = BigDecimal.valueOf(amount, currency.getDefaultFractionDigits());
+            this.currencyFractionDigits = currency.getDefaultFractionDigits();
+        }
+
         this.currencyCode = currencyCode;
         this.categoryCode = categoryCode;
         this.memo = memo;
@@ -47,14 +62,23 @@ public class Item
         return this.id;
     }
 
-    public BigDecimal getAmount()
+    public BigDecimal getBigDecimalAmount()
     {
         return this.amount;
     }
 
     public int getIntAmount() {
-        Currency currency = Currency.getInstance(currencyCode);
-        return UtilCurrency.getIntAmount(amount, currency.getDefaultFractionDigits());
+        if (currencyFractionDigits == 0) {
+            return amount.intValue();
+        } else if (currencyFractionDigits == 1) {
+            return amount.multiply(BigDecimal.valueOf(10)).intValue();
+        } else if (currencyFractionDigits == 2) {
+            return amount.multiply(BigDecimal.valueOf(100)).intValue();
+        } else if (currencyFractionDigits == 3) {
+            return amount.multiply(BigDecimal.valueOf(1000)).intValue();
+        }
+
+        return -9999;
     }
 
     public String getCurrencyCode() {
@@ -86,7 +110,6 @@ public class Item
     }
 
     public int getFractionDigits() {
-        Currency currency = Currency.getInstance(currencyCode);
-        return currency.getDefaultFractionDigits();
+        return this.currencyFractionDigits;
     }
 }

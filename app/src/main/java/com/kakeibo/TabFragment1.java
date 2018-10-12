@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -77,6 +78,7 @@ public class TabFragment1 extends Fragment {
         btnDate = view.findViewById(R.id.btn_date);
         btnNext = view.findViewById(R.id.btn_next);
         btnCurrency = view.findViewById(R.id.btn_currency);
+        btnCurrency.setText(UtilCurrency.sCurrencyCodes.get(UtilCurrency.sDefaultCurrencyIndex));
 
         btnsCategory = new ArrayList<>();
         btnsCategory.add(view.findViewById(R.id.btn_category1));
@@ -170,14 +172,27 @@ public class TabFragment1 extends Fragment {
                     .setSingleChoiceItems(arrCurrency, UtilCurrency.sDefaultCurrencyIndex, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            String pickedCurrencyCode = UtilCurrency.sCurrencyCodes.get(which);
+                            btnCurrency.setText(pickedCurrencyCode);
 
+                            if (!pickedCurrencyCode.equals(MainActivity.sCurrency.getCurrencyCode())) {
+                                edtAmount.setText("");
+                                int digits = 0;
+                                if (!pickedCurrencyCode.equals(UtilCurrency.CURRENCY_NONE)) {
+                                    digits = Currency.getInstance(pickedCurrencyCode).getDefaultFractionDigits();
+                                }
+                                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, digits));
+                            }
+
+                            dialog.dismiss();
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
-                    })
-                    .create().show();
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 
@@ -293,7 +308,7 @@ public class TabFragment1 extends Fragment {
         Item item = new Item(
                 "",
                 new BigDecimal(amount),
-                MainActivity.sCurrency.getCurrencyCode(),
+                btnCurrency.getText().toString(),
                 selectedCategoryCode,
                 edtMemo.getText().toString(),
                 eventDate,
@@ -325,8 +340,6 @@ public class TabFragment1 extends Fragment {
                         Locale.getDefault()).format(date)
                         + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
-
-                //todo get chosen date from here
             }
         }, year, month-1, day);
         dialog.show();

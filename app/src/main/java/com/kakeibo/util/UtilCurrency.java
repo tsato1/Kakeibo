@@ -18,29 +18,23 @@ public class UtilCurrency {
     public static ArrayList<String> sCurrencyIndex = new ArrayList<>();
     public static int sDefaultCurrencyIndex; // where in sCurrencyIndex
 
-    public static BigDecimal getBDAmount(int input /*** int from db ***/, int digit) {
-        return BigDecimal.valueOf(input, digit);
-    }
-
-    public static int getIntAmount(BigDecimal input, int digit) {
-        if (digit == 0) {
-            return input.intValue();
-        } else if (digit == 1) {
-            return input.multiply(BigDecimal.valueOf(10)).intValue();
-        } else if (digit == 2) {
-            return input.multiply(BigDecimal.valueOf(100)).intValue();
-        } else if (digit == 3) {
-            return input.multiply(BigDecimal.valueOf(1000)).intValue();
-        }
-
-        return 0;
-    }
-
-    int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
-        String string = bigDecimal.stripTrailingZeros().toPlainString();
-        int index = string.indexOf(".");
-        return index < 0 ? 0 : string.length() - index - 1;
-    }
+//    public static BigDecimal getBDAmount(int input, int digit) {
+//        return BigDecimal.valueOf(input, digit);
+//    }
+//
+//    public static int getIntAmount(BigDecimal input, int digit) {
+//        if (digit == 0) {
+//            return input.intValue();
+//        } else if (digit == 1) {
+//            return input.multiply(BigDecimal.valueOf(10)).intValue();
+//        } else if (digit == 2) {
+//            return input.multiply(BigDecimal.valueOf(100)).intValue();
+//        } else if (digit == 3) {
+//            return input.multiply(BigDecimal.valueOf(1000)).intValue();
+//        }
+//
+//        return 0;
+//    }
 
     public static void setUpCurrency() {
         Log.d(TAG, "setUpCurrency() called");

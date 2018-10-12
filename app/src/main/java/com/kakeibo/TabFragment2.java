@@ -259,11 +259,11 @@ public class TabFragment2 extends Fragment {
             SpannableString span1, span2;
             if (item.getCategoryCode() <= 0) {
                 span1 = new SpannableString(amountColon);
-                span2 = new SpannableString("+" + item.getAmount());
+                span2 = new SpannableString("+" + item.getBigDecimalAmount());
                 span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorBlue)), 0, 1, 0);
             } else {
                 span1 = new SpannableString(amountColon);
-                span2 = new SpannableString("-" + item.getAmount());
+                span2 = new SpannableString("-" + item.getBigDecimalAmount());
                 span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorRed)), 0, 1, 0);
             }
             txvAmount.setText(TextUtils.concat(span1, span2));
@@ -335,7 +335,7 @@ public class TabFragment2 extends Fragment {
                 txvCategory.setText(categoryText);
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
                 edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sCurrency.getDefaultFractionDigits()));
-                edtAmount.setText(String.valueOf(item.getAmount()));
+                edtAmount.setText(String.valueOf(item.getBigDecimalAmount()));
                 EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
@@ -512,7 +512,7 @@ public class TabFragment2 extends Fragment {
 
                 mStringBuilder.append(defaultCategory[item.getCategoryCode()]);
                 mStringBuilder.append(",");
-                mStringBuilder.append(item.getAmount());
+                mStringBuilder.append(item.getBigDecimalAmount());
                 mStringBuilder.append(",");
                 mStringBuilder.append(item.getMemo());
                 mStringBuilder.append(",");
@@ -592,16 +592,16 @@ public class TabFragment2 extends Fragment {
                 );
 
                 if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
-                    income = income.add(item.getAmount());
-                    balanceDay = balanceDay.add(item.getAmount());
+                    income = income.add(item.getBigDecimalAmount());
+                    balanceDay = balanceDay.add(item.getBigDecimalAmount());
                 } else {
-                    expense = expense.add(item.getAmount());
-                    balanceDay = balanceDay.subtract(item.getAmount());
+                    expense = expense.add(item.getBigDecimalAmount());
+                    balanceDay = balanceDay.subtract(item.getBigDecimalAmount());
                 }
 
                 mStringBuilder.append(item.getEventDate());
                 mStringBuilder.append(",");
-                mStringBuilder.append(item.getAmount());
+                mStringBuilder.append(item.getBigDecimalAmount());
                 mStringBuilder.append(",");
                 mStringBuilder.append(defaultCategory[item.getCategoryCode()]);
                 mStringBuilder.append(",");
@@ -618,8 +618,8 @@ public class TabFragment2 extends Fragment {
                         int amount = tmp.getIntAmount() + c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
 
                         // todo when currency is different for each item, handle it
-                        Log.d("asdf", "a: " + categoryList.get(i).getId()+" " +amount
-                        + " "+c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)));
+//                        Log.d("asdf", "a: " + categoryList.get(i).getId()+" " +amount
+//                        + " "+c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)));
 
                         tmp = new Item(categoryList.get(i).getId(),
                                 amount,
@@ -702,16 +702,16 @@ public class TabFragment2 extends Fragment {
                 );
 
                 if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
-                    income = income.add(item.getAmount());
-                    balanceDay = balanceDay.add(item.getAmount());
+                    income = income.add(item.getBigDecimalAmount());
+                    balanceDay = balanceDay.add(item.getBigDecimalAmount());
                 } else {
-                    expense = expense.add(item.getAmount());
-                    balanceDay = balanceDay.subtract(item.getAmount());
+                    expense = expense.add(item.getBigDecimalAmount());
+                    balanceDay = balanceDay.subtract(item.getBigDecimalAmount());
                 }
 
                 mStringBuilder.append(item.getEventDate());
                 mStringBuilder.append(",");
-                mStringBuilder.append(item.getAmount());
+                mStringBuilder.append(item.getBigDecimalAmount());
                 mStringBuilder.append(",");
                 mStringBuilder.append(defaultCategory[item.getCategoryCode()]);
                 mStringBuilder.append(",");
@@ -778,10 +778,9 @@ public class TabFragment2 extends Fragment {
     }
 
     void calculatePercentage() {
-        Log.d("asdf", income + " " + expense);
         for (int i = 0; i < categoryList.size(); i++) {
             BigDecimal sum = income.add(expense);
-            BigDecimal out = categoryList.get(i).getAmount()
+            BigDecimal out = categoryList.get(i).getBigDecimalAmount()
                     .divide(sum, RoundingMode.DOWN)
                     .setScale(0, RoundingMode.DOWN);
 
@@ -792,8 +791,8 @@ public class TabFragment2 extends Fragment {
     void categoryListSortByAmount() {
         for (int i = 0; i < categoryList.size() - 1; i++) {
             for (int j = categoryList.size() - 1; j > i; j--) {
-                BigDecimal amount_j = categoryList.get(j).getAmount();
-                BigDecimal amount_j_1 = categoryList.get(j-1).getAmount();
+                BigDecimal amount_j = categoryList.get(j).getBigDecimalAmount();
+                BigDecimal amount_j_1 = categoryList.get(j-1).getBigDecimalAmount();
                 if (amount_j.compareTo(amount_j_1) > 0) {
                     Item tmp = categoryList.get(j);
                     categoryList.set(j, categoryList.get(j-1));
@@ -812,7 +811,7 @@ public class TabFragment2 extends Fragment {
             } else {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
-            slice.setValue(categoryList.get(i).getAmount().intValue());
+            slice.setValue(categoryList.get(i).getBigDecimalAmount().intValue());
             graph.addSlice(slice);
         }
         graph.setThickness(100);

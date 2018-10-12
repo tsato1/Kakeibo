@@ -83,11 +83,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         /*** amount ***/
         SpannableString spannableString;
         if (item.getCategoryCode() <= 0) {
-            String string = "+" + item.getAmount();
+            String string = "+" + item.getBigDecimalAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
         } else {
-            String string = "-" + item.getAmount();
+            String string = "-" + item.getBigDecimalAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
         }
