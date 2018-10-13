@@ -12,7 +12,7 @@ public class AmountTextWatcher implements TextWatcher {
     private EditText mEdtAmount;
     private int mFractionDigits;
 
-    AmountTextWatcher(EditText edtAmount, int fractionDigits) {
+    public AmountTextWatcher(EditText edtAmount, int fractionDigits) {
         mEdtAmount = edtAmount;
         mFractionDigits = fractionDigits;
     }

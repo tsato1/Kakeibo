@@ -76,7 +76,6 @@ public class TabFragment2 extends Fragment {
     public  int _calMonth, _calYear;
     private String[] weekName;
     private String[] defaultCategory;
-    private String amountColon, memoColon, categoryColon, savedOnColon;
     private View _view;
     private Query _query;
     private StringBuilder mStringBuilder;
@@ -88,10 +87,6 @@ public class TabFragment2 extends Fragment {
 
         weekName = getResources().getStringArray(R.array.week_name);
         defaultCategory = getResources().getStringArray((R.array.default_category));
-        amountColon = getResources().getString(R.string.amount_colon);
-        memoColon = getResources().getString(R.string.memo_colon);
-        categoryColon = getResources().getString(R.string.category_colon);
-        savedOnColon = getResources().getString(R.string.updated_on_colon);
 
         findViews();
         setListeners();
@@ -253,23 +248,26 @@ public class TabFragment2 extends Fragment {
             TextView txvAmount = layout.findViewById(R.id.txv_detail_amount);
             TextView txvMemo = layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = layout.findViewById(R.id.txv_detail_registration);
+            TextView txvCurrency = layout.findViewById(R.id.txv_currency);
 
-            String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
+            String categoryText = getString(R.string.category_colon) + defaultCategory[item.getCategoryCode()];
             txvCategory.setText(categoryText);
             SpannableString span1, span2;
             if (item.getCategoryCode() <= 0) {
-                span1 = new SpannableString(amountColon);
+                span1 = new SpannableString(getString(R.string.amount_colon));
                 span2 = new SpannableString("+" + item.getBigDecimalAmount());
                 span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorBlue)), 0, 1, 0);
             } else {
-                span1 = new SpannableString(amountColon);
+                span1 = new SpannableString(getString(R.string.amount_colon));
                 span2 = new SpannableString("-" + item.getBigDecimalAmount());
                 span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_activity, R.color.colorRed)), 0, 1, 0);
             }
             txvAmount.setText(TextUtils.concat(span1, span2));
-            String memoText = memoColon + item.getMemo();
+            String currencyText = getString(R.string.currency_colon) + item.getCurrencyCode();
+            txvCurrency.setText(currencyText);
+            String memoText = getString(R.string.memo_colon) + item.getMemo();
             txvMemo.setText(memoText);
-            String savedOnText = savedOnColon + UtilDate.getDateFromDBDate(item.getUpdateDate(), weekName, MainActivity.sDateFormat);
+            String savedOnText = getString(R.string.updated_on_colon) + UtilDate.getDateFromDBDate(item.getUpdateDate(), weekName, MainActivity.sDateFormat);
             txvRegistrationDate.setText(savedOnText);
 
             new AlertDialog.Builder(_activity)
@@ -336,6 +334,9 @@ public class TabFragment2 extends Fragment {
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
                 edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sCurrency.getDefaultFractionDigits()));
                 edtAmount.setText(String.valueOf(item.getBigDecimalAmount()));
+                Button btnCurrency = layout.findViewById(R.id.btn_currency);
+                btnCurrency.setText(item.getCurrencyCode());
+                btnCurrency.setOnClickListener(new CurrencyPickerClickListener(_activity, btnCurrency, edtAmount));
                 EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
@@ -356,7 +357,7 @@ public class TabFragment2 extends Fragment {
                                         Item tmp = new Item(
                                                 "",
                                                 new BigDecimal(amount),
-                                                item.getCurrencyCode(),
+                                                btnCurrency.getText().toString(),
                                                 item.getCategoryCode(),
                                                 edtMemo.getText().toString(),
                                                 item.getEventDate(),
@@ -380,10 +381,16 @@ public class TabFragment2 extends Fragment {
         return super.onContextItemSelected(menuItem);
     }
 
-    //todo can make util file
-    boolean checkBeforeSave(EditText edt_amount) {
-        if ("".equals(edt_amount.getText().toString())) {
-            Toast.makeText(_activity, getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
+    private boolean checkBeforeSave(EditText edtAmount) {
+        if ("".equals(edtAmount.getText().toString())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if ("0".equals(edtAmount.getText().toString()) ||
+                "0.0".equals(edtAmount.getText().toString()) ||
+                "0.00".equals(edtAmount.getText().toString()) ||
+                "0.000".equals(edtAmount.getText().toString())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }
 

@@ -78,8 +78,8 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         TextView percentTextView;
         percentTextView = convertView.findViewById(R.id.txv_percent);
         String percent = item.getMemo();
-        if (percent.length() == 1) percent = "0" + percent;
-        percentTextView.setText(percent + "%");
+        if (percent.length() == 1) percent = "0" + percent + "%";
+        percentTextView.setText(percent);
 
         return convertView;
     }

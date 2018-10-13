@@ -18,6 +18,12 @@
         android:textStyle="bold"
         android:textColor="@color/colorBlack"/>
     <TextView
+        android:id="@+id/txv_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"/>
+    <TextView
         android:id="@+id/txv_detail_memo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

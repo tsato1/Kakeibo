@@ -54,4 +54,5 @@
     <string name="select_file">Seleccione Archivo</string>
     <string name="file_created">Se crea el archivo</string>
     <string name="file_create_error">Se produjo un error al crear un archivo</string>
+    <string name="currency_colon">Moneda</string>
 </resources>

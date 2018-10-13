@@ -2,12 +2,9 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +18,13 @@ import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.UtilKeyboard;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilSave;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -109,7 +106,7 @@ public class TabFragment1 extends Fragment {
         btnPrev.setOnClickListener(new DateButtonClickListener());
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
-        btnCurrency.setOnClickListener(new CurrencyButtonClickListener());
+        btnCurrency.setOnClickListener(new CurrencyPickerClickListener(_activity, btnCurrency, edtAmount));
         edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount,
                 MainActivity.sCurrency.getDefaultFractionDigits()));
         for (int i = 0; i < defaultCategory.length; i++) {
@@ -159,40 +156,6 @@ public class TabFragment1 extends Fragment {
                     btnDate.setText(str);
                     break;
             }
-        }
-    }
-
-    class CurrencyButtonClickListener implements View.OnClickListener {
-        public void  onClick(View view) {
-            String[] arrCurrency = UtilCurrency.sCurrencyCodes.toArray(new String[UtilCurrency.sAllCurrencyLength]);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(_activity);
-            builder.setTitle(getString(R.string.pref_title_currency))
-                    .setIcon(R.mipmap.ic_mikan)
-                    .setSingleChoiceItems(arrCurrency, UtilCurrency.sDefaultCurrencyIndex, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String pickedCurrencyCode = UtilCurrency.sCurrencyCodes.get(which);
-                            btnCurrency.setText(pickedCurrencyCode);
-
-                            if (!pickedCurrencyCode.equals(MainActivity.sCurrency.getCurrencyCode())) {
-                                edtAmount.setText("");
-                                int digits = 0;
-                                if (!pickedCurrencyCode.equals(UtilCurrency.CURRENCY_NONE)) {
-                                    digits = Currency.getInstance(pickedCurrencyCode).getDefaultFractionDigits();
-                                }
-                                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, digits));
-                            }
-
-                            dialog.dismiss();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
-            AlertDialog dialog = builder.create();
-            dialog.show();
         }
     }
 
@@ -268,7 +231,10 @@ public class TabFragment1 extends Fragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
             return false;
         }
-        if ("0".equals(edtAmount.getText().toString())) {
+        if ("0".equals(edtAmount.getText().toString()) ||
+                "0.0".equals(edtAmount.getText().toString()) ||
+                "0.00".equals(edtAmount.getText().toString()) ||
+                "0.000".equals(edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
             return false;
         }

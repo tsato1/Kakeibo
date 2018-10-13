@@ -27,13 +27,12 @@
     <string name="income_colon">Income:</string>
     <string name="expense_colon">Expense:</string>
     <string name="balance_colon">Balance:</string>
+    <string name="currency_colon">Currency:</string>
     <string name="amount_colon">Amount:</string>
     <string name="memo_colon">Memo:</string>
     <string name="category_colon">Category:</string>
     <string name="event_date_colon">Event Date:</string>
     <string name="updated_on_colon">Saved on:</string>
-
-    <string name="search_for_currency">Search for currency</string>
 
     <!-- card view -->
     <string name="add_search_criterion">Add Search Criterion</string>
@@ -95,8 +94,6 @@
     <string name="pref_title_change_date_format">Change Date Format</string>
     <string name="pref_title_remove_ads">Remove Ads</string>
     <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_current_desc_free">Free Version: Ads appear every 20 min</string>
-    <string name="pref_current_desc_pro">You are using Kakeibo! Pro</string>
     <string name="pref_title_category">Category</string>
     <string name="pref_title_currency">Currency</string>
 
