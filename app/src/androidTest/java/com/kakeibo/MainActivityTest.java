@@ -97,7 +97,7 @@ public class MainActivityTest {
                     m_message += "empty";
                     return false;
                 }
-                return item.getBigDecimalAmount().toString().equals(check_value);
+                return item.getAmount().toString().equals(check_value);
             }
         };
     }

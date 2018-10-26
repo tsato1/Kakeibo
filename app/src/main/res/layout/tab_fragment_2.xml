@@ -25,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_left_arrow"
+                android:contentDescription="@string/previous"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_date"
@@ -39,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_right_arrow"
+                android:contentDescription="@string/next"
                 style="?android:attr/buttonBarButtonStyle"/>
         </LinearLayout>
 
@@ -87,33 +89,12 @@
             </TableRow>
         </TableLayout>
 
-        <ExpandableListView
-            android:id="@+id/lsv_expandable"
+        <FrameLayout
+            android:id="@+id/frl_tab2_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-
-        <FrameLayout
-            android:id="@+id/scv_subtotal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <com.echo.holographlibrary.PieGraph
-                    android:id="@+id/graph_subtotal"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
-                <ListView
-                    android:id="@+id/lsv_subtotal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-        </FrameLayout>
     </LinearLayout>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_discard"
         android:layout_width="wrap_content"
@@ -121,13 +102,4 @@
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_default_padding"
         android:src="@drawable/ic_close_white"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_export"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_default_padding"
-        android:src="@drawable/ic_cloud_upload_white"/>
-
 </FrameLayout>

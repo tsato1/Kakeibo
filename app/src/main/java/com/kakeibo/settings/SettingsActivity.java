@@ -371,7 +371,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         private void deleteAllItems() {
-            ItemsDBAdapter itemsDbAdapter = new ItemsDBAdapter(getActivity());
+            ItemsDBAdapter itemsDbAdapter = new ItemsDBAdapter();
             itemsDbAdapter.open();
 
             if(itemsDbAdapter.deleteAllItems()) {

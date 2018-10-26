@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,12 +55,12 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         TextView txvAmount = convertView.findViewById(R.id.txv_amount);
         SpannableString spannableString;
         if (item.getCategoryCode() <= 0) {
-            String string = "+" + item.getBigDecimalAmount();
+            String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
             txvAmount.setText(spannableString);
         } else {
-            String string = "-" + item.getBigDecimalAmount();
+            String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
             txvAmount.setText(spannableString);
@@ -77,8 +76,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
 
         TextView percentTextView;
         percentTextView = convertView.findViewById(R.id.txv_percent);
-        String percent = item.getMemo();
-        if (percent.length() == 1) percent = "0" + percent + "%";
+        String percent = item.getMemo().length()==1? "0"+item.getMemo()+"%":  item.getMemo()+"%";
         percentTextView.setText(percent);
 
         return convertView;

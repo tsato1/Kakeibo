@@ -59,7 +59,7 @@ public class UtilDate {
         return sdFormat.format(cal.getTime());
     }
 
-    public static String getDateFromDBDate(String dbDate, String[] weekName, int dateFormat) {
+    public static String getDateWithDayFromDBDate(String dbDate, String[] weekName, int dateFormat) {
         String[] ymd = dbDate.split("[ ]")[0].split("[-]");
 
         GregorianCalendar cal = new GregorianCalendar(
@@ -72,7 +72,7 @@ public class UtilDate {
     }
 
     public static String getDateFromDBDate(String dbDate, int dateFormat) {
-        Log.d(TAG, "getDateFromDBDate() dbDate: " + dbDate);
+        Log.d(TAG, "getDateWithDayFromDBDate() dbDate: " + dbDate);
 
         String[] ymd = dbDate.split("[ ]")[0].split("[-]");
 
@@ -103,6 +103,8 @@ public class UtilDate {
 
     public static String convertDateFormat(String date, int fromFormat, int toFormat) {
         String out="";
+
+        if (fromFormat == toFormat) return date;
 
         if ((fromFormat==3 || fromFormat==4) && (toFormat==0 || toFormat==1 || toFormat==2)) {
             String[] ymd = date.split("-");

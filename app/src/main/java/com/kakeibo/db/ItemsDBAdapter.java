@@ -1,7 +1,6 @@
 package com.kakeibo.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,16 +25,9 @@ public class ItemsDBAdapter extends DBAdapter {
     public static final String COL_EVENT_DATE = "event_date";
     public static final String COL_UPDATE_DATE = "update_date";
 
-    public static final String ASC = "asc";
-    public static final String DESC = "desc";
-
-    private final Context _context;
     private SQLiteDatabase _db;
-    private QueriesDBAdapter _queriesDBAdapter;
 
-    public ItemsDBAdapter (Context context) {
-        _context = context;
-        _queriesDBAdapter = new QueriesDBAdapter(context);
+    public ItemsDBAdapter () {
     }
 
     public ItemsDBAdapter open() throws SQLException {
@@ -55,31 +47,6 @@ public class ItemsDBAdapter extends DBAdapter {
     public boolean deleteAllItems()
     {
         return _db.delete(TABLE_ITEM, null, null) > 0;
-    }
-
-    public Cursor getItems(int fromY, int fromM, int fromD, int toY, int toM, int toD, String memo,
-                           String order1, String direction1, String order2, String direction2)
-    {
-        String fromYMD = "\'" + fromY + "-" + fromM + "-" + fromD + "\'";
-        String toYMD = "\'" + toY + "-" + toM + "-" + toD + "\'";
-        String query;
-
-        if ("".equals(memo)) {
-            query = "SELECT * FROM " + TABLE_ITEM +
-                    " WHERE " + COL_EVENT_DATE +
-                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")" +
-                    " ORDER BY " + order1 + " " + direction1 + ", " + order2 + " " + direction2;
-        } else {
-            query = "SELECT * FROM " + TABLE_ITEM +
-                    " WHERE " + COL_EVENT_DATE +
-                    " between strftime('%Y-%m-%d', " + fromYMD + ") and strftime('%Y-%m-%d'," + toYMD + ")" +
-                    " AND " + COL_MEMO + "=" + "\'" + memo + "\'" +
-                    " ORDER BY " + order1 + " " + direction1 + ", " + order2 + " " + direction2;
-        }
-
-        //saveQuery(QueriesDBAdapter.QUERY_TYPE_AUTO, query);
-
-        return _db.rawQuery(query, new String[]{});
     }
 
     public Cursor getAllItemsInMonth (String y, String m)
@@ -114,19 +81,12 @@ public class ItemsDBAdapter extends DBAdapter {
     public void saveItem(Item item)
     {
         ContentValues values = new ContentValues();
-        values.put(COL_AMOUNT, item.getIntAmount());
+        values.put(COL_AMOUNT, UtilCurrency.getIntAmountFromBigDecimal(item.getAmount(), item.getFractionDigits()));
         values.put(COL_CURRENCY_CODE, item.getCurrencyCode());
         values.put(COL_CATEGORY_CODE, item.getCategoryCode());
         values.put(COL_MEMO, item.getMemo());
         values.put(COL_EVENT_DATE, item.getEventDate());
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
         _db.insertOrThrow(TABLE_ITEM, null, values);
-
-//        Log.d(TAG, "saveItem(): amount="+item.getBigDecimalAmount()
-//                +" intAmount="+item.getIntAmount()
-//                +" currency_code="+item.getCurrencyCode()
-//                +" category_code="+item.getCategoryCode()
-//                +" memo="+item.getMemo()
-//        );
     }
 }

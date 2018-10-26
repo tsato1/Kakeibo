@@ -16,7 +16,10 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
+    <string name="previous">Previous</string>
     <string name="export">Export</string>
+    <string name="export_date">Export [Date]</string>
+    <string name="export_category">Export [Category]</string>
     <string name="item_detail">Item Detail</string>
     <string name="amount">Amount</string>
     <string name="category">Category</string>
@@ -73,7 +76,8 @@
 
     <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
     <string name="quest_save_this_search">Do you want to save this search?</string>
-    <string name="quest_export_this_report">Do you want to export this report on Google Drive?</string>
+    <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is ordered by Category.</string>
+    <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is ordered by Date.</string>
 
     <string name="title_edit_item">Edit item</string>
     <string name="title_search_result">Search Result</string>

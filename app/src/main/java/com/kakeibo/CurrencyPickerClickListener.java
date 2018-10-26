@@ -51,6 +51,7 @@ public class CurrencyPickerClickListener implements View.OnClickListener {
                     }
                 });
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
         dialog.show();
     }
 }

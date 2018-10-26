@@ -48,4 +48,22 @@ public class UtilCurrency {
             if (sCurrencyCodes.get(i).equals(currencyCode)) sDefaultCurrencyIndex = i;
         }
     }
+
+    public static int getIntAmountFromBigDecimal(BigDecimal amount, int currencyFractionDigits) {
+        if (currencyFractionDigits == 0) {
+            return amount.intValue();
+        } else if (currencyFractionDigits == 1) {
+            return amount.multiply(BigDecimal.valueOf(10)).intValue();
+        } else if (currencyFractionDigits == 2) {
+            return amount.multiply(BigDecimal.valueOf(100)).intValue();
+        } else if (currencyFractionDigits == 3) {
+            return amount.multiply(BigDecimal.valueOf(1000)).intValue();
+        }
+
+        return -1;
+    }
+
+    public static BigDecimal getBigDecimalAmountFromInt(int amount, int currencyFractionDigits) {
+        return BigDecimal.valueOf(amount, currencyFractionDigits);
+    }
 }

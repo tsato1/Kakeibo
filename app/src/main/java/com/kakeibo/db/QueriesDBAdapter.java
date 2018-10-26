@@ -46,19 +46,13 @@ public class QueriesDBAdapter {
 
     public void saveItem(Query query) {
         ContentValues values = new ContentValues();
-        values.put(COL_QUERY_TYPE, query.getType());
-        values.put(COL_QUERY, query.getQuery());
-        values.put(COL_CREATE_DATE, query.getCreateDate());
-        values.put(COL_SEARCH_CRITERIA, query.getSearchCriteria());
-        values.put(COL_VAL_Y, query.getValY());
-        values.put(COL_VAL_M, query.getValM());
-        values.put(COL_VAL_D, query.getValD());
-        values.put(COL_VAL_FROM_DATE, query.getValFromDate());
-        values.put(COL_VAL_TO_DATE, query.getValToDate());
-        values.put(COL_VAL_MIN_AMOUNT, query.getValMinAmount());
-        values.put(COL_VAL_MAX_AMOUNT, query.getValMaxAmount());
-        values.put(COL_VAL_CATEGORY_CODE, query.getValCategoryCode());
-        values.put(COL_VAL_MEMO, query.getValMemo());
+//        values.put(COL_QUERY_TYPE, query.getType());
+//        values.put(COL_CREATE_DATE, query.getCreateDate());
+//        values.put(COL_VAL_FROM_DATE, query.getFromDBDate());
+//        values.put(COL_VAL_TO_DATE, query.getToDBDate());
+//        values.put(COL_VAL_MIN_AMOUNT, query.getMinAmount());
+//        values.put(COL_VAL_MAX_AMOUNT, query.getMaxAmount());
+//        values.put(COL_VAL_MEMO, query.getMemo());
 
         SQLiteDatabase db = DBAdapter.getInstance().openDatabase();
         db.insertOrThrow(TABLE_QUERIES, null, values);

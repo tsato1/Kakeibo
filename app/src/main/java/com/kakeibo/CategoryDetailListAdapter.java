@@ -54,7 +54,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
         TextView txvEventDate = v.findViewById(R.id.txv_event_date);
-        String eventDateText = eventDateColon + UtilDate.getDateFromDBDate(item.getEventDate(), weekName, mDateFormat);
+        String eventDateText = eventDateColon + UtilDate.getDateWithDayFromDBDate(item.getEventDate(), weekName, mDateFormat);
         txvEventDate.setText(eventDateText);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
@@ -62,18 +62,18 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         txvCategory.setText(categoryText);
 
         TextView txvAmount = v.findViewById(R.id.txv_amount);
-        String amountText = amountColon + item.getBigDecimalAmount();
+        String amountText = amountColon + item.getAmount();
         txvAmount.setText(amountText);
 
         TextView txvMemo = v.findViewById(R.id.txv_memo);
         SpannableString span1, span2;
         if (0 == (item.getCategoryCode())) {
             span1 = new SpannableString(amountColon);
-            span2 = new SpannableString("+" + item.getBigDecimalAmount());
+            span2 = new SpannableString("+" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 0, 1, 0);
         } else {
             span1 = new SpannableString(amountColon);
-            span2 = new SpannableString("-" + item.getBigDecimalAmount());
+            span2 = new SpannableString("-" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 0, 1, 0);
         }
         txvAmount.setText(TextUtils.concat(span1, span2));
@@ -81,7 +81,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         txvMemo.setText(memoText);
 
         TextView txvUpdateDate = v.findViewById(R.id.txv_update_date);
-        String updateDateText = savedOnColon + UtilDate.getDateFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
+        String updateDateText = savedOnColon + UtilDate.getDateWithDayFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
         txvUpdateDate.setText(updateDateText);
 
         return v;

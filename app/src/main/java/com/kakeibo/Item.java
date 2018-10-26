@@ -62,23 +62,9 @@ public class Item
         return this.id;
     }
 
-    public BigDecimal getBigDecimalAmount()
+    public BigDecimal getAmount()
     {
         return this.amount;
-    }
-
-    public int getIntAmount() {
-        if (currencyFractionDigits == 0) {
-            return amount.intValue();
-        } else if (currencyFractionDigits == 1) {
-            return amount.multiply(BigDecimal.valueOf(10)).intValue();
-        } else if (currencyFractionDigits == 2) {
-            return amount.multiply(BigDecimal.valueOf(100)).intValue();
-        } else if (currencyFractionDigits == 3) {
-            return amount.multiply(BigDecimal.valueOf(1000)).intValue();
-        }
-
-        return -9999;
     }
 
     public String getCurrencyCode() {

@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static int sDateFormat;
     public static Currency sCurrency;
+    public static String[] sWeekName;
+    public static String[] sCategory;
 
     private InterstitialAd mInterstitialAd;
     private ViewPager viewPager;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        UtilCurrency.setUpCurrency();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        sWeekName = getResources().getStringArray(R.array.week_name);
+        sCategory = getResources().getStringArray(R.array.default_category);
 
         loadAds();
     }
@@ -124,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
         sDateFormat = Integer.parseInt(f);
 
         /*** currency ***/
-        UtilCurrency.setUpCurrency();
         String value = mPref.getString(SettingsActivity.PREF_KEY_CURRENCY,
                 String.valueOf(UtilCurrency.sDefaultCurrencyIndex));
         sCurrency = Currency.getInstance(UtilCurrency.sCurrencyCodes.get(Integer.parseInt(value)));
@@ -150,23 +155,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void onItemSaved(Query query) {
+    public void onItemSaved(Query query, String eventDate) {
         try {
-            tabFragment2.focusOnSavedItem(query);
+            tabFragment2.focusOnSavedItem(query, eventDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void onSearch(Query query) {
+    public void onSearch(Query query, String fromDate, String toDate) {
         try {
-            tabFragment2.onSearch(query);
-
             if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
             } else {
                 Log.d(TAG, "The interstitial wasn't loaded yet.");
             }
+
+            tabFragment2.onSearch(query, fromDate, toDate);
         } catch (Exception e) {
             e.printStackTrace();
         }

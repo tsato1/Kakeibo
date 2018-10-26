@@ -22,31 +22,35 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.settings.UtilKeyboard;
+import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilQuery;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperListener {
     private final static String TAG = TabFragment3.class.getSimpleName();
 
-    private static String[] weekName;
     private static String[] searchCriteria;
 
-    private SharedPreferences mPref;
     private Activity _activity;
     private Context _context;
+    private View _view;
     private FrameLayout frlRoot;
     private RecyclerView rcvSearchCriteria;
     private SearchRecyclerViewAdapter adpRecyclerView;
     private ArrayList<Card> lstCards;     // for cards displayed
     private ArrayList<String> lstChoices; // for choices shown in dialog upon tapping fab
     private FloatingActionButton fabSearch, fabAdd;
-    private View _view;
-    private int mDateFormat;
-    private Query _query;
+
+    private static Query _query;
+    private static String _fromDate;
+    private static String _toDate;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,12 +59,10 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         _activity = getActivity();
         _context = getContext();
 
-        weekName = getResources().getStringArray(R.array.week_name);
         searchCriteria = getResources().getStringArray(R.array.search_criteria);
 
         findViews();
         setListeners();
-        loadSharedPreferences();
 
         return _view;
     }
@@ -89,15 +91,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         new ItemTouchHelper(ithCallback).attachToRecyclerView(rcvSearchCriteria);
     }
 
-    private void loadSharedPreferences() {
-        PreferenceManager.setDefaultValues(_activity, R.xml.pref_general, false);
-        mPref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
-        mDateFormat = Integer.parseInt(f);
-
-        //todo instruction
-    }
-
     class ButtonClickListener implements View.OnClickListener {
         public void onClick(View view) {
             switch (view.getId()) {
@@ -122,11 +115,18 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     break;
                 case R.id.fab_search:
                     _query = new Query(Query.QUERY_TYPE_SEARCH);
+                    UtilQuery.init();
 
                     if (checkBeforeSearch()) {
-                        _query.buildQuery();
+                        UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+                        UtilQuery.setCOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+                        UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
+                        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+                        _query.setQueryC(UtilQuery.buildQueryC());
+                        _query.setQueryCs(UtilQuery.buildQueryCs());
+                        _query.setQueryD(UtilQuery.buildQueryD());
                         ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                        ((MainActivity)_activity).onSearch(_query);
+                        ((MainActivity)_activity).onSearch(_query, _fromDate, _toDate);
                     }
                     break;
             }
@@ -169,12 +169,14 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_choose_to_date), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if (UtilDate.compareDate(fromDate, toDate, mDateFormat) == -1) {
+                if (UtilDate.compareDate(fromDate, toDate, MainActivity.sDateFormat) == -1) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_from_date_older), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                _query.setValDate(fromDate, toDate, mDateFormat);
+                _fromDate = UtilDate.convertDateFormat(fromDate, MainActivity.sDateFormat, 3);
+                _toDate = UtilDate.convertDateFormat(toDate, MainActivity.sDateFormat, 3);
+                UtilQuery.setDate(_fromDate, _toDate);
             }
         }
 
@@ -194,16 +196,26 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_max_amount), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if (0 == Integer.parseInt(min) || 0 == Integer.parseInt(max)) {
+                if ("0".equals(min) || "0".equals(max) ||
+                        "0.0".equals(min) || "0.0".equals(max) ||
+                        "0.00".equals(min) || "0.00".equals(max) ||
+                        "0.000".equals(min) || "0.000".equals(max)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if (Integer.parseInt(min) - Integer.parseInt(max) > 0) {
+
+                BigDecimal bigMin = new BigDecimal(min);
+                BigDecimal bigMax = new BigDecimal(max);
+
+                if (bigMin.compareTo(bigMax) > 0) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_min_amount_greater), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                _query.setValAmount(min, max);
+                UtilQuery.setAmount(UtilCurrency.getIntAmountFromBigDecimal(bigMin,
+                                MainActivity.sCurrency.getDefaultFractionDigits()),
+                        UtilCurrency.getIntAmountFromBigDecimal(bigMax,
+                                MainActivity.sCurrency.getDefaultFractionDigits()));
             }
         }
 
@@ -220,7 +232,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     return false;
                 }
 
-                _query.setCategory(categoryCode, category);
+                UtilQuery.setCategoryCode(String.valueOf(categoryCode));
             }
         }
 
@@ -236,11 +248,10 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     return false;
                 }
 
-                _query.setMemo(memo);
+                UtilQuery.setMemo(memo);
             }
         }
 
-        _query.setListCards(lstCards);
         return true;
     }
 
@@ -329,4 +340,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }
     }
+
+    //todo card for currency
 }

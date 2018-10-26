@@ -16,9 +16,8 @@ import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.settings.UtilKeyboard;
-import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
-import com.kakeibo.util.UtilSave;
+import com.kakeibo.util.UtilQuery;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -43,19 +42,15 @@ public class TabFragment1 extends Fragment {
     private Button btnCurrency;
     private ArrayList<Button> btnsCategory;
 
-    private String selectedCategory = "";
-    private int selectedCategoryCode;
-    private String[] weekName;
-    private String[] defaultCategory;
-    private Query _query;
+    private static Query _query;
+    private static String _eventDate;
+    private static String selectedCategory = "";
+    private static int selectedCategoryCode;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _activity = getActivity();
         View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
-
-        weekName = getResources().getStringArray(R.array.week_name);
-        defaultCategory = getResources().getStringArray(R.array.default_category);
 
         findViews(view);
         setListeners();
@@ -66,7 +61,7 @@ public class TabFragment1 extends Fragment {
     @Override
     public void onResume () {
         super.onResume();
-        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
+        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
     }
 
     void findViews(View view)
@@ -75,7 +70,7 @@ public class TabFragment1 extends Fragment {
         btnDate = view.findViewById(R.id.btn_date);
         btnNext = view.findViewById(R.id.btn_next);
         btnCurrency = view.findViewById(R.id.btn_currency);
-        btnCurrency.setText(UtilCurrency.sCurrencyCodes.get(UtilCurrency.sDefaultCurrencyIndex));
+        btnCurrency.setText(MainActivity.sCurrency.getCurrencyCode());
 
         btnsCategory = new ArrayList<>();
         btnsCategory.add(view.findViewById(R.id.btn_category1));
@@ -97,8 +92,8 @@ public class TabFragment1 extends Fragment {
     }
 
     void setButtonContent() {
-        for (int i = 0; i < defaultCategory.length; i++) {
-            btnsCategory.get(i).setText(defaultCategory[i]);
+        for (int i = 0; i < MainActivity.sCategory.length; i++) {
+            btnsCategory.get(i).setText(MainActivity.sCategory[i]);
         }
     }
 
@@ -109,7 +104,7 @@ public class TabFragment1 extends Fragment {
         btnCurrency.setOnClickListener(new CurrencyPickerClickListener(_activity, btnCurrency, edtAmount));
         edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount,
                 MainActivity.sCurrency.getDefaultFractionDigits()));
-        for (int i = 0; i < defaultCategory.length; i++) {
+        for (int i = 0; i < MainActivity.sCategory.length; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
         }
     }
@@ -135,7 +130,7 @@ public class TabFragment1 extends Fragment {
                     date = cal.getTime();
                     String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
-                            + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                            + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
                 case R.id.btn_date:
@@ -152,7 +147,7 @@ public class TabFragment1 extends Fragment {
                     date = cal.getTime();
                     str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
-                            + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                            + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                     btnDate.setText(str);
                     break;
             }
@@ -213,9 +208,11 @@ public class TabFragment1 extends Fragment {
             }
 
             if (checkBeforeSave()) {
+                _query = new Query(Query.QUERY_TYPE_NEW);
+
                 saveItem();
                 ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                ((MainActivity)_activity).onItemSaved(_query);
+                ((MainActivity)_activity).onItemSaved(_query, _eventDate);
                 reset();
             }
         }
@@ -244,7 +241,7 @@ public class TabFragment1 extends Fragment {
 
     void saveItem()
     {
-        ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter(getActivity());
+        ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
 
         String[] ymd = btnDate.getText().toString().split("\\s+")[0].split("/");
         String y, m, d;
@@ -287,8 +284,17 @@ public class TabFragment1 extends Fragment {
         itemsDBAdapter.close();
 
         _query = new Query(Query.QUERY_TYPE_NEW);
-        _query.setValDate(y, m, d, MainActivity.sDateFormat);
-        _query.buildQuery();
+        UtilQuery.init();
+        UtilQuery.setDate(eventDate, "");
+        UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+        UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+        _query.setQueryC(UtilQuery.buildQueryC());
+        _query.setQueryCs(UtilQuery.buildQueryCs());
+        _query.setQueryD(UtilQuery.buildQueryD());
+
+        _eventDate = eventDate;
     }
 
     private void showYMDPickerDialog()
@@ -304,7 +310,7 @@ public class TabFragment1 extends Fragment {
                 Date date = cal.getTime();
                 String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                         Locale.getDefault()).format(date)
-                        + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                        + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
                 btnDate.setText(str);
             }
         }, year, month-1, day);
@@ -315,7 +321,7 @@ public class TabFragment1 extends Fragment {
     {
         edtAmount.setText("");
         edtMemo.setText("");
-        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, weekName));
+        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
     }
 
     @Override
