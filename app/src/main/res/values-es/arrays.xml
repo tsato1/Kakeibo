@@ -24,11 +24,4 @@
         <item>IMPUES</item>
         <item>OTROS</item>
     </string-array>
-
-    <string-array name="search_criteria">
-        <item>Rango de Cantidad</item>
-        <item>Rango de Fechas</item>
-        <item>Categoría</item>
-        <item>Nota</item>
-    </string-array>
 </resources>

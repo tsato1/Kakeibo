@@ -22,6 +22,7 @@
     <string name="export_category">Export [Category]</string>
     <string name="item_detail">Item Detail</string>
     <string name="amount">Amount</string>
+    <string name="currency">Currency</string>
     <string name="category">Category</string>
     <string name="memo">Memo</string>
     <string name="event_date">Event Date</string>
@@ -95,11 +96,12 @@
     <!-- General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_change_date_format">Change Date Format</string>
+    <string name="pref_title_date_format">Date Format</string>
     <string name="pref_title_remove_ads">Remove Ads</string>
     <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
     <string name="pref_title_category">Category</string>
     <string name="pref_title_currency">Currency</string>
+    <string name="pref_title_fraction_digits">Fraction Digits</string>
 
     <!-- Setting for in-app data -->
     <string name="pref_header_in_app_data">In-App Data</string>

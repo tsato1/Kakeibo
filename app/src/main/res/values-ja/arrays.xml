@@ -24,11 +24,4 @@
         <item>税金</item>
         <item>他</item>
     </string-array>
-
-    <string-array name="search_criteria">
-        <item>日時範囲</item>
-        <item>金額範囲</item>
-        <item>カテゴリー</item>
-        <item>メモ</item>
-    </string-array>
 </resources>

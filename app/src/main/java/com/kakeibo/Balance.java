@@ -1,17 +1,19 @@
 package com.kakeibo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-public class Balance {
+class Balance {
     private BigDecimal income;
     private BigDecimal expense;
     private BigDecimal balance;
 
-    public static Balance newInstance() {
-        return new Balance(new BigDecimal(0), new BigDecimal(0));
+    static Balance newInstance(int fractionDigits) {
+        return new Balance(new BigDecimal(0).setScale(fractionDigits, RoundingMode.UNNECESSARY),
+                new BigDecimal(0).setScale(fractionDigits, RoundingMode.UNNECESSARY));
     }
 
-    Balance (BigDecimal income, BigDecimal expense) {
+    private Balance (BigDecimal income, BigDecimal expense) {
         this.income = income;
         this.expense = expense;
     }

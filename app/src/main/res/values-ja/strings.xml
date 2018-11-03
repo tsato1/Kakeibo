@@ -39,7 +39,7 @@
     <string name="file_created">ファイルの作成: %1$s</string>
     <string name="file_create_error">ファイル作成中にエラーが発生しました．</string>
     <string name="pref_header_general">一般</string>
-    <string name="pref_title_change_date_format">日付フォーマットの変更</string>
+    <string name="pref_title_date_format">日付フォーマットの変更</string>
     <string name="pref_title_remove_ads">広告を取り除く</string>
     <string name="pref_desc_remove_ads">Kakeibo! Proにアップグレード</string>
     <string name="select_folder">フォルダを選択</string>
@@ -69,7 +69,6 @@
     <string name="ins_tap_plus_to_add_criteria">プラスボタンより検索条件を追加してください．</string>
     <string name="ins_tap_search">検索ボタンを押して検索します．</string>
     <string name="quest_save_this_search">この検索を保存しますか．</string>
-    <string name="quest_export_this_report">このレポートをGoogle Driveにエクスポートしますか．</string>
     <string name="title_search_criteria">検索条件：</string>
     <string name="title_returning_to_monthly_report">月次レポートへ戻ります．</string>
     <string name="folder_not_selected">フォルダが選択されなかったためキャンセルされました．</string>
@@ -97,4 +96,5 @@
     <string name="export_category">エクスポート：カテゴリー</string>
     <string name="quest_export_this_report_C">このレポートをGoogle Driveにエクスポートしますか？日付順で出力されます．</string>
     <string name="quest_export_this_report_D">このレポートをGoogle Driveにエクスポートしますか？カテゴリー順で出力されます．</string>
+    <string name="currency">通貨</string>
 </resources>

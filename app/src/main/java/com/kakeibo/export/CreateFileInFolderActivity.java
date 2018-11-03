@@ -17,6 +17,7 @@ import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.util.UtilFiles;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -28,8 +29,8 @@ import java.io.Writer;
 public class CreateFileInFolderActivity extends BaseExportActivity {
     private static final String TAG = CreateFileInFolderActivity.class.getSimpleName();
 
-    public static final String TMP_FILE_ORDER_DATE = "tmp_order_date.csv";
-    public static final String TMP_FILE_ORDER_CATEGORY = "tmp_order_cat.csv";
+    public static final String FILE_ORDER_DATE = "tmp_order_date.csv";
+    public static final String FILE_ORDER_CATEGORY = "tmp_order_cat.csv";
 
     private static int REPORT_VIEW_TYPE;
 
@@ -76,9 +77,9 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
                     String str = "";
                     if (REPORT_VIEW_TYPE == 0) {
-                        str = UtilFiles.getFileValue(TMP_FILE_ORDER_DATE, this);
+                        str = UtilFiles.getFileValue(FILE_ORDER_DATE, this);
                     } else if (REPORT_VIEW_TYPE == 1) {
-                        str = UtilFiles.getFileValue(TMP_FILE_ORDER_CATEGORY, this);
+                        str = UtilFiles.getFileValue(FILE_ORDER_CATEGORY, this);
                     }
 
                     try (Writer writer = new OutputStreamWriter(outputStream)) {

@@ -1,12 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-14:12
+ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:1:1-12:12
 	package
 		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:2:5-40
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
@@ -21,25 +21,25 @@ INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/Androi
 		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:3:5-28
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
+application
+ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-10:19
+	android:label
+		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:8:9-41
+	android:allowBackup
+		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:7:9-35
+	android:theme
+		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:9:9-40
 uses-sdk
-ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-47
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-47
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-47
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-47
-INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-47
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
+INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
 	android:targetSdkVersion
-		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:15-44
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
+		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
-		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:6:5-47
+		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
 		INJECTED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml
-application
-ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:8:5-12:19
-	android:label
-		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:10:9-41
-	android:allowBackup
-		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:9:9-35
-	android:theme
-		ADDED from /Users/tsato/AndroidStudioProjects/Kakeibo/HoloGraphLibrary/AndroidManifest.xml:11:9-40

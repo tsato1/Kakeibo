@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frl_card_currency"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include layout="@layout/card_background"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cdv_currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_view_horizontal_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/card_view_horizontal_padding"
+            android:paddingEnd="@dimen/card_view_horizontal_padding"
+            android:paddingTop="@dimen/card_view_vertical_padding"
+            android:paddingBottom="@dimen/card_view_vertical_padding">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/currency"
+                android:textSize="@dimen/char_size_mid"/>
+            <Button
+                android:id="@+id/btn_card_currency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/currency"
+                style="?android:attr/buttonBarButtonStyle"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>
