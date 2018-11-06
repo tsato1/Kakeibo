@@ -45,7 +45,6 @@ public class TabFragment2C extends Fragment {
 
     private List<Item> lstCategory;
     private CategoryListAdapter lsaCategory;
-    private FrameLayout frlCategory;
     private ListView lsvCategory;
     private FloatingActionButton fabExport;
 
@@ -105,6 +104,13 @@ public class TabFragment2C extends Fragment {
                     dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Runnable rblSaveToFile = ()->{
+                                System.out.println("Runnable running");
+                                queryToSaveLocal();
+                            };
+                            Thread thread = new Thread(rblSaveToFile);
+                            thread.start();
+
                             Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
                             intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_CATEGORY);
                             startActivity(intent);
@@ -175,19 +181,8 @@ public class TabFragment2C extends Fragment {
         Log.d(TAG, "loadItemsOrderByCategory() "+_query.getQueryC());
 
         Balance balance = Balance.newInstance(MainActivity.sFractionDigits);
-        lstCategory.clear();
-        _stringBuilder.setLength(0);
-        _stringBuilder.append(getResources().getString(R.string.category));
-        _stringBuilder.append(",");
-        _stringBuilder.append(getResources().getString(R.string.amount));
-        _stringBuilder.append(",");
-        _stringBuilder.append(getResources().getString(R.string.memo));
-        _stringBuilder.append(",");
-        _stringBuilder.append(getResources().getString(R.string.event_date));
-        _stringBuilder.append(",");
-        _stringBuilder.append(getResources().getString(R.string.updated_date));
-        _stringBuilder.append("\n");
 
+        lstCategory.clear();
         _itemsDbAdapter.open();
         Cursor c = _itemsDbAdapter.getItemsByRawQuery(_query.getQueryC());
 
@@ -199,7 +194,7 @@ public class TabFragment2C extends Fragment {
                 Item item = new Item(
                         "",
                         c.getInt(c.getColumnIndex("SUM(amount)")),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_CURRENCY_CODE)),
+                        "",
                         MainActivity.sFractionDigits,
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
                         "",
@@ -215,17 +210,6 @@ public class TabFragment2C extends Fragment {
                     balanceDay = balanceDay.subtract(item.getAmount());
                 }
 
-                _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
-                _stringBuilder.append(",");
-                _stringBuilder.append(item.getAmount());
-                _stringBuilder.append(",");
-                _stringBuilder.append(item.getMemo());
-                _stringBuilder.append(",");
-                _stringBuilder.append(item.getEventDate());
-                _stringBuilder.append(",");
-                _stringBuilder.append(item.getUpdateDate());
-                _stringBuilder.append("\n");
-
                 lstCategory.add(item);
             } while (c.moveToNext());
         }
@@ -239,10 +223,61 @@ public class TabFragment2C extends Fragment {
         lsaCategory.notifyDataSetChanged();
         makePieGraph();
 
-        UtilFiles.writeToFile(CreateFileInFolderActivity.FILE_ORDER_DATE, _stringBuilder.toString(),
-                _activity, Context.MODE_PRIVATE);
-
         _itemLoadListener.onItemsLoaded(balance);
+    }
+
+    private void queryToSaveLocal() {
+        /***
+         * expecting: queryD=
+         * SELECT * FROM ITEMS WHERE strftime('%Y-%m', event_date) = '2018-11' ORDER BY event_date ASC
+         * ***/
+        String query = _query.getQueryD()
+                .replace("ORDER BY event_date ASC", " ORDER BY category_code, amount DESC");
+        Log.d(TAG, "queryToSaveLocal() "+query);
+
+        _stringBuilder.setLength(0);
+        _stringBuilder.append(getResources().getString(R.string.category));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.amount));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.memo));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.event_date));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.updated_date));
+        _stringBuilder.append("\n");
+
+        _itemsDbAdapter.open();
+        Cursor c = _itemsDbAdapter.getItemsByRawQuery(query);
+
+        if (c!=null && c.moveToFirst()) {
+            do {
+                Item item = new Item(
+                        "",
+                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        "",
+                        MainActivity.sFractionDigits,
+                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
+                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
+                );
+
+                _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getAmount());
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getMemo());
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getEventDate());
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getUpdateDate());
+                _stringBuilder.append("\n");
+            } while (c.moveToNext());
+        }
+
+        UtilFiles.writeToFile(CreateFileInFolderActivity.FILE_ORDER_CATEGORY,
+                _stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
     }
 
     void calculatePercentage(Balance balance) {

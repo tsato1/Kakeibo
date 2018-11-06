@@ -14,6 +14,7 @@ import static com.kakeibo.db.ItemsDBAdapter.COL_MEMO;
 public class UtilQuery {
     public static final String DESC = "DESC";
     public static final String ASC = "ASC";
+    public static final String SUM_AMOUNT = "SUM(amount)";
 
     private static StringBuilder[] builderCs; /*** for category detailed list ***/
     private static StringBuilder builderC; /*** for category list ***/
@@ -27,9 +28,8 @@ public class UtilQuery {
         for (int i=0; i<builderCs.length; ++i) {
             builderCs[i] = new StringBuilder("SELECT * FROM ITEMS");
         }
-        builderC = new StringBuilder("SELECT SUM(amount), " +
-                ItemsDBAdapter.COL_CATEGORY_CODE + ", " +
-                ItemsDBAdapter.COL_CURRENCY_CODE +
+        builderC = new StringBuilder("SELECT " + SUM_AMOUNT + ", " +
+                ItemsDBAdapter.COL_CATEGORY_CODE +
                 " FROM ITEMS");
         builderD = new StringBuilder("SELECT * FROM ITEMS");
         where = false;

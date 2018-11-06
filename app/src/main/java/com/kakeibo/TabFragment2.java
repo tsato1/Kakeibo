@@ -70,7 +70,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         UtilQuery.init();
         UtilQuery.setDate(todaysDate, "");
         UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-        UtilQuery.setCOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+        UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
         UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
         _query.setQueryC(UtilQuery.buildQueryC());
@@ -123,7 +123,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         UtilQuery.init();
         UtilQuery.setDate(y+"-"+m+"-01", "");
         UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-        UtilQuery.setCOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+        UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
         UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
         _query.setQueryC(UtilQuery.buildQueryC());
@@ -222,7 +222,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                             UtilQuery.init();
                             UtilQuery.setDate(todaysDate, "");
                             UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-                            UtilQuery.setCOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+                            UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
                             UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
                             UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
                             _query.setQueryC(UtilQuery.buildQueryC());

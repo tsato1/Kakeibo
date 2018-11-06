@@ -66,9 +66,7 @@
     <string name="msg_item_successfully_saved">The item was successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="ins_tap_plus_to_add_criteria">First, Tap the plus button on the left bottom to add criteria.
-        You can add as many criterion as you want</string>
-    <string name="ins_tap_search">Then tap the search button to search.</string>
+    <string name="ins_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
 
     <string name="err_please_select_category">Please select category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>
@@ -88,9 +86,10 @@
     <!-- Export -->
     <string name="select_file">Select file</string>
     <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file.</string>
+    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
     <string name="select_folder">Select a folder</string>
     <string name="folder_not_selected">No folder selected, canceling uploading.</string>
+    <string name="empty_report">Your report is empty.</string>
 
     <!-- Settings -->
     <!-- General settings -->

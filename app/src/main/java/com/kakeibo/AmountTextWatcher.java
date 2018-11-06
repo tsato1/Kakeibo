@@ -10,11 +10,9 @@ import java.util.Set;
 
 public class AmountTextWatcher implements TextWatcher {
     private EditText mEdtAmount;
-    private int mFractionDigits;
 
-    public AmountTextWatcher(EditText edtAmount, int fractionDigits) {
+    public AmountTextWatcher(EditText edtAmount) {
         mEdtAmount = edtAmount;
-        mFractionDigits = fractionDigits;
     }
 
     @Override
@@ -28,7 +26,7 @@ public class AmountTextWatcher implements TextWatcher {
         String str = editable.toString();
         int length = str.length();
 
-        if (mFractionDigits == 0) {
+        if (MainActivity.sFractionDigits == 0) {
             if (length > 1 && str.charAt(length - 1) == '.') {
                 mEdtAmount.setText(str.substring(0, length - 1));
                 mEdtAmount.setSelection(mEdtAmount.getText().length());
@@ -54,7 +52,7 @@ public class AmountTextWatcher implements TextWatcher {
             }
 
             if (str.contains(".") &&
-                    str.substring(str.indexOf('.')).length() > mFractionDigits + 1) {
+                    str.substring(str.indexOf('.')).length() > MainActivity.sFractionDigits + 1) {
                 mEdtAmount.setText(str.substring(0, length - 1));
                 mEdtAmount.setSelection(mEdtAmount.getText().length());
             }

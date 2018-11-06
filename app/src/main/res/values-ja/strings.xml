@@ -37,9 +37,9 @@
     <string name="search">検索</string>
     <string name="select_file">ファイルの選択</string>
     <string name="file_created">ファイルの作成: %1$s</string>
-    <string name="file_create_error">ファイル作成中にエラーが発生しました．</string>
+    <string name="file_create_error">ファイル作成中にエラーが発生しました．ネットワークを確認しもう一度試してください．</string>
     <string name="pref_header_general">一般</string>
-    <string name="pref_title_date_format">日付フォーマットの変更</string>
+    <string name="pref_title_date_format">日付フォーマット</string>
     <string name="pref_title_remove_ads">広告を取り除く</string>
     <string name="pref_desc_remove_ads">Kakeibo! Proにアップグレード</string>
     <string name="select_folder">フォルダを選択</string>
@@ -66,8 +66,7 @@
     <string name="err_please_enter_max_amount">上限金額を入力してください．</string>
     <string name="err_min_amount_greater">上限金額は下限金額より大きくなければなりません．</string>
     <string name="err_google_signin_failed">Googleサインインに失敗しました．もう一度試してください．</string>
-    <string name="ins_tap_plus_to_add_criteria">プラスボタンより検索条件を追加してください．</string>
-    <string name="ins_tap_search">検索ボタンを押して検索します．</string>
+    <string name="ins_tap_plus_to_add_criteria">プラスボタンより検索条件を追加した後検索ボタンをタップします．</string>
     <string name="quest_save_this_search">この検索を保存しますか．</string>
     <string name="title_search_criteria">検索条件：</string>
     <string name="title_returning_to_monthly_report">月次レポートへ戻ります．</string>
@@ -97,4 +96,5 @@
     <string name="quest_export_this_report_C">このレポートをGoogle Driveにエクスポートしますか？日付順で出力されます．</string>
     <string name="quest_export_this_report_D">このレポートをGoogle Driveにエクスポートしますか？カテゴリー順で出力されます．</string>
     <string name="currency">通貨</string>
+    <string name="pref_title_fraction_digits">金額の小数桁数</string>
 </resources>

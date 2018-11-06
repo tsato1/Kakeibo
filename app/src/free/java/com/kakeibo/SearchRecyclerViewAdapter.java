@@ -104,8 +104,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             edtMin = itemView.findViewById((R.id.edt_amount_min));
             edtMax = itemView.findViewById(R.id.edt_amount_max);
 
-            edtMin.addTextChangedListener(new AmountTextWatcher(edtMin, MainActivity.sFractionDigits));
-            edtMax.addTextChangedListener(new AmountTextWatcher(edtMax, MainActivity.sFractionDigits));
+            edtMin.addTextChangedListener(new AmountTextWatcher(edtMin));
+            edtMax.addTextChangedListener(new AmountTextWatcher(edtMax));
         }
     }
 

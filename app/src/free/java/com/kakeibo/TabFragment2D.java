@@ -223,7 +223,7 @@ public class TabFragment2D extends Fragment {
                 String categoryText = getString(R.string.category_colon) + MainActivity.sCategories[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
-                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sFractionDigits));
+                edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
                 edtAmount.setText(String.valueOf(item.getAmount()));
                 EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());

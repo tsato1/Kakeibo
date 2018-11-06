@@ -25,7 +25,9 @@ import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilFiles;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 //todo test on version up
 
@@ -74,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         sWeekName = getResources().getStringArray(R.array.week_name);
         sCategories = getResources().getStringArray(R.array.default_category);
-
-        if (!UtilFiles.fileExists(this, FILE_CATEGORY)) {
-
-        }
 
         loadAds();
     }
@@ -138,7 +136,13 @@ public class MainActivity extends AppCompatActivity {
         sDateFormat = Integer.parseInt(formatIndex);
 
         /*** fraction digits ***/
-        String digitsIndex = pref.getString(SettingsActivity.PREF_KEY_FRACTION_DIGITS, "0");
+        Locale locale = Locale.getDefault();
+        Currency currency = Currency.getInstance(locale);
+        int defValue = currency.getDefaultFractionDigits();
+        Log.d("asdf", defValue+"");
+
+
+        String digitsIndex = pref.getString(SettingsActivity.PREF_KEY_FRACTION_DIGITS, String.valueOf(defValue));
         String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 

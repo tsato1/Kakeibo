@@ -66,7 +66,6 @@ public class TabFragment1 extends Fragment {
         Log.d(TAG, "onResume() called");
         btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
         edtAmount.setText("");
-        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sFractionDigits));
     }
 
     void findViews(View view)
@@ -104,7 +103,7 @@ public class TabFragment1 extends Fragment {
         btnPrev.setOnClickListener(new DateButtonClickListener());
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
-        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount, MainActivity.sFractionDigits));
+        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
         for (int i = 0; i < MainActivity.sCategories.length; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
         }
@@ -288,7 +287,7 @@ public class TabFragment1 extends Fragment {
         UtilQuery.init();
         UtilQuery.setDate(eventDate, "");
         UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-        UtilQuery.setCOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+        UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
         UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
         _query.setQueryC(UtilQuery.buildQueryC());

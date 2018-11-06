@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -84,6 +85,9 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
                     try (Writer writer = new OutputStreamWriter(outputStream)) {
                         writer.write(str);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, R.string.empty_report, Toast.LENGTH_LONG).show();
                     }
 
                     String title = "Kakeibo_Export_" + UtilDate.getTodaysDate(mStrDateFormat);

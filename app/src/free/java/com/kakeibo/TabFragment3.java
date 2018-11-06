@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -18,7 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
@@ -39,7 +40,8 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private Activity _activity;
     private Context _context;
     private View _view;
-    private FrameLayout frlRoot;
+    private CoordinatorLayout frlRoot;
+    private TextView txvSearchInstruction;
     private RecyclerView rcvSearchCriteria;
     private SearchRecyclerViewAdapter adpRecyclerView;
     private ArrayList<Card> lstCards;     // for cards displayed
@@ -69,18 +71,19 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         super.onResume();
         Log.d(TAG, "onResume() called");
 
+        if (lstCards.size() == 0) {
+            txvSearchInstruction.setVisibility(View.VISIBLE);
+        } else {
+            txvSearchInstruction.setVisibility(View.INVISIBLE);
+        }
+
         int indexAmountRangeCard = lstCards.indexOf(new Card(Card.TYPE_AMOUNT_RANGE, 0));
         if (indexAmountRangeCard > -1) {
             RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexAmountRangeCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
                 SearchRecyclerViewAdapter.ViewHolderAmountRange viewHolderAmountRange = (SearchRecyclerViewAdapter.ViewHolderAmountRange) viewHolder;
-                EditText edtMin = viewHolderAmountRange.edtMin;
-                EditText edtMax = viewHolderAmountRange.edtMax;
-
                 viewHolderAmountRange.edtMin.setText("");
                 viewHolderAmountRange.edtMax.setText("");
-                edtMin.addTextChangedListener(new AmountTextWatcher(edtMin, MainActivity.sFractionDigits));
-                edtMax.addTextChangedListener(new AmountTextWatcher(edtMax, MainActivity.sFractionDigits));
             }
         }
 
@@ -88,7 +91,8 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     }
 
     private void findViews() {
-        frlRoot = _view.findViewById(R.id.frl_root_fragment3);
+        frlRoot = _view.findViewById(R.id.crl_root_fragment3);
+        txvSearchInstruction = _view.findViewById(R.id.txv_inst_search);
         rcvSearchCriteria = _view.findViewById(R.id.rcv_search_criteria);
         fabAdd = _view.findViewById(R.id.fab_add_criterion);
         fabSearch = _view.findViewById(R.id.fab_search);
@@ -139,7 +143,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
                     if (checkBeforeSearch()) {
                         UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-                        UtilQuery.setCOrderBy(ItemsDBAdapter.COL_AMOUNT, UtilQuery.DESC);
+                        UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
                         UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
                         UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
                         query.setQueryC(UtilQuery.buildQueryC());
@@ -165,6 +169,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         Card card = new Card(selected, 0);
         lstCards.add(card);
         adpRecyclerView.notifyDataSetChanged();
+        txvSearchInstruction.setVisibility(View.INVISIBLE);
     }
 
     private boolean checkBeforeSearch() {
@@ -308,42 +313,22 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         int deleteIndex = viewHolder.getAdapterPosition();
 
         adpRecyclerView.removeItem(deleteIndex);
+        if (lstCards.size() == 0) {
+            txvSearchInstruction.setVisibility(View.VISIBLE);
+        }
 
         Snackbar snackbar = Snackbar.make(frlRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
         snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adpRecyclerView.restoreItem(cardItem, deleteIndex);
+                txvSearchInstruction.setVisibility(View.INVISIBLE);
                 for (int i = 0; i < lstChoices.size(); i++) {
                     if (lstChoices.get(i).equals(searchCriteria[cardItem.type])) lstChoices.remove(i);
                 }
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
-    }
-
-    private void createFloatingInstruction() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getResources().getString(R.string.how_to_perform_search));
-        builder.setIcon(R.mipmap.ic_mikan);
-        builder.setMessage(R.string.ins_tap_plus_to_add_criteria);
-        builder.setPositiveButton(R.string.next, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(getResources().getString(R.string.how_to_perform_search));
-                builder.setIcon(R.mipmap.ic_mikan);
-                builder.setMessage(R.string.ins_tap_search);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.show();
-            }
-        });
-        builder.show();
     }
 
     @Override
