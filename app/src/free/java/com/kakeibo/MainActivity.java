@@ -38,16 +38,18 @@ import java.util.Locale;
 
 //todo tab newinstance
 
+//todo revisit the way queries are created
+
+//todo onSave doesn't focus on the saved item in the expandable list
+
 
 // versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String[] categoryColor = {
-            "#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872",
+            "#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872", "#7ca058",
             "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
-
-    public static final String FILE_CATEGORY = "FILE_CATEGORY";
 
     public static int sDateFormat;
     public static int sFractionDigits;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         sWeekName = getResources().getStringArray(R.array.week_name);
         sCategories = getResources().getStringArray(R.array.default_category);
 
-        loadAds();
+        /***loadAds();***/
     }
 
     @Override
@@ -139,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
         Locale locale = Locale.getDefault();
         Currency currency = Currency.getInstance(locale);
         int defValue = currency.getDefaultFractionDigits();
-        Log.d("asdf", defValue+"");
-
 
         String digitsIndex = pref.getString(SettingsActivity.PREF_KEY_FRACTION_DIGITS, String.valueOf(defValue));
         String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
@@ -181,11 +181,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSearch(Query query, String fromDate, String toDate) {
         try {
+            /***
             if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
             } else {
                 Log.d(TAG, "The interstitial wasn't loaded yet.");
-            }
+            }***/
 
             tabFragment2.onSearch(query, fromDate, toDate);
         } catch (Exception e) {

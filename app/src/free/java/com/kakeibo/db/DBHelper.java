@@ -42,7 +42,7 @@ public class DBHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + ItemsDBAdapter.TABLE_ITEM + " ("+
                     ItemsDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     ItemsDBAdapter.COL_AMOUNT + " INTEGER DEFAULT 0," +
-                    ItemsDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL, " +
+                    ItemsDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '"+UtilCurrency.CURRENCY_OLD+"', " +
                     ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0," +
                     ItemsDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
@@ -59,7 +59,6 @@ public class DBHelper extends SQLiteOpenHelper {
                     " (" +
                     ItemsDBAdapter.COL_ID+","+
                     ItemsDBAdapter.COL_AMOUNT+","+
-                    ItemsDBAdapter.COL_CURRENCY_CODE+","+
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
                     ItemsDBAdapter.COL_MEMO+","+
                     ItemsDBAdapter.COL_EVENT_DATE+","+
@@ -67,7 +66,6 @@ public class DBHelper extends SQLiteOpenHelper {
                     " SELECT "+
                     ItemsDBAdapter.COL_ID+","+
                     "CAST ("+ItemsDBAdapter.COL_AMOUNT+" AS INTEGER),"+
-                    ItemsDBAdapter.COL_CURRENCY_CODE+","+
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
                     ItemsDBAdapter.COL_MEMO+","+
                     ItemsDBAdapter.COL_EVENT_DATE+","+
@@ -97,6 +95,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "oldVersion=" + oldVersion + " : newVersion=" + newVersion);
 
+        ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
+        itemsDBAdapter.open();
+
         if (oldVersion < 2) {
             upgradeVersion2(db);
         }
@@ -109,43 +110,20 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
             initKkbAppTable(db, -1);
         }
+
+        itemsDBAdapter.close();
     }
 
     private void upgradeVersion4(SQLiteDatabase db) {
         /*** changing UpdateDate format form M to MM ***/
-        Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM, new String[]{ItemsDBAdapter.COL_ID, ItemsDBAdapter.COL_UPDATE_DATE},
-                null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            do {
-                /*** date ***/
-                String oriDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE));
-                String[] dates = oriDate.split("[ ]"); // [0]=date, [1]=time
-                String[] ymd = dates[0].split("[-]");
-                String d = UtilDate.convertMtoMM(Integer.parseInt(ymd[2]));
-                String updDate = oriDate;
-                if (d.length() == 2) {
-                    updDate = ymd[0]+"-"+ymd[1]+"-"+d+" "+dates[1];
-                }
-
-                int colId = c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_ID));
-                ContentValues values = new ContentValues();
-                values.put(ItemsDBAdapter.COL_UPDATE_DATE, updDate);
-
-                /*** flipping negative to positive***/
-                String amount = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
-                int newAmount = Math.abs(Integer.parseInt(amount));
-                values.put(ItemsDBAdapter.COL_AMOUNT, newAmount);
-
-                /*** setting currency ***/
-                values.put(ItemsDBAdapter.COL_CURRENCY_CODE, UtilCurrency.CURRENCY_OLD);
-
-                /*** reflecting the result to db ***/
-                db.update(ItemsDBAdapter.TABLE_ITEM, values,
-                        ItemsDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
-
-            } while (c.moveToNext());
-        }
-        c.close();
+//        Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM,
+//                new String[]{ItemsDBAdapter.COL_ID, ItemsDBAdapter.COL_UPDATE_DATE},
+//                null, null, null, null, null, null);
+//        if (c.moveToFirst()) {
+//            do {
+//            } while (c.moveToNext());
+//        }
+//        c.close();
     }
 
     private void upgradeVersion3(SQLiteDatabase db) {
@@ -153,9 +131,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM, new String[]{
                         ItemsDBAdapter.COL_ID,
+                        ItemsDBAdapter.COL_AMOUNT,
                         ItemsDBAdapter.COL_EVENT_D,
                         ItemsDBAdapter.COL_EVENT_YM,
-                        ItemsDBAdapter.COL_EVENT_D,
                         ItemsDBAdapter.COL_UPDATE_DATE},
                 null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -169,12 +147,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 /*** event_date ***/
                 eventDate = eventYM.replace('/','-') + "-" + eventD;
+                values.put(ItemsDBAdapter.COL_EVENT_DATE, eventDate);
+
                 /*** update_date ***/
                 updateDate = updateDate.split("\\s+")[0].replace('/','-') + " 00:00:00";
-
-                values.put(ItemsDBAdapter.COL_EVENT_DATE, eventDate);
                 values.put(ItemsDBAdapter.COL_UPDATE_DATE, updateDate);
-                db.update(ItemsDBAdapter.TABLE_ITEM, values, ItemsDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
+
+                /*** flipping negative to positive***/
+                String amount = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT));
+                int newAmount = Math.abs(Integer.parseInt(amount));
+                values.put(ItemsDBAdapter.COL_AMOUNT, newAmount*1000);
+
+                /*** reflecting the result to db ***/
+                db.update(ItemsDBAdapter.TABLE_ITEM, values,
+                        ItemsDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
             } while (c.moveToNext());
         }
         c.close();
@@ -231,17 +217,5 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
         db.insertOrThrow(TABLE_KKBAPP, null, valuesDBVersion);
-//
-//        ContentValues valuesCurrency = new ContentValues();
-//        valuesCurrency.put(KkbAppDBAdapter.COL_NAME, KkbAppDBAdapter.COL_VAL_ADS);
-//        valuesCurrency.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
-//        valuesCurrency.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
-//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_1, -1);
-//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
-//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
-//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
-//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
-//        valuesCurrency.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
-//        db.insertOrThrow(TABLE_KKBAPP, null, valuesCurrency);
     }
 }

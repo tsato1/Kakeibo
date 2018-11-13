@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
-import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilFiles;
 import com.kakeibo.util.UtilDate;
 
@@ -54,7 +53,7 @@ public class TabFragment2D extends Fragment {
     private List<String> lstDateHeader;
     private HashMap<String, List<Item>> hmpChildData;
     private ExpandableListAdapter elaData;
-    private ExpandableListView elvData;
+    private ExpandableListView explvData;
     private FloatingActionButton fabExport;
 
     public static TabFragment2D newInstance(ItemLoadListener itemLoadListener, Query query) {
@@ -85,11 +84,11 @@ public class TabFragment2D extends Fragment {
     }
 
     void findViews(){
-        elvData = _view.findViewById(R.id.lsv_expandable);
+        explvData = _view.findViewById(R.id.lsv_expandable);
         fabExport = _view.findViewById(R.id.fab_export);
 
-        elvData.setOnChildClickListener(new ChildClickListener());
-        elvData.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
+        explvData.setOnChildClickListener(new ChildClickListener());
+        explvData.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
         fabExport.setOnClickListener(new ButtonClickListener());
 
         _stringBuilder = new StringBuilder();
@@ -97,7 +96,7 @@ public class TabFragment2D extends Fragment {
         lstDateHeader = new ArrayList<>();
         hmpChildData = new HashMap<>();
         elaData = new ExpandableListAdapter(_activity, lstDateHeader, hmpChildData);
-        elvData.setAdapter(elaData);
+        explvData.setAdapter(elaData);
     }
 
     class ButtonClickListener implements View.OnClickListener {
@@ -379,24 +378,21 @@ public class TabFragment2D extends Fragment {
         _itemLoadListener.onItemsLoaded(balance);
     }
 
-    public void focusOnSavedItem(String query, String eventDate) {
-        Log.d(TAG, "focusOnSavedItem()");
+    public void focusOnSavedItem(String eventDate) {
+        Log.d(TAG, "focusOnSavedItem() " + eventDate);
         int m = Integer.parseInt(eventDate.split("-")[1]);
         int d = Integer.parseInt(eventDate.split("-")[2]);
-        _query.setQueryD(query);
 
         loadItemsOrderByDate();
 
         for (int i = 0; i < lstDateHeader.size(); i++) {
             String[] header = lstDateHeader.get(i).split("[,]"); // ex. "2018,04,30,-700"
 
-            //Log.d("TabFragment2","focusOnSavedItem() y:"+y+" m:"+m+" d:"+d);
-
             if (Integer.parseInt(header[1]) == m && Integer.parseInt(header[2]) == d) {
-                elvData.expandGroup(i);
-                elvData.smoothScrollToPositionFromTop(i, 0);
+                explvData.expandGroup(i);
+                explvData.smoothScrollToPositionFromTop(i, 0);
             } else {
-                elvData.collapseGroup(i);
+                explvData.collapseGroup(i);
             }
         }
     }

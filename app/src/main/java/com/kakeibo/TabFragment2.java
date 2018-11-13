@@ -33,7 +33,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
     public static int REPORT_BY_DATE = 0;
     public static int REPORT_BY_CATEGORY = 1;
-    public static int REPORT_BY_AMOUNT = 2;
+    public static int REPORT_BY_AMOUNT = 2; //todo
 
     private Activity _activity;
     private View _view;
@@ -313,13 +313,14 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _query = query;
         reset();
 
-        _ftrDetail = _cfmDetail.beginTransaction();
-        _tabFragment2D = TabFragment2D.newInstance(this, query);
-        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
-        _ftrDetail.addToBackStack(null);
-        _ftrDetail.commit();
+//        _ftrDetail = _cfmDetail.beginTransaction();
+//        _tabFragment2D = TabFragment2D.newInstance(this, query);
+//        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
+//        _ftrDetail.addToBackStack(null);
+//        _ftrDetail.commit();
+        //todo have to wait until oncreate gets called (fragment won't have context)
 
-        _tabFragment2D.focusOnSavedItem(eventDate.split("-")[0], eventDate.split("-")[1]);
+        _tabFragment2D.focusOnSavedItem(eventDate);
     }
 
     public void onSearch(Query query, String fromDate, String toDate) {

@@ -278,6 +278,8 @@ public class TabFragment2C extends Fragment {
 
         UtilFiles.writeToFile(CreateFileInFolderActivity.FILE_ORDER_CATEGORY,
                 _stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
+
+        //todo tell the CreateFileInFolderActivity that it's ready to upload
     }
 
     void calculatePercentage(Balance balance) {
@@ -298,7 +300,7 @@ public class TabFragment2C extends Fragment {
             PieSlice slice = new PieSlice();
             if (lstCategory.get(i).getCategoryCode() == 0) {
                 slice.setColor(ContextCompat.getColor(_activity, R.color.colorPrimary));
-            } else {
+            } else if (lstCategory.get(i).getCategoryCode() > 0) {
                 slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
             }
             slice.setValue(lstCategory.get(i).getAmount().intValue());

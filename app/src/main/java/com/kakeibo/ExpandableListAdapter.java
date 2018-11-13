@@ -55,7 +55,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         Object baseItem = getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater infalInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.row_explist_child, parent, false);
         }
 
@@ -71,7 +71,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
-            txvMemo.setText(item.getMemo().substring(0, 14) + "...");
+            String str = item.getMemo().substring(0, 14) + "...";
+            txvMemo.setText(str);
         }
         else {
             txvMemo.setText(item.getMemo());
@@ -138,9 +139,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
+            LayoutInflater infalInflater = (LayoutInflater) _context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.row_explist_header, null);
+            convertView = infalInflater.inflate(R.layout.row_explist_header, parent, false);
         }
 
         TextView txvHeaderDate = convertView.findViewById(R.id.txv_header_date);
