@@ -87,6 +87,7 @@ public abstract class BaseExportActivity extends Activity {
                     // required and is fatal. For apps where sign-in is optional, handle
                     // appropriately
                     Log.e(TAG, "Sign-in failed. 1");
+                    Toast.makeText(this, getString(R.string.err_google_signin_failed), Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
@@ -132,7 +133,7 @@ public abstract class BaseExportActivity extends Activity {
             GoogleSignInOptions signInOptions =
                     new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                             .requestScopes(Drive.SCOPE_FILE)
-                            .requestScopes(Drive.SCOPE_APPFOLDER)
+//                            .requestScopes(Drive.SCOPE_APPFOLDER)
                             .build();
             mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
             startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);

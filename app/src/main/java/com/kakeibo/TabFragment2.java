@@ -49,7 +49,8 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private TabFragment2D _tabFragment2D;
 
     private static Query _query;
-    public static int _calMonth, _calYear;
+    private static int _calMonth, _calYear;
+    private static String _eventDate;
 
     private Balance _balance;
 
@@ -284,7 +285,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     public void reset() {
-        //Log.d(TAG, "reset()");
+        Log.d(TAG, "reset() called");
 
         switch (_query.getType()) {
             case Query.QUERY_TYPE_NEW:
@@ -313,14 +314,13 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _query = query;
         reset();
 
-//        _ftrDetail = _cfmDetail.beginTransaction();
-//        _tabFragment2D = TabFragment2D.newInstance(this, query);
-//        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
-//        _ftrDetail.addToBackStack(null);
-//        _ftrDetail.commit();
-        //todo have to wait until oncreate gets called (fragment won't have context)
+        _ftrDetail = _cfmDetail.beginTransaction();
+        _tabFragment2D = TabFragment2D.newInstance(this, query);
+        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
+        _ftrDetail.addToBackStack(null);
+        _ftrDetail.commit();
 
-        _tabFragment2D.focusOnSavedItem(eventDate);
+        _eventDate = eventDate;
     }
 
     public void onSearch(Query query, String fromDate, String toDate) {
@@ -340,5 +340,12 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         Log.d(TAG, "onItemsLoaded() called");
         this._balance = balance;
         makeBalanceTable();
+
+        if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
+            if (_eventDate == null || "".equals(_eventDate)) {
+                _eventDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
+            }
+            _tabFragment2D.focusOnSavedItem(_eventDate);
+        }
     }
 }

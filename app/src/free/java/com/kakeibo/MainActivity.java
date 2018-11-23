@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String[] categoryColor = {
-            "#2b381d", "#40552b", "#557238", "#6a8d47", "#80aa55", "#95b872", "#7ca058",
+            "#2b381d", "#40552b", "#557238", "#6a8d47", "#7ca058", "#80aa55", "#95b872",
             "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
     public static int sDateFormat;
