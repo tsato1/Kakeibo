@@ -383,7 +383,7 @@ public class TabFragment2D extends Fragment {
         int m = Integer.parseInt(eventDate.split("-")[1]);
         int d = Integer.parseInt(eventDate.split("-")[2]);
 
-        //loadItemsOrderByDate();
+        //loadItemsOrderByDate(); //disposable
 
         for (int i = 0; i < lstDateHeader.size(); i++) {
             String[] header = lstDateHeader.get(i).split("[,]"); // ex. "2018,04,30,-700"

@@ -33,9 +33,6 @@ import java.util.Locale;
 
 //todo add and subtract custom categories (discreet categories for income too)
 
-//todo google drive api for release version
-//todo connection to firebase
-
 //todo tab newinstance
 
 //todo revisit the way queries are created
@@ -139,8 +136,13 @@ public class MainActivity extends AppCompatActivity {
 
         /*** fraction digits ***/
         Locale locale = Locale.getDefault();
-        Currency currency = Currency.getInstance(locale);
-        int defValue = currency.getDefaultFractionDigits();
+        int defValue = 0;
+        try {
+            Currency currency = Currency.getInstance(locale);
+            defValue = currency.getDefaultFractionDigits();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
 
         String digitsIndex = pref.getString(SettingsActivity.PREF_KEY_FRACTION_DIGITS, String.valueOf(defValue));
         String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
