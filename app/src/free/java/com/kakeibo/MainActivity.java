@@ -22,25 +22,16 @@ import com.kakeibo.settings.SettingsActivity;
 
 import com.google.android.gms.ads.MobileAds;
 import com.kakeibo.util.UtilDate;
-import com.kakeibo.util.UtilFiles;
 
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-//todo test on version up
-
 //todo add and subtract custom categories (discreet categories for income too)
-
-//todo tab newinstance
 
 //todo revisit the way queries are created
 
-//todo onSave doesn't focus on the saved item in the expandable list
-
-
-// versioncode: 9 (mom)
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -88,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        tabFragment1 = new TabFragment1();
-        tabFragment2 = new TabFragment2();
-        tabFragment3 = new TabFragment3();
+        tabFragment1 = TabFragment1.newInstance();
+        tabFragment2 = TabFragment2.newInstance();
+        tabFragment3 = TabFragment3.newInstance();
         adapter.addFragment(tabFragment1, getString(R.string.input));
         adapter.addFragment(tabFragment2, getString(R.string.report));
         adapter.addFragment(tabFragment3, getString(R.string.search));
@@ -183,13 +174,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSearch(Query query, String fromDate, String toDate) {
         try {
-            /***
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-            } else {
-                Log.d(TAG, "The interstitial wasn't loaded yet.");
-            }***/
-
             tabFragment2.onSearch(query, fromDate, toDate);
         } catch (Exception e) {
             e.printStackTrace();

@@ -51,6 +51,13 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private static String _fromDate;
     private static String _toDate;
 
+    public static TabFragment3 newInstance() {
+        TabFragment3 tabFragment3 = new TabFragment3();
+        Bundle args = new Bundle();
+        tabFragment3.setArguments(args);
+        return tabFragment3;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.tab_fragment_3, container, false);

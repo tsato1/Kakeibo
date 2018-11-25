@@ -1,6 +1,7 @@
 package com.kakeibo;
 
 import android.app.Application;
+import android.support.multidex.MultiDex;
 
 import com.kakeibo.db.DBAdapter;
 import com.kakeibo.db.DBHelper;
@@ -13,6 +14,7 @@ public class KkbApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         dbHelper = new DBHelper(this.getApplicationContext());
         DBAdapter.initInstance(dbHelper);
     }

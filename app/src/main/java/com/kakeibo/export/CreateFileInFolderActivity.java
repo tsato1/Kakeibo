@@ -35,7 +35,6 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
     private static int REPORT_VIEW_TYPE;
 
-    private int mIntDateFormat;
     private String mStrDateFormat;
 
     private InterstitialAd mInterstitialAd;
@@ -122,9 +121,8 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
-        mIntDateFormat = Integer.parseInt(f);
 
-        switch (mIntDateFormat) {
+        switch (Integer.parseInt(f)) {
             case 1: // MDY
                 mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_MDY) + " kk:mm:ss";
                 break;
@@ -151,7 +149,6 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                // Load the next interstitial.
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
             }
         });

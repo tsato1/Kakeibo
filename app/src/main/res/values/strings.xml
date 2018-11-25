@@ -17,6 +17,7 @@
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="loading">Loading</string>
     <string name="export">Export</string>
     <string name="export_date">Export [Date]</string>
     <string name="export_category">Export [Category]</string>
@@ -89,6 +90,7 @@
     <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
     <string name="select_folder">Select a folder</string>
     <string name="folder_not_selected">No folder selected, canceling uploading.</string>
+    <string name="nothing_to_export">There is nothing to export.</string>
     <string name="empty_report">Your report is empty.</string>
 
     <!-- Settings -->

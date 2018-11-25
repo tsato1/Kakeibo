@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
@@ -97,6 +98,11 @@ public class TabFragment2C extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.fab_export:
+                    if (lstCategory.size()==0) {
+                        Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+
                     AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
                     dialogExport.setIcon(R.mipmap.ic_mikan);
                     dialogExport.setTitle(getString(R.string.export_category));

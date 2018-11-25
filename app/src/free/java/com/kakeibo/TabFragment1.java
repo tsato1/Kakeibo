@@ -49,6 +49,13 @@ public class TabFragment1 extends Fragment {
     private static String selectedCategory = "";
     private static int selectedCategoryCode;
 
+    public static TabFragment1 newInstance() {
+        TabFragment1 tabFragment1 = new TabFragment1();
+        Bundle args = new Bundle();
+        tabFragment1.setArguments(args);
+        return tabFragment1;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _activity = getActivity();

@@ -104,6 +104,11 @@ public class TabFragment2D extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.fab_export:
+                    if (lstDateHeader.size()==0 || hmpChildData.size()==0) {
+                        Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+
                     AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
                     dialogExport.setIcon(R.mipmap.ic_mikan);
                     dialogExport.setTitle(getString(R.string.export_date));

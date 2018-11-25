@@ -54,8 +54,16 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
     private Balance _balance;
 
+    public static TabFragment2 newInstance() {
+        TabFragment2 tabFragment2 = new TabFragment2();
+        Bundle args = new Bundle();
+        tabFragment2.setArguments(args);
+        return tabFragment2;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView() called");
         _activity = getActivity();
         _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
 
@@ -310,7 +318,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     public void focusOnSavedItem(Query query, String eventDate) {
-        frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground));
         _query = query;
         reset();
 
@@ -324,7 +331,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     public void onSearch(Query query, String fromDate, String toDate) {
-        frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
         _query = query;
         reset();
 
@@ -339,6 +345,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     public void onItemsLoaded(Balance balance) {
         Log.d(TAG, "onItemsLoaded() called");
         this._balance = balance;
+
         makeBalanceTable();
 
         if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
