@@ -41,11 +41,12 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+        loadAds();
 
         REPORT_VIEW_TYPE = getIntent().getIntExtra("REPORT_VIEW_TYPE", 0);
-        loadAds();
     }
 
     @Override
@@ -99,8 +100,6 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
                     return getDriveResourceClient().createFile(parent, changeSet, contents);
                 })
-//                .addOnSuccessListener(this,
-//                        driveFile -> showMessage(getString(R.string.file_created)))
                 .addOnSuccessListener(aVoid -> {
                     showMessage(getString(R.string.file_created));
                     if (mInterstitialAd.isLoaded()) {
@@ -150,6 +149,9 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
             @Override
             public void onAdClosed() {
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+            @Override
+            public void onAdLoaded() {
             }
         });
     }

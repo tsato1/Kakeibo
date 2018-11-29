@@ -2,6 +2,7 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -62,13 +63,8 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView() called");
-        _activity = getActivity();
-        _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
-
-        findViews();
-
+    public void onAttach(Context context) {
+        super.onAttach(context);
         String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
         String[] ymd = todaysDate.split("-");
         _calYear = Integer.parseInt(ymd[0]);
@@ -93,6 +89,16 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _ftrDetail.add(R.id.frl_tab2_container, _tabFragment2D);
         _ftrDetail.addToBackStack(null);
         _ftrDetail.commit();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        Log.d(TAG, "onCreateView() called");
+        _activity = getActivity();
+        _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
+
+        findViews();
 
         return _view;
     }

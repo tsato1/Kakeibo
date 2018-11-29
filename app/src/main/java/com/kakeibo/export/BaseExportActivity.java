@@ -1,13 +1,10 @@
 package com.kakeibo.export;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,7 +15,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveFolder;
@@ -91,26 +87,16 @@ public abstract class BaseExportActivity extends Activity {
      */
     protected void signIn() {
         Log.d(TAG, "signIn()");
-        Set<Scope> requiredScopes = new HashSet<>(2);
-        requiredScopes.add(Drive.SCOPE_FILE);
-        requiredScopes.add(Drive.SCOPE_APPFOLDER);
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .requestScopes(Drive.SCOPE_FILE)
+                        .requestScopes(Drive.SCOPE_APPFOLDER)
+                        .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
         mAuth = FirebaseAuth.getInstance();
-
-        if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes)) {
-            initializeDriveClient(signInAccount);
-        } else {
-            GoogleSignInOptions signInOptions =
-                    new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestIdToken(getString(R.string.default_web_client_id))
-                            .requestEmail()
-                            .requestScopes(Drive.SCOPE_FILE)
-                            .requestScopes(Drive.SCOPE_APPFOLDER)
-                            .build();
-            mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
-            startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-        }
+        startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
     }
 
     /**
@@ -122,15 +108,6 @@ public abstract class BaseExportActivity extends Activity {
         Log.d(TAG, "onActivityResult()");
         switch (requestCode) {
             case REQUEST_CODE_SIGN_IN:
-                if (resultCode != RESULT_OK) {
-                    // Sign-in may fail or be cancelled by the user. For this sample, sign-in is
-                    // required and is fatal. For apps where sign-in is optional, handle
-                    // appropriately
-                    Log.e(TAG, "Sign-in failed. 1");
-                    Toast.makeText(this, R.string.err_google_signin_failed, Toast.LENGTH_SHORT).show();
-                    finish();
-                    return;
-                }
 
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 if (task.isSuccessful()) {
@@ -141,7 +118,6 @@ public abstract class BaseExportActivity extends Activity {
                     } catch (ApiException e) {
                         // Google Sign In failed, update UI appropriately
                         Log.w(TAG, "Google sign in failed", e);
-                        // ...
                     }
                 } else {
                     Toast.makeText(this, R.string.err_google_signin_failed, Toast.LENGTH_SHORT).show();
@@ -163,23 +139,6 @@ public abstract class BaseExportActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//            findViewById(R.id.signInButton).setVisibility(View.GONE);
-//            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
-//            findViewById(R.id.signOutAndDisconnect).setVisibility(View.GONE);
-//        }
-    }
-
     /**
      * Continues the sign-in process, initializing the Drive clients with the current
      * user's account.
@@ -191,9 +150,6 @@ public abstract class BaseExportActivity extends Activity {
         onDriveClientReady();
 
         Log.d(TAG, "firebaseAuthWithGoogle:" + signInAccount.getId());
-        // [START_EXCLUDE silent]
-        showProgressDialog();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -204,18 +160,10 @@ public abstract class BaseExportActivity extends Activity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             showMessage("Firebase signInWithCredential:failure");
-                            updateUI(null);
                         }
-
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -296,11 +244,12 @@ public abstract class BaseExportActivity extends Activity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop() called");
-        hideProgressDialog();
         signOut();
     }
 
     private void signOut() {
+        mAuth.signOut();
+
         if (mGoogleSignInClient != null) {
             mGoogleSignInClient.signOut()
                     .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -320,26 +269,6 @@ public abstract class BaseExportActivity extends Activity {
                         // ...
                     }
                 });
-    }
-
-
-    @VisibleForTesting
-    public ProgressDialog mProgressDialog;
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
     }
 
     public void hideKeyboard(View view) {

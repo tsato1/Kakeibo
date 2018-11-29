@@ -133,6 +133,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-libraries" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/checkFreeDebugClasspath" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/checkFreeReleaseClasspath" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/compatible_screen_manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant_run_merged_manifests" />
@@ -142,6 +143,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/merged_manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/processed_res" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shader_assets" />
@@ -229,6 +231,8 @@
     <orderEntry type="library" name="Gradle: com.google.guava:guava-jdk5:17.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-16.2.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-17.0.3" level="project" />
+    <orderEntry type="module" module-name="HoloGraphLibrary" />
+    <orderEntry type="module" module-name="HoloGraphLibrary" />
     <orderEntry type="module" module-name="HoloGraphLibrary" />
   </component>
 </module>
