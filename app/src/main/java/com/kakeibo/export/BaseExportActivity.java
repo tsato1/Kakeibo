@@ -120,9 +120,7 @@ public abstract class BaseExportActivity extends Activity {
                         Log.w(TAG, "Google sign in failed", e);
                     }
                 } else {
-                    Toast.makeText(this, R.string.err_google_signin_failed, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Sign-in failed. 2");
-                    finish();
+                    Log.w(TAG, "Sign-in failed. 2");
                 }
                 break;
             case REQUEST_CODE_OPEN_ITEM:
@@ -248,7 +246,7 @@ public abstract class BaseExportActivity extends Activity {
     }
 
     private void signOut() {
-        mAuth.signOut();
+        if (mAuth != null) mAuth.signOut();
 
         if (mGoogleSignInClient != null) {
             mGoogleSignInClient.signOut()

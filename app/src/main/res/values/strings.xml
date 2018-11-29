@@ -59,7 +59,6 @@
     <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
     <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
     <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
-    <string name="err_google_signin_failed">Google Sign-in failed. Please try again.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
