@@ -91,6 +91,7 @@
     <string name="folder_not_selected">No folder selected, canceling uploading.</string>
     <string name="nothing_to_export">There is nothing to export.</string>
     <string name="empty_report">Your report is empty.</string>
+    <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
 
     <!-- Settings -->
     <!-- General settings -->

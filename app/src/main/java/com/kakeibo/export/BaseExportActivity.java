@@ -1,13 +1,10 @@
 package com.kakeibo.export;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -99,6 +96,29 @@ public abstract class BaseExportActivity extends Activity {
         startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
     }
 
+    private void signOut() {
+        if (mAuth != null) mAuth.signOut();
+
+        if (mGoogleSignInClient != null) {
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+        }
+    }
+
+    private void revokeAccess() {
+        mGoogleSignInClient.revokeAccess()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+    }
+
     /**
      * Handles resolution callbacks.
      */
@@ -161,6 +181,7 @@ public abstract class BaseExportActivity extends Activity {
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             showMessage("Firebase signInWithCredential:failure");
+                            finish();
                         }
                     }
                 });
@@ -243,36 +264,5 @@ public abstract class BaseExportActivity extends Activity {
         super.onStop();
         Log.d(TAG, "onStop() called");
         signOut();
-    }
-
-    private void signOut() {
-        if (mAuth != null) mAuth.signOut();
-
-        if (mGoogleSignInClient != null) {
-            mGoogleSignInClient.signOut()
-                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-        }
-    }
-
-    private void revokeAccess() {
-        mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-    }
-
-    public void hideKeyboard(View view) {
-        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
     }
 }

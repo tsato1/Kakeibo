@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
@@ -154,5 +155,15 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
             public void onAdLoaded() {
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    public void screenTapped(View view) {
+        finish();
     }
 }

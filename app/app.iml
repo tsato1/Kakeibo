@@ -232,7 +232,5 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-16.2.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-17.0.3" level="project" />
     <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
   </component>
 </module>
