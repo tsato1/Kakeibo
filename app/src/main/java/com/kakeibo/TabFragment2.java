@@ -303,9 +303,14 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
         switch (_query.getType()) {
             case Query.QUERY_TYPE_NEW:
-                Calendar cal = Calendar.getInstance();
-                _calMonth = cal.get(Calendar.MONTH) + 1;
-                _calYear = cal.get(Calendar.YEAR);
+                if (_eventDate == null || "".equals(_eventDate)) {
+                    Calendar cal = Calendar.getInstance();
+                    _calMonth = cal.get(Calendar.MONTH) + 1;
+                    _calYear = cal.get(Calendar.YEAR);
+                } else {
+                    _calMonth = Integer.parseInt(_eventDate.split("-")[1]);
+                    _calYear = Integer.parseInt(_eventDate.split("-")[0]);
+                }
 
                 btnDate.setText(getTextBtnDate());
                 btnNext.setVisibility(View.VISIBLE);
@@ -325,6 +330,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
     public void focusOnSavedItem(Query query, String eventDate) {
         _query = query;
+        _eventDate = eventDate;
         reset();
 
         _ftrDetail = _cfmDetail.beginTransaction();
@@ -332,8 +338,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
         _ftrDetail.addToBackStack(null);
         _ftrDetail.commit();
-
-        _eventDate = eventDate;
     }
 
     public void onSearch(Query query, String fromDate, String toDate) {

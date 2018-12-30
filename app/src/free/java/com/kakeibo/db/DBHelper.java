@@ -186,9 +186,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 int catCode = 0;
 
                 for (int i=0; i<defaultCategory.length; ++i) {
-                    if (catName.equals(defaultCategory[i])) {
+                    if (catName.equalsIgnoreCase(defaultCategory[i])) {
                         catCode = i;
-                    } else if (catName.equals("Until")) {
+                    } else if (catName.equalsIgnoreCase("Until")) {
                         catCode = 3;
                     }
                 }

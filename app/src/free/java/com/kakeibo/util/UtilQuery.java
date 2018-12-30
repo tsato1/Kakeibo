@@ -1,13 +1,9 @@
 package com.kakeibo.util;
 
-import android.util.Log;
-
-import com.kakeibo.MainActivity;
 import com.kakeibo.db.ItemsDBAdapter;
 
 import static com.kakeibo.db.ItemsDBAdapter.COL_AMOUNT;
 import static com.kakeibo.db.ItemsDBAdapter.COL_CATEGORY_CODE;
-import static com.kakeibo.db.ItemsDBAdapter.COL_CURRENCY_CODE;
 import static com.kakeibo.db.ItemsDBAdapter.COL_EVENT_DATE;
 import static com.kakeibo.db.ItemsDBAdapter.COL_MEMO;
 
@@ -24,7 +20,7 @@ public class UtilQuery {
     private static boolean orderD;
 
     public static void init() {
-        builderCs = new StringBuilder[MainActivity.sCategories.length];
+        builderCs = new StringBuilder[12];
         for (int i=0; i<builderCs.length; ++i) {
             builderCs[i] = new StringBuilder("SELECT * FROM ITEMS");
         }

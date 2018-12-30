@@ -74,7 +74,6 @@
     <string name="err_memo_empty">Search word in Memo is empty.</string>
 
     <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_save_this_search">Do you want to save this search?</string>
     <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is ordered by Category.</string>
     <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is ordered by Date.</string>
 
