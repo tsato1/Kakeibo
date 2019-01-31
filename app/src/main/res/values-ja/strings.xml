@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kakeibo</string>
-    <string name="action_csv_export">CSVエクスポート</string>
     <string name="amount_colon">金額：</string>
     <string name="category_colon">カテゴリー：</string>
     <string name="delete">削除</string>
@@ -36,7 +35,7 @@
     <string name="action_settings">設定</string>
     <string name="search">検索</string>
     <string name="select_file">ファイルの選択</string>
-    <string name="file_created">ファイルの作成: %1$s</string>
+    <string name="file_created">ファイルが作成されました．</string>
     <string name="file_create_error">ファイル作成中にエラーが発生しました．ネットワークを確認しもう一度試してください．</string>
     <string name="pref_header_general">一般</string>
     <string name="pref_title_date_format">日付フォーマット</string>

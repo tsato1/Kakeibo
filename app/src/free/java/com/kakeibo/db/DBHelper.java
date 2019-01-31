@@ -110,20 +110,17 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
             initKkbAppTable(db, -1);
         }
+        if (oldVersion < 5) {
+            upgradeVersion_okasan(db);
+        }
 
         itemsDBAdapter.close();
     }
 
-    private void upgradeVersion4(SQLiteDatabase db) {
-        /*** changing UpdateDate format form M to MM ***/
-//        Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM,
-//                new String[]{ItemsDBAdapter.COL_ID, ItemsDBAdapter.COL_UPDATE_DATE},
-//                null, null, null, null, null, null);
-//        if (c.moveToFirst()) {
-//            do {
-//            } while (c.moveToNext());
-//        }
-//        c.close();
+    private void upgradeVersion4(SQLiteDatabase db) { }
+
+    private void upgradeVersion_okasan(SQLiteDatabase db) {
+
     }
 
     private void upgradeVersion3(SQLiteDatabase db) {

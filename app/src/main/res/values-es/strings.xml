@@ -10,7 +10,6 @@
     <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
     <string name="yes">Si</string>
-    <string name="action_csv_export">CSV Exportar</string>
     <string name="amount_colon">Cantidad:</string>
     <string name="category_colon">Categoría:</string>
     <string name="balance_colon">Balance:</string>

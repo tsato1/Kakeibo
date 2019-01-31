@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="week_name">
+        <item>dom</item>
+        <item>lun</item>
+        <item>mar</item>
+        <item>mer</item>
+        <item>gio</item>
+        <item>ven</item>
+        <item>sab</item>
+    </string-array>
+
+    <string-array name="default_category">
+        <item>ENTRATE</item>
+        <item>ACQUIST</item>
+        <item>ALIMENT</item>
+        <item>UTENZE</item>
+        <item>SALUTE</item>
+        <item>EDUCAZ</item>
+        <item>ABBIGLIAM</item>
+        <item>TRASPORT</item>
+        <item>DIVERTIM</item>
+        <item>RISPARMIO</item>
+        <item>TASSE</item>
+        <item>ALTRO</item>
+    </string-array>
+</resources>
