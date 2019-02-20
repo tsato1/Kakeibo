@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +40,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private Activity _activity;
     private Context _context;
     private View _view;
-    private CoordinatorLayout frlRoot;
+    private CoordinatorLayout viewRoot;
     private TextView txvSearchInstruction;
     private RecyclerView rcvSearchCriteria;
     private SearchRecyclerViewAdapter adpRecyclerView;
@@ -98,7 +98,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     }
 
     private void findViews() {
-        frlRoot = _view.findViewById(R.id.crl_root_fragment3);
+        viewRoot = _view.findViewById(R.id.col_root_fragment3);
         txvSearchInstruction = _view.findViewById(R.id.txv_inst_search);
         rcvSearchCriteria = _view.findViewById(R.id.rcv_search_criteria);
         fabAdd = _view.findViewById(R.id.fab_add_criterion);
@@ -324,7 +324,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             txvSearchInstruction.setVisibility(View.VISIBLE);
         }
 
-        Snackbar snackbar = Snackbar.make(frlRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(viewRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
         snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
             @Override
             public void onClick(View view) {

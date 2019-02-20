@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,7 +39,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
     private Activity _activity;
     private View _view;
-    private FrameLayout frlRoot;
+    private CoordinatorLayout rootView;
     private ImageButton btnPrev, btnNext;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
@@ -110,7 +111,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     void findViews(){
-        frlRoot = _view.findViewById(R.id.frl_root_fragment2);
+        rootView = _view.findViewById(R.id.col_root_fragment2);
         btnPrev = _view.findViewById(R.id.btn_prev);
         btnDate = _view.findViewById(R.id.btn_date);
         btnNext = _view.findViewById(R.id.btn_next);
@@ -316,14 +317,14 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                 btnNext.setVisibility(View.VISIBLE);
                 btnPrev.setVisibility(View.VISIBLE);
                 fabDiscard.setVisibility(View.INVISIBLE);
-                frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 break;
             case Query.QUERY_TYPE_SEARCH:
                 btnDate.setText(getString(R.string.title_search_result));
                 btnNext.setVisibility(View.INVISIBLE);
                 btnPrev.setVisibility(View.INVISIBLE);
                 fabDiscard.setVisibility(View.VISIBLE);
-                frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
+                rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
                 break;
         }
     }
