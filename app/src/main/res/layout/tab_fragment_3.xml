@@ -20,22 +20,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_criterion"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_default_padding"
-        android:src="@drawable/ic_add_white"
-        app:layout_behavior="com.kakeibo.ScrollingFABBehavior"/>
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab_add_criterion"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_gravity="bottom|start"-->
+        <!--android:layout_margin="@dimen/fab_default_padding"-->
+        <!--android:src="@drawable/ic_add_white"-->
+        <!--app:layout_behavior="com.kakeibo.ScrollingFABBehavior"/>-->
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_search"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_default_padding"
-        android:src="@drawable/ic_search_white"
-        app:layout_behavior="com.kakeibo.ScrollingFABBehavior"/>
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab_search"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_default_padding"-->
+        <!--android:src="@drawable/ic_search_white"-->
+        <!--app:layout_behavior="com.kakeibo.ScrollingFABBehavior"/>-->
 
 </android.support.design.widget.CoordinatorLayout>

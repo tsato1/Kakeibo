@@ -93,13 +93,4 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_discard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_default_padding"
-        android:src="@drawable/ic_close_white"
-        app:layout_behavior="com.kakeibo.ScrollingFABBehavior"/>
-
 </android.support.design.widget.CoordinatorLayout>

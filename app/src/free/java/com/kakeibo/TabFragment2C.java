@@ -47,7 +47,6 @@ public class TabFragment2C extends Fragment {
     private List<Item> lstCategory;
     private CategoryListAdapter lsaCategory;
     private ListView lsvCategory;
-    private FloatingActionButton fabExport;
 
     private PieGraph graph;
 
@@ -81,51 +80,14 @@ public class TabFragment2C extends Fragment {
     void findViews() {
         graph = _view.findViewById(R.id.graph_subtotal);
         lsvCategory = _view.findViewById(R.id.lsv_subtotal);
-        fabExport = _view.findViewById(R.id.fab_export);
 
         lsvCategory.setOnItemClickListener(new CategoryListItemClickListener());
-        fabExport.setOnClickListener(new ButtonClickListener());
 
         _stringBuilder = new StringBuilder();
         _itemsDbAdapter = new ItemsDBAdapter();
         lstCategory = new ArrayList<>();
         lsaCategory = new CategoryListAdapter(_activity, 0, lstCategory);
         lsvCategory.setAdapter(lsaCategory);
-    }
-
-    class ButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.fab_export:
-                    if (lstCategory.size()==0) {
-                        Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-
-                    AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
-                    dialogExport.setIcon(R.mipmap.ic_mikan);
-                    dialogExport.setTitle(getString(R.string.export_category));
-                    dialogExport.setMessage(getString(R.string.quest_export_this_report_C));
-                    dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Runnable rblSaveToFile = ()->{
-                                System.out.println("Runnable running");
-                                queryToSaveLocal();
-                            };
-                            Thread thread = new Thread(rblSaveToFile);
-                            thread.start();
-
-                            Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
-                            intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_CATEGORY);
-                            startActivity(intent);
-                        }
-                    });
-                    dialogExport.show();
-                    break;
-            }
-        }
     }
 
     class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
@@ -313,5 +275,34 @@ public class TabFragment2C extends Fragment {
             graph.addSlice(slice);
         }
         graph.setThickness(100);
+    }
+
+    public void export() {
+        Log.d(TAG, "export() called");
+
+        if (lstCategory.size()==0) {
+            Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+        }
+
+        AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
+        dialogExport.setIcon(R.mipmap.ic_mikan);
+        dialogExport.setTitle(getString(R.string.export_category));
+        dialogExport.setMessage(getString(R.string.quest_export_this_report_C));
+        dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Runnable rblSaveToFile = ()->{
+                    System.out.println("Runnable running");
+                    queryToSaveLocal();
+                };
+                Thread thread = new Thread(rblSaveToFile);
+                thread.start();
+
+                Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
+                intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_CATEGORY);
+                startActivity(intent);
+            }
+        });
+        dialogExport.show();
     }
 }

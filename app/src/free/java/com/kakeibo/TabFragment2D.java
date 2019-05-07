@@ -54,7 +54,6 @@ public class TabFragment2D extends Fragment {
     private HashMap<String, List<Item>> hmpChildData;
     private ExpandableListAdapter elaData;
     private ExpandableListView explvData;
-    private FloatingActionButton fabExport;
 
     public static TabFragment2D newInstance(ItemLoadListener itemLoadListener, Query query) {
         TabFragment2D tabFragment2D = new TabFragment2D();
@@ -85,11 +84,9 @@ public class TabFragment2D extends Fragment {
 
     void findViews(){
         explvData = _view.findViewById(R.id.lsv_expandable);
-        fabExport = _view.findViewById(R.id.fab_export);
 
         explvData.setOnChildClickListener(new ChildClickListener());
         explvData.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
-        fabExport.setOnClickListener(new ButtonClickListener());
 
         _stringBuilder = new StringBuilder();
         _itemsDbAdapter = new ItemsDBAdapter();
@@ -97,34 +94,6 @@ public class TabFragment2D extends Fragment {
         hmpChildData = new HashMap<>();
         elaData = new ExpandableListAdapter(_activity, lstDateHeader, hmpChildData);
         explvData.setAdapter(elaData);
-    }
-
-    class ButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.fab_export:
-                    if (lstDateHeader.size()==0 || hmpChildData.size()==0) {
-                        Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-
-                    AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
-                    dialogExport.setIcon(R.mipmap.ic_mikan);
-                    dialogExport.setTitle(getString(R.string.export_date));
-                    dialogExport.setMessage(getString(R.string.quest_export_this_report_D));
-                    dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
-                            intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_DATE);
-                            startActivityForResult(intent, 10);
-                        }
-                    });
-                    dialogExport.show();
-                    break;
-            }
-        }
     }
 
     @Override
@@ -388,8 +357,6 @@ public class TabFragment2D extends Fragment {
         int m = Integer.parseInt(eventDate.split("-")[1]);
         int d = Integer.parseInt(eventDate.split("-")[2]);
 
-        //loadItemsOrderByDate(); //disposable
-
         for (int i = 0; i < lstDateHeader.size(); i++) {
             String[] header = lstDateHeader.get(i).split("[,]"); // ex. "2018,04,30,-700"
 
@@ -400,5 +367,27 @@ public class TabFragment2D extends Fragment {
                 explvData.collapseGroup(i);
             }
         }
+    }
+
+    public void export() {
+        Log.d(TAG, "export() called");
+
+        if (lstDateHeader.size()==0 || hmpChildData.size()==0) {
+            Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+        }
+
+        AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
+        dialogExport.setIcon(R.mipmap.ic_mikan);
+        dialogExport.setTitle(getString(R.string.export_date));
+        dialogExport.setMessage(getString(R.string.quest_export_this_report_D));
+        dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
+                intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_DATE);
+                startActivityForResult(intent, 10);
+            }
+        });
+        dialogExport.show();
     }
 }
