@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,13 +40,12 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     private Activity _activity;
     private Context _context;
     private View _view;
-    private CoordinatorLayout frlRoot;
+    private CoordinatorLayout viewRoot;
     private TextView txvSearchInstruction;
     private RecyclerView rcvSearchCriteria;
     private SearchRecyclerViewAdapter adpRecyclerView;
     private ArrayList<Card> lstCards;     // for cards displayed
     private ArrayList<String> lstChoices; // for choices shown in dialog upon tapping fab
-    private FloatingActionButton fabSearch, fabAdd;
 
     private static String _fromDate;
     private static String _toDate;
@@ -98,17 +97,12 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     }
 
     private void findViews() {
-        frlRoot = _view.findViewById(R.id.crl_root_fragment3);
+        viewRoot = _view.findViewById(R.id.col_root_fragment3);
         txvSearchInstruction = _view.findViewById(R.id.txv_inst_search);
         rcvSearchCriteria = _view.findViewById(R.id.rcv_search_criteria);
-        fabAdd = _view.findViewById(R.id.fab_add_criterion);
-        fabSearch = _view.findViewById(R.id.fab_search);
     }
 
     private void setListeners() {
-        fabAdd.setOnClickListener(new ButtonClickListener());
-        fabSearch.setOnClickListener(new ButtonClickListener());
-
         lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
         lstCards = new ArrayList<>();
         adpRecyclerView = new SearchRecyclerViewAdapter(_context, lstCards);
@@ -120,48 +114,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         ItemTouchHelper.SimpleCallback ithCallback =
                 new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(ithCallback).attachToRecyclerView(rcvSearchCriteria);
-    }
-
-    class ButtonClickListener implements View.OnClickListener {
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.fab_add_criterion:
-                    String[] arrToDisplay = lstChoices.toArray(new String[lstChoices.size()]);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(getResources().getString(R.string.add_search_criterion));
-                    builder.setIcon(R.mipmap.ic_mikan);
-                    builder.setItems(arrToDisplay, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            addCriterion(which);
-                        }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    builder.show();
-                    break;
-                case R.id.fab_search:
-                    Query query = new Query(Query.QUERY_TYPE_SEARCH);
-                    UtilQuery.init();
-
-                    if (checkBeforeSearch()) {
-                        UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-                        UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-                        UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-                        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
-                        query.setQueryC(UtilQuery.buildQueryC());
-                        query.setQueryCs(UtilQuery.buildQueryCs());
-                        query.setQueryD(UtilQuery.buildQueryD());
-                        ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                        ((MainActivity)_activity).onSearch(query, _fromDate, _toDate);
-                    }
-                    break;
-            }
-        }
     }
 
     /*** removes a selected choice from fab and add card(criterion) for display ***/
@@ -324,7 +276,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             txvSearchInstruction.setVisibility(View.VISIBLE);
         }
 
-        Snackbar snackbar = Snackbar.make(frlRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(viewRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
         snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -349,6 +301,43 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                 Log.d(TAG, "Not visible anymore.");
                 UtilKeyboard.hideSoftKeyboard(_activity);
             }
+        }
+    }
+
+    public void addCriteria() {
+        String[] arrToDisplay = lstChoices.toArray(new String[lstChoices.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getResources().getString(R.string.add_search_criterion));
+        builder.setIcon(R.mipmap.ic_mikan);
+        builder.setItems(arrToDisplay, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                addCriterion(which);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
+
+    public void doSearch() {
+        Query query = new Query(Query.QUERY_TYPE_SEARCH);
+        UtilQuery.init();
+
+        if (checkBeforeSearch()) {
+            UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+            UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
+            UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
+            UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+            query.setQueryC(UtilQuery.buildQueryC());
+            query.setQueryCs(UtilQuery.buildQueryCs());
+            query.setQueryD(UtilQuery.buildQueryD());
+            ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
+            ((MainActivity)_activity).onSearch(query, _fromDate, _toDate);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -38,7 +38,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
     private Activity _activity;
     private View _view;
-    private FrameLayout frlRoot;
+    private CoordinatorLayout rootView;
     private ImageButton btnPrev, btnNext;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
@@ -110,20 +110,18 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     void findViews(){
-        frlRoot = _view.findViewById(R.id.frl_root_fragment2);
+        rootView = _view.findViewById(R.id.col_root_fragment2);
         btnPrev = _view.findViewById(R.id.btn_prev);
         btnDate = _view.findViewById(R.id.btn_date);
         btnNext = _view.findViewById(R.id.btn_next);
         txvIncome = _view.findViewById(R.id.txv_income);
         txvExpense = _view.findViewById(R.id.txv_expense);
         txvBalance = _view.findViewById(R.id.txv_balance);
-        fabDiscard = _view.findViewById(R.id.fab_discard);
 
         btnPrev.setOnClickListener(new ButtonClickListener());
         btnDate.setOnClickListener(new ButtonClickListener());
         btnNext.setOnClickListener(new ButtonClickListener());
         btnDate.setOnLongClickListener(new ButtonLongClickListener());
-        fabDiscard.setOnClickListener(new ButtonClickListener());
     }
 
     /***
@@ -149,16 +147,37 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     class ButtonLongClickListener implements View.OnLongClickListener {
         @Override
         public boolean onLongClick (View view) {
-//            AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
-//            dialog.setIcon(R.mipmap.ic_mikan);
-//            dialog.setTitle(getString(R.string.title_search_criteria));
-//            dialog.setMessage();
-//            dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                }
-//            });
-//            dialog.show();
+            AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
+            dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
+            dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
+            dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
+                    _query = new Query(Query.QUERY_TYPE_NEW);
+                    UtilQuery.init();
+                    UtilQuery.setDate(todaysDate, "");
+                    UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+                    UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
+                    UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
+                    UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+                    _query.setQueryC(UtilQuery.buildQueryC());
+                    _query.setQueryCs(UtilQuery.buildQueryCs());
+                    _query.setQueryD(UtilQuery.buildQueryD());
+
+                    reset();
+                    if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
+                        _tabFragment2C = (TabFragment2C) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
+                        _tabFragment2C.setQuery(_query);
+                        _tabFragment2C.loadItemsOrderByCategory();
+                    } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
+                        _tabFragment2D = (TabFragment2D) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
+                        _tabFragment2D.setQuery(_query);
+                        _tabFragment2D.loadItemsOrderByDate();
+                    }
+                }
+            });
+            dialogSaveSearch.show();
 
             return true;
         }
@@ -168,23 +187,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         public void onClick(View view) {
             switch(view.getId()) {
                 case R.id.btn_date:
-                    if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
-                        Log.d(TAG, "2c detail fragment is visible");
 
-                        _ftrDetail = _cfmDetail.beginTransaction();
-                        _tabFragment2D = TabFragment2D.newInstance(TabFragment2.this, _query);
-                        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
-                        _ftrDetail.addToBackStack(null);
-                        _ftrDetail.commit();
-                    } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
-                        Log.d(TAG, "2d detail fragment is visible");
-
-                        _ftrDetail = _cfmDetail.beginTransaction();
-                        _tabFragment2C = TabFragment2C.newInstance(TabFragment2.this, _query);
-                        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2C);
-                        _ftrDetail.addToBackStack(null);
-                        _ftrDetail.commit();
-                    }
                     break;
                 case R.id.btn_prev:
                     _calMonth--;
@@ -224,39 +227,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                         _tabFragment2D.setQuery(_query);
                         _tabFragment2D.loadItemsOrderByDate();
                     }
-                    break;
-                case R.id.fab_discard:
-                    AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
-                    dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
-                    dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
-                    dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
-                            _query = new Query(Query.QUERY_TYPE_NEW);
-                            UtilQuery.init();
-                            UtilQuery.setDate(todaysDate, "");
-                            UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-                            UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-                            UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-                            UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
-                            _query.setQueryC(UtilQuery.buildQueryC());
-                            _query.setQueryCs(UtilQuery.buildQueryCs());
-                            _query.setQueryD(UtilQuery.buildQueryD());
-
-                            reset();
-                            if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
-                                _tabFragment2C = (TabFragment2C) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
-                                _tabFragment2C.setQuery(_query);
-                                _tabFragment2C.loadItemsOrderByCategory();
-                            } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
-                                _tabFragment2D = (TabFragment2D) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
-                                _tabFragment2D.setQuery(_query);
-                                _tabFragment2D.loadItemsOrderByDate();
-                            }
-                        }
-                    });
-                    dialogSaveSearch.show();
                     break;
             }
         }
@@ -315,15 +285,13 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                 btnDate.setText(getTextBtnDate());
                 btnNext.setVisibility(View.VISIBLE);
                 btnPrev.setVisibility(View.VISIBLE);
-                fabDiscard.setVisibility(View.INVISIBLE);
-                frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 break;
             case Query.QUERY_TYPE_SEARCH:
                 btnDate.setText(getString(R.string.title_search_result));
                 btnNext.setVisibility(View.INVISIBLE);
                 btnPrev.setVisibility(View.INVISIBLE);
-                fabDiscard.setVisibility(View.VISIBLE);
-                frlRoot.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
+                rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
                 break;
         }
     }
@@ -363,6 +331,36 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                 _eventDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
             }
             _tabFragment2D.focusOnSavedItem(_eventDate);
+        }
+    }
+
+    public void toggleViews() {
+        if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
+            Log.d(TAG, "2c detail fragment is visible");
+
+            _ftrDetail = _cfmDetail.beginTransaction();
+            _tabFragment2D = TabFragment2D.newInstance(TabFragment2.this, _query);
+            _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
+            _ftrDetail.addToBackStack(null);
+            _ftrDetail.commit();
+        } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
+            Log.d(TAG, "2d detail fragment is visible");
+
+            _ftrDetail = _cfmDetail.beginTransaction();
+            _tabFragment2C = TabFragment2C.newInstance(TabFragment2.this, _query);
+            _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2C);
+            _ftrDetail.addToBackStack(null);
+            _ftrDetail.commit();
+        }
+    }
+
+    public void export() {
+        if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
+            TabFragment2C f = (TabFragment2C) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
+            f.export();
+        } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
+            TabFragment2D f = (TabFragment2D) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
+            f.export();
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -39,16 +41,21 @@ public class MainActivity extends AppCompatActivity {
             "#2b381d", "#40552b", "#557238", "#6a8d47", "#7ca058", "#80aa55", "#95b872",
             "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
 
+    public static int sFragmentPosition;
     public static int sDateFormat;
     public static int sFractionDigits;
     public static String[] sWeekName;
     public static String[] sCategories;
 
     private InterstitialAd mInterstitialAd;
+    private FragmentManager fm;
     private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
     private TabFragment1 tabFragment1;
     private TabFragment2 tabFragment2;
     private TabFragment3 tabFragment3;
+    private FloatingActionButton fabStart;
+    private FloatingActionButton fabEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        fm = getSupportFragmentManager();
+
+        fabStart = findViewById(R.id.fab_start);
+        fabEnd = findViewById(R.id.fab_end);
+        fabStart.setOnClickListener(new ButtonClickListener());
+        fabEnd.setOnClickListener(new ButtonClickListener());
         sWeekName = getResources().getStringArray(R.array.week_name);
         sCategories = getResources().getStringArray(R.array.default_category);
 
@@ -78,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         tabFragment1 = TabFragment1.newInstance();
         tabFragment2 = TabFragment2.newInstance();
         tabFragment3 = TabFragment3.newInstance();
@@ -86,6 +99,37 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(tabFragment2, getString(R.string.report));
         adapter.addFragment(tabFragment3, getString(R.string.search));
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                sFragmentPosition = position;
+
+                if (position==0) {
+                    fabStart.setVisibility(View.INVISIBLE);
+                    fabEnd.setVisibility(View.INVISIBLE);
+                } else if (position==1) {
+                    fabStart.setVisibility(View.VISIBLE);
+                    fabStart.setImageResource(R.drawable.ic_cloud_upload_white); //todo prepare image for toggle
+                    fabEnd.setVisibility(View.VISIBLE);
+                    fabEnd.setImageResource(R.drawable.ic_cloud_upload_white);
+                } else if (position==2) {
+                    fabStart.setVisibility(View.VISIBLE);
+                    fabStart.setImageResource(R.drawable.ic_add_white);
+                    fabEnd.setVisibility(View.VISIBLE);
+                    fabEnd.setImageResource(R.drawable.ic_search_white);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -140,6 +184,36 @@ public class MainActivity extends AppCompatActivity {
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 
         Log.d(TAG, "sDateFormat: "+sDateFormat+" sFractionDigits: "+sFractionDigits);
+    }
+
+    class ButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.fab_start:
+                    if (viewPager.getCurrentItem()==1) {
+                        TabFragment2 tabFragment2 = (TabFragment2) fm.findFragmentByTag(
+                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
+                        tabFragment2.toggleViews();
+                    } else if (viewPager.getCurrentItem()==2) {
+                        TabFragment3 tabFragment3 = (TabFragment3) fm.findFragmentByTag(
+                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
+                        tabFragment3.addCriteria();
+                    }
+                    break;
+                case R.id.fab_end:
+                    if (viewPager.getCurrentItem()==1) {
+                        TabFragment2 tabFragment2 = (TabFragment2) fm.findFragmentByTag(
+                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
+                        tabFragment2.export();
+                    } else if (viewPager.getCurrentItem()==2) {
+                        TabFragment3 tabFragment3 = (TabFragment3) fm.findFragmentByTag(
+                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
+                        tabFragment3.doSearch();
+                    }
+                    break;
+            }
+        }
     }
 
     private void loadAds() {
