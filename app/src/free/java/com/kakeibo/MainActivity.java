@@ -17,12 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.InterstitialAd;
 import com.kakeibo.settings.SettingsActivity;
 
-import com.google.android.gms.ads.MobileAds;
 import com.kakeibo.util.UtilDate;
 
 import java.util.ArrayList;
@@ -216,27 +216,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadAds() {
-        Log.d(TAG, "loading ads");
-
-        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
-        mInterstitialAd = new InterstitialAd(this);
-        AdRequest.Builder request = new AdRequest.Builder();
-
-        if (BuildConfig.DEBUG) {
-            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
-        } else {
-            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
-        }
-        mInterstitialAd.loadAd(request.build());
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-        });
-    }
+//    private void loadAds() {
+//        Log.d(TAG, "loading ads");
+//
+//        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
+//        mInterstitialAd = new InterstitialAd(this);
+//        AdRequest.Builder request = new AdRequest.Builder();
+//
+//        if (BuildConfig.DEBUG) {
+//            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
+//        } else {
+//            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
+//        }
+//        mInterstitialAd.loadAd(request.build());
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                // Load the next interstitial.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//        });
+//    }
 
     public void onItemSaved(Query query, String eventDate) {
         try {

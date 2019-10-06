@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.InterstitialAd;
+//import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
@@ -38,14 +38,16 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
     private String mStrDateFormat;
 
-    private InterstitialAd mInterstitialAd;
+    /*** ads ***/
+//    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
-        loadAds();
+        /*** ads ***/
+//        loadAds();
 
         REPORT_VIEW_TYPE = getIntent().getIntExtra("REPORT_VIEW_TYPE", 0);
     }
@@ -103,11 +105,12 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                 })
                 .addOnSuccessListener(aVoid -> {
                     showMessage(getString(R.string.file_created));
-                    if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.show();
-                    } else {
-                        Log.d(TAG, "The interstitial wasn't loaded yet.");
-                    }
+                    /*** ads ***/
+//                    if (mInterstitialAd.isLoaded()) {
+//                        mInterstitialAd.show();
+//                    } else {
+//                        Log.d(TAG, "The interstitial wasn't loaded yet.");
+//                    }
                 })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to create file", e);
@@ -134,28 +137,29 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
         }
     }
 
-    private void loadAds() {
-        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
-        mInterstitialAd = new InterstitialAd(this);
-        AdRequest.Builder request = new AdRequest.Builder();
-
-        if (BuildConfig.DEBUG) {
-            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
-        } else {
-            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
-        }
-
-        mInterstitialAd.loadAd(request.build());
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-            @Override
-            public void onAdLoaded() {
-            }
-        });
-    }
+    /*** ads ***/
+//    private void loadAds() {
+//        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
+//        mInterstitialAd = new InterstitialAd(this);
+//        AdRequest.Builder request = new AdRequest.Builder();
+//
+//        if (BuildConfig.DEBUG) {
+//            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
+//        } else {
+//            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
+//        }
+//
+//        mInterstitialAd.loadAd(request.build());
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//            @Override
+//            public void onAdLoaded() {
+//            }
+//        });
+//    }
 
     @Override
     protected void onStop() {
