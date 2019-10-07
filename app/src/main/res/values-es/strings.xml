@@ -26,7 +26,7 @@
     <string name="err_memo_empty">La palabra de búsqueda está vacía</string>
     <string name="err_please_select_category">Por favor seleccione categoría</string>
     <string name="err_please_enter_amount">Ingrese cantidad</string>
-    <string name="err_amount_cannot_be_0">La cantidad no puede ser 0</string>
+    <string name="err_amount_cannot_be_0">La cantidad no puede ser 0.</string>
     <string name="item_detail">Detalle del artículo</string>
     <string name="msg_change_successfully_saved">El cambio se guardó con éxito.</string>
     <string name="msg_item_successfully_saved">El artículo se guardó con éxito.</string>
@@ -98,4 +98,6 @@
     <string name="empty_report">Su informe está vacío.</string>
     <string name="nothing_to_export">No hay nada que exportar.</string>
     <string name="loading">Cargando</string>
+    <string name="err_max_amount_cannot_be_0">La cantidad máxima no puede ser 0.</string>
+    <string name="msg_result_empty">El conjunto de resultados está vacío para esta búsqueda.</string>
 </resources>

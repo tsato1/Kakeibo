@@ -58,6 +58,15 @@ public class ItemsDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
+    public Cursor getCountAllItemsInMonth (String y, String m)
+    {
+        String ym = "\'" + y + "-" + m + "\'";
+        String query = "SELECT COUNT(*) FROM " + TABLE_ITEM +
+                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
+                " ORDER BY " + COL_EVENT_DATE;
+        return _db.rawQuery(query, new String[]{});
+    }
+
     public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
         String ym = "'" + y + "-" + m + "'";
         String query = "SELECT * FROM " + TABLE_ITEM +
@@ -74,6 +83,17 @@ public class ItemsDBAdapter extends DBAdapter {
             int y = cal.get(Calendar.YEAR);
 
             return getAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
+        }
+        return _db.rawQuery(query, new String[]{});
+    }
+
+    public Cursor getCountItemsByRawQuery (String query) {
+        if (query==null) {
+            Calendar cal = Calendar.getInstance();
+            int m = cal.get(Calendar.MONTH) + 1;
+            int y = cal.get(Calendar.YEAR);
+
+            return getCountAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
         }
         return _db.rawQuery(query, new String[]{});
     }

@@ -285,6 +285,8 @@ public class TabFragment1 extends Fragment {
                 updateDate
         );
 
+        Log.d("TabFragment1", "asdf="+item.getAmount());
+
         itemsDBAdapter.open();
         itemsDBAdapter.saveItem(item);
         Toast.makeText(getActivity(), getResources().getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show();

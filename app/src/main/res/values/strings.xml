@@ -65,11 +65,13 @@
     <string name="msg_item_successfully_saved">The item was successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change was successfully saved.</string>
+    <string name="msg_result_empty">The result set is empty for this search.</string>
     <string name="ins_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
 
     <string name="err_please_select_category">Please select category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>
     <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
+    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
     <string name="err_memo_empty">Search word in Memo is empty.</string>
 
     <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>

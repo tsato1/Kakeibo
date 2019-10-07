@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -180,11 +181,11 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_max_amount), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                if ("0".equals(min) || "0".equals(max) ||
-                        "0.0".equals(min) || "0.0".equals(max) ||
-                        "0.00".equals(min) || "0.00".equals(max) ||
-                        "0.000".equals(min) || "0.000".equals(max)) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
+                if (/***"0".equals(min) ||***/ "0".equals(max) ||
+                        /***"0.0".equals(min) ||***/ "0.0".equals(max) ||
+                        /***"0.00".equals(min) ||***/ "0.00".equals(max) ||
+                        /***"0.000".equals(min) ||***/ "0.000".equals(max)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.err_max_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -336,8 +337,27 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             query.setQueryC(UtilQuery.buildQueryC());
             query.setQueryCs(UtilQuery.buildQueryCs());
             query.setQueryD(UtilQuery.buildQueryD());
-            ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-            ((MainActivity)_activity).onSearch(query, _fromDate, _toDate);
+
+            ItemsDBAdapter itemsDbAdapter = new ItemsDBAdapter();
+            itemsDbAdapter.open();
+            Cursor c = itemsDbAdapter.getCountItemsByRawQuery(query.getQueryD());
+
+            if (c.moveToNext()) {
+                /*** if the query returns empty set, toast message ***/
+                if (c.getInt(0)<=0) {
+                    Toast.makeText(_activity, getString(R.string.msg_result_empty), Toast.LENGTH_SHORT).show();
+                }
+                /*** if the query returns non-empty set, proceed ***/
+                else {
+                    ((MainActivity) _activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
+                    ((MainActivity) _activity).onSearch(query, _fromDate, _toDate);
+                }
+            } else {
+                /*** if the query returns empty set, toast message ***/
+                Toast.makeText(_activity, getString(R.string.msg_result_empty), Toast.LENGTH_SHORT).show();
+            }
+
+            itemsDbAdapter.close();
         }
     }
 }
