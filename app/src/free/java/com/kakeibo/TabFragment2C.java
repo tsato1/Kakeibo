@@ -110,7 +110,7 @@ public class TabFragment2C extends Fragment {
                 do {
                     Item item = new Item(
                             c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getLong(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
                             "",
                             MainActivity.sFractionDigits,
                             c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
@@ -161,7 +161,7 @@ public class TabFragment2C extends Fragment {
             do {
                 Item item = new Item(
                         "",
-                        c.getInt(c.getColumnIndex("SUM(amount)")),
+                        c.getLong(c.getColumnIndex("SUM(amount)")),
                         "",
                         MainActivity.sFractionDigits,
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
@@ -222,7 +222,7 @@ public class TabFragment2C extends Fragment {
             do {
                 Item item = new Item(
                         "",
-                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getLong(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
                         "",
                         MainActivity.sFractionDigits,
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
