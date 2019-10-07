@@ -306,7 +306,7 @@ public class TabFragment2D extends Fragment {
 
                 Item item = new Item(
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getLong(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
                         "",
                         MainActivity.sFractionDigits,
                         c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),

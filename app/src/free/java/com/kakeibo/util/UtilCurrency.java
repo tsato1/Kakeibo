@@ -20,15 +20,16 @@ public class UtilCurrency {
     public final static String CURRENCY_NONE = "---";
     public final static String CURRENCY_OLD = "===";
 
-    public static int getIntAmountFromBigDecimal(BigDecimal amount, int currencyFractionDigits) {
+    public static long getLongAmountFromBigDecimal(BigDecimal amount, int currencyFractionDigits) {
         if (currencyFractionDigits == 0) {
             return amount.intValue();
         } else if (currencyFractionDigits == 1) {
-            return amount.multiply(BigDecimal.valueOf(10)).intValue();
+            return amount.multiply(BigDecimal.valueOf(10)).longValue();
         } else if (currencyFractionDigits == 2) {
-            return amount.multiply(BigDecimal.valueOf(100)).intValue();
+            return amount.multiply(BigDecimal.valueOf(100)).longValue();
         } else if (currencyFractionDigits == 3) {
-            return amount.multiply(BigDecimal.valueOf(1000)).intValue();
+            Log.d("UtilCurrency", "asdf="+amount.multiply(BigDecimal.valueOf(1000)).longValue());
+            return amount.multiply(BigDecimal.valueOf(1000)).longValue();
         }
 
         return -1;

@@ -39,7 +39,7 @@ class Balance {
         this.expense = this.expense.add(expense);
     }
 
-    int inMinusOut () {
+    long inMinusOut () {
         if (getBalance().compareTo(new BigDecimal(0)) < 0) return -1;
         else if (getBalance().compareTo(new BigDecimal(0)) > 0) return 1;
         else return 0;

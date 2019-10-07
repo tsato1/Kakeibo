@@ -71,7 +71,7 @@ public class UtilQuery {
         }
     }
 
-    public static void setAmount(int min, int max) {
+    public static void setAmount(long min, long max) {
         if (!where) {
             for (StringBuilder builder :builderCs) {
                 builder.append(" WHERE ");

@@ -30,7 +30,7 @@ public class Item
     }
 
     /*** called from TabFragment2 before getting displayed ***/
-    Item (String id, int amount, String currencyCode, int fractionDigits, int categoryCode,
+    Item (String id, long amount, String currencyCode, int fractionDigits, int categoryCode,
           String memo, String eventDate, String updateDate) {
         this.id = id;
 

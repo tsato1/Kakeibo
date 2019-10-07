@@ -198,8 +198,8 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                 }
 
                 /*** using 3 (multiply by 1000) to compare with what's stored in db ***/
-                UtilQuery.setAmount(UtilCurrency.getIntAmountFromBigDecimal(bigMin, 3),
-                        UtilCurrency.getIntAmountFromBigDecimal(bigMax, 3));
+                UtilQuery.setAmount(UtilCurrency.getLongAmountFromBigDecimal(bigMin, 3),
+                        UtilCurrency.getLongAmountFromBigDecimal(bigMax, 3));
             }
         }
 
