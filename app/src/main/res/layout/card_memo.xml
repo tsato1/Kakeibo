@@ -7,7 +7,7 @@
 
     <include layout="@layout/card_background"/>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/cdv_memo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,5 +33,5 @@
                 android:maxLength="20"
                 android:hint="@string/hint_memo_max_20_characters"/>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

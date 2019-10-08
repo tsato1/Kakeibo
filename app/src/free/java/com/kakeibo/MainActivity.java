@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +20,6 @@ import android.view.View;
 //import com.google.android.gms.ads.AdListener;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.InterstitialAd;
 import com.kakeibo.settings.SettingsActivity;
 
 import com.kakeibo.util.UtilDate;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static String[] sWeekName;
     public static String[] sCategories;
 
-    private InterstitialAd mInterstitialAd;
+//    private InterstitialAd mInterstitialAd;
     private FragmentManager fm;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         sWeekName = getResources().getStringArray(R.array.week_name);
         sCategories = getResources().getStringArray(R.array.default_category);
 
-        /***loadAds();***/
+//        loadAds();
     }
 
     @Override

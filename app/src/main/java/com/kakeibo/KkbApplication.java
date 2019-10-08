@@ -1,7 +1,7 @@
 package com.kakeibo;
 
 import android.app.Application;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 
 import com.kakeibo.db.DBAdapter;
 import com.kakeibo.db.DBHelper;

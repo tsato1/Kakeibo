@@ -3,7 +3,7 @@ package com.kakeibo.export;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,9 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakeibo.R;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * An abstract activity that handles authorization and connection to the Drive
