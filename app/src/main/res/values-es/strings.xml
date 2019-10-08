@@ -100,4 +100,5 @@
     <string name="loading">Cargando</string>
     <string name="err_max_amount_cannot_be_0">La cantidad máxima no puede ser 0.</string>
     <string name="msg_result_empty">El conjunto de resultados está vacío para esta búsqueda.</string>
+    <string name="close">Cerrar</string>
 </resources>

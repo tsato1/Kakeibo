@@ -100,4 +100,5 @@
     <string name="tap_anywhere_to_dismiss">画面をタップしてください．</string>
     <string name="err_max_amount_cannot_be_0">上限金額が０です．</string>
     <string name="msg_result_empty">検索結果はありません．</string>
+    <string name="close">閉じる</string>
 </resources>

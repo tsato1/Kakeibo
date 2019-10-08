@@ -39,7 +39,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private Activity _activity;
     private View _view;
     private CoordinatorLayout rootView;
-    private ImageButton btnPrev, btnNext;
+    private ImageButton btnPrev, btnNext, btnClose;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
     private FloatingActionButton fabDiscard;
@@ -114,6 +114,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         btnPrev = _view.findViewById(R.id.btn_prev);
         btnDate = _view.findViewById(R.id.btn_date);
         btnNext = _view.findViewById(R.id.btn_next);
+        btnClose = _view.findViewById(R.id.btn_exit_search_result);
         txvIncome = _view.findViewById(R.id.txv_income);
         txvExpense = _view.findViewById(R.id.txv_expense);
         txvBalance = _view.findViewById(R.id.txv_balance);
@@ -121,6 +122,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         btnPrev.setOnClickListener(new ButtonClickListener());
         btnDate.setOnClickListener(new ButtonClickListener());
         btnNext.setOnClickListener(new ButtonClickListener());
+        btnClose.setOnClickListener(new ButtonClickListener());
         btnDate.setOnLongClickListener(new ButtonLongClickListener());
     }
 
@@ -147,38 +149,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     class ButtonLongClickListener implements View.OnLongClickListener {
         @Override
         public boolean onLongClick (View view) {
-            AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
-            dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
-            dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
-            dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
-                    _query = new Query(Query.QUERY_TYPE_NEW);
-                    UtilQuery.init();
-                    UtilQuery.setDate(todaysDate, "");
-                    UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
-                    UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-                    UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-                    UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
-                    _query.setQueryC(UtilQuery.buildQueryC());
-                    _query.setQueryCs(UtilQuery.buildQueryCs());
-                    _query.setQueryD(UtilQuery.buildQueryD());
-
-                    reset();
-                    if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
-                        _tabFragment2C = (TabFragment2C) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
-                        _tabFragment2C.setQuery(_query);
-                        _tabFragment2C.loadItemsOrderByCategory();
-                    } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
-                        _tabFragment2D = (TabFragment2D) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
-                        _tabFragment2D.setQuery(_query);
-                        _tabFragment2D.loadItemsOrderByDate();
-                    }
-                }
-            });
-            dialogSaveSearch.show();
-
             return true;
         }
     }
@@ -187,7 +157,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         public void onClick(View view) {
             switch(view.getId()) {
                 case R.id.btn_date:
-
                     break;
                 case R.id.btn_prev:
                     _calMonth--;
@@ -227,6 +196,9 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                         _tabFragment2D.setQuery(_query);
                         _tabFragment2D.loadItemsOrderByDate();
                     }
+                    break;
+                case R.id.btn_exit_search_result:
+                    exitSearchResult();
                     break;
             }
         }
@@ -285,12 +257,14 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                 btnDate.setText(getTextBtnDate());
                 btnNext.setVisibility(View.VISIBLE);
                 btnPrev.setVisibility(View.VISIBLE);
+                btnClose.setVisibility(View.GONE);
                 rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 break;
             case Query.QUERY_TYPE_SEARCH:
                 btnDate.setText(getString(R.string.title_search_result));
                 btnNext.setVisibility(View.INVISIBLE);
-                btnPrev.setVisibility(View.INVISIBLE);
+                btnPrev.setVisibility(View.GONE);
+                btnClose.setVisibility(View.VISIBLE);
                 rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground_search));
                 break;
         }
@@ -362,5 +336,41 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
             TabFragment2D f = (TabFragment2D) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
             f.export();
         }
+    }
+
+    private boolean exitSearchResult() {
+        AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
+        dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
+        dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
+        dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
+                _query = new Query(Query.QUERY_TYPE_NEW);
+                UtilQuery.init();
+                UtilQuery.setDate(todaysDate, "");
+                UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+                UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
+                UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
+                UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+                _query.setQueryC(UtilQuery.buildQueryC());
+                _query.setQueryCs(UtilQuery.buildQueryCs());
+                _query.setQueryD(UtilQuery.buildQueryD());
+
+                reset();
+                if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
+                    _tabFragment2C = (TabFragment2C) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
+                    _tabFragment2C.setQuery(_query);
+                    _tabFragment2C.loadItemsOrderByCategory();
+                } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
+                    _tabFragment2D = (TabFragment2D) _cfmDetail.findFragmentById(R.id.frl_tab2_container);
+                    _tabFragment2D.setQuery(_query);
+                    _tabFragment2D.loadItemsOrderByDate();
+                }
+            }
+        });
+        dialogSaveSearch.show();
+
+        return true;
     }
 }

@@ -100,4 +100,5 @@
     <string name="amount_colon">importo:</string>
     <string name="err_max_amount_cannot_be_0">l\'importo max non può essere zero.</string>
     <string name="msg_result_empty">Il set di risultati è vuoto per questa ricerca.</string>
+    <string name="close">Chiudere</string>
 </resources>
