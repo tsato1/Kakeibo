@@ -64,7 +64,7 @@
     <string name="err_please_enter_min_amount">下限金額を入力してください．</string>
     <string name="err_please_enter_max_amount">上限金額を入力してください．</string>
     <string name="err_min_amount_greater">上限金額は下限金額より大きくなければなりません．</string>
-    <string name="ins_tap_plus_to_add_criteria">プラスボタンより検索条件を追加した後検索ボタンをタップします．</string>
+    <string name="inst_tap_plus_to_add_criteria">プラスボタンより検索条件を追加した後検索ボタンをタップします．</string>
     <string name="title_search_criteria">検索条件：</string>
     <string name="title_returning_to_monthly_report">月次レポートへ戻ります．</string>
     <string name="folder_not_selected">フォルダが選択されなかったためキャンセルされました．</string>
@@ -99,6 +99,7 @@
     <string name="empty_report">レポートが空です．</string>
     <string name="tap_anywhere_to_dismiss">画面をタップしてください．</string>
     <string name="err_max_amount_cannot_be_0">上限金額が０です．</string>
-    <string name="msg_result_empty">検索結果はありません．</string>
+    <string name="msg_no_result_found">検索結果はありません．</string>
     <string name="close">閉じる</string>
+    <string name="msg_exit_search">検索結果画面を閉じ，今月の月次レポートへ戻ります．</string>
 </resources>

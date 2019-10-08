@@ -39,7 +39,6 @@
     <string name="event_date_colon">Event Date:</string>
     <string name="updated_on_colon">Saved on:</string>
 
-    <!-- card view -->
     <string name="add_search_criterion">Add Search Criterion</string>
     <string name="how_to_perform_search">How to perform Search</string>
     <string name="date_range">Date Range</string>
@@ -66,8 +65,10 @@
     <string name="msg_item_successfully_saved">The item was successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_result_empty">The result set is empty for this search.</string>
-    <string name="ins_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
+    <string name="msg_no_result_found">No result found.</string>
+    <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
+
+    <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
 
     <string name="err_please_select_category">Please select category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>

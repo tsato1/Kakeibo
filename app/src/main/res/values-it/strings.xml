@@ -37,7 +37,7 @@
     <string name="err_from_date_older">la data deve essere antecedente a oggi.</string>
     <string name="err_please_enter_min_amount">inserire importo min.</string>
     <string name="err_please_enter_max_amount">inserire importo max.</string>
-    <string name="ins_tap_plus_to_add_criteria">Prima premere il tasto più per inserire i criteri di ricerca. Poi il tasto con la lente per definire la ricerca.</string>
+    <string name="inst_tap_plus_to_add_criteria">Prima premere il tasto più per inserire i criteri di ricerca. Poi il tasto con la lente per definire la ricerca.</string>
     <string name="title_search_criteria">modalità ricerca:</string>
     <string name="title_returning_to_monthly_report">torna al prospetto mensile</string>
     <string name="folder_not_selected">cartella non trovata. Cancella caricamento.</string>
@@ -99,6 +99,7 @@
     <string name="event_date_colon">data evento:</string>
     <string name="amount_colon">importo:</string>
     <string name="err_max_amount_cannot_be_0">l\'importo max non può essere zero.</string>
-    <string name="msg_result_empty">Il set di risultati è vuoto per questa ricerca.</string>
+    <string name="msg_no_result_found">Nessun risultato trovato.</string>
     <string name="close">Chiudere</string>
+    <string name="msg_exit_search">Uscirai dalla pagina dei risultati della ricerca e tornerai al rapporto mensile di questo mese.</string>
 </resources>

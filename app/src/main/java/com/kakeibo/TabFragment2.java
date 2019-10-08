@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -42,7 +41,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private ImageButton btnPrev, btnNext, btnClose;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
-    private FloatingActionButton fabDiscard;
 
     private FragmentManager _cfmDetail;
     private FragmentTransaction _ftrDetail;
@@ -157,6 +155,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         public void onClick(View view) {
             switch(view.getId()) {
                 case R.id.btn_date:
+                    toggleViews();
                     break;
                 case R.id.btn_prev:
                     _calMonth--;
@@ -342,6 +341,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
         dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
         dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
+        dialogSaveSearch.setMessage(getString(R.string.msg_exit_search));
         dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

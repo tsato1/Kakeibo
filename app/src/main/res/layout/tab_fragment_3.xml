@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/fab_default_padding"
-        android:text="@string/ins_tap_plus_to_add_criteria"/>
+        android:text="@string/inst_tap_plus_to_add_criteria"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcv_search_criteria"

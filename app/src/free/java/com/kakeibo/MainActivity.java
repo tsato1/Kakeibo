@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     fabStart.setVisibility(View.INVISIBLE);
                     fabEnd.setVisibility(View.INVISIBLE);
                 } else if (position==1) {
-                    fabStart.setVisibility(View.VISIBLE);
+                    fabStart.setVisibility(View.INVISIBLE);
                     fabStart.setImageResource(R.drawable.ic_cloud_upload_white); //todo prepare image for toggle
                     fabEnd.setVisibility(View.VISIBLE);
                     fabEnd.setImageResource(R.drawable.ic_cloud_upload_white);
@@ -192,9 +192,10 @@ public class MainActivity extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.fab_start:
                     if (viewPager.getCurrentItem()==1) {
-                        TabFragment2 tabFragment2 = (TabFragment2) fm.findFragmentByTag(
-                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
-                        tabFragment2.toggleViews();
+                        /**** invisible ****/
+//                        TabFragment2 tabFragment2 = (TabFragment2) fm.findFragmentByTag(
+//                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
+//                        tabFragment2.toggleViews();
                     } else if (viewPager.getCurrentItem()==2) {
                         TabFragment3 tabFragment3 = (TabFragment3) fm.findFragmentByTag(
                                 "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());

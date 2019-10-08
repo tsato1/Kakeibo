@@ -326,7 +326,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getResources().getString(R.string.how_to_perform_search));
         builder.setIcon(R.mipmap.ic_mikan);
-        builder.setMessage(R.string.ins_tap_plus_to_add_criteria);
+        builder.setMessage(R.string.inst_tap_plus_to_add_criteria);
         builder.setPositiveButton(R.string.next, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

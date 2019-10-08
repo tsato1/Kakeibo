@@ -122,20 +122,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             layout = itemView.findViewById(R.id.frl_card_category);
             cardView = itemView.findViewById(R.id.cdv_category);
             btnCategory = itemView.findViewById(R.id.btn_card_category);
-            btnCategory.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(_context)
-                            .setSingleChoiceItems(mCategories, 0, null)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    dialog.dismiss();
-                                    selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                                    btnCategory.setText(mCategories[selectedPosition]);
-                                }
-                            })
-                            .show();
-                }
+            btnCategory.setOnClickListener((View view) -> {
+                new AlertDialog.Builder(_context)
+                        .setSingleChoiceItems(mCategories, 0, (DialogInterface dialog, int which)-> {
+                            dialog.dismiss();
+                            selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                            btnCategory.setText(mCategories[selectedPosition]);
+                        })
+                        .show();
             });
         }
 

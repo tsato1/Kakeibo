@@ -8,10 +8,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -345,7 +343,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             if (c.moveToNext()) {
                 /*** if the query returns empty set, toast message ***/
                 if (c.getInt(0)<=0) {
-                    Toast.makeText(_activity, getString(R.string.msg_result_empty), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(_activity, getString(R.string.msg_no_result_found), Toast.LENGTH_SHORT).show();
                 }
                 /*** if the query returns non-empty set, proceed ***/
                 else {
@@ -354,7 +352,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                 }
             } else {
                 /*** if the query returns empty set, toast message ***/
-                Toast.makeText(_activity, getString(R.string.msg_result_empty), Toast.LENGTH_SHORT).show();
+                Toast.makeText(_activity, getString(R.string.msg_no_result_found), Toast.LENGTH_SHORT).show();
             }
 
             itemsDbAdapter.close();
