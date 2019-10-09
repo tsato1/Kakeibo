@@ -7,14 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-//import com.google.android.gms.ads.AdListener;
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.InterstitialAd;
-//import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
@@ -28,6 +25,10 @@ import com.kakeibo.util.UtilFiles;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
+import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G;
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE;
 
 /**
  * An activity to create a file inside a folder.
@@ -143,6 +144,14 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
 
     /*** ads ***/
     private void loadAds() {
+        RequestConfiguration conf= new RequestConfiguration
+                .Builder()
+                .setTagForChildDirectedTreatment(TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE)
+                .setTagForUnderAgeOfConsent(TAG_FOR_UNDER_AGE_OF_CONSENT_TRUE)
+                .setMaxAdContentRating(MAX_AD_CONTENT_RATING_G)
+                .build();
+        MobileAds.setRequestConfiguration(conf);
+
         MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
         mInterstitialAd = new InterstitialAd(this);
         AdRequest.Builder request = new AdRequest.Builder();
