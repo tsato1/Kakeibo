@@ -8,7 +8,7 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 16
+        versionCode 17
         versionName "2.0.4"
         multiDexEnabled true
 
