@@ -6,10 +6,10 @@
     <string name="err_please_enter_amount">immettere l’importo</string>
     <string name="err_please_select_category">selezionare categoria.</string>
     <string name="err_memo_empty">manca dato.</string>
-    <string name="hint_amount_spent_or_earned">Importo spesa o entrata</string>
+    <string name="hint_amount_spent_or_earned">IMPORTO SPESA O ENTRATA</string>
     <string name="input">inserisci</string>
     <string name="item_detail">dettaglio voce</string>
-    <string name="hint_memo_max_20_characters">Memo: Max 20 caratteri</string>
+    <string name="hint_memo_max_20_characters">MEMO: MAX 20 CARATTERI</string>
     <string name="msg_change_successfully_saved">modifica salvata.</string>
     <string name="msg_item_successfully_deleted">dato eliminato.</string>
     <string name="msg_item_successfully_saved">dato salvato correttamente.</string>
@@ -21,12 +21,12 @@
     <string name="balance_colon">saldo:</string>
     <string name="expense_colon">spese:</string>
     <string name="income_colon">entrate:</string>
-    <string name="action_settings">impostazioni</string>
+    <string name="action_settings">IMPOSTAZIONI</string>
     <string name="search">ricerca</string>
     <string name="select_file">seleziona</string>
     <string name="file_create_error">errore di impostazione. Riprova.</string>
-    <string name="pref_header_general">generali</string>
-    <string name="pref_title_date_format">formato data</string>
+    <string name="pref_header_general">GENERALI</string>
+    <string name="pref_title_date_format">FORMATO DATA</string>
     <string name="pref_desc_remove_ads">Kakeibo! Proにアップグレード</string>
     <string name="pref_header_data_sync">dati e sincronizzazione</string>
     <string name="add_search_criterion">inserisci modalità ricerca</string>
@@ -47,7 +47,7 @@
     <string name="pref_ringtone_silent">muto</string>
     <string name="pref_title_system_sync_settings">impostazioni sistema</string>
     <string name="pref_title_vibrate">バイブレーション</string>
-    <string name="pref_header_in_app_data">nei dati dell’App</string>
+    <string name="pref_header_in_app_data">NEI DATI DELL\'APP</string>
     <string name="pref_title_delete_all_items">cancella tutti i dati</string>
     <string name="pref_desc_delete_all_items">Questo cancellerà tutti i dati in Kakeibo salvati su questo dispositivo. E’ consigliato salvare i dati su Google Drive prima di cancellare. Premere ok per cancellare, premere annulla per uscire.</string>
     <string name="pref_warn_delete_all_items">cancellare tutti i dati?</string>
@@ -56,7 +56,7 @@
     <string name="export_date">invia [data]</string>
     <string name="quest_export_this_report_C">salvare su Google Drive? Ordinato per cateroria.</string>
     <string name="quest_export_this_report_D">salvare su Google Drive? Ordinato per data.</string>
-    <string name="pref_title_fraction_digits">decimali</string>
+    <string name="pref_title_fraction_digits">DECIMALI</string>
     <string name="nothing_to_export">nulla da esportare.</string>
     <string name="empty_report">prospetto senza dati.</string>
     <string name="tap_anywhere_to_dismiss">tocca lo schermo per uscire.</string>
@@ -89,7 +89,7 @@
     <string name="title_edit_item">modifica</string>
     <string name="file_created">file salvato su cloud.</string>
     <string name="select_folder">seleziona cartella</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
+    <string name="pref_title_remove_ads">rimuovere gli annunci</string>
     <string name="pref_title_sync_frequency">frequenza di sincronizzazione</string>
     <string name="pref_header_notifications">notifiche</string>
     <string name="memo">memo</string>
