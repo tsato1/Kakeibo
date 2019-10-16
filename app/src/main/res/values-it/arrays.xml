@@ -23,5 +23,9 @@
         <item>RISP.</item>
         <item>TASSE</item>
         <item>ALTRO</item>
+        <item>ANIM.D.</item>
+        <item>SOCIAL</item>
+        <item>COSME</item>
+        <item>ABITAT.</item>
     </string-array>
 </resources>

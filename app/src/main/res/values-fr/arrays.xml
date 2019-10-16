@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="week_name">
+        <item>DIM</item>
+        <item>LUN</item>
+        <item>MAR</item>
+        <item>MER</item>
+        <item>JEU</item>
+        <item>VEN</item>
+        <item>SAM</item>
+    </string-array>
+
+    <string-array name="default_category">
+        <item>REV.</item>
+        <item>ACHAT.</item>
+        <item>ALIM.</item>
+        <item>FACTUR</item>
+        <item>SANTE\'</item>
+        <item>ETUDE</item>
+        <item>VETEM.</item>
+        <item>TRANS.</item>
+        <item>AMUSE.</item>
+        <item>EPARG.</item>
+        <item>TAXE</item>
+        <item>AUTRE</item>
+        <item>ANIM.C.</item>
+        <item>SOCIAL</item>
+        <item>COSMÉ</item>
+        <item>LOGMNT</item>
+    </string-array>
+</resources>

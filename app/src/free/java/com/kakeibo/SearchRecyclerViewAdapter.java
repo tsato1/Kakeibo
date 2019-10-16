@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.util.UtilDate;
 
 import java.text.SimpleDateFormat;
@@ -23,12 +26,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final static String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
     private static String[] mCategories;
+    private static List<KkbCategory> kkbCategoriesList;
 
     private Context _context;
     private ArrayList<Card> _lstCards;
@@ -36,6 +41,28 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCards) {
         _context = context;
         _lstCards = lstCards;
+
+        CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
+        categoriesDBAdapter.open();
+        Cursor c = categoriesDBAdapter.getParentCategories();
+        kkbCategoriesList = new ArrayList<>();
+        /*** ordered by location ***/
+        if (c!=null && c.moveToFirst()) {
+            do {
+                KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
+                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
+                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
+                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
+                );
+                kkbCategoriesList.add(kkbCategory);
+            } while (c.moveToNext());
+        }
+        categoriesDBAdapter.close();
 
         mCategories = _context.getResources().getStringArray(R.array.default_category);
     }

@@ -2,6 +2,7 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.database.Cursor;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilDate;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -46,6 +49,7 @@ public class TabFragment1 extends Fragment {
     private static String _eventDate;
     private static String selectedCategory = "";
     private static int selectedCategoryCode;
+    private static List<KkbCategory> kkbCategoriesList;
 
     public static TabFragment1 newInstance() {
         TabFragment1 tabFragment1 = new TabFragment1();
@@ -92,16 +96,43 @@ public class TabFragment1 extends Fragment {
         btnsCategory.add(view.findViewById(R.id.btn_category10));
         btnsCategory.add(view.findViewById(R.id.btn_category11));
         btnsCategory.add(view.findViewById(R.id.btn_category12));
-        setButtonContent();
+        btnsCategory.add(view.findViewById(R.id.btn_category13));
+        btnsCategory.add(view.findViewById(R.id.btn_category14));
+        btnsCategory.add(view.findViewById(R.id.btn_category15));
+        btnsCategory.add(view.findViewById(R.id.btn_category16));
+
+        CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
+        categoriesDBAdapter.open();
+        Cursor c = categoriesDBAdapter.getParentCategories();
+        kkbCategoriesList = new ArrayList<>();
+        /*** ordered by location ***/
+        if (c!=null && c.moveToFirst()) {
+            int i = 0;
+            do {
+                KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
+                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
+                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
+                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
+                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
+                );
+                kkbCategoriesList.add(kkbCategory);
+                btnsCategory.get(i).setText(MainActivity.sCategories[kkbCategory.getCode()]);
+                btnsCategory.get(i).setCompoundDrawablesWithIntrinsicBounds(
+                        0,
+                        kkbCategory.getDrawable(),
+                        0,
+                        0);
+                i++;
+            } while (c.moveToNext());
+        }
+        categoriesDBAdapter.close();
 
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);
-    }
-
-    void setButtonContent() {
-        for (int i = 0; i < MainActivity.sCategories.length; i++) {
-            btnsCategory.get(i).setText(MainActivity.sCategories[i]);
-        }
     }
 
     void setListeners() {
@@ -164,51 +195,67 @@ public class TabFragment1 extends Fragment {
             switch (view.getId()) {
                 case R.id.btn_category1:
                     selectedCategory = btnsCategory.get(0).getText().toString();
-                    selectedCategoryCode = 0;
+                    selectedCategoryCode = kkbCategoriesList.get(0).getCode();
                     break;
                 case R.id.btn_category2:
                     selectedCategory = btnsCategory.get(1).getText().toString();
-                    selectedCategoryCode = 1;
+                    selectedCategoryCode = kkbCategoriesList.get(1).getCode();
                     break;
                 case R.id.btn_category3:
                     selectedCategory = btnsCategory.get(2).getText().toString();
-                    selectedCategoryCode = 2;
+                    selectedCategoryCode = kkbCategoriesList.get(2).getCode();
                     break;
                 case R.id.btn_category4:
                     selectedCategory = btnsCategory.get(3).getText().toString();
-                    selectedCategoryCode = 3;
+                    selectedCategoryCode = kkbCategoriesList.get(3).getCode();
                     break;
                 case R.id.btn_category5:
                     selectedCategory = btnsCategory.get(4).getText().toString();
-                    selectedCategoryCode = 4;
+                    selectedCategoryCode = kkbCategoriesList.get(4).getCode();
                     break;
                 case R.id.btn_category6:
                     selectedCategory = btnsCategory.get(5).getText().toString();
-                    selectedCategoryCode = 5;
+                    selectedCategoryCode = kkbCategoriesList.get(5).getCode();
                     break;
                 case R.id.btn_category7:
                     selectedCategory = btnsCategory.get(6).getText().toString();
-                    selectedCategoryCode = 6;
+                    selectedCategoryCode = kkbCategoriesList.get(6).getCode();
                     break;
                 case R.id.btn_category8:
                     selectedCategory = btnsCategory.get(7).getText().toString();
-                    selectedCategoryCode = 7;
+                    selectedCategoryCode = kkbCategoriesList.get(7).getCode();
                     break;
                 case R.id.btn_category9:
                     selectedCategory = btnsCategory.get(8).getText().toString();
-                    selectedCategoryCode = 8;
+                    selectedCategoryCode = kkbCategoriesList.get(8).getCode();
                     break;
                 case R.id.btn_category10:
                     selectedCategory = btnsCategory.get(9).getText().toString();
-                    selectedCategoryCode = 9;
+                    selectedCategoryCode = kkbCategoriesList.get(9).getCode();
                     break;
                 case R.id.btn_category11:
                     selectedCategory = btnsCategory.get(10).getText().toString();
-                    selectedCategoryCode = 10;
+                    selectedCategoryCode = kkbCategoriesList.get(10).getCode();
                     break;
                 case R.id.btn_category12:
                     selectedCategory = btnsCategory.get(11).getText().toString();
-                    selectedCategoryCode = 11;
+                    selectedCategoryCode = kkbCategoriesList.get(11).getCode();
+                    break;
+                case R.id.btn_category13:
+                    selectedCategory = btnsCategory.get(12).getText().toString();
+                    selectedCategoryCode = kkbCategoriesList.get(12).getCode();
+                    break;
+                case R.id.btn_category14:
+                    selectedCategory = btnsCategory.get(13).getText().toString();
+                    selectedCategoryCode = kkbCategoriesList.get(13).getCode();
+                    break;
+                case R.id.btn_category15:
+                    selectedCategory = btnsCategory.get(14).getText().toString();
+                    selectedCategoryCode = kkbCategoriesList.get(14).getCode();
+                    break;
+                case R.id.btn_category16:
+                    selectedCategory = btnsCategory.get(15).getText().toString();
+                    selectedCategoryCode = kkbCategoriesList.get(15).getCode();
                     break;
             }
 

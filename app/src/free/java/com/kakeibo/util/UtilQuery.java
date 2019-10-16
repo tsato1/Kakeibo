@@ -1,5 +1,6 @@
 package com.kakeibo.util;
 
+import com.kakeibo.MainActivity;
 import com.kakeibo.db.ItemsDBAdapter;
 
 import static com.kakeibo.db.ItemsDBAdapter.COL_AMOUNT;
@@ -20,7 +21,7 @@ public class UtilQuery {
     private static boolean orderD;
 
     public static void init() {
-        builderCs = new StringBuilder[12];
+        builderCs = new StringBuilder[16];
         for (int i=0; i<builderCs.length; ++i) {
             builderCs[i] = new StringBuilder("SELECT * FROM ITEMS");
         }

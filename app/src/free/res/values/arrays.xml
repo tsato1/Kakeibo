@@ -23,6 +23,10 @@
         <item>Ins</item>
         <item>Tax</item>
         <item>Other</item>
+        <item>Pet</item>
+        <item>Social</item>
+        <item>Cosme</item>
+        <item>Housng</item>
     </string-array>
 
     <integer-array name="category_drawables">
@@ -38,6 +42,10 @@
         <item>@drawable/ic_category_ins</item>
         <item>@drawable/ic_category_tax</item>
         <item>@drawable/ic_category_other</item>
+        <item>@drawable/ic_category_pet</item>
+        <item>@drawable/ic_category_cosme</item>
+        <item>@drawable/ic_category_social</item>
+        <item>@drawable/ic_category_tele</item>
     </integer-array>
 
     <string-array name="search_criteria">

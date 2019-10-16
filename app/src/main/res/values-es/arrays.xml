@@ -23,5 +23,9 @@
         <item>SEGURO</item>
         <item>IMPUES</item>
         <item>OTROS</item>
+        <item>MSCTA</item>
+        <item>SOCIAL</item>
+        <item>COSME</item>
+        <item>VVENDA</item>
     </string-array>
 </resources>

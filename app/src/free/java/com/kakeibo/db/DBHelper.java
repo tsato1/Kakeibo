@@ -8,11 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -22,7 +24,7 @@ import static com.kakeibo.db.KkbAppDBAdapter.TABLE_KKBAPP;
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DATABASE_NAME = "kakeibo.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String DATABASE_CREATE_TABLE_KKBAPP =
             "CREATE TABLE " + TABLE_KKBAPP + " (" +
@@ -47,6 +49,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     ItemsDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
                     ItemsDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);";
+
+    /*** category table ***/
+    private static final String DATABASE_CREATE_TABLE_CATEGORY =
+            "CREATE TABLE " + CategoriesDBAdapter.TABLE_CATEGORY + " (" +
+                    CategoriesDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                    CategoriesDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_NAME + " TEXT NOT NULL," +
+                    CategoriesDBAdapter.COL_COLOR + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_DRAWABLE + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_LOCATION + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_SUB_CATEGORIES + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_DESC + " TEXT NOT NULL," +
+                    CategoriesDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
 
     private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
             " ADD COLUMN " + ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
@@ -86,6 +101,8 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(DATABASE_CREATE_TABLE_ITEM);
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
             initKkbAppTable(db, DATABASE_VERSION);
+            db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
+            initCategoriesTable(db);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,6 +114,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
         itemsDBAdapter.open();
+        CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
+        categoriesDBAdapter.open();
 
         if (oldVersion < 2) {
             upgradeVersion2(db);
@@ -105,22 +124,18 @@ public class DBHelper extends SQLiteOpenHelper {
             upgradeVersion3(db);
         }
         if (oldVersion < 4) {
-            upgradeVersion4(db);
-
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
             initKkbAppTable(db, -1);
         }
         if (oldVersion < 5) {
-            upgradeVersion_okasan(db);
+        }
+        if (oldVersion < 6) {
+            db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
+            initCategoriesTable(db);
         }
 
         itemsDBAdapter.close();
-    }
-
-    private void upgradeVersion4(SQLiteDatabase db) { }
-
-    private void upgradeVersion_okasan(SQLiteDatabase db) {
-
+        categoriesDBAdapter.close();
     }
 
     private void upgradeVersion3(SQLiteDatabase db) {
@@ -214,5 +229,119 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
         db.insertOrThrow(TABLE_KKBAPP, null, valuesDBVersion);
+    }
+
+    private void initCategoriesTable(SQLiteDatabase db) {
+        ArrayList<KkbCategory> list = new ArrayList<>();
+
+        KkbCategory income = new KkbCategory();
+        income.code = 0;
+        income.drawable = R.drawable.ic_category_income;
+        income.location = 0;
+        list.add(income);
+
+        KkbCategory commodity = new KkbCategory();
+        commodity.code = 1;
+        commodity.drawable = R.drawable.ic_category_comm;
+        commodity.location = 1;
+        list.add(commodity);
+
+        KkbCategory meal = new KkbCategory();
+        meal.code = 2;
+        meal.drawable = R.drawable.ic_category_meal;
+        meal.location = 2;
+        list.add(meal);
+
+        KkbCategory util = new KkbCategory();
+        util.code = 3;
+        util.drawable = R.drawable.ic_category_util;
+        util.location = 3;
+        list.add(util);
+
+        KkbCategory health = new KkbCategory();
+        health.code = 4;
+        health.drawable = R.drawable.ic_category_health;
+        health.location = 4;
+        list.add(health);
+
+        KkbCategory edu = new KkbCategory();
+        edu.code = 5;
+        edu.drawable = R.drawable.ic_category_edu;
+        edu.location = 5;
+        list.add(edu);
+
+        KkbCategory cloth = new KkbCategory();
+        cloth.code = 6;
+        cloth.drawable = R.drawable.ic_category_cloth;
+        cloth.location = 6;
+        list.add(cloth);
+
+        KkbCategory trans = new KkbCategory();
+        trans.code = 7;
+        trans.drawable = R.drawable.ic_category_trans;
+        trans.location = 7;
+        list.add(trans);
+
+        KkbCategory ent = new KkbCategory();
+        ent.code = 8;
+        ent.drawable = R.drawable.ic_category_ent;
+        ent.location = 12;
+        list.add(ent);
+
+        KkbCategory ins = new KkbCategory();
+        ins.code=9;
+        ins.drawable = R.drawable.ic_category_ins;
+        ins.location = 13;
+        list.add(ins);
+
+        KkbCategory tax = new KkbCategory();
+        tax.code=10;
+        tax.drawable = R.drawable.ic_category_tax;
+        tax.location = 14;
+        list.add(tax);
+
+        KkbCategory other = new KkbCategory();
+        other.code=11;
+        other.drawable = R.drawable.ic_category_other;
+        other.location = 15;
+        list.add(other);
+
+        KkbCategory pet = new KkbCategory();
+        pet.code = 12;
+        pet.drawable = R.drawable.ic_category_pet;
+        pet.location = 8;
+        list.add(pet);
+
+        KkbCategory social = new KkbCategory();
+        social.code = 13;
+        social.drawable = R.drawable.ic_category_social;
+        social.location = 9;
+        list.add(social);
+
+        KkbCategory cosme = new KkbCategory();
+        cosme.code=14;
+        cosme.drawable = R.drawable.ic_category_cosme;
+        cosme.location = 10;
+        list.add(cosme);
+
+        KkbCategory housing = new KkbCategory();
+        housing.code = 15;
+        housing.drawable = R.drawable.ic_category_housing;
+        housing.location = 11;
+        list.add(housing);
+
+        for (KkbCategory category: list) {
+            ContentValues values = new ContentValues();
+            values.put(CategoriesDBAdapter.COL_CODE, category.getCode());
+            values.put(CategoriesDBAdapter.COL_NAME, "");
+            values.put(CategoriesDBAdapter.COL_COLOR, 0);
+            values.put(CategoriesDBAdapter.COL_DRAWABLE, category.getDrawable());
+            values.put(CategoriesDBAdapter.COL_LOCATION, category.getLocation());
+            values.put(CategoriesDBAdapter.COL_SUB_CATEGORIES, 0);
+            values.put(CategoriesDBAdapter.COL_DESC, "");
+            values.put(CategoriesDBAdapter.COL_SAVED_DATE, "");
+
+            db.insertOrThrow(CategoriesDBAdapter.TABLE_CATEGORY, null, values);
+        }
     }
 }

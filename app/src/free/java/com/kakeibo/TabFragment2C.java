@@ -1,5 +1,6 @@
 package com.kakeibo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -74,9 +76,28 @@ public class TabFragment2C extends Fragment {
         loadItemsOrderByCategory(); /*** <- to handle come back from settings ***/
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     void findViews() {
         graph = _view.findViewById(R.id.graph_subtotal);
         lsvCategory = _view.findViewById(R.id.lsv_subtotal);
+        lsvCategory.setOnTouchListener((View v, MotionEvent event)-> {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+
+                // Handle ListView touch events.
+                v.onTouchEvent(event);
+                return true;
+        });
 
         lsvCategory.setOnItemClickListener(new CategoryListItemClickListener());
 

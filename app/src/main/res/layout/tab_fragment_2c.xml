@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <FrameLayout
-        android:id="@+id/frl_2c"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -22,5 +18,4 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
-    </FrameLayout>
 </androidx.core.widget.NestedScrollView>

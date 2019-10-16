@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '28.0.4'
 
     defaultConfig {
         applicationId "com.kakeibo"
@@ -75,11 +74,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha02'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-//    androidTestImplementation 'androidx.test:rules:1.2.1'
-//    androidTestImplementation ('androidx.test.espresso:espresso-core:3.1.0') {
-//        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-//    }
 }
 
 apply plugin: 'com.google.gms.google-services'

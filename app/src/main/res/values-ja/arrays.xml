@@ -14,7 +14,7 @@
         <item>収入</item>
         <item>生活雑貨</item>
         <item>食事</item>
-        <item>電気水道</item>
+        <item>水道光熱</item>
         <item>健康</item>
         <item>教育</item>
         <item>衣服</item>
@@ -23,5 +23,9 @@
         <item>保険</item>
         <item>税金</item>
         <item>他</item>
+        <item>ペット</item>
+        <item>交際</item>
+        <item>美容</item>
+        <item>居住</item>
     </string-array>
 </resources>

@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String[] categoryColor = {
-            "#2b381d", "#40552b", "#557238", "#6a8d47", "#7ca058", "#80aa55", "#95b872",
-            "#aac78d", "#bfd5aa", "#d5e2c7", "#eaf1e2", "#fafcf8"};
+            "#2b381d", "#324220", "#374C22", "#40552b", "#465E2E",
+            "#4E6A32", "#557238", "#6a8d47", "#7ca058", "#80aa55",
+            "#8CB365", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7",
+            "#eaf1e2"}; //"#fafcf8"
 
     public static int sFragmentPosition;
     public static int sDateFormat;
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     fabEnd.setVisibility(View.INVISIBLE);
                 } else if (position==1) {
                     fabStart.setVisibility(View.INVISIBLE);
-                    fabStart.setImageResource(R.drawable.ic_cloud_upload_white); //todo prepare image for toggle
+                    fabStart.setImageResource(R.drawable.ic_cloud_upload_white);
                     fabEnd.setVisibility(View.VISIBLE);
                     fabEnd.setImageResource(R.drawable.ic_cloud_upload_white);
                 } else if (position==2) {
