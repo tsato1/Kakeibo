@@ -1,8 +1,9 @@
 package com.kakeibo;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.util.UtilDate;
@@ -32,7 +35,7 @@ import java.util.Locale;
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final static String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
-    private static String[] mCategories;
+//    private static String[] mCategories;
     private static List<KkbCategory> kkbCategoriesList;
 
     private Context _context;
@@ -41,30 +44,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     SearchRecyclerViewAdapter(Context context, ArrayList<Card> lstCards) {
         _context = context;
         _lstCards = lstCards;
-
-        CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
-        categoriesDBAdapter.open();
-        Cursor c = categoriesDBAdapter.getParentCategories();
-        kkbCategoriesList = new ArrayList<>();
-        /*** ordered by location ***/
-        if (c!=null && c.moveToFirst()) {
-            do {
-                KkbCategory kkbCategory = new KkbCategory(
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
-                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
-                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
-                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
-                );
-                kkbCategoriesList.add(kkbCategory);
-            } while (c.moveToNext());
-        }
-        categoriesDBAdapter.close();
-
-        mCategories = _context.getResources().getStringArray(R.array.default_category);
+        //        mCategories = _context.getResources().getStringArray(R.array.default_category);
     }
 
     /*** date range card ***/
@@ -141,7 +121,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         FrameLayout layout;
         CardView cardView;
         Button btnCategory;
-        int selectedPosition=0;// todo need map between category code and selectedposition
+        int selectedCategoryCode =0;
 
         ViewHolderCategory(View itemView) {
             super(itemView);
@@ -150,18 +130,50 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             cardView = itemView.findViewById(R.id.cdv_category);
             btnCategory = itemView.findViewById(R.id.btn_card_category);
             btnCategory.setOnClickListener((View view) -> {
-                new AlertDialog.Builder(_context)
-                        .setSingleChoiceItems(mCategories, 0, (DialogInterface dialog, int which)-> {
-                            dialog.dismiss();
-                            selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                            btnCategory.setText(mCategories[selectedPosition]);
-                        })
-                        .show();
+                CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
+                categoriesDBAdapter.open();
+                Cursor c = categoriesDBAdapter.getParentCategories();
+                kkbCategoriesList = new ArrayList<>();
+                /*** ordered by location ***/
+                if (c!=null && c.moveToFirst()) {
+                    do {
+                        KkbCategory kkbCategory = new KkbCategory(
+                                c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
+                                c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
+                                c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
+                                c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
+                                c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
+                                c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
+                                c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
+                                c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
+                        );
+                        kkbCategoriesList.add(kkbCategory);
+                    } while (c.moveToNext());
+                }
+                categoriesDBAdapter.close();
+
+                SearchCardCategoryListAdapter adapter =
+                        new SearchCardCategoryListAdapter(_context, 0, kkbCategoriesList);
+                AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View convertView = inflater.inflate(R.layout.dialog_bas_search_category, null);
+                builder.setView(convertView);
+                builder.setCancelable(true);
+                builder.setIcon(R.mipmap.ic_mikan);
+                builder.setTitle(R.string.category);
+                ListView lv = convertView.findViewById(R.id.lsv_base_search_category);
+                lv.setAdapter(adapter);
+                final Dialog dialog = builder.show();
+                lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
+                    selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
+                    btnCategory.setText(MainActivity.sCategories[selectedCategoryCode]);
+                    dialog.dismiss();
+                });
             });
         }
 
-        int getSelectedPosition() {
-            return selectedPosition;
+        int getSelectedCategoryCode() {
+            return selectedCategoryCode;
         }
     }
 

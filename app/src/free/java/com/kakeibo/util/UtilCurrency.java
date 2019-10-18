@@ -28,7 +28,6 @@ public class UtilCurrency {
         } else if (currencyFractionDigits == 2) {
             return amount.multiply(BigDecimal.valueOf(100)).longValue();
         } else if (currencyFractionDigits == 3) {
-            Log.d("UtilCurrency", "asdf="+amount.multiply(BigDecimal.valueOf(1000)).longValue());
             return amount.multiply(BigDecimal.valueOf(1000)).longValue();
         }
 

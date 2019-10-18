@@ -207,7 +207,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
                 SearchRecyclerViewAdapter.ViewHolderCategory viewHolderCategory = (SearchRecyclerViewAdapter.ViewHolderCategory) viewHolder;
                 String category = viewHolderCategory.btnCategory.getText().toString();
-                int categoryCode = viewHolderCategory.getSelectedPosition();
+                int categoryCode = viewHolderCategory.getSelectedCategoryCode();
 
                 if ("".equals(category)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
