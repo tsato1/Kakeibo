@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static int sDateFormat;
     public static int sFractionDigits;
     public static String[] sWeekName;
-    public static String[] sCategories;
+//   disposable!!!!!!!!!!!!!!!!!!!!!!     public static String[] sCategories;
 
 //    private InterstitialAd mInterstitialAd;
     private FragmentManager fm;
@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private TabFragment1 tabFragment1;
     private TabFragment2 tabFragment2;
     private TabFragment3 tabFragment3;
-    private FloatingActionButton fabStart;
-    private FloatingActionButton fabEnd;
+    private static FloatingActionButton fabStart;
+    private static FloatingActionButton fabEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         fabStart.setOnClickListener(new ButtonClickListener());
         fabEnd.setOnClickListener(new ButtonClickListener());
         sWeekName = getResources().getStringArray(R.array.week_name);
-        sCategories = getResources().getStringArray(R.array.default_category);
+//    disposable!!!!!!!!!!!!!!!!!!    sCategories = getResources().getStringArray(R.array.default_category);
 
 //        loadAds();
     }
@@ -111,18 +111,18 @@ public class MainActivity extends AppCompatActivity {
                 sFragmentPosition = position;
 
                 if (position==0) {
-                    fabStart.setVisibility(View.INVISIBLE);
-                    fabEnd.setVisibility(View.INVISIBLE);
+                    fabStart.hide();//.setVisibility(View.INVISIBLE);
+                    fabEnd.hide();//.setVisibility(View.INVISIBLE);
                 } else if (position==1) {
-                    fabStart.setVisibility(View.INVISIBLE);
                     fabStart.setImageResource(R.drawable.ic_cloud_upload_white);
-                    fabEnd.setVisibility(View.VISIBLE);
+                    fabStart.hide();//.setVisibility(View.INVISIBLE);
                     fabEnd.setImageResource(R.drawable.ic_cloud_upload_white);
+                    fabEnd.show();//.setVisibility(View.VISIBLE);
                 } else if (position==2) {
-                    fabStart.setVisibility(View.VISIBLE);
                     fabStart.setImageResource(R.drawable.ic_add_white);
-                    fabEnd.setVisibility(View.VISIBLE);
+                    fabStart.show();//.setVisibility(View.VISIBLE);
                     fabEnd.setImageResource(R.drawable.ic_search_white);
+                    fabEnd.show();//.setVisibility(View.VISIBLE);
                 }
             }
 

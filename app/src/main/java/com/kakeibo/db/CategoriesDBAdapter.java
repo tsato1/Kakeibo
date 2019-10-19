@@ -1,7 +1,6 @@
 package com.kakeibo.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +10,6 @@ import com.kakeibo.KkbCategory;
 
 
 public class CategoriesDBAdapter extends DBAdapter {
-
     private static final String TAG = CategoriesDBAdapter.class.getSimpleName();
 
     public static final String TABLE_CATEGORY = "categories";
@@ -23,7 +21,7 @@ public class CategoriesDBAdapter extends DBAdapter {
     public static final String COL_LOCATION = "location"; //location in GridView on fragment1
     public static final String COL_SUB_CATEGORIES = "sub_categories";
     public static final String COL_DESC = "description";
-    public static final String COL_SAVED_DATE = "saved_date";
+    public static final String COL_SAVED_DATE = "saved_date"; //default=""
 
     private SQLiteDatabase _db;
 

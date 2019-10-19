@@ -24,7 +24,7 @@
     <string name="hint_memo_max_20_characters">Nota: Max 20 caracteres</string>
     <string name="hint_amount_spent_or_earned">Cantidad gastada o ganada</string>
     <string name="err_memo_empty">La palabra de búsqueda está vacía</string>
-    <string name="err_please_select_category">Por favor seleccione categoría</string>
+    <string name="err_please_select_category">Seleccione categoría.</string>
     <string name="err_please_enter_amount">Ingrese cantidad</string>
     <string name="err_amount_cannot_be_0">La cantidad no puede ser 0.</string>
     <string name="item_detail">Detalle del artículo</string>
@@ -59,12 +59,12 @@
     <string name="pref_title_remove_ads">Quitar Anuncios</string>
     <string name="pref_desc_remove_ads">Actualizar a Kakeibo Pro</string>
     <string name="pref_header_data_sync">Datos y Sincronización</string>
-    <string name="err_no_search_criteria_found">No se han encontrado criterios de búsqueda. Por favor agregue desde el botón izquierdo.</string>
-    <string name="err_please_choose_from_date">Por favor, elija desde la fecha.</string>
-    <string name="err_please_choose_to_date">Por favor, elija Hasta la fecha.</string>
+    <string name="err_no_search_criteria_found">No se han encontrado criterios de búsqueda. Agregue desde el botón más.</string>
+    <string name="err_please_choose_from_date">Elija desde la fecha.</string>
+    <string name="err_please_choose_to_date">Elija Hasta la fecha.</string>
     <string name="err_from_date_older">From Date tiene que ser más joven que To Date.</string>
-    <string name="err_please_enter_min_amount">Por favor ingrese la cantidad mínima.</string>
-    <string name="err_please_enter_max_amount">Por favor, introduzca la cantidad máxima.</string>
+    <string name="err_please_enter_min_amount">Ingrese la cantidad mínima.</string>
+    <string name="err_please_enter_max_amount">Introduzca la cantidad máxima.</string>
     <string name="err_min_amount_greater">La cantidad máxima tiene que ser mayor que la cantidad mínima.</string>
     <string name="inst_tap_plus_to_add_criteria">Primero, toque el botón más para agregar criterios. Luego toque el botón de búsqueda para realizar la búsqueda.</string>
     <string name="title_search_criteria">Criterio de Búsqueda:</string>

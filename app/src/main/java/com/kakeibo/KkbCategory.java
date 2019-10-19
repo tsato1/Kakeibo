@@ -10,6 +10,12 @@ public class KkbCategory {
     public String description;
     public String savedDate;
 
+    public String en;
+    public String it;
+    public String fr;
+    public String jp;
+    public String sp;
+
     public KkbCategory() {}
 
     public KkbCategory(int code,
@@ -60,5 +66,25 @@ public class KkbCategory {
 
     public String getSavedDate() {
         return savedDate;
+    }
+
+    public String getEN() {
+        return en;
+    }
+
+    public String getIT() {
+        return it;
+    }
+
+    public String getFR() {
+        return fr;
+    }
+
+    public String getJA() {
+        return jp;
+    }
+
+    public String getES() {
+        return sp;
     }
 }

@@ -57,7 +57,7 @@
     <string name="swipe_to_delete">削除</string>
     <string name="undo">やり直し</string>
     <string name="card_is_removed">カードが取り除かれました．</string>
-    <string name="err_no_search_criteria_found">検索条件がみつかりません．左のボタンから追加してください．</string>
+    <string name="err_no_search_criteria_found">検索条件がみつかりません．プラスボタンから追加してください．</string>
     <string name="err_please_choose_from_date">下限日時を選択してください．</string>
     <string name="err_please_choose_to_date">上限日時を選択してください．</string>
     <string name="err_from_date_older">上限日時が下限日時よりも後でなければなりません．</string>

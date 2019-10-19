@@ -12,6 +12,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kakeibo.util.UtilCategory;
+
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _lstDateHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Item>> _hmpChildData;
-    private String[] _strDefaultCategory;
+//    private String[] _strDefaultCategory; disposable !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private TypedArray _trrMipmaps;
 
     ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
@@ -35,7 +37,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._lstDateHeader = dateHeaderList;
         this._hmpChildData = childDataHashMap;
 
-        _strDefaultCategory = context.getResources().getStringArray(R.array.default_category);
+//      disposable!!!!!!!!!!!!!!!!!!!!  _strDefaultCategory = context.getResources().getStringArray(R.array.default_category);
         _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
@@ -67,8 +69,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         Item item = (Item)baseItem;
         imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
 
-        txvCategory.setText(_strDefaultCategory[item.getCategoryCode()]);
-
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
             String str = item.getMemo().substring(0, 14) + "...";
@@ -79,7 +79,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         /*** category ***/
-        txvCategory.setText(_strDefaultCategory[item.getCategoryCode()]);
+//    disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    txvCategory.setText(_strDefaultCategory[item.getCategoryCode()]);
+        txvCategory.setText(UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode()));
 
         /*** amount ***/
         SpannableString spannableString;

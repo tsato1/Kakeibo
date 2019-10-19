@@ -82,7 +82,7 @@
     <string name="cancel">Annuler</string>
     <string name="balance_colon">solde:</string>
     <string name="close">ferme</string>
-    <string name="err_no_search_criteria_found">Aucun critère de recherche répérée. S\'il vous plaît ajouter à partir du bouton de gauche.</string>
+    <string name="err_no_search_criteria_found">Aucun critère de recherche répérée. S\'il vous plaît ajouter à partir du bouton plus.</string>
     <string name="err_please_enter_amount">entrer le montant</string>
     <string name="expense_colon">frais:</string>
     <string name="file_create_error">Erreur lors de la tentative de création du fichier. Veuillez réessayer plus tard.</string>

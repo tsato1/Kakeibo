@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kakeibo.util.UtilCategory;
+
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ import java.util.List;
 public class CategoryListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater _layoutInflater;
     private Context _context;
-    private String[] _strsDefaultCategory;
+// disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   private String[] _strsDefaultCategory;
     private TypedArray _trrMipmaps;
 
     CategoryListAdapter(Context context, int id, List<Item> objects) {
@@ -30,7 +32,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         this._context = context;
         _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        _strsDefaultCategory = _context.getResources().getStringArray(R.array.default_category);
+//  disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      _strsDefaultCategory = _context.getResources().getStringArray(R.array.default_category);
         _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
@@ -49,7 +51,8 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         TextView txvCategory = convertView.findViewById(R.id.txv_category);
 
         imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
-        txvCategory.setText(_strsDefaultCategory[item.getCategoryCode()]);
+//   disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     txvCategory.setText(_strsDefaultCategory[item.getCategoryCode()]);
+        txvCategory.setText(UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode()));
 
         /*** amount ***/
         TextView txvAmount = convertView.findViewById(R.id.txv_amount);

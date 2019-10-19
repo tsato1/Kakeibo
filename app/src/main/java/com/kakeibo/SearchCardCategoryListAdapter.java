@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.kakeibo.util.UtilCategory;
+
 import java.util.List;
 
 public class SearchCardCategoryListAdapter extends ArrayAdapter<KkbCategory> {
@@ -29,7 +31,8 @@ public class SearchCardCategoryListAdapter extends ArrayAdapter<KkbCategory> {
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search_category, null);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
-        String categoryText = MainActivity.sCategories[kkbCategory.getCode()];
+        String categoryText = UtilCategory.getCategoryStrFromCode(getContext(), kkbCategory.getCode());
+//                disposable !!!!!!!!!!!!!!!!!!!!!!!!!!! MainActivity.sCategories[kkbCategory.getCode()];
         txvCategory.setText(categoryText);
 
         ImageView imvCategory = v.findViewById(R.id.imv_category);

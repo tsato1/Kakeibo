@@ -101,7 +101,7 @@ public class ItemsDBAdapter extends DBAdapter {
     public void saveItem(Item item)
     {
         ContentValues values = new ContentValues();
-        /*** when you save the amount, multiply the value by 1000 ***/
+        /*** amount gets multiplied the value by 1000 upon saving ***/
         values.put(COL_AMOUNT, UtilCurrency.getLongAmountFromBigDecimal(item.getAmount(), 3));
         values.put(COL_CURRENCY_CODE, UtilCurrency.CURRENCY_NONE);
         values.put(COL_CATEGORY_CODE, item.getCategoryCode());

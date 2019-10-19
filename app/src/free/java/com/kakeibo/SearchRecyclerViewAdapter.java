@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.kakeibo.db.CategoriesDBAdapter;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilDate;
 
 import java.text.SimpleDateFormat;
@@ -166,7 +167,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 final Dialog dialog = builder.show();
                 lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
                     selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
-                    btnCategory.setText(MainActivity.sCategories[selectedCategoryCode]);
+//      disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!              btnCategory.setText(MainActivity.sCategories[selectedCategoryCode]);
+                    btnCategory.setText(UtilCategory.getCategoryStrFromCode(_context, selectedCategoryCode));
                     dialog.dismiss();
                 });
             });

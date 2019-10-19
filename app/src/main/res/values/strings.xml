@@ -51,7 +51,7 @@
     <string name="undo">UNDO</string>
     <string name="swipe_to_delete">Swipe to Delete</string>
     <string name="card_is_removed">Card is removed.</string>
-    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the left button.</string>
+    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
     <string name="err_please_choose_from_date">Please choose From Date.</string>
     <string name="err_please_choose_to_date">Please choose To Date.</string>
     <string name="err_from_date_older">From Date has to be younger than To Date.</string>

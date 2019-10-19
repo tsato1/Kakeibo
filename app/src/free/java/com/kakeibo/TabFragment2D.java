@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilFiles;
 import com.kakeibo.util.UtilDate;
 
@@ -114,7 +115,10 @@ public class TabFragment2D extends Fragment {
             TextView txvMemo = layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = layout.findViewById(R.id.txv_detail_registration);
 
-            String categoryText = getString(R.string.category_colon) + MainActivity.sCategories[item.getCategoryCode()];
+            String categoryText = getString(R.string.category_colon) +
+//                    MainActivity.sCategories[item.getCategoryCode()];
+                    UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
+
             txvCategory.setText(categoryText);
             SpannableString span1, span2;
             if (item.getCategoryCode() <= 0) {
@@ -192,7 +196,9 @@ public class TabFragment2D extends Fragment {
                 TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
                 txvEventDate.setText(item.getEventDate());
                 TextView txvCategory = layout.findViewById(R.id.txv_category);
-                String categoryText = getString(R.string.category_colon) + MainActivity.sCategories[item.getCategoryCode()];
+                String categoryText = getString(R.string.category_colon) +
+                        UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
+                        // disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MainActivity.sCategories[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
                 edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
@@ -326,7 +332,8 @@ public class TabFragment2D extends Fragment {
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());
                 _stringBuilder.append(",");
-                _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
+//disposable !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
+                _stringBuilder.append(UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getMemo());
                 _stringBuilder.append(",");

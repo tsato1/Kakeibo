@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilQuery;
@@ -120,7 +121,7 @@ public class TabFragment1 extends Fragment {
                         c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
                 );
                 kkbCategoriesList.add(kkbCategory);
-                btnsCategory.get(i).setText(MainActivity.sCategories[kkbCategory.getCode()]);
+                btnsCategory.get(i).setText(UtilCategory.getCategoryStrFromCode(getContext(), kkbCategory.getCode()));
                 btnsCategory.get(i).setCompoundDrawablesWithIntrinsicBounds(
                         0,
                         kkbCategory.getDrawable(),
@@ -140,7 +141,7 @@ public class TabFragment1 extends Fragment {
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
         edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
-        for (int i = 0; i < MainActivity.sCategories.length; i++) {
+        for (int i = 0; i < UtilCategory.numCategories; i++) {
             btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
         }
     }

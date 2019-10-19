@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.kakeibo.settings.SettingsActivity;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilDate;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater inflater;
     private Context _context;
-    private String[] defaultCategory;
+//  disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  private String[] defaultCategory;
     private String[] weekName;
     private int mDateFormat;
     private SharedPreferences mPref;
@@ -35,7 +36,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
 
-        defaultCategory = _context.getResources().getStringArray(R.array.default_category);
+// disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!       defaultCategory = _context.getResources().getStringArray(R.array.default_category);
         weekName = _context.getResources().getStringArray(R.array.week_name);
 
         loadSharedPreference();
@@ -58,7 +59,9 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         txvEventDate.setText(eventDateText);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
-        String categoryText = categoryColon + defaultCategory[item.getCategoryCode()];
+        String categoryText = categoryColon +
+                UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode());
+//  disposable!!!!!!!!!!!!!!!!!!!!!!!              defaultCategory[item.getCategoryCode()];
         txvCategory.setText(categoryText);
 
         TextView txvAmount = v.findViewById(R.id.txv_amount);

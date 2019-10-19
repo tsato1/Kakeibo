@@ -25,6 +25,7 @@ import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilFiles;
 
 import java.math.BigDecimal;
@@ -148,7 +149,8 @@ public class TabFragment2C extends Fragment {
             listView.setAdapter(categoryDetailListAdapter);
             AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
-            dialog.setTitle(MainActivity.sCategories[tmp.getCategoryCode()]);
+            dialog.setTitle(UtilCategory.getCategoryStrFromCode(getContext(), tmp.getCategoryCode()));
+//  disposable!!!!!!!!!!!!!!!!!!!!!!          dialog.setTitle(MainActivity.sCategories[tmp.getCategoryCode()]);
             dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -249,7 +251,8 @@ public class TabFragment2C extends Fragment {
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
 
-                _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
+//            disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
+                _stringBuilder.append(UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());
                 _stringBuilder.append(",");
