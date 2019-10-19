@@ -1,5 +1,6 @@
 package com.kakeibo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,11 +24,14 @@ import android.view.View;
 import com.kakeibo.settings.SettingsActivity;
 
 import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilKeyboard;
 
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
+
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 //todo add and subtract custom categories (discreet categories for income too)
 
@@ -58,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private static FloatingActionButton fabStart;
     private static FloatingActionButton fabEnd;
 
+    private Activity _activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 //    disposable!!!!!!!!!!!!!!!!!!    sCategories = getResources().getStringArray(R.array.default_category);
 
 //        loadAds();
+
+        _activity = this;
     }
 
     @Override
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         tabFragment1 = TabFragment1.newInstance();
         tabFragment2 = TabFragment2.newInstance();
         tabFragment3 = TabFragment3.newInstance();
@@ -109,20 +117,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 sFragmentPosition = position;
+                UtilKeyboard.hideSoftKeyboard(_activity);
 
                 if (position==0) {
-                    fabStart.hide();//.setVisibility(View.INVISIBLE);
-                    fabEnd.hide();//.setVisibility(View.INVISIBLE);
+                    fabStart.setVisibility(View.INVISIBLE);
+                    fabEnd.setVisibility(View.INVISIBLE);
                 } else if (position==1) {
                     fabStart.setImageResource(R.drawable.ic_cloud_upload_white);
-                    fabStart.hide();//.setVisibility(View.INVISIBLE);
+                    fabStart.setVisibility(View.INVISIBLE);
                     fabEnd.setImageResource(R.drawable.ic_cloud_upload_white);
-                    fabEnd.show();//.setVisibility(View.VISIBLE);
+                    fabEnd.setVisibility(View.VISIBLE);
                 } else if (position==2) {
                     fabStart.setImageResource(R.drawable.ic_add_white);
-                    fabStart.show();//.setVisibility(View.VISIBLE);
+                    fabStart.setVisibility(View.VISIBLE);
                     fabEnd.setImageResource(R.drawable.ic_search_white);
-                    fabEnd.show();//.setVisibility(View.VISIBLE);
+                    fabEnd.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -137,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        private ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+        private ViewPagerAdapter(FragmentManager manager, int flag) {
+            super(manager, flag);
         }
 
         @Override

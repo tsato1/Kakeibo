@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.util.UtilCategory;
-import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilQuery;
 
@@ -375,19 +374,5 @@ public class TabFragment1 extends Fragment {
         edtAmount.setText("");
         edtMemo.setText("");
         btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        // Make sure that we are currently visible
-        if (this.isVisible()) {
-            // If we are becoming invisible, then...
-            if (!isVisibleToUser) {
-                //Log.d(TAG, "Not visible anymore.");
-                UtilKeyboard.hideSoftKeyboard(_activity);
-            }
-        }
     }
 }

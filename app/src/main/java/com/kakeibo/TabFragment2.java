@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilQuery;
 
 import java.util.Calendar;
