@@ -43,9 +43,9 @@
         <item>@drawable/ic_category_tax</item>
         <item>@drawable/ic_category_other</item>
         <item>@drawable/ic_category_pet</item>
-        <item>@drawable/ic_category_cosme</item>
         <item>@drawable/ic_category_social</item>
-        <item>@drawable/ic_category_tele</item>
+        <item>@drawable/ic_category_cosme</item>
+        <item>@drawable/ic_category_housing</item>
     </integer-array>
 
     <string-array name="search_criteria">

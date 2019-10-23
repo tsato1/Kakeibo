@@ -54,52 +54,49 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * to reflect its new value.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
-            = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+            = (Preference preference, Object value) -> {
+        String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                    index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null);
 
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
+        } else if (preference instanceof RingtonePreference) {
+            // For ringtone preferences, look up the correct display value
+            // using RingtoneManager.
+            if (TextUtils.isEmpty(stringValue)) {
+                // Empty values correspond to 'silent' (no ringtone).
+                preference.setSummary(R.string.pref_ringtone_silent);
 
             } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
+                Ringtone ringtone = RingtoneManager.getRingtone(
+                        preference.getContext(), Uri.parse(stringValue));
+
+                if (ringtone == null) {
+                    // Clear the summary if there was a lookup error.
+                    preference.setSummary(null);
+                } else {
+                    // Set the summary to reflect the new ringtone display
+                    // name.
+                    String name = ringtone.getTitle(preference.getContext());
+                    preference.setSummary(name);
+                }
             }
-            return true;
+
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
         }
+        return true;
     };
 
     /**
@@ -140,11 +137,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
         setSupportActionBar(bar);
         root.addView(bar, 0); // insert at top
-        bar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+        bar.setNavigationOnClickListener((View v) -> {
+            onBackPressed();
         });
         setupActionBar();
     }
@@ -296,41 +290,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
 
             Preference myPref = findPreference(PREF_KEY_DELETE_ALL_DATA);
-            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                public boolean onPreferenceClick(Preference preference) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setIcon(R.mipmap.ic_mikan);
-                    dialog.setTitle(getString(R.string.pref_title_delete_all_items));
-                    dialog.setMessage(getString(R.string.pref_desc_delete_all_items));
-                    dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
-                            confirmation.setIcon(R.drawable.ic_warning_black_24dp);
-                            confirmation.setTitle(getString(R.string.pref_title_delete_all_items));
-                            confirmation.setMessage(getString(R.string.pref_warn_delete_all_items));
-                            confirmation.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    deleteAllItems();
-                                }
-                            });
-                            confirmation.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                            confirmation.show();
-                        }
+            myPref.setOnPreferenceClickListener((Preference preference) -> {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setIcon(R.mipmap.ic_mikan);
+                dialog.setTitle(getString(R.string.pref_title_delete_all_items));
+                dialog.setMessage(getString(R.string.pref_desc_delete_all_items));
+                dialog.setPositiveButton(R.string.ok, (DialogInterface dp, int w) -> {
+                    AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
+                    confirmation.setIcon(R.drawable.ic_warning_black_24dp);
+                    confirmation.setTitle(getString(R.string.pref_title_delete_all_items));
+                    confirmation.setMessage(getString(R.string.pref_warn_delete_all_items));
+                    confirmation.setPositiveButton(R.string.ok, (DialogInterface dp2, int which) -> {
+                        deleteAllItems();
+
                     });
-                    dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
+                    confirmation.setNegativeButton(R.string.cancel, (DialogInterface dn2, int which) -> {
                     });
-                    dialog.show();
-                    return true;
-                }
+                    confirmation.show();
+                });
+                dialog.setNegativeButton(R.string.cancel, (DialogInterface dn, int which)-> {
+                });
+                dialog.show();
+                return true;
             });
         }
 

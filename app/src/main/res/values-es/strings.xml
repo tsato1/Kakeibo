@@ -102,4 +102,5 @@
     <string name="msg_no_result_found">No se han encontrado resultados.</string>
     <string name="close">Cerrar</string>
     <string name="msg_exit_search">Saldrá de la página de resultados de búsqueda y volverá al informe mensual de este mes.</string>
+    <string name="err_amount_invalid">La cantidad no es válida.</string>
 </resources>

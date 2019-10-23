@@ -167,7 +167,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 final Dialog dialog = builder.show();
                 lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
                     selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
-//      disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!              btnCategory.setText(MainActivity.sCategories[selectedCategoryCode]);
                     btnCategory.setText(UtilCategory.getCategoryStrFromCode(_context, selectedCategoryCode));
                     dialog.dismiss();
                 });

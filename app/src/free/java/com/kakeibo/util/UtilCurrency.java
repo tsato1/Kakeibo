@@ -1,19 +1,6 @@
 package com.kakeibo.util;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import com.kakeibo.MainActivity;
-import com.kakeibo.settings.SettingsActivity;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Currency;
-import java.util.HashSet;
-import java.util.Locale;
 
 public class UtilCurrency {
     private final static String TAG = UtilCurrency.class.getSimpleName();
@@ -36,5 +23,18 @@ public class UtilCurrency {
 
     public static BigDecimal getBigDecimalAmountFromInt(int amount, int currencyFractionDigits) {
         return BigDecimal.valueOf(amount, currencyFractionDigits);
+    }
+
+    public static boolean checkAmount(String str) {
+        return str.matches("\\d+(\\.\\d+)?");
+
+//        try (Scanner scanner = new Scanner(System.in)) {
+//            System.out.println("Enter an integer : ");
+//            if (scanner.hasNextInt()) {
+//                System.out.println("You entered : " + scanner.nextInt());
+//            } else {
+//                System.out.println("The input is not an integer");
+//            }
+//        }
     }
 }

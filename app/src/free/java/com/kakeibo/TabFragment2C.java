@@ -150,11 +150,7 @@ public class TabFragment2C extends Fragment {
             AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
             dialog.setTitle(UtilCategory.getCategoryStrFromCode(getContext(), tmp.getCategoryCode()));
-//  disposable!!!!!!!!!!!!!!!!!!!!!!          dialog.setTitle(MainActivity.sCategories[tmp.getCategoryCode()]);
-            dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            dialog.setPositiveButton(R.string.ok, (DialogInterface d, int which) -> {
             });
             dialog.setView(listView).create();
             dialog.show();
@@ -251,7 +247,6 @@ public class TabFragment2C extends Fragment {
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
 
-//            disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
                 _stringBuilder.append(UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());

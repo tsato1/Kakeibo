@@ -198,7 +198,6 @@ public class TabFragment2D extends Fragment {
                 TextView txvCategory = layout.findViewById(R.id.txv_category);
                 String categoryText = getString(R.string.category_colon) +
                         UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
-                        // disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MainActivity.sCategories[item.getCategoryCode()];
                 txvCategory.setText(categoryText);
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
                 edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
@@ -332,7 +331,6 @@ public class TabFragment2D extends Fragment {
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());
                 _stringBuilder.append(",");
-//disposable !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                _stringBuilder.append(MainActivity.sCategories[item.getCategoryCode()]);
                 _stringBuilder.append(UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getMemo());

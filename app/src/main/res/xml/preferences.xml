@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_header_general">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_list_date_format"
+            android:entryValues="@array/pref_list_date_format_values"
+            android:key="@string/pref_key_date_format"
+            android:summary="%s"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_date_format" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_list_fraction_digits"
+            android:entryValues="@array/pref_list_fraction_digits_values"
+            android:key="@string/pref_key_fraction_digits"
+            android:summary="%s"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_fraction_digits" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_header_in_app_data">
+        <Preference
+            android:key="@string/pref_key_delete_all_data"
+            android:title="@string/pref_title_delete_all_items"
+            android:negativeButtonText="@string/no"
+            android:positiveButtonText="@string/yes">
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>
+
+    <!--    <header-->
+    <!--    android:fragment="com.kakeibo.settings.SettingsActivity$DataSyncPreferenceFragment"-->
+    <!--    android:icon="@drawable/ic_sync_black_24dp"-->
+    <!--    android:title="@string/pref_title_category" />-->
+
+    <!--<header-->
+    <!--android:fragment="com.kakeibo.settings.SettingsActivity$NotificationPreferenceFragment"-->
+    <!--android:icon="@drawable/ic_notifications_black_24dp"-->
+    <!--android:title="@string/pref_header_notifications" />-->
+
+    <!--<header-->
+    <!--android:fragment="com.kakeibo.settings.SettingsActivity$DataSyncPreferenceFragment"-->
+    <!--android:icon="@drawable/ic_sync_black_24dp"-->
+    <!--android:title="@string/pref_header_data_sync" />-->

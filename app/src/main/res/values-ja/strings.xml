@@ -102,4 +102,5 @@
     <string name="msg_no_result_found">検索結果はありません．</string>
     <string name="close">閉じる</string>
     <string name="msg_exit_search">検索結果画面を閉じ，今月の月次レポートへ戻ります．</string>
+    <string name="err_amount_invalid">金額が正しくありません．</string>
 </resources>

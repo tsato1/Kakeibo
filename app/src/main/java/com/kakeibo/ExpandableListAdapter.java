@@ -29,7 +29,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _lstDateHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Item>> _hmpChildData;
-//    private String[] _strDefaultCategory; disposable !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private TypedArray _trrMipmaps;
 
     ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
@@ -37,7 +36,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._lstDateHeader = dateHeaderList;
         this._hmpChildData = childDataHashMap;
 
-//      disposable!!!!!!!!!!!!!!!!!!!!  _strDefaultCategory = context.getResources().getStringArray(R.array.default_category);
         _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
@@ -79,7 +77,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         /*** category ***/
-//    disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    txvCategory.setText(_strDefaultCategory[item.getCategoryCode()]);
         txvCategory.setText(UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode()));
 
         /*** amount ***/

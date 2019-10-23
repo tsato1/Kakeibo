@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.util.UtilCategory;
+import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilQuery;
 
@@ -273,18 +274,22 @@ public class TabFragment1 extends Fragment {
     boolean checkBeforeSave()
     {
         if ("".equals(selectedCategory)) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.err_please_select_category), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.err_please_select_category, Toast.LENGTH_SHORT).show();
             return false;
         }
         if ("".equals(edtAmount.getText().toString())) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.err_please_enter_amount, Toast.LENGTH_SHORT).show();
             return false;
         }
         if ("0".equals(edtAmount.getText().toString()) ||
                 "0.0".equals(edtAmount.getText().toString()) ||
                 "0.00".equals(edtAmount.getText().toString()) ||
                 "0.000".equals(edtAmount.getText().toString())) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.err_amount_cannot_be_0, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!UtilCurrency.checkAmount(edtAmount.getText().toString())) {
+            Toast.makeText(getActivity(), R.string.err_amount_invalid, Toast.LENGTH_SHORT).show();
             return false;
         }
 

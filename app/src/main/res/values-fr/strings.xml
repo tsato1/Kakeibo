@@ -102,4 +102,5 @@
     <string name="quest_export_this_report_C">exporter ce rapport sur Google Drive? Il est trié par catégorie.</string>
     <string name="title_edit_item">modifier les données</string>
     <string name="title_search_result">résultat de la recherche</string>
+    <string name="err_amount_invalid">Le montant est invalide.</string>
 </resources>

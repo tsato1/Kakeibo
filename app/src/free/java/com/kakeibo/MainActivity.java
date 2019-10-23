@@ -23,6 +23,7 @@ import android.view.View;
 //import com.google.android.gms.ads.MobileAds;
 import com.kakeibo.settings.SettingsActivity;
 
+import com.kakeibo.settings.SettingsCompatActivity;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilKeyboard;
 
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     public static int sDateFormat;
     public static int sFractionDigits;
     public static String[] sWeekName;
-//   disposable!!!!!!!!!!!!!!!!!!!!!!     public static String[] sCategories;
 
 //    private InterstitialAd mInterstitialAd;
     private FragmentManager fm;
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         fabStart.setOnClickListener(new ButtonClickListener());
         fabEnd.setOnClickListener(new ButtonClickListener());
         sWeekName = getResources().getStringArray(R.array.week_name);
-//    disposable!!!!!!!!!!!!!!!!!!    sCategories = getResources().getStringArray(R.array.default_category);
 
 //        loadAds();
 
@@ -284,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+//            startActivity(new Intent(this, SettingsCompatActivity.class));
             return true;
         }
 

@@ -48,5 +48,9 @@
             android:label="Settings"
             android:parentActivityName="com.kakeibo.MainActivity"
             android:theme="@style/MyMaterialTheme.NoActionBar"/>
+        <activity
+            android:name=".settings.SettingsCompatActivity"
+            android:label="Settings"
+            android:parentActivityName="com.kakeibo.MainActivity"/>
     </application>
 </manifest>

@@ -32,7 +32,6 @@ public class SearchCardCategoryListAdapter extends ArrayAdapter<KkbCategory> {
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
         String categoryText = UtilCategory.getCategoryStrFromCode(getContext(), kkbCategory.getCode());
-//                disposable !!!!!!!!!!!!!!!!!!!!!!!!!!! MainActivity.sCategories[kkbCategory.getCode()];
         txvCategory.setText(categoryText);
 
         ImageView imvCategory = v.findViewById(R.id.imv_category);

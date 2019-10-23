@@ -24,7 +24,6 @@ import java.util.List;
 public class CategoryListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater _layoutInflater;
     private Context _context;
-// disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   private String[] _strsDefaultCategory;
     private TypedArray _trrMipmaps;
 
     CategoryListAdapter(Context context, int id, List<Item> objects) {
@@ -32,7 +31,6 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         this._context = context;
         _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//  disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      _strsDefaultCategory = _context.getResources().getStringArray(R.array.default_category);
         _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
@@ -51,7 +49,6 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         TextView txvCategory = convertView.findViewById(R.id.txv_category);
 
         imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
-//   disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     txvCategory.setText(_strsDefaultCategory[item.getCategoryCode()]);
         txvCategory.setText(UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode()));
 
         /*** amount ***/

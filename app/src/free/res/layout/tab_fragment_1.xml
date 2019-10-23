@@ -51,6 +51,7 @@
                     android:inputType="numberDecimal"
                     android:digits="0123456789."
                     android:maxLength="10"
+                    android:textIsSelectable="false"
                     android:hint="@string/hint_amount_spent_or_earned"/>
             </TableRow>
             <TableRow

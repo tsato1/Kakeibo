@@ -26,7 +26,6 @@ import java.util.List;
 public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater inflater;
     private Context _context;
-//  disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  private String[] defaultCategory;
     private String[] weekName;
     private int mDateFormat;
     private SharedPreferences mPref;
@@ -36,7 +35,6 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
 
-// disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!       defaultCategory = _context.getResources().getStringArray(R.array.default_category);
         weekName = _context.getResources().getStringArray(R.array.week_name);
 
         loadSharedPreference();
@@ -61,7 +59,6 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         TextView txvCategory = v.findViewById(R.id.txv_category);
         String categoryText = categoryColon +
                 UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode());
-//  disposable!!!!!!!!!!!!!!!!!!!!!!!              defaultCategory[item.getCategoryCode()];
         txvCategory.setText(categoryText);
 
         TextView txvAmount = v.findViewById(R.id.txv_amount);
