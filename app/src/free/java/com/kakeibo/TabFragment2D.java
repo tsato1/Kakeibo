@@ -2,6 +2,8 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,11 +21,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
@@ -32,9 +39,14 @@ import com.kakeibo.util.UtilDate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class TabFragment2D extends Fragment {
     public final static String TAG = TabFragment2D.class.getSimpleName();
@@ -54,6 +66,7 @@ public class TabFragment2D extends Fragment {
     private HashMap<String, List<Item>> hmpChildData;
     private ExpandableListAdapter elaData;
     private ExpandableListView explvData;
+    private Button btnEditDialogCategory;
 
     public static TabFragment2D newInstance(ItemLoadListener itemLoadListener, Query query) {
         TabFragment2D tabFragment2D = new TabFragment2D();
@@ -115,10 +128,7 @@ public class TabFragment2D extends Fragment {
             TextView txvMemo = layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = layout.findViewById(R.id.txv_detail_registration);
 
-            String categoryText = getString(R.string.category_colon) +
-//                    MainActivity.sCategories[item.getCategoryCode()];
-                    UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
-
+            String categoryText = getString(R.string.category_colon) + UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
             txvCategory.setText(categoryText);
             SpannableString span1, span2;
             if (item.getCategoryCode() <= 0) {
@@ -193,15 +203,86 @@ public class TabFragment2D extends Fragment {
             case MENU_ITEM_ID_EDIT:
                 LayoutInflater layoutInflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, _view.findViewById(R.id.layout_root));
-                TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
-                txvEventDate.setText(item.getEventDate());
-                TextView txvCategory = layout.findViewById(R.id.txv_category);
-                String categoryText = getString(R.string.category_colon) +
-                        UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
-                txvCategory.setText(categoryText);
+
+                /*** event date ***/
+                Button btnEventDate = layout.findViewById(R.id.btn_event_date);
+                String[] eventDates = item.getEventDate().split("-");
+                GregorianCalendar cal = new GregorianCalendar(
+                        Integer.parseInt(eventDates[0]),
+                        Integer.parseInt(eventDates[1])-1,
+                        Integer.parseInt(eventDates[2]));
+                Date date = cal.getTime();
+                String eventDate = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
+                        Locale.getDefault()).format(date)
+                        + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                btnEventDate.setText(eventDate);
+                btnEventDate.setOnClickListener((View v1) -> {
+                    String[] ymd = UtilDate.convertDateFormat(
+                            eventDate.split("\\s+")[0], MainActivity.sDateFormat, 3).split("-");
+                    int year = Integer.parseInt(ymd[0]), month=Integer.parseInt(ymd[1]), day=Integer.parseInt(ymd[2]);
+                    DatePickerDialog dialog = new DatePickerDialog(_activity, new DatePickerDialog.OnDateSetListener() {
+                        public void onDateSet(DatePicker picker, int year, int month, int day){
+                            GregorianCalendar cal = new GregorianCalendar(year, month, day);
+                            Date date = cal.getTime();
+                            String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
+                                    Locale.getDefault()).format(date)
+                                    + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
+                            btnEventDate.setText(str);
+                        }
+                    }, year, month-1, day);
+                    dialog.show();
+                });
+                /*** category ***/
+                Button btnCategory = layout.findViewById(R.id.btn_category);
+                String categoryText = UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
+                btnCategory.setText(categoryText);
+                btnCategory.setOnClickListener((View v2) -> {
+                    CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
+                    categoriesDBAdapter.open();
+                    Cursor c = categoriesDBAdapter.getParentCategories();
+                    List<KkbCategory> kkbCategoriesList = new ArrayList<>();
+                    /*** ordered by location ***/
+                    if (c!=null && c.moveToFirst()) {
+                        do {
+                            KkbCategory kkbCategory = new KkbCategory(
+                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
+                                    c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
+                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
+                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
+                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
+                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
+                                    c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
+                                    c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
+                            );
+                            kkbCategoriesList.add(kkbCategory);
+                        } while (c.moveToNext());
+                    }
+                    categoriesDBAdapter.close();
+
+                    DialogCategoryListAdapter adapter =
+                            new DialogCategoryListAdapter(_activity, 0, kkbCategoriesList);
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_activity);
+                    LayoutInflater inflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View convertView = inflater.inflate(R.layout.dialog_bas_search_category, null);
+                    builder.setView(convertView);
+                    builder.setCancelable(true);
+                    builder.setIcon(R.mipmap.ic_mikan);
+                    builder.setTitle(R.string.category);
+                    ListView lv = convertView.findViewById(R.id.lsv_base_search_category);
+                    lv.setAdapter(adapter);
+                    Dialog dialog = builder.show();
+                    lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
+                        int selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
+                        btnCategory.setText(UtilCategory.getCategoryStrFromCode(_activity, selectedCategoryCode));
+                        btnCategory.setHint(""+selectedCategoryCode);
+                        dialog.dismiss();
+                    });
+                });
+                /*** amount***/
                 EditText edtAmount = layout.findViewById(R.id.edt_amount);
                 edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
                 edtAmount.setText(String.valueOf(item.getAmount()));
+                /*** memo ***/
                 EditText edtMemo = layout.findViewById(R.id.edt_memo);
                 edtMemo.setText(item.getMemo());
 
@@ -209,35 +290,34 @@ public class TabFragment2D extends Fragment {
                         .setIcon(R.mipmap.ic_mikan)
                         .setTitle(getString(R.string.title_edit_item))
                         .setView(layout)
-                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                _itemsDbAdapter.open();
-                                final int itemId = Integer.parseInt(item.getId());
+                        .setPositiveButton(R.string.save, (DialogInterface d, int which)-> {
+                            _itemsDbAdapter.open();
+                            final int itemId = Integer.parseInt(item.getId());
 
-                                if (checkBeforeSave(edtAmount)) {
-                                    if(_itemsDbAdapter.deleteItem(itemId)) {
-                                        String amount = edtAmount.getText().toString();
+                            if (checkBeforeSave(edtAmount)) {
+                                if(_itemsDbAdapter.deleteItem(itemId)) {
+                                    String amount = edtAmount.getText().toString();
 
-                                        Item tmp = new Item(
-                                                "",
-                                                new BigDecimal(amount),
-                                                MainActivity.sFractionDigits,
-                                                item.getCategoryCode(),
-                                                edtMemo.getText().toString(),
-                                                item.getEventDate(),
-                                                UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
-                                        );
+                                    Item tmp = new Item(
+                                            "",
+                                            new BigDecimal(amount),
+                                            MainActivity.sFractionDigits,
+                                            Integer.parseInt(btnCategory.getHint().toString()),
+                                            edtMemo.getText().toString(),
+                                            UtilDate.convertDateFormat(
+                                                    btnEventDate.getText().toString().split("\\s+")[0],
+                                                    MainActivity.sDateFormat, 3),
+                                            UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
+                                    );
 
-                                        _itemsDbAdapter.saveItem(tmp);
+                                    _itemsDbAdapter.saveItem(tmp);
 
-                                        Toast.makeText(_activity, getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
-                                    }
+                                    Toast.makeText(_activity, getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
                                 }
-
-                                loadItemsOrderByDate();
-                                _itemsDbAdapter.close();
                             }
+
+                            loadItemsOrderByDate();
+                            _itemsDbAdapter.close();
                         })
                         .setNegativeButton(R.string.cancel, null)
                         .show();
@@ -296,8 +376,6 @@ public class TabFragment2D extends Fragment {
             List<Item> tmpItemList = new ArrayList<>();
 
             do {
-                //Log.d("item(memo)", c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)));
-
                 if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
                     lstDateHeader.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator
                     hmpChildData.put(lstDateHeader.get(sameDateCounter), tmpItemList); // set the header of the old day

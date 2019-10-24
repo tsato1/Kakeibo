@@ -14,11 +14,11 @@ import com.kakeibo.util.UtilCategory;
 
 import java.util.List;
 
-public class SearchCardCategoryListAdapter extends ArrayAdapter<KkbCategory> {
+public class DialogCategoryListAdapter extends ArrayAdapter<KkbCategory> {
     private LayoutInflater inflater;
     private Context _context;
 
-    SearchCardCategoryListAdapter(Context context, int resource, List<KkbCategory> objects) {
+    DialogCategoryListAdapter(Context context, int resource, List<KkbCategory> objects) {
         super(context, resource, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _context = context;
@@ -28,7 +28,7 @@ public class SearchCardCategoryListAdapter extends ArrayAdapter<KkbCategory> {
     public View getView(int position, View v, ViewGroup parent) {
         KkbCategory kkbCategory = getItem(position);
 
-        if (null == v) v = inflater.inflate(R.layout.dialog_row_search_category, null);
+        if (null == v) v = inflater.inflate(R.layout.dialog_row_category, null);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
         String categoryText = UtilCategory.getCategoryStrFromCode(getContext(), kkbCategory.getCode());

@@ -153,8 +153,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 }
                 categoriesDBAdapter.close();
 
-                SearchCardCategoryListAdapter adapter =
-                        new SearchCardCategoryListAdapter(_context, 0, kkbCategoriesList);
+                DialogCategoryListAdapter adapter =
+                        new DialogCategoryListAdapter(_context, 0, kkbCategoriesList);
                 AlertDialog.Builder builder = new AlertDialog.Builder(_context);
                 LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View convertView = inflater.inflate(R.layout.dialog_bas_search_category, null);

@@ -52,7 +52,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
 
         if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
 
-        TextView txvEventDate = v.findViewById(R.id.txv_event_date);
+        TextView txvEventDate = v.findViewById(R.id.btn_event_date);
         String eventDateText = eventDateColon + UtilDate.getDateWithDayFromDBDate(item.getEventDate(), weekName, mDateFormat);
         txvEventDate.setText(eventDateText);
 

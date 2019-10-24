@@ -218,7 +218,7 @@ public class TabFragment2D extends Fragment {
             case MENU_ITEM_ID_EDIT:
                 LayoutInflater layoutInflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View layout = layoutInflater.inflate(R.layout.dialog_item_edit, _view.findViewById(R.id.layout_root));
-                TextView txvEventDate = layout.findViewById(R.id.txv_event_date);
+                TextView txvEventDate = layout.findViewById(R.id.btn_event_date);
                 txvEventDate.setText(item.getEventDate());
                 TextView txvCategory = layout.findViewById(R.id.txv_category);
                 String categoryText = getString(R.string.category_colon) + MainActivity.sCategories[item.getCategoryCode()];
