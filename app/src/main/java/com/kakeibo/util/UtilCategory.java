@@ -20,6 +20,14 @@ public class UtilCategory {
         String langCode = locale.getLanguage();
         Log.d(TAG, "locale.getLanguage() = " + langCode);
 
+        if (!langCode.equals(CategoriesLanDBAdapter.COL_EN) &&
+                !langCode.equals(CategoriesLanDBAdapter.COL_ES) &&
+                !langCode.equals(CategoriesLanDBAdapter.COL_FR) &&
+                !langCode.equals(CategoriesLanDBAdapter.COL_JA) &&
+                !langCode.equals(CategoriesLanDBAdapter.COL_IT)) {
+            langCode = CategoriesLanDBAdapter.COL_EN;
+        }
+
         CategoriesLanDBAdapter categoriesLanDBAdapter = new CategoriesLanDBAdapter();
         categoriesLanDBAdapter.open();
 
