@@ -271,6 +271,7 @@ public class TabFragment1 extends Fragment {
         }
     }
 
+    /*** same functionality is in TabFragment2D too ***/
     boolean checkBeforeSave()
     {
         if ("".equals(selectedCategory)) {
@@ -300,27 +301,6 @@ public class TabFragment1 extends Fragment {
     {
         ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
 
-//        String[] ymd = btnDate.getText().toString().split("\\s+")[0].split("/");
-//        String y, m, d;
-//
-//        switch (MainActivity.sDateFormat) {
-//            case 1: // MDY
-//                y = ymd[2];
-//                m = ymd[0];
-//                d = ymd[1];
-//                break;
-//            case 2: // DMY
-//                y = ymd[2];
-//                m = ymd[1];
-//                d = ymd[0];
-//                break;
-//            default:  // YMD
-//                y = ymd[0];
-//                m = ymd[1];
-//                d = ymd[2];
-//        }
-//
-//        String eventDate = y + "-" + m + "-" + d;
         String eventDate = UtilDate.convertDateFormat(
                 btnDate.getText().toString().split("\\s+")[0], MainActivity.sDateFormat, 3);
         String updateDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS);

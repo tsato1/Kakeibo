@@ -7,8 +7,8 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 22
-        versionName "2.0.7"
+        versionCode 23
+        versionName "2.0.8"
         multiDexEnabled true
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

@@ -34,6 +34,7 @@ import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
+import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilFiles;
 import com.kakeibo.util.UtilDate;
 
@@ -236,6 +237,7 @@ public class TabFragment2D extends Fragment {
                 Button btnCategory = layout.findViewById(R.id.btn_category);
                 String categoryText = UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
                 btnCategory.setText(categoryText);
+                btnCategory.setHint(""+item.getCategoryCode());
                 btnCategory.setOnClickListener((View v2) -> {
                     CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
                     categoriesDBAdapter.open();
@@ -326,6 +328,7 @@ public class TabFragment2D extends Fragment {
         return super.onContextItemSelected(menuItem);
     }
 
+    /*** same functionality is in TabFragment1 too ***/
     private boolean checkBeforeSave(EditText edtAmount) {
         if ("".equals(edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_please_enter_amount), Toast.LENGTH_SHORT).show();
@@ -336,6 +339,10 @@ public class TabFragment2D extends Fragment {
                 "0.00".equals(edtAmount.getText().toString()) ||
                 "0.000".equals(edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.err_amount_cannot_be_0), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!UtilCurrency.checkAmount(edtAmount.getText().toString())) {
+            Toast.makeText(getActivity(), R.string.err_amount_invalid, Toast.LENGTH_SHORT).show();
             return false;
         }
 
