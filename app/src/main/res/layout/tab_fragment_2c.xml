@@ -9,13 +9,37 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.echo.holographlibrary.PieGraph
-                android:id="@+id/graph_subtotal"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="wrap_content">
+                <com.echo.holographlibrary.PieGraph
+                    android:id="@+id/pie_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+                <ImageButton
+                    android:id="@+id/imb_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_sync_black_24dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/toggle"
+                    android:visibility="gone"
+                    style="?android:attr/buttonBarButtonStyle"/>
+            </FrameLayout>
+            <ListView
+                android:id="@+id/lsv_expense"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"/>
+            <ListView
+                android:id="@+id/lsv_income"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
             <ListView
                 android:id="@+id/lsv_subtotal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
         </LinearLayout>
 </androidx.core.widget.NestedScrollView>

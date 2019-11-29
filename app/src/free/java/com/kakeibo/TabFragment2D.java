@@ -322,6 +322,9 @@ public class TabFragment2D extends Fragment {
                             _itemsDbAdapter.close();
                         })
                         .setNegativeButton(R.string.cancel, null)
+                        .setOnDismissListener((DialogInterface dialog)-> {
+                            loadItemsOrderByDate();
+                        })
                         .show();
                 return true;
         }

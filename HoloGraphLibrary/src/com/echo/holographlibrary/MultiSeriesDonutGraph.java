@@ -33,6 +33,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +43,8 @@ import java.util.List;
 
 public class MultiSeriesDonutGraph extends View
 {
+    private final String TAG = MultiSeriesDonutGraph.class.getSimpleName();
+
     private List<List<MultiSeriesDonutSlice>> seriesList = new ArrayList<>();
     private Paint paint = new Paint();
     private Path path = new Path();
@@ -128,7 +131,7 @@ public class MultiSeriesDonutGraph extends View
                     path.reset();
                     paint.setColor(slice.getColor());
                     paint.setColor(Color.parseColor("#33B5E5"));
-                    paint.setAlpha(100);
+//                    paint.setAlpha(slice.getAlpha());
 
                     if (seriesList.size() > 1)
                     {
@@ -170,6 +173,7 @@ public class MultiSeriesDonutGraph extends View
                 if (r.contains(point.x, point.y) && event.getAction() == MotionEvent.ACTION_DOWN)
                 {
                     indexSelected = Pair.create(seriesCount, sliceCount);
+                    Log.d(TAG, indexSelected + " touched");
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
