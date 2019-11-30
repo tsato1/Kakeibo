@@ -351,8 +351,18 @@ public class TabFragment2C extends Fragment {
     public void export() {
         Log.d(TAG, "export() called");
 
-        if (mLstInCategory.size()==0) {
-            Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+        if (_toggleView == 0) {
+            if (mLstExCategory.size()==0) {
+                Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+            }
+        } else if (_toggleView == 1) {
+            if (mLstInCategory.size()==0) {
+                Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+            }
+        } else if (_toggleView == 2) {
+            if (mLstCategory.size()==0) {
+                Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+            }
         }
 
         AlertDialog.Builder dialogExport = new AlertDialog.Builder(mActivity);
@@ -382,8 +392,19 @@ public class TabFragment2C extends Fragment {
          * expecting: queryD=
          * SELECT * FROM ITEMS WHERE strftime('%Y-%m', event_date) = '2018-11' ORDER BY event_date ASC
          * ***/
-        String query = sQuery.getQueryD()
-                .replace("ORDER BY event_date ASC", " ORDER BY category_code, amount DESC");
+        String query = "";
+
+        if (_toggleView == 0) { // only expense
+            query = sQuery.getQueryD()
+                    .replace("ORDER BY event_date ASC", " AND category_code > 0 ORDER BY category_code, amount DESC");
+        } else if (_toggleView == 1) { // only income
+            query = sQuery.getQueryD()
+                    .replace("ORDER BY event_date ASC", " AND category_code<= 0 ORDER BY category_code, amount DESC");
+        } else if (_toggleView == 2) { // both income and expense
+            query = sQuery.getQueryD()
+                    .replace("ORDER BY event_date ASC", " ORDER BY category_code, amount DESC");
+        }
+
         Log.d(TAG, "queryToSaveLocal() "+query);
 
         mStringBuilder.setLength(0);
