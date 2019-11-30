@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="week_name">
+        <item>रविवार</item>
+        <item>सोमवार</item>
+        <item>मंगलवार</item>
+        <item>बुधवार</item>
+        <item>गुरूवार</item>
+        <item>शुक्रवार</item>
+        <item>शनिवार</item>
+    </string-array>
+
+<!--    <string-array name="default_category">-->
+<!--        <item>INGRE</item>-->
+<!--        <item>MERCAN</item>-->
+<!--        <item>COMIDA</item>-->
+<!--        <item>UTIL</item>-->
+<!--        <item>SALUD</item>-->
+<!--        <item>EDU</item>-->
+<!--        <item>VESTID</item>-->
+<!--        <item>TRANS</item>-->
+<!--        <item>ENTRET</item>-->
+<!--        <item>SEGURO</item>-->
+<!--        <item>IMPUES</item>-->
+<!--        <item>OTROS</item>-->
+<!--        <item>MSCTA</item>-->
+<!--        <item>SOCIAL</item>-->
+<!--        <item>COSME</item>-->
+<!--        <item>VVENDA</item>-->
+<!--    </string-array>-->
+</resources>

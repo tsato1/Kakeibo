@@ -41,7 +41,7 @@
     <string name="event_date">Tiempo</string>
     <string name="updated_date">Tiempo de Actualizacion</string>
     <string name="event_date_colon">Tiempo:</string>
-    <string name="add_search_criterion">Añadir criterio de búsqueda</string>
+    <string name="add_search_criterion">Añadir criterios de búsqueda</string>
     <string name="amount_range">Rango de Cantidad</string>
     <string name="date_range">Rango de Fechas</string>
     <string name="swipe_to_delete">Deslizar para eliminar</string>
@@ -53,7 +53,7 @@
     <string name="select_file">Seleccione Archivo</string>
     <string name="file_created">Se crea el archivo</string>
     <string name="file_create_error">Se produjo un error al crear un archivo</string>
-    <string name="currency_colon">Moneda</string>
+    <string name="currency_colon">Moneda:</string>
     <string name="previous">Anterior</string>
     <string name="pref_title_date_format">Formato de Fecha</string>
     <string name="pref_title_remove_ads">Quitar Anuncios</string>

@@ -24,7 +24,7 @@
     <string name="event_date_colon">date de l\'événement:</string>
     <string name="updated_date">date mises à jour</string>
     <string name="updated_on_colon">sauver dans:</string>
-    <string name="add_search_criterion">ajouter un critère de recherche</string>
+    <string name="add_search_criterion">Ajouter des critères de recherche</string>
     <string name="amount_colon">montant:</string>
     <string name="how_to_perform_search">comment chercher</string>
     <string name="date_range">recherche par date</string>
