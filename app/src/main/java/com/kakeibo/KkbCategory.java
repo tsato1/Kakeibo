@@ -10,11 +10,17 @@ public class KkbCategory {
     public String description;
     public String savedDate;
 
+    public String ar;
     public String en;
-    public String it;
+    public String es;
     public String fr;
+    public String hi;
+    public String in;
+    public String it;
     public String jp;
-    public String sp;
+    public String ko;
+    public String pt;
+    public String ru;
 
     public KkbCategory() {}
 
@@ -68,23 +74,47 @@ public class KkbCategory {
         return savedDate;
     }
 
+    public String getAR() {
+        return ar;
+    }
+
     public String getEN() {
         return en;
+    }
+
+    public String getES() {
+        return es;
     }
 
     public String getIT() {
         return it;
     }
 
+    public String getIN() {
+        return in;
+    }
+
     public String getFR() {
         return fr;
+    }
+
+    public String getHI() {
+        return hi;
     }
 
     public String getJA() {
         return jp;
     }
 
-    public String getES() {
-        return sp;
+    public String getKO() {
+        return ko;
+    }
+
+    public String getPT() {
+        return pt;
+    }
+
+    public String getRU() {
+        return ru;
     }
 }

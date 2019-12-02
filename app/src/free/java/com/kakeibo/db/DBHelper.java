@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
+import com.kakeibo.util.PrepDB;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
 
@@ -100,6 +101,14 @@ public class DBHelper extends SQLiteOpenHelper {
                     ItemsDBAdapter.COL_UPDATE_DATE+" FROM "+ItemsDBAdapter.TABLE_ITEM+"_old;";
     private static final String DATABASE_UPDATE_2_TO_3_4 =
             "DROP TABLE "+ItemsDBAdapter.TABLE_ITEM+"_old;";
+    private static final String DATABASE_ADD_LAN_COLS =
+            "ALTER TABLE " + CategoriesLanDBAdapter.TABLE_CATEGORY_LAN +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_AR + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_HI + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_IN + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_KO + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_PT + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_RU + " INTEGER DEFAULT 0;";
 
     private final Context _context;
 
@@ -116,7 +125,8 @@ public class DBHelper extends SQLiteOpenHelper {
             initKkbAppTable(db, DATABASE_VERSION);
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN);
-            initCategoriesTable(db);
+            PrepDB.initCategoriesTable(db);
+            PrepDB.addLangsToCategoriesTable(db);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,7 +158,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 6) {
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN);
-            initCategoriesTable(db);
+            PrepDB.initCategoriesTable(db);
+        }
+        if (oldVersion < 7) {
+            db.execSQL(DATABASE_ADD_LAN_COLS); // todo add  portugese, arabic, maybe russian and chinese
+            PrepDB.addLangsToCategoriesTable(db);
         }
 
         itemsDBAdapter.close();
@@ -250,207 +264,5 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insertOrThrow(TABLE_KKBAPP, null, valuesDBVersion);
     }
 
-    private void initCategoriesTable(SQLiteDatabase db) {
-        ArrayList<KkbCategory> list = new ArrayList<>();
 
-        KkbCategory income = new KkbCategory();
-        income.code = 0;
-        income.drawable = R.drawable.ic_category_income;
-        income.location = 0;
-        income.en = "INCOME";
-        income.fr = "REV.";
-        income.it = "ENTR.";
-        income.jp = "収入";
-        income.sp = "INGRE";
-        list.add(income);
-
-        KkbCategory commodity = new KkbCategory();
-        commodity.code = 1;
-        commodity.drawable = R.drawable.ic_category_comm;
-        commodity.location = 1;
-        commodity.en = "COMM";
-        commodity.fr = "ACHAT.";
-        commodity.it = "ACQ.";
-        commodity.jp = "生活雑貨";
-        commodity.sp = "MERCAN";
-        list.add(commodity);
-
-        KkbCategory meal = new KkbCategory();
-        meal.code = 2;
-        meal.drawable = R.drawable.ic_category_meal;
-        meal.location = 2;
-        meal.en = "MEAL";
-        meal.fr = "ALIM.";
-        meal.it = "ALIMEN.";
-        meal.jp = "食事";
-        meal.sp = "COMIDA";
-        list.add(meal);
-
-        KkbCategory util = new KkbCategory();
-        util.code = 3;
-        util.drawable = R.drawable.ic_category_util;
-        util.location = 3;
-        util.en = "UTIL";
-        util.fr = "FACTUR";
-        util.it = "UTENZE";
-        util.jp = "水道光熱";
-        util.sp = "UTIL";
-        list.add(util);
-
-        KkbCategory health = new KkbCategory();
-        health.code = 4;
-        health.drawable = R.drawable.ic_category_health;
-        health.location = 4;
-        health.en = "HEALTH";
-        health.fr = "SANTÉ";
-        health.it = "SALUTE";
-        health.jp = "健康";
-        health.sp = "SALUD";
-        list.add(health);
-
-        KkbCategory edu = new KkbCategory();
-        edu.code = 5;
-        edu.drawable = R.drawable.ic_category_edu;
-        edu.location = 5;
-        edu.en = "EDU";
-        edu.fr = "ETUDE";
-        edu.it = "EDUCAZ";
-        edu.jp = "教育";
-        edu.sp = "EDU";
-        list.add(edu);
-
-        KkbCategory cloth = new KkbCategory();
-        cloth.code = 6;
-        cloth.drawable = R.drawable.ic_category_cloth;
-        cloth.location = 6;
-        cloth.en = "CLOTH";
-        cloth.fr = "VETEM.";
-        cloth.it = "ABBIG.";
-        cloth.jp = "衣服";
-        cloth.sp = "VESTID";
-        list.add(cloth);
-
-        KkbCategory trans = new KkbCategory();
-        trans.code = 7;
-        trans.drawable = R.drawable.ic_category_trans;
-        trans.location = 7;
-        trans.en = "TRANS";
-        trans.fr = "TRANS.";
-        trans.it = "TRASP.";
-        trans.jp = "交通";
-        trans.sp = "TRANS";
-        list.add(trans);
-
-        KkbCategory ent = new KkbCategory();
-        ent.code = 8;
-        ent.drawable = R.drawable.ic_category_ent;
-        ent.location = 12;
-        ent.en = "ENT";
-        ent.fr = "AMUSE.";
-        ent.it = "DIVERT.";
-        ent.jp = "娯楽";
-        ent.sp = "ENTRET";
-        list.add(ent);
-
-        KkbCategory ins = new KkbCategory();
-        ins.code=9;
-        ins.drawable = R.drawable.ic_category_ins;
-        ins.location = 13;
-        ins.en = "INS";
-        ins.fr = "EPARG.";
-        ins.it = "RISP.";
-        ins.jp = "保険";
-        ins.sp = "SEGURO";
-        list.add(ins);
-
-        KkbCategory tax = new KkbCategory();
-        tax.code=10;
-        tax.drawable = R.drawable.ic_category_tax;
-        tax.location = 14;
-        tax.en = "TAX";
-        tax.fr = "TAXE";
-        tax.it = "TASSE";
-        tax.jp = "税金";
-        tax.sp = "IMPUES";
-        list.add(tax);
-
-        KkbCategory other = new KkbCategory();
-        other.code=11;
-        other.drawable = R.drawable.ic_category_other;
-        other.location = 15;
-        other.en = "OTHER";
-        other.fr = "AUTRE";
-        other.it = "ALTRO";
-        other.jp = "他";
-        other.sp = "OTROS";
-        list.add(other);
-
-        KkbCategory pet = new KkbCategory();
-        pet.code = 12;
-        pet.drawable = R.drawable.ic_category_pet;
-        pet.location = 8;
-        pet.en = "PET";
-        pet.fr = "ANIM.C.";
-        pet.it = "ANIM.D.";
-        pet.jp = "ペット";
-        pet.sp = "MSCTA";
-        list.add(pet);
-
-        KkbCategory social = new KkbCategory();
-        social.code = 13;
-        social.drawable = R.drawable.ic_category_social;
-        social.location = 9;
-        social.en = "SOCIAL";
-        social.fr = "SOCIAL";
-        social.it = "SOCIAL";
-        social.jp = "交際";
-        social.sp = "SOCIAL";
-        list.add(social);
-
-        KkbCategory cosme = new KkbCategory();
-        cosme.code=14;
-        cosme.drawable = R.drawable.ic_category_cosme;
-        cosme.location = 10;
-        cosme.en = "COSME";
-        cosme.fr = "COSMÉ";
-        cosme.it = "COSME";
-        cosme.jp = "美容";
-        cosme.sp = "COSME";
-        list.add(cosme);
-
-        KkbCategory housing = new KkbCategory();
-        housing.code = 15;
-        housing.drawable = R.drawable.ic_category_housing;
-        housing.location = 11;
-        housing.en = "HOUSNG";
-        housing.fr = "LOGMNT";
-        housing.it = "ABITAT.";
-        housing.jp = "居住";
-        housing.sp = "VVENDA";
-        list.add(housing);
-
-        for (KkbCategory category: list) {
-            ContentValues values = new ContentValues();
-            values.put(CategoriesDBAdapter.COL_CODE, category.getCode());
-            values.put(CategoriesDBAdapter.COL_NAME, "");
-            values.put(CategoriesDBAdapter.COL_COLOR, 0);
-            values.put(CategoriesDBAdapter.COL_DRAWABLE, category.getDrawable());
-            values.put(CategoriesDBAdapter.COL_LOCATION, category.getLocation());
-            values.put(CategoriesDBAdapter.COL_SUB_CATEGORIES, 0);
-            values.put(CategoriesDBAdapter.COL_DESC, "");
-            values.put(CategoriesDBAdapter.COL_SAVED_DATE, "");
-            db.insertOrThrow(CategoriesDBAdapter.TABLE_CATEGORY, null, values);
-
-            ContentValues values2 = new ContentValues();
-            values2.put(CategoriesLanDBAdapter.COL_CODE, category.getCode());
-            values2.put(CategoriesLanDBAdapter.COL_NAME, "");
-            values2.put(CategoriesLanDBAdapter.COL_EN, category.getEN());
-            values2.put(CategoriesLanDBAdapter.COL_ES, category.getES());
-            values2.put(CategoriesLanDBAdapter.COL_FR, category.getFR());
-            values2.put(CategoriesLanDBAdapter.COL_IT, category.getIT());
-            values2.put(CategoriesLanDBAdapter.COL_JA, category.getJA());
-            values2.put(CategoriesLanDBAdapter.COL_SAVED_DATE, "");
-            db.insertOrThrow(CategoriesLanDBAdapter.TABLE_CATEGORY_LAN, null, values2);
-        }
-    }
 }

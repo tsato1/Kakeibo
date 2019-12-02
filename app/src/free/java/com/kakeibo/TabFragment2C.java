@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
@@ -92,7 +93,10 @@ public class TabFragment2C extends Fragment {
         mGraph.setThickness(150);
         mLsvCategory = mView.findViewById(R.id.lsv_subtotal);
         mLsvInCategory = mView.findViewById(R.id.lsv_income);
-        mLsvExCategory = mView.findViewById(R.id.lsv_expense);//todo  sasdfasdfasdf
+        mLsvExCategory = mView.findViewById(R.id.lsv_expense);
+        ViewCompat.setNestedScrollingEnabled(mLsvCategory, true);
+        ViewCompat.setNestedScrollingEnabled(mLsvInCategory, true);
+        ViewCompat.setNestedScrollingEnabled(mLsvExCategory, true);
         mLsvCategory.setOnTouchListener((View v, MotionEvent event)-> {
                 int action = event.getAction();
                 switch (action) {
@@ -155,17 +159,19 @@ public class TabFragment2C extends Fragment {
                     mLsvExCategory.setVisibility(View.GONE);
                     mLsvInCategory.setVisibility(View.VISIBLE);
                     break;
-                default: // _toggleView==2
+                case 2:
                     mLsvCategory.setVisibility(View.VISIBLE);
                     mLsvExCategory.setVisibility(View.GONE);
                     mLsvInCategory.setVisibility(View.GONE);
                     break;
+                default:
             }
             mLsaCategory.notifyDataSetChanged();
             mLsaInCategory.notifyDataSetChanged();
             mLsaExCategory.notifyDataSetChanged();
             makePieGraph();
             sItemLoadListener.onItemsLoaded(mBalance);
+            sItemLoadListener.onViewToggled(_toggleView);
         }
     }
 
@@ -294,6 +300,7 @@ public class TabFragment2C extends Fragment {
         mLsaExCategory.notifyDataSetChanged();
         makePieGraph();
         sItemLoadListener.onItemsLoaded(mBalance);
+        sItemLoadListener.onViewToggled(_toggleView);
     }
 
     void calculatePercentage() {

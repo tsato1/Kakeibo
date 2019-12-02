@@ -41,7 +41,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private CoordinatorLayout rootView;
     private ImageButton btnPrev, btnNext, btnClose;
     private Button btnDate;
-    private TextView txvIncome, txvExpense, txvBalance;
+    private TextView txvIncome, txvExpense, txvBalance, txvIncomeColon, txvExpenseColon, txvBalanceColon;
 
     private FragmentManager _cfmDetail;
     private FragmentTransaction _ftrDetail;
@@ -117,6 +117,9 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         txvIncome = _view.findViewById(R.id.txv_income);
         txvExpense = _view.findViewById(R.id.txv_expense);
         txvBalance = _view.findViewById(R.id.txv_balance);
+        txvIncomeColon = _view.findViewById(R.id.txv_income_colon);
+        txvExpenseColon = _view.findViewById(R.id.txv_expense_colon);
+        txvBalanceColon = _view.findViewById(R.id.txv_balance_colon);
 
         btnPrev.setOnClickListener(new ButtonClickListener());
         btnDate.setOnClickListener(new ButtonClickListener());
@@ -231,7 +234,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         }
         else if (_balance.inMinusOut() > 0) {
             txvBalance.setTextColor(ContextCompat.getColor(_activity, R.color.colorBlue));
-            String str = "+" + String.valueOf(_balance.getBalance());
+            String str = "+" + _balance.getBalance();
             txvBalance.setText(str);
         }
         else {
@@ -308,6 +311,36 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         }
     }
 
+    @Override
+    public void onViewToggled(int toggleView) {
+        switch (toggleView) {
+            case 0:
+                txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvIncome.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvExpenseColon.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+                txvExpense.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+                txvBalanceColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvBalance.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                break;
+            case 1:
+                txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+                txvIncome.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+                txvExpenseColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvExpense.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvBalanceColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvBalance.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                break;
+            default: // _toggleView==2
+                txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvIncome.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvExpenseColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvExpense.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+                txvBalanceColon.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+                txvBalance.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+                break;
+        }
+    }
+
     public void toggleViews() {
         if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2C) {
             Log.d(TAG, "2c detail fragment is visible");
@@ -317,6 +350,13 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
             _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
             _ftrDetail.addToBackStack(null);
             _ftrDetail.commit();
+
+            txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvIncome.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvExpenseColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvExpense.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvBalanceColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvBalance.setBackgroundColor(getResources().getColor(R.color.colorBackground));
         } else if (_cfmDetail.findFragmentById(R.id.frl_tab2_container) instanceof TabFragment2D) {
             Log.d(TAG, "2d detail fragment is visible");
 
@@ -325,6 +365,13 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
             _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2C);
             _ftrDetail.addToBackStack(null);
             _ftrDetail.commit();
+
+            txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvIncome.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvExpenseColon.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+            txvExpense.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));
+            txvBalanceColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            txvBalance.setBackgroundColor(getResources().getColor(R.color.colorBackground));
         }
     }
 

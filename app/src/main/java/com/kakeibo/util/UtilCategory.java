@@ -20,11 +20,17 @@ public class UtilCategory {
         String langCode = locale.getLanguage();
         Log.d(TAG, "locale.getLanguage() = " + langCode);
 
-        if (!langCode.equals(CategoriesLanDBAdapter.COL_EN) &&
-                !langCode.equals(CategoriesLanDBAdapter.COL_ES) &&
-                !langCode.equals(CategoriesLanDBAdapter.COL_FR) &&
-                !langCode.equals(CategoriesLanDBAdapter.COL_JA) &&
-                !langCode.equals(CategoriesLanDBAdapter.COL_IT)) {
+        if (!langCode.equals(new Locale(CategoriesLanDBAdapter.COL_AR).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_EN).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_ES).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_FR).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_HI).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_JA).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_KO).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IN).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IT).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_PT).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_RU).getLanguage())) {
             langCode = CategoriesLanDBAdapter.COL_EN;
         }
 

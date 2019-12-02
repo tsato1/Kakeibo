@@ -58,6 +58,7 @@
             android:paddingBottom="4dp">
             <TableRow>
                 <TextView
+                    android:id="@+id/txv_income_colon"
                     android:text="@string/income_colon"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"/>
@@ -70,6 +71,7 @@
             </TableRow>
             <TableRow>
                 <TextView
+                    android:id="@+id/txv_expense_colon"
                     android:text="@string/expense_colon"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"/>
@@ -82,6 +84,7 @@
             </TableRow>
             <TableRow>
                 <TextView
+                    android:id="@+id/txv_balance_colon"
                     android:text="@string/balance_colon"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"/>

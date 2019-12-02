@@ -15,11 +15,17 @@ public class CategoriesLanDBAdapter extends DBAdapter {
     public static final String COL_ID = "_id";
     public static final String COL_CODE = "code";
     public static final String COL_NAME = "name";
+    public static final String COL_AR = "ar";
     public static final String COL_EN = "en";
     public static final String COL_ES = "es";
     public static final String COL_FR = "fr";
+    public static final String COL_HI = "hi";
     public static final String COL_IT = "it";
+    public static final String COL_IN = "in";
     public static final String COL_JA = "ja";
+    public static final String COL_KO = "ko";
+    public static final String COL_PT = "pt";
+    public static final String COL_RU = "ru";
     public static final String COL_SAVED_DATE = "saved_date";
 
     private SQLiteDatabase _db;
@@ -55,11 +61,17 @@ public class CategoriesLanDBAdapter extends DBAdapter {
         ContentValues values = new ContentValues();
         values.put(COL_CODE, category.getCode());
         values.put(COL_NAME, category.getName());
+        values.put(COL_AR, category.getAR());
         values.put(COL_EN, category.getEN());
         values.put(COL_ES, category.getES());
         values.put(COL_FR, category.getFR());
+        values.put(COL_HI, category.getHI());
+        values.put(COL_IN, category.getIN());
         values.put(COL_IT, category.getIT());
         values.put(COL_JA, category.getJA());
+        values.put(COL_KO, category.getKO());
+        values.put(COL_PT, category.getPT());
+        values.put(COL_RU, category.getRU());
         values.put(COL_SAVED_DATE, category.getSavedDate());
         _db.insertOrThrow(TABLE_CATEGORY_LAN, null, values);
 
