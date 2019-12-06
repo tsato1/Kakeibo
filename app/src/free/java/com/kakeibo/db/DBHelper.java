@@ -107,8 +107,10 @@ public class DBHelper extends SQLiteOpenHelper {
                     " ADD COLUMN " + CategoriesLanDBAdapter.COL_HI + " INTEGER DEFAULT 0;" +
                     " ADD COLUMN " + CategoriesLanDBAdapter.COL_IN + " INTEGER DEFAULT 0;" +
                     " ADD COLUMN " + CategoriesLanDBAdapter.COL_KO + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_PL + " INTEGER DEFAULT 0;" +
                     " ADD COLUMN " + CategoriesLanDBAdapter.COL_PT + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_RU + " INTEGER DEFAULT 0;";
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_RU + " INTEGER DEFAULT 0;" +
+                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_TR + " INTEGER DEFAULT 0;";
 
     private final Context _context;
 

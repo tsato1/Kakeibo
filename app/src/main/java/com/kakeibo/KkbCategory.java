@@ -19,8 +19,10 @@ public class KkbCategory {
     public String it;
     public String jp;
     public String ko;
+    public String pl;
     public String pt;
     public String ru;
+    public String tr;
 
     public KkbCategory() {}
 
@@ -110,11 +112,19 @@ public class KkbCategory {
         return ko;
     }
 
+    public String getPL() {
+        return pl;
+    }
+
     public String getPT() {
         return pt;
     }
 
     public String getRU() {
         return ru;
+    }
+
+    public String getTR() {
+        return tr;
     }
 }

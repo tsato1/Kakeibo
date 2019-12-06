@@ -29,8 +29,10 @@ public class UtilCategory {
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_KO).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IN).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IT).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_PL).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_PT).getLanguage()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_RU).getLanguage())) {
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_RU).getLanguage()) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_TR).getLanguage())) {
             langCode = CategoriesLanDBAdapter.COL_EN;
         }
 

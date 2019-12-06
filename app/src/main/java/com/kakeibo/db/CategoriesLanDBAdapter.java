@@ -24,8 +24,10 @@ public class CategoriesLanDBAdapter extends DBAdapter {
     public static final String COL_IN = "in";
     public static final String COL_JA = "ja";
     public static final String COL_KO = "ko";
+    public static final String COL_PL = "pl";
     public static final String COL_PT = "pt";
     public static final String COL_RU = "ru";
+    public static final String COL_TR = "tr";
     public static final String COL_SAVED_DATE = "saved_date";
 
     private SQLiteDatabase _db;
@@ -70,8 +72,10 @@ public class CategoriesLanDBAdapter extends DBAdapter {
         values.put(COL_IT, category.getIT());
         values.put(COL_JA, category.getJA());
         values.put(COL_KO, category.getKO());
+        values.put(COL_PL, category.getPL());
         values.put(COL_PT, category.getPT());
         values.put(COL_RU, category.getRU());
+        values.put(COL_TR, category.getTR());
         values.put(COL_SAVED_DATE, category.getSavedDate());
         _db.insertOrThrow(TABLE_CATEGORY_LAN, null, values);
 
