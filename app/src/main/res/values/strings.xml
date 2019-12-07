@@ -70,7 +70,7 @@
     <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
 
     <string name="err_amount_invalid">The amount is invalid.</string>
-    <string name="err_please_select_category">Please select category.</string>
+    <string name="err_please_select_category">Please select a category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>
     <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
@@ -88,7 +88,7 @@
     <!-- Export -->
     <string name="select_file">Select file</string>
     <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
+    <string name="file_create_error">An error occurred while trying to create the file. Please try again later.</string>
     <string name="select_folder">Select a folder</string>
     <string name="folder_not_selected">No folder selected, canceling uploading.</string>
     <string name="nothing_to_export">There is nothing to export.</string>

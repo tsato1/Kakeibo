@@ -1,126 +1,119 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">настройки</string>
 
-    <string name="input">INPUT</string>
-    <string name="report">REPORT</string>
-    <string name="search">SEARCH</string>
+    <string name="input">ВХОД</string>
+    <string name="report">ОТЧЕТ</string>
+    <string name="search">ПОИСК</string>
 
-    <string name="income">Income</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="loading">Loading</string>
-    <string name="export">Export</string>
-    <string name="export_date">Export [Date]</string>
-    <string name="export_category">Export [Category]</string>
-    <string name="item_detail">Item Detail</string>
-    <string name="currency">Currency</string>
-    <string name="category">Category</string>
-    <string name="event_date">Event Date</string>
-    <string name="updated_date">Updated Date</string>
-    <string name="toggle" translatable="false">toggle</string>
+    <string name="income">доход</string>
+    <string name="delete">удалять</string>
+    <string name="edit">редактировать</string>
+    <string name="yes">да</string>
+    <string name="no">нет</string>
+    <string name="ok">хорошо</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="close">близко</string>
+    <string name="next">следующий</string>
+    <string name="previous">предыдущий</string>
+    <string name="loading">загрузка</string>
+    <string name="export">экспорт</string>
+    <string name="export_date">экспорт [Свидание]</string>
+    <string name="export_category">экспорт [категория]</string>
+    <string name="item_detail">детали товара</string>
+    <string name="currency">валюта</string>
+    <string name="category">категория</string>
+    <string name="event_date">Дата события</string>
+    <string name="updated_date">Дата обновления</string>
 
-    <string name="income_colon">Income:</string>
-    <string name="expense_colon">Expense:</string>
-    <string name="balance_colon">Balance:</string>
-    <string name="currency_colon">Currency:</string>
-    <string name="amount_colon">Amount:</string>
-    <string name="memo_colon">Memo:</string>
-    <string name="category_colon">Category:</string>
-    <string name="event_date_colon">Event Date:</string>
-    <string name="updated_on_colon">Saved on:</string>
+    <string name="income_colon">доход:</string>
+    <string name="expense_colon">расходы:</string>
+    <string name="balance_colon">баланс:</string>
+    <string name="currency_colon">валюта:</string>
+    <string name="amount_colon">Количество:</string>
+    <string name="memo_colon">меморандум:</string>
+    <string name="category_colon">категория:</string>
+    <string name="event_date_colon">Дата события:</string>
+    <string name="updated_on_colon">Сохранено в:</string>
 
-    <string name="add_search_criterion">Add Search Criteria</string>
-    <string name="how_to_perform_search">How to perform Search</string>
-    <string name="date_range">Date Range</string>
-    <string name="from">From</string>
-    <string name="dash" translatable="false">-</string>
-    <string name="to">To</string>
-    <string name="amount_range">Amount Range</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="undo">UNDO</string>
-    <string name="swipe_to_delete">Swipe to Delete</string>
-    <string name="card_is_removed">Card is removed.</string>
-    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
-    <string name="err_please_choose_from_date">Please choose From Date.</string>
-    <string name="err_please_choose_to_date">Please choose To Date.</string>
-    <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
-    <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
-    <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
+    <string name="add_search_criterion">Добавить критерии поиска</string>
+    <string name="how_to_perform_search">Как выполнить поиск</string>
+    <string name="date_range">Диапазон дат</string>
+    <string name="from">От</string>
+    <string name="to">к</string>
+    <string name="amount_range">Количество Диапазон</string>
+    <string name="min">минимальный</string>
+    <string name="max">Максимум</string>
+    <string name="undo">отменить</string>
+    <string name="swipe_to_delete">Проведите, чтобы удалить</string>
+    <string name="card_is_removed">Карта удалена.</string>
+    <string name="err_no_search_criteria_found">Критерии поиска не найдены. Пожалуйста, добавьте от кнопки плюс.</string>
+    <string name="err_please_choose_from_date">Пожалуйста, выберите От датa.</string>
+    <string name="err_please_enter_min_amount">Пожалуйста, введите минимальную сумму.</string>
+    <string name="err_please_enter_max_amount">Пожалуйста, введите максимальную сумму.</string>
+    <string name="err_min_amount_greater">Максимальная сумма должна быть больше, чем минимальная сумма.</string>
 
-    <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
-    <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_amount_spent_or_earned">Сумма потрачена или заработана</string>
+    <string name="hint_memo_max_20_characters">напоминание: максимум 20 символов</string>
 
-    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
-    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
-    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_no_result_found">No result found.</string>
-    <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
+    <string name="msg_item_successfully_saved">Элемент был успешно сохранен.</string>
+    <string name="msg_item_successfully_deleted">Элемент был успешно удален.</string>
+    <string name="msg_change_successfully_saved">Изменение было успешно сохранено.</string>
+    <string name="msg_no_result_found">Результатов не найдено.</string>
+    <string name="msg_exit_search">Вы выйдете из страницы результатов поиска и вернетесь к ежемесячному отчету.</string>
 
-    <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
+    <string name="inst_tap_plus_to_add_criteria">Сначала нажмите кнопку «плюс», чтобы добавить критерии. Затем нажмите кнопку поиска, чтобы выполнить поиск.</string>
 
-    <string name="err_amount_invalid">The amount is invalid.</string>
-    <string name="err_please_select_category">Please select category.</string>
-    <string name="err_please_enter_amount">Please enter amount.</string>
-    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
-    <string name="err_memo_empty">Search word in Memo is empty.</string>
+    <string name="err_amount_invalid">Сумма недействительна.</string>
+    <string name="err_please_select_category">Пожалуйста, выберите категорию.</string>
+    <string name="err_please_enter_amount">Пожалуйста, введите сумму.</string>
+    <string name="err_amount_cannot_be_0">Сумма не может быть 0.</string>
+    <string name="err_max_amount_cannot_be_0">Максимальная сумма не может быть 0.</string>
+    <string name="err_memo_empty">Поисковое слово в меморандум пусто.</string>
 
-    <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is sorted by Category.</string>
-    <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is sorted by Date.</string>
+    <string name="quest_do_you_want_to_delete_item">Вы действительно хотите удалить этот элемент?</string>
+    <string name="quest_export_this_report_C">Хотите экспортировать этот отчет на Google Drive? Сортируется по категории.</string>
+    <string name="quest_export_this_report_D">Хотите экспортировать этот отчет на Google Drive? Отсортировано по дате.</string>
 
-    <string name="title_edit_item">Edit item</string>
-    <string name="title_search_result">Search Result</string>
-    <string name="title_search_criteria">Search Criteria:</string>
-    <string name="title_returning_to_monthly_report">Returning to monthly report</string>
+    <string name="title_edit_item">Изменить элемент</string>
+    <string name="title_search_result">Результат поиска</string>
+    <string name="title_search_criteria">Критерий поиска:</string>
+    <string name="title_returning_to_monthly_report">Возвращаясь к ежемесячному отчету</string>
 
     <!-- Export -->
-    <string name="select_file">Select file</string>
-    <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
-    <string name="select_folder">Select a folder</string>
-    <string name="folder_not_selected">No folder selected, canceling uploading.</string>
-    <string name="nothing_to_export">There is nothing to export.</string>
-    <string name="empty_report">Your report is empty.</string>
-    <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
+    <string name="select_file">Выбрать файл</string>
+    <string name="file_created">Файл сохранен в облаке.</string>
+    <string name="file_create_error">Произошла ошибка при попытке создать файл. Пожалуйста, попробуйте позже.</string>
+    <string name="select_folder">Выберите папку</string>
+    <string name="folder_not_selected">Папка не была выбрана. загрузка была отменена.</string>
+    <string name="nothing_to_export">Нечего экспортировать.</string>
+    <string name="empty_report">Ваш отчет пуст.</string>
+    <string name="tap_anywhere_to_dismiss">Нажмите в любом месте, чтобы уволить.</string>
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">генеральный</string>
 
-    <string name="pref_title_date_format">Date Format</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
-    <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_fraction_digits">Fraction Digits</string>
+    <string name="pref_title_date_format">Формат даты</string>
+    <string name="pref_title_remove_ads">Удалить рекламу</string>
+    <string name="pref_desc_remove_ads">Обновление до Kakeibo Pro</string>
+    <string name="pref_title_category">категория</string>
+    <string name="pref_title_currency">валюта</string>
+    <string name="pref_title_fraction_digits">Цифры дроби</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">In-App Data</string>
-    <string name="pref_title_delete_all_items">Delete all items</string>
-    <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
-    <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
-
-    <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
-    <string name="pref_key_fraction_digits" translatable="false">pref_key_fraction_digits</string>
-    <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
+    <string name="pref_header_in_app_data">Данные в приложении</string>
+    <string name="pref_title_delete_all_items">Удалить все элементы</string>
+    <string name="pref_desc_delete_all_items">Это удалит все элементы Kakeibo, которые вы сохранили на этом устройстве. Перед удалением рекомендуется выполнить экспорт на Google Диск. Нажмите Да, чтобы продолжить.</string>
+    <string name="pref_warn_delete_all_items">Вы действительно хотите удалить все элементы?</string>
+    <string name="pref_msg_all_delete_success">Все элементы были успешно удалены.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data and Sync</string>
+    <string name="pref_header_data_sync">Данные и синхронизация</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_sync_frequency">Частота синхронизации</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -152,18 +145,19 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">Настройки системной синхронизации</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">Уведомления</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">Уведомления о новых сообщениях</string>
 
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_ringtone">Мелодия</string>
+    <string name="pref_ringtone_silent">бесшумный</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
-    <string name="memo">Memo</string>
-    <string name="amount">Amount</string>
-    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="pref_title_vibrate">вибрировать</string>
+    <string name="memo">меморандум</string>
+    <string name="amount">Количество</string>
+    <string name="err_from_date_older">От датa должен быть моложе к дата.</string>
+    <string name="err_please_choose_to_date">Пожалуйста, выберите к дата.</string>
 </resources>

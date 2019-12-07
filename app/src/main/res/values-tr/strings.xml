@@ -27,7 +27,6 @@
     <string name="category">Category</string>
     <string name="event_date">Event Date</string>
     <string name="updated_date">Updated Date</string>
-    <string name="toggle" translatable="false">toggle</string>
 
     <string name="income_colon">Income:</string>
     <string name="expense_colon">Expense:</string>
@@ -43,7 +42,6 @@
     <string name="how_to_perform_search">How to perform Search</string>
     <string name="date_range">Date Range</string>
     <string name="from">From</string>
-    <string name="dash" translatable="false">-</string>
     <string name="to">To</string>
     <string name="amount_range">Amount Range</string>
     <string name="min">Min</string>
@@ -112,10 +110,6 @@
     <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
     <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
     <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
-
-    <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
-    <string name="pref_key_fraction_digits" translatable="false">pref_key_fraction_digits</string>
-    <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data and Sync</string>

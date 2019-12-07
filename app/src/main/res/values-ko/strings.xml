@@ -3,124 +3,118 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="input">INPUT</string>
-    <string name="report">REPORT</string>
-    <string name="search">SEARCH</string>
+    <string name="input">입력</string>
+    <string name="report">보고서</string>
+    <string name="search">수색</string>
 
-    <string name="income">Income</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="income">수입</string>
+    <string name="delete">지우다</string>
+    <string name="edit">편집하다</string>
+    <string name="yes">예</string>
+    <string name="no">아니</string>
     <string name="ok">OK</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="loading">Loading</string>
-    <string name="export">Export</string>
-    <string name="export_date">Export [Date]</string>
-    <string name="export_category">Export [Category]</string>
-    <string name="item_detail">Item Detail</string>
-    <string name="currency">Currency</string>
-    <string name="category">Category</string>
-    <string name="event_date">Event Date</string>
-    <string name="updated_date">Updated Date</string>
-    <string name="toggle" translatable="false">toggle</string>
+    <string name="save">구하다</string>
+    <string name="cancel">취소</string>
+    <string name="close">닫기</string>
+    <string name="next">"다음 것 "</string>
+    <string name="previous">너무 이른</string>
+    <string name="loading">로딩</string>
+    <string name="export">수출</string>
+    <string name="export_date">수출 [날짜]</string>
+    <string name="export_category">수출 [범주]</string>
+    <string name="item_detail">품목 세부 사항</string>
+    <string name="currency">통화</string>
+    <string name="category">범주</string>
+    <string name="event_date">행사 날</string>
+    <string name="updated_date">업데이트 날짜</string>
 
-    <string name="income_colon">Income:</string>
-    <string name="expense_colon">Expense:</string>
-    <string name="balance_colon">Balance:</string>
-    <string name="currency_colon">Currency:</string>
-    <string name="amount_colon">Amount:</string>
-    <string name="memo_colon">Memo:</string>
-    <string name="category_colon">Category:</string>
-    <string name="event_date_colon">Event Date:</string>
-    <string name="updated_on_colon">Saved on:</string>
+    <string name="income_colon">수입:</string>
+    <string name="expense_colon">비용:</string>
+    <string name="balance_colon">균형:</string>
+    <string name="currency_colon">통화:</string>
+    <string name="amount_colon">양:</string>
+    <string name="memo_colon">메모:</string>
+    <string name="category_colon">범주:</string>
+    <string name="event_date_colon">행사 날:</string>
+    <string name="updated_on_colon">절약:</string>
 
-    <string name="add_search_criterion">Add Search Criteria</string>
-    <string name="how_to_perform_search">How to perform Search</string>
-    <string name="date_range">Date Range</string>
-    <string name="from">From</string>
-    <string name="dash" translatable="false">-</string>
-    <string name="to">To</string>
-    <string name="amount_range">Amount Range</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="undo">UNDO</string>
-    <string name="swipe_to_delete">Swipe to Delete</string>
-    <string name="card_is_removed">Card is removed.</string>
-    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
-    <string name="err_please_choose_from_date">Please choose From Date.</string>
-    <string name="err_please_choose_to_date">Please choose To Date.</string>
-    <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
-    <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
-    <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
+    <string name="add_search_criterion">검색 기준 추가</string>
+    <string name="how_to_perform_search">검색 방법</string>
+    <string name="date_range">날짜 범위</string>
+    <string name="from">에서</string>
+    <string name="to">에</string>
+    <string name="amount_range">금액 범위</string>
+    <string name="min">최소</string>
+    <string name="max">맥스</string>
+    <string name="undo">끄르다</string>
+    <string name="swipe_to_delete">스 와이프하여 삭제</string>
+    <string name="card_is_removed">카드가 제거되었습니다.</string>
+    <string name="err_no_search_criteria_found">검색 기준이 없습니다. 더하기 버튼에서 추가합니다.</string>
+    <string name="err_please_choose_from_date">시작 날짜를 선택하십시오.</string>
+    <string name="err_please_choose_to_date">현재 날짜를 선택하십시오.</string>
+    <string name="err_please_enter_min_amount">최소 금액을 입력하십시오.</string>
+    <string name="err_please_enter_max_amount">최대 금액을 입력하십시오.</string>
+    <string name="err_min_amount_greater">최대 금액은 최소 금액보다 커야합니다.</string>
 
-    <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
-    <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_amount_spent_or_earned">지출 또는 얻은 금액</string>
+    <string name="hint_memo_max_20_characters">메모 : 최대 20 자</string>
 
-    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
-    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
-    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_no_result_found">No result found.</string>
-    <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
+    <string name="msg_item_successfully_saved">항목이 성공적으로 저장되었습니다.</string>
+    <string name="msg_item_successfully_deleted">항목이 성공적으로 삭제되었습니다.</string>
+    <string name="msg_change_successfully_saved">변경 사항이 저장되었습니다.</string>
+    <string name="msg_no_result_found">결과가 없습니다.</string>
+    <string name="msg_exit_search">검색 결과 페이지를 종료하고이 달의 월별 보고서로 돌아갑니다.</string>
 
-    <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
+    <string name="inst_tap_plus_to_add_criteria">먼저 더하기 버튼을 눌러 기준을 추가합니다. 그런 다음 검색 버튼을 눌러 검색을 수행하십시오.</string>
 
-    <string name="err_amount_invalid">The amount is invalid.</string>
-    <string name="err_please_select_category">Please select category.</string>
-    <string name="err_please_enter_amount">Please enter amount.</string>
-    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
-    <string name="err_memo_empty">Search word in Memo is empty.</string>
+    <string name="err_amount_invalid">금액이 유효하지 않습니다.</string>
+    <string name="err_please_select_category">카테고리를 선택하십시오.</string>
+    <string name="err_please_enter_amount">금액을 입력하십시오.</string>
+    <string name="err_amount_cannot_be_0">금액은 0 일 수 없습니다.</string>
+    <string name="err_max_amount_cannot_be_0">최대 금액은 0 일 수 없습니다.</string>
+    <string name="err_memo_empty">메모의 검색어가 비어 있습니다.</string>
 
-    <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is sorted by Category.</string>
-    <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is sorted by Date.</string>
+    <string name="quest_do_you_want_to_delete_item">이 항목을 정말로 삭제 하시겠습니까?</string>
+    <string name="quest_export_this_report_C">이 보고서를 Google 드라이브로 내보내시겠습니까? 범주별로 정렬되어 있습니다.</string>
+    <string name="quest_export_this_report_D">이 보고서를 Google 드라이브로 내보내시겠습니까? 날짜별로 정렬되어 있습니다.</string>
 
-    <string name="title_edit_item">Edit item</string>
-    <string name="title_search_result">Search Result</string>
-    <string name="title_search_criteria">Search Criteria:</string>
-    <string name="title_returning_to_monthly_report">Returning to monthly report</string>
+    <string name="title_edit_item">항목 편집</string>
+    <string name="title_search_result">검색 결과</string>
+    <string name="title_search_criteria">검색 조건:</string>
+    <string name="title_returning_to_monthly_report">월간 보고서로 돌아 가기</string>
 
     <!-- Export -->
-    <string name="select_file">Select file</string>
-    <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
-    <string name="select_folder">Select a folder</string>
-    <string name="folder_not_selected">No folder selected, canceling uploading.</string>
-    <string name="nothing_to_export">There is nothing to export.</string>
-    <string name="empty_report">Your report is empty.</string>
-    <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
+    <string name="select_file">파일 선택</string>
+    <string name="file_created">클라우드에 파일이 저장되었습니다.</string>
+    <string name="file_create_error">파일을 작성하는 중 오류가 발생했습니다. 나중에 다시 시도 해주십시오.</string>
+    <string name="select_folder">폴더를 선택하십시오</string>
+    <string name="folder_not_selected">폴더가 선택되지 않았습니다. 업로드가 취소되었습니다.</string>
+    <string name="nothing_to_export">내보낼 것이 없습니다.</string>
+    <string name="empty_report">보고서가 비어 있습니다.</string>
+    <string name="tap_anywhere_to_dismiss">닫으려면 아무 곳이나 누르십시오.</string>
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">일반</string>
 
-    <string name="pref_title_date_format">Date Format</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
-    <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_fraction_digits">Fraction Digits</string>
+    <string name="pref_title_date_format">날짜 형식</string>
+    <string name="pref_title_remove_ads">광고를 제거하다</string>
+    <string name="pref_desc_remove_ads">Kakeibo Pro로 업그레이드</string>
+    <string name="pref_title_category">범주</string>
+    <string name="pref_title_currency">통화</string>
+    <string name="pref_title_fraction_digits">분수 자리</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">In-App Data</string>
-    <string name="pref_title_delete_all_items">Delete all items</string>
-    <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
-    <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
-
-    <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
-    <string name="pref_key_fraction_digits" translatable="false">pref_key_fraction_digits</string>
-    <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
+    <string name="pref_header_in_app_data">인앱 데이터</string>
+    <string name="pref_title_delete_all_items">모든 항목 삭제</string>
+    <string name="pref_desc_delete_all_items">이 장치에 저장 한 모든 Kakeibo 항목이 삭제됩니다. 삭제하기 전에 Google 드라이브로 내보내는 것이 좋습니다. 계속하려면 예를 누르십시오.</string>
+    <string name="pref_warn_delete_all_items">정말로 모든 항목을 삭제 하시겠습니까?</string>
+    <string name="pref_msg_all_delete_success">모든 항목이 성공적으로 삭제되었습니다.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data and Sync</string>
+    <string name="pref_header_data_sync">데이터 및 동기화</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_sync_frequency">동기 주파수</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -152,18 +146,18 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">시스템 동기화 설정</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">알림</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">새로운 메시지 알림</string>
 
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_ringtone">벨소리</string>
+    <string name="pref_ringtone_silent">조용한</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
-    <string name="memo">Memo</string>
-    <string name="amount">Amount</string>
-    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="pref_title_vibrate">설레다</string>
+    <string name="memo">메모</string>
+    <string name="amount">양</string>
+    <string name="err_from_date_older">시작 날짜는 종료 날짜보다 작아야합니다.</string>
 </resources>
