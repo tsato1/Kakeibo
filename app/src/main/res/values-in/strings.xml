@@ -1,120 +1,117 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Pengaturan</string>
 
-    <string name="input">INPUT</string>
-    <string name="report">REPORT</string>
-    <string name="search">SEARCH</string>
+    <string name="input">MEMASUKKAN</string>
+    <string name="report">MELAPORKAN</string>
+    <string name="search">PENCARIAN</string>
 
-    <string name="income">Income</string>
-    <string name="delete">Delete</string>
+    <string name="income">Pendapatan</string>
+    <string name="delete">Menghapus</string>
     <string name="edit">Edit</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="loading">Loading</string>
-    <string name="export">Export</string>
-    <string name="export_date">Export [Date]</string>
-    <string name="export_category">Export [Category]</string>
-    <string name="item_detail">Item Detail</string>
-    <string name="currency">Currency</string>
-    <string name="category">Category</string>
-    <string name="event_date">Event Date</string>
-    <string name="updated_date">Updated Date</string>
+    <string name="yes">iya nih</string>
+    <string name="save">Menyimpan</string>
+    <string name="cancel">Membatalkan</string>
+    <string name="close">Dekat</string>
+    <string name="next">Berikutnya</string>
+    <string name="previous">Sebelumnya</string>
+    <string name="loading">Pemuatan</string>
+    <string name="export">Ekspor</string>
+    <string name="export_date">Ekspor [Tanggal]</string>
+    <string name="export_category">Ekspor [Kategori]</string>
+    <string name="item_detail">Detail barang</string>
+    <string name="currency">Mata uang</string>
+    <string name="category">Kategori</string>
+    <string name="event_date">Tanggal Acara</string>
+    <string name="updated_date">Tanggal Diperbarui</string>
 
-    <string name="income_colon">Income:</string>
-    <string name="expense_colon">Expense:</string>
-    <string name="balance_colon">Balance:</string>
-    <string name="currency_colon">Currency:</string>
-    <string name="amount_colon">Amount:</string>
+    <string name="income_colon">Pendapatan:</string>
+    <string name="expense_colon">Biaya:</string>
+    <string name="balance_colon">Keseimbangan:</string>
+    <string name="currency_colon">Mata uang:</string>
+    <string name="amount_colon">Jumlah:</string>
     <string name="memo_colon">Memo:</string>
-    <string name="category_colon">Category:</string>
-    <string name="event_date_colon">Event Date:</string>
-    <string name="updated_on_colon">Saved on:</string>
+    <string name="category_colon">Kategori:</string>
+    <string name="event_date_colon">Tanggal Acara:</string>
+    <string name="updated_on_colon">Disimpan pada:</string>
 
-    <string name="add_search_criterion">Add Search Criteria</string>
-    <string name="how_to_perform_search">How to perform Search</string>
-    <string name="date_range">Date Range</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="amount_range">Amount Range</string>
+    <string name="add_search_criterion">Tambahkan Kriteria Pencarian</string>
+    <string name="how_to_perform_search">Cara melakukan Pencarian</string>
+    <string name="date_range">Rentang Tanggal</string>
+    <string name="from">Dari</string>
+    <string name="amount_range">Kisaran Jumlah</string>
     <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="undo">UNDO</string>
-    <string name="swipe_to_delete">Swipe to Delete</string>
-    <string name="card_is_removed">Card is removed.</string>
-    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
-    <string name="err_please_choose_from_date">Please choose From Date.</string>
-    <string name="err_please_choose_to_date">Please choose To Date.</string>
-    <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
-    <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
-    <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
+    <string name="max">Maks</string>
+    <string name="undo">batalkan</string>
+    <string name="swipe_to_delete">Gesek ke Hapus</string>
+    <string name="card_is_removed">Kartu dilepas.</string>
+    <string name="err_no_search_criteria_found">Tidak ditemukan Kriteria Pencarian. Silakan tambahkan dari tombol plus.</string>
+    <string name="err_please_choose_from_date">Silakan pilih \'Dari Tanggal\'.</string>
+    <string name="err_please_choose_to_date">Silakan pilih \'Ke Tanggal\'.</string>
+    <string name="err_please_enter_min_amount">Silakan masukkan Jumlah Min.</string>
+    <string name="err_please_enter_max_amount">Silakan masukkan Jumlah Maks.</string>
+    <string name="err_min_amount_greater">Jumlah Max harus lebih besar dari Jumlah Min.</string>
 
-    <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
-    <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_amount_spent_or_earned">Jumlah yang dihabiskan atau diperoleh</string>
+    <string name="hint_memo_max_20_characters">Memo: Maks 20 karakter</string>
 
-    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
-    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
-    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_no_result_found">No result found.</string>
-    <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
+    <string name="msg_item_successfully_saved">Item berhasil disimpan.</string>
+    <string name="msg_item_successfully_deleted">Item berhasil dihapus.</string>
+    <string name="msg_change_successfully_saved">Perubahan berhasil disimpan.</string>
+    <string name="msg_no_result_found">Tidak ditemukan hasil.</string>
+    <string name="msg_exit_search">Anda akan keluar dari halaman hasil pencarian dan kembali ke laporan bulanan bulan ini.</string>
 
-    <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
+    <string name="inst_tap_plus_to_add_criteria">Pertama, ketuk tombol plus untuk menambahkan kriteria. Kemudian ketuk tombol pencarian untuk melakukan pencarian.</string>
 
-    <string name="err_amount_invalid">The amount is invalid.</string>
-    <string name="err_please_select_category">Please select category.</string>
-    <string name="err_please_enter_amount">Please enter amount.</string>
-    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
-    <string name="err_memo_empty">Search word in Memo is empty.</string>
+    <string name="err_amount_invalid">Jumlahnya tidak valid.</string>
+    <string name="err_please_select_category">Silakan pilih Kategori.</string>
+    <string name="err_please_enter_amount">Silakan masukkan Jumlah.</string>
+    <string name="err_amount_cannot_be_0">Jumlah tidak boleh 0.</string>
+    <string name="err_max_amount_cannot_be_0">Jumlah Max tidak boleh 0.</string>
+    <string name="err_memo_empty">Kata pencarian di Memo kosong.</string>
 
-    <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is sorted by Category.</string>
-    <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is sorted by Date.</string>
+    <string name="quest_do_you_want_to_delete_item">Apakah Anda benar-benar ingin menghapus item ini?</string>
+    <string name="quest_export_this_report_C">Apakah Anda ingin mengekspor laporan ini di Google Drive? Ini diurutkan berdasarkan Kategori.</string>
+    <string name="quest_export_this_report_D">Apakah Anda ingin mengekspor laporan ini di Google Drive? Ini diurutkan berdasarkan Tanggal.</string>
 
     <string name="title_edit_item">Edit item</string>
-    <string name="title_search_result">Search Result</string>
-    <string name="title_search_criteria">Search Criteria:</string>
-    <string name="title_returning_to_monthly_report">Returning to monthly report</string>
+    <string name="title_search_result">Hasil Pencarian</string>
+    <string name="title_search_criteria">Kriteria Pencarian:</string>
+    <string name="title_returning_to_monthly_report">Kembali ke laporan bulanan</string>
 
     <!-- Export -->
-    <string name="select_file">Select file</string>
-    <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
-    <string name="select_folder">Select a folder</string>
-    <string name="folder_not_selected">No folder selected, canceling uploading.</string>
-    <string name="nothing_to_export">There is nothing to export.</string>
-    <string name="empty_report">Your report is empty.</string>
-    <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
+    <string name="select_file">Pilih file</string>
+    <string name="file_created">File disimpan di cloud.</string>
+    <string name="file_create_error">Terjadi kesalahan saat mencoba membuat file. Silakan coba lagi nanti.</string>
+    <string name="select_folder">Pilih folder</string>
+    <string name="folder_not_selected">Tidak ada folder yang dipilih, membatalkan pengunggahan.</string>
+    <string name="nothing_to_export">Tidak ada yang diekspor.</string>
+    <string name="empty_report">Laporan Anda kosong.</string>
+    <string name="tap_anywhere_to_dismiss">Ketuk di mana saja untuk mengabaikan.</string>
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">Umum</string>
 
-    <string name="pref_title_date_format">Date Format</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
-    <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_fraction_digits">Fraction Digits</string>
+    <string name="pref_title_date_format">Format Tanggal</string>
+    <string name="pref_title_remove_ads">Hilangkan iklan</string>
+    <string name="pref_desc_remove_ads">Tingkatkan ke Kakeibo Pro</string>
+    <string name="pref_title_category">Kategori</string>
+    <string name="pref_title_currency">Mata uang</string>
+    <string name="pref_title_fraction_digits">Digit Pecahan</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">In-App Data</string>
-    <string name="pref_title_delete_all_items">Delete all items</string>
-    <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
-    <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
+    <string name="pref_header_in_app_data">Data Dalam Aplikasi</string>
+    <string name="pref_title_delete_all_items">Hapus semua item</string>
+    <string name="pref_desc_delete_all_items">"Ini akan menghapus semua item Kakeibo yang Anda simpan di perangkat ini. Ekspor ke Google Drive Anda disarankan sebelum dihapus. Ketuk ya untuk melanjutkan. "</string>
+    <string name="pref_warn_delete_all_items">Apakah Anda benar-benar ingin menghapus semua item?</string>
+    <string name="pref_msg_all_delete_success">Semua item berhasil dihapus.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data and Sync</string>
+    <string name="pref_header_data_sync">Data dan Sinkronisasi</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_sync_frequency">Frekuensi sinkronisasi</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -146,18 +143,21 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">Pengaturan sinkronisasi sistem</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">Notifikasi</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">Notifikasi pesan baru</string>
 
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_ringtone">Nada dering</string>
+    <string name="pref_ringtone_silent">Diam</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_title_vibrate">Bergetar</string>
     <string name="memo">Memo</string>
-    <string name="amount">Amount</string>
-    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="amount">Jumlah</string>
+    <string name="err_from_date_older">\'Dari Tanggal\' harus lebih muda dari \'Ke Tanggal\'.</string>
+    <string name="to">Ke</string>
+    <string name="no">Tidak</string>
+    <string name="ok">baik</string>
 </resources>

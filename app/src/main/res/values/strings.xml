@@ -70,7 +70,7 @@
     <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
 
     <string name="err_amount_invalid">The Amount is invalid.</string>
-    <string name="err_please_select_category">Please select a category.</string>
+    <string name="err_please_select_category">Please select a Category.</string>
     <string name="err_please_enter_amount">Please enter amount.</string>
     <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
