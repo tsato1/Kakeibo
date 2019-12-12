@@ -1,120 +1,119 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ustawienia</string>
 
-    <string name="input">INPUT</string>
-    <string name="report">REPORT</string>
-    <string name="search">SEARCH</string>
+    <string name="input">WKŁAD</string>
+    <string name="report">RAPORT</string>
+    <string name="search">SZUKAJ</string>
 
-    <string name="income">Income</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="loading">Loading</string>
-    <string name="export">Export</string>
-    <string name="export_date">Export [Date]</string>
-    <string name="export_category">Export [Category]</string>
-    <string name="item_detail">Item Detail</string>
-    <string name="currency">Currency</string>
-    <string name="category">Category</string>
-    <string name="event_date">Event Date</string>
-    <string name="updated_date">Updated Date</string>
+    <string name="income">Dochód</string>
+    <string name="delete">Kasować</string>
+    <string name="edit">Edytować</string>
+    <string name="yes">tak</string>
+    <string name="no">Nie</string>
+    <string name="save">Zapisać</string>
+    <string name="cancel">anulować</string>
+    <string name="close">Blisko</string>
+    <string name="next">Kolejny</string>
+    <string name="previous">Poprzedni</string>
+    <string name="loading">Ładuję</string>
+    <string name="export">Eksport</string>
+    <string name="export_date">Eksport [Data]</string>
+    <string name="export_category">Eksport [Kategoria]</string>
+    <string name="item_detail">Szczegóły przedmiotu</string>
+    <string name="currency">Waluta</string>
+    <string name="category">Kategoria</string>
+    <string name="event_date">Data wydarzenia</string>
+    <string name="updated_date">Zaktualizowana data</string>
 
-    <string name="income_colon">Income:</string>
-    <string name="expense_colon">Expense:</string>
-    <string name="balance_colon">Balance:</string>
-    <string name="currency_colon">Currency:</string>
-    <string name="amount_colon">Amount:</string>
-    <string name="memo_colon">Memo:</string>
-    <string name="category_colon">Category:</string>
-    <string name="event_date_colon">Event Date:</string>
-    <string name="updated_on_colon">Saved on:</string>
+    <string name="income_colon">Dochód:</string>
+    <string name="expense_colon">Koszt:</string>
+    <string name="balance_colon">Saldo:</string>
+    <string name="currency_colon">Waluta:</string>
+    <string name="amount_colon">Ilość:</string>
+    <string name="memo_colon">Notatka:</string>
+    <string name="category_colon">Kategoria:</string>
+    <string name="event_date_colon">Data wydarzenia:</string>
+    <string name="updated_on_colon">Zapisano w:</string>
 
-    <string name="add_search_criterion">Add Search Criteria</string>
-    <string name="how_to_perform_search">How to perform Search</string>
-    <string name="date_range">Date Range</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="amount_range">Amount Range</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="undo">UNDO</string>
-    <string name="swipe_to_delete">Swipe to Delete</string>
-    <string name="card_is_removed">Card is removed.</string>
-    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
-    <string name="err_please_choose_from_date">Please choose From Date.</string>
-    <string name="err_please_choose_to_date">Please choose To Date.</string>
-    <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
-    <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
-    <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
+    <string name="add_search_criterion">Dodaj kryteria wyszukiwania</string>
+    <string name="how_to_perform_search">Jak przeprowadzić wyszukiwanie</string>
+    <string name="date_range">Zakres dat</string>
+    <string name="from">Od</string>
+    <string name="to">Do</string>
+    <string name="amount_range">Zakres kwoty</string>
+    <string name="min">Minimum</string>
+    <string name="max">Maksymalny</string>
+    <string name="undo">COFNIJ</string>
+    <string name="swipe_to_delete">Przesuń, aby usunąć</string>
+    <string name="card_is_removed">Karta została usunięta.</string>
+    <string name="err_no_search_criteria_found">Nie znaleziono kryteriów wyszukiwania. Dodaj z przycisku plus.</string>
+    <string name="err_please_choose_from_date">Proszę wybrać „Od daty”.</string>
+    <string name="err_please_choose_to_date">Proszę wybrać „Do daty”.</string>
+    <string name="err_please_enter_min_amount">Wprowadź Minimalną Kwotę.</string>
+    <string name="err_please_enter_max_amount">Wprowadź Maksymalną Kwotę.</string>
+    <string name="err_min_amount_greater">Maksymalna kwota musi być większa niż kwota minimalna.</string>
 
-    <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
-    <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_amount_spent_or_earned">Kwota wydana lub zarobiona</string>
+    <string name="hint_memo_max_20_characters">Notatka: maks. 20 znaków</string>
 
-    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
-    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
-    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_no_result_found">No result found.</string>
-    <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
+    <string name="msg_item_successfully_saved">Element został pomyślnie zapisany.</string>
+    <string name="msg_item_successfully_deleted">Element został pomyślnie usunięty.</string>
+    <string name="msg_change_successfully_saved">Zmiana została pomyślnie zapisana.</string>
+    <string name="msg_no_result_found">Nie znaleziono żadnych wyników.</string>
+    <string name="msg_exit_search">Wyjdziesz ze strony wyników wyszukiwania i wrócisz do raportu miesięcznego za ten miesiąc.</string>
 
-    <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
+    <string name="inst_tap_plus_to_add_criteria">Najpierw dotknij przycisku plus, aby dodać kryteria. Następnie dotknij przycisku wyszukiwania, aby przeprowadzić wyszukiwanie.</string>
 
-    <string name="err_amount_invalid">The amount is invalid.</string>
-    <string name="err_please_select_category">Please select category.</string>
-    <string name="err_please_enter_amount">Please enter amount.</string>
-    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
-    <string name="err_memo_empty">Search word in Memo is empty.</string>
+    <string name="err_amount_invalid">Kwota jest nieprawidłowa.</string>
+    <string name="err_please_select_category">Proszę wybierz Kategorie.</string>
+    <string name="err_please_enter_amount">Proszę podać Kwotę.</string>
+    <string name="err_amount_cannot_be_0">Kwota nie może wynosić 0.</string>
+    <string name="err_max_amount_cannot_be_0">Maksymalna kwota nie może wynosić 0.</string>
+    <string name="err_memo_empty">Szukane słowo w notatce jest puste.</string>
 
-    <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is sorted by Category.</string>
-    <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is sorted by Date.</string>
+    <string name="quest_do_you_want_to_delete_item">Czy na pewno chcesz usunąć ten element?</string>
+    <string name="quest_export_this_report_C">Czy chcesz wyeksportować ten raport na Dysk Google? Jest posortowane według kategorii.</string>
+    <string name="quest_export_this_report_D">Czy chcesz wyeksportować ten raport na Dysk Google? Jest sortowane według daty.</string>
 
-    <string name="title_edit_item">Edit item</string>
-    <string name="title_search_result">Search Result</string>
-    <string name="title_search_criteria">Search Criteria:</string>
-    <string name="title_returning_to_monthly_report">Returning to monthly report</string>
+    <string name="title_edit_item">Edytuj rzecz</string>
+    <string name="title_search_result">Wynik wyszukiwania</string>
+    <string name="title_search_criteria">Kryteria wyszukiwania:</string>
+    <string name="title_returning_to_monthly_report">Wracając do raportu miesięcznego</string>
 
     <!-- Export -->
-    <string name="select_file">Select file</string>
-    <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
-    <string name="select_folder">Select a folder</string>
-    <string name="folder_not_selected">No folder selected, canceling uploading.</string>
-    <string name="nothing_to_export">There is nothing to export.</string>
-    <string name="empty_report">Your report is empty.</string>
-    <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
+    <string name="select_file">Wybierz plik</string>
+    <string name="file_created">Plik zapisany w chmurze.</string>
+    <string name="file_create_error">Wystąpił błąd podczas próby utworzenia pliku. Spróbuj ponownie później.</string>
+    <string name="select_folder">Wybierz folder</string>
+    <string name="folder_not_selected">Nie wybrano folderu, anulowanie przesyłania.</string>
+    <string name="nothing_to_export">Nie ma nic do wyeksportowania.</string>
+    <string name="empty_report">Twój raport jest pusty.</string>
+    <string name="tap_anywhere_to_dismiss">Stuknij w dowolnym miejscu, aby zamknąć.</string>
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">Generał</string>
 
-    <string name="pref_title_date_format">Date Format</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
-    <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_fraction_digits">Fraction Digits</string>
+    <string name="pref_title_date_format">Format daty</string>
+    <string name="pref_title_remove_ads">Usuń reklamy</string>
+    <string name="pref_desc_remove_ads">Uaktualnij do Kakeibo Pro</string>
+    <string name="pref_title_category">Kategoria</string>
+    <string name="pref_title_currency">Waluta</string>
+    <string name="pref_title_fraction_digits">Cyfry ułamkowe</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">In-App Data</string>
-    <string name="pref_title_delete_all_items">Delete all items</string>
-    <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
-    <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
+    <string name="pref_header_in_app_data">Dane w aplikacji</string>
+    <string name="pref_title_delete_all_items">Usuń wszystkie elementy</string>
+    <string name="pref_desc_delete_all_items">"Spowoduje to usunięcie wszystkich elementów Kakeibo zapisanych na tym urządzeniu. Przed usunięciem zalecamy eksport na dysk Google. Stuknij tak, aby kontynuować. "</string>
+    <string name="pref_warn_delete_all_items">Czy na pewno chcesz usunąć wszystkie elementy?</string>
+    <string name="pref_msg_all_delete_success">Wszystkie elementy zostały pomyślnie usunięte.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data and Sync</string>
+    <string name="pref_header_data_sync">Dane i synchronizacja</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_sync_frequency">Częstotliwość synchronizacji</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -146,18 +145,19 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">Ustawienia synchronizacji systemu</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">Powiadomienia</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">Powiadomienia o nowych wiadomościach</string>
 
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_ringtone">Dzwonek</string>
+    <string name="pref_ringtone_silent">Cichy</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
-    <string name="memo">Memo</string>
-    <string name="amount">Amount</string>
-    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="pref_title_vibrate">Wibrować</string>
+    <string name="memo">Notatka</string>
+    <string name="amount">Ilość</string>
+    <string name="err_from_date_older">„Od daty” musi być młodsze niż „Do daty”.</string>
+    <string name="ok">OK</string>
 </resources>
