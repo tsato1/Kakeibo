@@ -1,120 +1,120 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ayarlar</string>
 
-    <string name="input">INPUT</string>
-    <string name="report">REPORT</string>
-    <string name="search">SEARCH</string>
+    <string name="input">GİRİŞ</string>
+    <string name="report">RAPOR</string>
+    <string name="search">ARAMA</string>
 
-    <string name="income">Income</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="loading">Loading</string>
-    <string name="export">Export</string>
-    <string name="export_date">Export [Date]</string>
-    <string name="export_category">Export [Category]</string>
-    <string name="item_detail">Item Detail</string>
-    <string name="currency">Currency</string>
-    <string name="category">Category</string>
-    <string name="event_date">Event Date</string>
-    <string name="updated_date">Updated Date</string>
+    <string name="income">Gelir</string>
+    <string name="delete">Sil</string>
+    <string name="edit">Düzenle</string>
+    <string name="yes">Evet</string>
+    <string name="no">Yok hayır</string>
+    <string name="ok">Tamam</string>
+    <string name="save">Kayıt etmek</string>
+    <string name="cancel">İptal etmek</string>
+    <string name="close">Kapat</string>
+    <string name="next">Sonraki</string>
+    <string name="previous">Önceki</string>
+    <string name="loading">Yükleniyor</string>
+    <string name="export">Ihracat</string>
+    <string name="export_date">Ihracat [Tarih]</string>
+    <string name="export_category">Ihracat [Kategori]</string>
+    <string name="item_detail">Öğe Detayı</string>
+    <string name="currency">Para birimi</string>
+    <string name="category">Kategori</string>
+    <string name="event_date">Etkinlik Tarihi</string>
+    <string name="updated_date">Güncelleme Tarihi</string>
 
-    <string name="income_colon">Income:</string>
-    <string name="expense_colon">Expense:</string>
-    <string name="balance_colon">Balance:</string>
-    <string name="currency_colon">Currency:</string>
-    <string name="amount_colon">Amount:</string>
-    <string name="memo_colon">Memo:</string>
-    <string name="category_colon">Category:</string>
-    <string name="event_date_colon">Event Date:</string>
-    <string name="updated_on_colon">Saved on:</string>
+    <string name="income_colon">Gelir:</string>
+    <string name="expense_colon">Gider:</string>
+    <string name="balance_colon">Denge:</string>
+    <string name="currency_colon">Para birimi:</string>
+    <string name="amount_colon">Miktar:</string>
+    <string name="memo_colon">Muhtıra:</string>
+    <string name="category_colon">Kategori:</string>
+    <string name="event_date_colon">Etkinlik Tarihi:</string>
+    <string name="updated_on_colon">Tarihinde kaydedildi:</string>
 
-    <string name="add_search_criterion">Add Search Criteria</string>
-    <string name="how_to_perform_search">How to perform Search</string>
-    <string name="date_range">Date Range</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="amount_range">Amount Range</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="undo">UNDO</string>
-    <string name="swipe_to_delete">Swipe to Delete</string>
-    <string name="card_is_removed">Card is removed.</string>
-    <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
-    <string name="err_please_choose_from_date">Please choose From Date.</string>
-    <string name="err_please_choose_to_date">Please choose To Date.</string>
-    <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
-    <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
-    <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
+    <string name="add_search_criterion">Arama Kriteri Ekle</string>
+    <string name="how_to_perform_search">Arama nasıl yapılır</string>
+    <string name="date_range">Tarih Aralığı</string>
+    <string name="from">Itibaren</string>
+    <string name="to">Kadar</string>
+    <string name="amount_range">Miktar Aralığı</string>
+    <string name="min">Minimum</string>
+    <string name="max">Maksimum</string>
+    <string name="undo">GERİ ALMA</string>
+    <string name="swipe_to_delete">Silmek için Kaydırın</string>
+    <string name="card_is_removed">Kart çıkarıldı.</string>
+    <string name="err_no_search_criteria_found">Arama Kriteri bulunamadı. Lütfen artı düğmesinden ekleyin.</string>
+    <string name="err_please_choose_from_date">Lütfen \"Kadar Itibaren\"\'yi seçin.</string>
+    <string name="err_please_choose_to_date">Lütfen \"Tarih Kadar\"\'yi seçin.</string>
+    <string name="err_please_enter_min_amount">Lütfen Minimum Tutarı girin.</string>
+    <string name="err_please_enter_max_amount">Lütfen Maksimum Tutarı girin.</string>
+    <string name="err_min_amount_greater">Maksimum Tutar Min Tutardan büyük olmalıdır.</string>
 
-    <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
-    <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_amount_spent_or_earned">Harcanan veya kazanılan miktar</string>
+    <string name="hint_memo_max_20_characters">Muhtıra: En fazla 20 karakter</string>
 
-    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
-    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
-    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
-    <string name="msg_no_result_found">No result found.</string>
-    <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
+    <string name="msg_item_successfully_saved">Öğe başarıyla kaydedildi.</string>
+    <string name="msg_item_successfully_deleted">Öğe başarıyla silindi.</string>
+    <string name="msg_change_successfully_saved">Değişiklik başarıyla kaydedildi.</string>
+    <string name="msg_no_result_found">Sonuç bulunamadı.</string>
+    <string name="msg_exit_search">Arama sonucu sayfasından çıkacak ve bu ayın aylık raporuna döneceksiniz.</string>
 
-    <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
+    <string name="inst_tap_plus_to_add_criteria">Önce ölçüt eklemek için artı düğmesine dokunun. Ardından, arama yapmak için arama düğmesine dokunun.</string>
 
-    <string name="err_amount_invalid">The amount is invalid.</string>
-    <string name="err_please_select_category">Please select category.</string>
-    <string name="err_please_enter_amount">Please enter amount.</string>
-    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
-    <string name="err_memo_empty">Search word in Memo is empty.</string>
+    <string name="err_amount_invalid">Tutar geçersiz.</string>
+    <string name="err_please_select_category">Lütfen Kategori seçiniz.</string>
+    <string name="err_please_enter_amount">Lütfen tutarı giriniz.</string>
+    <string name="err_amount_cannot_be_0">Tutar 0 olamaz.</string>
+    <string name="err_max_amount_cannot_be_0">Maksimum Tutar 0 olamaz.</string>
+    <string name="err_memo_empty">Not’taki arama sözcüğü boş.</string>
 
-    <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
-    <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is sorted by Category.</string>
-    <string name="quest_export_this_report_D">Do you want to export this report on Google Drive? It is sorted by Date.</string>
+    <string name="quest_do_you_want_to_delete_item">Bu öğeyi gerçekten silmek istiyor musunuz?</string>
+    <string name="quest_export_this_report_C">Bu raporu Google Drive\'a vermek ister misiniz? Kategori\'ye göre sıralanır.</string>
+    <string name="quest_export_this_report_D">Bu raporu Google Drive\'a vermek ister misiniz? Tarihe göre sıralanır.</string>
 
-    <string name="title_edit_item">Edit item</string>
-    <string name="title_search_result">Search Result</string>
-    <string name="title_search_criteria">Search Criteria:</string>
-    <string name="title_returning_to_monthly_report">Returning to monthly report</string>
+    <string name="title_edit_item">Ögeyi düzenle</string>
+    <string name="title_search_result">Arama sonuçları</string>
+    <string name="title_search_criteria">Arama Kriteri:</string>
+    <string name="title_returning_to_monthly_report">Aylık rapora dönme</string>
 
     <!-- Export -->
-    <string name="select_file">Select file</string>
-    <string name="file_created">File saved on cloud.</string>
-    <string name="file_create_error">Error while trying to create the file. Please try again later.</string>
-    <string name="select_folder">Select a folder</string>
-    <string name="folder_not_selected">No folder selected, canceling uploading.</string>
-    <string name="nothing_to_export">There is nothing to export.</string>
-    <string name="empty_report">Your report is empty.</string>
-    <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
+    <string name="select_file">Dosya Seç</string>
+    <string name="file_created">Bulutta kaydedilen dosya.</string>
+    <string name="file_create_error">Dosyayı oluşturmaya çalışırken hata. Lütfen daha sonra tekrar deneyiniz.</string>
+    <string name="select_folder">Bir klasör seçin</string>
+    <string name="folder_not_selected">Seçili klasör yok, yükleme işlemini iptal ediyor.</string>
+    <string name="nothing_to_export">Verilecek hiçbir şey yok.</string>
+    <string name="empty_report">Raporunuz boş.</string>
+    <string name="tap_anywhere_to_dismiss">Kapatmak için herhangi bir yere dokunun.</string>
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">Genel</string>
 
-    <string name="pref_title_date_format">Date Format</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
-    <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_fraction_digits">Fraction Digits</string>
+    <string name="pref_title_date_format">Tarih Formatı</string>
+    <string name="pref_title_remove_ads">Reklamları kaldırmak</string>
+    <string name="pref_desc_remove_ads">Kakeibo Pro\'ya Yükseltme</string>
+    <string name="pref_title_category">Kategori</string>
+    <string name="pref_title_currency">Para birimi</string>
+    <string name="pref_title_fraction_digits">Kesir Basamağı</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">In-App Data</string>
-    <string name="pref_title_delete_all_items">Delete all items</string>
-    <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
-    <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
+    <string name="pref_header_in_app_data">Uygulama İçi Veriler</string>
+    <string name="pref_title_delete_all_items">Tüm öğeleri sil</string>
+    <string name="pref_desc_delete_all_items">Bu, bu cihaza kaydettiğiniz tüm Kakeibo öğelerini siler. Silmeden önce Google Drive’ınıza dışa aktarmanız önerilir. Devam etmek için evet\'e dokunun.</string>
+    <string name="pref_warn_delete_all_items">Tüm öğeleri gerçekten silmek istiyor musunuz?</string>
+    <string name="pref_msg_all_delete_success">Tüm öğeler başarıyla silindi.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data and Sync</string>
+    <string name="pref_header_data_sync">Veri ve Senkronizasyon</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_sync_frequency">Senkronizasyon frekansı</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -146,18 +146,18 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">Sistem senkronizasyon ayarları</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">Bildirimler</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">Yeni mesaj bildirimleri</string>
 
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_ringtone">Zil</string>
+    <string name="pref_ringtone_silent">Sessiz</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
-    <string name="memo">Memo</string>
-    <string name="amount">Amount</string>
-    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="pref_title_vibrate">Titremek</string>
+    <string name="memo">Muhtıra</string>
+    <string name="amount">Miktar</string>
+    <string name="err_from_date_older">\"Kadar Itibaren\"\'nın \"Tarih Kadar\"\'den küçük olması gerekir.</string>
 </resources>

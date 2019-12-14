@@ -71,7 +71,7 @@
 
     <string name="err_amount_invalid">The Amount is invalid.</string>
     <string name="err_please_select_category">Please select a Category.</string>
-    <string name="err_please_enter_amount">Please enter amount.</string>
+    <string name="err_please_enter_amount">Please enter Amount.</string>
     <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
     <string name="err_memo_empty">Search word in Memo is empty.</string>
