@@ -15,7 +15,7 @@ public class KkbCategory {
     public String es;
     public String fr;
     public String hi;
-    public String in;
+    public String ind;
     public String it;
     public String jp;
     public String ko;
@@ -23,6 +23,8 @@ public class KkbCategory {
     public String pt;
     public String ru;
     public String tr;
+    public String zh_hans;
+    public String zh_hant;
 
     public KkbCategory() {}
 
@@ -93,7 +95,7 @@ public class KkbCategory {
     }
 
     public String getIN() {
-        return in;
+        return ind;
     }
 
     public String getFR() {
@@ -126,5 +128,13 @@ public class KkbCategory {
 
     public String getTR() {
         return tr;
+    }
+
+    public String getZH_Hans() {
+        return zh_hans;
+    }
+
+    public String getZH_Hant() {
+        return zh_hant;
     }
 }

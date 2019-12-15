@@ -8,14 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.PrepDB;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -25,7 +23,7 @@ import static com.kakeibo.db.KkbAppDBAdapter.TABLE_KKBAPP;
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DATABASE_NAME = "kakeibo.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_CREATE_TABLE_KKBAPP =
             "CREATE TABLE " + TABLE_KKBAPP + " (" +
@@ -70,11 +68,32 @@ public class DBHelper extends SQLiteOpenHelper {
                     CategoriesLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     CategoriesLanDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
                     CategoriesLanDBAdapter.COL_NAME + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_EN + " INTEGER DEFAULT 0," +
-                    CategoriesLanDBAdapter.COL_ES + " INTEGER DEFAULT 0," +
-                    CategoriesLanDBAdapter.COL_FR + " INTEGER DEFAULT 0," +
-                    CategoriesLanDBAdapter.COL_IT + " INTEGER DEFAULT 0," +
-                    CategoriesLanDBAdapter.COL_JA + " INTEGER DEFAULT 0," +
+                    CategoriesLanDBAdapter.COL_EN + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_ES + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_FR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_IT + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_JA + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
+    private static final String DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED_1 =
+            "CREATE TABLE " + CategoriesLanDBAdapter.TABLE_CATEGORY_LAN + " (" +
+                    CategoriesLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                    CategoriesLanDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
+                    CategoriesLanDBAdapter.COL_NAME + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_AR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_EN + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_ES + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_FR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_HI + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_IND + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_IT + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_JA + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_KO + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_PL + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_PT + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_RU + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_TR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_ZH_Hans + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_ZH_Hant + " TEXT NOT NULL," +
                     CategoriesLanDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
 
     private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
@@ -101,16 +120,10 @@ public class DBHelper extends SQLiteOpenHelper {
                     ItemsDBAdapter.COL_UPDATE_DATE+" FROM "+ItemsDBAdapter.TABLE_ITEM+"_old;";
     private static final String DATABASE_UPDATE_2_TO_3_4 =
             "DROP TABLE "+ItemsDBAdapter.TABLE_ITEM+"_old;";
-    private static final String DATABASE_ADD_LAN_COLS =
-            "ALTER TABLE " + CategoriesLanDBAdapter.TABLE_CATEGORY_LAN +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_AR + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_HI + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_IN + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_KO + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_PL + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_PT + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_RU + " INTEGER DEFAULT 0;" +
-                    " ADD COLUMN " + CategoriesLanDBAdapter.COL_TR + " INTEGER DEFAULT 0;";
+
+    /*** category lan table adding new languages ***/
+    private static final String DROP_TABLE_CATEGORY_LAN = "DROP TABLE "+CategoriesLanDBAdapter.TABLE_CATEGORY_LAN;
+
 
     private final Context _context;
 
@@ -125,10 +138,12 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(DATABASE_CREATE_TABLE_ITEM);
             db.execSQL(DATABASE_CREATE_TABLE_KKBAPP);
             initKkbAppTable(db, DATABASE_VERSION);
+            /*** added on 2.0.8 ***/
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN);
             PrepDB.initCategoriesTable(db);
-            PrepDB.addLangsToCategoriesTable(db);
+            /*** added on 2.8.6 ***/
+            upgradeVersion7(db);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,20 +171,23 @@ public class DBHelper extends SQLiteOpenHelper {
             initKkbAppTable(db, -1);
         }
         if (oldVersion < 5) {
-        }
-        if (oldVersion < 6) {
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN);
             PrepDB.initCategoriesTable(db);
         }
-        if (oldVersion < 7) {
-            db.execSQL(DATABASE_ADD_LAN_COLS); // todo add  portugese, arabic, maybe russian and chinese
-            PrepDB.addLangsToCategoriesTable(db);
+        if (oldVersion < 6) {
+            upgradeVersion7(db);
         }
 
         itemsDBAdapter.close();
         categoriesDBAdapter.close();
         categoriesLanDBAdapter.close();
+    }
+
+    private void upgradeVersion7(SQLiteDatabase db) {
+        db.execSQL(DROP_TABLE_CATEGORY_LAN);
+        db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED_1);
+        PrepDB.initCategoriesTableRevised(db, DATABASE_VERSION);
     }
 
     private void upgradeVersion3(SQLiteDatabase db) {

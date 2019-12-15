@@ -314,7 +314,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     @Override
     public void onViewToggled(int toggleView) {
         switch (toggleView) {
-            case 0:
+            case 0://todo tabfragment2 error not attached to context
                 txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 txvIncome.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 txvExpenseColon.setBackgroundColor(getResources().getColor(R.color.colorBackground_text));

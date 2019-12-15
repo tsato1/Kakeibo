@@ -20,14 +20,16 @@ public class CategoriesLanDBAdapter extends DBAdapter {
     public static final String COL_ES = "es";
     public static final String COL_FR = "fr";
     public static final String COL_HI = "hi";
+    public static final String COL_IND = "ind";
     public static final String COL_IT = "it";
-    public static final String COL_IN = "in";
     public static final String COL_JA = "ja";
     public static final String COL_KO = "ko";
     public static final String COL_PL = "pl";
     public static final String COL_PT = "pt";
     public static final String COL_RU = "ru";
     public static final String COL_TR = "tr";
+    public static final String COL_ZH_Hans = "Hans";
+    public static final String COL_ZH_Hant = "Hant";
     public static final String COL_SAVED_DATE = "saved_date";
 
     private SQLiteDatabase _db;
@@ -68,7 +70,7 @@ public class CategoriesLanDBAdapter extends DBAdapter {
         values.put(COL_ES, category.getES());
         values.put(COL_FR, category.getFR());
         values.put(COL_HI, category.getHI());
-        values.put(COL_IN, category.getIN());
+        values.put(COL_IND, category.getIN());
         values.put(COL_IT, category.getIT());
         values.put(COL_JA, category.getJA());
         values.put(COL_KO, category.getKO());
@@ -76,6 +78,8 @@ public class CategoriesLanDBAdapter extends DBAdapter {
         values.put(COL_PT, category.getPT());
         values.put(COL_RU, category.getRU());
         values.put(COL_TR, category.getTR());
+        values.put(COL_ZH_Hans, category.getZH_Hans());
+        values.put(COL_ZH_Hant, category.getZH_Hant());
         values.put(COL_SAVED_DATE, category.getSavedDate());
         _db.insertOrThrow(TABLE_CATEGORY_LAN, null, values);
 
