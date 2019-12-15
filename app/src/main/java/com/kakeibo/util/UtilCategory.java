@@ -28,7 +28,6 @@ public class UtilCategory {
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_HI).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_JA).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_KO).getLanguage()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IND).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IT).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_PL).getLanguage()) &&
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_PT).getLanguage()) &&
@@ -36,6 +35,12 @@ public class UtilCategory {
                 !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_TR).getLanguage())) {
             langCode = CategoriesLanDBAdapter.COL_EN;
         }
+        /*** for Indonesian ***/
+        if (!"".equals(langCode) &&
+                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IND).getLanguage())) {
+            langCode = "ind";
+        }
+        /*** for Chinese ***/
         if (!"".equals(langScrt) &&
                 !langScrt.equals(new Locale(CategoriesLanDBAdapter.COL_ZH_Hans).getScript())) {
             langCode = CategoriesLanDBAdapter.COL_ZH_Hans;
