@@ -159,5 +159,5 @@
     <string name="err_from_date_older">\'Dari Tanggal\' harus lebih muda dari \'Ke Tanggal\'.</string>
     <string name="to">Ke</string>
     <string name="no">Tidak</string>
-    <string name="ok">baik</string>
+    <string name="ok">Oke</string>
 </resources>

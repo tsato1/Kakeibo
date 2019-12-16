@@ -69,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*** this part is to handle unexpected crashes ***/
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if (getIntent().getBooleanExtra("crash", false)) {
+            Log.e(TAG, "crashed");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -85,9 +91,7 @@ public class MainActivity extends AppCompatActivity {
         fabStart.setOnClickListener(new ButtonClickListener());
         fabEnd.setOnClickListener(new ButtonClickListener());
         sWeekName = getResources().getStringArray(R.array.week_name);
-
 //        loadAds();
-
         _activity = this;
     }
 
@@ -282,8 +286,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-//            startActivity(new Intent(this, SettingsCompatActivity.class));
+//            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsCompatActivity.class));
             return true;
         }
 

@@ -42,7 +42,7 @@ public class SettingsCompatActivity extends AppCompatActivity
 
         String fragmentName = pref.getFragment();
 
-        Log.d("asdf", fragmentName + " id=" +id);
+        Log.d(TAG, "fragmentName=" + fragmentName + ", id=" +id);
         return true;
     }
 }
