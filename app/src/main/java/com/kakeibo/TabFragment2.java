@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +42,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private Activity _activity;
     private View _view;
     private CoordinatorLayout rootView;
+    private SwipeRefreshLayout srlReload;
     private ImageButton btnPrev, btnNext, btnClose;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance, txvIncomeColon, txvExpenseColon, txvBalanceColon;
@@ -116,6 +120,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
     void findViews(){
         rootView = _view.findViewById(R.id.col_root_fragment2);
+        srlReload = _view.findViewById(R.id.srl_reload);
         btnPrev = _view.findViewById(R.id.btn_prev);
         btnDate = _view.findViewById(R.id.btn_date);
         btnNext = _view.findViewById(R.id.btn_next);
@@ -127,6 +132,12 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         txvExpenseColon = _view.findViewById(R.id.txv_expense_colon);
         txvBalanceColon = _view.findViewById(R.id.txv_balance_colon);
 
+        srlReload.setOnRefreshListener(()-> {
+            new Handler().postDelayed(()-> {
+                srlReload.setRefreshing(false);
+                reset();
+            }, 1000);
+        });
         btnPrev.setOnClickListener(new ButtonClickListener());
         btnDate.setOnClickListener(new ButtonClickListener());
         btnNext.setOnClickListener(new ButtonClickListener());
