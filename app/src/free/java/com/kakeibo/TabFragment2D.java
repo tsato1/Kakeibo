@@ -37,6 +37,7 @@ import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilFiles;
 import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilKeyboard;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -67,7 +68,6 @@ public class TabFragment2D extends Fragment {
     private HashMap<String, List<Item>> hmpChildData;
     private ExpandableListAdapter elaData;
     private ExpandableListView explvData;
-    private Button btnEditDialogCategory;
 
     public static TabFragment2D newInstance(ItemLoadListener itemLoadListener, Query query) {
         TabFragment2D tabFragment2D = new TabFragment2D();
@@ -94,6 +94,12 @@ public class TabFragment2D extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume() called");
         loadItemsOrderByDate(); /*** <- to handle come back from settings ***/
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        UtilKeyboard.hideSoftKeyboard(_activity);
     }
 
     void findViews(){

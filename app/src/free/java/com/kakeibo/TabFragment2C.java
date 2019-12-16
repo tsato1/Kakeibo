@@ -29,6 +29,7 @@ import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilFiles;
+import com.kakeibo.util.UtilKeyboard;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -85,6 +86,12 @@ public class TabFragment2C extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume() called");
         loadItemsOrderByCategory(); /*** <- to handle come back from settings ***/
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        UtilKeyboard.hideSoftKeyboard(mActivity);
     }
 
     @SuppressLint("ClickableViewAccessibility")

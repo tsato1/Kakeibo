@@ -95,6 +95,12 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         adpRecyclerView.notifyDataSetChanged();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        UtilKeyboard.hideSoftKeyboard(_activity);
+    }
+
     private void findViews() {
         viewRoot = _view.findViewById(R.id.col_root_fragment3);
         txvSearchInstruction = _view.findViewById(R.id.txv_inst_search);
@@ -287,20 +293,6 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        // Make sure that we are currently visible
-        if (this.isVisible()) {
-            // If we are becoming invisible, then...
-            if (!isVisibleToUser) {
-                Log.d(TAG, "Not visible anymore.");
-                UtilKeyboard.hideSoftKeyboard(_activity);
-            }
-        }
     }
 
     public void addCriteria() {

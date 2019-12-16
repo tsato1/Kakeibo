@@ -108,6 +108,12 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         reset();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        UtilKeyboard.hideSoftKeyboard(_activity);
+    }
+
     void findViews(){
         rootView = _view.findViewById(R.id.col_root_fragment2);
         btnPrev = _view.findViewById(R.id.btn_prev);

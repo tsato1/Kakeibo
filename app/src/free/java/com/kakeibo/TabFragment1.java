@@ -21,6 +21,7 @@ import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilQuery;
 
 import java.math.BigDecimal;
@@ -76,6 +77,12 @@ public class TabFragment1 extends Fragment {
         Log.d(TAG, "onResume() called");
         btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
         edtAmount.setText("");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        UtilKeyboard.hideSoftKeyboard(_activity);
     }
 
     void findViews(View view)

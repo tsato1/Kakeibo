@@ -36,7 +36,8 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 //todo add and subtract custom categories (discreet categories for income too)
 
-//todo revisit the way queries are created
+//todo check loading items mechanism
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -102,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
         loadSharedPreference();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UtilKeyboard.hideSoftKeyboard(_activity);
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         tabFragment1 = TabFragment1.newInstance();
@@ -120,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 sFragmentPosition = position;
-                UtilKeyboard.hideSoftKeyboard(_activity);
 
                 if (position==0) {
                     fabStart.setVisibility(View.INVISIBLE);
