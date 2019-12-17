@@ -71,8 +71,8 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp">
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
             <TableRow>
                 <Button
                     android:id="@+id/btn_category1"

@@ -95,21 +95,21 @@
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">Genel</string>
+    <string name="general">Genel</string>
 
-    <string name="pref_title_date_format">Tarih Formatı</string>
-    <string name="pref_title_remove_ads">Reklamları kaldırmak</string>
+    <string name="date_format">Tarih Formatı</string>
+    <string name="remove_ads">Reklamları kaldırmak</string>
     <string name="pref_desc_remove_ads">Kakeibo Pro\'ya Yükseltme</string>
     <string name="pref_title_category">Kategori</string>
     <string name="pref_title_currency">Para birimi</string>
-    <string name="pref_title_fraction_digits">Kesir Basamağı</string>
+    <string name="fraction_digits">Kesir Basamağı</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">Uygulama İçi Veriler</string>
-    <string name="pref_title_delete_all_items">Tüm öğeleri sil</string>
-    <string name="pref_desc_delete_all_items">Bu, bu cihaza kaydettiğiniz tüm Kakeibo öğelerini siler. Silmeden önce Google Drive’ınıza dışa aktarmanız önerilir. Devam etmek için evet\'e dokunun.</string>
-    <string name="pref_warn_delete_all_items">Tüm öğeleri gerçekten silmek istiyor musunuz?</string>
-    <string name="pref_msg_all_delete_success">Tüm öğeler başarıyla silindi.</string>
+    <string name="in_app_data">Uygulama İçi Veriler</string>
+    <string name="delete_all_items">Tüm öğeleri sil</string>
+    <string name="desc_delete_all_items">Bu, bu cihaza kaydettiğiniz tüm Kakeibo öğelerini siler. Silmeden önce Google Drive’ınıza dışa aktarmanız önerilir. Devam etmek için evet\'e dokunun.</string>
+    <string name="warn_delete_all_items">Tüm öğeleri gerçekten silmek istiyor musunuz?</string>
+    <string name="msg_all_delete_success">Tüm öğeler başarıyla silindi.</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Veri ve Senkronizasyon</string>

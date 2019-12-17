@@ -293,13 +293,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             myPref.setOnPreferenceClickListener((Preference preference) -> {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                 dialog.setIcon(R.mipmap.ic_mikan);
-                dialog.setTitle(getString(R.string.pref_title_delete_all_items));
-                dialog.setMessage(getString(R.string.pref_desc_delete_all_items));
+                dialog.setTitle(getString(R.string.delete_all_items));
+                dialog.setMessage(getString(R.string.desc_delete_all_items));
                 dialog.setPositiveButton(R.string.ok, (DialogInterface dp, int w) -> {
                     AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
                     confirmation.setIcon(R.drawable.ic_warning_black_24dp);
-                    confirmation.setTitle(getString(R.string.pref_title_delete_all_items));
-                    confirmation.setMessage(getString(R.string.pref_warn_delete_all_items));
+                    confirmation.setTitle(getString(R.string.delete_all_items));
+                    confirmation.setMessage(getString(R.string.warn_delete_all_items));
                     confirmation.setPositiveButton(R.string.ok, (DialogInterface dp2, int which) -> {
                         deleteAllItems();
 
@@ -331,7 +331,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             itemsDbAdapter.open();
 
             if(itemsDbAdapter.deleteAllItems()) {
-                Toast.makeText(getActivity(), getString(R.string.pref_msg_all_delete_success), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.msg_all_delete_success), Toast.LENGTH_SHORT).show();
             }
 
             itemsDbAdapter.close();

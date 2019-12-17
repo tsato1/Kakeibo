@@ -94,21 +94,21 @@
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">генеральный</string>
+    <string name="general">генеральный</string>
 
-    <string name="pref_title_date_format">Формат даты</string>
-    <string name="pref_title_remove_ads">Удалить рекламу</string>
+    <string name="date_format">Формат даты</string>
+    <string name="remove_ads">Удалить рекламу</string>
     <string name="pref_desc_remove_ads">Обновление до Kakeibo Pro</string>
     <string name="pref_title_category">категория</string>
     <string name="pref_title_currency">валюта</string>
-    <string name="pref_title_fraction_digits">Цифры дроби</string>
+    <string name="fraction_digits">Цифры дроби</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">Данные в приложении</string>
-    <string name="pref_title_delete_all_items">Удалить все элементы</string>
-    <string name="pref_desc_delete_all_items">Это удалит все элементы Kakeibo, которые вы сохранили на этом устройстве. Перед удалением рекомендуется выполнить экспорт на Google Диск. Нажмите Да, чтобы продолжить.</string>
-    <string name="pref_warn_delete_all_items">Вы действительно хотите удалить все элементы?</string>
-    <string name="pref_msg_all_delete_success">Все элементы были успешно удалены.</string>
+    <string name="in_app_data">Данные в приложении</string>
+    <string name="delete_all_items">Удалить все элементы</string>
+    <string name="desc_delete_all_items">Это удалит все элементы Kakeibo, которые вы сохранили на этом устройстве. Перед удалением рекомендуется выполнить экспорт на Google Диск. Нажмите Да, чтобы продолжить.</string>
+    <string name="warn_delete_all_items">Вы действительно хотите удалить все элементы?</string>
+    <string name="msg_all_delete_success">Все элементы были успешно удалены.</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Данные и синхронизация</string>

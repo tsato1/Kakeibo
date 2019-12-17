@@ -36,7 +36,11 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 //todo add and subtract custom categories (discreet categories for income too)
 
-//todo check loading items mechanism
+//todo check loading items mechanism = accessing db
+
+//todo expense showing percentage as the fraction of income -> tabfragment2 2c and 2d
+
+//todo expected/unexpected, favorite,
 
 
 public class MainActivity extends AppCompatActivity {

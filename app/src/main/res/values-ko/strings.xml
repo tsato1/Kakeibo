@@ -95,21 +95,21 @@
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">일반</string>
+    <string name="general">일반</string>
 
-    <string name="pref_title_date_format">날짜 형식</string>
-    <string name="pref_title_remove_ads">광고를 제거하다</string>
+    <string name="date_format">날짜 형식</string>
+    <string name="remove_ads">광고를 제거하다</string>
     <string name="pref_desc_remove_ads">Kakeibo Pro로 업그레이드</string>
     <string name="pref_title_category">범주</string>
     <string name="pref_title_currency">통화</string>
-    <string name="pref_title_fraction_digits">분수 자리</string>
+    <string name="fraction_digits">분수 자리</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">인앱 데이터</string>
-    <string name="pref_title_delete_all_items">모든 항목 삭제</string>
-    <string name="pref_desc_delete_all_items">이 장치에 저장 한 모든 Kakeibo 항목이 삭제됩니다. 삭제하기 전에 Google 드라이브로 내보내는 것이 좋습니다. 계속하려면 예를 누르십시오.</string>
-    <string name="pref_warn_delete_all_items">정말로 모든 항목을 삭제 하시겠습니까?</string>
-    <string name="pref_msg_all_delete_success">모든 항목이 성공적으로 삭제되었습니다.</string>
+    <string name="in_app_data">인앱 데이터</string>
+    <string name="delete_all_items">모든 항목 삭제</string>
+    <string name="desc_delete_all_items">이 장치에 저장 한 모든 Kakeibo 항목이 삭제됩니다. 삭제하기 전에 Google 드라이브로 내보내는 것이 좋습니다. 계속하려면 예를 누르십시오.</string>
+    <string name="warn_delete_all_items">정말로 모든 항목을 삭제 하시겠습니까?</string>
+    <string name="msg_all_delete_success">모든 항목이 성공적으로 삭제되었습니다.</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">데이터 및 동기화</string>

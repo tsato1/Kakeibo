@@ -94,21 +94,21 @@
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">Generał</string>
+    <string name="general">Generał</string>
 
-    <string name="pref_title_date_format">Format daty</string>
-    <string name="pref_title_remove_ads">Usuń reklamy</string>
+    <string name="date_format">Format daty</string>
+    <string name="remove_ads">Usuń reklamy</string>
     <string name="pref_desc_remove_ads">Uaktualnij do Kakeibo Pro</string>
     <string name="pref_title_category">Kategoria</string>
     <string name="pref_title_currency">Waluta</string>
-    <string name="pref_title_fraction_digits">Cyfry ułamkowe</string>
+    <string name="fraction_digits">Cyfry ułamkowe</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">Dane w aplikacji</string>
-    <string name="pref_title_delete_all_items">Usuń wszystkie elementy</string>
-    <string name="pref_desc_delete_all_items">"Spowoduje to usunięcie wszystkich elementów Kakeibo zapisanych na tym urządzeniu. Przed usunięciem zalecamy eksport na dysk Google. Stuknij tak, aby kontynuować. "</string>
-    <string name="pref_warn_delete_all_items">Czy na pewno chcesz usunąć wszystkie elementy?</string>
-    <string name="pref_msg_all_delete_success">Wszystkie elementy zostały pomyślnie usunięte.</string>
+    <string name="in_app_data">Dane w aplikacji</string>
+    <string name="delete_all_items">Usuń wszystkie elementy</string>
+    <string name="desc_delete_all_items">"Spowoduje to usunięcie wszystkich elementów Kakeibo zapisanych na tym urządzeniu. Przed usunięciem zalecamy eksport na dysk Google. Stuknij tak, aby kontynuować. "</string>
+    <string name="warn_delete_all_items">Czy na pewno chcesz usunąć wszystkie elementy?</string>
+    <string name="msg_all_delete_success">Wszystkie elementy zostały pomyślnie usunięte.</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Dane i synchronizacja</string>

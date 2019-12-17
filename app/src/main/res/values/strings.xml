@@ -97,25 +97,24 @@
 
     <!-- Settings -->
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_date_format">Date Format</string>
-    <string name="pref_title_remove_ads">Remove Ads</string>
+    <string name="general">General</string>
+    <string name="date_format">Date Format</string>
+    <string name="remove_ads">Remove Ads</string>
     <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_fraction_digits">Fraction Digits</string>
+    <string name="fraction_digits">Fraction Digits</string>
+    <string name="categories">Categories</string>
 
     <!-- Setting for in-app data -->
-    <string name="pref_header_in_app_data">In-App Data</string>
-    <string name="pref_title_delete_all_items">Delete all items</string>
-    <string name="pref_desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
-    <string name="pref_warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="pref_msg_all_delete_success">All the items were successfully deleted.</string>
+    <string name="in_app_data">In-App Data</string>
+    <string name="delete_all_items">Delete all items</string>
+    <string name="desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
+    <string name="warn_delete_all_items">Do you really want to delete all items?</string>
+    <string name="msg_all_delete_success">All the items were successfully deleted.</string>
 
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
     <string name="pref_key_fraction_digits" translatable="false">pref_key_fraction_digits</string>
     <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
+    <string name="pref_key_categories" translatable="false">pref_key_categories</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data and Sync</string>

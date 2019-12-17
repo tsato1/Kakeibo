@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="week_name">
-        <item>日</item>
-        <item>月</item>
-        <item>火</item>
-        <item>水</item>
-        <item>木</item>
-        <item>金</item>
-        <item>土</item>
+        <item>Min</item>
+        <item>Sen</item>
+        <item>Sel</item>
+        <item>Rab</item>
+        <item>Kam</item>
+        <item>Jum</item>
+        <item>Sab</item>
     </string-array>
 
 <!--    <string-array name="default_category">-->
