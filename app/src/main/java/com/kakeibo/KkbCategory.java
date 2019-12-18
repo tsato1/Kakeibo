@@ -1,47 +1,32 @@
 package com.kakeibo;
 
 public class KkbCategory {
-    public int code;
-    public String name;
-    public int color;
-    public int drawable;
-    public int location;
-    public int subCategories;
-    public String description;
-    public String savedDate;
-
-    public String ar;
-    public String en;
-    public String es;
-    public String fr;
-    public String hi;
-    public String ind;
-    public String it;
-    public String jp;
-    public String ko;
-    public String pl;
-    public String pt;
-    public String ru;
-    public String tr;
-    public String zh_hans;
-    public String zh_hant;
-
-    public KkbCategory() {}
+    private int code;
+    private String name;
+    private int color;
+    private int significance;
+    private int drawable;
+    private int location;
+    private int parent;
+    private String description;
+    private String savedDate;
 
     public KkbCategory(int code,
                        String name,
                        int color,
+                       int significance,
                        int drawable,
                        int location,
-                       int subCategories,
+                       int parent,
                        String description,
                        String savedDate) {
         this.code = code;
         this.name = name;
         this.color = color;
+        this.significance = significance;
         this.drawable = drawable;
         this.location = location;
-        this.subCategories = subCategories;
+        this.parent = parent;
         this.description = description;
         this.savedDate = savedDate;
     }
@@ -54,9 +39,9 @@ public class KkbCategory {
         return name;
     }
 
-    public int getColor() {
-        return color;
-    }
+    public int getColor() { return color; }
+
+    public int getSignificance() { return significance; }
 
     public int getDrawable() {
         return drawable;
@@ -66,8 +51,8 @@ public class KkbCategory {
         return location;
     }
 
-    public int getSubCategories() {
-        return subCategories;
+    public int getParent() {
+        return parent;
     }
 
     public String getDescription() {
@@ -76,65 +61,5 @@ public class KkbCategory {
 
     public String getSavedDate() {
         return savedDate;
-    }
-
-    public String getAR() {
-        return ar;
-    }
-
-    public String getEN() {
-        return en;
-    }
-
-    public String getES() {
-        return es;
-    }
-
-    public String getIT() {
-        return it;
-    }
-
-    public String getIN() {
-        return ind;
-    }
-
-    public String getFR() {
-        return fr;
-    }
-
-    public String getHI() {
-        return hi;
-    }
-
-    public String getJA() {
-        return jp;
-    }
-
-    public String getKO() {
-        return ko;
-    }
-
-    public String getPL() {
-        return pl;
-    }
-
-    public String getPT() {
-        return pt;
-    }
-
-    public String getRU() {
-        return ru;
-    }
-
-    public String getTR() {
-        return tr;
-    }
-
-    public String getZH_Hans() {
-        return zh_hans;
-    }
-
-    public String getZH_Hant() {
-        return zh_hant;
     }
 }

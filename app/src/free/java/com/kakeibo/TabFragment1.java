@@ -2,7 +2,6 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.database.Cursor;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
@@ -109,35 +107,15 @@ public class TabFragment1 extends Fragment {
         btnsCategory.add(view.findViewById(R.id.btn_category15));
         btnsCategory.add(view.findViewById(R.id.btn_category16));
 
-        CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
-        categoriesDBAdapter.open();
-        Cursor c = categoriesDBAdapter.getParentCategories();
-        kkbCategoriesList = new ArrayList<>();
-        /*** ordered by location ***/
-        if (c!=null && c.moveToFirst()) {
-            int i = 0;
-            do {
-                KkbCategory kkbCategory = new KkbCategory(
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
-                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
-                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
-                        c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
-                );
-                kkbCategoriesList.add(kkbCategory);
-                btnsCategory.get(i).setText(UtilCategory.getCategoryStrFromCode(getContext(), kkbCategory.getCode()));
-                btnsCategory.get(i).setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        kkbCategory.getDrawable(),
-                        0,
-                        0);
-                i++;
-            } while (c.moveToNext());
+        kkbCategoriesList = UtilCategory.getDspKkbCategoryList(_activity);
+        for (int i =0; i<UtilCategory.numCategories; i++) {
+            btnsCategory.get(i).setText(kkbCategoriesList.get(i).getName());
+            btnsCategory.get(i).setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    kkbCategoriesList.get(i).getDrawable(),
+                    0,
+                    0);
         }
-        categoriesDBAdapter.close();
 
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);

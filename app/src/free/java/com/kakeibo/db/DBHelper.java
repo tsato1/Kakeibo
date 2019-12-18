@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.kakeibo.R;
-import com.kakeibo.util.PrepDB;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
 
@@ -40,7 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /*** items table ***/
     private static final String DATABASE_CREATE_TABLE_ITEM =
-            "CREATE TABLE " + ItemsDBAdapter.TABLE_ITEM + " ("+
+            "CREATE TABLE " + ItemsDBAdapter.TABLE_NAME + " ("+
                     ItemsDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     ItemsDBAdapter.COL_AMOUNT + " INTEGER DEFAULT 0," +
                     ItemsDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '"+UtilCurrency.CURRENCY_OLD+"', " +
@@ -51,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /*** category table ***/
     private static final String DATABASE_CREATE_TABLE_CATEGORY =
-            "CREATE TABLE " + CategoriesDBAdapter.TABLE_CATEGORY + " (" +
+            "CREATE TABLE " + CategoriesDBAdapter.TABLE_NAME + " (" +
                     CategoriesDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     CategoriesDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
                     CategoriesDBAdapter.COL_NAME + " TEXT NOT NULL," +
@@ -61,10 +60,23 @@ public class DBHelper extends SQLiteOpenHelper {
                     CategoriesDBAdapter.COL_SUB_CATEGORIES + " INTEGER DEFAULT 0," +
                     CategoriesDBAdapter.COL_DESC + " TEXT NOT NULL," +
                     CategoriesDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
-
+    private static final String DATABASE_CREATE_TABLE_CATEGORY_REVISED =
+            "CREATE TABLE " + CategoriesDBAdapter.TABLE_NAME + " (" +
+                    CategoriesDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                    CategoriesDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_COLOR + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_SIGNIFICANCE + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_DRAWABLE + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_LOCATION + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_PARENT + " INTEGER DEFAULT -1," +
+                    CategoriesDBAdapter.COL_DESC + " TEXT NOT NULL," +
+                    CategoriesDBAdapter.COL_VAL1 + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_VAL2 + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_VAL3 + " INTEGER DEFAULT 0," +
+                    CategoriesDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
     /*** category lan table ***/
     private static final String DATABASE_CREATE_TABLE_CATEGORY_LAN =
-            "CREATE TABLE " + CategoriesLanDBAdapter.TABLE_CATEGORY_LAN + " (" +
+            "CREATE TABLE " + CategoriesLanDBAdapter.TABLE_NAME + " (" +
                     CategoriesLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     CategoriesLanDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
                     CategoriesLanDBAdapter.COL_NAME + " TEXT NOT NULL," +
@@ -74,36 +86,41 @@ public class DBHelper extends SQLiteOpenHelper {
                     CategoriesLanDBAdapter.COL_IT + " TEXT NOT NULL," +
                     CategoriesLanDBAdapter.COL_JA + " TEXT NOT NULL," +
                     CategoriesLanDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
-    private static final String DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED_1 =
-            "CREATE TABLE " + CategoriesLanDBAdapter.TABLE_CATEGORY_LAN + " (" +
+    private static final String DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED =
+            "CREATE TABLE " + CategoriesLanDBAdapter.TABLE_NAME + " (" +
                     CategoriesLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     CategoriesLanDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
-                    CategoriesLanDBAdapter.COL_NAME + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_AR + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_EN + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_ES + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_FR + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_HI + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_ARA + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_ENG + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_SPA + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_FRA + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_HIN + " TEXT NOT NULL," +
                     CategoriesLanDBAdapter.COL_IND + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_IT + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_JA + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_KO + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_PL + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_PT + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_RU + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_TR + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_ZH_Hans + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_ZH_Hant + " TEXT NOT NULL," +
-                    CategoriesLanDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);";
+                    CategoriesLanDBAdapter.COL_ITA + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_JPN + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_KOR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_POL + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_POR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_RUS + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_TUR + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_Hans + " TEXT NOT NULL," +
+                    CategoriesLanDBAdapter.COL_Hant + " TEXT NOT NULL);";
 
-    private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
+    /*** category display table ***/
+    private static final String DATABASE_CREATE_TABLE_CATEGORY_DSP =
+            "CREATE TABLE " + CategoriesDspDBAdapter.TABLE_NAME + " (" +
+                    CategoriesDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                    CategoriesDspDBAdapter.COL_LOCATION + " INTEGER DEFAULT 0," +
+                    CategoriesDspDBAdapter.COL_CODE + " INTEGER DEFAULT 0);";
+
+    private static final String DATABASE_UPDATE_1_TO_2 = "ALTER TABLE " + ItemsDBAdapter.TABLE_NAME +
             " ADD COLUMN " + ItemsDBAdapter.COL_CATEGORY_CODE + " INTEGER DEFAULT 0;";
-    private static final String DATABASE_UPDATE_2_TO_3_1 = "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM +
+    private static final String DATABASE_UPDATE_2_TO_3_1 = "ALTER TABLE " + ItemsDBAdapter.TABLE_NAME +
             " ADD COLUMN " + ItemsDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';";
     private static final String DATABASE_UPDATE_2_TO_3_2 =
-            "ALTER TABLE " + ItemsDBAdapter.TABLE_ITEM + " RENAME TO " + ItemsDBAdapter.TABLE_ITEM + "_old;";
+            "ALTER TABLE " + ItemsDBAdapter.TABLE_NAME + " RENAME TO " + ItemsDBAdapter.TABLE_NAME + "_old;";
     private static final String DATABASE_UPDATE_2_TO_3_3 =
-            "INSERT INTO " + ItemsDBAdapter.TABLE_ITEM +
+            "INSERT INTO " + ItemsDBAdapter.TABLE_NAME +
                     " (" +
                     ItemsDBAdapter.COL_ID+","+
                     ItemsDBAdapter.COL_AMOUNT+","+
@@ -117,12 +134,13 @@ public class DBHelper extends SQLiteOpenHelper {
                     ItemsDBAdapter.COL_CATEGORY_CODE+","+
                     ItemsDBAdapter.COL_MEMO+","+
                     ItemsDBAdapter.COL_EVENT_DATE+","+
-                    ItemsDBAdapter.COL_UPDATE_DATE+" FROM "+ItemsDBAdapter.TABLE_ITEM+"_old;";
+                    ItemsDBAdapter.COL_UPDATE_DATE+" FROM "+ItemsDBAdapter.TABLE_NAME +"_old;";
     private static final String DATABASE_UPDATE_2_TO_3_4 =
-            "DROP TABLE "+ItemsDBAdapter.TABLE_ITEM+"_old;";
+            "DROP TABLE "+ItemsDBAdapter.TABLE_NAME +"_old;";
 
-    /*** category lan table adding new languages ***/
-    private static final String DROP_TABLE_CATEGORY_LAN = "DROP TABLE "+CategoriesLanDBAdapter.TABLE_CATEGORY_LAN;
+    /*** category and category_lan table revision ***/
+    private static final String DROP_TABLE_CATEGORY = "DROP TABLE "+CategoriesDBAdapter.TABLE_NAME;
+    private static final String DROP_TABLE_CATEGORY_LAN = "DROP TABLE "+CategoriesLanDBAdapter.TABLE_NAME;
 
 
     private final Context _context;
@@ -185,15 +203,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeVersion7(SQLiteDatabase db) {
+        db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_DSP);
+        db.execSQL(DROP_TABLE_CATEGORY);
         db.execSQL(DROP_TABLE_CATEGORY_LAN);
-        db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED_1);
+        db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_REVISED);
+        db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED);
         PrepDB.initCategoriesTableRevised(db, DATABASE_VERSION);
     }
 
     private void upgradeVersion3(SQLiteDatabase db) {
         db.execSQL(DATABASE_UPDATE_2_TO_3_1);
 
-        Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM, new String[]{
+        Cursor c = db.query(ItemsDBAdapter.TABLE_NAME, new String[]{
                         ItemsDBAdapter.COL_ID,
                         ItemsDBAdapter.COL_AMOUNT,
                         ItemsDBAdapter.COL_EVENT_D,
@@ -223,7 +244,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 values.put(ItemsDBAdapter.COL_AMOUNT, newAmount*1000);
 
                 /*** reflecting the result to db ***/
-                db.update(ItemsDBAdapter.TABLE_ITEM, values,
+                db.update(ItemsDBAdapter.TABLE_NAME, values,
                         ItemsDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
             } while (c.moveToNext());
         }
@@ -239,7 +260,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private void upgradeVersion2(SQLiteDatabase db) {
         db.execSQL(DATABASE_UPDATE_1_TO_2);
 
-        Cursor c = db.query(ItemsDBAdapter.TABLE_ITEM,
+        Cursor c = db.query(ItemsDBAdapter.TABLE_NAME,
                 new String[]{ItemsDBAdapter.COL_ID, ItemsDBAdapter.COL_CATEGORY} ,
                 null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -259,7 +280,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
 
                 values.put(ItemsDBAdapter.COL_CATEGORY_CODE, catCode);
-                db.update(ItemsDBAdapter.TABLE_ITEM, values,
+                db.update(ItemsDBAdapter.TABLE_NAME, values,
                         ItemsDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
             } while (c.moveToNext());
         }

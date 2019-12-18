@@ -135,7 +135,7 @@ public class TabFragment2D extends Fragment {
             TextView txvMemo = layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = layout.findViewById(R.id.txv_detail_registration);
 
-            String categoryText = getString(R.string.category_colon) + UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
+            String categoryText = getString(R.string.category_colon) + UtilCategory.getCategory(getContext(), item.getCategoryCode());
             txvCategory.setText(categoryText);
             SpannableString span1, span2;
             if (item.getCategoryCode() <= 0) {
@@ -241,32 +241,12 @@ public class TabFragment2D extends Fragment {
                 });
                 /*** category ***/
                 Button btnCategory = layout.findViewById(R.id.btn_category);
-                String categoryText = UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode());
+                String categoryText = UtilCategory.getCategory(getContext(), item.getCategoryCode());
                 btnCategory.setText(categoryText);
                 btnCategory.setHint(""+item.getCategoryCode());
                 btnCategory.setOnClickListener((View v2) -> {
-                    CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
-                    categoriesDBAdapter.open();
-                    Cursor c = categoriesDBAdapter.getParentCategories();
-                    List<KkbCategory> kkbCategoriesList = new ArrayList<>();
                     /*** ordered by location ***/
-                    if (c!=null && c.moveToFirst()) {
-                        do {
-                            KkbCategory kkbCategory = new KkbCategory(
-                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
-                                    c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_NAME)),
-                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_COLOR)),
-                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
-                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
-                                    c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_SUB_CATEGORIES)),
-                                    c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_DESC)),
-                                    c.getString(c.getColumnIndex(CategoriesDBAdapter.COL_SAVED_DATE))
-                            );
-                            kkbCategoriesList.add(kkbCategory);
-                        } while (c.moveToNext());
-                    }
-                    categoriesDBAdapter.close();
-
+                    List<KkbCategory> kkbCategoriesList = UtilCategory.getAllKkbCategoryList(_activity);
                     DialogCategoryListAdapter adapter =
                             new DialogCategoryListAdapter(_activity, 0, kkbCategoriesList);
                     androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_activity);
@@ -281,7 +261,7 @@ public class TabFragment2D extends Fragment {
                     Dialog dialog = builder.show();
                     lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
                         int selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
-                        btnCategory.setText(UtilCategory.getCategoryStrFromCode(_activity, selectedCategoryCode));
+                        btnCategory.setText(UtilCategory.getCategory(_activity, selectedCategoryCode));
                         btnCategory.setHint(""+selectedCategoryCode);
                         dialog.dismiss();
                     });
@@ -393,7 +373,7 @@ public class TabFragment2D extends Fragment {
 
             do {
                 if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
-                    lstDateHeader.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator
+                    lstDateHeader.add(eventDate.replace('-', ',') + "," + balanceDay); // comma is deliminator
                     hmpChildData.put(lstDateHeader.get(sameDateCounter), tmpItemList); // set the header of the old day
                     balanceDay = BigDecimal.valueOf(0);
                     /*** change of the date ***/
@@ -425,7 +405,7 @@ public class TabFragment2D extends Fragment {
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());
                 _stringBuilder.append(",");
-                _stringBuilder.append(UtilCategory.getCategoryStrFromCode(getContext(), item.getCategoryCode()));
+                _stringBuilder.append(UtilCategory.getCategory(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getMemo());
                 _stringBuilder.append(",");
@@ -435,8 +415,7 @@ public class TabFragment2D extends Fragment {
                 tmpItemList.add(item);
             } while (c.moveToNext());
 
-            lstDateHeader.add(eventDate.replace('-', ',')
-                    + "," + String.valueOf(balanceDay)); // set what to show on the header
+            lstDateHeader.add(eventDate.replace('-', ',') + "," + balanceDay); // set what to show on the header
             hmpChildData.put(lstDateHeader.get(sameDateCounter), tmpItemList);
         }
 
@@ -450,7 +429,7 @@ public class TabFragment2D extends Fragment {
         _itemLoadListener.onItemsLoaded(balance);
     }
 
-    public void focusOnSavedItem(String eventDate) {
+    void focusOnSavedItem(String eventDate) {
         Log.d(TAG, "focusOnSavedItem() " + eventDate);
         int m = Integer.parseInt(eventDate.split("-")[1]);
         int d = Integer.parseInt(eventDate.split("-")[2]);

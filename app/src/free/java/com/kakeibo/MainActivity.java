@@ -24,8 +24,10 @@ import android.view.View;
 import com.kakeibo.settings.SettingsActivity;
 
 import com.kakeibo.settings.SettingsCompatActivity;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilKeyboard;
+import com.kakeibo.util.UtilSystem;
 
 import java.util.ArrayList;
 import java.util.Currency;
@@ -35,10 +37,9 @@ import java.util.Locale;
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 //todo add and subtract custom categories (discreet categories for income too)
-
-//todo check loading items mechanism = accessing db
-
 //todo expense showing percentage as the fraction of income -> tabfragment2 2c and 2d
+
+//todo bug for arabic check query some arabic languages in the date part
 
 //todo expected/unexpected, favorite,
 
@@ -73,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*** loading categories from db ***/
+        if (UtilSystem.isLangChanged(this)) {
+            UtilCategory.resetCategoryLists(this);
+        }
 
         /*** this part is to handle unexpected crashes ***/
         Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));

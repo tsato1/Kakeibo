@@ -57,8 +57,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         txvEventDate.setText(eventDateText);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
-        String categoryText = categoryColon +
-                UtilCategory.getCategoryStrFromCode(_context, item.getCategoryCode());
+        String categoryText = categoryColon + UtilCategory.getCategory(_context, item.getCategoryCode());
         txvCategory.setText(categoryText);
 
         TextView txvAmount = v.findViewById(R.id.txv_amount);

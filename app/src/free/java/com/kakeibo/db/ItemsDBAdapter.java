@@ -13,7 +13,7 @@ import java.util.Calendar;
 
 public class ItemsDBAdapter extends DBAdapter {
     private static final String TAG = ItemsDBAdapter.class.getSimpleName();
-    public static final String TABLE_ITEM = "items";
+    public static final String TABLE_NAME = "items";
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNT = "amount";
     public static final String COL_CURRENCY_CODE = "currency_code";
@@ -41,18 +41,18 @@ public class ItemsDBAdapter extends DBAdapter {
 
     public boolean deleteItem(int id)
     {
-        return _db.delete(TABLE_ITEM, COL_ID + "=" + id, null) > 0;
+        return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
     }
 
     public boolean deleteAllItems()
     {
-        return _db.delete(TABLE_ITEM, null, null) > 0;
+        return _db.delete(TABLE_NAME, null, null) > 0;
     }
 
     public Cursor getAllItemsInMonth (String y, String m)
     {
         String ym = "\'" + y + "-" + m + "\'";
-        String query = "SELECT * FROM " + TABLE_ITEM +
+        String query = "SELECT * FROM " + TABLE_NAME +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " ORDER BY " + COL_EVENT_DATE;
         return _db.rawQuery(query, new String[]{});
@@ -61,7 +61,7 @@ public class ItemsDBAdapter extends DBAdapter {
     public Cursor getCountAllItemsInMonth (String y, String m)
     {
         String ym = "\'" + y + "-" + m + "\'";
-        String query = "SELECT COUNT(*) FROM " + TABLE_ITEM +
+        String query = "SELECT COUNT(*) FROM " + TABLE_NAME +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " ORDER BY " + COL_EVENT_DATE;
         return _db.rawQuery(query, new String[]{});
@@ -69,7 +69,7 @@ public class ItemsDBAdapter extends DBAdapter {
 
     public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
         String ym = "'" + y + "-" + m + "'";
-        String query = "SELECT * FROM " + TABLE_ITEM +
+        String query = "SELECT * FROM " + TABLE_NAME +
                 " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
                 " AND " + COL_CATEGORY_CODE + " = ? " +
                 " ORDER BY " + COL_EVENT_DATE;
@@ -108,6 +108,6 @@ public class ItemsDBAdapter extends DBAdapter {
         values.put(COL_MEMO, item.getMemo());
         values.put(COL_EVENT_DATE, item.getEventDate());
         values.put(COL_UPDATE_DATE, item.getUpdateDate());
-        _db.insertOrThrow(TABLE_ITEM, null, values);
+        _db.insertOrThrow(TABLE_NAME, null, values);
     }
 }
