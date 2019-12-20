@@ -88,9 +88,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         /*** preparing fragment in detail view ***/
         _cfmDetail = getChildFragmentManager();
         _ftrDetail = _cfmDetail.beginTransaction();
-        if (_tabFragment2D == null) { //todo maybe wrong: this is to cope with loading expandableListView twice overlayered
-            _tabFragment2D = TabFragment2D.newInstance(this, _query);
-        }
+        _tabFragment2D = TabFragment2D.newInstance(this, _query);
         _ftrDetail.add(R.id.frl_tab2_container, _tabFragment2D);
         _ftrDetail.addToBackStack(null);
         _ftrDetail.commit();
@@ -298,9 +296,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         reset();
 
         _ftrDetail = _cfmDetail.beginTransaction();
-        if (_tabFragment2D==null) { //todo maybe wrong: this is to cope with loading expandableListView twice overlayered
-            _tabFragment2D = TabFragment2D.newInstance(this, query);
-        }
+        _tabFragment2D = TabFragment2D.newInstance(this, query);
         _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
         _ftrDetail.addToBackStack(null);
         _ftrDetail.commit();
@@ -311,9 +307,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         reset();
 
         _ftrDetail = _cfmDetail.beginTransaction();
-        if (_tabFragment2D==null) { //todo maybe wrong: this is to cope with loading expandableListView twice overlayered
-            _tabFragment2D = TabFragment2D.newInstance(this, query);
-        }
+        _tabFragment2D = TabFragment2D.newInstance(this, query);
         _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
         _ftrDetail.addToBackStack(null);
         _ftrDetail.commit();
@@ -335,7 +329,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     @Override
-    public void onViewToggled(int toggleView) {
+    public void onViewToggled(int toggleView) {//todo get rid of toggle and create card views for income and expense and both
         switch (toggleView) {
             case 0://todo tabfragment2 error not attached to context
                 txvIncomeColon.setBackgroundColor(getResources().getColor(R.color.colorBackground));
@@ -369,9 +363,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
             Log.d(TAG, "2c detail fragment is visible");
 
             _ftrDetail = _cfmDetail.beginTransaction();
-            if (_tabFragment2D==null) { //todo maybe wrong: this is to cope with loading expandableListView twice overlayered
-                _tabFragment2D = TabFragment2D.newInstance(TabFragment2.this, _query);
-            }
+            _tabFragment2D = TabFragment2D.newInstance(TabFragment2.this, _query);
             _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D);
             _ftrDetail.addToBackStack(null);
             _ftrDetail.commit();
@@ -386,9 +378,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
             Log.d(TAG, "2d detail fragment is visible");
 
             _ftrDetail = _cfmDetail.beginTransaction();
-            if (_tabFragment2C==null) { //todo maybe wrong: this is to cope with loading expandableListView twice overlayered
-                _tabFragment2C = TabFragment2C.newInstance(TabFragment2.this, _query);
-            }
+            _tabFragment2C = TabFragment2C.newInstance(TabFragment2.this, _query);
             _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2C);
             _ftrDetail.addToBackStack(null);
             _ftrDetail.commit();

@@ -188,7 +188,7 @@ public class TabFragment1 extends Fragment {
 
     void saveItem() {
         Log.d(TAG, "saveItem() called");
-        
+
         ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
 
         String eventDate = UtilDate.convertDateFormat(

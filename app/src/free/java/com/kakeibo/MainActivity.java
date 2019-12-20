@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void onItemSaved(Query query, String eventDate) {
+        Log.d(TAG, "onItemSaved() queryD="+query.getQueryD());
         try {
             tabFragment2.focusOnSavedItem(query, eventDate);
         } catch (Exception e) {
@@ -277,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSearch(Query query, String fromDate, String toDate) {
+        Log.d(TAG, "onSearch() queryD="+query.getQueryD());
         try {
             tabFragment2.onSearch(query, fromDate, toDate);
         } catch (Exception e) {
