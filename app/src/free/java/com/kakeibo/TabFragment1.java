@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -25,7 +27,6 @@ import com.kakeibo.util.UtilQuery;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -43,13 +44,12 @@ public class TabFragment1 extends Fragment {
     private Button btnDate;
     private EditText edtAmount;
     private EditText edtMemo;
-    private ArrayList<Button> btnsCategory;
+    private GridView grvCategories;
 
     private static Query _query;
     private static String _eventDate;
-    private static String selectedCategory = "";
-    private static int selectedCategoryCode;
-    private static List<KkbCategory> kkbCategoriesList;
+    private static KkbCategory _selectedKkbCategory;
+    private static List<KkbCategory> _kkbCategoryList;
 
     public static TabFragment1 newInstance() {
         TabFragment1 tabFragment1 = new TabFragment1();
@@ -63,6 +63,8 @@ public class TabFragment1 extends Fragment {
         _activity = getActivity();
         View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
+        _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
+
         findViews(view);
         setListeners();
 
@@ -74,7 +76,6 @@ public class TabFragment1 extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume() called");
         btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
-        edtAmount.setText("");
     }
 
     @Override
@@ -89,33 +90,19 @@ public class TabFragment1 extends Fragment {
         btnDate = view.findViewById(R.id.btn_date);
         btnNext = view.findViewById(R.id.btn_next);
 
-        btnsCategory = new ArrayList<>();
-        btnsCategory.add(view.findViewById(R.id.btn_category1));
-        btnsCategory.add(view.findViewById(R.id.btn_category2));
-        btnsCategory.add(view.findViewById(R.id.btn_category3));
-        btnsCategory.add(view.findViewById(R.id.btn_category4));
-        btnsCategory.add(view.findViewById(R.id.btn_category5));
-        btnsCategory.add(view.findViewById(R.id.btn_category6));
-        btnsCategory.add(view.findViewById(R.id.btn_category7));
-        btnsCategory.add(view.findViewById(R.id.btn_category8));
-        btnsCategory.add(view.findViewById(R.id.btn_category9));
-        btnsCategory.add(view.findViewById(R.id.btn_category10));
-        btnsCategory.add(view.findViewById(R.id.btn_category11));
-        btnsCategory.add(view.findViewById(R.id.btn_category12));
-        btnsCategory.add(view.findViewById(R.id.btn_category13));
-        btnsCategory.add(view.findViewById(R.id.btn_category14));
-        btnsCategory.add(view.findViewById(R.id.btn_category15));
-        btnsCategory.add(view.findViewById(R.id.btn_category16));
-
-        kkbCategoriesList = UtilCategory.getDspKkbCategoryList(_activity);
-        for (int i =0; i<UtilCategory.numCategories; i++) {
-            btnsCategory.get(i).setText(kkbCategoriesList.get(i).getName());
-            btnsCategory.get(i).setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    kkbCategoriesList.get(i).getDrawable(),
-                    0,
-                    0);
-        }
+        grvCategories = view.findViewById(R.id.grv_categories);
+        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
+        grvCategories.setAdapter(categoryGridAdapter);
+        grvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                _selectedKkbCategory = _kkbCategoryList.get(position);
+                if (checkBeforeSave()) {
+                    _query = new Query(Query.QUERY_TYPE_NEW);
+                    saveItem();
+                }
+            }
+        });
 
         edtAmount = view.findViewById(R.id.edt_amount);
         edtMemo = view.findViewById(R.id.edt_memo);
@@ -126,9 +113,6 @@ public class TabFragment1 extends Fragment {
         btnDate.setOnClickListener(new DateButtonClickListener());
         btnNext.setOnClickListener(new DateButtonClickListener());
         edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
-        for (int i = 0; i < UtilCategory.numCategories; i++) {
-            btnsCategory.get(i).setOnClickListener(new CategoryButtonClickListener());
-        }
     }
 
     class DateButtonClickListener implements View.OnClickListener {
@@ -176,90 +160,10 @@ public class TabFragment1 extends Fragment {
         }
     }
 
-    class CategoryButtonClickListener implements View.OnClickListener {
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.btn_category1:
-                    selectedCategory = btnsCategory.get(0).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(0).getCode();
-                    break;
-                case R.id.btn_category2:
-                    selectedCategory = btnsCategory.get(1).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(1).getCode();
-                    break;
-                case R.id.btn_category3:
-                    selectedCategory = btnsCategory.get(2).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(2).getCode();
-                    break;
-                case R.id.btn_category4:
-                    selectedCategory = btnsCategory.get(3).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(3).getCode();
-                    break;
-                case R.id.btn_category5:
-                    selectedCategory = btnsCategory.get(4).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(4).getCode();
-                    break;
-                case R.id.btn_category6:
-                    selectedCategory = btnsCategory.get(5).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(5).getCode();
-                    break;
-                case R.id.btn_category7:
-                    selectedCategory = btnsCategory.get(6).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(6).getCode();
-                    break;
-                case R.id.btn_category8:
-                    selectedCategory = btnsCategory.get(7).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(7).getCode();
-                    break;
-                case R.id.btn_category9:
-                    selectedCategory = btnsCategory.get(8).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(8).getCode();
-                    break;
-                case R.id.btn_category10:
-                    selectedCategory = btnsCategory.get(9).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(9).getCode();
-                    break;
-                case R.id.btn_category11:
-                    selectedCategory = btnsCategory.get(10).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(10).getCode();
-                    break;
-                case R.id.btn_category12:
-                    selectedCategory = btnsCategory.get(11).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(11).getCode();
-                    break;
-                case R.id.btn_category13:
-                    selectedCategory = btnsCategory.get(12).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(12).getCode();
-                    break;
-                case R.id.btn_category14:
-                    selectedCategory = btnsCategory.get(13).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(13).getCode();
-                    break;
-                case R.id.btn_category15:
-                    selectedCategory = btnsCategory.get(14).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(14).getCode();
-                    break;
-                case R.id.btn_category16:
-                    selectedCategory = btnsCategory.get(15).getText().toString();
-                    selectedCategoryCode = kkbCategoriesList.get(15).getCode();
-                    break;
-            }
-
-            if (checkBeforeSave()) {
-                _query = new Query(Query.QUERY_TYPE_NEW);
-
-                saveItem();
-                ((MainActivity)_activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
-                ((MainActivity)_activity).onItemSaved(_query, _eventDate);
-                reset();
-            }
-        }
-    }
-
     /*** same functionality is in TabFragment2D too ***/
     boolean checkBeforeSave()
     {
-        if ("".equals(selectedCategory)) {
+        if ("".equals(_selectedKkbCategory.getName())) {
             Toast.makeText(getActivity(), R.string.err_please_select_category, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -282,8 +186,9 @@ public class TabFragment1 extends Fragment {
         return true;
     }
 
-    void saveItem()
-    {
+    void saveItem() {
+        Log.d(TAG, "saveItem() called");
+        
         ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
 
         String eventDate = UtilDate.convertDateFormat(
@@ -296,7 +201,7 @@ public class TabFragment1 extends Fragment {
                 "",
                 new BigDecimal(amount),
                 MainActivity.sFractionDigits,
-                selectedCategoryCode,
+                _selectedKkbCategory.getCode(),
                 edtMemo.getText().toString(),
                 eventDate,
                 updateDate
@@ -319,6 +224,11 @@ public class TabFragment1 extends Fragment {
         _query.setQueryD(UtilQuery.buildQueryD());
 
         _eventDate = eventDate;
+
+        ((MainActivity) _activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
+        ((MainActivity) _activity).onItemSaved(_query, _eventDate);
+
+        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
     }
 
     private void showYMDPickerDialog()
@@ -339,12 +249,5 @@ public class TabFragment1 extends Fragment {
             }
         }, year, month-1, day);
         dialog.show();
-    }
-
-    private void reset()
-    {
-        edtAmount.setText("");
-        edtMemo.setText("");
-        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
     }
 }

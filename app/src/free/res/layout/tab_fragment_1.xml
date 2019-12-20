@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_left_arrow"
+                android:contentDescription="@string/previous"
                 style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_date"
@@ -34,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_right_arrow"
+                android:contentDescription="@string/next"
                 style="?android:attr/buttonBarButtonStyle"/>
         </LinearLayout>
 
@@ -41,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableRow
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp">
+                android:paddingTop="@dimen/table_row_padding_vertical"
+                android:paddingBottom="@dimen/table_row_padding_vertical">
                 <EditText
                     android:id="@+id/edt_amount"
                     android:layout_width="0dp"
@@ -55,8 +61,8 @@
                     android:hint="@string/hint_amount_spent_or_earned"/>
             </TableRow>
             <TableRow
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp">
+                android:paddingTop="@dimen/table_row_padding_vertical"
+                android:paddingBottom="@dimen/table_row_padding_vertical">
                 <EditText
                     android:id="@+id/edt_memo"
                     android:layout_width="0dp"
@@ -64,120 +70,21 @@
                     android:layout_weight="1"
                     android:maxLength="20"
                     android:inputType="text"
+                    android:autofillHints="@string/hint_memo_max_20_characters"
                     android:hint="@string/hint_memo_max_20_characters"/>
             </TableRow>
         </TableLayout>
 
-        <TableLayout
+        <GridView
+            android:id="@+id/grv_categories"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp">
-            <TableRow>
-                <Button
-                    android:id="@+id/btn_category1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-            </TableRow>
-            <TableRow>
-                <Button
-                    android:id="@+id/btn_category5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category6"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category7"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-            </TableRow>
-            <TableRow>
-                <Button
-                    android:id="@+id/btn_category9"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category11"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category12"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-            </TableRow>
-            <TableRow>
-                <Button
-                    android:id="@+id/btn_category13"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category14"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category15"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_category16"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="?android:attr/buttonBarButtonStyle"/>
-            </TableRow>
-        </TableLayout>
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:columnWidth="@dimen/grid_view_column_width"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="@dimen/grid_view_vertical_spacing"
+            android:horizontalSpacing="0dp"
+            android:stretchMode="spacingWidthUniform" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -12,6 +12,12 @@
     <dimen name="tab_height">48dp</dimen>
     <dimen name="dialog_alert_default_padding">18dp</dimen>
 
+    <!-- input fragment -->
+    <dimen name="table_row_padding_vertical">2dp</dimen>
+    <dimen name="padding_bottom_of_category_image">22dp</dimen>
+    <dimen name="grid_view_column_width">80dp</dimen>
+    <dimen name="grid_view_vertical_spacing">4dp</dimen>
+
     <!-- search fragment -->
     <dimen name="search_criteria_1_row_height">20dp</dimen>
     <dimen name="search_criteria_txv_width">80dp</dimen>
