@@ -59,6 +59,13 @@
     <string name="err_please_enter_min_amount">Please enter Min Amount.</string>
     <string name="err_please_enter_max_amount">Please enter Max Amount.</string>
     <string name="err_min_amount_greater">Max Amount has to be greater than Min Amount.</string>
+    <string name="err_amount_invalid">The Amount is invalid.</string>
+    <string name="err_please_select_category">Please select a Category.</string>
+    <string name="err_please_enter_amount">Please enter Amount.</string>
+    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
+    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
+    <string name="err_memo_empty">Search word in Memo is empty.</string>
+    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
@@ -70,13 +77,6 @@
     <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
 
     <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
-
-    <string name="err_amount_invalid">The Amount is invalid.</string>
-    <string name="err_please_select_category">Please select a Category.</string>
-    <string name="err_please_enter_amount">Please enter Amount.</string>
-    <string name="err_amount_cannot_be_0">Amount cannot be 0.</string>
-    <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
-    <string name="err_memo_empty">Search word in Memo is empty.</string>
 
     <string name="quest_do_you_want_to_delete_item">Do you really want to delete this item?</string>
     <string name="quest_export_this_report_C">Do you want to export this report on Google Drive? It is sorted by Category.</string>
@@ -106,18 +106,22 @@
     <string name="date_format">Date Format</string>
     <string name="remove_ads">Remove Ads</string>
     <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
-    <string name="fraction_digits">Fraction Digits</string>
+
     <string name="categories">Categories</string>
 
     <!-- Setting for in-app data -->
     <string name="in_app_data">In-App Data</string>
+    <string name="fraction_digits">Fraction Digits</string>
+    <string name="widget_and_font_size">Widget and Font Size</string>
     <string name="delete_all_items">Delete all items</string>
     <string name="desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
     <string name="msg_all_delete_success">All the items were successfully deleted.</string>
 
+    <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
     <string name="pref_key_fraction_digits" translatable="false">pref_key_fraction_digits</string>
+    <string name="pref_key_widget_and_font_size" translatable="false">pref_key_widget_and_font_size</string>
     <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
     <string name="pref_key_categories" translatable="false">pref_key_categories</string>
 
@@ -154,18 +158,11 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
     <!-- Example settings for Notifications -->
+    <string name="pref_title_system_sync_settings">System sync settings</string>
     <string name="pref_header_notifications">Notifications</string>
-
     <string name="pref_title_new_message_notifications">New message notifications</string>
-
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="err_from_date_older">From Date has to be younger than To Date.</string>
 </resources>

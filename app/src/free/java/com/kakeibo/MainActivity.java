@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public static int sFragmentPosition;
     public static int sDateFormat;
     public static int sFractionDigits;
+    public static int sWidgetFontSize;
     public static String[] sWeekName;
 
 //    private InterstitialAd mInterstitialAd;
@@ -195,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         /*** dateFormat ***/
-        String formatIndex = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
-        sDateFormat = Integer.parseInt(formatIndex);
+        String dateFormatIndex = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
+        sDateFormat = Integer.parseInt(dateFormatIndex);
 
         /*** fraction digits ***/
         Locale locale = Locale.getDefault();
@@ -207,12 +208,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-
-        String digitsIndex = pref.getString(SettingsActivity.PREF_KEY_FRACTION_DIGITS, String.valueOf(defValue));
+        String digitsIndex = pref.getString(getString(R.string.pref_key_fraction_digits), String.valueOf(defValue));
         String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 
-        Log.d(TAG, "sDateFormat: "+sDateFormat+" sFractionDigits: "+sFractionDigits);
+        /*** widget and font size ***/
+        String widgetFontSizeIndex = pref.getString(getString(R.string.pref_key_widget_and_font_size), "1");
+        int sWidgetFontSize = Integer.parseInt(widgetFontSizeIndex);
+
+        Log.d(TAG, "sDateFormat:"+sDateFormat+
+                " sFractionDigits:"+sFractionDigits+
+                " widgetAndFontSize:"+widgetFontSizeIndex);
     }
 
     class ButtonClickListener implements View.OnClickListener {

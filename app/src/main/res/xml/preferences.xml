@@ -21,6 +21,15 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/fraction_digits" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/pref_list_widget_and_font_size"
+            android:entryValues="@array/pref_list_widget_and_font_size_values"
+            android:key="@string/pref_key_widget_and_font_size"
+            android:summary="%s"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/widget_and_font_size" />
     </PreferenceCategory>
 <!--    <PreferenceCategory-->
 <!--        android:title="@string/categories">-->
@@ -42,18 +51,3 @@
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
-
-    <!--    <header-->
-    <!--    android:fragment="com.kakeibo.settings.SettingsActivity$DataSyncPreferenceFragment"-->
-    <!--    android:icon="@drawable/ic_sync_black_24dp"-->
-    <!--    android:title="@string/pref_title_category" />-->
-
-    <!--<header-->
-    <!--android:fragment="com.kakeibo.settings.SettingsActivity$NotificationPreferenceFragment"-->
-    <!--android:icon="@drawable/ic_notifications_black_24dp"-->
-    <!--android:title="@string/pref_header_notifications" />-->
-
-    <!--<header-->
-    <!--android:fragment="com.kakeibo.settings.SettingsActivity$DataSyncPreferenceFragment"-->
-    <!--android:icon="@drawable/ic_sync_black_24dp"-->
-    <!--android:title="@string/pref_header_data_sync" />-->

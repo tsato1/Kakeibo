@@ -19,7 +19,7 @@ import android.view.MenuItem;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.InterstitialAd;
 //import com.google.android.gms.ads.MobileAds;
-import com.kakeibo.settings.SettingsActivity;
+//import com.kakeibo.settings.SettingsActivity;
 
 
 import com.kakeibo.util.UtilCurrency;

@@ -128,7 +128,7 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     public void loadSharedPreference() {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = pref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
+        String f = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
 
         switch (Integer.parseInt(f)) {
             case 1: // MDY

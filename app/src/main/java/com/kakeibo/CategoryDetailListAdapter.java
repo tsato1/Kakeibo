@@ -89,7 +89,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
     private void loadSharedPreference() {
         PreferenceManager.setDefaultValues(_context, R.xml.pref_general, false);
         mPref = PreferenceManager.getDefaultSharedPreferences(_context);
-        String f = mPref.getString(SettingsActivity.PREF_KEY_DATE_FORMAT, UtilDate.DATE_FORMAT_YMD);
+        String f = mPref.getString(_context.getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
         mDateFormat = Integer.parseInt(f);
     }
 }

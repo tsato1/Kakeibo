@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.kakeibo.MainActivity;
-import com.kakeibo.settings.SettingsActivity;
+//import com.kakeibo.settings.SettingsActivity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

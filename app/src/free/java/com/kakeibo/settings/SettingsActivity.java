@@ -43,7 +43,6 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
-    private static final String TAG = SettingsActivity.class.getSimpleName();
     public static final String PREF_KEY_DATE_FORMAT = "pref_key_date_format";
     public static final String PREF_KEY_FRACTION_DIGITS = "pref_key_fraction_digits";
     public static final String PREF_KEY_CATEGORY = "pref_key_category";
@@ -202,8 +201,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
 
-            bindPreferenceSummaryToValue(findPreference(PREF_KEY_DATE_FORMAT));
-            bindPreferenceSummaryToValue(findPreference(PREF_KEY_FRACTION_DIGITS));
         }
 
         @Override
@@ -289,30 +286,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_in_app_data);
             setHasOptionsMenu(true);
 
-            Preference myPref = findPreference(PREF_KEY_DELETE_ALL_DATA);
-            myPref.setOnPreferenceClickListener((Preference preference) -> {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setIcon(R.mipmap.ic_mikan);
-                dialog.setTitle(getString(R.string.delete_all_items));
-                dialog.setMessage(getString(R.string.desc_delete_all_items));
-                dialog.setPositiveButton(R.string.ok, (DialogInterface dp, int w) -> {
-                    AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
-                    confirmation.setIcon(R.drawable.ic_warning_black_24dp);
-                    confirmation.setTitle(getString(R.string.delete_all_items));
-                    confirmation.setMessage(getString(R.string.warn_delete_all_items));
-                    confirmation.setPositiveButton(R.string.ok, (DialogInterface dp2, int which) -> {
-                        deleteAllItems();
-
-                    });
-                    confirmation.setNegativeButton(R.string.cancel, (DialogInterface dn2, int which) -> {
-                    });
-                    confirmation.show();
-                });
-                dialog.setNegativeButton(R.string.cancel, (DialogInterface dn, int which)-> {
-                });
-                dialog.show();
-                return true;
-            });
+//            Preference myPref = findPreference(PREF_KEY_DELETE_ALL_DATA);
+//            myPref.setOnPreferenceClickListener((Preference preference) -> {
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+//                dialog.setIcon(R.mipmap.ic_mikan);
+//                dialog.setTitle(getString(R.string.delete_all_items));
+//                dialog.setMessage(getString(R.string.desc_delete_all_items));
+//                dialog.setPositiveButton(R.string.ok, (DialogInterface dp, int w) -> {
+//                    AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
+//                    confirmation.setIcon(R.drawable.ic_warning_black_24dp);
+//                    confirmation.setTitle(getString(R.string.delete_all_items));
+//                    confirmation.setMessage(getString(R.string.warn_delete_all_items));
+//                    confirmation.setPositiveButton(R.string.ok, (DialogInterface dp2, int which) -> {
+//                        deleteAllItems();
+//
+//                    });
+//                    confirmation.setNegativeButton(R.string.cancel, (DialogInterface dn2, int which) -> {
+//                    });
+//                    confirmation.show();
+//                });
+//                dialog.setNegativeButton(R.string.cancel, (DialogInterface dn, int which)-> {
+//                });
+//                dialog.show();
+//                return true;
+//            });
         }
 
         @Override
