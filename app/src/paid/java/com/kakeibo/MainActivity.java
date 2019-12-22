@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false); //todo remove currency from xml
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false); //todo remove currency from xml
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         /*** dateFormat ***/

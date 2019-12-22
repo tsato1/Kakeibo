@@ -19,7 +19,6 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilDate;
-import com.kakeibo.settings.SettingsActivity;
 import com.kakeibo.util.UtilFiles;
 
 import java.io.OutputStream;
@@ -126,7 +125,7 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     }
 
     public void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String f = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
 

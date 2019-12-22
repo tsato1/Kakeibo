@@ -21,7 +21,6 @@ import android.view.View;
 //import com.google.android.gms.ads.AdListener;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.MobileAds;
-import com.kakeibo.settings.SettingsActivity;
 
 import com.kakeibo.settings.SettingsCompatActivity;
 import com.kakeibo.util.UtilCategory;
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         /*** dateFormat ***/
@@ -310,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-//            startActivity(new Intent(this, SettingsActivity.class));
             startActivity(new Intent(this, SettingsCompatActivity.class));
             return true;
         }

@@ -97,7 +97,7 @@
     <string name="loading">ロード中</string>
     <string name="nothing_to_export">エクスポートするアイテムが見つかりません．</string>
     <string name="empty_report">レポートが空です．</string>
-    <string name="tap_anywhere_to_dismiss">画面をタップしてください．</string>
+    <string name="tap_anywhere_to_dismiss">画面をタップすると接続を中断します．</string>
     <string name="err_max_amount_cannot_be_0">上限金額が０です．</string>
     <string name="msg_no_result_found">検索結果はありません．</string>
     <string name="close">閉じる</string>
