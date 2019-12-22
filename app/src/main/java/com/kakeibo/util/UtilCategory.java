@@ -15,47 +15,48 @@ import java.util.List;
 public class UtilCategory {
     private static String TAG = UtilCategory.class.getSimpleName();
 
-    private static List<String> mAllCategoryStrList = new ArrayList<>(); //key(i)=category code
-    private static List<String> mDspCategoryStrList = new ArrayList<>(); //key(i)=location
-    private static List<KkbCategory> mAllKkbCategoryList = new ArrayList<>();//key(i)=category code
-    private static List<KkbCategory> mDspKkbCategoryList = new ArrayList<>();//key(i)=location
+    private static List<String> sAllCategoryStrList = new ArrayList<>(); //key(i)=category code
+    private static List<String> sDspCategoryStrList = new ArrayList<>(); //key(i)=location
+    private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//key(i)=category code
+    private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//key(i)=location
 
     public static int numCategories = 16;
 
-    public static void resetCategoryLists(Context context) {
+    public static void reloadCategoryLists(Context context) {
         setAllCategoryStrList(context);
         setAllKkbCategoryList(context);
         setDspCategoryStrList(context);
         setDspKkbCategoryList(context);
     }
 
-    public static void setAllCategoryStrList(Context context) {
+    private static void setAllCategoryStrList(Context context) {
         Log.d(TAG, "setAllCategoryStrList() called");
 
         String langCode = UtilSystem.getCurrentLangCode(context);
         Log.d(TAG, "langCode="+langCode);
 
-        mAllCategoryStrList.clear();
+        sAllCategoryStrList.clear();
         CategoriesLanDBAdapter categoriesLanDBAdapter = new CategoriesLanDBAdapter();
         categoriesLanDBAdapter.open();
         Cursor c = categoriesLanDBAdapter.getAllCategoryStrs(langCode);
         if (c!=null && c.moveToFirst()) {
             do {
-                mAllCategoryStrList.add(c.getString(0));
+                sAllCategoryStrList.add(c.getString(0));
             } while (c.moveToNext());
         }
         categoriesLanDBAdapter.close();
     }
-    public static void setDspCategoryStrList(Context context) {
+
+    private static void setDspCategoryStrList(Context context) {
         Log.d(TAG, "setDspCategoryStrList() called");
     }
 
-    public static void setAllKkbCategoryList(Context context) {
+    private static void setAllKkbCategoryList(Context context) {
         Log.d(TAG, "setAllKkbCategoryList() called");
 
         String langCode = UtilSystem.getCurrentLangCode(context);
 
-        mAllKkbCategoryList.clear();
+        sAllKkbCategoryList.clear();
         CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
         categoriesDBAdapter.open();
         Cursor c = categoriesDBAdapter.getAllKkbCategories(langCode);
@@ -71,17 +72,18 @@ public class UtilCategory {
                         c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_PARENT)),
                         "",
                         "");
-                mAllKkbCategoryList.add(kkbCategory);
+                sAllKkbCategoryList.add(kkbCategory);
             } while (c.moveToNext());
         }
         categoriesDBAdapter.close();
     }
-    public static void setDspKkbCategoryList(Context context) {
+
+    private static void setDspKkbCategoryList(Context context) {
         Log.d(TAG, "setDspKkbCategoryList() called");
 
         String langCode = UtilSystem.getCurrentLangCode(context);
 
-        mDspKkbCategoryList.clear();
+        sDspKkbCategoryList.clear();
         CategoriesDspDBAdapter categoriesDspDBAdapter = new CategoriesDspDBAdapter();
         categoriesDspDBAdapter.open();
         Cursor c = categoriesDspDBAdapter.getKkbDspCategories(langCode);
@@ -97,50 +99,51 @@ public class UtilCategory {
                         c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_PARENT)),
                         "",
                         "");
-                mDspKkbCategoryList.add(kkbCategory);
+                sDspKkbCategoryList.add(kkbCategory);
             } while (c.moveToNext());
         }
         categoriesDspDBAdapter.close();
     }
 
-
     /*** category string list ***/
     public static List<String> getAllCategoryStrList(Context context) {
-        if (mAllCategoryStrList !=null && !mAllCategoryStrList.isEmpty()) return mAllCategoryStrList;
+        if (sAllCategoryStrList !=null && !sAllCategoryStrList.isEmpty()) return sAllCategoryStrList;
 
         setAllCategoryStrList(context);
 
-        return mAllCategoryStrList;
+        return sAllCategoryStrList;
     }
+
     public static List<String> getDspCategoryStrList(Context context) {
-        if (mDspCategoryStrList !=null && !mDspCategoryStrList.isEmpty()) return mDspCategoryStrList;
+        if (sDspCategoryStrList !=null && !sDspCategoryStrList.isEmpty()) return sDspCategoryStrList;
 
         setDspCategoryStrList(context);
 
-        return mDspCategoryStrList;
+        return sDspCategoryStrList;
     }
 
     /*** KkbCateogry list ***/
     public static List<KkbCategory> getAllKkbCategoryList(Context context) {
-        if (mAllKkbCategoryList !=null && !mAllKkbCategoryList.isEmpty()) return mAllKkbCategoryList;
+        if (sAllKkbCategoryList !=null && !sAllKkbCategoryList.isEmpty()) return sAllKkbCategoryList;
 
         setAllKkbCategoryList(context);
 
-        return mAllKkbCategoryList;
+        return sAllKkbCategoryList;
     }
+
     public static List<KkbCategory> getDspKkbCategoryList(Context context) {
-        if (mDspKkbCategoryList !=null && !mDspKkbCategoryList.isEmpty()) return mDspKkbCategoryList;
+        if (sDspKkbCategoryList !=null && !sDspKkbCategoryList.isEmpty()) return sDspKkbCategoryList;
 
         setDspKkbCategoryList(context);
 
-        return mDspKkbCategoryList;
+        return sDspKkbCategoryList;
     }
 
     public static String getCategory(Context context, int ctgrCode) {
-        if (mAllCategoryStrList ==null || mAllCategoryStrList.isEmpty()) {
+        if (sAllCategoryStrList ==null || sAllCategoryStrList.isEmpty()) {
             setAllCategoryStrList(context);
         }
 
-        return mAllCategoryStrList.get(ctgrCode);
+        return sAllCategoryStrList.get(ctgrCode);
     }
 }

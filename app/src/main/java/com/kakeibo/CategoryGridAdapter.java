@@ -38,7 +38,7 @@ public class CategoryGridAdapter extends BaseAdapter {
 
         if (convertView==null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(_context);
-            convertView = layoutInflater.inflate(R.layout.category_in_grid, null);
+            convertView = layoutInflater.inflate(R.layout.f1_grid_cell_category, null);
             final ImageView imvCategory = convertView.findViewById(R.id.imv_category);
             final TextView txvCategory = convertView.findViewById(R.id.txv_category);
             final ViewHolder viewHolder = new ViewHolder(imvCategory, txvCategory);

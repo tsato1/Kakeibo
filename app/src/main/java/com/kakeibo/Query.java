@@ -7,10 +7,10 @@ public class Query implements Parcelable {
     static final int QUERY_TYPE_NEW = 0;
     static final int QUERY_TYPE_SEARCH = 1;
 
-    private int type;
-    private String[] queryCs;
-    private String queryC;
-    private String queryD;
+    private static int type;
+    private static String[] queryCs;
+    private static String queryC;
+    private static String queryD;
 
     Query (int type) {
         this.type = type;
@@ -20,11 +20,11 @@ public class Query implements Parcelable {
         return this.type;
     }
 
-    String[] getQueryCs() {
+    public String[] getQueryCs() {
         return queryCs;
     }
 
-    String getQueryC() {
+    public String getQueryC() {
         return queryC;
     }
 

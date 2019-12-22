@@ -51,7 +51,7 @@ public class TabFragment1 extends Fragment {
     private static KkbCategory _selectedKkbCategory;
     private static List<KkbCategory> _kkbCategoryList;
 
-    public static TabFragment1 newInstance() {
+    static TabFragment1 newInstance() {
         TabFragment1 tabFragment1 = new TabFragment1();
         Bundle args = new Bundle();
         tabFragment1.setArguments(args);
@@ -76,6 +76,8 @@ public class TabFragment1 extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume() called");
         btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
+        edtAmount.setText("");
+        edtMemo.setText("");
     }
 
     @Override
@@ -89,6 +91,8 @@ public class TabFragment1 extends Fragment {
         btnPrev = view.findViewById(R.id.btn_prev);
         btnDate = view.findViewById(R.id.btn_date);
         btnNext = view.findViewById(R.id.btn_next);
+        edtAmount = view.findViewById(R.id.edt_amount);
+        edtMemo = view.findViewById(R.id.edt_memo);
 
         grvCategories = view.findViewById(R.id.grv_categories);
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
@@ -103,9 +107,6 @@ public class TabFragment1 extends Fragment {
                 }
             }
         });
-
-        edtAmount = view.findViewById(R.id.edt_amount);
-        edtMemo = view.findViewById(R.id.edt_memo);
     }
 
     void setListeners() {

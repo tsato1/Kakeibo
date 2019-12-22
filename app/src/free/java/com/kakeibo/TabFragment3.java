@@ -34,17 +34,17 @@ import java.util.Arrays;
 public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperListener {
     private final static String TAG = TabFragment3.class.getSimpleName();
 
-    private static String[] searchCriteria;
+    private static String[] _searchCriteria;
 
     private Activity _activity;
     private Context _context;
     private View _view;
-    private CoordinatorLayout viewRoot;
-    private TextView txvSearchInstruction;
-    private RecyclerView rcvSearchCriteria;
-    private SearchRecyclerViewAdapter adpRecyclerView;
-    private ArrayList<Card> lstCards;     // for cards displayed
-    private ArrayList<String> lstChoices; // for choices shown in dialog upon tapping fab
+    private CoordinatorLayout _viewRoot;
+    private TextView _txvSearchInstruction;
+    private RecyclerView _rcvSearchCriteria;
+    private SearchRecyclerViewAdapter _adpRecyclerView;
+    private ArrayList<Card> _lstCards;     // for cards displayed
+    private ArrayList<String> _lstChoices; // for choices shown in dialog upon tapping fab
 
     private static String _fromDate;
     private static String _toDate;
@@ -63,7 +63,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         _activity = getActivity();
         _context = getContext();
 
-        searchCriteria = getResources().getStringArray(R.array.search_criteria);
+        _searchCriteria = getResources().getStringArray(R.array.search_criteria);
 
         findViews();
         setListeners();
@@ -75,16 +75,17 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume() called");
+        UtilKeyboard.hideSoftKeyboard(_activity);
 
-        if (lstCards.size() == 0) {
-            txvSearchInstruction.setVisibility(View.VISIBLE);
+        if (_lstCards.size() == 0) {
+            _txvSearchInstruction.setVisibility(View.VISIBLE);
         } else {
-            txvSearchInstruction.setVisibility(View.INVISIBLE);
+            _txvSearchInstruction.setVisibility(View.INVISIBLE);
         }
 
-        int indexAmountRangeCard = lstCards.indexOf(new Card(Card.TYPE_AMOUNT_RANGE, 0));
+        int indexAmountRangeCard = _lstCards.indexOf(new Card(Card.TYPE_AMOUNT_RANGE, 0));
         if (indexAmountRangeCard > -1) {
-            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexAmountRangeCard);
+            RecyclerView.ViewHolder viewHolder = _rcvSearchCriteria.findViewHolderForAdapterPosition(indexAmountRangeCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
                 SearchRecyclerViewAdapter.ViewHolderAmountRange viewHolderAmountRange = (SearchRecyclerViewAdapter.ViewHolderAmountRange) viewHolder;
                 viewHolderAmountRange.edtMin.setText("");
@@ -92,7 +93,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }
 
-        adpRecyclerView.notifyDataSetChanged();
+        _adpRecyclerView.notifyDataSetChanged();
     }
 
     @Override
@@ -102,49 +103,49 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
     }
 
     private void findViews() {
-        viewRoot = _view.findViewById(R.id.col_root_fragment3);
-        txvSearchInstruction = _view.findViewById(R.id.txv_inst_search);
-        rcvSearchCriteria = _view.findViewById(R.id.rcv_search_criteria);
+        _viewRoot = _view.findViewById(R.id.col_root_fragment3);
+        _txvSearchInstruction = _view.findViewById(R.id.txv_inst_search);
+        _rcvSearchCriteria = _view.findViewById(R.id.rcv_search_criteria);
     }
 
     private void setListeners() {
-        lstChoices = new ArrayList<>(Arrays.asList(searchCriteria));
-        lstCards = new ArrayList<>();
-        adpRecyclerView = new SearchRecyclerViewAdapter(_context, lstCards);
+        _lstChoices = new ArrayList<>(Arrays.asList(_searchCriteria));
+        _lstCards = new ArrayList<>();
+        _adpRecyclerView = new SearchRecyclerViewAdapter(_context, _lstCards);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(_context);
-        rcvSearchCriteria.setLayoutManager(layoutManager);
-        rcvSearchCriteria.setItemAnimator(new DefaultItemAnimator());
-        rcvSearchCriteria.setAdapter(adpRecyclerView);
+        _rcvSearchCriteria.setLayoutManager(layoutManager);
+        _rcvSearchCriteria.setItemAnimator(new DefaultItemAnimator());
+        _rcvSearchCriteria.setAdapter(_adpRecyclerView);
 
         ItemTouchHelper.SimpleCallback ithCallback =
                 new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(ithCallback).attachToRecyclerView(rcvSearchCriteria);
+        new ItemTouchHelper(ithCallback).attachToRecyclerView(_rcvSearchCriteria);
     }
 
     /*** removes a selected choice from fab and add card(criterion) for display ***/
     private void addCriterion(int which) {
-        String str = lstChoices.remove(which);
+        String str = _lstChoices.remove(which);
 
         int selected = 0;
-        for (int i=0; i< searchCriteria.length;i++) {
-            if(searchCriteria[i].equals(str)) selected = i;
+        for (int i = 0; i< _searchCriteria.length; i++) {
+            if(_searchCriteria[i].equals(str)) selected = i;
         }
 
         Card card = new Card(selected, 0);
-        lstCards.add(card);
-        adpRecyclerView.notifyDataSetChanged();
-        txvSearchInstruction.setVisibility(View.INVISIBLE);
+        _lstCards.add(card);
+        _adpRecyclerView.notifyDataSetChanged();
+        _txvSearchInstruction.setVisibility(View.INVISIBLE);
     }
 
     private boolean checkBeforeSearch() {
-        if (lstCards.size() == 0) {
+        if (_lstCards.size() == 0) {
             Toast.makeText(_activity, getResources().getString(R.string.err_no_search_criteria_found), Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        int indexDateRangeCard = lstCards.indexOf(new Card(Card.TYPE_DATE_RANGE, 0));
+        int indexDateRangeCard = _lstCards.indexOf(new Card(Card.TYPE_DATE_RANGE, 0));
         if (indexDateRangeCard > -1) {
-            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexDateRangeCard);
+            RecyclerView.ViewHolder viewHolder = _rcvSearchCriteria.findViewHolderForAdapterPosition(indexDateRangeCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
                 SearchRecyclerViewAdapter.ViewHolderDateRange viewHolderDateRange = (SearchRecyclerViewAdapter.ViewHolderDateRange) viewHolder;
                 String fromDate = viewHolderDateRange.btnFrom.getText().toString();
@@ -169,9 +170,9 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }
 
-        int indexAmountRangeCard = lstCards.indexOf(new Card(Card.TYPE_AMOUNT_RANGE, 0));
+        int indexAmountRangeCard = _lstCards.indexOf(new Card(Card.TYPE_AMOUNT_RANGE, 0));
         if (indexAmountRangeCard > -1) {
-            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexAmountRangeCard);
+            RecyclerView.ViewHolder viewHolder = _rcvSearchCriteria.findViewHolderForAdapterPosition(indexAmountRangeCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
                 SearchRecyclerViewAdapter.ViewHolderAmountRange viewHolderAmountRange = (SearchRecyclerViewAdapter.ViewHolderAmountRange) viewHolder;
                 String min = viewHolderAmountRange.edtMin.getText().toString();
@@ -207,9 +208,9 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }
 
-        int indexCategoryCard = lstCards.indexOf(new Card(Card.TYPE_CATEGORY, 0));
+        int indexCategoryCard = _lstCards.indexOf(new Card(Card.TYPE_CATEGORY, 0));
         if (indexCategoryCard > -1) {
-            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexCategoryCard);
+            RecyclerView.ViewHolder viewHolder = _rcvSearchCriteria.findViewHolderForAdapterPosition(indexCategoryCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
                 SearchRecyclerViewAdapter.ViewHolderCategory viewHolderCategory = (SearchRecyclerViewAdapter.ViewHolderCategory) viewHolder;
                 String category = viewHolderCategory.btnCategory.getText().toString();
@@ -224,9 +225,9 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
             }
         }
 
-        int indexMemoCard = lstCards.indexOf(new Card(Card.TYPE_MEMO, 0));
+        int indexMemoCard = _lstCards.indexOf(new Card(Card.TYPE_MEMO, 0));
         if (indexMemoCard > -1) {
-            RecyclerView.ViewHolder viewHolder = rcvSearchCriteria.findViewHolderForAdapterPosition(indexMemoCard);
+            RecyclerView.ViewHolder viewHolder = _rcvSearchCriteria.findViewHolderForAdapterPosition(indexMemoCard);
             if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderMemo) {
                 SearchRecyclerViewAdapter.ViewHolderMemo viewHolderMemo = (SearchRecyclerViewAdapter.ViewHolderMemo) viewHolder;
                 String memo = viewHolderMemo.edtMemo.getText().toString();
@@ -249,54 +250,54 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
         if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderDateRange) {
             name = getResources().getString(R.string.date_range);
-            lstChoices.add(0, searchCriteria[0]);
+            _lstChoices.add(0, _searchCriteria[0]);
         } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderAmountRange) {
             name = getResources().getString(R.string.amount_range);
-            if (lstChoices.size() == 0) {
-                lstChoices.add(searchCriteria[1]);
+            if (_lstChoices.size() == 0) {
+                _lstChoices.add(_searchCriteria[1]);
             } else {
-                lstChoices.add(1, searchCriteria[1]);
+                _lstChoices.add(1, _searchCriteria[1]);
             }
         } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderCategory) {
             name = getResources().getString(R.string.category);
-            if (lstChoices.size() <= 1) {
-                lstChoices.add(searchCriteria[2]);
+            if (_lstChoices.size() <= 1) {
+                _lstChoices.add(_searchCriteria[2]);
             } else {
-                lstChoices.add(2, searchCriteria[2]);
+                _lstChoices.add(2, _searchCriteria[2]);
             }
         } else if (viewHolder instanceof SearchRecyclerViewAdapter.ViewHolderMemo) {
             name = getResources().getString(R.string.memo);
-            if (lstChoices.size() <= 2) {
-                lstChoices.add(searchCriteria[3]);
+            if (_lstChoices.size() <= 2) {
+                _lstChoices.add(_searchCriteria[3]);
             } else {
-                lstChoices.add(3, searchCriteria[3]);
+                _lstChoices.add(3, _searchCriteria[3]);
             }
         }
 
-        Card cardItem = lstCards.get(viewHolder.getAdapterPosition());
+        Card cardItem = _lstCards.get(viewHolder.getAdapterPosition());
         int deleteIndex = viewHolder.getAdapterPosition();
 
-        adpRecyclerView.removeItem(deleteIndex);
-        if (lstCards.size() == 0) {
-            txvSearchInstruction.setVisibility(View.VISIBLE);
+        _adpRecyclerView.removeItem(deleteIndex);
+        if (_lstCards.size() == 0) {
+            _txvSearchInstruction.setVisibility(View.VISIBLE);
         }
 
-        Snackbar snackbar = Snackbar.make(viewRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(_viewRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
         snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adpRecyclerView.restoreItem(cardItem, deleteIndex);
-                txvSearchInstruction.setVisibility(View.INVISIBLE);
-                for (int i = 0; i < lstChoices.size(); i++) {
-                    if (lstChoices.get(i).equals(searchCriteria[cardItem.type])) lstChoices.remove(i);
+                _adpRecyclerView.restoreItem(cardItem, deleteIndex);
+                _txvSearchInstruction.setVisibility(View.INVISIBLE);
+                for (int i = 0; i < _lstChoices.size(); i++) {
+                    if (_lstChoices.get(i).equals(_searchCriteria[cardItem.type])) _lstChoices.remove(i);
                 }
             }
         }).setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
     }
 
-    public void addCriteria() {
-        String[] arrToDisplay = lstChoices.toArray(new String[lstChoices.size()]);
+    void addCriteria() {
+        String[] arrToDisplay = _lstChoices.toArray(new String[_lstChoices.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getResources().getString(R.string.add_search_criterion));
@@ -315,7 +316,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         builder.show();
     }
 
-    public void doSearch() {
+    void doSearch() {
         Query query = new Query(Query.QUERY_TYPE_SEARCH);
         UtilQuery.init();
 

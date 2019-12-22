@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         /*** loading categories from db ***/
         if (UtilSystem.isLangChanged(this)) {
-            UtilCategory.resetCategoryLists(this);
+            UtilCategory.reloadCategoryLists(this);
         }
 
         /*** this part is to handle unexpected crashes ***/

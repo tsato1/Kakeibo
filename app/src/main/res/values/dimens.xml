@@ -1,29 +1,37 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">9dp</dimen>
-    <dimen name="activity_vertical_margin">9dp</dimen>
-    <dimen name="card_view_horizontal_padding">12dp</dimen>
-    <dimen name="card_view_vertical_padding">12dp</dimen>
-    <dimen name="card_view_horizontal_margin">4dp</dimen>
-    <dimen name="card_view_vertical_margin">4dp</dimen>
-    <dimen name="swipe_to_delete_margin_end">8dp</dimen>
+    <!-- General -->
+    <dimen name="activity_margin">9dp</dimen>
+    <dimen name="card_view_padding">12dp</dimen>
+    <dimen name="card_view_margin">4dp</dimen>
     <dimen name="date_range_dash_width">50dp</dimen>
     <dimen name="fab_default_padding">16dp</dimen>
     <dimen name="tab_height">48dp</dimen>
-    <dimen name="dialog_alert_default_padding">18dp</dimen>
+    <dimen name="list_row_padding_horizontal">22dp</dimen>
+    <dimen name="list_row_padding_vertical">6dp</dimen>
 
-    <!-- input fragment -->
+    <!-- fragment1 -->
     <dimen name="table_row_padding_vertical">2dp</dimen>
     <dimen name="padding_bottom_of_category_image">22dp</dimen>
     <dimen name="grid_view_column_width">80dp</dimen>
     <dimen name="grid_view_vertical_spacing">4dp</dimen>
 
-    <!-- search fragment -->
+    <!-- fragment2c -->
+    <dimen name="item_category_list_row_height">35dp</dimen>
+        <!-- graph -->
+        <dimen name="pie_graph_height">190dp</dimen>
+        <dimen name="pie_graph_margin_vertical">4dp</dimen>
+
+    <!-- fragment3 -->
     <dimen name="search_criteria_1_row_height">20dp</dimen>
     <dimen name="search_criteria_txv_width">80dp</dimen>
+    <dimen name="swipe_to_delete_margin_end">8dp</dimen>
+
+    <!-- dialog -->
+    <dimen name="dialog_alert_default_padding">18dp</dimen>
 
     <!-- character size -->
     <dimen name="char_size_big">18sp</dimen>
     <dimen name="char_size_mid">16sp</dimen>
     <dimen name="char_size_sml">14sp</dimen>
+
 </resources>

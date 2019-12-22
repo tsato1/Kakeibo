@@ -13,13 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,24 +42,20 @@ public class TabFragment2C extends Fragment {
     private static Query sQuery;
     private static ItemLoadListener sItemLoadListener;
 
-    private Activity mActivity;
-    private View mView;
-    private ItemsDBAdapter mItemsDbAdapter;
-    private StringBuilder mStringBuilder;
-    private Balance mBalance;
-    private PieGraph mGraph;
-    private ImageButton mImbToggleGraph;
-    private List<Item> mLstCategory;
-    private List<Item> mLstInCategory;
-    private List<Item> mLstExCategory;
-    private CategoryListAdapter mLsaCategory;
-    private CategoryListAdapter mLsaInCategory;
-    private CategoryListAdapter mLsaExCategory;
-    private ListView mLsvCategory;
-    private ListView mLsvInCategory;
-    private ListView mLsvExCategory;
-
-    private int _toggleView = 0; //0=expense, 1=income, 2=both
+    private Activity _activity;
+    private View _view;
+    private ItemsDBAdapter _itemsDbAdapter;
+    private StringBuilder _stringBuilder;
+    private Balance _balance;
+    private PieGraph _inPieGraph;
+    private PieGraph _exPieGraph;
+    private List<Item> _itemCategoryInList;
+    private List<Item> _itemCategoryExList;
+    private CategoryListAdapter _itemCategoryInAdapter;
+    private CategoryListAdapter _itemCategoryExAdapter;
+    private ListView _itemCategoryInListView;
+    private ListView _itemCategoryExListView;
+//    private int _toggleView = 0; //0=expense, 1=income, 2=both
 
     public static TabFragment2C newInstance(ItemLoadListener itemLoadListener, Query query) {
         TabFragment2C tabFragment2C = new TabFragment2C();
@@ -73,12 +69,12 @@ public class TabFragment2C extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mActivity = getActivity();
-        mView = inflater.inflate(R.layout.tab_fragment_2c, container, false);
+        _activity = getActivity();
+        _view = inflater.inflate(R.layout.tab_fragment_2c, container, false);
 
         findViews();
 
-        return mView;
+        return _view;
     }
 
     @Override
@@ -91,20 +87,21 @@ public class TabFragment2C extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        UtilKeyboard.hideSoftKeyboard(mActivity);
+        UtilKeyboard.hideSoftKeyboard(_activity);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    void findViews() {
-        mGraph = mView.findViewById(R.id.pie_graph);
-        mGraph.setThickness(150);
-        mLsvCategory = mView.findViewById(R.id.lsv_subtotal);
-        mLsvInCategory = mView.findViewById(R.id.lsv_income);
-        mLsvExCategory = mView.findViewById(R.id.lsv_expense);
-        ViewCompat.setNestedScrollingEnabled(mLsvCategory, true);
-        ViewCompat.setNestedScrollingEnabled(mLsvInCategory, true);
-        ViewCompat.setNestedScrollingEnabled(mLsvExCategory, true);
-        mLsvCategory.setOnTouchListener((View v, MotionEvent event)-> {
+    private void findViews() {
+        _inPieGraph = _view.findViewById(R.id.pie_graph_income);
+        _exPieGraph = _view.findViewById(R.id.pie_graph_expense);
+        _inPieGraph.setThickness(150);
+        _exPieGraph.setThickness(150);
+
+        _itemCategoryInListView = _view.findViewById(R.id.lsv_income);
+        _itemCategoryExListView = _view.findViewById(R.id.lsv_expense);
+        ViewCompat.setNestedScrollingEnabled(_itemCategoryInListView, true);
+        ViewCompat.setNestedScrollingEnabled(_itemCategoryExListView, true);
+        _itemCategoryInListView.setOnTouchListener((View v, MotionEvent event)-> {
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
@@ -122,64 +119,36 @@ public class TabFragment2C extends Fragment {
                 v.onTouchEvent(event);
                 return true;
         });
+        _itemCategoryExListView.setOnTouchListener((View v, MotionEvent event)-> {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    // Disallow ScrollView to intercept touch events.
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    break;
 
-        mImbToggleGraph = mView.findViewById(R.id.imb_toggle);
-        mImbToggleGraph.setOnClickListener(new ToggleGraphClickListener());
-
-        mLsvCategory.setOnItemClickListener(new CategoryListItemClickListener());
-        mLsvInCategory.setOnItemClickListener(new CategoryListItemClickListener());
-        mLsvExCategory.setOnItemClickListener(new CategoryListItemClickListener());
-
-        mStringBuilder = new StringBuilder();
-        mItemsDbAdapter = new ItemsDBAdapter();
-        mLstCategory = new ArrayList<>();
-        mLstInCategory = new ArrayList<>();
-        mLstExCategory = new ArrayList<>();
-        mLsaCategory = new CategoryListAdapter(mActivity, 0, mLstCategory);
-        mLsaInCategory = new CategoryListAdapter(mActivity, 0, mLstInCategory);
-        mLsaExCategory = new CategoryListAdapter(mActivity, 0, mLstExCategory);
-        mLsvCategory.setAdapter(mLsaCategory);
-        mLsvInCategory.setAdapter(mLsaInCategory);
-        mLsvExCategory.setAdapter(mLsaExCategory);
-    }
-
-    class ToggleGraphClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            _toggleView = (_toggleView + 1) % 3;
-
-            if (mLstCategory.isEmpty()) {
-                mImbToggleGraph.setVisibility(View.GONE);
-            } else {
-                mImbToggleGraph.setVisibility(View.VISIBLE);
-                calculatePercentage();
+                case MotionEvent.ACTION_UP:
+                    // Allow ScrollView to intercept touch events.
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                    break;
             }
 
-            switch (_toggleView) {
-                case 0:
-                    mLsvCategory.setVisibility(View.GONE);
-                    mLsvExCategory.setVisibility(View.VISIBLE);
-                    mLsvInCategory.setVisibility(View.GONE);
-                    break;
-                case 1:
-                    mLsvCategory.setVisibility(View.GONE);
-                    mLsvExCategory.setVisibility(View.GONE);
-                    mLsvInCategory.setVisibility(View.VISIBLE);
-                    break;
-                case 2:
-                    mLsvCategory.setVisibility(View.VISIBLE);
-                    mLsvExCategory.setVisibility(View.GONE);
-                    mLsvInCategory.setVisibility(View.GONE);
-                    break;
-                default:
-            }
-            mLsaCategory.notifyDataSetChanged();
-            mLsaInCategory.notifyDataSetChanged();
-            mLsaExCategory.notifyDataSetChanged();
-            makePieGraph();
-            sItemLoadListener.onItemsLoaded(mBalance);
-            sItemLoadListener.onViewToggled(_toggleView);
-        }
+            // Handle ListView touch events.
+            v.onTouchEvent(event);
+            return true;
+        });
+
+        _itemCategoryInListView.setOnItemClickListener(new CategoryListItemClickListener());
+        _itemCategoryExListView.setOnItemClickListener(new CategoryListItemClickListener());
+
+        _stringBuilder = new StringBuilder();
+        _itemsDbAdapter = new ItemsDBAdapter();
+        _itemCategoryInList = new ArrayList<>();
+        _itemCategoryExList = new ArrayList<>();
+        _itemCategoryInAdapter = new CategoryListAdapter(_activity, 0, _itemCategoryInList);
+        _itemCategoryExAdapter = new CategoryListAdapter(_activity, 0, _itemCategoryExList);
+        _itemCategoryInListView.setAdapter(_itemCategoryInAdapter);
+        _itemCategoryExListView.setAdapter(_itemCategoryExAdapter);
     }
 
     class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
@@ -195,8 +164,8 @@ public class TabFragment2C extends Fragment {
 
             Log.d(TAG, "loadItems: " + queries[tmp.getCategoryCode()]);
 
-            mItemsDbAdapter.open();
-            Cursor c = mItemsDbAdapter.getItemsByRawQuery(queries[tmp.getCategoryCode()]);
+            _itemsDbAdapter.open();
+            Cursor c = _itemsDbAdapter.getItemsByRawQuery(queries[tmp.getCategoryCode()]);
 
             if (c.moveToFirst()) {
                 do {
@@ -214,13 +183,13 @@ public class TabFragment2C extends Fragment {
                     searchResultList.add(item);
                 } while (c.moveToNext());
             }
-            mItemsDbAdapter.close();
+            _itemsDbAdapter.close();
 
             CategoryDetailListAdapter categoryDetailListAdapter =
-                    new CategoryDetailListAdapter(mActivity, 0, searchResultList);
-            ListView listView = new ListView(mActivity);
+                    new CategoryDetailListAdapter(_activity, 0, searchResultList);
+            ListView listView = new ListView(_activity);
             listView.setAdapter(categoryDetailListAdapter);
-            AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
             dialog.setTitle(UtilCategory.getCategory(getContext(), tmp.getCategoryCode()));
             dialog.setPositiveButton(R.string.ok, (DialogInterface d, int which) -> {
@@ -234,16 +203,15 @@ public class TabFragment2C extends Fragment {
         sQuery = query;
     }
 
-    public void loadItemsOrderByCategory () {
+    protected void loadItemsOrderByCategory () {
         Log.d(TAG, "loadItemsOrderByCategory() "+ sQuery.getQueryC());
 
-        mBalance = Balance.newInstance(MainActivity.sFractionDigits);
+        _balance = Balance.newInstance(MainActivity.sFractionDigits);
 
-        mLstCategory.clear();
-        mLstInCategory.clear();
-        mLstExCategory.clear();
-        mItemsDbAdapter.open();
-        Cursor c = mItemsDbAdapter.getItemsByRawQuery(sQuery.getQueryC());
+        _itemCategoryInList.clear();
+        _itemCategoryExList.clear();
+        _itemsDbAdapter.open();
+        Cursor c = _itemsDbAdapter.getItemsByRawQuery(sQuery.getQueryC());
 
         if (c!=null && c.moveToFirst()) {
             BigDecimal balanceDay = new BigDecimal(0)
@@ -262,124 +230,91 @@ public class TabFragment2C extends Fragment {
                 );
 
                 if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
-                    mBalance.addIncome(item.getAmount());
+                    _balance.addIncome(item.getAmount());
                     balanceDay = balanceDay.add(item.getAmount());
-                    mLstInCategory.add(item);
+                    _itemCategoryInList.add(item);
                 } else {
-                    mBalance.addExpense(item.getAmount());
+                    _balance.addExpense(item.getAmount());
                     balanceDay = balanceDay.subtract(item.getAmount());
-                    mLstExCategory.add(item);
+                    _itemCategoryExList.add(item);
                 }
-
-                mLstCategory.add(item);
             } while (c.moveToNext());
         }
 
-        mItemsDbAdapter.close();
+        _itemsDbAdapter.close();
 
-        if (mLstCategory.isEmpty()) {
-            mImbToggleGraph.setVisibility(View.GONE);
-        } else {
-            mImbToggleGraph.setVisibility(View.VISIBLE);
-            calculatePercentage();
-        }
-
-        switch (_toggleView) {
-            case 0:
-                mLsvCategory.setVisibility(View.GONE);
-                mLsvExCategory.setVisibility(View.VISIBLE);
-                mLsvInCategory.setVisibility(View.GONE);
-                break;
-            case 1:
-                mLsvCategory.setVisibility(View.GONE);
-                mLsvExCategory.setVisibility(View.GONE);
-                mLsvInCategory.setVisibility(View.VISIBLE);
-                break;
-            default: // _toggleView==2
-                mLsvCategory.setVisibility(View.VISIBLE);
-                mLsvExCategory.setVisibility(View.GONE);
-                mLsvInCategory.setVisibility(View.GONE);
-                break;
-        }
-
-        mLsaCategory.notifyDataSetChanged();
-        mLsaInCategory.notifyDataSetChanged();
-        mLsaExCategory.notifyDataSetChanged();
+        _itemCategoryInAdapter.notifyDataSetChanged();
+        _itemCategoryExAdapter.notifyDataSetChanged();
+        adjustItemCategoryListViewHeight();
+        calculatePercentage();
         makePieGraph();
-        sItemLoadListener.onItemsLoaded(mBalance);
-        sItemLoadListener.onViewToggled(_toggleView);
+        sItemLoadListener.onItemsLoaded(_balance);
     }
 
-    void calculatePercentage() {
-        BigDecimal sumIn = mBalance.getIncome();
-        BigDecimal sumEx = mBalance.getExpense();
-        for (int i = 0; i < mLstInCategory.size(); i++) {
-            BigDecimal percentage = mLstInCategory.get(i).getAmount()
+    private void adjustItemCategoryListViewHeight() {
+        ViewGroup.LayoutParams lpmsIncome = _itemCategoryInListView.getLayoutParams();
+        ViewGroup.LayoutParams lpmsExpens = _itemCategoryExListView.getLayoutParams();
+
+        int rowHeightIncome = (int) getResources().getDimension(R.dimen.item_category_list_row_height);
+        lpmsIncome.height = _itemCategoryInList.size() * rowHeightIncome;
+        _itemCategoryInListView.setLayoutParams(lpmsIncome);
+
+        int rowHeightExpens = (int) getResources().getDimension(R.dimen.item_category_list_row_height);
+        lpmsExpens.height = _itemCategoryExList.size() * rowHeightExpens;
+        _itemCategoryExListView.setLayoutParams(lpmsExpens);
+    }
+
+    private void calculatePercentage() {
+        BigDecimal sumIn = _balance.getIncome();
+        BigDecimal sumEx = _balance.getExpense();
+        for (int i = 0; i < _itemCategoryInList.size(); i++) {
+            BigDecimal percentage = _itemCategoryInList.get(i).getAmount()
                     .multiply(new BigDecimal(100))
                     .divide(sumIn, RoundingMode.HALF_EVEN)
                     .setScale(0, RoundingMode.DOWN);
 
-            mLstInCategory.get(i).setMemo(String.valueOf(percentage)); // memo is place holder for percentage
+            _itemCategoryInList.get(i).setMemo(String.valueOf(percentage)); // memo is place holder for percentage
         }
-        for (int i = 0; i < mLstExCategory.size(); i++) {
-            BigDecimal percentage = mLstExCategory.get(i).getAmount()
+        for (int i = 0; i < _itemCategoryExList.size(); i++) {
+            BigDecimal percentage = _itemCategoryExList.get(i).getAmount()
                     .multiply(new BigDecimal(100))
                     .divide(sumEx, RoundingMode.HALF_EVEN)
                     .setScale(0, RoundingMode.DOWN);
 
-            mLstExCategory.get(i).setMemo(String.valueOf(percentage)); // memo is place holder for percentage
+            _itemCategoryExList.get(i).setMemo(String.valueOf(percentage)); // memo is place holder for percentage
         }
     }
 
     private void makePieGraph() {
-        mGraph.removeSlices();
-        PieSlice slice;
+        _inPieGraph.removeSlices();
+        _exPieGraph.removeSlices();
+        PieSlice inPieSlice;
+        PieSlice exPieSlice;
 
-        if (_toggleView == 0) {
-            for (int i = 0; i < mLstExCategory.size(); i++) {
-                slice = new PieSlice();
-                slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
-                slice.setValue(mLstExCategory.get(i).getAmount().floatValue());
-                mGraph.addSlice(slice);
-            }
-        } else if (_toggleView == 1) {
-            for (int i = 0; i < mLstInCategory.size(); i++) {
-                slice = new PieSlice();
-                slice.setColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
-                slice.setValue(mLstInCategory.get(i).getAmount().floatValue());
-                mGraph.addSlice(slice);
-            }
-        } else if (_toggleView == 2) {
-            for (int i = 0; i < mLstCategory.size(); i++) {
-                slice = new PieSlice();
-                if (mLstCategory.get(i).getCategoryCode()==0)
-                    slice.setColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
-                else
-                    slice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
-                slice.setValue(mLstCategory.get(i).getAmount().floatValue());
-                mGraph.addSlice(slice);
-            }
+
+        for (int i = 0; i < _itemCategoryExList.size(); i++) {
+            exPieSlice = new PieSlice();
+            exPieSlice.setColor(Color.parseColor(MainActivity.categoryColor[i]));
+            exPieSlice.setValue(_itemCategoryExList.get(i).getAmount().floatValue());
+            _exPieGraph.addSlice(exPieSlice);
+        }
+
+        for (int i = 0; i < _itemCategoryInList.size(); i++) {
+            inPieSlice = new PieSlice();
+            inPieSlice.setColor(ContextCompat.getColor(_activity, R.color.colorPrimary));
+            inPieSlice.setValue(_itemCategoryInList.get(i).getAmount().floatValue());
+            _inPieGraph.addSlice(inPieSlice);
         }
     }
 
     public void export() {
         Log.d(TAG, "export() called");
 
-        if (_toggleView == 0) {
-            if (mLstExCategory.size()==0) {
-                Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
-            }
-        } else if (_toggleView == 1) {
-            if (mLstInCategory.size()==0) {
-                Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
-            }
-        } else if (_toggleView == 2) {
-            if (mLstCategory.size()==0) {
-                Toast.makeText(mActivity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
-            }
+        if (_itemCategoryExList.isEmpty() || _itemCategoryInList.isEmpty()) {
+            Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
         }
 
-        AlertDialog.Builder dialogExport = new AlertDialog.Builder(mActivity);
+        AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);
         dialogExport.setIcon(R.mipmap.ic_mikan);
         dialogExport.setTitle(getString(R.string.export_category));
         dialogExport.setMessage(getString(R.string.quest_export_this_report_C));
@@ -393,7 +328,7 @@ public class TabFragment2C extends Fragment {
                 Thread thread = new Thread(rblSaveToFile);
                 thread.start();
 
-                Intent intent = new Intent(mActivity, CreateFileInFolderActivity.class);
+                Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
                 intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_CATEGORY);
                 startActivity(intent);
             }
@@ -406,35 +341,25 @@ public class TabFragment2C extends Fragment {
          * expecting: queryD=
          * SELECT * FROM ITEMS WHERE strftime('%Y-%m', event_date) = '2018-11' ORDER BY event_date ASC
          * ***/
-        String query = "";
-
-        if (_toggleView == 0) { // only expense
-            query = sQuery.getQueryD()
-                    .replace("ORDER BY event_date ASC", " AND category_code > 0 ORDER BY category_code, amount DESC");
-        } else if (_toggleView == 1) { // only income
-            query = sQuery.getQueryD()
-                    .replace("ORDER BY event_date ASC", " AND category_code<= 0 ORDER BY category_code, amount DESC");
-        } else if (_toggleView == 2) { // both income and expense
-            query = sQuery.getQueryD()
-                    .replace("ORDER BY event_date ASC", " ORDER BY category_code, amount DESC");
-        }
+        String query = sQuery.getQueryD()
+                .replace("ORDER BY event_date ASC", " ORDER BY category_code, amount DESC");
 
         Log.d(TAG, "queryToSaveLocal() "+query);
 
-        mStringBuilder.setLength(0);
-        mStringBuilder.append(getResources().getString(R.string.category));
-        mStringBuilder.append(",");
-        mStringBuilder.append(getResources().getString(R.string.amount));
-        mStringBuilder.append(",");
-        mStringBuilder.append(getResources().getString(R.string.memo));
-        mStringBuilder.append(",");
-        mStringBuilder.append(getResources().getString(R.string.event_date));
-        mStringBuilder.append(",");
-        mStringBuilder.append(getResources().getString(R.string.updated_date));
-        mStringBuilder.append("\n");
+        _stringBuilder.setLength(0);
+        _stringBuilder.append(getResources().getString(R.string.category));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.amount));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.memo));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.event_date));
+        _stringBuilder.append(",");
+        _stringBuilder.append(getResources().getString(R.string.updated_date));
+        _stringBuilder.append("\n");
 
-        mItemsDbAdapter.open();
-        Cursor c = mItemsDbAdapter.getItemsByRawQuery(query);
+        _itemsDbAdapter.open();
+        Cursor c = _itemsDbAdapter.getItemsByRawQuery(query);
 
         if (c!=null && c.moveToFirst()) {
             do {
@@ -449,21 +374,21 @@ public class TabFragment2C extends Fragment {
                         c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
                 );
 
-                mStringBuilder.append(UtilCategory.getCategory(getContext(), item.getCategoryCode()));
-                mStringBuilder.append(",");
-                mStringBuilder.append(item.getAmount());
-                mStringBuilder.append(",");
-                mStringBuilder.append(item.getMemo());
-                mStringBuilder.append(",");
-                mStringBuilder.append(item.getEventDate());
-                mStringBuilder.append(",");
-                mStringBuilder.append(item.getUpdateDate());
-                mStringBuilder.append("\n");
+                _stringBuilder.append(UtilCategory.getCategory(getContext(), item.getCategoryCode()));
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getAmount());
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getMemo());
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getEventDate());
+                _stringBuilder.append(",");
+                _stringBuilder.append(item.getUpdateDate());
+                _stringBuilder.append("\n");
             } while (c.moveToNext());
         }
 
         UtilFiles.writeToFile(CreateFileInFolderActivity.FILE_ORDER_CATEGORY,
-                mStringBuilder.toString(), mActivity, Context.MODE_PRIVATE);
+                _stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
 
         //todo tell the CreateFileInFolderActivity that it's ready to upload
     }
