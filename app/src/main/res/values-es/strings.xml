@@ -16,9 +16,9 @@
     <string name="expense_colon">Gastos:</string>
     <string name="export">Exportar</string>
     <string name="income_colon">Ingresos:</string>
-    <string name="title_edit_item">Editar Elemento</string>
+    <string name="edit_item">Editar Elemento</string>
     <string name="memo_colon">"Nota: "</string>
-    <string name="title_search_result">Resultados de la Búsqueda</string>
+    <string name="search_result">Resultados de la Búsqueda</string>
     <string name="updated_on_colon">"Guardado en: "</string>
     <string name="quest_do_you_want_to_delete_item">¿SEGURO QUE QUIERES ELIMINAR ESTE ELEMENTO?</string>
     <string name="hint_memo_max_20_characters">Nota: Max 20 caracteres</string>
@@ -46,7 +46,7 @@
     <string name="date_range">Rango de Fechas</string>
     <string name="swipe_to_delete">Deslizar para eliminar</string>
     <string name="undo">Deshacer</string>
-    <string name="card_is_removed">La tarjeta es removida.</string>
+    <string name="msg_card_is_removed">La tarjeta es removida.</string>
     <string name="select_folder">Seleccione la carpeta</string>
     <string name="how_to_perform_search">Cómo realizar la búsqueda</string>
     <string name="general">General</string>
@@ -68,7 +68,7 @@
     <string name="err_min_amount_greater">La cantidad máxima tiene que ser mayor que la cantidad mínima.</string>
     <string name="inst_tap_plus_to_add_criteria">Primero, toque el botón más para agregar criterios. Luego toque el botón de búsqueda para realizar la búsqueda.</string>
     <string name="title_search_criteria">Criterio de Búsqueda:</string>
-    <string name="title_returning_to_monthly_report">Volviendo al informe mensual</string>
+    <string name="returning_to_monthly_report">Volviendo al informe mensual</string>
     <string name="folder_not_selected">Ninguna carpeta seleccionada, cancelando la carga.</string>
     <string name="pref_title_category">Categoría</string>
     <string name="pref_header_notifications">Notificaciones</string>

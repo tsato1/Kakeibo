@@ -16,7 +16,7 @@ public class CategoryGridAdapter extends BaseAdapter {
     private Context _context;
     private List<KkbCategory> _kkbCategoryList;
 
-    CategoryGridAdapter(Context context, List<KkbCategory> objects) {
+    public CategoryGridAdapter(Context context, List<KkbCategory> objects) {
         this._context = context;
         this._kkbCategoryList = objects;
     }

@@ -309,7 +309,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
         adpRecyclerView.removeItem(deleteIndex);
 
-        Snackbar snackbar = Snackbar.make(frlRoot, name + getResources().getString(R.string.card_is_removed), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(frlRoot, name + getResources().getString(R.string.msg_card_is_removed), Snackbar.LENGTH_LONG);
         snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
             @Override
             public void onClick(View view) {

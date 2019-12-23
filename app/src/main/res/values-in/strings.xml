@@ -45,7 +45,7 @@
     <string name="max">Maks</string>
     <string name="undo">batalkan</string>
     <string name="swipe_to_delete">Gesek ke Hapus</string>
-    <string name="card_is_removed">Kartu dilepas.</string>
+    <string name="msg_card_is_removed">Kartu dilepas.</string>
     <string name="err_no_search_criteria_found">Tidak ditemukan Kriteria Pencarian. Silakan tambahkan dari tombol plus.</string>
     <string name="err_please_choose_from_date">Silakan pilih \'Dari Tanggal\'.</string>
     <string name="err_please_choose_to_date">Silakan pilih \'Ke Tanggal\'.</string>
@@ -75,10 +75,10 @@
     <string name="quest_export_this_report_C">Apakah Anda ingin mengekspor laporan ini di Google Drive? Ini diurutkan berdasarkan Kategori.</string>
     <string name="quest_export_this_report_D">Apakah Anda ingin mengekspor laporan ini di Google Drive? Ini diurutkan berdasarkan Tanggal.</string>
 
-    <string name="title_edit_item">Edit item</string>
-    <string name="title_search_result">Hasil Pencarian</string>
+    <string name="edit_item">Edit item</string>
+    <string name="search_result">Hasil Pencarian</string>
     <string name="title_search_criteria">Kriteria Pencarian:</string>
-    <string name="title_returning_to_monthly_report">Kembali ke laporan bulanan</string>
+    <string name="returning_to_monthly_report">Kembali ke laporan bulanan</string>
 
     <!-- Export -->
     <string name="select_file">Pilih file</string>

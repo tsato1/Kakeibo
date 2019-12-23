@@ -211,13 +211,8 @@ public class MainActivity extends AppCompatActivity {
         String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 
-        /*** widget and font size ***/
-        String widgetFontSizeIndex = pref.getString(getString(R.string.pref_key_widget_and_font_size), "1");
-        int sWidgetFontSize = Integer.parseInt(widgetFontSizeIndex);
-
         Log.d(TAG, "sDateFormat:"+sDateFormat+
-                " sFractionDigits:"+sFractionDigits+
-                " widgetAndFontSize:"+widgetFontSizeIndex);
+                " sFractionDigits:"+sFractionDigits);
     }
 
     class ButtonClickListener implements View.OnClickListener {

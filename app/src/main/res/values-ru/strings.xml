@@ -48,7 +48,7 @@
     <string name="max">Максимум</string>
     <string name="undo">отменить</string>
     <string name="swipe_to_delete">Проведите, чтобы удалить</string>
-    <string name="card_is_removed">Карта удалена.</string>
+    <string name="msg_card_is_removed">Карта удалена.</string>
     <string name="err_no_search_criteria_found">Критерии поиска не найдены. Пожалуйста, добавьте от кнопки плюс.</string>
     <string name="err_please_choose_from_date">Пожалуйста, выберите От датa.</string>
     <string name="err_please_enter_min_amount">Пожалуйста, введите минимальную сумму.</string>
@@ -77,10 +77,10 @@
     <string name="quest_export_this_report_C">Хотите экспортировать этот отчет на Google Drive? Сортируется по категории.</string>
     <string name="quest_export_this_report_D">Хотите экспортировать этот отчет на Google Drive? Отсортировано по дате.</string>
 
-    <string name="title_edit_item">Изменить элемент</string>
-    <string name="title_search_result">Результат поиска</string>
+    <string name="edit_item">Изменить элемент</string>
+    <string name="search_result">Результат поиска</string>
     <string name="title_search_criteria">Критерий поиска:</string>
-    <string name="title_returning_to_monthly_report">Возвращаясь к ежемесячному отчету</string>
+    <string name="returning_to_monthly_report">Возвращаясь к ежемесячному отчету</string>
 
     <!-- Export -->
     <string name="select_file">Выбрать файл</string>

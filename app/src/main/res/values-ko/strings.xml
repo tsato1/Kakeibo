@@ -48,7 +48,7 @@
     <string name="max">맥스</string>
     <string name="undo">끄르다</string>
     <string name="swipe_to_delete">스 와이프하여 삭제</string>
-    <string name="card_is_removed">카드가 제거되었습니다.</string>
+    <string name="msg_card_is_removed">카드가 제거되었습니다.</string>
     <string name="err_no_search_criteria_found">검색 기준이 없습니다. 더하기 버튼에서 추가합니다.</string>
     <string name="err_please_choose_from_date">시작 날짜를 선택하십시오.</string>
     <string name="err_please_choose_to_date">현재 날짜를 선택하십시오.</string>
@@ -78,10 +78,10 @@
     <string name="quest_export_this_report_C">이 보고서를 Google 드라이브로 내보내시겠습니까? 범주별로 정렬되어 있습니다.</string>
     <string name="quest_export_this_report_D">이 보고서를 Google 드라이브로 내보내시겠습니까? 날짜별로 정렬되어 있습니다.</string>
 
-    <string name="title_edit_item">항목 편집</string>
-    <string name="title_search_result">검색 결과</string>
+    <string name="edit_item">항목 편집</string>
+    <string name="search_result">검색 결과</string>
     <string name="title_search_criteria">검색 조건:</string>
-    <string name="title_returning_to_monthly_report">월간 보고서로 돌아 가기</string>
+    <string name="returning_to_monthly_report">월간 보고서로 돌아 가기</string>
 
     <!-- Export -->
     <string name="select_file">파일 선택</string>

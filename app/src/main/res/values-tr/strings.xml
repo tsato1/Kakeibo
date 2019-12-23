@@ -48,7 +48,7 @@
     <string name="max">Maksimum</string>
     <string name="undo">GERİ ALMA</string>
     <string name="swipe_to_delete">Silmek için Kaydırın</string>
-    <string name="card_is_removed">Kart çıkarıldı.</string>
+    <string name="msg_card_is_removed">Kart çıkarıldı.</string>
     <string name="err_no_search_criteria_found">Arama Kriteri bulunamadı. Lütfen artı düğmesinden ekleyin.</string>
     <string name="err_please_choose_from_date">Lütfen \"Kadar Itibaren\"\'yi seçin.</string>
     <string name="err_please_choose_to_date">Lütfen \"Tarih Kadar\"\'yi seçin.</string>
@@ -78,10 +78,10 @@
     <string name="quest_export_this_report_C">Bu raporu Google Drive\'a vermek ister misiniz? Kategori\'ye göre sıralanır.</string>
     <string name="quest_export_this_report_D">Bu raporu Google Drive\'a vermek ister misiniz? Tarihe göre sıralanır.</string>
 
-    <string name="title_edit_item">Ögeyi düzenle</string>
-    <string name="title_search_result">Arama sonuçları</string>
+    <string name="edit_item">Ögeyi düzenle</string>
+    <string name="search_result">Arama sonuçları</string>
     <string name="title_search_criteria">Arama Kriteri:</string>
-    <string name="title_returning_to_monthly_report">Aylık rapora dönme</string>
+    <string name="returning_to_monthly_report">Aylık rapora dönme</string>
 
     <!-- Export -->
     <string name="select_file">Dosya Seç</string>

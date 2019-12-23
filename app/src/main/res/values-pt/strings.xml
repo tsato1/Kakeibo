@@ -46,7 +46,7 @@
     <string name="max">Máx.</string>
     <string name="undo">DESFAZER</string>
     <string name="swipe_to_delete">Deslize para excluir</string>
-    <string name="card_is_removed">O cartão foi removido.</string>
+    <string name="msg_card_is_removed">O cartão foi removido.</string>
     <string name="err_no_search_criteria_found">Nenhum critério de pesquisa encontrado. Adicione do botão de adição.</string>
     <string name="err_please_choose_from_date">Por favor escolha Da data.</string>
     <string name="err_please_choose_to_date">Por favor escolha Para data.</string>
@@ -76,10 +76,10 @@
     <string name="quest_export_this_report_C">Deseja exportar este relatório no Google Drive? É classificado por Categoria.</string>
     <string name="quest_export_this_report_D">"Deseja exportar este relatório no Google Drive? É classificado por Data. "</string>
 
-    <string name="title_edit_item">Editar item</string>
-    <string name="title_search_result">Resultado da pesquisa</string>
+    <string name="edit_item">Editar item</string>
+    <string name="search_result">Resultado da pesquisa</string>
     <string name="title_search_criteria">Critérios de pesquisa:</string>
-    <string name="title_returning_to_monthly_report">Retornando ao relatório mensal</string>
+    <string name="returning_to_monthly_report">Retornando ao relatório mensal</string>
 
     <!-- Export -->
     <string name="select_file">Selecione o arquivo</string>

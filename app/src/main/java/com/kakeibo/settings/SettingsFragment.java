@@ -2,12 +2,14 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -16,9 +18,10 @@ import com.kakeibo.R;
 import com.kakeibo.db.ItemsDBAdapter;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
-    private static final String TAG = SettingsFragment.class.getSimpleName();
+    public static final String TAG = SettingsFragment.class.getSimpleName();
 
     private Activity _activity;
+    private FragmentActivity _context;
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
             = (Preference preference, Object value) -> {
@@ -48,6 +51,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
         _activity = getActivity();
+        _context = getActivity();
     }
 
     @Override
@@ -58,8 +62,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         } else if (str.equals(getString(R.string.pref_key_fraction_digits))) {
             return true;
+        } else if (str.equals(getString(R.string.pref_key_category_placement))) {
+            startActivity(new Intent(_activity, CategoryPlacementActivity.class));
+            return true;
+        } else if (str.equals(getString(R.string.create_new_category))) {
+
+            return true;
         } else if (str.equals(getString(R.string.pref_key_delete_all_data))) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
             dialog.setTitle(getString(R.string.delete_all_items));
             dialog.setMessage(getString(R.string.desc_delete_all_items));
@@ -97,13 +107,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                _activity.onBackPressed();
-                Log.d(TAG, "Home button pressed");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            _activity.onBackPressed();
+            Log.d(TAG, "Home button pressed");
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

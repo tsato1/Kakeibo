@@ -30,7 +30,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kakeibo.db.CategoriesDBAdapter;
 import com.kakeibo.db.ItemsDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
@@ -276,7 +275,7 @@ public class TabFragment2D extends Fragment {
 
                 new AlertDialog.Builder(_activity)
                         .setIcon(R.mipmap.ic_mikan)
-                        .setTitle(getString(R.string.title_edit_item))
+                        .setTitle(getString(R.string.edit_item))
                         .setView(layout)
                         .setPositiveButton(R.string.save, (DialogInterface d, int which)-> {
                             _itemsDbAdapter.open();

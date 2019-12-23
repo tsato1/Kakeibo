@@ -47,7 +47,7 @@
     <string name="max">Maksymalny</string>
     <string name="undo">COFNIJ</string>
     <string name="swipe_to_delete">Przesuń, aby usunąć</string>
-    <string name="card_is_removed">Karta została usunięta.</string>
+    <string name="msg_card_is_removed">Karta została usunięta.</string>
     <string name="err_no_search_criteria_found">Nie znaleziono kryteriów wyszukiwania. Dodaj z przycisku plus.</string>
     <string name="err_please_choose_from_date">Proszę wybrać „Od daty”.</string>
     <string name="err_please_choose_to_date">Proszę wybrać „Do daty”.</string>
@@ -77,10 +77,10 @@
     <string name="quest_export_this_report_C">Czy chcesz wyeksportować ten raport na Dysk Google? Jest posortowane według kategorii.</string>
     <string name="quest_export_this_report_D">Czy chcesz wyeksportować ten raport na Dysk Google? Jest sortowane według daty.</string>
 
-    <string name="title_edit_item">Edytuj rzecz</string>
-    <string name="title_search_result">Wynik wyszukiwania</string>
+    <string name="edit_item">Edytuj rzecz</string>
+    <string name="search_result">Wynik wyszukiwania</string>
     <string name="title_search_criteria">Kryteria wyszukiwania:</string>
-    <string name="title_returning_to_monthly_report">Wracając do raportu miesięcznego</string>
+    <string name="returning_to_monthly_report">Wracając do raportu miesięcznego</string>
 
     <!-- Export -->
     <string name="select_file">Wybierz plik</string>

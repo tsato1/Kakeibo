@@ -284,7 +284,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                 rootView.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 break;
             case Query.QUERY_TYPE_SEARCH:
-                btnDate.setText(getString(R.string.title_search_result));
+                btnDate.setText(getString(R.string.search_result));
                 btnNext.setVisibility(View.INVISIBLE);
                 btnPrev.setVisibility(View.GONE);
                 btnClose.setVisibility(View.VISIBLE);
@@ -364,7 +364,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private boolean exitSearchResult() {
         AlertDialog.Builder dialogSaveSearch = new AlertDialog.Builder(_activity);
         dialogSaveSearch.setIcon(R.mipmap.ic_mikan);
-        dialogSaveSearch.setTitle(getString(R.string.title_returning_to_monthly_report));
+        dialogSaveSearch.setTitle(getString(R.string.returning_to_monthly_report));
         dialogSaveSearch.setMessage(getString(R.string.msg_exit_search));
         dialogSaveSearch.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override

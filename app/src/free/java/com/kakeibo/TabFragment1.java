@@ -40,11 +40,11 @@ public class TabFragment1 extends Fragment {
     private final static String TAG = TabFragment1.class.getSimpleName();
 
     private Activity _activity;
-    private ImageButton btnPrev, btnNext;
-    private Button btnDate;
-    private EditText edtAmount;
-    private EditText edtMemo;
-    private GridView grvCategories;
+    private ImageButton _btnPrev, _btnNext;
+    private Button _btnDate;
+    private EditText _edtAmount;
+    private EditText _edtMemo;
+    private GridView _grvCategory;
 
     private static Query _query;
     private static String _eventDate;
@@ -60,9 +60,8 @@ public class TabFragment1 extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        _activity = getActivity();
         View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
-
+        _activity = getActivity();
         _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
 
         findViews(view);
@@ -75,9 +74,9 @@ public class TabFragment1 extends Fragment {
     public void onResume () {
         super.onResume();
         Log.d(TAG, "onResume() called");
-        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
-        edtAmount.setText("");
-        edtMemo.setText("");
+        _btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
+        _edtAmount.setText("");
+        _edtMemo.setText("");
     }
 
     @Override
@@ -88,16 +87,16 @@ public class TabFragment1 extends Fragment {
 
     void findViews(View view)
     {
-        btnPrev = view.findViewById(R.id.btn_prev);
-        btnDate = view.findViewById(R.id.btn_date);
-        btnNext = view.findViewById(R.id.btn_next);
-        edtAmount = view.findViewById(R.id.edt_amount);
-        edtMemo = view.findViewById(R.id.edt_memo);
+        _btnPrev = view.findViewById(R.id.btn_prev);
+        _btnDate = view.findViewById(R.id.btn_date);
+        _btnNext = view.findViewById(R.id.btn_next);
+        _edtAmount = view.findViewById(R.id.edt_amount);
+        _edtMemo = view.findViewById(R.id.edt_memo);
 
-        grvCategories = view.findViewById(R.id.grv_categories);
+        _grvCategory = view.findViewById(R.id.grv_category);
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
-        grvCategories.setAdapter(categoryGridAdapter);
-        grvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        _grvCategory.setAdapter(categoryGridAdapter);
+        _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 _selectedKkbCategory = _kkbCategoryList.get(position);
@@ -110,15 +109,15 @@ public class TabFragment1 extends Fragment {
     }
 
     void setListeners() {
-        btnPrev.setOnClickListener(new DateButtonClickListener());
-        btnDate.setOnClickListener(new DateButtonClickListener());
-        btnNext.setOnClickListener(new DateButtonClickListener());
-        edtAmount.addTextChangedListener(new AmountTextWatcher(edtAmount));
+        _btnPrev.setOnClickListener(new ButtonClickListener());
+        _btnDate.setOnClickListener(new ButtonClickListener());
+        _btnNext.setOnClickListener(new ButtonClickListener());
+        _edtAmount.addTextChangedListener(new AmountTextWatcher(_edtAmount));
     }
 
-    class DateButtonClickListener implements View.OnClickListener {
+    class ButtonClickListener implements View.OnClickListener {
         public void  onClick(View view) {
-            String sourceDate = btnDate.getText().toString().substring(0, 10);
+            String sourceDate = _btnDate.getText().toString().substring(0, 10);
             //Log.d("sourceDate", sourceDate);
             SimpleDateFormat format = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                     Locale.getDefault());
@@ -138,7 +137,7 @@ public class TabFragment1 extends Fragment {
                     String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
-                    btnDate.setText(str);
+                    _btnDate.setText(str);
                     break;
                 case R.id.btn_date:
                     showYMDPickerDialog();
@@ -155,7 +154,7 @@ public class TabFragment1 extends Fragment {
                     str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                             Locale.getDefault()).format(date)
                             + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
-                    btnDate.setText(str);
+                    _btnDate.setText(str);
                     break;
             }
         }
@@ -168,18 +167,18 @@ public class TabFragment1 extends Fragment {
             Toast.makeText(getActivity(), R.string.err_please_select_category, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if ("".equals(edtAmount.getText().toString())) {
+        if ("".equals(_edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), R.string.err_please_enter_amount, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if ("0".equals(edtAmount.getText().toString()) ||
-                "0.0".equals(edtAmount.getText().toString()) ||
-                "0.00".equals(edtAmount.getText().toString()) ||
-                "0.000".equals(edtAmount.getText().toString())) {
+        if ("0".equals(_edtAmount.getText().toString()) ||
+                "0.0".equals(_edtAmount.getText().toString()) ||
+                "0.00".equals(_edtAmount.getText().toString()) ||
+                "0.000".equals(_edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), R.string.err_amount_cannot_be_0, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (!UtilCurrency.checkAmount(edtAmount.getText().toString())) {
+        if (!UtilCurrency.checkAmount(_edtAmount.getText().toString())) {
             Toast.makeText(getActivity(), R.string.err_amount_invalid, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -193,17 +192,17 @@ public class TabFragment1 extends Fragment {
         ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
 
         String eventDate = UtilDate.convertDateFormat(
-                btnDate.getText().toString().split("\\s+")[0], MainActivity.sDateFormat, 3);
+                _btnDate.getText().toString().split("\\s+")[0], MainActivity.sDateFormat, 3);
         String updateDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS);
 
-        String amount = edtAmount.getText().toString();
+        String amount = _edtAmount.getText().toString();
 
         Item item = new Item(
                 "",
                 new BigDecimal(amount),
                 MainActivity.sFractionDigits,
                 _selectedKkbCategory.getCode(),
-                edtMemo.getText().toString(),
+                _edtMemo.getText().toString(),
                 eventDate,
                 updateDate
         );
@@ -229,7 +228,7 @@ public class TabFragment1 extends Fragment {
         ((MainActivity) _activity).getViewPager().setCurrentItem(1); // 1 = Fragment2
         ((MainActivity) _activity).onItemSaved(_query, _eventDate);
 
-        btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
+        _btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
     }
 
     private void showYMDPickerDialog()
@@ -246,7 +245,7 @@ public class TabFragment1 extends Fragment {
                 String str = new SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.sDateFormat],
                         Locale.getDefault()).format(date)
                         + " [" + MainActivity.sWeekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
-                btnDate.setText(str);
+                _btnDate.setText(str);
             }
         }, year, month-1, day);
         dialog.show();

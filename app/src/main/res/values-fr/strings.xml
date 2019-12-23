@@ -35,7 +35,7 @@
     <string name="min">min</string>
     <string name="undo">annulation</string>
     <string name="swipe_to_delete">glisser pour supprimer</string>
-    <string name="card_is_removed">la carte a été retirée</string>
+    <string name="msg_card_is_removed">la carte a été retirée</string>
     <string name="err_please_choose_from_date">choisissez la date de début</string>
     <string name="err_please_choose_to_date">choisissez la date de fin</string>
     <string name="err_from_date_older">la date doit être antérieure à celle.</string>
@@ -52,7 +52,7 @@
     <string name="quest_do_you_want_to_delete_item">supprimer définitivement?</string>
     <string name="quest_export_this_report_D">exporter ce rapport sur Google Drive? Il est trié par Date.</string>
     <string name="title_search_criteria">mode de recherche:</string>
-    <string name="title_returning_to_monthly_report">retour au report mensuel</string>
+    <string name="returning_to_monthly_report">retour au report mensuel</string>
     <string name="select_file">sélectionner les données</string>
     <string name="file_created">fichier sauvegardé sur le cloud</string>
     <string name="select_folder">sélectionner un dossier</string>
@@ -100,7 +100,7 @@
     <string name="pref_title_vibrate">vibrer</string>
     <string name="warn_delete_all_items">Voulez-vous vraiment supprimer tous les éléments?</string>
     <string name="quest_export_this_report_C">exporter ce rapport sur Google Drive? Il est trié par catégorie.</string>
-    <string name="title_edit_item">modifier les données</string>
-    <string name="title_search_result">résultat de la recherche</string>
+    <string name="edit_item">modifier les données</string>
+    <string name="search_result">résultat de la recherche</string>
     <string name="err_amount_invalid">Le montant est invalide.</string>
 </resources>

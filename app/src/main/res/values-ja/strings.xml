@@ -26,8 +26,8 @@
     <string name="report">レポート</string>
     <string name="save">保存</string>
     <string name="updated_on_colon">変更日時：</string>
-    <string name="title_edit_item">アイテムを編集</string>
-    <string name="title_search_result">検索結果</string>
+    <string name="edit_item">アイテムを編集</string>
+    <string name="search_result">検索結果</string>
     <string name="yes">はい</string>
     <string name="balance_colon">収支：</string>
     <string name="expense_colon">支出：</string>
@@ -56,7 +56,7 @@
     <string name="amount_range">金額範囲</string>
     <string name="swipe_to_delete">削除</string>
     <string name="undo">やり直し</string>
-    <string name="card_is_removed">カードが取り除かれました．</string>
+    <string name="msg_card_is_removed">カードが取り除かれました．</string>
     <string name="err_no_search_criteria_found">検索条件がみつかりません．プラスボタンから追加してください．</string>
     <string name="err_please_choose_from_date">下限日時を選択してください．</string>
     <string name="err_please_choose_to_date">上限日時を選択してください．</string>
@@ -66,7 +66,7 @@
     <string name="err_min_amount_greater">上限金額は下限金額より大きくなければなりません．</string>
     <string name="inst_tap_plus_to_add_criteria">プラスボタンより検索条件を追加した後検索ボタンをタップします．</string>
     <string name="title_search_criteria">検索条件：</string>
-    <string name="title_returning_to_monthly_report">月次レポートへ戻ります．</string>
+    <string name="returning_to_monthly_report">月次レポートへ戻ります．</string>
     <string name="folder_not_selected">フォルダが選択されなかったためキャンセルされました．</string>
     <string name="pref_title_category">カテゴリー</string>
     <string name="pref_header_notifications">通知</string>

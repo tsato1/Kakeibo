@@ -44,7 +44,7 @@
     <string name="max">أقصى</string>
     <string name="undo">التراجع</string>
     <string name="swipe_to_delete">اسحب إلى الحذف</string>
-    <string name="card_is_removed">تتم إزالة البطاقة.</string>
+    <string name="msg_card_is_removed">تتم إزالة البطاقة.</string>
     <string name="err_no_search_criteria_found">لم يتم العثور على معايير البحث. يرجى إضافة واحد من زر زائد.</string>
     <string name="err_please_enter_min_amount">الرجاء إدخال الحد الأدنى للمبلغ</string>
     <string name="err_please_enter_max_amount">الرجاء إدخال الحد الأقصى للمبلغ.</string>
@@ -72,10 +72,10 @@
     <string name="quest_export_this_report_C">هل تريد تصدير هذا التقرير على Google Drive؟ يتم فرزها حسب الفئة.</string>
     <string name="quest_export_this_report_D">هل تريد تصدير هذا التقرير على Google Drive؟ يتم فرزها حسب التاريخ.</string>
 
-    <string name="title_edit_item">تعديل عنصر</string>
-    <string name="title_search_result">نتيجة البحث</string>
+    <string name="edit_item">تعديل عنصر</string>
+    <string name="search_result">نتيجة البحث</string>
     <string name="title_search_criteria">معايير البحث:</string>
-    <string name="title_returning_to_monthly_report">العودة إلى التقرير الشهري</string>
+    <string name="returning_to_monthly_report">العودة إلى التقرير الشهري</string>
 
     <!-- Export -->
     <string name="select_file">اختر الملف</string>

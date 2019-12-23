@@ -16,9 +16,9 @@
     <string name="expense_colon">व्यय:</string>
     <string name="export">निर्यात</string>
     <string name="income_colon">आय:</string>
-    <string name="title_edit_item">संपादित आइटम</string>
+    <string name="edit_item">संपादित आइटम</string>
     <string name="memo_colon">"मेमो: "</string>
-    <string name="title_search_result">परिणाम खोजें</string>
+    <string name="search_result">परिणाम खोजें</string>
     <string name="updated_on_colon">इस पर सहेजा गया:</string>
     <string name="quest_do_you_want_to_delete_item">"क्या आप सुनिश्चित रूप से इस आइटम को मिटाना चाहते हैं? "</string>
     <string name="hint_memo_max_20_characters">मेमो: अधिकतम 20 वर्ण</string>
@@ -45,7 +45,7 @@
     <string name="date_range">तारीख  रेंज</string>
     <string name="swipe_to_delete">हटाने के लिए स्वाइप करें</string>
     <string name="undo">पूर्ववत</string>
-    <string name="card_is_removed">कार्ड निकाला जाता है।</string>
+    <string name="msg_card_is_removed">कार्ड निकाला जाता है।</string>
     <string name="select_folder">एक फ़ोल्डर का चयन करें</string>
     <string name="how_to_perform_search">कैसे खोजे</string>
     <string name="general">सामान्य</string>
@@ -64,7 +64,7 @@
     <string name="err_min_amount_greater">अधिकतम राशि न्यूनतम राशि से अधिक होनी चाहिए।</string>
     <string name="inst_tap_plus_to_add_criteria">सबसे पहले, मापदंड जोड़ने के लिए प्लस बटन पर टैप करें। फिर सर्च करने के लिए सर्च बटन पर टैप करें।</string>
     <string name="title_search_criteria">खोज मापदंड:</string>
-    <string name="title_returning_to_monthly_report">मासिक रिपोर्ट पर लौटना</string>
+    <string name="returning_to_monthly_report">मासिक रिपोर्ट पर लौटना</string>
     <string name="folder_not_selected">कोई फ़ोल्डर चयनित नहीं है। अपलोड रद्द कर दिया गया है</string>
     <string name="pref_title_category">वर्ग</string>
     <string name="pref_header_notifications">सूचनाएं</string>

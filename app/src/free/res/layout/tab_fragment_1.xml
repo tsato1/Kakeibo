@@ -76,7 +76,7 @@
         </TableLayout>
 
         <GridView
-            android:id="@+id/grv_categories"
+            android:id="@+id/grv_category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

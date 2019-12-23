@@ -30,7 +30,7 @@
     <string name="pref_desc_remove_ads">Kakeibo! Proにアップグレード</string>
     <string name="pref_header_data_sync">dati e sincronizzazione</string>
     <string name="add_search_criterion">inserisci modalità ricerca</string>
-    <string name="card_is_removed">la card é stata rimossa.</string>
+    <string name="msg_card_is_removed">la card é stata rimossa.</string>
     <string name="err_no_search_criteria_found">nessun modalita di ricerca trovata. Inserisci con il pulsante a sinistra.</string>
     <string name="err_please_choose_from_date">scegliere data di inizio.</string>
     <string name="err_please_choose_to_date">scegliere data di fine.</string>
@@ -39,7 +39,7 @@
     <string name="err_please_enter_max_amount">inserire importo max.</string>
     <string name="inst_tap_plus_to_add_criteria">Prima premere il tasto più per inserire i criteri di ricerca. Poi il tasto con la lente per definire la ricerca.</string>
     <string name="title_search_criteria">modalità ricerca:</string>
-    <string name="title_returning_to_monthly_report">torna al prospetto mensile</string>
+    <string name="returning_to_monthly_report">torna al prospetto mensile</string>
     <string name="folder_not_selected">cartella non trovata. Cancella caricamento.</string>
     <string name="pref_title_category">categoria</string>
     <string name="pref_title_new_message_notifications">nuovo messaggio</string>
@@ -60,7 +60,7 @@
     <string name="nothing_to_export">nulla da esportare.</string>
     <string name="empty_report">prospetto senza dati.</string>
     <string name="tap_anywhere_to_dismiss">tocca lo schermo per uscire.</string>
-    <string name="title_search_result">RISULTATI</string>
+    <string name="search_result">RISULTATI</string>
     <string name="income">entrate</string>
     <string name="edit">scrivi</string>
     <string name="yes">si</string>
@@ -86,7 +86,7 @@
     <string name="swipe_to_delete">scorri per eliminare</string>
     <string name="err_min_amount_greater">l\'importo max deve essere maggiore del min.</string>
     <string name="err_amount_cannot_be_0">l\'importo non può essere zero.</string>
-    <string name="title_edit_item">modifica</string>
+    <string name="edit_item">modifica</string>
     <string name="file_created">file salvato su cloud.</string>
     <string name="select_folder">seleziona cartella</string>
     <string name="remove_ads">rimuovere gli annunci</string>

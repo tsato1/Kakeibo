@@ -16,6 +16,35 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:paddingBottom="@dimen/padding_bottom_of_category_image"
+        android:contentDescription="@string/category"
+        style="?android:attr/buttonBarButtonStyle"/>
+
+    <ImageView
+        android:id="@+id/imv_category_removal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:paddingBottom="@dimen/padding_bottom_of_category_image"
+        android:contentDescription="@string/category"
+        android:src="@drawable/ic_sync_black_24dp"
+        android:visibility="gone"
+        style="?android:attr/buttonBarButtonStyle"/>
+
+    <ImageView
+        android:id="@+id/imv_category_addition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:paddingBottom="@dimen/padding_bottom_of_category_image"
+        android:contentDescription="@string/category"
+        android:src="@drawable/ic_sync_black_24dp"
+        android:visibility="gone"
         style="?android:attr/buttonBarButtonStyle"/>
 
     <TextView

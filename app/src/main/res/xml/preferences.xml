@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:title="@string/general"
         android:icon="@drawable/ic_info_black_24dp">
@@ -21,25 +22,19 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/fraction_digits" />
-        <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/pref_list_widget_and_font_size"
-            android:entryValues="@array/pref_list_widget_and_font_size_values"
-            android:key="@string/pref_key_widget_and_font_size"
-            android:summary="%s"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/widget_and_font_size" />
     </PreferenceCategory>
-<!--    <PreferenceCategory-->
-<!--        android:title="@string/categories">-->
-<!--        <Preference-->
-<!--            android:key="@string/pref_key_categories"-->
-<!--            android:title="@string/categories"-->
-<!--            android:negativeButtonText="@string/no"-->
-<!--            android:positiveButtonText="@string/yes">-->
-<!--        </Preference>-->
-<!--    </PreferenceCategory>-->
+    <PreferenceCategory
+        android:title="@string/category">
+        <Preference
+            android:key="@string/pref_key_category_placement"
+            android:title="@string/placement_of_category_icons"
+            android:fragment="com.kakeibo.settings.CategoryPlacementRemovalFragment"/>
+        <Preference
+            android:key="@string/pref_key_category_creation"
+            android:title="@string/create_new_category"
+            android:negativeButtonText="@string/no"
+            android:positiveButtonText="@string/yes"/>
+    </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/in_app_data"
         android:icon="@drawable/ic_perm_data_setting_black_24dp">

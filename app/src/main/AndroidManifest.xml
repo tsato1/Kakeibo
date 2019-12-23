@@ -47,5 +47,9 @@
             android:name=".settings.SettingsCompatActivity"
             android:label="Settings"
             android:parentActivityName="com.kakeibo.MainActivity"/>
+        <activity
+            android:name=".settings.CategoryPlacementActivity"
+            android:label="Category Icon Placement"
+            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
     </application>
 </manifest>
