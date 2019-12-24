@@ -7,14 +7,12 @@
     <color name="colorBackground">#FFFFBB</color><!--cream-->
     <color name="colorBackground_search">#fffbe8</color>
     <color name="colorBackground_text">#DCDCDC</color><!--grey-->
+    <color name="colorBackground_category_removal">#d5ff80</color><!--green-->
+    <color name="colorBackground_category_addition">#cce6ff</color><!--sky-->
+    <color name="colorBackground_category_reorder">#dab3ff</color><!--purple-->
+    <color name="colorBackground_category_">#b3b3ff</color><!--blue-->
     <color name="colorEmboss">#11000001</color>
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorBlue">#12a1eb</color>
-    <color name="colorBlueTrans">#5512a1eb</color>
-
-    <color name="colorThemeDarkBlue">#355555</color>
-    <color name="colorThemeDarkBlack">#33000000</color>
-    <color name="colorThemeDarkCream">#e3aaaa</color>
-
 </resources>

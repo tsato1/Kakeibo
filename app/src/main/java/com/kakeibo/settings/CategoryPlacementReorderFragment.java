@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,16 +29,25 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
     private static List<KkbCategory> _kkbCategoryList;
     private static List<Integer> _selectedCategoryCodeForRemoval;
+    private static SettingsCategoryEventListener _eventListener;
 
     private Activity _activity;
     private GridView _grvCategory;
     private Button _btnBack, _btnNext;
+    private RelativeLayout _rllBackground;
 
-    private SettingsCategoryEventListener _eventListener;
+    public static CategoryPlacementReorderFragment newInstance() {
+        CategoryPlacementReorderFragment fragment = new CategoryPlacementReorderFragment();
+        Bundle args = new Bundle();
+        args.putString("key", TAG);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        _eventListener = (SettingsCategoryEventListener) context;
     }
 
     @Override
@@ -56,6 +66,9 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _grvCategory = view.findViewById(R.id.grv_category);
         _btnBack = view.findViewById(R.id.btn_back);
         _btnNext = view.findViewById(R.id.btn_next);
+        _btnNext.setText(getString(R.string.done));
+        _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
+        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
 
         _selectedCategoryCodeForRemoval = new ArrayList<>();
 
@@ -78,7 +91,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_back:
-                    _activity.onBackPressed();
+                    _eventListener.onBackPressed(1);
                     break;
                 case R.id.btn_next:
                     _eventListener.onNextPressed(2);
