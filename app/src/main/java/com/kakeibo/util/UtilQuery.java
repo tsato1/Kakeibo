@@ -1,11 +1,11 @@
 package com.kakeibo.util;
 
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 
-import static com.kakeibo.db.ItemsDBAdapter.COL_AMOUNT;
-import static com.kakeibo.db.ItemsDBAdapter.COL_CATEGORY_CODE;
-import static com.kakeibo.db.ItemsDBAdapter.COL_EVENT_DATE;
-import static com.kakeibo.db.ItemsDBAdapter.COL_MEMO;
+import static com.kakeibo.db.ItemDBAdapter.COL_AMOUNT;
+import static com.kakeibo.db.ItemDBAdapter.COL_CATEGORY_CODE;
+import static com.kakeibo.db.ItemDBAdapter.COL_EVENT_DATE;
+import static com.kakeibo.db.ItemDBAdapter.COL_MEMO;
 
 public class UtilQuery {
     public static final String DESC = "DESC";
@@ -25,7 +25,7 @@ public class UtilQuery {
             builderCs[i] = new StringBuilder("SELECT * FROM ITEMS");
         }
         builderC = new StringBuilder("SELECT " + SUM_AMOUNT + ", " +
-                ItemsDBAdapter.COL_CATEGORY_CODE +
+                ItemDBAdapter.COL_CATEGORY_CODE +
                 " FROM ITEMS");
         builderD = new StringBuilder("SELECT * FROM ITEMS");
         where = false;

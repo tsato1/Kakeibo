@@ -23,12 +23,14 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilQuery;
 
 import java.util.Calendar;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by T on 2015/09/14.
@@ -69,7 +71,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@Nonnull Context context) {
         super.onAttach(context);
         String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
         String[] ymd = todaysDate.split("-");
@@ -80,10 +82,10 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _query = new Query(Query.QUERY_TYPE_NEW);
         UtilQuery.init();
         UtilQuery.setDate(todaysDate, "");
-        UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-        UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+        UtilQuery.setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
         _query.setQueryC(UtilQuery.buildQueryC());
         _query.setQueryCs(UtilQuery.buildQueryCs());
         _query.setQueryD(UtilQuery.buildQueryD());
@@ -159,10 +161,10 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _query = new Query(Query.QUERY_TYPE_NEW);
         UtilQuery.init();
         UtilQuery.setDate(y+"-"+m+"-01", ""); //todo settings start date of the month
-        UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-        UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+        UtilQuery.setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
         _query.setQueryC(UtilQuery.buildQueryC());
         _query.setQueryCs(UtilQuery.buildQueryCs());
         _query.setQueryD(UtilQuery.buildQueryD());
@@ -373,10 +375,10 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
                 _query = new Query(Query.QUERY_TYPE_NEW);
                 UtilQuery.init();
                 UtilQuery.setDate(todaysDate, "");
-                UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+                UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
                 UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-                UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-                UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+                UtilQuery.setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE);
+                UtilQuery.setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
                 _query.setQueryC(UtilQuery.buildQueryC());
                 _query.setQueryCs(UtilQuery.buildQueryCs());
                 _query.setQueryD(UtilQuery.buildQueryD());

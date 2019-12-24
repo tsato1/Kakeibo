@@ -322,7 +322,7 @@ public class TabFragment2D extends Fragment {
             List<Item> tmpItemList = new ArrayList<>();
 
             do {
-                //Log.d("item(memo)", c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)));
+                //Log.d("item(memo)", c.getString(c.getColumnIndex(ItemDBAdapter.COL_MEMO)));
 
                 if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
                     lstDateHeader.add(eventDate.replace('-', ',') + "," + String.valueOf(balanceDay)); // comma is deliminator

@@ -9,8 +9,8 @@ import android.util.Log;
 import com.kakeibo.KkbCategory;
 
 
-public class CategoriesDBAdapter extends DBAdapter {
-    private static final String TAG = CategoriesDBAdapter.class.getSimpleName();
+public class CategoryDBAdapter extends DBAdapter {
+    private static final String TAG = CategoryDBAdapter.class.getSimpleName();
 
     public static final String TABLE_NAME = "categories";
     public static final String COL_ID = "_id";
@@ -30,10 +30,10 @@ public class CategoriesDBAdapter extends DBAdapter {
 
     private SQLiteDatabase _db;
 
-    public CategoriesDBAdapter() {
+    public CategoryDBAdapter() {
     }
 
-    public CategoriesDBAdapter open() throws SQLException {
+    public CategoryDBAdapter open() throws SQLException {
         _db = DBAdapter.getInstance().openDatabase();
         return this;
     }
@@ -54,21 +54,21 @@ public class CategoriesDBAdapter extends DBAdapter {
     public Cursor getAllKkbCategories(String langCode) {
         String query =
                 "SELECT "+
-                        CategoriesDBAdapter.TABLE_NAME+"."+CategoriesDBAdapter.COL_CODE+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
                         langCode+","+
-                        CategoriesDBAdapter.TABLE_NAME+"."+CategoriesDBAdapter.COL_DRAWABLE+","+
-                        CategoriesDspDBAdapter.TABLE_NAME+"."+CategoriesDspDBAdapter.COL_LOCATION+","+
-                        CategoriesDBAdapter.TABLE_NAME+"."+CategoriesDBAdapter.COL_PARENT+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_DRAWABLE+","+
+                        CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_LOCATION+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_PARENT+
                 " FROM " + TABLE_NAME +
-                " INNER JOIN " + CategoriesLanDBAdapter.TABLE_NAME +
+                " INNER JOIN " + CategoryLanDBAdapter.TABLE_NAME +
                 " ON " +
-                        CategoriesDBAdapter.TABLE_NAME+"."+CategoriesDBAdapter.COL_CODE + "=" +
-                        CategoriesLanDBAdapter.TABLE_NAME+"."+CategoriesLanDBAdapter.COL_CODE +
-                " INNER JOIN " + CategoriesDspDBAdapter.TABLE_NAME +
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE + "=" +
+                        CategoryLanDBAdapter.TABLE_NAME+"."+ CategoryLanDBAdapter.COL_CODE +
+                " INNER JOIN " + CategoryDspDBAdapter.TABLE_NAME +
                 " ON " +
-                        CategoriesDspDBAdapter.TABLE_NAME+"."+CategoriesDspDBAdapter.COL_CODE+"="+
-                        CategoriesDBAdapter.TABLE_NAME+"."+CategoriesDBAdapter.COL_CODE +
-                " ORDER BY " + CategoriesDspDBAdapter.TABLE_NAME+"."+COL_LOCATION;
+                        CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_CODE+"="+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE +
+                " ORDER BY " + CategoryDspDBAdapter.TABLE_NAME+"."+COL_LOCATION;
         return _db.rawQuery(query, new String[]{});
     }
 

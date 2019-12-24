@@ -8,8 +8,8 @@ import android.util.Log;
 
 import com.kakeibo.KkbCategory;
 
-public class CategoriesLanDBAdapter extends DBAdapter {
-    private static final String TAG = CategoriesLanDBAdapter.class.getSimpleName();
+public class CategoryLanDBAdapter extends DBAdapter {
+    private static final String TAG = CategoryLanDBAdapter.class.getSimpleName();
 
     public static final String TABLE_NAME = "categories_lan";
     public static final String COL_ID = "_id";
@@ -41,10 +41,10 @@ public class CategoriesLanDBAdapter extends DBAdapter {
 
     private SQLiteDatabase _db;
 
-    public CategoriesLanDBAdapter() {
+    public CategoryLanDBAdapter() {
     }
 
-    public CategoriesLanDBAdapter open() throws SQLException {
+    public CategoryLanDBAdapter open() throws SQLException {
         _db = DBAdapter.getInstance().openDatabase();
         return this;
     }

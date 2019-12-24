@@ -30,7 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
@@ -60,7 +60,7 @@ public class TabFragment2D extends Fragment {
 
     private Activity _activity;
     private View _view;
-    private ItemsDBAdapter _itemsDbAdapter;
+    private ItemDBAdapter _itemDbAdapter;
     private StringBuilder _stringBuilder;
 
     private List<String> lstDateHeader;
@@ -108,7 +108,7 @@ public class TabFragment2D extends Fragment {
         explvData.setOnCreateContextMenuListener(new ChildClickContextMenuListener());
 
         _stringBuilder = new StringBuilder();
-        _itemsDbAdapter = new ItemsDBAdapter();
+        _itemDbAdapter = new ItemDBAdapter();
         lstDateHeader = new ArrayList<>();
         hmpChildData = new HashMap<>();
         elaData = new ExpandableListAdapter(_activity, lstDateHeader, hmpChildData);
@@ -192,15 +192,15 @@ public class TabFragment2D extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 //Log.d("groupPosition", String.valueOf(groupPosition));
                                 //Log.d("childPosition", String.valueOf(childPosition));
-                                _itemsDbAdapter.open();
+                                _itemDbAdapter.open();
                                 final int itemId = Integer.parseInt(item.getId());
 
-                                if(_itemsDbAdapter.deleteItem(itemId)) {
+                                if(_itemDbAdapter.deleteItem(itemId)) {
                                     Toast.makeText(_activity, getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_SHORT).show();
                                 }
 
                                 loadItemsOrderByDate();
-                                _itemsDbAdapter.close();
+                                _itemDbAdapter.close();
                             }
                         })
                         .setNegativeButton(R.string.no, null)
@@ -278,11 +278,11 @@ public class TabFragment2D extends Fragment {
                         .setTitle(getString(R.string.edit_item))
                         .setView(layout)
                         .setPositiveButton(R.string.save, (DialogInterface d, int which)-> {
-                            _itemsDbAdapter.open();
+                            _itemDbAdapter.open();
                             final int itemId = Integer.parseInt(item.getId());
 
                             if (checkBeforeSave(edtAmount)) {
-                                if(_itemsDbAdapter.deleteItem(itemId)) {
+                                if(_itemDbAdapter.deleteItem(itemId)) {
                                     String amount = edtAmount.getText().toString();
 
                                     Item tmp = new Item(
@@ -297,14 +297,14 @@ public class TabFragment2D extends Fragment {
                                             UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
                                     );
 
-                                    _itemsDbAdapter.saveItem(tmp);
+                                    _itemDbAdapter.saveItem(tmp);
 
                                     Toast.makeText(_activity, getString(R.string.msg_change_successfully_saved), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             loadItemsOrderByDate();
-                            _itemsDbAdapter.close();
+                            _itemDbAdapter.close();
                         })
                         .setNegativeButton(R.string.cancel, null)
                         .setOnDismissListener((DialogInterface dialog)-> {
@@ -360,39 +360,39 @@ public class TabFragment2D extends Fragment {
         _stringBuilder.append(getResources().getString(R.string.updated_date));
         _stringBuilder.append("\n");
 
-        _itemsDbAdapter.open();
+        _itemDbAdapter.open();
 
-        Cursor c = _itemsDbAdapter.getItemsByRawQuery(_query.getQueryD());
+        Cursor c = _itemDbAdapter.getItemsByRawQuery(_query.getQueryD());
 
         if (c!=null && c.moveToFirst()) {
-            String eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE));
+            String eventDate = c.getString(c.getColumnIndex(ItemDBAdapter.COL_EVENT_DATE));
             BigDecimal balanceDay = new BigDecimal(0)
                     .setScale(MainActivity.sFractionDigits, RoundingMode.UNNECESSARY);;
             List<Item> tmpItemList = new ArrayList<>();
 
             do {
-                if (!c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
+                if (!c.getString(c.getColumnIndex(ItemDBAdapter.COL_EVENT_DATE)).equals(eventDate)){ // if the event day of an item increases
                     lstDateHeader.add(eventDate.replace('-', ',') + "," + balanceDay); // comma is deliminator
                     hmpChildData.put(lstDateHeader.get(sameDateCounter), tmpItemList); // set the header of the old day
                     balanceDay = BigDecimal.valueOf(0);
                     /*** change of the date ***/
-                    eventDate = c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)); // set a new date
+                    eventDate = c.getString(c.getColumnIndex(ItemDBAdapter.COL_EVENT_DATE)); // set a new date
                     tmpItemList = new ArrayList<>(); // empty the array list of items
                     sameDateCounter++;
                 }
 
                 Item item = new Item(
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-                        c.getLong(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_ID)),
+                        c.getLong(c.getColumnIndex(ItemDBAdapter.COL_AMOUNT)),
                         "",
                         MainActivity.sFractionDigits,
-                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
+                        c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_MEMO)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_EVENT_DATE)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
                 );
 
-                if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
+                if(c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)) == 0) {
                     balance.addIncome(item.getAmount());
                     balanceDay = balanceDay.add(item.getAmount());
                 } else {
@@ -418,7 +418,7 @@ public class TabFragment2D extends Fragment {
             hmpChildData.put(lstDateHeader.get(sameDateCounter), tmpItemList);
         }
 
-        _itemsDbAdapter.close();
+        _itemDbAdapter.close();
         elaData.notifyDataSetChanged();
 
         UtilFiles.writeToFile(CreateFileInFolderActivity.FILE_ORDER_DATE, _stringBuilder.toString(),

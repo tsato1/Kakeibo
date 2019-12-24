@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.kakeibo.Item;
 import com.kakeibo.Query;
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 
 import java.util.List;
 
@@ -29,11 +29,11 @@ public class UtilItem {
         sItemInList_Category.clear();
         sItemExList_Category.clear();
 
-        ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
-        itemsDBAdapter.open();
-        Cursor c = itemsDBAdapter.getItemsByRawQuery(query.getQueryC());
+        ItemDBAdapter itemDBAdapter = new ItemDBAdapter();
+        itemDBAdapter.open();
+        Cursor c = itemDBAdapter.getItemsByRawQuery(query.getQueryC());
 
-        itemsDBAdapter.close();
+        itemDBAdapter.close();
     }
 
     public static List<Item> getItemInList_Category(Context context, Query query) {

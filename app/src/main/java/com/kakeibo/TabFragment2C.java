@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilFiles;
@@ -44,7 +44,7 @@ public class TabFragment2C extends Fragment {
 
     private Activity _activity;
     private View _view;
-    private ItemsDBAdapter _itemsDbAdapter;
+    private ItemDBAdapter _itemDbAdapter;
     private StringBuilder _stringBuilder;
     private Balance _balance;
     private PieGraph _inPieGraph;
@@ -142,7 +142,7 @@ public class TabFragment2C extends Fragment {
         _itemCategoryExListView.setOnItemClickListener(new CategoryListItemClickListener());
 
         _stringBuilder = new StringBuilder();
-        _itemsDbAdapter = new ItemsDBAdapter();
+        _itemDbAdapter = new ItemDBAdapter();
         _itemCategoryInList = new ArrayList<>();
         _itemCategoryExList = new ArrayList<>();
         _itemCategoryInAdapter = new CategoryListAdapter(_activity, 0, _itemCategoryInList);
@@ -164,26 +164,26 @@ public class TabFragment2C extends Fragment {
 
             Log.d(TAG, "loadItems: " + queries[tmp.getCategoryCode()]);
 
-            _itemsDbAdapter.open();
-            Cursor c = _itemsDbAdapter.getItemsByRawQuery(queries[tmp.getCategoryCode()]);
+            _itemDbAdapter.open();
+            Cursor c = _itemDbAdapter.getItemsByRawQuery(queries[tmp.getCategoryCode()]);
 
             if (c.moveToFirst()) {
                 do {
                     Item item = new Item(
-                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_ID)),
-                            c.getLong(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                            c.getString(c.getColumnIndex(ItemDBAdapter.COL_ID)),
+                            c.getLong(c.getColumnIndex(ItemDBAdapter.COL_AMOUNT)),
                             "",
                             MainActivity.sFractionDigits,
-                            c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
-                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
-                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
-                            c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
+                            c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)),
+                            c.getString(c.getColumnIndex(ItemDBAdapter.COL_MEMO)),
+                            c.getString(c.getColumnIndex(ItemDBAdapter.COL_EVENT_DATE)),
+                            c.getString(c.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
                     );
 
                     searchResultList.add(item);
                 } while (c.moveToNext());
             }
-            _itemsDbAdapter.close();
+            _itemDbAdapter.close();
 
             CategoryDetailListAdapter categoryDetailListAdapter =
                     new CategoryDetailListAdapter(_activity, 0, searchResultList);
@@ -210,8 +210,8 @@ public class TabFragment2C extends Fragment {
 
         _itemCategoryInList.clear();
         _itemCategoryExList.clear();
-        _itemsDbAdapter.open();
-        Cursor c = _itemsDbAdapter.getItemsByRawQuery(sQuery.getQueryC());
+        _itemDbAdapter.open();
+        Cursor c = _itemDbAdapter.getItemsByRawQuery(sQuery.getQueryC());
 
         if (c!=null && c.moveToFirst()) {
             BigDecimal balanceDay = new BigDecimal(0)
@@ -223,13 +223,13 @@ public class TabFragment2C extends Fragment {
                         c.getLong(c.getColumnIndex("SUM(amount)")),
                         "",
                         MainActivity.sFractionDigits,
-                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
+                        c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)),
                         "",
                         "",
                         ""
                 );
 
-                if(c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)) == 0) {
+                if(c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)) == 0) {
                     _balance.addIncome(item.getAmount());
                     balanceDay = balanceDay.add(item.getAmount());
                     _itemCategoryInList.add(item);
@@ -241,7 +241,7 @@ public class TabFragment2C extends Fragment {
             } while (c.moveToNext());
         }
 
-        _itemsDbAdapter.close();
+        _itemDbAdapter.close();
 
         _itemCategoryInAdapter.notifyDataSetChanged();
         _itemCategoryExAdapter.notifyDataSetChanged();
@@ -358,20 +358,20 @@ public class TabFragment2C extends Fragment {
         _stringBuilder.append(getResources().getString(R.string.updated_date));
         _stringBuilder.append("\n");
 
-        _itemsDbAdapter.open();
-        Cursor c = _itemsDbAdapter.getItemsByRawQuery(query);
+        _itemDbAdapter.open();
+        Cursor c = _itemDbAdapter.getItemsByRawQuery(query);
 
         if (c!=null && c.moveToFirst()) {
             do {
                 Item item = new Item(
                         "",
-                        c.getLong(c.getColumnIndex(ItemsDBAdapter.COL_AMOUNT)),
+                        c.getLong(c.getColumnIndex(ItemDBAdapter.COL_AMOUNT)),
                         "",
                         MainActivity.sFractionDigits,
-                        c.getInt(c.getColumnIndex(ItemsDBAdapter.COL_CATEGORY_CODE)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_MEMO)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_EVENT_DATE)),
-                        c.getString(c.getColumnIndex(ItemsDBAdapter.COL_UPDATE_DATE))
+                        c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_MEMO)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_EVENT_DATE)),
+                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
                 );
 
                 _stringBuilder.append(UtilCategory.getCategory(getContext(), item.getCategoryCode()));

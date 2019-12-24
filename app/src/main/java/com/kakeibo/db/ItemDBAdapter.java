@@ -11,8 +11,8 @@ import com.kakeibo.util.UtilDate;
 
 import java.util.Calendar;
 
-public class ItemsDBAdapter extends DBAdapter {
-    private static final String TAG = ItemsDBAdapter.class.getSimpleName();
+public class ItemDBAdapter extends DBAdapter {
+    private static final String TAG = ItemDBAdapter.class.getSimpleName();
     public static final String TABLE_NAME = "items";
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNT = "amount";
@@ -27,10 +27,10 @@ public class ItemsDBAdapter extends DBAdapter {
 
     private SQLiteDatabase _db;
 
-    public ItemsDBAdapter () {
+    public ItemDBAdapter() {
     }
 
-    public ItemsDBAdapter open() throws SQLException {
+    public ItemDBAdapter open() throws SQLException {
         _db = DBAdapter.getInstance().openDatabase();
         return this;
     }

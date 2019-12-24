@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.kakeibo.KkbCategory;
-import com.kakeibo.db.CategoriesDBAdapter;
-import com.kakeibo.db.CategoriesDspDBAdapter;
-import com.kakeibo.db.CategoriesLanDBAdapter;
+import com.kakeibo.db.CategoryDBAdapter;
+import com.kakeibo.db.CategoryDspDBAdapter;
+import com.kakeibo.db.CategoryLanDBAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +36,15 @@ public class UtilCategory {
         Log.d(TAG, "langCode="+langCode);
 
         sAllCategoryStrList.clear();
-        CategoriesLanDBAdapter categoriesLanDBAdapter = new CategoriesLanDBAdapter();
-        categoriesLanDBAdapter.open();
-        Cursor c = categoriesLanDBAdapter.getAllCategoryStrs(langCode);
+        CategoryLanDBAdapter categoryLanDBAdapter = new CategoryLanDBAdapter();
+        categoryLanDBAdapter.open();
+        Cursor c = categoryLanDBAdapter.getAllCategoryStrs(langCode);
         if (c!=null && c.moveToFirst()) {
             do {
                 sAllCategoryStrList.add(c.getString(0));
             } while (c.moveToNext());
         }
-        categoriesLanDBAdapter.close();
+        categoryLanDBAdapter.close();
     }
 
     private static void setDspCategoryStrList(Context context) {
@@ -57,25 +57,25 @@ public class UtilCategory {
         String langCode = UtilSystem.getCurrentLangCode(context);
 
         sAllKkbCategoryList.clear();
-        CategoriesDBAdapter categoriesDBAdapter = new CategoriesDBAdapter();
-        categoriesDBAdapter.open();
-        Cursor c = categoriesDBAdapter.getAllKkbCategories(langCode);
+        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+        categoryDBAdapter.open();
+        Cursor c = categoryDBAdapter.getAllKkbCategories(langCode);
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
                         c.getString(1), //second arg is name (colum name is like 'jpn')
                         0,
                         0,
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_PARENT)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_LOCATION)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
                         "",
                         "");
                 sAllKkbCategoryList.add(kkbCategory);
             } while (c.moveToNext());
         }
-        categoriesDBAdapter.close();
+        categoryDBAdapter.close();
     }
 
     private static void setDspKkbCategoryList(Context context) {
@@ -84,25 +84,25 @@ public class UtilCategory {
         String langCode = UtilSystem.getCurrentLangCode(context);
 
         sDspKkbCategoryList.clear();
-        CategoriesDspDBAdapter categoriesDspDBAdapter = new CategoriesDspDBAdapter();
-        categoriesDspDBAdapter.open();
-        Cursor c = categoriesDspDBAdapter.getKkbDspCategories(langCode);
+        CategoryDspDBAdapter categoryDspDBAdapter = new CategoryDspDBAdapter();
+        categoryDspDBAdapter.open();
+        Cursor c = categoryDspDBAdapter.getKkbDspCategories(langCode);
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_CODE)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
                         c.getString(1), //second arg is name (colum name is like 'jpn')
                         0,
                         0,
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_DRAWABLE)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_LOCATION)),
-                        c.getInt(c.getColumnIndex(CategoriesDBAdapter.COL_PARENT)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_LOCATION)),
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
                         "",
                         "");
                 sDspKkbCategoryList.add(kkbCategory);
             } while (c.moveToNext());
         }
-        categoriesDspDBAdapter.close();
+        categoryDspDBAdapter.close();
     }
 
     /*** category string list ***/

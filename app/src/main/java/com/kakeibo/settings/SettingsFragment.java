@@ -15,7 +15,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.kakeibo.R;
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     public static final String TAG = SettingsFragment.class.getSimpleName();
@@ -95,14 +95,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void deleteAllItems() {
-        ItemsDBAdapter itemsDbAdapter = new ItemsDBAdapter();
-        itemsDbAdapter.open();
+        ItemDBAdapter itemDbAdapter = new ItemDBAdapter();
+        itemDbAdapter.open();
 
-        if(itemsDbAdapter.deleteAllItems()) {
+        if(itemDbAdapter.deleteAllItems()) {
             Toast.makeText(getActivity(), getString(R.string.msg_all_delete_success), Toast.LENGTH_SHORT).show();
         }
 
-        itemsDbAdapter.close();
+        itemDbAdapter.close();
     }
 
     @Override

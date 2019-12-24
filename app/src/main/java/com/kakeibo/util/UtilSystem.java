@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import com.kakeibo.db.CategoriesLanDBAdapter;
+import com.kakeibo.db.CategoryLanDBAdapter;
 
 import java.util.Locale;
 
@@ -29,28 +29,28 @@ public class UtilSystem {
         String langScrt = locale.getScript();
 
         if (!"".equals(langCode) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_ARA).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_ENG).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_SPA).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_FRA).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_HIN).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_IND).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_JPN).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_KOR).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_ITA).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_POL).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_POR).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_RUS).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoriesLanDBAdapter.COL_TUR).getISO3Language())) {
-            langCode = CategoriesLanDBAdapter.COL_ENG;
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_ARA).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_ENG).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_SPA).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_FRA).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_HIN).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_IND).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_JPN).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_KOR).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_ITA).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_POL).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_POR).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_RUS).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_TUR).getISO3Language())) {
+            langCode = CategoryLanDBAdapter.COL_ENG;
         }
         /*** for Chinese ***/
         if (!"".equals(langScrt) &&
-                !langScrt.equals(new Locale(CategoriesLanDBAdapter.COL_Hans).getScript())) {
-            langCode = CategoriesLanDBAdapter.COL_Hans;
+                !langScrt.equals(new Locale(CategoryLanDBAdapter.COL_Hans).getScript())) {
+            langCode = CategoryLanDBAdapter.COL_Hans;
         } else if (!"".equals(langScrt) &&
-                !langScrt.equals(new Locale(CategoriesLanDBAdapter.COL_Hant).getScript())) {
-            langCode = CategoriesLanDBAdapter.COL_Hant;
+                !langScrt.equals(new Locale(CategoryLanDBAdapter.COL_Hant).getScript())) {
+            langCode = CategoryLanDBAdapter.COL_Hant;
         }
         Log.d(TAG, "prevCode = " + mPrevLang +
                 " currCode = " + langCode +

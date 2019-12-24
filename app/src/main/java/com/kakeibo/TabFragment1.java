@@ -17,7 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
@@ -189,7 +189,7 @@ public class TabFragment1 extends Fragment {
     void saveItem() {
         Log.d(TAG, "saveItem() called");
 
-        ItemsDBAdapter itemsDBAdapter = new ItemsDBAdapter();
+        ItemDBAdapter itemDBAdapter = new ItemDBAdapter();
 
         String eventDate = UtilDate.convertDateFormat(
                 _btnDate.getText().toString().split("\\s+")[0], MainActivity.sDateFormat, 3);
@@ -207,18 +207,18 @@ public class TabFragment1 extends Fragment {
                 updateDate
         );
 
-        itemsDBAdapter.open();
-        itemsDBAdapter.saveItem(item);
+        itemDBAdapter.open();
+        itemDBAdapter.saveItem(item);
         Toast.makeText(getActivity(), getResources().getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show();
-        itemsDBAdapter.close();
+        itemDBAdapter.close();
 
         _query = new Query(Query.QUERY_TYPE_NEW);
         UtilQuery.init();
         UtilQuery.setDate(eventDate, "");
-        UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-        UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-        UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+        UtilQuery.setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE);
+        UtilQuery.setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
         _query.setQueryC(UtilQuery.buildQueryC());
         _query.setQueryCs(UtilQuery.buildQueryCs());
         _query.setQueryD(UtilQuery.buildQueryD());

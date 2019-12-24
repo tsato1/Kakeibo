@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
-import java.sql.SQLData;
 import java.util.ArrayList;
 
 class PrepDB {
@@ -191,26 +190,26 @@ class PrepDB {
 
         for (TmpCategory category: list) {
             ContentValues values = new ContentValues();
-            values.put(CategoriesDBAdapter.COL_CODE, category.code);
-            values.put(CategoriesDBAdapter.COL_NAME, "");
-            values.put(CategoriesDBAdapter.COL_COLOR, 0);
-            values.put(CategoriesDBAdapter.COL_DRAWABLE, category.drawable);
-            values.put(CategoriesDBAdapter.COL_LOCATION, category.location);
-            values.put(CategoriesDBAdapter.COL_SUB_CATEGORIES, 0);
-            values.put(CategoriesDBAdapter.COL_DESC, "");
-            values.put(CategoriesDBAdapter.COL_SAVED_DATE, "");
-            db.insertOrThrow(CategoriesDBAdapter.TABLE_NAME, null, values);
+            values.put(CategoryDBAdapter.COL_CODE, category.code);
+            values.put(CategoryDBAdapter.COL_NAME, "");
+            values.put(CategoryDBAdapter.COL_COLOR, 0);
+            values.put(CategoryDBAdapter.COL_DRAWABLE, category.drawable);
+            values.put(CategoryDBAdapter.COL_LOCATION, category.location);
+            values.put(CategoryDBAdapter.COL_SUB_CATEGORIES, 0);
+            values.put(CategoryDBAdapter.COL_DESC, "");
+            values.put(CategoryDBAdapter.COL_SAVED_DATE, "");
+            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
 
             ContentValues values2 = new ContentValues();
-            values2.put(CategoriesLanDBAdapter.COL_CODE, category.code);
-            values2.put(CategoriesLanDBAdapter.COL_NAME, "");
-            values2.put(CategoriesLanDBAdapter.COL_EN, category.eng);
-            values2.put(CategoriesLanDBAdapter.COL_ES, category.spa);
-            values2.put(CategoriesLanDBAdapter.COL_FR, category.fra);
-            values2.put(CategoriesLanDBAdapter.COL_IT, category.ita);
-            values2.put(CategoriesLanDBAdapter.COL_JA, category.jpn);
-            values2.put(CategoriesLanDBAdapter.COL_SAVED_DATE, "");
-            db.insertOrThrow(CategoriesLanDBAdapter.TABLE_NAME, null, values2);
+            values2.put(CategoryLanDBAdapter.COL_CODE, category.code);
+            values2.put(CategoryLanDBAdapter.COL_NAME, "");
+            values2.put(CategoryLanDBAdapter.COL_EN, category.eng);
+            values2.put(CategoryLanDBAdapter.COL_ES, category.spa);
+            values2.put(CategoryLanDBAdapter.COL_FR, category.fra);
+            values2.put(CategoryLanDBAdapter.COL_IT, category.ita);
+            values2.put(CategoryLanDBAdapter.COL_JA, category.jpn);
+            values2.put(CategoryLanDBAdapter.COL_SAVED_DATE, "");
+            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values2);
         }
     }
 
@@ -555,41 +554,41 @@ class PrepDB {
 
         for (int i = 0; i < UtilCategory.numCategories; i++) {
             ContentValues values1 = new ContentValues();
-            values1.put(CategoriesDBAdapter.COL_CODE, list.get(i).code);
-            values1.put(CategoriesDBAdapter.COL_COLOR, 0);
-            values1.put(CategoriesDBAdapter.COL_SIGNIFICANCE, 0);
-            values1.put(CategoriesDBAdapter.COL_DRAWABLE, list.get(i).drawable);
-            values1.put(CategoriesDBAdapter.COL_PARENT, -1);
-            values1.put(CategoriesDBAdapter.COL_DESC, "");
-            values1.put(CategoriesDBAdapter.COL_VAL1, 0);
-            values1.put(CategoriesDBAdapter.COL_VAL2, 0);
-            values1.put(CategoriesDBAdapter.COL_VAL3, 0);
-            values1.put(CategoriesDBAdapter.COL_SAVED_DATE, "");
-            db.insertOrThrow(CategoriesDBAdapter.TABLE_NAME, null, values1);
+            values1.put(CategoryDBAdapter.COL_CODE, list.get(i).code);
+            values1.put(CategoryDBAdapter.COL_COLOR, 0);
+            values1.put(CategoryDBAdapter.COL_SIGNIFICANCE, 0);
+            values1.put(CategoryDBAdapter.COL_DRAWABLE, list.get(i).drawable);
+            values1.put(CategoryDBAdapter.COL_PARENT, -1);
+            values1.put(CategoryDBAdapter.COL_DESC, "");
+            values1.put(CategoryDBAdapter.COL_VAL1, 0);
+            values1.put(CategoryDBAdapter.COL_VAL2, 0);
+            values1.put(CategoryDBAdapter.COL_VAL3, 0);
+            values1.put(CategoryDBAdapter.COL_SAVED_DATE, "");
+            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values1);
 
             ContentValues values = new ContentValues();
-            values.put(CategoriesLanDBAdapter.COL_CODE, list.get(i).code);
-            values.put(CategoriesLanDBAdapter.COL_ENG, list.get(i).eng);
-            values.put(CategoriesLanDBAdapter.COL_SPA, list.get(i).spa);
-            values.put(CategoriesLanDBAdapter.COL_FRA, list.get(i).fra);
-            values.put(CategoriesLanDBAdapter.COL_ITA, list.get(i).ita);
-            values.put(CategoriesLanDBAdapter.COL_JPN, list.get(i).jpn);
-            values.put(CategoriesLanDBAdapter.COL_ARA, list.get(i).ara);
-            values.put(CategoriesLanDBAdapter.COL_HIN, list.get(i).hin);
-            values.put(CategoriesLanDBAdapter.COL_IND, list.get(i).ind);
-            values.put(CategoriesLanDBAdapter.COL_KOR, list.get(i).kor);
-            values.put(CategoriesLanDBAdapter.COL_POL, list.get(i).pol);
-            values.put(CategoriesLanDBAdapter.COL_POR, list.get(i).por);
-            values.put(CategoriesLanDBAdapter.COL_RUS, list.get(i).rus);
-            values.put(CategoriesLanDBAdapter.COL_TUR, list.get(i).tur);
-            values.put(CategoriesLanDBAdapter.COL_Hans, list.get(i).hans);
-            values.put(CategoriesLanDBAdapter.COL_Hant, list.get(i).hant);
-            db.insertOrThrow(CategoriesLanDBAdapter.TABLE_NAME, null, values);
+            values.put(CategoryLanDBAdapter.COL_CODE, list.get(i).code);
+            values.put(CategoryLanDBAdapter.COL_ENG, list.get(i).eng);
+            values.put(CategoryLanDBAdapter.COL_SPA, list.get(i).spa);
+            values.put(CategoryLanDBAdapter.COL_FRA, list.get(i).fra);
+            values.put(CategoryLanDBAdapter.COL_ITA, list.get(i).ita);
+            values.put(CategoryLanDBAdapter.COL_JPN, list.get(i).jpn);
+            values.put(CategoryLanDBAdapter.COL_ARA, list.get(i).ara);
+            values.put(CategoryLanDBAdapter.COL_HIN, list.get(i).hin);
+            values.put(CategoryLanDBAdapter.COL_IND, list.get(i).ind);
+            values.put(CategoryLanDBAdapter.COL_KOR, list.get(i).kor);
+            values.put(CategoryLanDBAdapter.COL_POL, list.get(i).pol);
+            values.put(CategoryLanDBAdapter.COL_POR, list.get(i).por);
+            values.put(CategoryLanDBAdapter.COL_RUS, list.get(i).rus);
+            values.put(CategoryLanDBAdapter.COL_TUR, list.get(i).tur);
+            values.put(CategoryLanDBAdapter.COL_Hans, list.get(i).hans);
+            values.put(CategoryLanDBAdapter.COL_Hant, list.get(i).hant);
+            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values);
 
             ContentValues values2 = new ContentValues();
-            values2.put(CategoriesDspDBAdapter.COL_LOCATION, list.get(i).location);
-            values2.put(CategoriesDspDBAdapter.COL_CODE, list.get(i).code);
-            db.insertOrThrow(CategoriesDspDBAdapter.TABLE_NAME, null, values2);
+            values2.put(CategoryDspDBAdapter.COL_LOCATION, list.get(i).location);
+            values2.put(CategoryDspDBAdapter.COL_CODE, list.get(i).code);
+            db.insertOrThrow(CategoryDspDBAdapter.TABLE_NAME, null, values2);
         }
     }
 }

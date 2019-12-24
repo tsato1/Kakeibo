@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kakeibo.db.ItemsDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
@@ -321,17 +321,17 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
         UtilQuery.init();
 
         if (checkBeforeSearch()) {
-            UtilQuery.setCGroupBy(ItemsDBAdapter.COL_CATEGORY_CODE);
+            UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
             UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
-            UtilQuery.setCsWhere(ItemsDBAdapter.COL_CATEGORY_CODE);
-            UtilQuery.setDOrderBy(ItemsDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
+            UtilQuery.setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE);
+            UtilQuery.setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, UtilQuery.ASC);
             query.setQueryC(UtilQuery.buildQueryC());
             query.setQueryCs(UtilQuery.buildQueryCs());
             query.setQueryD(UtilQuery.buildQueryD());
 
-            ItemsDBAdapter itemsDbAdapter = new ItemsDBAdapter();
-            itemsDbAdapter.open();
-            Cursor c = itemsDbAdapter.getCountItemsByRawQuery(query.getQueryD());
+            ItemDBAdapter itemDbAdapter = new ItemDBAdapter();
+            itemDbAdapter.open();
+            Cursor c = itemDbAdapter.getCountItemsByRawQuery(query.getQueryD());
 
             if (c.moveToNext()) {
                 /*** if the query returns empty set, toast message ***/
@@ -348,7 +348,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
                 Toast.makeText(_activity, getString(R.string.msg_no_result_found), Toast.LENGTH_SHORT).show();
             }
 
-            itemsDbAdapter.close();
+            itemDbAdapter.close();
         }
     }
 }

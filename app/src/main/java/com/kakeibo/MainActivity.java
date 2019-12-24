@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,9 +26,7 @@ import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilSystem;
 
-import java.util.ArrayList;
 import java.util.Currency;
-import java.util.List;
 import java.util.Locale;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
@@ -161,35 +157,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        private ViewPagerAdapter(FragmentManager manager, int flag) {
-            super(manager, flag);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        private void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
     private void loadSharedPreference() {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -222,9 +189,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.fab_start:
                     if (viewPager.getCurrentItem()==1) {
                         /**** invisible ****/
-//                        TabFragment2 tabFragment2 = (TabFragment2) fm.findFragmentByTag(
-//                                "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
-//                        tabFragment2.toggleViews();
                     } else if (viewPager.getCurrentItem()==2) {
                         TabFragment3 tabFragment3 = (TabFragment3) fm.findFragmentByTag(
                                 "android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
