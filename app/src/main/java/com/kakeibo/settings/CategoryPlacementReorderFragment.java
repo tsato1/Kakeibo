@@ -47,7 +47,6 @@ public class CategoryPlacementReorderFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        _eventListener = (SettingsCategoryEventListener) context;
     }
 
     @Override
@@ -55,7 +54,6 @@ public class CategoryPlacementReorderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_category_placement, container, false);
         _activity = getActivity();
         _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
-        _eventListener = (SettingsCategoryEventListener) _activity;
 
         findViews(view);
 
@@ -91,10 +89,10 @@ public class CategoryPlacementReorderFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_back:
-                    _eventListener.onBackPressed(1);
+                    ((CategoryPlacementActivity) _activity).onBackPressed(1);
                     break;
                 case R.id.btn_next:
-                    _eventListener.onNextPressed(2);
+                    ((CategoryPlacementActivity) _activity).onNextPressed(2);
                     break;
             }
         }

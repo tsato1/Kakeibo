@@ -51,7 +51,6 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     @Override
     public void onAttach(@Nonnull Context context) {
         super.onAttach(context);
-        _eventListener = (SettingsCategoryEventListener) context;
     }
 
     @Override
@@ -59,7 +58,6 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_category_placement, container, false);
         _activity = getActivity();
         _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
-        _eventListener = (SettingsCategoryEventListener) _activity;
 
         findViews(view);
 
@@ -94,10 +92,10 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_back:
-                    _eventListener.onBackPressed(0);
+                    ((CategoryPlacementActivity) _activity).onBackPressed(0);
                     break;
                 case R.id.btn_next:
-                    _eventListener.onNextPressed(1);
+                    ((CategoryPlacementActivity) _activity).onNextPressed(1);
                     break;
             }
         }

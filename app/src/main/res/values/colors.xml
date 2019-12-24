@@ -15,4 +15,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorBlue">#12a1eb</color>
+
+    <color name="pager_dots_selected">#FF0000</color>
+    <color name="pager_dots_not_selected">#12a1eb</color>
 </resources>
