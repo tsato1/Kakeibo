@@ -10,29 +10,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.kakeibo.CategoryGridAdapter;
+import com.kakeibo.CategoryDynamicGridAdapter;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
+import com.takahidesato.android.dynamicgrid.DynamicGridView;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CategoryPlacementReorderFragment extends Fragment {
     public final static String TAG = CategoryPlacementReorderFragment.class.getSimpleName();
 
     private static List<KkbCategory> _kkbCategoryList;
-    private static List<Integer> _selectedCategoryCodeForRemoval;
-    private static SettingsCategoryEventListener _eventListener;
+
+    DynamicGridView _dgvCategory;
 
     private Activity _activity;
-    private GridView _grvCategory;
     private Button _btnBack, _btnNext;
     private RelativeLayout _rllBackground;
 
@@ -51,37 +53,61 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings_category_placement, container, false);
+        View view = inflater.inflate(R.layout.fragment_s_category_placement_reorder, container, false);
         _activity = getActivity();
         _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
 
         findViews(view);
 
+        _dgvCategory = view.findViewById(R.id.dynamic_grid);
+        _dgvCategory.setAdapter(new CategoryDynamicGridAdapter(_activity,
+                new ArrayList<>(Arrays.asList(Cheeses.sCheeseStrings)), 5));
+        _dgvCategory.setOnDropListener(new DynamicGridView.OnDropListener() {
+            @Override
+            public void onActionDrop()
+            {
+                _dgvCategory.stopEditMode();
+            }
+        });
+        _dgvCategory.setOnDragListener(new DynamicGridView.OnDragListener() {
+            @Override
+            public void onDragStarted(int position) {
+                Log.d(TAG, "drag started at position " + position);
+            }
+
+            @Override
+            public void onDragPositionsChanged(int oldPosition, int newPosition) {
+                Log.d(TAG, String.format("drag item position changed from %d to %d", oldPosition, newPosition));
+            }
+        });
+        _dgvCategory.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                _dgvCategory.startEditMode(position);
+                return true;
+            }
+        });
+
+        _dgvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(_activity, parent.getAdapter().getItem(position).toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
 
     private void findViews(View view) {
-        _grvCategory = view.findViewById(R.id.grv_category);
         _btnBack = view.findViewById(R.id.btn_back);
         _btnNext = view.findViewById(R.id.btn_next);
         _btnNext.setText(getString(R.string.done));
-        _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
-        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
-
-        _selectedCategoryCodeForRemoval = new ArrayList<>();
-
-        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
-        _grvCategory.setAdapter(categoryGridAdapter);
-        _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                _selectedCategoryCodeForRemoval.add(_kkbCategoryList.get(position).getCode());
-//                _imvCategoryRemoval.setVisibility(View.VISIBLE);
-            }
-        });
-
         _btnBack.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
         _btnNext.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
+
+        _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
+        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
     }
 
     class ItemClickListener implements View.OnClickListener {

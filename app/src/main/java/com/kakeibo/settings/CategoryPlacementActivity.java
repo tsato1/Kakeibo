@@ -1,6 +1,5 @@
 package com.kakeibo.settings;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -134,6 +133,15 @@ public class CategoryPlacementActivity extends AppCompatActivity {
             case 1:
                 _viewPager.setCurrentItem(1);
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (_fragmentReorder._dgvCategory.isEditMode()) {
+            _fragmentReorder._dgvCategory.stopEditMode();
+        } else {
+            super.onBackPressed();
         }
     }
 }

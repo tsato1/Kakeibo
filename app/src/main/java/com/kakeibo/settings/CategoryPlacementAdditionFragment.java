@@ -24,7 +24,6 @@ import com.kakeibo.util.UtilCategory;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 public class CategoryPlacementAdditionFragment extends Fragment {
@@ -55,7 +54,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings_category_placement, container, false);
+        View view = inflater.inflate(R.layout.fragment_s_category_placement, container, false);
         _activity = getActivity();
         _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
 

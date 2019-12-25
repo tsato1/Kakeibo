@@ -2,7 +2,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rll_settings_category_placement"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_above="@id/rll_footer"
         android:layout_below="@id/txv_description"
         android:columnWidth="@dimen/grid_view_column_width"
         android:numColumns="auto_fit"
@@ -25,6 +25,7 @@
         android:stretchMode="spacingWidthUniform" />
 
     <RelativeLayout
+        android:id="@+id/rll_footer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tab_height"
         android:layout_alignParentBottom="true"
