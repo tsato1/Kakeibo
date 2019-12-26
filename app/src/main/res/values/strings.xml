@@ -93,6 +93,7 @@
     <string name="dash" translatable="false">-</string>
     <string name="percent" translatable="false">%</string>
     <string name="toggle" translatable="false">toggle</string>
+    <string name="def_num_columns" translatable="false">4</string>
 
     <!-- Export -->
     <string name="select_file">Select file</string>
@@ -119,6 +120,7 @@
 
     <string name="placement_of_category_icons">Placement of Category icons</string>
     <string name="create_new_category">Create a new Category</string>
+    <string name="num_columns">Number of Category icons per row</string>
     <string name="settings_about_categories">Settings about categories in the app</string>
     <string name="remove_categories">Remove Categories</string>
     <string name="add_categories">Add Categories</string>
@@ -131,5 +133,6 @@
     <string name="pref_key_category" translatable="false">pref_key_category</string>
     <string name="pref_key_category_placement" translatable="false">pref_key_category_placement</string>
     <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>
+    <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
 
 </resources>

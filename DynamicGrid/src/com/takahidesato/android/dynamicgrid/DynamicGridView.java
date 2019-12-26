@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -775,7 +776,7 @@ public class DynamicGridView extends GridView {
     }
 
     /**
-     * A {@link org.askerov.dynamicgrid.DynamicGridView.SwitchCellAnimator} for versions KitKat and below.
+     * for versions KitKat and below.
      */
     private class KitKatSwitchCellAnimator implements SwitchCellAnimator {
 
@@ -826,7 +827,7 @@ public class DynamicGridView extends GridView {
     }
 
     /**
-     * A {@link org.askerov.dynamicgrid.DynamicGridView.SwitchCellAnimator} for versions L and above.
+     * for versions L and above.
      */
     private class LSwitchCellAnimator implements SwitchCellAnimator {
 

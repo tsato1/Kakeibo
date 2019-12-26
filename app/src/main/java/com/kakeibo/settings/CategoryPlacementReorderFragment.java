@@ -31,6 +31,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
     public final static String TAG = CategoryPlacementReorderFragment.class.getSimpleName();
 
     private static List<KkbCategory> _kkbCategoryList;
+    private static int sNumColumns;
 
     DynamicGridView _dgvCategory;
 
@@ -49,6 +50,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        sNumColumns = CategoryPlacementActivity.sNumColumns;
     }
 
     @Override
@@ -61,7 +63,8 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
         _dgvCategory = view.findViewById(R.id.dynamic_grid);
         _dgvCategory.setAdapter(new CategoryDynamicGridAdapter(_activity,
-                new ArrayList<>(Arrays.asList(Cheeses.sCheeseStrings)), 5));
+                new ArrayList<>(Arrays.asList(Cheeses.sCheeseStrings)), sNumColumns));
+        _dgvCategory.setNumColumns(sNumColumns);
         _dgvCategory.setOnDropListener(new DynamicGridView.OnDropListener() {
             @Override
             public void onActionDrop()

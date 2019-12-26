@@ -62,7 +62,6 @@ public class CategoryPlacementRemovalFragment extends Fragment {
     }
 
     private void findViews(View view) {
-        _grvCategory = view.findViewById(R.id.grv_category);
         _btnBack = view.findViewById(R.id.btn_back);
         _btnNext = view.findViewById(R.id.btn_next);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
@@ -71,6 +70,8 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _selectedCategoryCodeForRemoval = new ArrayList<>();
 
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
+        _grvCategory = view.findViewById(R.id.grv_category);
+        _grvCategory.setNumColumns(CategoryPlacementActivity.sNumColumns);
         _grvCategory.setAdapter(categoryGridAdapter);
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

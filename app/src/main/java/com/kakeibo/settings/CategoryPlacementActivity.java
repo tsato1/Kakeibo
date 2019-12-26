@@ -1,5 +1,6 @@
 package com.kakeibo.settings;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.kakeibo.MyExceptionHandler;
@@ -23,6 +25,8 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 public class CategoryPlacementActivity extends AppCompatActivity {
     private final static String TAG = CategoryPlacementActivity.class.getSimpleName();
     private final static int NUM_PAGES = 3;
+
+    public static int sNumColumns;
 
     private NonSwipeableViewPager _viewPager;
     private ViewPagerAdapter _adapter;
@@ -65,9 +69,25 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         addDots();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+
+        /*** SharedPreference: num category icons per row ***/
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
+        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
+        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+
+        Log.d(TAG, "sNumColumns:"+sNumColumns);
+    }
+
     public void addDots() {
         _lstDots = new ArrayList<>();
-        LinearLayout dotsLayout = (LinearLayout)findViewById(R.id.dots);
+        LinearLayout dotsLayout = findViewById(R.id.dots);
 
         for(int i = 0; i < NUM_PAGES; i++) {
             ImageView dot = new ImageView(this);

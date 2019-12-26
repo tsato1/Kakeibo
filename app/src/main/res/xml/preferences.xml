@@ -34,6 +34,15 @@
             android:title="@string/create_new_category"
             android:negativeButtonText="@string/no"
             android:positiveButtonText="@string/yes"/>
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/pref_list_num_columns"
+            android:entryValues="@array/pref_list_num_columns_values"
+            android:key="@string/pref_key_num_columns"
+            android:summary="%s"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/num_columns" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/in_app_data"

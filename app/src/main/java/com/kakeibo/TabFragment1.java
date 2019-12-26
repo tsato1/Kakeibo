@@ -85,16 +85,16 @@ public class TabFragment1 extends Fragment {
         UtilKeyboard.hideSoftKeyboard(_activity);
     }
 
-    void findViews(View view)
-    {
+    void findViews(View view) {
         _btnPrev = view.findViewById(R.id.btn_prev);
         _btnDate = view.findViewById(R.id.btn_date);
         _btnNext = view.findViewById(R.id.btn_next);
         _edtAmount = view.findViewById(R.id.edt_amount);
         _edtMemo = view.findViewById(R.id.edt_memo);
 
-        _grvCategory = view.findViewById(R.id.grv_category);
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
+        _grvCategory = view.findViewById(R.id.grv_category);
+        _grvCategory.setNumColumns(MainActivity.sNumColumns);
         _grvCategory.setAdapter(categoryGridAdapter);
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

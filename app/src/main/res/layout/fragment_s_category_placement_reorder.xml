@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_above="@+id/rll_footer"
-        android:layout_below="@id/txv_description"
-        android:numColumns="5" />
+        android:layout_below="@id/txv_description" />
 
     <RelativeLayout
         android:id="@+id/rll_footer"

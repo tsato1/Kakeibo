@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static int sFragmentPosition;
     public static int sDateFormat;
     public static int sFractionDigits;
-    public static int sWidgetFontSize;
+    public static int sNumColumns;
     public static String[] sWeekName;
 
 //    private InterstitialAd mInterstitialAd;
@@ -178,8 +178,15 @@ public class MainActivity extends AppCompatActivity {
         String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 
+        /*** num category icons per row ***/
+        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns),
+                getString(R.string.def_num_columns));
+        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
+        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+
         Log.d(TAG, "sDateFormat:"+sDateFormat+
-                " sFractionDigits:"+sFractionDigits);
+                " sFractionDigits:"+sFractionDigits+
+                " sNumColumns:"+sNumColumns);
     }
 
     class ButtonClickListener implements View.OnClickListener {
