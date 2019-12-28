@@ -27,7 +27,9 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
         } else {
             holder = (CheeseViewHolder) convertView.getTag();
         }
-        holder.build(getItem(position).toString());
+
+        KkbCategory item = (KkbCategory) getItem(position);
+        holder.build(item.getName(), item.getDrawable());
         return convertView;
     }
 
@@ -36,13 +38,13 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
         private ImageView image;
 
         private CheeseViewHolder(View view) {
-            titleText = (TextView) view.findViewById(R.id.item_title);
-            image = (ImageView) view.findViewById(R.id.item_img);
+            titleText = view.findViewById(R.id.item_title);
+            image = view.findViewById(R.id.item_img);
         }
 
-        void build(String title) {
+        void build(String title, int drawable) {
             titleText.setText(title);
-            image.setImageResource(R.drawable.ic_launcher);
+            image.setImageResource(drawable);
         }
     }
 }

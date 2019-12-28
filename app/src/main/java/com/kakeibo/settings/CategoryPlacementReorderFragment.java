@@ -23,8 +23,6 @@ import com.kakeibo.util.UtilCategory;
 
 import com.takahidesato.android.dynamicgrid.DynamicGridView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CategoryPlacementReorderFragment extends Fragment {
@@ -62,8 +60,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         findViews(view);
 
         _dgvCategory = view.findViewById(R.id.dynamic_grid);
-        _dgvCategory.setAdapter(new CategoryDynamicGridAdapter(_activity,
-                new ArrayList<>(Arrays.asList(Cheeses.sCheeseStrings)), sNumColumns));
+        _dgvCategory.setAdapter(new CategoryDynamicGridAdapter(_activity, _kkbCategoryList, sNumColumns));
         _dgvCategory.setNumColumns(sNumColumns);
         _dgvCategory.setOnDropListener(new DynamicGridView.OnDropListener() {
             @Override

@@ -38,6 +38,8 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 //todo expected/unexpected, favorite,
 
+//todo use viewholder for adapter, use <?> for adapter type
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
