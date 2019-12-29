@@ -2,6 +2,7 @@ package com.kakeibo.db;
 
 class TmpCategory {
     int code;
+    int color;
     int drawable;
     int location;
     String ara;

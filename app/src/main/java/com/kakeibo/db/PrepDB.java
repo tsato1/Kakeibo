@@ -3,6 +3,7 @@ package com.kakeibo.db;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
@@ -589,6 +590,171 @@ class PrepDB {
             values2.put(CategoryDspDBAdapter.COL_LOCATION, list.get(i).location);
             values2.put(CategoryDspDBAdapter.COL_CODE, list.get(i).code);
             db.insertOrThrow(CategoryDspDBAdapter.TABLE_NAME, null, values2);
+        }
+    }
+
+    static void addMoreCategories(SQLiteDatabase db) {
+        /*** change color column of Income from 0 to 1 ***/
+        String query = "UPDATE " + CategoryDBAdapter.TABLE_NAME +
+                " SET " + CategoryDBAdapter.COL_CODE + "=1" +
+                " WHERE " + CategoryDBAdapter.COL_CODE + "=0;";
+        db.execSQL(query);
+
+        ArrayList<TmpCategory> list = new ArrayList<>();
+
+        TmpCategory bonus = new TmpCategory();
+        bonus.code=16;
+        bonus.color=1;
+        bonus.drawable=R.drawable.ic_category_bonus;
+        bonus.ara="";
+        bonus.eng="BONUS";
+        bonus.spa="";
+        bonus.fra="";
+        bonus.hin="";
+        bonus.ind="";
+        bonus.ita="";
+        bonus.jpn="ボーナス";
+        bonus.kor="";
+        bonus.pol="";
+        bonus.por="";
+        bonus.rus="";
+        bonus.tur="";
+        bonus.hans="";
+        bonus.hant="";
+        list.add(bonus);
+
+        TmpCategory allowance = new TmpCategory();
+        allowance.code=17;
+        allowance.color=1;
+        allowance.drawable=R.drawable.ic_category_allowance;
+        allowance.ara="";
+        allowance.eng="ALLOW";
+        allowance.spa="";
+        allowance.fra="";
+        allowance.hin="";
+        allowance.ind="";
+        allowance.ita="";
+        allowance.jpn="お小遣い";
+        allowance.kor="";
+        allowance.pol="";
+        allowance.por="";
+        allowance.rus="";
+        allowance.tur="";
+        allowance.hans="";
+        allowance.hant="";
+        list.add(allowance);
+
+        TmpCategory inv = new TmpCategory();
+        inv.code=18;
+        inv.color=1;
+        inv.drawable=R.drawable.ic_category_in_inv;
+        inv.ara="";
+        inv.eng="INV";
+        inv.spa="";
+        inv.fra="";
+        inv.hin="";
+        inv.ind="";
+        inv.ita="";
+        inv.jpn="投資";
+        inv.kor="";
+        inv.pol="";
+        inv.por="";
+        inv.rus="";
+        inv.tur="";
+        inv.hans="";
+        inv.hant="";
+        list.add(inv);
+
+        TmpCategory rent = new TmpCategory();
+        rent.code=19;
+        rent.color=1;
+        rent.drawable=R.drawable.ic_category_in_rent;
+        rent.ara="";
+        rent.eng="RENT";
+        rent.spa="";
+        rent.fra="";
+        rent.hin="";
+        rent.ind="";
+        rent.ita="";
+        rent.jpn="家賃";
+        rent.kor="";
+        rent.pol="";
+        rent.por="";
+        rent.rus="";
+        rent.tur="";
+        rent.hans="";
+        rent.hant="";
+        list.add(rent);
+
+        TmpCategory in_circle = new TmpCategory();
+        in_circle.code=20;
+        in_circle.color=0;
+        in_circle.drawable=R.drawable.ic_category_ex_inv;
+        in_circle.ara="";
+        in_circle.eng="INV";
+        in_circle.spa="";
+        in_circle.fra="";
+        in_circle.hin="";
+        in_circle.ind="";
+        in_circle.ita="";
+        in_circle.jpn="投資";
+        in_circle.kor="";
+        in_circle.pol="";
+        in_circle.por="";
+        in_circle.rus="";
+        in_circle.tur="";
+        in_circle.hans="";
+        in_circle.hant="";
+        list.add(in_circle);
+
+        TmpCategory in_square = new TmpCategory();
+        in_square.code=21;
+        in_square.color=0;
+        in_square.drawable=R.drawable.ic_category_ex_rent;
+        in_square.ara="";
+        in_square.eng="RENT";
+        in_square.spa="";
+        in_square.fra="";
+        in_square.hin="";
+        in_square.ind="";
+        in_square.ita="";
+        in_square.jpn="家賃";
+        in_square.kor="";
+        in_square.pol="";
+        in_square.por="";
+        in_square.rus="";
+        in_square.tur="";
+        in_square.hans="";
+        in_square.hant="";
+        list.add(in_square);
+
+        for (TmpCategory c : list) {
+            ContentValues values = new ContentValues();
+            values.put(CategoryDBAdapter.COL_CODE, c.code);
+            values.put(CategoryDBAdapter.COL_COLOR, c.color);
+            values.put(CategoryDBAdapter.COL_DRAWABLE, c.drawable);
+            values.put(CategoryDBAdapter.COL_DESC, "");
+            values.put(CategoryDBAdapter.COL_SAVED_DATE, "");
+            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
+
+            ContentValues values1 = new ContentValues();
+            values1.put(CategoryLanDBAdapter.COL_CODE, c.code);
+            values1.put(CategoryLanDBAdapter.COL_ARA, c.ara);
+            values1.put(CategoryLanDBAdapter.COL_ENG, c.eng);
+            values1.put(CategoryLanDBAdapter.COL_SPA, c.spa);
+            values1.put(CategoryLanDBAdapter.COL_FRA, c.fra);
+            values1.put(CategoryLanDBAdapter.COL_HIN, c.hin);
+            values1.put(CategoryLanDBAdapter.COL_IND, c.ind);
+            values1.put(CategoryLanDBAdapter.COL_ITA, c.ita);
+            values1.put(CategoryLanDBAdapter.COL_JPN, c.jpn);
+            values1.put(CategoryLanDBAdapter.COL_KOR, c.kor);
+            values1.put(CategoryLanDBAdapter.COL_POL, c.pol);
+            values1.put(CategoryLanDBAdapter.COL_POR, c.por);
+            values1.put(CategoryLanDBAdapter.COL_RUS, c.rus);
+            values1.put(CategoryLanDBAdapter.COL_TUR, c.tur);
+            values1.put(CategoryLanDBAdapter.COL_Hans, c.hans);
+            values1.put(CategoryLanDBAdapter.COL_Hant, c.hant);
+            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values1);
         }
     }
 }
