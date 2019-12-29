@@ -81,7 +81,7 @@ public class TabFragment2D extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _activity = getActivity();
-        _view = inflater.inflate(R.layout.tab_fragment_2d, container, false);
+        _view = inflater.inflate(R.layout.fragment_tab_2d, container, false);
 
         findViews();
 

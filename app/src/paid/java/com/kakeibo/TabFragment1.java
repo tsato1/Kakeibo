@@ -50,7 +50,7 @@ public class TabFragment1 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _activity = getActivity();
-        View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_1, container, false);
 
         findViews(view);
         setListeners();

@@ -29,7 +29,7 @@
         android:focusableInTouchMode="false"
         android:paddingBottom="@dimen/padding_bottom_of_category_image"
         android:contentDescription="@string/category"
-        android:src="@drawable/ic_sync_black_24dp"
+        android:src="@drawable/ic_overlay_remove"
         android:visibility="gone"
         style="?android:attr/buttonBarButtonStyle"/>
 
@@ -43,7 +43,7 @@
         android:focusableInTouchMode="false"
         android:paddingBottom="@dimen/padding_bottom_of_category_image"
         android:contentDescription="@string/category"
-        android:src="@drawable/ic_sync_black_24dp"
+        android:src="@drawable/ic_overlay_add"
         android:visibility="gone"
         style="?android:attr/buttonBarButtonStyle"/>
 

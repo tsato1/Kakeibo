@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,7 @@ import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -30,14 +31,12 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     public static final String TAG = CategoryPlacementAdditionFragment.class.getSimpleName();
 
     private static List<KkbCategory> _kkbCategoryList;
-    private static List<Integer> _selectedCategoryCodeForRemoval;
+    private static HashSet<Integer> _selectedCategorySet;
 
     private Activity _activity;
     private GridView _grvCategory;
     private Button _btnBack, _btnNext;
     private RelativeLayout _rllBackground;
-
-    private SettingsCategoryEventListener _eventListener;
 
     public static CategoryPlacementAdditionFragment newInstance() {
         CategoryPlacementAdditionFragment fragment = new CategoryPlacementAdditionFragment();
@@ -69,7 +68,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_addition));
 
-        _selectedCategoryCodeForRemoval = new ArrayList<>();
+        _selectedCategorySet = new HashSet<>();
 
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);
@@ -78,13 +77,23 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                _selectedCategoryCodeForRemoval.add(_kkbCategoryList.get(position).getCode());
-//                _imvCategoryRemoval.setVisibility(View.VISIBLE);
+                ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_addition);
+                toggle(_kkbCategoryList.get(position).getCode(), imvCategoryOverlay);
             }
         });
 
         _btnBack.setOnClickListener(new CategoryPlacementAdditionFragment.ItemClickListener());
         _btnNext.setOnClickListener(new CategoryPlacementAdditionFragment.ItemClickListener());
+    }
+
+    private void toggle(int categoryCode, ImageView imv) {
+        if (_selectedCategorySet.contains(categoryCode)) {
+            _selectedCategorySet.remove(categoryCode);
+            imv.setVisibility(View.GONE);
+        } else {
+            _selectedCategorySet.add(categoryCode);
+            imv.setVisibility(View.VISIBLE);
+        }
     }
 
     class ItemClickListener implements View.OnClickListener {

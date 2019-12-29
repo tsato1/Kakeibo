@@ -104,7 +104,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.d(TAG, "onCreateView() called");
         _activity = getActivity();
-        _view = inflater.inflate(R.layout.tab_fragment_2, container, false);
+        _view = inflater.inflate(R.layout.fragment_tab_2, container, false);
 
         findViews();
 

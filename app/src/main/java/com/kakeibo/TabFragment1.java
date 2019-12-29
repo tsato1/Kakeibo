@@ -60,7 +60,7 @@ public class TabFragment1 extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab_fragment_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_1, container, false);
         _activity = getActivity();
         _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
 

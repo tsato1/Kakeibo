@@ -58,7 +58,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        _view = inflater.inflate(R.layout.tab_fragment_3, container, false);
+        _view = inflater.inflate(R.layout.fragment_tab_3, container, false);
 
         _activity = getActivity();
         _context = getContext();
