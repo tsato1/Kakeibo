@@ -55,7 +55,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement, container, false);
         _activity = getActivity();
-        _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
+        _kkbCategoryList = UtilCategory.getNonDspKkbCategoryList(_activity);
 
         findViews(view);
 

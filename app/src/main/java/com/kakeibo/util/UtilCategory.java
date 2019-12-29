@@ -3,6 +3,7 @@ package com.kakeibo.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.kakeibo.KkbCategory;
 import com.kakeibo.db.CategoryDBAdapter;
@@ -19,6 +20,7 @@ public class UtilCategory {
     private static List<String> sDspCategoryStrList = new ArrayList<>(); //key(i)=location
     private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//key(i)=category code
     private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//key(i)=location
+    private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();//key: code, val: KkbCategory
 
     public static int numCategories = 16;
 
@@ -105,6 +107,33 @@ public class UtilCategory {
         categoryDspDBAdapter.close();
     }
 
+    private static void setNonDspKkbCategoryList(Context context) {
+        Log.d(TAG, "setNonDspKkbCategoryList() called");
+
+        String langCode = UtilSystem.getCurrentLangCode(context);
+
+        sNonDspKkbCategoryList.clear();
+        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+        categoryDBAdapter.open();
+        Cursor c = categoryDBAdapter.getNonDspKkbCategories(langCode);
+        if (c!=null && c.moveToFirst()) {
+            do {
+                KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
+                        c.getString(1), //second arg is category name (colum name is like 'jpn')
+                        0,
+                        0,
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
+                        0,
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
+                        "",
+                        "");
+                sNonDspKkbCategoryList.add(kkbCategory);
+            } while (c.moveToNext());
+        }
+        categoryDBAdapter.close();
+    }
+
     /*** category string list ***/
     public static List<String> getAllCategoryStrList(Context context) {
         if (sAllCategoryStrList !=null && !sAllCategoryStrList.isEmpty()) return sAllCategoryStrList;
@@ -137,6 +166,14 @@ public class UtilCategory {
         setDspKkbCategoryList(context);
 
         return sDspKkbCategoryList;
+    }
+
+    public static List<KkbCategory> getNonDspKkbCategoryList(Context context) {
+        if (sNonDspKkbCategoryList != null && sNonDspKkbCategoryList.size()!=0) return sNonDspKkbCategoryList;
+
+        setNonDspKkbCategoryList(context);
+
+        return sNonDspKkbCategoryList;
     }
 
     public static String getCategory(Context context, int ctgrCode) {

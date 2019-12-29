@@ -72,6 +72,28 @@ public class CategoryDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
+    public Cursor getNonDspKkbCategories(String langCode) {
+        String query =
+                "SELECT "+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
+                        langCode+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_DRAWABLE+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_PARENT+
+                " FROM " + TABLE_NAME +
+                " INNER JOIN " + CategoryLanDBAdapter.TABLE_NAME +
+                " ON " +
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE + "=" +
+                        CategoryLanDBAdapter.TABLE_NAME+"."+ CategoryLanDBAdapter.COL_CODE +
+                " WHERE " + TABLE_NAME+"."+CategoryDBAdapter.COL_CODE +
+                " NOT IN " +
+                " (" +
+                        " SELECT " + CategoryDspDBAdapter.COL_CODE +
+                        " FROM " + CategoryDspDBAdapter.TABLE_NAME +
+                ")"+
+                " ORDER BY " + CategoryDBAdapter.TABLE_NAME+"."+COL_CODE;
+        return _db.rawQuery(query, new String[]{});
+    }
+
     public void saveCategory(KkbCategory category) {
         ContentValues values = new ContentValues();
         values.put(COL_CODE, category.getCode());

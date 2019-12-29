@@ -67,7 +67,6 @@ public class DBHelper extends SQLiteOpenHelper {
                     CategoryDBAdapter.COL_COLOR + " INTEGER DEFAULT 0," +
                     CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER DEFAULT 0," +
                     CategoryDBAdapter.COL_DRAWABLE + " INTEGER DEFAULT 0," +
-//                    CategoryDBAdapter.COL_LOCATION + " INTEGER DEFAULT 0," +
                     CategoryDBAdapter.COL_PARENT + " INTEGER DEFAULT -1," +
                     CategoryDBAdapter.COL_DESC + " TEXT NOT NULL," +
                     CategoryDBAdapter.COL_VAL1 + " INTEGER DEFAULT 0," +
