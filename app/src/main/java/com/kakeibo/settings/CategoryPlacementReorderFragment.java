@@ -19,19 +19,20 @@ import androidx.fragment.app.Fragment;
 import com.kakeibo.CategoryDynamicGridAdapter;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
-import com.kakeibo.util.UtilCategory;
 
 import com.takahidesato.android.dynamicgrid.DynamicGridView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryPlacementReorderFragment extends Fragment {
     public final static String TAG = CategoryPlacementReorderFragment.class.getSimpleName();
 
-    private static List<KkbCategory> _kkbCategoryList;
+    private static List<KkbCategory> _modKkbCategoryList;
     private static int sNumColumns;
 
     DynamicGridView _dgvCategory;
+    private CategoryDynamicGridAdapter _adpGridCategory;
 
     private Activity _activity;
     private Button _btnBack, _btnNext;
@@ -55,12 +56,28 @@ public class CategoryPlacementReorderFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement_reorder, container, false);
         _activity = getActivity();
-        _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
 
         findViews(view);
 
+        return view;
+    }
+
+    private void findViews(View view) {
+        _btnBack = view.findViewById(R.id.btn_back);
+        _btnNext = view.findViewById(R.id.btn_next);
         _dgvCategory = view.findViewById(R.id.dynamic_grid);
-        _dgvCategory.setAdapter(new CategoryDynamicGridAdapter(_activity, _kkbCategoryList, sNumColumns));
+        _btnNext.setText(getString(R.string.done));
+        _btnBack.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
+        _btnNext.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
+
+        _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
+        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
+    }
+
+    void setItemsOnGrid(List<KkbCategory> list) {
+        _modKkbCategoryList = new ArrayList<>(list);
+        _adpGridCategory = new CategoryDynamicGridAdapter(_activity, _modKkbCategoryList, sNumColumns);
+        _dgvCategory.setAdapter(_adpGridCategory);
         _dgvCategory.setNumColumns(sNumColumns);
         _dgvCategory.setOnDropListener(new DynamicGridView.OnDropListener() {
             @Override
@@ -87,7 +104,6 @@ public class CategoryPlacementReorderFragment extends Fragment {
                 return true;
             }
         });
-
         _dgvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -95,19 +111,6 @@ public class CategoryPlacementReorderFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         });
-
-        return view;
-    }
-
-    private void findViews(View view) {
-        _btnBack = view.findViewById(R.id.btn_back);
-        _btnNext = view.findViewById(R.id.btn_next);
-        _btnNext.setText(getString(R.string.done));
-        _btnBack.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
-        _btnNext.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
-
-        _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
-        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
     }
 
     class ItemClickListener implements View.OnClickListener {
@@ -118,7 +121,13 @@ public class CategoryPlacementReorderFragment extends Fragment {
                     ((CategoryPlacementActivity) _activity).onBackPressed(1);
                     break;
                 case R.id.btn_next:
-                    ((CategoryPlacementActivity) _activity).onNextPressed(2);
+                    List<Object> list = _adpGridCategory.getItems();
+                    List<KkbCategory> newList = new ArrayList<>();
+                    for (Object item: list) {
+                        KkbCategory category = (KkbCategory) item;
+                        newList.add(category);
+                    }
+                    ((CategoryPlacementActivity) _activity).onNextPressed(2, newList);
                     break;
             }
         }

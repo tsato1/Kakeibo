@@ -13,12 +13,19 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.kakeibo.KkbCategory;
 import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
 import com.kakeibo.ViewPagerAdapter;
+import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -34,6 +41,7 @@ public class CategoryPlacementActivity extends AppCompatActivity {
     private CategoryPlacementAdditionFragment _fragmentAddition;
     private CategoryPlacementReorderFragment _fragmentReorder;
     private List<ImageView> _lstDots;
+    private Set<KkbCategory> _modKkbCategorySet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,9 @@ public class CategoryPlacementActivity extends AppCompatActivity {
 
         /*** for dots indicator for pages ***/
         addDots();
+
+        /*** initializing the set with dspCategories ***/
+        _modKkbCategorySet = new HashSet<>(UtilCategory.getDspKkbCategoryList(getApplicationContext()));
     }
 
     @Override
@@ -128,16 +139,39 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         });
     }
 
-    public void onNextPressed(int tag) {
+    public void onNextPressed(int tag, List<KkbCategory> list) {
         switch (tag) {
             case 0:
                 _viewPager.setCurrentItem(1);
+
+                for (KkbCategory item: list) {
+                    _modKkbCategorySet.remove(item);
+                    Log.d(TAG, "location:"+item.getLocation()+" "+item.getName());
+                }
+
                 break;
             case 1:
                 _viewPager.setCurrentItem(2);
+
+                List<KkbCategory> out = new ArrayList<>(_modKkbCategorySet);
+
+                Collections.sort(out, (KkbCategory o1, KkbCategory o2) -> {
+                    return o1.getLocation() - o2.getLocation();
+                });
+
+                for (KkbCategory item: list) {
+                    out.add(item);
+                    Log.d(TAG, "location:"+item.getLocation()+" "+item.getName());
+                }
+                _fragmentReorder.setItemsOnGrid(out);
                 break;
             case 2:
                 Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
+                int j = 0;
+                for (KkbCategory i: list) {
+                    Log.d(TAG, j+" "+i.getLocation()+" "+i.getName());
+                    j++;
+                }
                 break;
         }
     }
@@ -158,7 +192,7 @@ public class CategoryPlacementActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (_fragmentReorder._dgvCategory.isEditMode()) {
+        if (_fragmentReorder!=null && _fragmentReorder._dgvCategory.isEditMode()) {
             _fragmentReorder._dgvCategory.stopEditMode();
         } else {
             super.onBackPressed();

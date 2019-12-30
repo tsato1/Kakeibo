@@ -22,6 +22,7 @@ import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     public static final String TAG = CategoryPlacementAdditionFragment.class.getSimpleName();
 
     private static List<KkbCategory> _kkbCategoryList;
-    private static HashSet<Integer> _selectedCategorySet;
+    private static HashSet<KkbCategory> _selectedCategorySet;
 
     private Activity _activity;
     private GridView _grvCategory;
@@ -78,7 +79,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_addition);
-                toggle(_kkbCategoryList.get(position).getCode(), imvCategoryOverlay);
+                toggle(_kkbCategoryList.get(position), imvCategoryOverlay);
             }
         });
 
@@ -86,12 +87,12 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _btnNext.setOnClickListener(new CategoryPlacementAdditionFragment.ItemClickListener());
     }
 
-    private void toggle(int categoryCode, ImageView imv) {
-        if (_selectedCategorySet.contains(categoryCode)) {
-            _selectedCategorySet.remove(categoryCode);
+    private void toggle(KkbCategory category, ImageView imv) {
+        if (_selectedCategorySet.contains(category)) {
+            _selectedCategorySet.remove(category);
             imv.setVisibility(View.GONE);
         } else {
-            _selectedCategorySet.add(categoryCode);
+            _selectedCategorySet.add(category);
             imv.setVisibility(View.VISIBLE);
         }
     }
@@ -104,7 +105,8 @@ public class CategoryPlacementAdditionFragment extends Fragment {
                     ((CategoryPlacementActivity) _activity).onBackPressed(0);
                     break;
                 case R.id.btn_next:
-                    ((CategoryPlacementActivity) _activity).onNextPressed(1);
+                    List<KkbCategory> list = new ArrayList<>(_selectedCategorySet);
+                    ((CategoryPlacementActivity) _activity).onNextPressed(1, list);
                     break;
             }
         }

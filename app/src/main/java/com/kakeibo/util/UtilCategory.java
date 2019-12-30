@@ -3,7 +3,6 @@ package com.kakeibo.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.kakeibo.KkbCategory;
 import com.kakeibo.db.CategoryDBAdapter;
@@ -18,6 +17,7 @@ public class UtilCategory {
 
     private static List<String> sAllCategoryStrList = new ArrayList<>(); //key(i)=category code
     private static List<String> sDspCategoryStrList = new ArrayList<>(); //key(i)=location
+    private static List<Integer> sDspCategoryCodeList = new ArrayList<>();
     private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//key(i)=category code
     private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//key(i)=location
     private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();//key: code, val: KkbCategory
@@ -27,7 +27,6 @@ public class UtilCategory {
     public static void reloadCategoryLists(Context context) {
         setAllCategoryStrList(context);
         setAllKkbCategoryList(context);
-        setDspCategoryStrList(context);
         setDspKkbCategoryList(context);
     }
 
@@ -47,10 +46,6 @@ public class UtilCategory {
             } while (c.moveToNext());
         }
         categoryLanDBAdapter.close();
-    }
-
-    private static void setDspCategoryStrList(Context context) {
-        Log.d(TAG, "setDspCategoryStrList() called");
     }
 
     private static void setAllKkbCategoryList(Context context) {
@@ -86,6 +81,7 @@ public class UtilCategory {
         String langCode = UtilSystem.getCurrentLangCode(context);
 
         sDspKkbCategoryList.clear();
+        sDspCategoryCodeList.clear();
         CategoryDspDBAdapter categoryDspDBAdapter = new CategoryDspDBAdapter();
         categoryDspDBAdapter.open();
         Cursor c = categoryDspDBAdapter.getKkbDspCategories(langCode);
@@ -102,6 +98,7 @@ public class UtilCategory {
                         "",
                         "");
                 sDspKkbCategoryList.add(kkbCategory);
+                sDspCategoryCodeList.add(kkbCategory.getCode());
             } while (c.moveToNext());
         }
         categoryDspDBAdapter.close();
@@ -135,20 +132,28 @@ public class UtilCategory {
     }
 
     /*** category string list ***/
-    public static List<String> getAllCategoryStrList(Context context) {
-        if (sAllCategoryStrList !=null && !sAllCategoryStrList.isEmpty()) return sAllCategoryStrList;
+//    public static List<String> getAllCategoryStrList(Context context) {
+//        if (sAllCategoryStrList !=null && !sAllCategoryStrList.isEmpty()) return sAllCategoryStrList;
+//
+//        setAllCategoryStrList(context);
+//
+//        return sAllCategoryStrList;
+//    }
+//
+//    public static List<String> getDspCategoryStrList(Context context) {
+//        if (sDspCategoryStrList !=null && !sDspCategoryStrList.isEmpty()) return sDspCategoryStrList;
+//
+//        setDspKkbCategoryList(context); // make changes to this function so that the list gets filled
+//
+//        return sDspCategoryStrList;
+//    }
 
-        setAllCategoryStrList(context);
+    public static List<Integer> getDspCategoryIntList(Context context) {
+        if (sDspCategoryCodeList != null && !sDspCategoryCodeList.isEmpty()) return sDspCategoryCodeList;
 
-        return sAllCategoryStrList;
-    }
+        setDspKkbCategoryList(context);
 
-    public static List<String> getDspCategoryStrList(Context context) {
-        if (sDspCategoryStrList !=null && !sDspCategoryStrList.isEmpty()) return sDspCategoryStrList;
-
-        setDspCategoryStrList(context);
-
-        return sDspCategoryStrList;
+        return sDspCategoryCodeList;
     }
 
     /*** KkbCateogry list ***/
@@ -169,7 +174,7 @@ public class UtilCategory {
     }
 
     public static List<KkbCategory> getNonDspKkbCategoryList(Context context) {
-        if (sNonDspKkbCategoryList != null && sNonDspKkbCategoryList.size()!=0) return sNonDspKkbCategoryList;
+        if (sNonDspKkbCategoryList != null && !sNonDspKkbCategoryList.isEmpty()) return sNonDspKkbCategoryList;
 
         setNonDspKkbCategoryList(context);
 
