@@ -39,8 +39,7 @@ public class ItemDBAdapter extends DBAdapter {
         DBAdapter.getInstance().closeDatabase();
     }
 
-    public boolean deleteItem(int id)
-    {
+    public boolean deleteItem(int id) {
         return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
     }
 

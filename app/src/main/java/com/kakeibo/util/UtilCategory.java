@@ -188,4 +188,15 @@ public class UtilCategory {
 
         return sAllCategoryStrList.get(ctgrCode);
     }
+
+    public static void updateDspTable(Context context, List<KkbCategory> list) {
+        CategoryDspDBAdapter categoryDspDBAdapter = new CategoryDspDBAdapter();
+        categoryDspDBAdapter.open();
+        categoryDspDBAdapter.deleteAllItems();
+        for (int i=0; i<list.size(); i++) {
+            categoryDspDBAdapter.saveItem(i, list.get(i));
+        }
+        categoryDspDBAdapter.close();
+        reloadCategoryLists(context);
+    }
 }

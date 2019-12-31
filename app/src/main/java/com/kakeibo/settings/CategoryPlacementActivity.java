@@ -20,9 +20,7 @@ import com.kakeibo.ViewPagerAdapter;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +40,8 @@ public class CategoryPlacementActivity extends AppCompatActivity {
     private CategoryPlacementReorderFragment _fragmentReorder;
     private List<ImageView> _lstDots;
     private Set<KkbCategory> _modKkbCategorySet;
+    private List<KkbCategory> _kkbCategoryRmvList;
+    private List<KkbCategory> _kkbCategoryAddList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,15 +143,17 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         switch (tag) {
             case 0:
                 _viewPager.setCurrentItem(1);
+                _kkbCategoryRmvList = new ArrayList<>(list);
 
                 for (KkbCategory item: list) {
                     _modKkbCategorySet.remove(item);
-                    Log.d(TAG, "location:"+item.getLocation()+" "+item.getName());
+                    Log.d(TAG, "1, location:"+item.getLocation()+" "+item.getName());
                 }
 
                 break;
             case 1:
                 _viewPager.setCurrentItem(2);
+                _kkbCategoryAddList = new ArrayList<>(list);
 
                 List<KkbCategory> out = new ArrayList<>(_modKkbCategorySet);
 
@@ -161,17 +163,25 @@ public class CategoryPlacementActivity extends AppCompatActivity {
 
                 for (KkbCategory item: list) {
                     out.add(item);
-                    Log.d(TAG, "location:"+item.getLocation()+" "+item.getName());
+                    Log.d(TAG, "2, location:"+item.getLocation()+" "+item.getName());
                 }
                 _fragmentReorder.setItemsOnGrid(out);
                 break;
             case 2:
+                //todo dialog
+
+                UtilCategory.updateDspTable(getApplicationContext(), list);
+
+
                 Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
+
                 int j = 0;
                 for (KkbCategory i: list) {
-                    Log.d(TAG, j+" "+i.getLocation()+" "+i.getName());
+                    Log.d(TAG, "3, j="+j+" location:"+i.getLocation()+" "+i.getName());
                     j++;
                 }
+
+                finish();
                 break;
         }
     }

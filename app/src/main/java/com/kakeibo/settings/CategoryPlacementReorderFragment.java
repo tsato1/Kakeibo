@@ -122,12 +122,12 @@ public class CategoryPlacementReorderFragment extends Fragment {
                     break;
                 case R.id.btn_next:
                     List<Object> list = _adpGridCategory.getItems();
-                    List<KkbCategory> newList = new ArrayList<>();
+                    List<KkbCategory> out = new ArrayList<>();
                     for (Object item: list) {
                         KkbCategory category = (KkbCategory) item;
-                        newList.add(category);
+                        out.add(category);
                     }
-                    ((CategoryPlacementActivity) _activity).onNextPressed(2, newList);
+                    ((CategoryPlacementActivity) _activity).onNextPressed(2, out);
                     break;
             }
         }

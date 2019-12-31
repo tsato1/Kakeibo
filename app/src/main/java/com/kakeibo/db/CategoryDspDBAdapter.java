@@ -1,8 +1,11 @@
 package com.kakeibo.db;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.kakeibo.KkbCategory;
 
 public class CategoryDspDBAdapter {
     private static final String TAG = CategoryDspDBAdapter.class.getSimpleName();
@@ -25,6 +28,10 @@ public class CategoryDspDBAdapter {
 
     public boolean deleteItem(int id) {
         return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
+    }
+
+    public boolean deleteAllItems() {
+        return _db.delete(TABLE_NAME, null, null) > 0;
     }
 
     public Cursor getDspCategoryCodes() {
@@ -51,5 +58,12 @@ public class CategoryDspDBAdapter {
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE +
                 " ORDER BY " + CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_LOCATION;
         return _db.rawQuery(query, new String[]{});
+    }
+
+    public void saveItem(int location, KkbCategory category) {
+        ContentValues values = new ContentValues();
+        values.put(COL_CODE, category.getCode());
+        values.put(COL_LOCATION, location);
+        _db.insertOrThrow(TABLE_NAME, null, values);
     }
 }
