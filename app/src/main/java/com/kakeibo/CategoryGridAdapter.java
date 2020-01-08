@@ -1,11 +1,14 @@
 package com.kakeibo;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,14 +18,16 @@ public class CategoryGridAdapter extends BaseAdapter {
 
     private Context _context;
     private List<KkbCategory> _kkbCategoryList;
+    private int _isVisible;
 
     public CategoryGridAdapter(Context context, List<KkbCategory> objects) {
         this._context = context;
         this._kkbCategoryList = objects;
+        this._isVisible = 0;
     }
 
     public Object getItem(int position) {
-        return null;
+        return _kkbCategoryList.get(position);
     }
 
     public int getCount() {
@@ -30,7 +35,7 @@ public class CategoryGridAdapter extends BaseAdapter {
     }
 
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -39,9 +44,10 @@ public class CategoryGridAdapter extends BaseAdapter {
         if (convertView==null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(_context);
             convertView = layoutInflater.inflate(R.layout.f1_grid_cell_category, null);
+            final RelativeLayout rllCategoryCell = convertView.findViewById(R.id.rll_category_cell);
             final ImageView imvCategory = convertView.findViewById(R.id.imv_category);
             final TextView txvCategory = convertView.findViewById(R.id.txv_category);
-            final ViewHolder viewHolder = new ViewHolder(imvCategory, txvCategory);
+            final ViewHolder viewHolder = new ViewHolder(rllCategoryCell, imvCategory, txvCategory);
             convertView.setTag(viewHolder);
         }
 
@@ -49,14 +55,20 @@ public class CategoryGridAdapter extends BaseAdapter {
         viewHolder.imvCategory.setImageDrawable(_context.getDrawable(kkbCategory.getDrawable()));
         viewHolder.txvCategory.setText(kkbCategory.getName());
 
+        viewHolder.rllCategoryCell.setOnClickListener((View v) -> {
+            ((GridView) parent).performItemClick(v, position, 0);
+        });
+
         return convertView;
     }
 
     private class ViewHolder {
+        private RelativeLayout rllCategoryCell;
         private ImageView imvCategory;
         private TextView txvCategory;
 
-        ViewHolder(ImageView imvCategory, TextView txvCategory) {
+        ViewHolder (RelativeLayout rllCategoryCell, ImageView imvCategory, TextView txvCategory) {
+            this.rllCategoryCell = rllCategoryCell;
             this.imvCategory = imvCategory;
             this.txvCategory = txvCategory;
         }

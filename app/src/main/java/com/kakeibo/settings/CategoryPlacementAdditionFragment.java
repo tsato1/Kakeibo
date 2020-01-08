@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,13 +32,17 @@ import javax.annotation.Nonnull;
 
 public class CategoryPlacementAdditionFragment extends Fragment {
     public static final String TAG = CategoryPlacementAdditionFragment.class.getSimpleName();
+    public static final int TAG_INT = 1;
 
-    private static List<KkbCategory> _kkbCategoryList;
-    private static HashSet<KkbCategory> _selectedCategorySet;
+    private static List<KkbCategory> _nonDspKkbCategoryList;
+    private static HashSet<Integer> _selectedCategoryCodeSet;
+
+    private int _remainingCount; // remaining count for addition
 
     private Activity _activity;
     private GridView _grvCategory;
     private Button _btnBack, _btnNext;
+    private TextView _txvTitle, _txvDescription;
     private RelativeLayout _rllBackground;
 
     public static CategoryPlacementAdditionFragment newInstance() {
@@ -48,6 +54,11 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public void onAttach(@Nonnull Context context) {
         super.onAttach(context);
     }
@@ -56,7 +67,8 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement, container, false);
         _activity = getActivity();
-        _kkbCategoryList = UtilCategory.getNonDspKkbCategoryList(_activity);
+        _nonDspKkbCategoryList = UtilCategory.getNonDspKkbCategoryList(_activity);
+        _selectedCategoryCodeSet = new HashSet<>();
 
         findViews(view);
 
@@ -66,12 +78,16 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     private void findViews(View view) {
         _btnBack = view.findViewById(R.id.btn_back);
         _btnNext = view.findViewById(R.id.btn_next);
+        _btnBack.setOnClickListener(new ItemClickListener());
+        _btnNext.setOnClickListener(new ItemClickListener());
+        _txvTitle = view.findViewById(R.id.txv_title);
+        _txvTitle.setText("Category Addition:");
+        _txvDescription = view.findViewById(R.id.txv_description);
+        _txvDescription.setText("Please tap icons to add categories.");
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_addition));
 
-        _selectedCategorySet = new HashSet<>();
-
-        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
+        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _nonDspKkbCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);
         _grvCategory.setNumColumns(CategoryPlacementActivity.sNumColumns);
         _grvCategory.setAdapter(categoryGridAdapter);
@@ -79,22 +95,35 @@ public class CategoryPlacementAdditionFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_addition);
-                toggle(_kkbCategoryList.get(position), imvCategoryOverlay);
+                toggle(_nonDspKkbCategoryList.get(position).getCode(), imvCategoryOverlay);
             }
         });
-
-        _btnBack.setOnClickListener(new CategoryPlacementAdditionFragment.ItemClickListener());
-        _btnNext.setOnClickListener(new CategoryPlacementAdditionFragment.ItemClickListener());
     }
 
-    private void toggle(KkbCategory category, ImageView imv) {
-        if (_selectedCategorySet.contains(category)) {
-            _selectedCategorySet.remove(category);
+    private void toggle(Integer categoryCode, ImageView imv) {
+        if (_selectedCategoryCodeSet.contains(categoryCode)) {
+            _selectedCategoryCodeSet.remove(categoryCode);
             imv.setVisibility(View.GONE);
+            _remainingCount++;
         } else {
-            _selectedCategorySet.add(category);
-            imv.setVisibility(View.VISIBLE);
+            if (_remainingCount <= 0) {
+                Toast.makeText(_activity,
+                        "You cannot add any more because you have reached the max count (MAX=" +
+                        UtilCategory.NUM_MAX_DSP_CATEGORIES+")", Toast.LENGTH_LONG).show();
+            } else {
+                _selectedCategoryCodeSet.add(categoryCode);
+                imv.setVisibility(View.VISIBLE);
+                _remainingCount--;
+            }
         }
+
+        _txvDescription.setText("You can add " + _remainingCount + " more categories.");
+    }
+
+    void setRemainingCount(int remainingCount) {
+        Log.d("asdf","remaining  count = " + remainingCount);
+        this._remainingCount = remainingCount - _selectedCategoryCodeSet.size();
+        _txvDescription.setText("You can add " + _remainingCount + " more categories.");
     }
 
     class ItemClickListener implements View.OnClickListener {
@@ -102,14 +131,23 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_back:
-                    ((CategoryPlacementActivity) _activity).onBackPressed(0);
+                    ((CategoryPlacementActivity) _activity).onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_next:
-                    List<KkbCategory> list = new ArrayList<>(_selectedCategorySet);
-                    ((CategoryPlacementActivity) _activity).onNextPressed(1, list);
+                    List<Integer> list = new ArrayList<>(_selectedCategoryCodeSet);
+                    for (Integer code: _selectedCategoryCodeSet) {
+                        Log.d("asdf", "ooo "+code);
+                    }
+                    ((CategoryPlacementActivity) _activity).onNextPressed(TAG_INT, list);
                     break;
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        _activity.finish();
     }
 
     @Override

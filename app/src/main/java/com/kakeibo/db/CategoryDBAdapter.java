@@ -46,7 +46,7 @@ public class CategoryDBAdapter extends DBAdapter {
         return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
     }
 
-    public Cursor getParentCategories() { // todo name it getAllCategories and do it in DspAdapter
+    public Cursor getParentCategories() {
         String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_LOCATION;
         return _db.rawQuery(query, new String[]{});
     }
@@ -57,18 +57,13 @@ public class CategoryDBAdapter extends DBAdapter {
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
                         langCode+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_DRAWABLE+","+
-                        CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_LOCATION+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_PARENT+
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + CategoryLanDBAdapter.TABLE_NAME +
                 " ON " +
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE + "=" +
                         CategoryLanDBAdapter.TABLE_NAME+"."+ CategoryLanDBAdapter.COL_CODE +
-                " INNER JOIN " + CategoryDspDBAdapter.TABLE_NAME +
-                " ON " +
-                        CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_CODE+"="+
-                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE +
-                " ORDER BY " + CategoryDspDBAdapter.TABLE_NAME+"."+COL_LOCATION;
+                " ORDER BY " + CategoryDBAdapter.TABLE_NAME+"."+COL_CODE;
         return _db.rawQuery(query, new String[]{});
     }
 

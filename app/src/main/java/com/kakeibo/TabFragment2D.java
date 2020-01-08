@@ -134,7 +134,7 @@ public class TabFragment2D extends Fragment {
             TextView txvMemo = layout.findViewById(R.id.txv_detail_memo);
             TextView txvRegistrationDate = layout.findViewById(R.id.txv_detail_registration);
 
-            String categoryText = getString(R.string.category_colon) + UtilCategory.getCategory(getContext(), item.getCategoryCode());
+            String categoryText = getString(R.string.category_colon) + UtilCategory.getCategoryStr(getContext(), item.getCategoryCode());
             txvCategory.setText(categoryText);
             SpannableString span1, span2;
             if (item.getCategoryCode() <= 0) {
@@ -240,7 +240,7 @@ public class TabFragment2D extends Fragment {
                 });
                 /*** category ***/
                 Button btnCategory = layout.findViewById(R.id.btn_category);
-                String categoryText = UtilCategory.getCategory(getContext(), item.getCategoryCode());
+                String categoryText = UtilCategory.getCategoryStr(getContext(), item.getCategoryCode());
                 btnCategory.setText(categoryText);
                 btnCategory.setHint(""+item.getCategoryCode());
                 btnCategory.setOnClickListener((View v2) -> {
@@ -260,7 +260,7 @@ public class TabFragment2D extends Fragment {
                     Dialog dialog = builder.show();
                     lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
                         int selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
-                        btnCategory.setText(UtilCategory.getCategory(_activity, selectedCategoryCode));
+                        btnCategory.setText(UtilCategory.getCategoryStr(_activity, selectedCategoryCode));
                         btnCategory.setHint(""+selectedCategoryCode);
                         dialog.dismiss();
                     });
@@ -404,7 +404,7 @@ public class TabFragment2D extends Fragment {
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());
                 _stringBuilder.append(",");
-                _stringBuilder.append(UtilCategory.getCategory(getContext(), item.getCategoryCode()));
+                _stringBuilder.append(UtilCategory.getCategoryStr(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getMemo());
                 _stringBuilder.append(",");

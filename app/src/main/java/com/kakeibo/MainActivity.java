@@ -43,6 +43,7 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;
 
     public static final String[] categoryColor = {
             "#2b381d", "#324220", "#374C22", "#40552b", "#465E2E",
@@ -79,15 +80,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /*** this part is to handle unexpected crashes ***/
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-        if (getIntent().getBooleanExtra("crash", false)) {
-            Log.e(TAG, "crashed");
-        }
+//        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+//        if (getIntent().getBooleanExtra("crash", false)) {
+//            Log.e(TAG, "crashed");
+//        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         viewPager = findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(VIEWPAGER_OFF_SCREEN_PAGE_LIMIT);
         setupViewPager(viewPager);
 
         TabLayout tabLayout = findViewById(R.id.tabs);

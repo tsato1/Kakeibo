@@ -31,7 +31,7 @@ public class DialogCategoryListAdapter extends ArrayAdapter<KkbCategory> {
         if (null == v) v = inflater.inflate(R.layout.dialog_row_category, null);
 
         TextView txvCategory = v.findViewById(R.id.txv_category);
-        String categoryText = UtilCategory.getCategory(getContext(), kkbCategory.getCode());
+        String categoryText = UtilCategory.getCategoryStr(getContext(), kkbCategory.getCode());
         txvCategory.setText(categoryText);
 
         ImageView imvCategory = v.findViewById(R.id.imv_category);

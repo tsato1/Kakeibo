@@ -60,9 +60,9 @@ public class CategoryDspDBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
-    public void saveItem(int location, KkbCategory category) {
+    public void saveItem(int code, int location) {
         ContentValues values = new ContentValues();
-        values.put(COL_CODE, category.getCode());
+        values.put(COL_CODE, code);
         values.put(COL_LOCATION, location);
         _db.insertOrThrow(TABLE_NAME, null, values);
     }

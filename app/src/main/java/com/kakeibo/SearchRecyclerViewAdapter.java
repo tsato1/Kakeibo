@@ -142,7 +142,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 final Dialog dialog = builder.show();
                 lv.setOnItemClickListener((AdapterView<?> parent, View v, int pos, long id) -> {
                     selectedCategoryCode = kkbCategoriesList.get(pos).getCode();
-                    btnCategory.setText(UtilCategory.getCategory(_context, selectedCategoryCode));
+                    btnCategory.setText(UtilCategory.getCategoryStr(_context, selectedCategoryCode));
                     dialog.dismiss();
                 });
             });

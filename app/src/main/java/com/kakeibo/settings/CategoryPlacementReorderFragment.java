@@ -20,6 +20,7 @@ import com.kakeibo.CategoryDynamicGridAdapter;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 
+import com.kakeibo.util.UtilCategory;
 import com.takahidesato.android.dynamicgrid.DynamicGridView;
 
 import java.util.ArrayList;
@@ -27,8 +28,10 @@ import java.util.List;
 
 public class CategoryPlacementReorderFragment extends Fragment {
     public final static String TAG = CategoryPlacementReorderFragment.class.getSimpleName();
+    public final static int TAG_INT = 2;
 
-    private static List<KkbCategory> _modKkbCategoryList;
+    private static List<KkbCategory> _newKkbCategoryList;
+    private static List<KkbCategory> _addedKkbCategoryList;
     private static int sNumColumns;
 
     DynamicGridView _dgvCategory;
@@ -74,9 +77,23 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
     }
 
-    void setItemsOnGrid(List<KkbCategory> list) {
-        _modKkbCategoryList = new ArrayList<>(list);
-        _adpGridCategory = new CategoryDynamicGridAdapter(_activity, _modKkbCategoryList, sNumColumns);
+    void setItemsOnGrid(List<Integer> newList, List<Integer> addedList) {
+        _addedKkbCategoryList = new ArrayList<>();
+        _newKkbCategoryList = new ArrayList<>();
+
+        for (Integer categoryCode: newList) {
+            KkbCategory kkbCategory = new KkbCategory(
+                    categoryCode,
+                    UtilCategory.getCategoryStr(_activity, categoryCode),
+                    0,0,
+                    UtilCategory.getCategoryDrawable(_activity, categoryCode),
+                    0, 0, "",""
+                    );
+            if (addedList.contains(categoryCode)) _addedKkbCategoryList.add(kkbCategory);
+            _newKkbCategoryList.add(kkbCategory);
+        }
+
+        _adpGridCategory = new CategoryDynamicGridAdapter(_activity, _newKkbCategoryList, sNumColumns);
         _dgvCategory.setAdapter(_adpGridCategory);
         _dgvCategory.setNumColumns(sNumColumns);
         _dgvCategory.setOnDropListener(new DynamicGridView.OnDropListener() {
@@ -118,19 +135,28 @@ public class CategoryPlacementReorderFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_back:
-                    ((CategoryPlacementActivity) _activity).onBackPressed(1);
+                    _newKkbCategoryList.removeAll(_addedKkbCategoryList);
+                    _adpGridCategory.notifyDataSetChanged();
+                    Log.d("asdf","new list size="+_newKkbCategoryList.size());
+                    ((CategoryPlacementActivity) _activity).onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_next:
                     List<Object> list = _adpGridCategory.getItems();
-                    List<KkbCategory> out = new ArrayList<>();
+                    List<Integer> out = new ArrayList<>();
                     for (Object item: list) {
                         KkbCategory category = (KkbCategory) item;
-                        out.add(category);
+                        out.add(category.getCode());
                     }
-                    ((CategoryPlacementActivity) _activity).onNextPressed(2, out);
+                    ((CategoryPlacementActivity) _activity).onNextPressed(TAG_INT, out);
                     break;
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        _activity.finish();
     }
 
     @Override

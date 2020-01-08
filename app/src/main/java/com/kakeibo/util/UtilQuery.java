@@ -20,7 +20,7 @@ public class UtilQuery {
     private static boolean orderD;
 
     public static void init() {
-        builderCs = new StringBuilder[UtilCategory.numCategories];
+        builderCs = new StringBuilder[UtilCategory.NUM_MAX_DSP_CATEGORIES];
         for (int i=0; i<builderCs.length; ++i) {
             builderCs[i] = new StringBuilder("SELECT * FROM ITEMS");
         }

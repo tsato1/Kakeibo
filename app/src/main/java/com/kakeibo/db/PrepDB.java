@@ -3,7 +3,6 @@ package com.kakeibo.db;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
@@ -553,7 +552,7 @@ class PrepDB {
         housing.hant = "住房";
         list.add(housing);
 
-        for (int i = 0; i < UtilCategory.numCategories; i++) {
+        for (int i = 0; i < UtilCategory.NUM_MAX_DSP_CATEGORIES; i++) {
             ContentValues values1 = new ContentValues();
             values1.put(CategoryDBAdapter.COL_CODE, list.get(i).code);
             values1.put(CategoryDBAdapter.COL_COLOR, 0);

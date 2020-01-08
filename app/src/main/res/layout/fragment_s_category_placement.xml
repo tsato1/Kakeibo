@@ -6,10 +6,15 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/txv_description"
+        android:id="@+id/txv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
+    <TextView
+        android:id="@+id/txv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txv_title"/>
 
     <GridView
         android:id="@+id/grv_category"

@@ -3,6 +3,7 @@ package com.kakeibo.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.kakeibo.KkbCategory;
 import com.kakeibo.db.CategoryDBAdapter;
@@ -16,18 +17,20 @@ public class UtilCategory {
     private static String TAG = UtilCategory.class.getSimpleName();
 
     private static List<String> sAllCategoryStrList = new ArrayList<>(); //key(i)=category code
-    private static List<String> sDspCategoryStrList = new ArrayList<>(); //key(i)=location
-    private static List<Integer> sDspCategoryCodeList = new ArrayList<>();
-    private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//key(i)=category code
-    private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//key(i)=location
-    private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();//key: code, val: KkbCategory
+    private static List<Integer> sDspCategoryCodeList = new ArrayList<>(); // ordered by location
+    private static SparseArray< KkbCategory> sAllKkbCategoryArr = new SparseArray<>();
+    private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//ordered by category code
+    private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//ordered by location
+    private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();
 
-    public static int numCategories = 16;
+    public static int NUM_MAX_DSP_CATEGORIES = 16;
 
     public static void reloadCategoryLists(Context context) {
         setAllCategoryStrList(context);
+        setAllKkbCategoryArr(context);
         setAllKkbCategoryList(context);
         setDspKkbCategoryList(context);
+        setNonDspKkbCategoryList(context);
     }
 
     private static void setAllCategoryStrList(Context context) {
@@ -61,15 +64,42 @@ public class UtilCategory {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-                        c.getString(1), //second arg is name (colum name is like 'jpn')
+                        c.getString(1), //second arg is category name in specified language (column name is like 'jpn')
                         0,
                         0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
-                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_LOCATION)),
+                        0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
                         "",
                         "");
                 sAllKkbCategoryList.add(kkbCategory);
+            } while (c.moveToNext());
+        }
+        categoryDBAdapter.close();
+    }
+
+    private static void setAllKkbCategoryArr(Context context) {
+        Log.d(TAG, "setAllKkbCategoryArr() called");
+
+        String langCode = UtilSystem.getCurrentLangCode(context);
+
+        sAllKkbCategoryArr.clear();
+        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+        categoryDBAdapter.open();
+        Cursor c = categoryDBAdapter.getAllKkbCategories(langCode);// ordered by category code
+        if (c!=null && c.moveToFirst()) {
+            do {
+                KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
+                        c.getString(1), //second arg is name (colum name is like 'jpn')
+                        0,
+                        0,
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
+                        0,
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
+                        "",
+                        "");
+                sAllKkbCategoryArr.append(kkbCategory.getCode(), kkbCategory);
             } while (c.moveToNext());
         }
         categoryDBAdapter.close();
@@ -84,7 +114,7 @@ public class UtilCategory {
         sDspCategoryCodeList.clear();
         CategoryDspDBAdapter categoryDspDBAdapter = new CategoryDspDBAdapter();
         categoryDspDBAdapter.open();
-        Cursor c = categoryDspDBAdapter.getKkbDspCategories(langCode);
+        Cursor c = categoryDspDBAdapter.getKkbDspCategories(langCode); // ordered by location
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
@@ -131,24 +161,7 @@ public class UtilCategory {
         categoryDBAdapter.close();
     }
 
-    /*** category string list ***/
-//    public static List<String> getAllCategoryStrList(Context context) {
-//        if (sAllCategoryStrList !=null && !sAllCategoryStrList.isEmpty()) return sAllCategoryStrList;
-//
-//        setAllCategoryStrList(context);
-//
-//        return sAllCategoryStrList;
-//    }
-//
-//    public static List<String> getDspCategoryStrList(Context context) {
-//        if (sDspCategoryStrList !=null && !sDspCategoryStrList.isEmpty()) return sDspCategoryStrList;
-//
-//        setDspKkbCategoryList(context); // make changes to this function so that the list gets filled
-//
-//        return sDspCategoryStrList;
-//    }
-
-    public static List<Integer> getDspCategoryIntList(Context context) {
+    public static List<Integer> getDspCategoryCodeList(Context context) {
         if (sDspCategoryCodeList != null && !sDspCategoryCodeList.isEmpty()) return sDspCategoryCodeList;
 
         setDspKkbCategoryList(context);
@@ -181,20 +194,28 @@ public class UtilCategory {
         return sNonDspKkbCategoryList;
     }
 
-    public static String getCategory(Context context, int ctgrCode) {
+    public static int getCategoryDrawable(Context context, int categoryCode) {
+        if (sAllKkbCategoryArr ==null || sAllKkbCategoryArr.size()==0) {
+            setAllKkbCategoryArr(context);
+        }
+
+        return sAllKkbCategoryArr.get(categoryCode).getDrawable();
+    }
+
+    public static String getCategoryStr(Context context, int categoryCode) {
         if (sAllCategoryStrList ==null || sAllCategoryStrList.isEmpty()) {
             setAllCategoryStrList(context);
         }
 
-        return sAllCategoryStrList.get(ctgrCode);
+        return sAllCategoryStrList.get(categoryCode);
     }
 
-    public static void updateDspTable(Context context, List<KkbCategory> list) {
+    public static void updateDspTable(Context context, List<Integer> categoryCodes) {
         CategoryDspDBAdapter categoryDspDBAdapter = new CategoryDspDBAdapter();
         categoryDspDBAdapter.open();
         categoryDspDBAdapter.deleteAllItems();
-        for (int i=0; i<list.size(); i++) {
-            categoryDspDBAdapter.saveItem(i, list.get(i));
+        for (int i = 0; i < categoryCodes.size(); i++) {
+            categoryDspDBAdapter.saveItem(categoryCodes.get(i), i); // because categoryCodes is ordered by location
         }
         categoryDspDBAdapter.close();
         reloadCategoryLists(context);

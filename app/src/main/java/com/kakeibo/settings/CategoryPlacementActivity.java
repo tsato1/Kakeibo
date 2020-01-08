@@ -1,5 +1,7 @@
 package com.kakeibo.settings;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,22 +15,23 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.kakeibo.KkbCategory;
 import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
 import com.kakeibo.ViewPagerAdapter;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class CategoryPlacementActivity extends AppCompatActivity {
     private final static String TAG = CategoryPlacementActivity.class.getSimpleName();
+    private final static int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;
     private final static int NUM_PAGES = 3;
 
     public static int sNumColumns;
@@ -39,9 +42,9 @@ public class CategoryPlacementActivity extends AppCompatActivity {
     private CategoryPlacementAdditionFragment _fragmentAddition;
     private CategoryPlacementReorderFragment _fragmentReorder;
     private List<ImageView> _lstDots;
-    private Set<KkbCategory> _modKkbCategorySet;
-    private List<KkbCategory> _kkbCategoryRmvList;
-    private List<KkbCategory> _kkbCategoryAddList;
+    private List<Integer> _modCategoryCodeList;
+    private List<Integer> _tmpRemovedCategoryCodes;
+    private List<Integer> _tmpAddedCategoryCodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +65,24 @@ public class CategoryPlacementActivity extends AppCompatActivity {
 
         /*** find views ***/
         _viewPager = findViewById(R.id.view_pager);
+        _viewPager.setOffscreenPageLimit(VIEWPAGER_OFF_SCREEN_PAGE_LIMIT);
+
+        /*** restoring fragment's instances ***/
+        if (savedInstanceState != null) {
+            _fragmentRemoval = (CategoryPlacementRemovalFragment)
+                    getSupportFragmentManager().getFragment(savedInstanceState, CategoryPlacementRemovalFragment.TAG);
+            _fragmentAddition = (CategoryPlacementAdditionFragment)
+                    getSupportFragmentManager().getFragment(savedInstanceState, CategoryPlacementAdditionFragment.TAG);
+            _fragmentReorder = (CategoryPlacementReorderFragment)
+                    getSupportFragmentManager().getFragment(savedInstanceState, CategoryPlacementReorderFragment.TAG);
+        } else {
+            _fragmentRemoval = CategoryPlacementRemovalFragment.newInstance();
+            _fragmentAddition = CategoryPlacementAdditionFragment.newInstance();
+            _fragmentReorder = CategoryPlacementReorderFragment.newInstance();
+        }
 
         /*** setting adapter ***/
         _adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        _fragmentRemoval = CategoryPlacementRemovalFragment.newInstance();
-        _fragmentAddition = CategoryPlacementAdditionFragment.newInstance();
-        _fragmentReorder = CategoryPlacementReorderFragment.newInstance();
         _adapter.addFragment(_fragmentRemoval, CategoryPlacementRemovalFragment.TAG);
         _adapter.addFragment(_fragmentAddition, CategoryPlacementAdditionFragment.TAG);
         _adapter.addFragment(_fragmentReorder, CategoryPlacementReorderFragment.TAG);
@@ -77,7 +92,19 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         addDots();
 
         /*** initializing the set with dspCategories ***/
-        _modKkbCategorySet = new HashSet<>(UtilCategory.getDspKkbCategoryList(getApplicationContext()));
+        _modCategoryCodeList = new ArrayList<>(UtilCategory.getDspCategoryCodeList(getApplicationContext())); // ordered by location
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(@Nonnull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        /*** saving fragment's instance ***/
+        getSupportFragmentManager().putFragment(outState, CategoryPlacementRemovalFragment.TAG, _fragmentRemoval);
+        getSupportFragmentManager().putFragment(outState, CategoryPlacementAdditionFragment.TAG, _fragmentAddition);
+        getSupportFragmentManager().putFragment(outState, CategoryPlacementReorderFragment.TAG, _fragmentReorder);
     }
 
     @Override
@@ -94,6 +121,12 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
 
         Log.d(TAG, "sNumColumns:"+sNumColumns);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 
     public void addDots() {
@@ -139,63 +172,63 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         });
     }
 
-    public void onNextPressed(int tag, List<KkbCategory> list) {
+    public void onNextPressed(int tag, List<Integer> list) {
         switch (tag) {
-            case 0:
-                _viewPager.setCurrentItem(1);
-                _kkbCategoryRmvList = new ArrayList<>(list);
-
-                for (KkbCategory item: list) {
-                    _modKkbCategorySet.remove(item);
-                    Log.d(TAG, "1, location:"+item.getLocation()+" "+item.getName());
+            case CategoryPlacementRemovalFragment.TAG_INT:
+                /*** check before proceed: list = category codes to remove ***/
+                if (_modCategoryCodeList.size()-list.size()>=UtilCategory.NUM_MAX_DSP_CATEGORIES) {
+                    Toast.makeText(this, "Please remove at least one category", Toast.LENGTH_LONG).show();
+                    return ;
                 }
 
+                _modCategoryCodeList.removeAll(list);
+                _fragmentAddition.setRemainingCount(UtilCategory.NUM_MAX_DSP_CATEGORIES - _modCategoryCodeList.size());
+                Log.d("asdf1","modlist size = "+_modCategoryCodeList.size() +" listsize="+list.size());
+                _viewPager.setCurrentItem(CategoryPlacementAdditionFragment.TAG_INT);
+                _tmpRemovedCategoryCodes = new ArrayList<>(list);
                 break;
-            case 1:
-                _viewPager.setCurrentItem(2);
-                _kkbCategoryAddList = new ArrayList<>(list);
+            case CategoryPlacementAdditionFragment.TAG_INT:
+                /*** check before proceed: list = category codes to add ***/
+                if (_modCategoryCodeList.size()+list.size()>UtilCategory.NUM_MAX_DSP_CATEGORIES) {
+                    Toast.makeText(this, "You cannot exceed the MAX count: "+UtilCategory.NUM_MAX_DSP_CATEGORIES, Toast.LENGTH_LONG).show();
+                    return ;
+                }
 
-                List<KkbCategory> out = new ArrayList<>(_modKkbCategorySet);
-
-                Collections.sort(out, (KkbCategory o1, KkbCategory o2) -> {
-                    return o1.getLocation() - o2.getLocation();
+                _modCategoryCodeList.addAll(list);
+                Log.d("asdf2","modlist size = "+_modCategoryCodeList.size() +" listsize="+list.size());
+                _fragmentReorder.setItemsOnGrid(_modCategoryCodeList, list);
+                _viewPager.setCurrentItem(CategoryPlacementReorderFragment.TAG_INT);
+                _tmpAddedCategoryCodes = new ArrayList<>(list);
+                break;
+            case CategoryPlacementReorderFragment.TAG_INT:
+                /*** list: contains necessary categories ordered by location the user wants ***/
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setIcon(R.mipmap.ic_mikan);
+                dialog.setTitle("Determine how categories get displayed on INPUT screen");
+                dialog.setMessage("Do you want to proceed with the specified categories with specified order");
+                dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
+                    Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
+                    UtilCategory.updateDspTable(getApplicationContext(), list);
+                    finish();
                 });
-
-                for (KkbCategory item: list) {
-                    out.add(item);
-                    Log.d(TAG, "2, location:"+item.getLocation()+" "+item.getName());
-                }
-                _fragmentReorder.setItemsOnGrid(out);
-                break;
-            case 2:
-                //todo dialog
-
-                UtilCategory.updateDspTable(getApplicationContext(), list);
-
-
-                Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
-
-                int j = 0;
-                for (KkbCategory i: list) {
-                    Log.d(TAG, "3, j="+j+" location:"+i.getLocation()+" "+i.getName());
-                    j++;
-                }
-
-                finish();
+                dialog.setNegativeButton(R.string.no, (DialogInterface d, int which) -> {});
+                dialog.show();
                 break;
         }
     }
 
     public void onBackPressed(int tag) {
         switch (tag) {
-            case -1:
+            case CategoryPlacementRemovalFragment.TAG_INT:
                 super.onBackPressed();
                 break;
-            case 0:
-                _viewPager.setCurrentItem(0);
+            case CategoryPlacementAdditionFragment.TAG_INT:
+                _modCategoryCodeList.addAll(_tmpRemovedCategoryCodes);
+                _viewPager.setCurrentItem(CategoryPlacementRemovalFragment.TAG_INT);
                 break;
-            case 1:
-                _viewPager.setCurrentItem(1);
+            case CategoryPlacementReorderFragment.TAG_INT:
+                _viewPager.setCurrentItem(CategoryPlacementAdditionFragment.TAG_INT);
+                _modCategoryCodeList.removeAll(_tmpAddedCategoryCodes);
                 break;
         }
     }

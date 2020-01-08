@@ -49,7 +49,7 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         TextView txvCategory = convertView.findViewById(R.id.txv_category);
 
         imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
-        txvCategory.setText(UtilCategory.getCategory(_context, item.getCategoryCode()));
+        txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
 
         /*** amount ***/
         TextView txvAmount = convertView.findViewById(R.id.txv_amount);

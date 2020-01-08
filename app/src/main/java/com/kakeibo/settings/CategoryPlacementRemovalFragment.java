@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,18 +24,18 @@ import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class CategoryPlacementRemovalFragment extends Fragment {
     public static final String TAG = CategoryPlacementRemovalFragment.class.getSimpleName();
+    public static final int TAG_INT = 0;
 
-    private static List<KkbCategory> _kkbCategoryList;
-    private static HashSet<KkbCategory> _selectedCategorySet;
+    private static ArrayList<Integer> _selectedCategoryCodeList;
 
     private Activity _activity;
     private GridView _grvCategory;
     private Button _btnBack, _btnNext;
+    private TextView _txvTitle, _txvDescription;
     private RelativeLayout _rllBackground;
 
     public static CategoryPlacementRemovalFragment newInstance() {
@@ -46,6 +47,11 @@ public class CategoryPlacementRemovalFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
@@ -54,43 +60,46 @@ public class CategoryPlacementRemovalFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement, container, false);
         _activity = getActivity();
-        _kkbCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
+        _selectedCategoryCodeList = new ArrayList<>();
 
-        findViews(view);
-
-        return view;
-    }
-
-    private void findViews(View view) {
+        /*** find views ***/
         _btnBack = view.findViewById(R.id.btn_back);
         _btnNext = view.findViewById(R.id.btn_next);
+        _btnBack.setOnClickListener(new ItemClickListener());
+        _btnNext.setOnClickListener(new ItemClickListener());
+
+        _txvTitle = view.findViewById(R.id.txv_title);
+        _txvTitle.setText("Category Removal:");
+        _txvDescription = view.findViewById(R.id.txv_description);
+        _txvDescription.setText("Please tap icons to remove categories.");
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_removal));
 
-        _selectedCategorySet = new HashSet<>();
-
-        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
+        List<KkbCategory> kkbDspCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
+        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, kkbDspCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);
         _grvCategory.setNumColumns(CategoryPlacementActivity.sNumColumns);
         _grvCategory.setAdapter(categoryGridAdapter);
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick() called: position="+position);
                 ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_removal);
-                toggle(_kkbCategoryList.get(position), imvCategoryOverlay);
+                toggle(kkbDspCategoryList.get(position).getCode(), imvCategoryOverlay);
             }
         });
 
-        _btnBack.setOnClickListener(new ItemClickListener());
-        _btnNext.setOnClickListener(new ItemClickListener());
+        return view;
     }
 
-    private void toggle(KkbCategory category, ImageView imv) {
-        if (_selectedCategorySet.contains(category)) {
-            _selectedCategorySet.remove(category);
+    private void toggle(Integer categoryCode, ImageView imv) {
+        if (_selectedCategoryCodeList.contains(categoryCode)) {
+            Log.d(TAG, "removed! at position "+categoryCode);
+            _selectedCategoryCodeList.remove(categoryCode);
             imv.setVisibility(View.GONE);
         } else {
-            _selectedCategorySet.add(category);
+            Log.d(TAG, "add! at position "+categoryCode);
+            _selectedCategoryCodeList.add(categoryCode);
             imv.setVisibility(View.VISIBLE);
         }
     }
@@ -100,14 +109,20 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_back:
-                    ((CategoryPlacementActivity) _activity).onBackPressed(-1);
+                    ((CategoryPlacementActivity) _activity).onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_next:
-                    ArrayList<KkbCategory> list = new ArrayList<>(_selectedCategorySet);
-                    ((CategoryPlacementActivity) _activity).onNextPressed(0, list);
+                    ArrayList<Integer> list = new ArrayList<>(_selectedCategoryCodeList);
+                    ((CategoryPlacementActivity) _activity).onNextPressed(TAG_INT, list);
                     break;
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        _activity.finish();
     }
 
     @Override

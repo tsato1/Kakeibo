@@ -77,7 +77,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         /*** category ***/
-        txvCategory.setText(UtilCategory.getCategory(_context, item.getCategoryCode()));
+        txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
 
         /*** amount ***/
         SpannableString spannableString;

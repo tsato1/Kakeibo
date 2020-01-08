@@ -191,7 +191,7 @@ public class TabFragment2C extends Fragment {
             listView.setAdapter(categoryDetailListAdapter);
             AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
-            dialog.setTitle(UtilCategory.getCategory(getContext(), tmp.getCategoryCode()));
+            dialog.setTitle(UtilCategory.getCategoryStr(getContext(), tmp.getCategoryCode()));
             dialog.setPositiveButton(R.string.ok, (DialogInterface d, int which) -> {
             });
             dialog.setView(listView).create();
@@ -374,7 +374,7 @@ public class TabFragment2C extends Fragment {
                         c.getString(c.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
                 );
 
-                _stringBuilder.append(UtilCategory.getCategory(getContext(), item.getCategoryCode()));
+                _stringBuilder.append(UtilCategory.getCategoryStr(getContext(), item.getCategoryCode()));
                 _stringBuilder.append(",");
                 _stringBuilder.append(item.getAmount());
                 _stringBuilder.append(",");
