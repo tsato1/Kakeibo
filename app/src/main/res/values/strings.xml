@@ -115,20 +115,21 @@
     <!-- Setting for in-app data -->
     <string name="in_app_data">In-App Data</string>
     <string name="fraction_digits">Fraction Digits</string>
+    <string name="start_date_of_month">Starting date of a month</string>
     <string name="delete_all_items">Delete all items</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
-
     <string name="remove_add_reorder_categories">Remove, add and reorder Categories</string>
     <string name="reorder_categories">Reorder Categories</string>
     <string name="create_new_category">Create a new Category</string>
     <string name="num_columns">Number of Categories per row</string>
-    <string name="settings_about_categories">Settings about categories in the app</string>
+    <string name="settings_about_categories">Settings about Categories</string>
     <string name="remove_categories">Remove Categories</string>
     <string name="add_categories">Add Categories</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
     <string name="pref_key_fraction_digits" translatable="false">pref_key_fraction_digits</string>
+    <string name="pref_key_start_date_of_month" translatable="false">pref_key_start_date_of_month</string>
     <string name="pref_key_widget_and_font_size" translatable="false">pref_key_widget_and_font_size</string>
     <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
     <string name="pref_key_category" translatable="false">pref_key_category</string>

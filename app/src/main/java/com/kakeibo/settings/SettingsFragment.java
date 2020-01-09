@@ -1,6 +1,7 @@
 package com.kakeibo.settings;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,6 +62,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (str.equals(getString(R.string.pref_key_date_format))) {
             return true;
         } else if (str.equals(getString(R.string.pref_key_fraction_digits))) {
+            return true;
+        } else if (str.equals(getString(R.string.pref_key_start_date_of_month))) {
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_add_remove_reorder))) {
             startActivity(new Intent(_activity, CategoryPlacementActivity.class));
