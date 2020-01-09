@@ -2,6 +2,7 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryDynamicGridAdapter;
 import com.kakeibo.KkbCategory;
@@ -30,9 +32,11 @@ public class CategoryPlacementReorderFragment extends Fragment {
     public final static String TAG = CategoryPlacementReorderFragment.class.getSimpleName();
     public final static int TAG_INT = 2;
 
+    private static SettingsCategoryEventListener _sEventListener;
+
     private static List<KkbCategory> _newKkbCategoryList;
     private static List<KkbCategory> _addedKkbCategoryList;
-    private static int sNumColumns;
+    private static int _sNumColumns;
 
     DynamicGridView _dgvCategory;
     private CategoryDynamicGridAdapter _adpGridCategory;
@@ -52,13 +56,20 @@ public class CategoryPlacementReorderFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        sNumColumns = CategoryPlacementActivity.sNumColumns;
+        _sEventListener = (SettingsCategoryEventListener) context;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement_reorder, container, false);
         _activity = getActivity();
+
+        /*** SharedPreference: num category icons per row ***/
+        PreferenceManager.setDefaultValues(_activity, R.xml.preferences, false);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
+        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
+        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
+        _sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
 
         findViews(view);
 
@@ -75,6 +86,9 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
+
+        _addedKkbCategoryList = new ArrayList<>();
+        _newKkbCategoryList = new ArrayList<>();
     }
 
     void setItemsOnGrid(List<Integer> newList, List<Integer> addedList) {
@@ -93,9 +107,9 @@ public class CategoryPlacementReorderFragment extends Fragment {
             _newKkbCategoryList.add(kkbCategory);
         }
 
-        _adpGridCategory = new CategoryDynamicGridAdapter(_activity, _newKkbCategoryList, sNumColumns);
+        _adpGridCategory = new CategoryDynamicGridAdapter(_activity, _newKkbCategoryList, _sNumColumns);
         _dgvCategory.setAdapter(_adpGridCategory);
-        _dgvCategory.setNumColumns(sNumColumns);
+        _dgvCategory.setNumColumns(_sNumColumns);
         _dgvCategory.setOnDropListener(new DynamicGridView.OnDropListener() {
             @Override
             public void onActionDrop()
@@ -138,7 +152,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
                     _newKkbCategoryList.removeAll(_addedKkbCategoryList);
                     _adpGridCategory.notifyDataSetChanged();
                     Log.d("asdf","new list size="+_newKkbCategoryList.size());
-                    ((CategoryPlacementActivity) _activity).onBackPressed(TAG_INT);
+                    _sEventListener.onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_next:
                     List<Object> list = _adpGridCategory.getItems();
@@ -147,7 +161,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
                         KkbCategory category = (KkbCategory) item;
                         out.add(category.getCode());
                     }
-                    ((CategoryPlacementActivity) _activity).onNextPressed(TAG_INT, out);
+                    _sEventListener.onNextPressed(TAG_INT, out);
                     break;
             }
         }

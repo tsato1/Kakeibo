@@ -231,13 +231,5 @@
     <orderEntry type="library" name="Gradle: com.adcolony:sdk:4.1.0@aar" level="project" />
     <orderEntry type="module" module-name="HoloGraphLibrary" />
     <orderEntry type="module" module-name="DynamicGrid" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="DynamicGrid" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="DynamicGrid" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="DynamicGrid" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="DynamicGrid" />
   </component>
 </module>

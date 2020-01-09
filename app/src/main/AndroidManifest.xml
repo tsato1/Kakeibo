@@ -49,7 +49,15 @@
             android:parentActivityName="com.kakeibo.MainActivity"/>
         <activity
             android:name=".settings.CategoryPlacementActivity"
-            android:label="Category Icon Placement"
+            android:label="@string/remove_add_reorder_categories"
+            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+        <activity
+            android:name=".settings.CategoryReorderActivity"
+            android:label="@string/reorder_categories"
+            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+        <activity
+            android:name=".settings.CategoryCreationActivity"
+            android:label="@string/create_new_category"
             android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
     </application>
 </manifest>

@@ -2,6 +2,7 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryGridAdapter;
 import com.kakeibo.KkbCategory;
@@ -36,6 +38,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
 
     private static List<KkbCategory> _nonDspKkbCategoryList;
     private static HashSet<Integer> _selectedCategoryCodeSet;
+    private static int _sNumColumns;
 
     private int _remainingCount; // remaining count for addition
 
@@ -67,8 +70,13 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement, container, false);
         _activity = getActivity();
-        _nonDspKkbCategoryList = UtilCategory.getNonDspKkbCategoryList(_activity);
-        _selectedCategoryCodeSet = new HashSet<>();
+
+        /*** SharedPreference: num category icons per row ***/
+        PreferenceManager.setDefaultValues(_activity, R.xml.preferences, false);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
+        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
+        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
+        _sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
 
         findViews(view);
 
@@ -76,6 +84,9 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     }
 
     private void findViews(View view) {
+        _nonDspKkbCategoryList = UtilCategory.getNonDspKkbCategoryList(_activity);
+        _selectedCategoryCodeSet = new HashSet<>();
+
         _btnBack = view.findViewById(R.id.btn_back);
         _btnNext = view.findViewById(R.id.btn_next);
         _btnBack.setOnClickListener(new ItemClickListener());
@@ -89,7 +100,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
 
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _nonDspKkbCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);
-        _grvCategory.setNumColumns(CategoryPlacementActivity.sNumColumns);
+        _grvCategory.setNumColumns(_sNumColumns);
         _grvCategory.setAdapter(categoryGridAdapter);
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

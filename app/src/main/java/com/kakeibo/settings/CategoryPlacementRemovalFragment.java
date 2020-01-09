@@ -2,6 +2,7 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryGridAdapter;
 import com.kakeibo.KkbCategory;
@@ -31,6 +33,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
     public static final int TAG_INT = 0;
 
     private static ArrayList<Integer> _selectedCategoryCodeList;
+    private static int _sNumColumns;
 
     private Activity _activity;
     private GridView _grvCategory;
@@ -60,6 +63,14 @@ public class CategoryPlacementRemovalFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_s_category_placement, container, false);
         _activity = getActivity();
+
+        /*** SharedPreference: num category icons per row ***/
+        PreferenceManager.setDefaultValues(_activity, R.xml.preferences, false);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
+        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
+        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
+        _sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+
         _selectedCategoryCodeList = new ArrayList<>();
 
         /*** find views ***/
@@ -78,7 +89,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         List<KkbCategory> kkbDspCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, kkbDspCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);
-        _grvCategory.setNumColumns(CategoryPlacementActivity.sNumColumns);
+        _grvCategory.setNumColumns(_sNumColumns);
         _grvCategory.setAdapter(categoryGridAdapter);
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

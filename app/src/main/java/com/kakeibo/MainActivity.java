@@ -80,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /*** this part is to handle unexpected crashes ***/
-//        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-//        if (getIntent().getBooleanExtra("crash", false)) {
-//            Log.e(TAG, "crashed");
-//        }
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if (getIntent().getBooleanExtra("crash", false)) {
+            Log.e(TAG, "crashed");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

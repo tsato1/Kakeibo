@@ -2,7 +2,6 @@ package com.kakeibo.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.kakeibo.MyExceptionHandler;
@@ -21,20 +19,17 @@ import com.kakeibo.ViewPagerAdapter;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-public class CategoryPlacementActivity extends AppCompatActivity {
+public class CategoryPlacementActivity extends AppCompatActivity
+        implements SettingsCategoryEventListener{
     private final static String TAG = CategoryPlacementActivity.class.getSimpleName();
     private final static int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;
     private final static int NUM_PAGES = 3;
-
-    public static int sNumColumns;
 
     private NonSwipeableViewPager _viewPager;
     private ViewPagerAdapter _adapter;
@@ -95,8 +90,6 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         _modCategoryCodeList = new ArrayList<>(UtilCategory.getDspCategoryCodeList(getApplicationContext())); // ordered by location
     }
 
-
-
     @Override
     protected void onSaveInstanceState(@Nonnull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -111,16 +104,6 @@ public class CategoryPlacementActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume() called");
-
-        /*** SharedPreference: num category icons per row ***/
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
-        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
-        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
-
-        Log.d(TAG, "sNumColumns:"+sNumColumns);
     }
 
     @Override
@@ -172,6 +155,7 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         });
     }
 
+    @Override
     public void onNextPressed(int tag, List<Integer> list) {
         switch (tag) {
             case CategoryPlacementRemovalFragment.TAG_INT:
@@ -217,6 +201,7 @@ public class CategoryPlacementActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     public void onBackPressed(int tag) {
         switch (tag) {
             case CategoryPlacementRemovalFragment.TAG_INT:

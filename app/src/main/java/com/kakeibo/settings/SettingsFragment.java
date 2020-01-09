@@ -62,11 +62,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         } else if (str.equals(getString(R.string.pref_key_fraction_digits))) {
             return true;
-        } else if (str.equals(getString(R.string.pref_key_category_placement))) {
+        } else if (str.equals(getString(R.string.pref_key_category_add_remove_reorder))) {
             startActivity(new Intent(_activity, CategoryPlacementActivity.class));
             return true;
-        } else if (str.equals(getString(R.string.create_new_category))) {
-
+        } else if (str.equals(getString(R.string.pref_key_category_reorder))) {
+            startActivity(new Intent(_activity, CategoryReorderActivity.class));
+            return true;
+        } else if (str.equals(getString(R.string.pref_key_category_creation))) {
+            startActivity(new Intent(_activity, CategoryCreationActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_delete_all_data))) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);

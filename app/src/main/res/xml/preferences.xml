@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/general"
         android:icon="@drawable/ic_info_black_24dp">
@@ -26,14 +26,14 @@
     <PreferenceCategory
         android:title="@string/category">
         <Preference
-            android:key="@string/pref_key_category_placement"
-            android:title="@string/placement_of_category_icons"
-            android:fragment="com.kakeibo.settings.CategoryPlacementRemovalFragment"/>
+            android:key="@string/pref_key_category_add_remove_reorder"
+            android:title="@string/remove_add_reorder_categories"/>
+        <Preference
+            android:key="@string/pref_key_category_reorder"
+            android:title="@string/reorder_categories"/>
         <Preference
             android:key="@string/pref_key_category_creation"
-            android:title="@string/create_new_category"
-            android:negativeButtonText="@string/no"
-            android:positiveButtonText="@string/yes"/>
+            android:title="@string/create_new_category"/>
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/pref_list_num_columns"

@@ -118,9 +118,10 @@
     <string name="delete_all_items">Delete all items</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
 
-    <string name="placement_of_category_icons">Placement of Category icons</string>
+    <string name="remove_add_reorder_categories">Remove, add and reorder Categories</string>
+    <string name="reorder_categories">Reorder Categories</string>
     <string name="create_new_category">Create a new Category</string>
-    <string name="num_columns">Number of Category icons per row</string>
+    <string name="num_columns">Number of Categories per row</string>
     <string name="settings_about_categories">Settings about categories in the app</string>
     <string name="remove_categories">Remove Categories</string>
     <string name="add_categories">Add Categories</string>
@@ -131,7 +132,8 @@
     <string name="pref_key_widget_and_font_size" translatable="false">pref_key_widget_and_font_size</string>
     <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
     <string name="pref_key_category" translatable="false">pref_key_category</string>
-    <string name="pref_key_category_placement" translatable="false">pref_key_category_placement</string>
+    <string name="pref_key_category_add_remove_reorder" translatable="false">pref_key_category_add_remove_reorder</string>
+    <string name="pref_key_category_reorder" translatable="false">pref_key_category_reorder</string>
     <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
 
