@@ -74,6 +74,7 @@ dependencies {
     }
     implementation project(':HoloGraphLibrary')
     implementation project(':DynamicGrid')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {

@@ -31,9 +31,6 @@ import java.util.Locale;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-//todo add and subtract custom categories (discreet categories for income too)
-//todo expense showing percentage as the fraction of income -> tabfragment2 2c and 2d
-
 //todo bug for arabic check query some arabic languages in the date part
 
 //todo expected/unexpected, favorite,

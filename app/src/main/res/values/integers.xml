@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="def_num_columns">4</integer>
+    <integer name="chart_animation_milli_seconds">600</integer>
 </resources>

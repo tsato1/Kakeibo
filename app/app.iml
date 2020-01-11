@@ -229,8 +229,7 @@
     <orderEntry type="library" name="Gradle: androidx.multidex:multidex:2.0.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-base:18.3.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.adcolony:sdk:4.1.0@aar" level="project" />
-    <orderEntry type="module" module-name="HoloGraphLibrary" />
-    <orderEntry type="module" module-name="DynamicGrid" />
+    <orderEntry type="library" name="Gradle: com.github.PhilJay:MPAndroidChart:v3.1.0@aar" level="project" />
     <orderEntry type="module" module-name="HoloGraphLibrary" />
     <orderEntry type="module" module-name="DynamicGrid" />
   </component>

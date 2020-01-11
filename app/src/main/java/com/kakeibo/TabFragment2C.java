@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
@@ -25,6 +26,18 @@ import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
 import com.kakeibo.util.UtilCategory;
@@ -36,7 +49,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabFragment2C extends Fragment {
+public class TabFragment2C extends Fragment implements OnChartValueSelectedListener {
     private final static String TAG = TabFragment2C.class.getSimpleName();
 
     private static Query sQuery;
@@ -90,8 +103,48 @@ public class TabFragment2C extends Fragment {
         UtilKeyboard.hideSoftKeyboard(_activity);
     }
 
+    HorizontalBarChart _horizontalBarChart;
     @SuppressLint("ClickableViewAccessibility")
     private void findViews() {
+        _horizontalBarChart = _view.findViewById(R.id.horizontal_bar_chart);
+        _horizontalBarChart.setDrawBarShadow(false);
+        _horizontalBarChart.setDrawValueAboveBar(true);
+        _horizontalBarChart.setDrawGridBackground(false);
+        _horizontalBarChart.setMaxVisibleValueCount(5);
+        _horizontalBarChart.setFitBars(true);
+        _horizontalBarChart.setPinchZoom(false);
+        _horizontalBarChart.getDescription().setEnabled(false);
+        _horizontalBarChart.setOnChartValueSelectedListener(this);
+        XAxis xl = _horizontalBarChart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xl.setDrawAxisLine(true);
+        xl.setDrawGridLines(false);
+        xl.setGranularity(10f);
+
+        YAxis yl = _horizontalBarChart.getAxisLeft();
+        yl.setDrawAxisLine(true);
+        yl.setDrawGridLines(true);
+        yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        YAxis yr = _horizontalBarChart.getAxisRight();
+        yr.setDrawAxisLine(true);
+        yr.setDrawGridLines(false);
+        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        yr.setInverted(true);
+
+        _horizontalBarChart.setFitBars(true);
+        _horizontalBarChart.animateY(getResources().getInteger(R.integer.chart_animation_milli_seconds));
+
+        // setting data
+
+        Legend l = _horizontalBarChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+        l.setFormSize(8f);
+        l.setXEntrySpace(4f);
+
         _inPieGraph = _view.findViewById(R.id.pie_graph_income);
         _exPieGraph = _view.findViewById(R.id.pie_graph_expense);
         _inPieGraph.setThickness(150);
@@ -150,6 +203,62 @@ public class TabFragment2C extends Fragment {
         _itemCategoryInListView.setAdapter(_itemCategoryInAdapter);
         _itemCategoryExListView.setAdapter(_itemCategoryExAdapter);
     }
+
+    private void setData() {
+        float barWidth = 9f;
+        float spaceForBar = 10f;
+        ArrayList<BarEntry> values = new ArrayList<>();
+
+        values.add(new BarEntry(0 * spaceForBar, _balance.getIncome().floatValue(),
+                ContextCompat.getDrawable(_activity, R.drawable.ic_category_tele)));
+        values.add(new BarEntry(1 * spaceForBar, _balance.getExpense().floatValue(),
+                ContextCompat.getDrawable(_activity, R.drawable.ic_category_tele)));
+
+        BarDataSet income;
+        BarDataSet expense;
+
+        if (_horizontalBarChart.getData() != null && _horizontalBarChart.getData().getDataSetCount() > 0) {
+            income = (BarDataSet) _horizontalBarChart.getData().getDataSetByIndex(0);
+            income.setValues(values);
+            _horizontalBarChart.getData().notifyDataChanged();
+            _horizontalBarChart.notifyDataSetChanged();
+        } else {
+            income = new BarDataSet(values, getString(R.string.income));
+            expense = new BarDataSet(values, getString(R.string.expense_colon));
+
+            income.setDrawIcons(false);
+            expense.setDrawIcons(false);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(income);
+            dataSets.add(expense);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setBarWidth(barWidth);
+            _horizontalBarChart.setData(data);
+        }
+    }
+
+    private final RectF mOnValueSelectedRectF = new RectF();
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        if (e == null)
+            return;
+
+        RectF bounds = mOnValueSelectedRectF;
+        _horizontalBarChart.getBarBounds((BarEntry) e, bounds);
+
+        MPPointF position = _horizontalBarChart.getPosition(e, _horizontalBarChart.getData().getDataSetByIndex(h.getDataSetIndex())
+                .getAxisDependency());
+
+        Log.i("bounds", bounds.toString());
+        Log.i("position", position.toString());
+
+        MPPointF.recycleInstance(position);
+    }
+    @Override
+    public void onNothingSelected() {}
 
     class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
         @Override
@@ -248,6 +357,7 @@ public class TabFragment2C extends Fragment {
         adjustItemCategoryListViewHeight();
         calculatePercentage();
         makePieGraph();
+        setData();
         sItemLoadListener.onItemsLoaded(_balance);
     }
 
