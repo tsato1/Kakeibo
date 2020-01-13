@@ -23,6 +23,11 @@
         <dimen name="pie_graph_height">190dp</dimen>
         <dimen name="pie_graph_margin_vertical">4dp</dimen>
 
+        <!-- horizontal bar chart -->
+        <item name="horizontal_bar_text_size" format="float" type="dimen">10.0</item>
+        <item name="horizontal_bar_chart_width" format="float" type="dimen">9.0</item>
+        <item name="horizontal_bar_chart_space" format="float" type="dimen">10.0</item>
+
     <!-- fragment3 -->
     <dimen name="search_criteria_1_row_height">20dp</dimen>
     <dimen name="search_criteria_txv_width">80dp</dimen>

@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,6 +61,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     private ItemDBAdapter _itemDbAdapter;
     private StringBuilder _stringBuilder;
     private Balance _balance;
+    private HorizontalBarChart _horizontalBarChart;
     private PieGraph _inPieGraph;
     private PieGraph _exPieGraph;
     private List<Item> _itemCategoryInList;
@@ -68,7 +70,6 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     private CategoryListAdapter _itemCategoryExAdapter;
     private ListView _itemCategoryInListView;
     private ListView _itemCategoryExListView;
-//    private int _toggleView = 0; //0=expense, 1=income, 2=both
 
     public static TabFragment2C newInstance(ItemLoadListener itemLoadListener, Query query) {
         TabFragment2C tabFragment2C = new TabFragment2C();
@@ -103,9 +104,9 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         UtilKeyboard.hideSoftKeyboard(_activity);
     }
 
-    HorizontalBarChart _horizontalBarChart;
     @SuppressLint("ClickableViewAccessibility")
     private void findViews() {
+        /*** horizontal bar chart for balance ***/
         _horizontalBarChart = _view.findViewById(R.id.horizontal_bar_chart);
         _horizontalBarChart.setDrawBarShadow(false);
         _horizontalBarChart.setDrawValueAboveBar(true);
@@ -115,11 +116,14 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         _horizontalBarChart.setPinchZoom(false);
         _horizontalBarChart.getDescription().setEnabled(false);
         _horizontalBarChart.setOnChartValueSelectedListener(this);
+        _horizontalBarChart.setFitBars(true);
+        _horizontalBarChart.animateY(getResources().getInteger(R.integer.chart_animation_milli_seconds));
         XAxis xl = _horizontalBarChart.getXAxis();
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
+        xl.setEnabled(false);
 
         YAxis yl = _horizontalBarChart.getAxisLeft();
         yl.setDrawAxisLine(true);
@@ -130,20 +134,15 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-//        yr.setInverted(true);
-
-        _horizontalBarChart.setFitBars(true);
-        _horizontalBarChart.animateY(getResources().getInteger(R.integer.chart_animation_milli_seconds));
-
-        // setting data
 
         Legend l = _horizontalBarChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
         l.setFormSize(8f);
         l.setXEntrySpace(4f);
+        l.setEnabled(false);
 
         _inPieGraph = _view.findViewById(R.id.pie_graph_income);
         _exPieGraph = _view.findViewById(R.id.pie_graph_expense);
@@ -205,14 +204,19 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     }
 
     private void setData() {
-        float barWidth = 9f;
-        float spaceForBar = 10f;
-        ArrayList<BarEntry> values = new ArrayList<>();
+        TypedValue outValue = new TypedValue();
 
+        getResources().getValue(R.dimen.horizontal_bar_chart_width, outValue, true);
+        float barWidth = outValue.getFloat();
+
+        getResources().getValue(R.dimen.horizontal_bar_chart_space, outValue, true);
+        float spaceForBar = outValue.getFloat();
+
+        ArrayList<BarEntry> values = new ArrayList<>();
         values.add(new BarEntry(0 * spaceForBar, _balance.getIncome().floatValue(),
-                ContextCompat.getDrawable(_activity, R.drawable.ic_category_tele)));
+                ContextCompat.getDrawable(_activity, R.drawable.ic_category_income)));
         values.add(new BarEntry(1 * spaceForBar, _balance.getExpense().floatValue(),
-                ContextCompat.getDrawable(_activity, R.drawable.ic_category_tele)));
+                ContextCompat.getDrawable(_activity, R.drawable.ic_category_expense)));
 
         BarDataSet income;
         BarDataSet expense;
@@ -220,6 +224,8 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         if (_horizontalBarChart.getData() != null && _horizontalBarChart.getData().getDataSetCount() > 0) {
             income = (BarDataSet) _horizontalBarChart.getData().getDataSetByIndex(0);
             income.setValues(values);
+            expense = (BarDataSet) _horizontalBarChart.getData().getDataSetByIndex(1);
+            expense.setValues(values);
             _horizontalBarChart.getData().notifyDataChanged();
             _horizontalBarChart.notifyDataSetChanged();
         } else {
@@ -228,13 +234,16 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
             income.setDrawIcons(false);
             expense.setDrawIcons(false);
+            expense.setColors(getResources().getColor(R.color.colorPrimary),
+                    getResources().getColor(R.color.colorAccent));
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(income);
             dataSets.add(expense);
 
             BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
+            getResources().getValue(R.dimen.horizontal_bar_text_size, outValue, true);
+            data.setValueTextSize(outValue.getFloat());
             data.setBarWidth(barWidth);
             _horizontalBarChart.setData(data);
         }
