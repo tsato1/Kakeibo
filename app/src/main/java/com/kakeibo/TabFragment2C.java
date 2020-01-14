@@ -21,8 +21,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
@@ -111,12 +113,15 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         _horizontalBarChart.setDrawBarShadow(false);
         _horizontalBarChart.setDrawValueAboveBar(true);
         _horizontalBarChart.setDrawGridBackground(false);
-        _horizontalBarChart.setMaxVisibleValueCount(5);
+        _horizontalBarChart.setMaxVisibleValueCount(2);//income and expense
         _horizontalBarChart.setFitBars(true);
+        _horizontalBarChart.setHighlightPerDragEnabled(false);
+        _horizontalBarChart.setHighlightPerTapEnabled(false);
+        _horizontalBarChart.setDoubleTapToZoomEnabled(false);
+        _horizontalBarChart.setNoDataTextColor(R.color.colorBlack);
         _horizontalBarChart.setPinchZoom(false);
         _horizontalBarChart.getDescription().setEnabled(false);
         _horizontalBarChart.setOnChartValueSelectedListener(this);
-        _horizontalBarChart.setFitBars(true);
         _horizontalBarChart.animateY(getResources().getInteger(R.integer.chart_animation_milli_seconds));
         XAxis xl = _horizontalBarChart.getXAxis();
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -136,12 +141,12 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         Legend l = _horizontalBarChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-        l.setDrawInside(false);
-        l.setFormSize(8f);
-        l.setXEntrySpace(4f);
+//        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+//        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+//        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+//        l.setDrawInside(false);
+//        l.setFormSize(8f);
+//        l.setXEntrySpace(5f);
         l.setEnabled(false);
 
         _inPieGraph = _view.findViewById(R.id.pie_graph_income);
@@ -206,22 +211,21 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     private void setData() {
         TypedValue outValue = new TypedValue();
 
-        getResources().getValue(R.dimen.horizontal_bar_chart_width, outValue, true);
+        getResources().getValue(R.dimen.horizontal_bar_bar_width, outValue, true);
         float barWidth = outValue.getFloat();
 
-        getResources().getValue(R.dimen.horizontal_bar_chart_space, outValue, true);
+        getResources().getValue(R.dimen.horizontal_bar_bar_space, outValue, true);
         float spaceForBar = outValue.getFloat();
 
         ArrayList<BarEntry> values = new ArrayList<>();
-        values.add(new BarEntry(0 * spaceForBar, _balance.getIncome().floatValue(),
-                ContextCompat.getDrawable(_activity, R.drawable.ic_category_income)));
-        values.add(new BarEntry(1 * spaceForBar, _balance.getExpense().floatValue(),
-                ContextCompat.getDrawable(_activity, R.drawable.ic_category_expense)));
+        values.add(new BarEntry(0 * spaceForBar, _balance.getIncome().floatValue()));
+        values.add(new BarEntry(1 * spaceForBar, _balance.getExpense().floatValue()));
 
         BarDataSet income;
         BarDataSet expense;
 
         if (_horizontalBarChart.getData() != null && _horizontalBarChart.getData().getDataSetCount() > 0) {
+            _horizontalBarChart.invalidate();
             income = (BarDataSet) _horizontalBarChart.getData().getDataSetByIndex(0);
             income.setValues(values);
             expense = (BarDataSet) _horizontalBarChart.getData().getDataSetByIndex(1);
@@ -234,8 +238,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
             income.setDrawIcons(false);
             expense.setDrawIcons(false);
-            expense.setColors(getResources().getColor(R.color.colorPrimary),
-                    getResources().getColor(R.color.colorAccent));
+            expense.setColors(getResources().getColor(R.color.colorPrimary),getResources().getColor(R.color.colorAccent));
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(income);
@@ -249,20 +252,24 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         }
     }
 
-    private final RectF mOnValueSelectedRectF = new RectF();
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-        if (e == null)
-            return;
+        if (e == null) return;
 
-        RectF bounds = mOnValueSelectedRectF;
-        _horizontalBarChart.getBarBounds((BarEntry) e, bounds);
+        _horizontalBarChart.getBarBounds((BarEntry) e, new RectF());
 
         MPPointF position = _horizontalBarChart.getPosition(e, _horizontalBarChart.getData().getDataSetByIndex(h.getDataSetIndex())
                 .getAxisDependency());
 
-        Log.i("bounds", bounds.toString());
-        Log.i("position", position.toString());
+        PopupWindow popup = new PopupWindow(_activity);
+        View layout = getLayoutInflater().inflate(R.layout.popup_bar_chart, null);
+        popup.setContentView(layout);
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setOutsideTouchable(true);
+        popup.setFocusable(true);
+        popup.showAsDropDown(_horizontalBarChart);
+//        popup.showAsDropDown(_view);
 
         MPPointF.recycleInstance(position);
     }

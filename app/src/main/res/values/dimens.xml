@@ -19,14 +19,16 @@
 
     <!-- fragment2c -->
     <dimen name="item_category_list_row_height">35dp</dimen>
+    <dimen name="small_imv_square_side_length">10dp</dimen>
         <!-- graph -->
         <dimen name="pie_graph_height">190dp</dimen>
         <dimen name="pie_graph_margin_vertical">4dp</dimen>
 
         <!-- horizontal bar chart -->
+        <dimen name="horizontal_bar_height">130dp</dimen>
         <item name="horizontal_bar_text_size" format="float" type="dimen">10.0</item>
-        <item name="horizontal_bar_chart_width" format="float" type="dimen">9.0</item>
-        <item name="horizontal_bar_chart_space" format="float" type="dimen">10.0</item>
+        <item name="horizontal_bar_bar_width" format="float" type="dimen">9.5</item>
+        <item name="horizontal_bar_bar_space" format="float" type="dimen">10.0</item>
 
     <!-- fragment3 -->
     <dimen name="search_criteria_1_row_height">20dp</dimen>

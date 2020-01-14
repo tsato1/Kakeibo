@@ -85,7 +85,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _btnNext.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
 
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
-        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_reorder));
+        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
         _addedKkbCategoryList = new ArrayList<>();
         _newKkbCategoryList = new ArrayList<>();

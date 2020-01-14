@@ -3,18 +3,12 @@
     <color name="colorPrimary">#FF5722</color>
     <color name="colorPrimaryDark">#E64A19</color>
     <color name="colorAccent">#808000</color>
+    <color name="colorEmboss">#11000001</color>
+
     <color name="colorBackground">#FFFFBB</color><!--cream-->
     <color name="colorBackground_search">#fffbe8</color>
-    <color name="colorBackground_text">#DCDCDC</color><!--grey-->
-    <color name="colorBackground_category_removal">#d5ff80</color><!--green-->
-    <color name="colorBackground_category_addition">#cce6ff</color><!--sky-->
-    <color name="colorBackground_category_reorder">#dab3ff</color><!--purple-->
-    <color name="colorBackground_category_">#b3b3ff</color><!--blue-->
-    <color name="colorEmboss">#11000001</color>
+
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorBlue">#12a1eb</color>
-
-    <color name="pager_dots_selected">#FF0000</color>
-    <color name="pager_dots_not_selected">#12a1eb</color>
 </resources>

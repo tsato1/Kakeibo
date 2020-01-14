@@ -96,7 +96,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _txvDescription = view.findViewById(R.id.txv_description);
         _txvDescription.setText("Please tap icons to add categories.");
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
-        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_addition));
+        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _nonDspKkbCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);

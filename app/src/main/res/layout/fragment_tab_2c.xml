@@ -33,8 +33,7 @@
                 <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/horizontal_bar_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/pie_graph_height"
-                    android:background="@android:color/white" />
+                    android:layout_height="@dimen/horizontal_bar_height"/>
 
             </LinearLayout>
 

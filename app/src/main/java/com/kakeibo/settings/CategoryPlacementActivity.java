@@ -120,9 +120,9 @@ public class CategoryPlacementActivity extends AppCompatActivity
             ImageView dot = new ImageView(this);
 
             if (i==0) {
-                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pager_dot_selected));
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_selected));
             } else {
-                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pager_dot_not_selected));
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_not_selected));
             }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -143,7 +143,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
             public void onPageSelected(int position) {
                 for(int i = 0; i < NUM_PAGES; i++) {
                     int drawableId = (i==position)?
-                            (R.drawable.pager_dot_selected):(R.drawable.pager_dot_not_selected);
+                            (R.drawable.dot_selected):(R.drawable.dot_not_selected);
                     Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                     _lstDots.get(i).setImageDrawable(drawable);
                 }

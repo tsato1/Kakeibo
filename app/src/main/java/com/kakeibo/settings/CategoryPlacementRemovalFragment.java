@@ -84,7 +84,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _txvDescription = view.findViewById(R.id.txv_description);
         _txvDescription.setText("Please tap icons to remove categories.");
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
-        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground_category_removal));
+        _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
         List<KkbCategory> kkbDspCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, kkbDspCategoryList);
