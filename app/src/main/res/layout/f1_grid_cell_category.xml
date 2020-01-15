@@ -15,7 +15,7 @@
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:paddingBottom="@dimen/padding_bottom_of_category_image"
+        android:paddingBottom="@dimen/imv_category_padding_bottom"
         android:contentDescription="@string/category"
         style="?android:attr/buttonBarButtonStyle"/>
 
@@ -27,7 +27,7 @@
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:paddingBottom="@dimen/padding_bottom_of_category_image"
+        android:paddingBottom="@dimen/imv_category_padding_bottom"
         android:contentDescription="@string/category"
         android:src="@drawable/ic_overlay_remove"
         android:visibility="gone"
@@ -41,7 +41,7 @@
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:paddingBottom="@dimen/padding_bottom_of_category_image"
+        android:paddingBottom="@dimen/imv_category_padding_bottom"
         android:contentDescription="@string/category"
         android:src="@drawable/ic_overlay_add"
         android:visibility="gone"

@@ -37,6 +37,7 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 //todo use viewholder for adapter, use <?> for adapter type
 
+//todo textsize for all the textviews
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();

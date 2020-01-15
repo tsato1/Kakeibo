@@ -28,6 +28,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/balance_colon"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
                     android:textSize="@dimen/char_size_mid" />
 
                 <com.github.mikephil.charting.charts.HorizontalBarChart
@@ -56,6 +58,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/income_colon"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
                     android:textSize="@dimen/char_size_mid" />
 
                 <com.echo.holographlibrary.PieGraph
@@ -89,6 +93,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/expense_colon"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
                     android:textSize="@dimen/char_size_mid" />
 
                 <com.echo.holographlibrary.PieGraph
