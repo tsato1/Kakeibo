@@ -20,6 +20,7 @@
     <!-- fragment2c -->
     <dimen name="item_category_list_row_height">35dp</dimen>
     <dimen name="small_imv_square_side_length">10dp</dimen>
+    <dimen name="imv_percent_margin_horizontal">3dp</dimen>
         <!-- graph -->
         <dimen name="pie_graph_height">190dp</dimen>
         <dimen name="pie_graph_margin_vertical">4dp</dimen>

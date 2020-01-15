@@ -381,11 +381,11 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         ViewGroup.LayoutParams lpmsIncome = _itemCategoryInListView.getLayoutParams();
         ViewGroup.LayoutParams lpmsExpens = _itemCategoryExListView.getLayoutParams();
 
-        int rowHeightIncome = (int) getResources().getDimension(R.dimen.item_category_list_row_height);
+        int rowHeightIncome = (int) getResources().getDimension(R.dimen.item_category_list_row_height)+_itemCategoryInList.size();
         lpmsIncome.height = _itemCategoryInList.size() * rowHeightIncome;
         _itemCategoryInListView.setLayoutParams(lpmsIncome);
 
-        int rowHeightExpens = (int) getResources().getDimension(R.dimen.item_category_list_row_height);
+        int rowHeightExpens = (int) getResources().getDimension(R.dimen.item_category_list_row_height)+_itemCategoryExList.size();
         lpmsExpens.height = _itemCategoryExList.size() * rowHeightExpens;
         _itemCategoryExListView.setLayoutParams(lpmsExpens);
     }
@@ -416,7 +416,6 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         _exPieGraph.removeSlices();
         PieSlice inPieSlice;
         PieSlice exPieSlice;
-
 
         for (int i = 0; i < _itemCategoryExList.size(); i++) {
             exPieSlice = new PieSlice();

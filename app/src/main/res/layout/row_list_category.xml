@@ -11,10 +11,6 @@
         android:id="@+id/imv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
         android:contentDescription="@string/category"/>
 
     <TextView
@@ -39,10 +35,8 @@
         android:id="@+id/imv_percent"
         android:layout_width="@dimen/item_category_list_row_height"
         android:layout_height="@dimen/item_category_list_row_height"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
+        android:layout_marginStart="@dimen/imv_percent_margin_horizontal"
+        android:layout_marginEnd="@dimen/imv_percent_margin_horizontal"
         android:contentDescription="@string/percent"/>
 
     <TextView
