@@ -14,6 +14,8 @@ import com.kakeibo.util.UtilCategory;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 public class DialogCategoryListAdapter extends ArrayAdapter<KkbCategory> {
     private LayoutInflater inflater;
     private Context _context;
@@ -25,18 +27,34 @@ public class DialogCategoryListAdapter extends ArrayAdapter<KkbCategory> {
     }
 
     @Override
-    public View getView(int position, View v, ViewGroup parent) {
+    public View getView(int position, View convertView, @Nonnull ViewGroup parent) {
         KkbCategory kkbCategory = getItem(position);
 
-        if (null == v) v = inflater.inflate(R.layout.dialog_row_category, null);
+        if (null == convertView) {
+            convertView = inflater.inflate(R.layout.dialog_row_category, null);
+            final TextView txvCategory = convertView.findViewById(R.id.txv_category);
+            final ImageView imvCategory = convertView.findViewById(R.id.imv_category);
+            final ViewHolder viewHolder = new ViewHolder(imvCategory, txvCategory);
+            convertView.setTag(viewHolder);
+        }
 
-        TextView txvCategory = v.findViewById(R.id.txv_category);
+        final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+
         String categoryText = UtilCategory.getCategoryStr(getContext(), kkbCategory.getCode());
-        txvCategory.setText(categoryText);
+        viewHolder.txvCategory.setText(categoryText);
 
-        ImageView imvCategory = v.findViewById(R.id.imv_category);
-        imvCategory.setImageDrawable(ContextCompat.getDrawable(_context, kkbCategory.getDrawable()));
+        viewHolder.imvCategory.setImageDrawable(ContextCompat.getDrawable(_context, kkbCategory.getDrawable()));
 
-        return v;
+        return convertView;
+    }
+
+    private class ViewHolder {
+        private ImageView imvCategory;
+        private TextView txvCategory;
+
+        ViewHolder (ImageView imvCategory, TextView txvCategory) {
+            this.imvCategory = imvCategory;
+            this.txvCategory = txvCategory;
+        }
     }
 }

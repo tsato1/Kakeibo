@@ -238,5 +238,7 @@
     <orderEntry type="module" module-name="DynamicGrid" />
     <orderEntry type="module" module-name="HoloGraphLibrary" />
     <orderEntry type="module" module-name="DynamicGrid" />
+    <orderEntry type="module" module-name="HoloGraphLibrary" />
+    <orderEntry type="module" module-name="DynamicGrid" />
   </component>
 </module>

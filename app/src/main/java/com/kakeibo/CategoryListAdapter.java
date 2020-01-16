@@ -41,41 +41,44 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
 
         if (null == convertView) {
             convertView = _layoutInflater.inflate(R.layout.row_list_category, parent, false);
+            final ImageView imvCategory = convertView.findViewById(R.id.imv_category);
+            final TextView txvCategory = convertView.findViewById(R.id.txv_category);
+            final TextView txvAmount = convertView.findViewById(R.id.txv_amount);
+            final ImageView imvPercent = convertView.findViewById(R.id.imv_percent);
+            final TextView txvPercent = convertView.findViewById(R.id.txv_percent);
+            final ViewHolder viewHolder = new ViewHolder(imvCategory, txvCategory, txvAmount, imvPercent, txvPercent);
+            convertView.setTag(viewHolder);
         }
 
         if (item == null) return convertView;
 
-        ImageView imvCategory = convertView.findViewById(R.id.imv_category);
-        TextView txvCategory = convertView.findViewById(R.id.txv_category);
+        final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 
-        imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
-        txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
+        /*** category ***/
+        viewHolder.imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+        viewHolder.txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
 
         /*** amount ***/
-        TextView txvAmount = convertView.findViewById(R.id.txv_amount);
         SpannableString spannableString;
-        if (item.getCategoryCode() <= 0) {
+        if (item.getCategoryCode() <= 0) {//todo 0 is not the only income
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-            txvAmount.setText(spannableString);
+            viewHolder.txvAmount.setText(spannableString);
         } else {
             String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
-            txvAmount.setText(spannableString);
+            viewHolder.txvAmount.setText(spannableString);
         }
 
-        ImageView percentImageView;
-        percentImageView = convertView.findViewById(R.id.imv_percent);
+        /*** percent ***/
         if (item.getCategoryCode() <= 0) {
-            percentImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            viewHolder.imvPercent.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         } else {
-            percentImageView.setBackgroundColor(Color.parseColor(MainActivity.categoryColor[position]));
+            viewHolder.imvPercent.setBackgroundColor(Color.parseColor(MainActivity.categoryColor[position]));
         }
 
-        TextView percentTextView;
-        percentTextView = convertView.findViewById(R.id.txv_percent);
         String percent;
         if (item.getMemo().length()==1) { // 5 -> 005
             percent = "00"+item.getMemo()+"%";
@@ -84,8 +87,24 @@ public class CategoryListAdapter extends ArrayAdapter<Item> {
         } else { // 100
             percent = item.getMemo()+"%";
         }
-        percentTextView.setText(percent);
+        viewHolder.txvPercent.setText(percent);
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        ImageView imvCategory;
+        TextView txvCategory;
+        TextView txvAmount;
+        ImageView imvPercent;
+        TextView txvPercent;
+
+        ViewHolder (ImageView imvCategory, TextView txvCategory, TextView txvAmount, ImageView imvPercent, TextView txvPercent) {
+            this.imvCategory = imvCategory;
+            this.txvCategory = txvCategory;
+            this.txvAmount = txvAmount;
+            this.imvPercent = imvPercent;
+            this.txvPercent = txvPercent;
+        }
     }
 }

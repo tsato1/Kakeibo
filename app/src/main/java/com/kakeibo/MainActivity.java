@@ -39,6 +39,10 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 //todo textsize for all the textviews
 
+//todo settings 'about' page
+
+//todo language
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;

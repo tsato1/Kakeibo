@@ -57,27 +57,32 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.row_explist_child, parent, false);
+            final ImageView imvCategory = convertView.findViewById(R.id.img_category);
+            final TextView txvCategory = convertView.findViewById(R.id.txv_category);
+            final TextView txvMemo = convertView.findViewById(R.id.txv_memo);
+            final TextView txvAmount = convertView.findViewById(R.id.txv_amount);
+            final ChildViewHolder childViewHolder = new ChildViewHolder(imvCategory, txvCategory, txvMemo, txvAmount);
+            convertView.setTag(childViewHolder);
         }
 
-        ImageView imvCategory = convertView.findViewById(R.id.img_category);
-        TextView txvCategory = convertView.findViewById(R.id.txv_category);
-        TextView txvMemo = convertView.findViewById(R.id.txv_memo);
-        TextView txvAmount = convertView.findViewById(R.id.txv_amount);
+        final ChildViewHolder childViewHolder = (ChildViewHolder) convertView.getTag();
 
         Item item = (Item)baseItem;
-        imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+
+        /*** imv category ***/
+        childViewHolder.imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
 
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
             String str = item.getMemo().substring(0, 14) + "...";
-            txvMemo.setText(str);
+            childViewHolder.txvMemo.setText(str);
         }
         else {
-            txvMemo.setText(item.getMemo());
+            childViewHolder.txvMemo.setText(item.getMemo());
         }
 
-        /*** category ***/
-        txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
+        /*** txv category ***/
+        childViewHolder.txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
 
         /*** amount ***/
         SpannableString spannableString;
@@ -90,7 +95,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
         }
-        txvAmount.setText(spannableString);
+        childViewHolder.txvAmount.setText(spannableString);
 
         return convertView;
     }
@@ -137,27 +142,33 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) _context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater infalInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.row_explist_header, parent, false);
+            final TextView txvHeaderDate = convertView.findViewById(R.id.txv_header_date);
+            final TextView txvHeaderBalance = convertView.findViewById(R.id.txv_header_balance);
+            final ParentViewHolder parentViewHolder = new ParentViewHolder(txvHeaderDate, txvHeaderBalance);
+            convertView.setTag(parentViewHolder);
         }
 
-        TextView txvHeaderDate = convertView.findViewById(R.id.txv_header_date);
+        final ParentViewHolder parentViewHolder = (ParentViewHolder) convertView.getTag();
+
+        /*** header date ***/
         Calendar cal = Calendar.getInstance();
         cal.set(parseInt(headerYear), parseInt(headerMonth)-1, parseInt(headerDay));
         String[] weekName = _context.getResources().getStringArray(R.array.week_name);
 
         String str = headerDate + " [" + weekName[cal.get(Calendar.DAY_OF_WEEK)-1] + "]";
-        txvHeaderDate.setText(str);
+        parentViewHolder.txvHeaderDate.setText(str);
 
-        TextView txvHeaderBalance = convertView.findViewById(R.id.txv_header_balance);
+        /*** header balance ***/
         SpannableString spannableString;
         String tmp;
-        if (new BigDecimal(headerBalance).compareTo(new BigDecimal(0)) > 0) {
+        BigDecimal zero = new BigDecimal(0);
+        if (new BigDecimal(headerBalance).compareTo(zero) > 0) {
             tmp = "+" + headerBalance;
             spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-        } else if (new BigDecimal(headerBalance).compareTo(new BigDecimal(0)) < 0){
+        } else if (new BigDecimal(headerBalance).compareTo(zero) < 0){
             tmp = headerBalance;
             spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
@@ -166,9 +177,33 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             spannableString = new SpannableString(tmp);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlack)), 0, 1, 0);
         }
-        txvHeaderBalance.setText(spannableString);
+        parentViewHolder.txvHeaderBalance.setText(spannableString);
 
         return convertView;
+    }
+
+    private class ParentViewHolder {
+        TextView txvHeaderDate;
+        TextView txvHeaderBalance;
+
+        ParentViewHolder (TextView txvHeaderDate, TextView txvHeaderBalance) {
+            this.txvHeaderDate = txvHeaderDate;
+            this.txvHeaderBalance = txvHeaderBalance;
+        }
+    }
+
+    private class ChildViewHolder {
+        ImageView imvCategory;
+        TextView txvCategory;
+        TextView txvMemo;
+        TextView txvAmount;
+
+        ChildViewHolder (ImageView imvCategory, TextView txvCategory, TextView txvMemo, TextView txvAmount) {
+            this.imvCategory = imvCategory;
+            this.txvCategory = txvCategory;
+            this.txvMemo = txvMemo;
+            this.txvAmount = txvAmount;
+        }
     }
 
     @Override

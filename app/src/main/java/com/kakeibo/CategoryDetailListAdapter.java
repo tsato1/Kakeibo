@@ -41,7 +41,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
 
     @Override
     @NonNull
-    public View getView(int position, View v, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         String eventDateColon = _context.getResources().getString(R.string.event_date_colon);
         String amountColon = _context.getResources().getString(R.string.amount_colon);
         String memoColon = _context.getResources().getString(R.string.memo_colon);
@@ -49,23 +49,31 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         String savedOnColon = _context.getResources().getString(R.string.updated_on_colon);
         Item item = getItem(position);
 
-        if (null == v) v = inflater.inflate(R.layout.dialog_row_search, null);
+        if (null == convertView) {
+            convertView = inflater.inflate(R.layout.dialog_row_search, null);
 
-        TextView txvEventDate = v.findViewById(R.id.btn_event_date);
+            final TextView txvEventDate = convertView.findViewById(R.id.btn_event_date);
+            final TextView txvCategory = convertView.findViewById(R.id.txv_category);
+            final TextView txvAmount = convertView.findViewById(R.id.txv_amount);
+            final TextView txvMemo = convertView.findViewById(R.id.txv_memo);
+            final TextView txvUpdateDate = convertView.findViewById(R.id.txv_update_date);
+            final ViewHolder viewHolder = new ViewHolder(txvEventDate, txvCategory, txvAmount, txvMemo, txvUpdateDate);
+            convertView.setTag(viewHolder);
+        }
+
+        final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+
         String eventDateText = eventDateColon + UtilDate.getDateWithDayFromDBDate(item.getEventDate(), weekName, mDateFormat);
-        txvEventDate.setText(eventDateText);
+        viewHolder.txvEventDate.setText(eventDateText);
 
-        TextView txvCategory = v.findViewById(R.id.txv_category);
         String categoryText = categoryColon + UtilCategory.getCategoryStr(_context, item.getCategoryCode());
-        txvCategory.setText(categoryText);
+        viewHolder.txvCategory.setText(categoryText);
 
-        TextView txvAmount = v.findViewById(R.id.txv_amount);
         String amountText = amountColon + item.getAmount();
-        txvAmount.setText(amountText);
+        viewHolder.txvAmount.setText(amountText);
 
-        TextView txvMemo = v.findViewById(R.id.txv_memo);
         SpannableString span1, span2;
-        if (0 == (item.getCategoryCode())) {
+        if (0 == (item.getCategoryCode())) {//todo 0 is not the only income
             span1 = new SpannableString(amountColon);
             span2 = new SpannableString("+" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 0, 1, 0);
@@ -74,15 +82,31 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
             span2 = new SpannableString("-" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 0, 1, 0);
         }
-        txvAmount.setText(TextUtils.concat(span1, span2));
+        viewHolder.txvAmount.setText(TextUtils.concat(span1, span2));
+
         String memoText = memoColon + item.getMemo();
-        txvMemo.setText(memoText);
+        viewHolder.txvMemo.setText(memoText);
 
-        TextView txvUpdateDate = v.findViewById(R.id.txv_update_date);
         String updateDateText = savedOnColon + UtilDate.getDateWithDayFromDBDate(item.getUpdateDate(), weekName, mDateFormat);
-        txvUpdateDate.setText(updateDateText);
+        viewHolder.txvUpdateDate.setText(updateDateText);
 
-        return v;
+        return convertView;
+    }
+
+    private class ViewHolder {
+        private TextView txvEventDate;
+        private TextView txvCategory;
+        private TextView txvAmount;
+        private TextView txvMemo;
+        private TextView txvUpdateDate;
+
+        ViewHolder (TextView txvEventDate, TextView txvCategory, TextView txvAmount, TextView txvMemo, TextView txvUpdateDate) {
+            this.txvEventDate = txvEventDate;
+            this.txvCategory = txvCategory;
+            this.txvAmount = txvAmount;
+            this.txvMemo = txvMemo;
+            this.txvUpdateDate = txvUpdateDate;
+        }
     }
 
     private void loadSharedPreference() {

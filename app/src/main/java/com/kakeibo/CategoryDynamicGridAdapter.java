@@ -19,13 +19,13 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        CheeseViewHolder holder;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_grid, null);
-            holder = new CheeseViewHolder(convertView);
+            holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
-            holder = (CheeseViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         KkbCategory item = (KkbCategory) getItem(position);
@@ -33,11 +33,11 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
         return convertView;
     }
 
-    private class CheeseViewHolder {
+    private class ViewHolder {
         private TextView titleText;
         private ImageView image;
 
-        private CheeseViewHolder(View view) {
+        private ViewHolder(View view) {
             titleText = view.findViewById(R.id.item_title);
             image = view.findViewById(R.id.item_img);
         }

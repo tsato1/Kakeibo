@@ -18,12 +18,10 @@ public class CategoryGridAdapter extends BaseAdapter {
 
     private Context _context;
     private List<KkbCategory> _kkbCategoryList;
-    private int _isVisible;
 
     public CategoryGridAdapter(Context context, List<KkbCategory> objects) {
         this._context = context;
         this._kkbCategoryList = objects;
-        this._isVisible = 0;
     }
 
     public Object getItem(int position) {
