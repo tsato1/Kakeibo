@@ -17,13 +17,12 @@
             android:padding="@dimen/card_view_padding">
 
             <TextView
-                android:id="@+id/txv_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/your_app_version_is"
                 android:textColor="@color/colorBlack"/>
 
             <TextView
-                android:id="@+id/txv_version_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -32,65 +31,161 @@
                 android:text="@string/versionName"
                 android:padding="@dimen/fab_default_padding"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/you_have_purchased"
+                android:textColor="@color/colorBlack"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:textAlignment="gravity"
+                android:gravity="end"
+                android:text="@string/none"
+                android:padding="@dimen/fab_default_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/how_to_use_app"
+                android:textColor="@color/colorBlack"/>
+
+            <TextView
+                android:id="@+id/txv_how_to_use_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:textAlignment="gravity"
+                android:gravity="end"
+                android:text="@string/tap_to_jump_to_website"
+                android:padding="@dimen/fab_default_padding"
+                android:onClick="onClick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/more_documentation"
+                android:textColor="@color/colorBlack"/>
+
+            <TextView
+                android:id="@+id/txv_more_documentation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:textAlignment="gravity"
+                android:gravity="end"
+                android:text="@string/tap_to_jump_to_website"
+                android:padding="@dimen/fab_default_padding"
+                android:onClick="onClick"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_view_margin">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/card_view_margin">-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/card_view_padding">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="@dimen/card_view_padding">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/about_kakeibo"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/imv_kakeibo_basic"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_launcher"-->
+<!--                android:contentDescription="@string/kakeibo_basic"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/txv_kakeibo_basic"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toEndOf="@+id/imv_kakeibo_basic"-->
+<!--                android:text="@string/kakeibo_basic"/>-->
 
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_view_margin">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/card_view_margin">-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/card_view_padding">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="@dimen/card_view_padding">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/about_kakeibo_plus"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/imv_kakeibo_plus"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_launcher"-->
+<!--                android:contentDescription="@string/kakeibo_plus"/>-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toEndOf="@+id/imv_kakeibo_plus"-->
+<!--                android:text="@string/kakeibo_plus"/>-->
 
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_view_margin">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/card_view_margin">-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/card_view_padding">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="@dimen/card_view_padding">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/about_kakeibo_plus_plus"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/imv_kakeibo_plus_plus"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_launcher"-->
+<!--                android:contentDescription="@string/kakeibo_plus_plus"/>-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toEndOf="@+id/imv_kakeibo_plus_plus"-->
+<!--                android:text="@string/kakeibo_plus_plus"/>-->
 
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/card_view_margin">-->
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="@dimen/card_view_padding">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imv_kakeibo_original"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_mikan"-->
+<!--                android:contentDescription="@string/kakeibo_basic"/>-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toEndOf="@+id/imv_kakeibo_original"-->
+<!--                android:text="@string/kakeibo_original"/>-->
+
+<!--        </RelativeLayout>-->
+
+<!--    </androidx.cardview.widget.CardView>-->
 
 </LinearLayout>
