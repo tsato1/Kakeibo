@@ -59,5 +59,9 @@
             android:name=".settings.CategoryCreationActivity"
             android:label="@string/create_new_category"
             android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+        <activity
+            android:name=".settings.SettingsAboutActivity"
+            android:label="@string/about_this_app"
+            android:parentActivityName="com.kakeibo.settings.SettingsAboutActivity"/>
     </application>
 </manifest>

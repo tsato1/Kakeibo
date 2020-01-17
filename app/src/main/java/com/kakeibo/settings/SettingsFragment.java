@@ -95,6 +95,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
             dialog.show();
             return true;
+        } else if (str.equals(getString(R.string.pref_key_about))) {
+            startActivity(new Intent(_activity, SettingsAboutActivity.class));
+            return true;
         } else {
             return super.onPreferenceTreeClick(preference);
         }

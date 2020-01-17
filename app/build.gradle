@@ -3,12 +3,19 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
 
+    def versionMajor = 3
+    def versionMinor = 0
+    def versionDB = 6
+
     defaultConfig {
         applicationId "com.kakeibo"
         minSdkVersion 22
         targetSdkVersion 29
+
         versionCode 24
-        versionName "2.8.6" // major.minor.db
+        versionName "${versionMajor}.${versionMinor}.${versionDB}"
+        /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
+
         multiDexEnabled true
 
         applicationVariants.all { variant ->
@@ -18,6 +25,10 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
+        buildTypes.each {
+            it.buildConfigField('int', 'versionMajor', "${versionMajor}")
+            it.buildConfigField('int', 'versionDB', "${versionDB}")
+        }
         release {
             minifyEnabled true  // shrink
         }
@@ -37,9 +48,10 @@ android {
     flavorDimensions "default"
     productFlavors {
         free {
-
+            buildConfigField('int', 'versionMinor', "${versionMinor}")
         }
         paid {
+            buildConfigField('int', 'versionMinor', "${versionMinor}+100")
             applicationIdSuffix ".paid"
             versionNameSuffix "-paid"
         }

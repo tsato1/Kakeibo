@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
@@ -22,7 +23,7 @@ import static com.kakeibo.db.KkbAppDBAdapter.TABLE_KKBAPP;
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DATABASE_NAME = "kakeibo.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = BuildConfig.versionDB;
 
     private static final String DATABASE_CREATE_TABLE_KKBAPP =
             "CREATE TABLE " + TABLE_KKBAPP + " (" +
@@ -146,6 +147,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        Log.d(TAG, "db version = " + DATABASE_VERSION);
         this._context = context;
     }
 
@@ -159,7 +161,7 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY);
             db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN);
             PrepDB.initCategoriesTable(db);
-            /*** added on 2.8.6 ***/
+            /*** added on 2.8.6 (-> 3.0.6) ***/
             upgradeVersion7(db);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -57,4 +57,12 @@
             android:positiveButtonText="@string/yes">
         </Preference>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/about_this_app"
+        android:icon="@drawable/ic_notifications_black_24dp">
+        <Preference
+            android:key="@string/pref_key_about"
+            android:title="@string/about_this_app">
+        </Preference>
+    </PreferenceCategory>
 </PreferenceScreen>

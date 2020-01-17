@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
+    <string name="kakeibo_plus" translatable="false">Kakeibo Plus</string>
+    <string name="kakeibo_plus_plus" translatable="false">Kakeibo Plus Plus</string>
 
     <string name="action_settings">Settings</string>
 
@@ -117,6 +119,7 @@
     <string name="fraction_digits">Fraction Digits</string>
     <string name="start_date_of_month">Starting date of a month</string>
     <string name="delete_all_items">Delete all items</string>
+    <string name="about_this_app">About this App</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
     <string name="remove_add_reorder_categories">Remove, add and reorder Categories</string>
     <string name="reorder_categories">Reorder Categories</string>
@@ -132,10 +135,14 @@
     <string name="pref_key_start_date_of_month" translatable="false">pref_key_start_date_of_month</string>
     <string name="pref_key_widget_and_font_size" translatable="false">pref_key_widget_and_font_size</string>
     <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
+    <string name="pref_key_about" translatable="false">pref_key_about</string>
     <string name="pref_key_category" translatable="false">pref_key_category</string>
     <string name="pref_key_category_add_remove_reorder" translatable="false">pref_key_category_add_remove_reorder</string>
     <string name="pref_key_category_reorder" translatable="false">pref_key_category_reorder</string>
     <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
 
+    <string name="about_kakeibo">Kakeibo:</string>
+    <string name="about_kakeibo_plus">Kakeibo Plus</string>
+    <string name="about_kakeibo_plus_plus">Kakeibo Plus Plus</string>
 </resources>
