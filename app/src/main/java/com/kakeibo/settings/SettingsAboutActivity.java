@@ -28,14 +28,13 @@ public class SettingsAboutActivity extends AppCompatActivity {
 
     /*** call set up in layout xml ***/
     public void onClick(View v) {
-        String url = "";
         if (v.getId()==R.id.txv_how_to_use_app) {
-            url = "https://sites.google.com/view/kakeibo/home";
+            String url = "https://sites.google.com/view/kakeibo/home/how-to-use-the-app";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
-        } else if (v.getId()==R.id.txv_more_documentation) {
-            url = "https://sites.google.com/view/kakeibo/home/privacy-policy";
+        } else if (v.getId()==R.id.txv_read_documentation) {
+            String url = "https://sites.google.com/view/kakeibo/home";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);

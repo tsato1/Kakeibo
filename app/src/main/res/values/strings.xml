@@ -61,7 +61,7 @@
     <string name="search_result">Search Result</string>
     <string name="none">None</string>
     <string name="how_to_use_app">How to use this app</string>
-    <string name="more_documentation">More documentation</string>
+    <string name="read_documentation">Read documentation</string>
     <string name="tap_to_jump_to_website">Tap to jump to the website</string>
 
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
@@ -89,7 +89,7 @@
     <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
     <string name="msg_all_delete_success">All the items were successfully deleted.</string>
 
-    <string name="desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to your Google Drive is recommended before deletion. Tap yes to proceed.</string>
+    <string name="desc_delete_all_items">This will delete all the Kakeibo items that you saved on this device. Exporting to Google Drive is recommended before deletion. Tap yes to proceed.</string>
 
     <string name="inst_tap_plus_to_add_criteria">First, tap the plus button to add criteria. Then tap the search button to perform search.</string>
 
@@ -104,7 +104,7 @@
     <string name="select_folder">Select a folder</string>
     <string name="folder_not_selected">No folder selected, canceling uploading.</string>
     <string name="nothing_to_export">There is nothing to export.</string>
-    <string name="empty_report">Your report is empty.</string>
+    <string name="empty_report">The report is empty.</string>
     <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
 
     <!-- Settings -->
@@ -126,8 +126,8 @@
     <string name="settings_about_categories">Settings about Categories</string>
     <string name="remove_categories">Remove Categories</string>
     <string name="add_categories">Add Categories</string>
-    <string name="your_app_version_is">Your app version is</string>
-    <string name="you_have_purchased">You have purchased</string>
+    <string name="the_app_version">The app version</string>
+    <string name="purchased_items">Purchased items</string>
 
     <string name="desc_kakeibo_original">Kakeibo was developed </string>
 

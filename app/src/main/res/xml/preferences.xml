@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/general"
-        android:icon="@drawable/ic_info_black_24dp">
+        android:icon="@drawable/ic_general_black">
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/pref_list_date_format"
@@ -27,7 +27,8 @@
 <!--            android:title="@string/start_date_of_month"/>-->
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/category">
+        android:title="@string/category"
+        android:icon="@drawable/ic_category_meal_black">
         <Preference
             android:key="@string/pref_key_category_add_remove_reorder"
             android:title="@string/remove_add_reorder_categories"/>
@@ -59,7 +60,7 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/about_this_app"
-        android:icon="@drawable/ic_notifications_black_24dp">
+        android:icon="@drawable/ic_launcher_round_black">
         <Preference
             android:key="@string/pref_key_about"
             android:title="@string/version_etc">

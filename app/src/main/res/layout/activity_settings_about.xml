@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/your_app_version_is"
+                android:text="@string/the_app_version"
                 android:textColor="@color/colorBlack"/>
 
             <TextView
@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/you_have_purchased"
+                android:text="@string/purchased_items"
                 android:textColor="@color/colorBlack"/>
 
             <TextView
@@ -66,11 +66,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/more_documentation"
+                android:text="@string/read_documentation"
                 android:textColor="@color/colorBlack"/>
 
             <TextView
-                android:id="@+id/txv_more_documentation"
+                android:id="@+id/txv_read_documentation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
