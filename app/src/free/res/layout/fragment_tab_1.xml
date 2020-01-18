@@ -79,7 +79,8 @@
         <GridView
             android:id="@+id/grv_category"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:columnWidth="@dimen/grv_column_width"
             android:numColumns="auto_fit"
@@ -88,5 +89,13 @@
             android:nestedScrollingEnabled="true"
             android:stretchMode="spacingWidthUniform" />
 
+        <com.google.android.gms.ads.doubleclick.PublisherAdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/publisherAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="/6499/example/banner">
+        </com.google.android.gms.ads.doubleclick.PublisherAdView>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

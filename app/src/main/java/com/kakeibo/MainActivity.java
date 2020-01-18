@@ -37,9 +37,9 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 //todo textsize for all the textviews
 
-//todo settings 'about' page
-
 //todo language
+
+//todo hidden bar ads
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();

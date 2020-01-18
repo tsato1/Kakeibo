@@ -117,6 +117,7 @@
     <string name="start_date_of_month">Starting date of a month</string>
     <string name="delete_all_items">Delete all items</string>
     <string name="about_this_app">About this App</string>
+    <string name="in_app_purchases">In-App Purchases</string>
     <string name="version_etc">The installed version, etc</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
     <string name="remove_add_reorder_categories">Remove, add and reorder Categories</string>
@@ -137,12 +138,13 @@
     <string name="pref_key_start_date_of_month" translatable="false">pref_key_start_date_of_month</string>
     <string name="pref_key_widget_and_font_size" translatable="false">pref_key_widget_and_font_size</string>
     <string name="pref_key_delete_all_data" translatable="false">pref_key_delete_all_data</string>
-    <string name="pref_key_about" translatable="false">pref_key_about</string>
+    <string name="pref_key_in_app_purchases" translatable="false">pref_key_in_app_purchases</string>
     <string name="pref_key_category" translatable="false">pref_key_category</string>
     <string name="pref_key_category_add_remove_reorder" translatable="false">pref_key_category_add_remove_reorder</string>
     <string name="pref_key_category_reorder" translatable="false">pref_key_category_reorder</string>
     <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
+    <string name="pref_key_about" translatable="false">pref_key_about</string>
 
     <!-- other -->
     <string name="dash" translatable="false">-</string>
