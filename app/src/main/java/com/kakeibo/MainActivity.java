@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.FragmentManager;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public static String[] sWeekName;
 
 //    private InterstitialAd mInterstitialAd;
+    private PublisherAdView mPublisherAdView;
     private FragmentManager fm;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -87,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        /*** ads ***/
+        mPublisherAdView = findViewById(R.id.publisherAdView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
 
         viewPager = findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(VIEWPAGER_OFF_SCREEN_PAGE_LIMIT);

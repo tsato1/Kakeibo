@@ -17,8 +17,6 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
@@ -40,8 +38,6 @@ import java.util.Locale;
  */
 public class TabFragment1 extends Fragment {
     private final static String TAG = TabFragment1.class.getSimpleName();
-
-    private PublisherAdView mPublisherAdView;
 
     private Activity _activity;
     private ImageButton _btnPrev, _btnNext;
@@ -110,10 +106,6 @@ public class TabFragment1 extends Fragment {
                 }
             }
         });
-
-        mPublisherAdView = view.findViewById(R.id.publisherAdView);
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-        mPublisherAdView.loadAd(adRequest);
     }
 
     void setListeners() {
