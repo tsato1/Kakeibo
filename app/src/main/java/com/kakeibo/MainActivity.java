@@ -19,10 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-//import com.google.android.gms.ads.AdListener;
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.MobileAds;
-
 import com.kakeibo.settings.SettingsCompatActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilDate;
@@ -48,11 +44,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;
 
+//    public static final String[] categoryColor = {
+//            "#2b381d", "#324220", "#374C22", "#40552b", "#465E2E",
+//            "#4E6A32", "#557238", "#6a8d47", "#7ca058", "#80aa55",
+//            "#8CB365", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7",
+//            "#eaf1e2"}; //"#fafcf8"
+
     public static final String[] categoryColor = {
-            "#2b381d", "#324220", "#374C22", "#40552b", "#465E2E",
-            "#4E6A32", "#557238", "#6a8d47", "#7ca058", "#80aa55",
-            "#8CB365", "#95b872", "#aac78d", "#bfd5aa", "#d5e2c7",
-            "#eaf1e2"}; //"#fafcf8"
+            "#2b381d", "#40552b", "#557238", "#80aa55", "#aac78d",
+            "#eaf1e2", "#fafcf8", "#fafcf8", "#fafcf8", "#fafcf8",
+            "#fafcf8", "#fafcf8", "#fafcf8", "#fafcf8", "#fafcf8",
+            "#fafcf8"
+    };
 
     public static int sFragmentPosition;
     public static int sDateFormat;
@@ -60,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public static int sNumColumns;
     public static String[] sWeekName;
 
-//    private InterstitialAd mInterstitialAd;
-    private PublisherAdView mPublisherAdView;
+    private PublisherAdView _publisherAdView;
     private FragmentManager fm;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -93,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         /*** ads ***/
-        mPublisherAdView = findViewById(R.id.publisherAdView);
+        _publisherAdView = findViewById(R.id.publisherAdView);
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-        mPublisherAdView.loadAd(adRequest);
+        _publisherAdView.loadAd(adRequest);
 
         viewPager = findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(VIEWPAGER_OFF_SCREEN_PAGE_LIMIT);
