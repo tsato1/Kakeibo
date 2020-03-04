@@ -55,6 +55,8 @@ import java.util.List;
 public class TabFragment2C extends Fragment implements OnChartValueSelectedListener {
     private final static String TAG = TabFragment2C.class.getSimpleName();
 
+    private final static int PIE_GRAPH_THICKNESS = 120;
+
     private static Query sQuery;
     private static ItemLoadListener sItemLoadListener;
 
@@ -151,8 +153,8 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
         _inPieGraph = _view.findViewById(R.id.pie_graph_income);
         _exPieGraph = _view.findViewById(R.id.pie_graph_expense);
-        _inPieGraph.setThickness(150);
-        _exPieGraph.setThickness(150);
+        _inPieGraph.setThickness(PIE_GRAPH_THICKNESS);
+        _exPieGraph.setThickness(PIE_GRAPH_THICKNESS);
 
         _itemCategoryInListView = _view.findViewById(R.id.lsv_income);
         _itemCategoryExListView = _view.findViewById(R.id.lsv_expense);

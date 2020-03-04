@@ -30,15 +30,13 @@ import java.util.Locale;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-//todo bug for arabic check query some arabic languages in the date part
+////todo bug for arabic check query some arabic languages in the date part
 
-//todo expected/unexpected, favorite,
+//todo expected/unexpected, favorite
 
 //todo textsize for all the textviews
 
 //todo language
-
-//todo hidden bar ads
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();

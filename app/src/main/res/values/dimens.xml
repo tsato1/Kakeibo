@@ -24,11 +24,11 @@
     <dimen name="tbl_padding_vertical">2dp</dimen>
 
     <!-- fragment2c -->
-    <dimen name="item_category_list_row_height">35dp</dimen>
+    <dimen name="item_category_list_row_height">30dp</dimen>
     <dimen name="small_imv_square_sides">10dp</dimen>
     <dimen name="imv_percent_margin_horizontal">3dp</dimen>
         <!-- graph -->
-        <dimen name="pie_graph_height">190dp</dimen>
+        <dimen name="pie_graph_height">160dp</dimen>
         <dimen name="pie_graph_margin_vertical">4dp</dimen>
         <!-- horizontal bar chart -->
         <dimen name="horizontal_bar_height">130dp</dimen>
@@ -46,7 +46,7 @@
 
     <!-- character size -->
     <dimen name="char_size_big">16sp</dimen>
-    <dimen name="char_size_mid">15sp</dimen>
+    <dimen name="char_size_mid">14sp</dimen>
     <dimen name="char_size_sml">12sp</dimen>
 
 </resources>

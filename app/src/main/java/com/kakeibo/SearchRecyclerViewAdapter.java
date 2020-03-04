@@ -240,7 +240,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 break;
             case Card.TYPE_MEMO:
                 ViewHolderMemo viewHolderMemo = (ViewHolderMemo)holder;
-                viewHolderMemo.edtMemo.getText().clear();
+//                viewHolderMemo.edtMemo.getText().clear();
                 break;
         }
     }
