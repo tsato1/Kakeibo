@@ -151,14 +151,14 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
                 .build();
         MobileAds.setRequestConfiguration(conf);
 
-        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
         mInterstitialAd = new InterstitialAd(this);
         AdRequest.Builder request = new AdRequest.Builder();
 
         if (BuildConfig.DEBUG) {
             mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
         } else {
-            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
+            mInterstitialAd.setAdUnitId(getString(R.string.upload_ad));
         }
 
         mInterstitialAd.loadAd(request.build());

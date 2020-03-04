@@ -6,18 +6,28 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.kakeibo.settings.SettingsCompatActivity;
 import com.kakeibo.util.UtilCategory;
@@ -72,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     private static FloatingActionButton fabEnd;
 
     private Activity _activity;
+    private FrameLayout _adContainerView;
+    private AdView _adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,14 +101,18 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "crashed");
         }
 
+        /*** toolbar ***/
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         /*** ads ***/
-        _publisherAdView = findViewById(R.id.publisherAdView);
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-        _publisherAdView.loadAd(adRequest);
+        initAd();
+        loadBanner();
+//        _publisherAdView = findViewById(R.id.ad_container);
+//        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+//        _publisherAdView.loadAd(adRequest);
 
+        /*** viewPager ***/
         viewPager = findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(VIEWPAGER_OFF_SCREEN_PAGE_LIMIT);
         setupViewPager(viewPager);
@@ -111,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         fabStart.setOnClickListener(new ButtonClickListener());
         fabEnd.setOnClickListener(new ButtonClickListener());
         sWeekName = getResources().getStringArray(R.array.week_name);
-//        loadAds();
+
         _activity = this;
     }
 
@@ -192,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 
         /*** num category icons per row ***/
-        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns),
-                getString(R.string.def_num_columns));
+        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
         String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
         sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
 
@@ -293,5 +308,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*** ads ***/
+    private void initAd() {
+        //Call the function to initialize AdMob SDK
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        //get the reference to your FrameLayout
+        _adContainerView = findViewById(R.id.ad_container);
+
+        //Create an AdView and put it into your FrameLayout
+        _adView = new AdView(this);
+        if (BuildConfig.DEBUG) {
+            _adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");/*** in debug mode ***/
+        } else {
+            _adView.setAdUnitId(getString(R.string.main_banner_ad));
+        }
+        _adContainerView.addView(_adView);
+    }
+
+    private AdSize getAdSize() {
+        //Determine the screen width to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        //you can also pass your selected width here in dp
+        int adWidth = (int) (widthPixels / density);
+
+        //return the optimal size depends on your orientation (landscape or portrait)
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        AdSize adSize = getAdSize();
+        // Set the adaptive ad size to the ad view.
+        _adView.setAdSize(adSize);
+
+        // Start loading the ad in the background.
+        _adView.loadAd(adRequest);
     }
 }

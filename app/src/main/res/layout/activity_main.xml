@@ -9,7 +9,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/publisherAdView">
+        android:layout_above="@+id/ad_container">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -55,14 +55,19 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.google.android.gms.ads.doubleclick.PublisherAdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/publisherAdView"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/ad_container"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="/6499/example/banner">
-    </com.google.android.gms.ads.doubleclick.PublisherAdView>
+        android:background="@color/colorBackground"
+        android:layout_alignParentBottom="true"/>
+<!--    <com.google.android.gms.ads.doubleclick.PublisherAdView-->
+<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+<!--        android:id="@+id/ad_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        ads:adSize="BANNER"-->
+<!--        ads:adUnitId="/6499/example/banner">-->
+<!--    </com.google.android.gms.ads.doubleclick.PublisherAdView>-->
 </RelativeLayout>
