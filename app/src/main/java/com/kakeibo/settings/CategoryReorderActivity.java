@@ -58,8 +58,8 @@ public class CategoryReorderActivity extends AppCompatActivity
     public void onNextPressed(int tag, List<Integer> list) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setIcon(R.mipmap.ic_mikan);
-        dialog.setTitle("Determine how categories get displayed on INPUT screen");
-        dialog.setMessage("Do you want to proceed with the specified categories with specified order");
+        dialog.setTitle(R.string.display_of_icons);
+        dialog.setMessage(R.string.quest_determine_category_order);
         dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
             Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
             UtilCategory.updateDspTable(getApplicationContext(), list);

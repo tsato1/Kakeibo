@@ -43,7 +43,7 @@
                 android:layout_gravity="bottom"
                 android:textAlignment="gravity"
                 android:gravity="end"
-                android:text="@string/none"
+                android:text="@string/dash"
                 android:padding="@dimen/fab_default_padding"/>
 
             <TextView
@@ -59,26 +59,26 @@
                 android:layout_gravity="bottom"
                 android:textAlignment="gravity"
                 android:gravity="end"
-                android:text="@string/tap_to_jump_to_website"
+                android:text="@string/jump_to_website"
                 android:padding="@dimen/fab_default_padding"
                 android:onClick="onClick"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/read_documentation"
-                android:textColor="@color/colorBlack"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/read_documentation"-->
+<!--                android:textColor="@color/colorBlack"/>-->
 
-            <TextView
-                android:id="@+id/txv_read_documentation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:textAlignment="gravity"
-                android:gravity="end"
-                android:text="@string/tap_to_jump_to_website"
-                android:padding="@dimen/fab_default_padding"
-                android:onClick="onClick"/>
+<!--            <TextView-->
+<!--                android:id="@+id/txv_read_documentation"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:textAlignment="gravity"-->
+<!--                android:gravity="end"-->
+<!--                android:text="@string/jump_to_website"-->
+<!--                android:padding="@dimen/fab_default_padding"-->
+<!--                android:onClick="onClick"/>-->
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

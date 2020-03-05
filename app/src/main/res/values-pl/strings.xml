@@ -160,4 +160,27 @@
     <string name="amount">Ilość</string>
     <string name="err_from_date_older">„Od daty” musi być młodsze niż „Do daty”.</string>
     <string name="ok">OK</string>
+    <string name="done">Gotowy</string>
+    <string name="back">Plecy</string>
+    <string name="how_to_use_app">Jak korzystać z tej aplikacji</string>
+    <string name="jump_to_website">Przejdź do strony internetowej</string>
+    <string name="about_this_app">O tej aplikacji</string>
+    <string name="version_etc">Zainstalowana wersja itp.</string>
+    <string name="remove_add_reorder_categories">Usuń, dodaj i zmień kolejność kategorii</string>
+    <string name="reorder_categories">Zmień kolejność kategorii</string>
+    <string name="create_new_category">Utwórz nową kategorię</string>
+    <string name="num_columns">Liczba kategorii w rzędzie</string>
+    <string name="remove_categories">Usuń kategorie</string>
+    <string name="add_categories">Dodaj kategorie</string>
+    <string name="the_app_version">Wersja aplikacji</string>
+    <string name="purchased_items">Zakupione przedmioty</string>
+    <string name="inst_tap_icon_to_remove_categories">Wybierz ikony, aby usunąć kategorie.</string>
+    <string name="inst_tap_icon_to_add_categories">Wybierz ikony, aby dodać kategorie.</string>
+    <string name="in_app_purchases">Zakupy w aplikacji</string>
+    <string name="remaining_spots_colon">"Pozostałe miejsca: "</string>
+    <string name="inst_long_tap_to_move_icons">Naciśnij długo, aby przenieść ikony.</string>
+    <string name="err_cannot_add_category">Nie możesz dodać więcej, ponieważ osiągnąłeś maks</string>
+    <string name="inst_keep_pressing_longer">Naciskaj dłużej</string>
+    <string name="display_of_icons">Wyświetlanie ikon</string>
+    <string name="quest_determine_category_order">Ikony będą wyświetlane w określonej kolejności. Czy chcesz kontynuować?</string>
 </resources>

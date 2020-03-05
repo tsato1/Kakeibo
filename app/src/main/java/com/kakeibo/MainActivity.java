@@ -42,6 +42,8 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 ////todo bug for arabic check query some arabic languages in the date part
 
+//todo edit doesn't save item tabfragment2D
+
 //todo expected/unexpected, favorite
 
 //todo textsize for all the textviews

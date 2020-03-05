@@ -160,4 +160,27 @@
     <string name="err_from_date_older">Da data deve ser menor que a Para data.</string>
     <string name="to">Para</string>
     <string name="yes">Sim</string>
+    <string name="done">Feita</string>
+    <string name="back">Costas</string>
+    <string name="how_to_use_app">Como usar esta aplicação</string>
+    <string name="jump_to_website">Ir para o site</string>
+    <string name="about_this_app">Sobre este aplicativo</string>
+    <string name="version_etc">Versão instalada, etc.</string>
+    <string name="remove_add_reorder_categories">Remover, adicionar e reordenar categorias</string>
+    <string name="reorder_categories">Reordenar categorias</string>
+    <string name="create_new_category">Crie uma nova categoria</string>
+    <string name="num_columns">Número de categorias por linha</string>
+    <string name="remove_categories">Remover categorias</string>
+    <string name="add_categories">Adicionar categorias</string>
+    <string name="the_app_version">A versão do aplicativo</string>
+    <string name="purchased_items">Itens comprados</string>
+    <string name="inst_tap_icon_to_remove_categories">Por favor, toque nos ícones para remover categorias.</string>
+    <string name="inst_tap_icon_to_add_categories">Por favor, toque nos ícones para adicionar categorias.</string>
+    <string name="in_app_purchases">Compras dentro do aplicativo</string>
+    <string name="remaining_spots_colon">"Pontos restantes: "</string>
+    <string name="inst_long_tap_to_move_icons">Toque longo para mover os ícones.</string>
+    <string name="err_cannot_add_category">Você não pode adicionar mais porque atingiu o valor máximo</string>
+    <string name="inst_keep_pressing_longer">Continue pressionando por mais tempo</string>
+    <string name="display_of_icons">Exibição de ícones</string>
+    <string name="quest_determine_category_order">Os ícones serão exibidos na ordem especificada. Você quer prosseguir?</string>
 </resources>

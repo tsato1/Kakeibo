@@ -58,13 +58,13 @@
             android:positiveButtonText="@string/yes">
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/in_app_purchases">
-        <Preference
-            android:key="@string/pref_key_in_app_purchases"
-            android:title="@string/version_etc">
-        </Preference>
-    </PreferenceCategory>
+<!--    <PreferenceCategory-->
+<!--        android:title="@string/in_app_purchases">-->
+<!--        <Preference-->
+<!--            android:key="@string/pref_key_in_app_purchases"-->
+<!--            android:title="@string/version_etc">-->
+<!--        </Preference>-->
+<!--    </PreferenceCategory>-->
     <PreferenceCategory
         android:title="@string/about_this_app"
         android:icon="@drawable/ic_launcher_round_black">

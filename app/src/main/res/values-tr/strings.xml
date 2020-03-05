@@ -160,4 +160,27 @@
     <string name="memo">Muhtıra</string>
     <string name="amount">Miktar</string>
     <string name="err_from_date_older">\"Kadar Itibaren\"\'nın \"Tarih Kadar\"\'den küçük olması gerekir.</string>
+    <string name="done">Bitti</string>
+    <string name="back">Geri</string>
+    <string name="how_to_use_app">Bu uygulama nasıl kullanılır?</string>
+    <string name="jump_to_website">Web sitesine atla</string>
+    <string name="about_this_app">Bu uygulama hakkında</string>
+    <string name="version_etc">Yüklü sürüm vb.</string>
+    <string name="remove_add_reorder_categories">Kategorileri Kaldırma, Ekleme ve Yeniden Sıralama</string>
+    <string name="reorder_categories">Kategorileri Yeniden Sırala</string>
+    <string name="create_new_category">Yeni bir Kategori oluşturun</string>
+    <string name="num_columns">Satır başına Kategori sayısı</string>
+    <string name="remove_categories">Kategorileri Kaldır</string>
+    <string name="add_categories">Kategori Ekle</string>
+    <string name="the_app_version">Uygulama sürümü</string>
+    <string name="purchased_items">Satın alınan ürünler</string>
+    <string name="inst_tap_icon_to_remove_categories">Kategorileri kaldırmak için lütfen simgelere dokunun.</string>
+    <string name="inst_tap_icon_to_add_categories">Kategori eklemek için lütfen simgelere dokunun.</string>
+    <string name="in_app_purchases">Uygulama içi satın alma işlemleri</string>
+    <string name="remaining_spots_colon">"Kalan noktalar: "</string>
+    <string name="inst_long_tap_to_move_icons">Simgeleri taşımak için uzun dokunun.</string>
+    <string name="err_cannot_add_category">Maks. Değere ulaştığınız için daha fazla ekleyemezsiniz</string>
+    <string name="inst_keep_pressing_longer">Daha uzun süre basmaya devam edin</string>
+    <string name="display_of_icons">Simgeleri görüntüleme</string>
+    <string name="quest_determine_category_order">Simgeler belirtilen sırada görüntülenir. Devam etmek istiyor musunuz?</string>
 </resources>

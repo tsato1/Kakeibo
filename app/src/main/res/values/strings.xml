@@ -59,10 +59,8 @@
     <string name="undo">UNDO</string>
     <string name="swipe_to_delete">Swipe to Delete</string>
     <string name="search_result">Search Result</string>
-    <string name="none">None</string>
     <string name="how_to_use_app">How to use this app</string>
-    <string name="read_documentation">Read documentation</string>
-    <string name="tap_to_jump_to_website">Tap to jump to the website</string>
+    <string name="jump_to_website">Jump to the website</string>
 
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
     <string name="err_please_choose_from_date">Please choose From Date.</string>
@@ -114,23 +112,25 @@
     <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
     <string name="in_app_data">In-App Data</string>
     <string name="fraction_digits">Fraction Digits</string>
-    <string name="start_date_of_month">Starting date of a month</string>
     <string name="delete_all_items">Delete all items</string>
     <string name="about_this_app">About this App</string>
     <string name="in_app_purchases">In-App Purchases</string>
-    <string name="version_etc">The installed version, etc</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="remove_add_reorder_categories">Remove, add and reorder Categories</string>
+    <string name="remove_add_reorder_categories">Remove, Add and Reorder Categories</string>
     <string name="reorder_categories">Reorder Categories</string>
-    <string name="create_new_category">Create a new Category</string>
     <string name="num_columns">Number of Categories per row</string>
-    <string name="settings_about_categories">Settings about Categories</string>
     <string name="remove_categories">Remove Categories</string>
     <string name="add_categories">Add Categories</string>
     <string name="the_app_version">The app version</string>
-    <string name="purchased_items">Purchased items</string>
-
-    <string name="desc_kakeibo_original">Kakeibo was developed </string>
+    <string name="inst_tap_icon_to_remove_categories">Please tap icons to remove categories.</string>
+    <string name="inst_tap_icon_to_add_categories">Please tap icons to add categories.</string>
+    <string name="inst_long_tap_to_move_icons">Long tap to move icons.</string>
+    <string name="inst_keep_pressing_longer">Push longer</string>
+    <string name="remaining_spots_colon">Remaining spots: </string>
+    <string name="version_etc">Installed version, etc</string>
+    <string name="purchased_items">Purchased Items</string>
+    <string name="create_new_category">Create a new Category</string>
+    <string name="err_cannot_add_category">You cannot add any more because you have reached the max</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
@@ -151,4 +151,17 @@
     <string name="percent" translatable="false">%</string>
     <string name="toggle" translatable="false">toggle</string>
     <string name="def_num_columns" translatable="false">4</string>
+    <string name="title_search_criteria">Search Criteria</string>
+    <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_header_data_sync">Data Sync</string>
+    <string name="pref_title_sync_frequency">Sync Frequency</string>
+    <string name="pref_title_system_sync_settings">System Sync Settings</string>
+    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_title_new_message_notifications">New Message Notifications</string>
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_title_category">Category</string>
+    <string name="pref_title_currency">Currency</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="display_of_icons">Display of icons</string>
+    <string name="quest_determine_category_order">The icons will be displayed in the specified order. Do you want to proceed?</string>
 </resources>

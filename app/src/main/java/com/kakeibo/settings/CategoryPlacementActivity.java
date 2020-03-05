@@ -21,8 +21,6 @@ import com.kakeibo.util.UtilCategory;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class CategoryPlacementActivity extends AppCompatActivity
@@ -91,7 +89,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onSaveInstanceState(@Nonnull Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         /*** saving fragment's instance ***/
@@ -188,8 +186,8 @@ public class CategoryPlacementActivity extends AppCompatActivity
                 /*** list: contains necessary categories ordered by location the user wants ***/
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setIcon(R.mipmap.ic_mikan);
-                dialog.setTitle("Determine how categories get displayed on INPUT screen");
-                dialog.setMessage("Do you want to proceed with the specified categories with specified order");
+                dialog.setTitle(R.string.display_of_icons);
+                dialog.setMessage(R.string.quest_determine_category_order);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
                     Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
                     UtilCategory.updateDspTable(getApplicationContext(), list);

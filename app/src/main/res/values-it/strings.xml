@@ -103,4 +103,27 @@
     <string name="close">Chiudere</string>
     <string name="msg_exit_search">Uscirai dalla pagina dei risultati della ricerca e tornerai al rapporto mensile di questo mese.</string>
     <string name="err_amount_invalid">l\'importo non è valido.</string>
+    <string name="done">Fatto</string>
+    <string name="back">Indietro</string>
+    <string name="how_to_use_app">Come usare questa applicazione</string>
+    <string name="jump_to_website">Vai al sito Web</string>
+    <string name="about_this_app">A proposito di questa app</string>
+    <string name="version_etc">Versione installata, ecc.</string>
+    <string name="remove_add_reorder_categories">Rimuovi, aggiungi e riordina categorie</string>
+    <string name="reorder_categories">Riordina categorie</string>
+    <string name="create_new_category">Crea una nuova categoria</string>
+    <string name="num_columns">Numero di categorie per riga</string>
+    <string name="remove_categories">Rimuovi categorie</string>
+    <string name="add_categories">Aggiungi categorie</string>
+    <string name="the_app_version">La versione dell\'app</string>
+    <string name="purchased_items">Articoli acquistati</string>
+    <string name="inst_tap_icon_to_remove_categories">Si prega di toccare le icone per rimuovere le categorie.</string>
+    <string name="inst_tap_icon_to_add_categories">Si prega di toccare le icone per aggiungere categorie.</string>
+    <string name="in_app_purchases">Acquisti in-app</string>
+    <string name="remaining_spots_colon">"Macchie rimanenti: "</string>
+    <string name="inst_long_tap_to_move_icons">Tocca a lungo per spostare le icone.</string>
+    <string name="err_cannot_add_category">Non puoi aggiungere altro perché hai raggiunto il limite massimo</string>
+    <string name="inst_keep_pressing_longer">Spingere più a lungo</string>
+    <string name="display_of_icons">Visualizzazione delle icone</string>
+    <string name="quest_determine_category_order">Le icone verranno visualizzate nell\'ordine specificato. Vuoi procedere?</string>
 </resources>

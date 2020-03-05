@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
     private Activity _activity;
     private Button _btnBack, _btnNext;
+    private TextView _txvTitle, _txvDescription;
     private RelativeLayout _rllBackground;
 
     public static CategoryPlacementReorderFragment newInstance() {
@@ -83,14 +85,17 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _btnNext.setText(getString(R.string.done));
         _btnBack.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
         _btnNext.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
-
+        _txvTitle = view.findViewById(R.id.txv_title);
+        _txvTitle.setText(R.string.reorder_categories);
+        _txvDescription = view.findViewById(R.id.txv_description);
+        _txvDescription.setText(R.string.inst_long_tap_to_move_icons);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
         _addedKkbCategoryList = new ArrayList<>();
         _newKkbCategoryList = new ArrayList<>();
     }
-
+//
     void setItemsOnGrid(List<Integer> newList, List<Integer> addedList) {
         _addedKkbCategoryList = new ArrayList<>();
         _newKkbCategoryList = new ArrayList<>();
@@ -138,7 +143,8 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _dgvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(_activity, parent.getAdapter().getItem(position).toString(),
+                Log.d(TAG, parent.getAdapter().getItem(position).toString());
+                Toast.makeText(_activity, R.string.inst_keep_pressing_longer,
                         Toast.LENGTH_SHORT).show();
             }
         });

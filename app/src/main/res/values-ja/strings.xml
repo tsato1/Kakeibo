@@ -103,4 +103,27 @@
     <string name="close">閉じる</string>
     <string name="msg_exit_search">検索結果画面を閉じ，今月の月次レポートへ戻ります．</string>
     <string name="err_amount_invalid">金額が正しくありません．</string>
+    <string name="done">完了</string>
+    <string name="back">戻る</string>
+    <string name="how_to_use_app">本アプリの使い方</string>
+    <string name="jump_to_website">ウェブサイトへ</string>
+    <string name="about_this_app">本アプリについて</string>
+    <string name="version_etc">バージョン情報等</string>
+    <string name="remove_add_reorder_categories">カテゴリーの削除、追加、並べ替え</string>
+    <string name="reorder_categories">カテゴリーの並べ替え</string>
+    <string name="create_new_category">新カテゴリーの作成</string>
+    <string name="num_columns">行ごとのカテゴリー数</string>
+    <string name="remove_categories">カテゴリーの削除</string>
+    <string name="add_categories">カテゴリーの追加</string>
+    <string name="the_app_version">アプリのバージョン</string>
+    <string name="purchased_items">購入済み商品</string>
+    <string name="inst_tap_icon_to_remove_categories">アイコンをタップして削除するカテゴリーを選択します</string>
+    <string name="inst_tap_icon_to_add_categories">アイコンをタップして追加するカテゴリーを選択します</string>
+    <string name="in_app_purchases">アプリ内購入</string>
+    <string name="remaining_spots_colon">残りのスポット：</string>
+    <string name="inst_long_tap_to_move_icons">ロングタップしてアイコンを移動します</string>
+    <string name="err_cannot_add_category">"閾値に達したため、これ以上追加できません "</string>
+    <string name="inst_keep_pressing_longer">長押ししてください</string>
+    <string name="display_of_icons">アイコンの表示</string>
+    <string name="quest_determine_category_order">アイコンは指定された順序で表示されます。続行しますか？</string>
 </resources>

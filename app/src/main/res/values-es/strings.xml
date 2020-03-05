@@ -103,4 +103,27 @@
     <string name="close">Cerrar</string>
     <string name="msg_exit_search">Saldrá de la página de resultados de búsqueda y volverá al informe mensual de este mes.</string>
     <string name="err_amount_invalid">La cantidad no es válida.</string>
+    <string name="done">Hecho</string>
+    <string name="back">Regresa</string>
+    <string name="how_to_use_app">Cómo usar esta aplicación</string>
+    <string name="jump_to_website">Ir al sitio web</string>
+    <string name="about_this_app">Acerca de esta aplicación</string>
+    <string name="version_etc">Versión instalada, etc.</string>
+    <string name="remove_add_reorder_categories">Eliminar, agregar y reordenar categorías</string>
+    <string name="reorder_categories">Reordenar categorías</string>
+    <string name="create_new_category">Crea una nueva categoría</string>
+    <string name="num_columns">Número de categorías por fila</string>
+    <string name="remove_categories">Eliminar categorías</string>
+    <string name="add_categories">Agregar categorías</string>
+    <string name="the_app_version">La versión de la aplicación</string>
+    <string name="purchased_items">Elementos comprados</string>
+    <string name="inst_tap_icon_to_remove_categories">Toque los iconos para eliminar categorías.</string>
+    <string name="inst_tap_icon_to_add_categories">Toque los iconos para agregar categorías.</string>
+    <string name="in_app_purchases">Compras en la aplicación</string>
+    <string name="remaining_spots_colon">"Puntos restantes: "</string>
+    <string name="inst_long_tap_to_move_icons">Toque largo para mover los iconos.</string>
+    <string name="err_cannot_add_category">No puede agregar más porque ha alcanzado el máximo</string>
+    <string name="inst_keep_pressing_longer">Sigue presionando por más tiempo</string>
+    <string name="display_of_icons">Visualización de íconos</string>
+    <string name="quest_determine_category_order">Los iconos se mostrarán en el orden especificado. Quieres proceder?</string>
 </resources>

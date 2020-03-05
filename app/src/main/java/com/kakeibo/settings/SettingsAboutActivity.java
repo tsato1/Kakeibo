@@ -33,11 +33,11 @@ public class SettingsAboutActivity extends AppCompatActivity {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
-        } else if (v.getId()==R.id.txv_read_documentation) {
-            String url = "https://sites.google.com/view/kakeibo/home";
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
+//        } else if (v.getId()==R.id.txv_read_documentation) {
+//            String url = "https://sites.google.com/view/kakeibo/home";
+//            Intent i = new Intent(Intent.ACTION_VIEW);
+//            i.setData(Uri.parse(url));
+//            startActivity(i);
         }
     }
 }

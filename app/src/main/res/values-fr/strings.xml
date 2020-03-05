@@ -103,4 +103,27 @@
     <string name="edit_item">modifier les données</string>
     <string name="search_result">résultat de la recherche</string>
     <string name="err_amount_invalid">Le montant est invalide.</string>
+    <string name="done">Terminé</string>
+    <string name="back">Retour</string>
+    <string name="how_to_use_app">Comment utiliser cette application</string>
+    <string name="jump_to_website">Allez sur le site</string>
+    <string name="about_this_app">À propos de cette appli</string>
+    <string name="version_etc">"Yüklü sürüm vb. "</string>
+    <string name="remove_add_reorder_categories">Supprimer, ajouter et réorganiser les catégories</string>
+    <string name="reorder_categories">Réorganiser les catégories</string>
+    <string name="create_new_category">Créer une nouvelle catégorie</string>
+    <string name="num_columns">Nombre de catégories par ligne</string>
+    <string name="remove_categories">Supprimer des catégories</string>
+    <string name="add_categories">Ajouter des catégories</string>
+    <string name="the_app_version">La version de l\'application</string>
+    <string name="purchased_items">Articles achetés</string>
+    <string name="inst_tap_icon_to_remove_categories">Veuillez toucher les icônes pour supprimer les catégories.</string>
+    <string name="inst_tap_icon_to_add_categories">Veuillez appuyer sur des icônes pour ajouter des catégories.</string>
+    <string name="in_app_purchases">Achats intégrés</string>
+    <string name="remaining_spots_colon">"Taches restantes: "</string>
+    <string name="inst_long_tap_to_move_icons">Appuyez longuement pour déplacer les icônes.</string>
+    <string name="err_cannot_add_category">Vous ne pouvez plus en ajouter car vous avez atteint le maximum</string>
+    <string name="inst_keep_pressing_longer">Poussez plus longtemps</string>
+    <string name="display_of_icons">Affichage des icônes</string>
+    <string name="quest_determine_category_order">Les icônes seront affichées dans l\'ordre spécifié. Voulez-vous poursuivre?</string>
 </resources>

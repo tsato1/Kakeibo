@@ -160,4 +160,27 @@
     <string name="amount">Количество</string>
     <string name="err_from_date_older">От датa должен быть моложе к дата.</string>
     <string name="err_please_choose_to_date">Пожалуйста, выберите к дата.</string>
+    <string name="done">Выполнено</string>
+    <string name="back">назад</string>
+    <string name="how_to_use_app">Как использовать это приложение</string>
+    <string name="jump_to_website">Перейти на сайт</string>
+    <string name="about_this_app">Об этом приложении</string>
+    <string name="version_etc">Установленная версия и др.</string>
+    <string name="remove_add_reorder_categories">Удалить, добавить и изменить порядок категорий</string>
+    <string name="reorder_categories">Изменить порядок категорий</string>
+    <string name="create_new_category">Создать новую категорию</string>
+    <string name="num_columns">Количество категорий в строке</string>
+    <string name="remove_categories">Удалить категории</string>
+    <string name="add_categories">Добавить категории</string>
+    <string name="the_app_version">Версия приложения</string>
+    <string name="purchased_items">Купленные товары</string>
+    <string name="inst_tap_icon_to_remove_categories">Пожалуйста, нажмите значки, чтобы удалить категории.</string>
+    <string name="inst_tap_icon_to_add_categories">Пожалуйста, нажмите значки, чтобы добавить категории.</string>
+    <string name="in_app_purchases">Покупки в приложении</string>
+    <string name="remaining_spots_colon">"Оставшиеся пятна: "</string>
+    <string name="inst_long_tap_to_move_icons">Длинное нажатие, чтобы переместить значки.</string>
+    <string name="err_cannot_add_category">Вы не можете добавить больше, потому что вы достигли максимума</string>
+    <string name="inst_keep_pressing_longer">Продолжайте нажимать дольше</string>
+    <string name="display_of_icons">Отображение иконок</string>
+    <string name="quest_determine_category_order">Иконки будут отображаться в указанном порядке. Вы хотите продолжить</string>
 </resources>

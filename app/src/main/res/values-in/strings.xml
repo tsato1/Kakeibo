@@ -160,4 +160,27 @@
     <string name="to">Ke</string>
     <string name="no">Tidak</string>
     <string name="ok">Oke</string>
+    <string name="done">Selesai</string>
+    <string name="back">Kembali</string>
+    <string name="how_to_use_app">Cara menggunakan aplikasi ini</string>
+    <string name="jump_to_website">Pergi ke situs web</string>
+    <string name="about_this_app">Tentang aplikasi ini</string>
+    <string name="version_etc">Versi yang diinstal, dll.</string>
+    <string name="remove_add_reorder_categories">Hapus, Tambah, dan Atur Ulang Kategori</string>
+    <string name="reorder_categories">Susun Ulang Kategori</string>
+    <string name="create_new_category">Buat Kategori baru</string>
+    <string name="num_columns">Jumlah Kategori per baris</string>
+    <string name="remove_categories">Hapus Kategori</string>
+    <string name="add_categories">Tambahkan Kategori</string>
+    <string name="the_app_version">Versi aplikasi</string>
+    <string name="purchased_items">Barang yang dibeli</string>
+    <string name="inst_tap_icon_to_remove_categories">Silakan ketuk ikon untuk menghapus kategori.</string>
+    <string name="inst_tap_icon_to_add_categories">Ketuk ikon untuk menambahkan kategori.</string>
+    <string name="in_app_purchases">Pembelian Dalam Aplikasi</string>
+    <string name="remaining_spots_colon">"Tempat yang tersisa: "</string>
+    <string name="inst_long_tap_to_move_icons">Ketuk panjang untuk memindahkan ikon.</string>
+    <string name="err_cannot_add_category">"Anda tidak dapat menambahkan lagi karena Anda telah mencapai maks "</string>
+    <string name="inst_keep_pressing_longer">"Mendorong lebih lama "</string>
+    <string name="display_of_icons">Tampilan ikon</string>
+    <string name="quest_determine_category_order">Ikon akan ditampilkan dalam urutan yang ditentukan. Apakah Anda ingin melanjutkan?</string>
 </resources>

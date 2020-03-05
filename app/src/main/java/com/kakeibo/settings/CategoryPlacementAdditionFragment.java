@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 public class CategoryPlacementAdditionFragment extends Fragment {
     public static final String TAG = CategoryPlacementAdditionFragment.class.getSimpleName();
     public static final int TAG_INT = 1;
@@ -62,7 +60,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(@Nonnull Context context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
     }
 
@@ -92,9 +90,9 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _btnBack.setOnClickListener(new ItemClickListener());
         _btnNext.setOnClickListener(new ItemClickListener());
         _txvTitle = view.findViewById(R.id.txv_title);
-        _txvTitle.setText("Category Addition:");
+        _txvTitle.setText(R.string.add_categories);
         _txvDescription = view.findViewById(R.id.txv_description);
-        _txvDescription.setText("Please tap icons to add categories.");
+        _txvDescription.setText(R.string.inst_tap_plus_to_add_criteria);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
@@ -119,8 +117,8 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         } else {
             if (_remainingCount <= 0) {
                 Toast.makeText(_activity,
-                        "You cannot add any more because you have reached the max count (MAX=" +
-                        UtilCategory.NUM_MAX_DSP_CATEGORIES+")", Toast.LENGTH_LONG).show();
+                        getString(R.string.err_cannot_add_category) +
+                        "(="+UtilCategory.NUM_MAX_DSP_CATEGORIES+")", Toast.LENGTH_LONG).show();
             } else {
                 _selectedCategoryCodeSet.add(categoryCode);
                 imv.setVisibility(View.VISIBLE);
@@ -128,13 +126,16 @@ public class CategoryPlacementAdditionFragment extends Fragment {
             }
         }
 
-        _txvDescription.setText("You can add " + _remainingCount + " more categories.");
+        String tmp = getString(R.string.remaining_spots_colon) + _remainingCount;
+        _txvDescription.setText(tmp);
     }
 
+    /*** called from CategoryPlacementActivity ***/
     void setRemainingCount(int remainingCount) {
         Log.d("asdf","remaining  count = " + remainingCount);
         this._remainingCount = remainingCount - _selectedCategoryCodeSet.size();
-        _txvDescription.setText("You can add " + _remainingCount + " more categories.");
+        String tmp = getString(R.string.remaining_spots_colon) + _remainingCount;
+        _txvDescription.setText(tmp);
     }
 
     class ItemClickListener implements View.OnClickListener {

@@ -80,9 +80,9 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _btnNext.setOnClickListener(new ItemClickListener());
 
         _txvTitle = view.findViewById(R.id.txv_title);
-        _txvTitle.setText("Category Removal:");
+        _txvTitle.setText(R.string.remove_categories);
         _txvDescription = view.findViewById(R.id.txv_description);
-        _txvDescription.setText("Please tap icons to remove categories.");
+        _txvDescription.setText(R.string.inst_tap_icon_to_remove_categories);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
