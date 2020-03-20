@@ -65,18 +65,18 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.android.billingclient:billing:2.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
-    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'com.google.android.gms:play-services-ads:19.0.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
-    implementation 'com.google.firebase:firebase-core:17.2.2'
-    implementation 'com.google.firebase:firebase-ads:18.3.0'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'com.google.firebase:firebase-ads:19.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation 'com.adcolony:sdk:4.1.0'
     implementation('com.google.api-client:google-api-client-android:1.23.0') {
@@ -88,7 +88,8 @@ dependencies {
     implementation project(':HoloGraphLibrary')
     implementation project(':DynamicGrid')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

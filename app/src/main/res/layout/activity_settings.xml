@@ -7,7 +7,8 @@
     <FrameLayout
         android:id="@+id/frl_settings_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ad_container"/>
 
     <FrameLayout
         android:id="@+id/ad_container"
@@ -15,17 +16,5 @@
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
         android:layout_alignParentBottom="true"/>
-
-<!--    <com.google.android.gms.ads.doubleclick.PublisherAdView-->
-<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/ad_container"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:backgroundTint="@color/colorBackground"-->
-<!--        android:backgroundTintMode="src_over"-->
-<!--        ads:adSize="BANNER"-->
-<!--        ads:adUnitId="/6499/example/banner">-->
-<!--    </com.google.android.gms.ads.doubleclick.PublisherAdView>-->
 
 </RelativeLayout>

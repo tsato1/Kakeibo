@@ -42,13 +42,15 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 ////todo bug for arabic check query some arabic languages in the date part
 
-//todo edit doesn't save item tabfragment2D
+//todo edit doesn't save item tabfragment2D -> kotlin version
 
 //todo expected/unexpected, favorite
 
 //todo textsize for all the textviews
 
-//todo language
+//todo ask if user wants category management or ads -> hide ads depending on answer
+
+//todo string translateion
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private static FloatingActionButton fabEnd;
 
     private Activity _activity;
+
     private FrameLayout _adContainerView;
     private AdView _adView;
 

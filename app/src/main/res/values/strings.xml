@@ -12,6 +12,7 @@
     <string name="search">SEARCH</string>
 
     <string name="income">Income</string>
+    <string name="expense">Expense</string>
     <string name="memo">Memo</string>
     <string name="amount">Amount</string>
     <string name="delete">Delete</string>
@@ -45,6 +46,11 @@
     <string name="category_colon">Category:</string>
     <string name="event_date_colon">Event Date:</string>
     <string name="updated_on_colon">Saved on:</string>
+    <string name="color_colon">Color:</string>
+    <string name="name_colon">Name:</string>
+    <string name="language">Language</string>
+    <string name="icon_colon">Icon:</string>
+    <string name="default_icons">Default Icons</string>
 
     <string name="add_search_criterion">Add Search Criteria</string>
     <string name="edit_item">Edit item</string>
@@ -75,13 +81,15 @@
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
     <string name="err_memo_empty">Search word in Memo is empty.</string>
     <string name="err_from_date_older">From Date has to be younger than To Date.</string>
+    <string name="err_please_enter_name">Category name cannot empty.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
+    <string name="hint_name_max_8_characters">Name: Max 8 characters</string>
 
-    <string name="msg_item_successfully_saved">The item was successfully saved.</string>
-    <string name="msg_item_successfully_deleted">The item was successfully deleted.</string>
-    <string name="msg_change_successfully_saved">The change was successfully saved.</string>
+    <string name="msg_item_successfully_saved">The item is successfully saved.</string>
+    <string name="msg_item_successfully_deleted">The item is successfully deleted.</string>
+    <string name="msg_change_successfully_saved">The change is successfully saved.</string>
     <string name="msg_no_result_found">No result found.</string>
     <string name="msg_card_is_removed">Card is removed.</string>
     <string name="msg_exit_search">You will exit the search result page and return to the monthly report of this month.</string>
@@ -130,7 +138,11 @@
     <string name="version_etc">Installed version, etc</string>
     <string name="purchased_items">Purchased Items</string>
     <string name="create_new_category">Create a new Category</string>
-    <string name="err_cannot_add_category">You cannot add any more because you have reached the max</string>
+    <string name="err_cannot_add_category">Cannot add any more. Please note the maximum count </string>
+    <string name="quest_determine_category_order">The icons will be displayed in the specified order. Do you want to proceed?</string>
+    <string name="rearrancement_completed">Rearrangement completed</string>
+    <string name="quest_new_category_do_you_want_to_proceed">A new Category is about to be created. Do you want to proceed?</string>
+    <string name="msg_new_category_created">A new Category now is created</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
@@ -162,6 +174,5 @@
     <string name="pref_title_category">Category</string>
     <string name="pref_title_currency">Currency</string>
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="display_of_icons">Display of icons</string>
-    <string name="quest_determine_category_order">The icons will be displayed in the specified order. Do you want to proceed?</string>
+    <string name="add">Add</string>
 </resources>

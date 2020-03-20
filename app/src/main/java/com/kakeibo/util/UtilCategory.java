@@ -9,6 +9,7 @@ import com.kakeibo.KkbCategory;
 import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.db.CategoryDspDBAdapter;
 import com.kakeibo.db.CategoryLanDBAdapter;
+import com.kakeibo.db.TmpCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +148,7 @@ public class UtilCategory {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-                        c.getString(1), //second arg is category name (colum name is like 'jpn')
+                        c.getString(1), //second arg is category name (column name is like 'jpn')
                         0,
                         0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
@@ -218,6 +219,29 @@ public class UtilCategory {
             categoryDspDBAdapter.saveItem(categoryCodes.get(i), i); // because categoryCodes is ordered by location
         }
         categoryDspDBAdapter.close();
+        reloadCategoryLists(context);
+    }
+
+    public static void addNewCategory(Context context, TmpCategory tmpCategory) {
+        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+        categoryDBAdapter.open();
+        categoryDBAdapter.saveCategory(new KkbCategory(
+                tmpCategory.code,
+                "", // will not be saved
+                tmpCategory.color,
+                0, // will not be saved
+                tmpCategory.drawable,
+                tmpCategory.location,
+                0, // will not be saved
+                "", // will not be saved
+                UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)));
+        categoryDBAdapter.close();
+
+        CategoryLanDBAdapter categoryLanDBAdapter = new CategoryLanDBAdapter();
+        categoryLanDBAdapter.open();
+        categoryLanDBAdapter.saveCategoryLan(tmpCategory);
+        categoryLanDBAdapter.close();
+
         reloadCategoryLists(context);
     }
 }

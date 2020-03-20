@@ -62,9 +62,24 @@ public class CategoryLanDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
-    public void saveCategoryLan(KkbCategory category) {
+    public void saveCategoryLan(TmpCategory category) {
         ContentValues values = new ContentValues();
-        values.put(COL_CODE, category.getCode());
+        values.put(COL_CODE, category.code);
+        values.put(COL_ARA, category.ara);
+        values.put(COL_ENG, category.eng);
+        values.put(COL_SPA, category.spa);
+        values.put(COL_FRA, category.fra);
+        values.put(COL_HIN, category.hin);
+        values.put(COL_IND, category.ind);
+        values.put(COL_ITA, category.ita);
+        values.put(COL_JPN, category.jpn);
+        values.put(COL_KOR, category.kor);
+        values.put(COL_POL, category.pol);
+        values.put(COL_POR, category.por);
+        values.put(COL_RUS, category.rus);
+        values.put(COL_TUR, category.tur);
+        values.put(COL_Hans, category.hans);
+        values.put(COL_Hant, category.hant);
         _db.insertOrThrow(TABLE_NAME, null, values);
 
         Log.d(TAG, "saveItem() called");

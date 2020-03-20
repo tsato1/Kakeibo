@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -137,6 +138,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 builder.setCancelable(true);
                 builder.setIcon(R.mipmap.ic_mikan);
                 builder.setTitle(R.string.category);
+                builder.setNegativeButton(R.string.cancel, (DialogInterface dialog, int which) -> { });
                 ListView lv = convertView.findViewById(R.id.lsv_base_search_category);
                 lv.setAdapter(adapter);
                 final Dialog dialog = builder.show();

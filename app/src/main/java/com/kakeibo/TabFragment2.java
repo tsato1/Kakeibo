@@ -94,7 +94,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _cfmDetail = getChildFragmentManager();
         _ftrDetail = _cfmDetail.beginTransaction();
         _tabFragment2D = TabFragment2D.newInstance(this, _query);
-        _ftrDetail.add(R.id.frl_tab2_container, _tabFragment2D);
+        _ftrDetail.replace(R.id.frl_tab2_container, _tabFragment2D); //todo: changed from 'add' to 'replace'. gotta see if overlay problem still happpens
         _ftrDetail.addToBackStack(null);
         _ftrDetail.commit();
     }

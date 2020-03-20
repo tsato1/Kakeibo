@@ -21,7 +21,7 @@ public class UtilSystem {
         }
     }
 
-    static String getCurrentLangCode(Context context) {
+    public static String getCurrentLangCode(Context context) {
         Log.d(TAG, "getCurrentLangCode() called");
 
         Locale locale = getCurrentLocale(context);

@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -13,6 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.kakeibo.BuildConfig;
 import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
 import com.kakeibo.ViewPagerAdapter;
@@ -39,6 +49,9 @@ public class CategoryPlacementActivity extends AppCompatActivity
     private List<Integer> _tmpRemovedCategoryCodes;
     private List<Integer> _tmpAddedCategoryCodes;
 
+    private FrameLayout _adContainerView;
+    private AdView _adView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +68,10 @@ public class CategoryPlacementActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setHomeButtonEnabled(false);
         }
+
+        /*** ads ***/
+        initAd();
+        loadBanner();
 
         /*** find views ***/
         _viewPager = findViewById(R.id.view_pager);
@@ -186,10 +203,10 @@ public class CategoryPlacementActivity extends AppCompatActivity
                 /*** list: contains necessary categories ordered by location the user wants ***/
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setIcon(R.mipmap.ic_mikan);
-                dialog.setTitle(R.string.display_of_icons);
+                dialog.setTitle(R.string.reorder_categories);
                 dialog.setMessage(R.string.quest_determine_category_order);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-                    Toast.makeText(this, R.string.next, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_SHORT).show();
                     UtilCategory.updateDspTable(getApplicationContext(), list);
                     finish();
                 });
@@ -223,5 +240,56 @@ public class CategoryPlacementActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    /*** ads ***/
+    private void initAd() {
+        //Call the function to initialize AdMob SDK
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        //get the reference to your FrameLayout
+        _adContainerView = findViewById(R.id.ad_container);
+
+        //Create an AdView and put it into your FrameLayout
+        _adView = new AdView(this);
+        if (BuildConfig.DEBUG) {
+            _adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");/*** in debug mode ***/
+        } else {
+            _adView.setAdUnitId(getString(R.string.category_placement_banner_ad));
+        }
+        _adContainerView.addView(_adView);
+    }
+
+    private AdSize getAdSize() {
+        //Determine the screen width to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        //you can also pass your selected width here in dp
+        int adWidth = (int) (widthPixels / density);
+
+        //return the optimal size depends on your orientation (landscape or portrait)
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        AdSize adSize = getAdSize();
+        // Set the adaptive ad size to the ad view.
+        _adView.setAdSize(adSize);
+
+        // Start loading the ad in the background.
+        _adView.loadAd(adRequest);
     }
 }

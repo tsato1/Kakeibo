@@ -37,7 +37,7 @@ public class SettingsCompatActivity extends AppCompatActivity
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
+                .replace(R.id.frl_settings_container, new SettingsFragment())
                 .commit();
 
         initAd();

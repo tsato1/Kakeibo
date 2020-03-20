@@ -20,7 +20,7 @@
 
     <!-- fragment2 -->
     <dimen name="imv_exit_search_sides">30dp</dimen>
-    <dimen name="tbl_padding_horizontal">75dp</dimen>
+    <dimen name="tbl_padding_horizontal">65dp</dimen>
     <dimen name="tbl_padding_vertical">2dp</dimen>
 
     <!-- fragment2c -->
@@ -43,6 +43,7 @@
 
     <!-- settings -->
     <dimen name="pager_dots">18dp</dimen>
+    <dimen name="fragment_padding">14dp</dimen>
 
     <!-- character size -->
     <dimen name="char_size_big">16sp</dimen>
