@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryDynamicGridAdapter;
+import com.kakeibo.KkbApplication;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 
@@ -67,11 +68,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        PreferenceManager.setDefaultValues(_activity, R.xml.preferences, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
-        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
-        _sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+        _sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
 
         findViews(view);
 
@@ -95,7 +92,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _addedKkbCategoryList = new ArrayList<>();
         _newKkbCategoryList = new ArrayList<>();
     }
-//
+
     void setItemsOnGrid(List<Integer> newList, List<Integer> addedList) {
         _addedKkbCategoryList = new ArrayList<>();
         _newKkbCategoryList = new ArrayList<>();
@@ -104,8 +101,10 @@ public class CategoryPlacementReorderFragment extends Fragment {
             KkbCategory kkbCategory = new KkbCategory(
                     categoryCode,
                     UtilCategory.getCategoryStr(_activity, categoryCode),
-                    0,0,
+                    0,
+                    0,
                     UtilCategory.getCategoryDrawable(_activity, categoryCode),
+                    UtilCategory.getCategoryImage(_activity, categoryCode),
                     0, 0, "",""
                     );
             if (addedList.contains(categoryCode)) _addedKkbCategoryList.add(kkbCategory);
@@ -144,8 +143,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, parent.getAdapter().getItem(position).toString());
-                Toast.makeText(_activity, R.string.inst_keep_pressing_longer,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(_activity, R.string.inst_keep_pressing_longer, Toast.LENGTH_LONG).show();
             }
         });
     }

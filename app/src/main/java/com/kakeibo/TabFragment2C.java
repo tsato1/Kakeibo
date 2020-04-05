@@ -70,10 +70,10 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     private PieGraph _exPieGraph;
     private List<Item> _itemCategoryInList;
     private List<Item> _itemCategoryExList;
-    private CategoryListAdapter _itemCategoryInAdapter;
-    private CategoryListAdapter _itemCategoryExAdapter;
-    private ListView _itemCategoryInListView;
-    private ListView _itemCategoryExListView;
+    private ItemDetailListAdapter _itemListInAdapter;
+    private ItemDetailListAdapter _itemListExAdapter;
+    private ListView _lsvCategoryIn;
+    private ListView _lsvCategoryEx;
 
     public static TabFragment2C newInstance(ItemLoadListener itemLoadListener, Query query) {
         TabFragment2C tabFragment2C = new TabFragment2C();
@@ -156,11 +156,11 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         _inPieGraph.setThickness(PIE_GRAPH_THICKNESS);
         _exPieGraph.setThickness(PIE_GRAPH_THICKNESS);
 
-        _itemCategoryInListView = _view.findViewById(R.id.lsv_income);
-        _itemCategoryExListView = _view.findViewById(R.id.lsv_expense);
-        ViewCompat.setNestedScrollingEnabled(_itemCategoryInListView, true);
-        ViewCompat.setNestedScrollingEnabled(_itemCategoryExListView, true);
-        _itemCategoryInListView.setOnTouchListener((View v, MotionEvent event)-> {
+        _lsvCategoryIn = _view.findViewById(R.id.lsv_income);
+        _lsvCategoryEx = _view.findViewById(R.id.lsv_expense);
+        ViewCompat.setNestedScrollingEnabled(_lsvCategoryIn, true);
+        ViewCompat.setNestedScrollingEnabled(_lsvCategoryEx, true);
+        _lsvCategoryIn.setOnTouchListener((View v, MotionEvent event)-> {
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
@@ -178,7 +178,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
                 v.onTouchEvent(event);
                 return true;
         });
-        _itemCategoryExListView.setOnTouchListener((View v, MotionEvent event)-> {
+        _lsvCategoryEx.setOnTouchListener((View v, MotionEvent event)-> {
             int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
@@ -197,17 +197,17 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
             return true;
         });
 
-        _itemCategoryInListView.setOnItemClickListener(new CategoryListItemClickListener());
-        _itemCategoryExListView.setOnItemClickListener(new CategoryListItemClickListener());
+        _lsvCategoryIn.setOnItemClickListener(new ItemClickListener());
+        _lsvCategoryEx.setOnItemClickListener(new ItemClickListener());
 
         _stringBuilder = new StringBuilder();
         _itemDbAdapter = new ItemDBAdapter();
         _itemCategoryInList = new ArrayList<>();
         _itemCategoryExList = new ArrayList<>();
-        _itemCategoryInAdapter = new CategoryListAdapter(_activity, 0, _itemCategoryInList);
-        _itemCategoryExAdapter = new CategoryListAdapter(_activity, 0, _itemCategoryExList);
-        _itemCategoryInListView.setAdapter(_itemCategoryInAdapter);
-        _itemCategoryExListView.setAdapter(_itemCategoryExAdapter);
+        _itemListInAdapter = new ItemDetailListAdapter(_activity, 0, _itemCategoryInList);
+        _itemListExAdapter = new ItemDetailListAdapter(_activity, 0, _itemCategoryExList);
+        _lsvCategoryIn.setAdapter(_itemListInAdapter);
+        _lsvCategoryEx.setAdapter(_itemListExAdapter);
     }
 
     private void setData() {
@@ -278,7 +278,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     @Override
     public void onNothingSelected() {}
 
-    class CategoryListItemClickListener implements AdapterView.OnItemClickListener {
+    class ItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView lsvCat = (ListView) parent;
@@ -319,8 +319,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
             AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
             dialog.setIcon(R.mipmap.ic_mikan);
             dialog.setTitle(UtilCategory.getCategoryStr(getContext(), tmp.getCategoryCode()));
-            dialog.setPositiveButton(R.string.ok, (DialogInterface d, int which) -> {
-            });
+            dialog.setPositiveButton(R.string.ok, (DialogInterface d, int which) -> { });
             dialog.setView(listView).create();
             dialog.show();
         }
@@ -370,8 +369,8 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
         _itemDbAdapter.close();
 
-        _itemCategoryInAdapter.notifyDataSetChanged();
-        _itemCategoryExAdapter.notifyDataSetChanged();
+        _itemListInAdapter.notifyDataSetChanged();
+        _itemListExAdapter.notifyDataSetChanged();
         adjustItemCategoryListViewHeight();
         calculatePercentage();
         makePieGraph();
@@ -380,16 +379,16 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     }
 
     private void adjustItemCategoryListViewHeight() {
-        ViewGroup.LayoutParams lpmsIncome = _itemCategoryInListView.getLayoutParams();
-        ViewGroup.LayoutParams lpmsExpens = _itemCategoryExListView.getLayoutParams();
+        ViewGroup.LayoutParams lpmsIncome = _lsvCategoryIn.getLayoutParams();
+        ViewGroup.LayoutParams lpmsExpens = _lsvCategoryEx.getLayoutParams();
 
         int rowHeightIncome = (int) getResources().getDimension(R.dimen.item_category_list_row_height)+_itemCategoryInList.size();
         lpmsIncome.height = _itemCategoryInList.size() * rowHeightIncome;
-        _itemCategoryInListView.setLayoutParams(lpmsIncome);
+        _lsvCategoryIn.setLayoutParams(lpmsIncome);
 
         int rowHeightExpens = (int) getResources().getDimension(R.dimen.item_category_list_row_height)+_itemCategoryExList.size();
         lpmsExpens.height = _itemCategoryExList.size() * rowHeightExpens;
-        _itemCategoryExListView.setLayoutParams(lpmsExpens);
+        _lsvCategoryEx.setLayoutParams(lpmsExpens);
     }
 
     private void calculatePercentage() {

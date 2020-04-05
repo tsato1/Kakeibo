@@ -6,6 +6,7 @@ public class KkbCategory {
     private int color;
     private int significance;
     private int drawable;
+    private byte[] image;
     private int location;
     private int parent;
     private String description;
@@ -16,6 +17,7 @@ public class KkbCategory {
                        int color,
                        int significance,
                        int drawable,
+                       byte[] image,
                        int location,
                        int parent,
                        String description,
@@ -25,41 +27,30 @@ public class KkbCategory {
         this.color = color;
         this.significance = significance;
         this.drawable = drawable;
+        this.image = image;
         this.location = location;
         this.parent = parent;
         this.description = description;
         this.savedDate = savedDate;
     }
 
-    public int getCode() {
-        return code;
-    }
+    public int getCode() { return code; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public int getColor() { return color; }
 
     public int getSignificance() { return significance; }
 
-    public int getDrawable() {
-        return drawable;
-    }
+    public int getDrawable() { return drawable; }
 
-    public int getLocation() {
-        return location;
-    }
+    public byte[] getImage() { return image; }
 
-    public int getParent() {
-        return parent;
-    }
+    public int getLocation() { return location; }
 
-    public String getDescription() {
-        return description;
-    }
+    public int getParent() { return parent; }
 
-    public String getSavedDate() {
-        return savedDate;
-    }
+    public String getDescription() { return description; }
+
+    public String getSavedDate() { return savedDate; }
 }

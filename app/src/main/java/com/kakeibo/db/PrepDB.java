@@ -558,6 +558,7 @@ class PrepDB {
             values1.put(CategoryDBAdapter.COL_COLOR, 0);
             values1.put(CategoryDBAdapter.COL_SIGNIFICANCE, 0);
             values1.put(CategoryDBAdapter.COL_DRAWABLE, list.get(i).drawable);
+            values1.putNull(CategoryDBAdapter.COL_IMAGE);
             values1.put(CategoryDBAdapter.COL_PARENT, -1);
             values1.put(CategoryDBAdapter.COL_DESC, "");
             values1.put(CategoryDBAdapter.COL_VAL1, 0);
@@ -581,6 +582,7 @@ class PrepDB {
             values.put(CategoryLanDBAdapter.COL_POR, list.get(i).por);
             values.put(CategoryLanDBAdapter.COL_RUS, list.get(i).rus);
             values.put(CategoryLanDBAdapter.COL_TUR, list.get(i).tur);
+            values.put(CategoryLanDBAdapter.COL_VIE, "");
             values.put(CategoryLanDBAdapter.COL_Hans, list.get(i).hans);
             values.put(CategoryLanDBAdapter.COL_Hant, list.get(i).hant);
             db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values);
@@ -732,6 +734,7 @@ class PrepDB {
             values.put(CategoryDBAdapter.COL_CODE, c.code);
             values.put(CategoryDBAdapter.COL_COLOR, c.color);
             values.put(CategoryDBAdapter.COL_DRAWABLE, c.drawable);
+            values.putNull(CategoryDBAdapter.COL_IMAGE);
             values.put(CategoryDBAdapter.COL_DESC, "");
             values.put(CategoryDBAdapter.COL_SAVED_DATE, "");
             db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
@@ -751,6 +754,7 @@ class PrepDB {
             values1.put(CategoryLanDBAdapter.COL_POR, c.por);
             values1.put(CategoryLanDBAdapter.COL_RUS, c.rus);
             values1.put(CategoryLanDBAdapter.COL_TUR, c.tur);
+            values1.put(CategoryLanDBAdapter.COL_VIE, "");
             values1.put(CategoryLanDBAdapter.COL_Hans, c.hans);
             values1.put(CategoryLanDBAdapter.COL_Hant, c.hant);
             db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values1);

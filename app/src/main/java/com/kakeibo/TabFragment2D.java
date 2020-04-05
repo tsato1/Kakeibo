@@ -164,16 +164,16 @@ public class TabFragment2D extends Fragment {
     }
 
     class ChildClickContextMenuListener implements ExpandableListView.OnCreateContextMenuListener {
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
-            int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-            if(type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                menu.setHeaderIcon(R.mipmap.ic_mikan);
-                menu.add(0, MENU_ITEM_ID_EDIT, 0, R.string.edit);
-                menu.add(0, MENU_ITEM_ID_DELETE, 1, R.string.delete);
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+                int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+                if(type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    menu.setHeaderIcon(R.mipmap.ic_mikan);
+                    menu.add(0, MENU_ITEM_ID_EDIT, 0, R.string.edit);
+                    menu.add(0, MENU_ITEM_ID_DELETE, 1, R.string.delete);
+                }
             }
-        }
     }
 
     public boolean onContextItemSelected(MenuItem menuItem) {
@@ -246,8 +246,8 @@ public class TabFragment2D extends Fragment {
                 btnCategory.setOnClickListener((View v2) -> {
                     /*** ordered by location ***/
                     List<KkbCategory> kkbCategoriesList = UtilCategory.getAllKkbCategoryList(_activity);
-                    DialogCategoryListAdapter adapter =
-                            new DialogCategoryListAdapter(_activity, 0, kkbCategoriesList);
+                    CategoryListAdapter adapter =
+                            new CategoryListAdapter(_activity, 0, kkbCategoriesList);
                     androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_activity);
                     LayoutInflater inflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View convertView = inflater.inflate(R.layout.dialog_bas_search_category, null);

@@ -38,6 +38,9 @@
         <Preference
             android:key="@string/pref_key_category_creation"
             android:title="@string/create_new_category"/>
+        <Preference
+            android:key="@string/pref_key_category_edition"
+            android:title="@string/edit_new_category"/>
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/pref_list_num_columns"

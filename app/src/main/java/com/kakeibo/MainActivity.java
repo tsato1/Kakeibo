@@ -42,15 +42,19 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 
 ////todo bug for arabic check query some arabic languages in the date part
 
+//future fix////
 //todo edit doesn't save item tabfragment2D -> kotlin version
-
 //todo expected/unexpected, favorite
-
 //todo textsize for all the textviews
 
 //todo ask if user wants category management or ads -> hide ads depending on answer
+//todo string translateion - vie
+//todo sharedpreferences in KkbApplication
+//todo ads code -> Utility
+//todo custom categories trim in circle -> can see the square edge
 
-//todo string translateion
+// todo new categories max 10: TEST!
+//todo custom category too big in reorder fragment -> dimen 50dp TEST!
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -101,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /*** this part is to handle unexpected crashes ***/
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-        if (getIntent().getBooleanExtra("crash", false)) {
-            Log.e(TAG, "crashed");
-        }
+//        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+//        if (getIntent().getBooleanExtra("crash", false)) {
+//            Log.e(TAG, "crashed");
+//        }
 
         /*** toolbar ***/
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -113,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
         /*** ads ***/
         initAd();
         loadBanner();
-//        _publisherAdView = findViewById(R.id.ad_container);
-//        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-//        _publisherAdView.loadAd(adRequest);
 
         /*** viewPager ***/
         viewPager = findViewById(R.id.viewpager);
@@ -192,8 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences pref = KkbApplication.getSharedPreferences();
 
         /*** dateFormat ***/
         String dateFormatIndex = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
@@ -213,9 +213,10 @@ public class MainActivity extends AppCompatActivity {
         sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
 
         /*** num category icons per row ***/
-        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
-        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
-        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+//        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
+//        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
+//        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+        sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
 
         Log.d(TAG, "sDateFormat:"+sDateFormat+
                 " sFractionDigits:"+sFractionDigits+
@@ -249,28 +250,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-//    private void loadAds() {
-//        Log.d(TAG, "loading ads");
-//
-//        MobileAds.initialize(this, "ca-app-pub-3282892636336089~3692682630");
-//        mInterstitialAd = new InterstitialAd(this);
-//        AdRequest.Builder request = new AdRequest.Builder();
-//
-//        if (BuildConfig.DEBUG) {
-//            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); /*** in debug mode ***/
-//        } else {
-//            mInterstitialAd.setAdUnitId(getString(R.string.google_ads_api_key));
-//        }
-//        mInterstitialAd.loadAd(request.build());
-//        mInterstitialAd.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdClosed() {
-//                // Load the next interstitial.
-//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-//            }
-//        });
-//    }
 
     public void onItemSaved(Query query, String eventDate) {
         Log.d(TAG, "onItemSaved() queryD="+query.getQueryD());

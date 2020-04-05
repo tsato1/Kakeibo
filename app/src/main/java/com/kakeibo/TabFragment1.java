@@ -77,6 +77,7 @@ public class TabFragment1 extends Fragment {
         _btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
         _edtAmount.setText("");
         _edtMemo.setText("");
+        _grvCategory.setNumColumns(KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns)));
     }
 
     @Override

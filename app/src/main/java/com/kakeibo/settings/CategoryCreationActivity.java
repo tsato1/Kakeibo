@@ -1,26 +1,22 @@
 package com.kakeibo.settings;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -29,38 +25,33 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
-import com.kakeibo.KkbCategory;
-import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
-import com.kakeibo.db.CategoryLanDBAdapter;
+import com.kakeibo.ViewPagerAdapter;
 import com.kakeibo.db.TmpCategory;
 import com.kakeibo.util.UtilCategory;
-import com.kakeibo.util.UtilSystem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class CategoryCreationActivity extends AppCompatActivity {
-    private static final String TAG = CategoryCreationActivity.class.getSimpleName();
+    private final static String TAG = CategoryCreationActivity.class.getSimpleName();
 
-    private static int _rowInsertIndex = 2;
+    private final static int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;
+    private final static int NUM_PAGES = 3;
 
-    private Context _context;
-
-    private TmpCategory _tmpCategory;
-
-    private LinearLayout _lnlForm;
     private FrameLayout _adContainerView;
     private AdView _adView;
-    private Button _btnColor, _btnLanguage, _btnDefaultIcons, _btnBack, _btnDone;
-    private ImageButton _imbRemove, _imbAdd;
-    private EditText _edtName;
-    private List<String> _langList = new ArrayList<>();
-    private List<KkbCategory> _kkbCategoryList = new ArrayList<>();
-    private Map<String, EditText> _langMap = new HashMap<>();
-    private ArrayAdapter<String> _langAdapter;
+
+    private Context _context;
+    private NonSwipeableViewPager _viewPager;
+    private ViewPagerAdapter _adapter;
+    private CategoryCreationColorFragment _fragmentColor;
+    private CategoryCreationLanguageFragment _fragmentLanguage;
+    private CategoryCreationIconFragment _fragmentIcon;
+
+    private List<ImageView> _lstDots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +59,15 @@ public class CategoryCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings_category_creation);
         _context = this;
 
+        /*** if this activity was called from CategoryEditionActivity ***/
+        Intent intent = getIntent();
+        int categoryCode = intent.getIntExtra(CategoryEditionActivity.EXTRA_KEY, -1);
+
         /*** this part is to handle unexpected crashes ***/
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-        if (getIntent().getBooleanExtra("crash", false)) {
-            Log.e(TAG, "crashed");
-        }
+//        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+//        if (getIntent().getBooleanExtra("crash", false)) {
+//            Log.e(TAG, "crashed");
+//        }
 
         /*** hide home button on actionbar ***/
         if (getSupportActionBar() != null) {
@@ -84,156 +79,145 @@ public class CategoryCreationActivity extends AppCompatActivity {
         initAd();
         loadBanner();
 
-        /*** findViews ***/
-        _lnlForm = findViewById(R.id.lnl_form);
-        _btnColor = findViewById(R.id.btn_color);
-        _btnLanguage = findViewById(R.id.btn_language);
-        _imbRemove = findViewById(R.id.imb_remove);
-        _imbAdd = findViewById(R.id.imb_add);
-        _btnDefaultIcons = findViewById(R.id.btn_default_icon);
-        _btnBack = findViewById(R.id.btn_back);
-        _btnDone = findViewById(R.id.btn_done);
-        _edtName = findViewById(R.id.edt_name);
-        _btnColor.setOnClickListener(new ButtonClickListener());
-        _btnLanguage.setOnClickListener(new ButtonClickListener());
-        _btnDefaultIcons.setOnClickListener(new ButtonClickListener());
-        _btnBack.setOnClickListener(new ButtonClickListener());
-        _btnDone.setOnClickListener(new ButtonClickListener());
-        _imbAdd.setOnClickListener(new ButtonClickListener());
-        _imbRemove.setOnClickListener(new ButtonClickListener());
+        /*** find views ***/
+        _viewPager = findViewById(R.id.view_pager);
+        _viewPager.setOffscreenPageLimit(VIEWPAGER_OFF_SCREEN_PAGE_LIMIT);
 
-        _btnLanguage.setText(UtilSystem.getCurrentLangCode(this));
+        /*** restoring fragment's instances ***/
+        if (savedInstanceState != null) {
+            _fragmentColor = (CategoryCreationColorFragment)
+                    getSupportFragmentManager().getFragment(savedInstanceState, CategoryCreationColorFragment.TAG);
+            _fragmentLanguage = (CategoryCreationLanguageFragment)
+                    getSupportFragmentManager().getFragment(savedInstanceState, CategoryCreationLanguageFragment.TAG);
+            _fragmentIcon = (CategoryCreationIconFragment)
+                    getSupportFragmentManager().getFragment(savedInstanceState, CategoryCreationIconFragment.TAG);
+        } else {
+            _fragmentColor = CategoryCreationColorFragment.newInstance(categoryCode);
+            _fragmentLanguage = CategoryCreationLanguageFragment.newInstance(categoryCode);
+            _fragmentIcon = CategoryCreationIconFragment.newInstance(categoryCode);
+        }
 
-        /*** other prep ***/
-        _langList.add(CategoryLanDBAdapter.COL_ENG);
-        _langList.add(CategoryLanDBAdapter.COL_SPA);
-        _langList.add(CategoryLanDBAdapter.COL_FRA);
-        _langList.add(CategoryLanDBAdapter.COL_HIN);
-        _langList.add(CategoryLanDBAdapter.COL_IND);
-        _langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, _langList);
+        /*** setting adapter ***/
+        _adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        _adapter.addFragment(_fragmentColor, CategoryCreationColorFragment.TAG);
+        _adapter.addFragment(_fragmentLanguage, CategoryCreationLanguageFragment.TAG);
+        _adapter.addFragment(_fragmentIcon, CategoryCreationIconFragment.TAG);
+        _viewPager.setAdapter(_adapter);
 
-        _kkbCategoryList = UtilCategory.getNonDspKkbCategoryList(this);
+        /*** for dots indicator for pages ***/
+        addDots();
     }
 
-    private class ButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.btn_color:
-                    if (_btnColor.getText().equals(getString(R.string.income))) {
-                        _btnColor.setBackground(getDrawable(R.drawable.gradient_expense));
-                        _btnColor.setText(getString(R.string.expense));
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        /*** saving fragment's instance ***/
+        getSupportFragmentManager().putFragment(outState, CategoryCreationColorFragment.TAG, _fragmentColor);
+        getSupportFragmentManager().putFragment(outState, CategoryCreationLanguageFragment.TAG, _fragmentLanguage);
+        getSupportFragmentManager().putFragment(outState, CategoryCreationIconFragment.TAG, _fragmentIcon);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
+
+    public void addDots() {
+        _lstDots = new ArrayList<>();
+        LinearLayout dotsLayout = findViewById(R.id.dots);
+
+        for(int i = 0; i < NUM_PAGES; i++) {
+            ImageView dot = new ImageView(this);
+
+            if (i==0) {
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_selected));
+            } else {
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_not_selected));
+            }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            dotsLayout.addView(dot, params);
+
+            _lstDots.add(dot);
+        }
+
+        _viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for(int i = 0; i < NUM_PAGES; i++) {
+                    int drawableId = (i==position)? (R.drawable.dot_selected):(R.drawable.dot_not_selected);
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
+                    _lstDots.get(i).setImageDrawable(drawable);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    public void onNextPressed(int tag, TmpCategory tmpCategory) {
+        switch (tag) {
+            case CategoryCreationColorFragment.TAG_INT:
+                _fragmentLanguage.setTmpCategory(tmpCategory);
+                _viewPager.setCurrentItem(CategoryCreationLanguageFragment.TAG_INT);
+                break;
+            case CategoryCreationLanguageFragment.TAG_INT:
+                _fragmentIcon.setTmpCategory(tmpCategory);
+                _viewPager.setCurrentItem(CategoryCreationIconFragment.TAG_INT);
+                break;
+            case CategoryCreationIconFragment.TAG_INT:
+                AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
+                dialog.setIcon(R.mipmap.ic_mikan);
+                dialog.setTitle(R.string.create_new_category);
+                dialog.setMessage(R.string.quest_new_category_do_you_want_to_proceed);
+                dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
+                    if (UtilCategory.addNewCategory(_context, tmpCategory)==-1) {
+                        Toast.makeText(_context, getString(R.string.err_new_category_not_created), Toast.LENGTH_LONG).show();
                     } else {
-                        _btnColor.setBackground(getDrawable(R.drawable.gradient_income));
-                        _btnColor.setText(getString(R.string.income));
+                        Toast.makeText(_context, R.string.msg_new_category_created, Toast.LENGTH_LONG).show();
                     }
-                    break;
-                case R.id.btn_language:
-                    break;
-                case R.id.btn_default_icon:
-                    AlertDialog.Builder dialog2 = new AlertDialog.Builder(_context);
-                    LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View convertView = inflater.inflate(R.layout.form_new_category_drawable, null);
-                    dialog2.setIcon(R.mipmap.ic_mikan);
-                    dialog2.setTitle(R.string.default_icons);
-                    dialog2.setView(convertView);
-                    dialog2.setNegativeButton(R.string.cancel, (DialogInterface d, int which) -> {
-                    });
-                    LinearLayout lnl = convertView.findViewById(R.id.lnl_default_category);
-                    for (KkbCategory kkbCategory: _kkbCategoryList) {
-                        ImageView thumbnail = new ImageView(_context);
-                        thumbnail.setImageResource(kkbCategory.getDrawable());
-
-                        int paddingDp = (int) getResources().getDimension(R.dimen.list_row_padding_vertical);
-                        float density = _context.getResources().getDisplayMetrics().density;
-                        int paddingPixel = (int)(paddingDp * density);
-
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        lp.setMargins(0, paddingPixel, paddingPixel, 0);
-                        thumbnail.setLayoutParams(lp);
-                        lnl.addView(thumbnail);
-                    }
-                    final Dialog d2 = dialog2.show();
-                    lnl.setOnClickListener((View v) -> {
-                        d2.dismiss();
-                    });
-                    break;
-                case R.id.btn_back:
-                    onBackPressed();
-                    break;
-                case R.id.btn_done:
-                    int color = 0;
-                    if (_btnColor.getText().equals(getString(R.string.income))) {
-                        color = 0;
-                    } else if (_btnColor.getText().equals(getString(R.string.expense))) {
-                        color = 1;
-                    }
-                    _tmpCategory = new TmpCategory(0, color, 111, 0,
-                            "","","","","","","","",
-                            "","","","","","","");
-
-                    if (checkBeforeSave()) {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
-                        dialog.setIcon(R.mipmap.ic_mikan);
-                        dialog.setTitle(R.string.create_new_category);
-                        dialog.setMessage(R.string.quest_new_category_do_you_want_to_proceed);
-                        dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-                            Toast.makeText(_context, R.string.msg_new_category_created, Toast.LENGTH_SHORT).show();
-                            UtilCategory.addNewCategory(_context, _tmpCategory);
-                            finish();
-                        });
-                        dialog.setNegativeButton(R.string.no, (DialogInterface d, int which) -> {
-                        });
-                        dialog.show();
-                    }
-                    break;
-                case R.id.imb_add:
-                    AlertDialog.Builder dialog1 = new AlertDialog.Builder(_context);
-                    dialog1.setIcon(R.mipmap.ic_mikan);
-                    dialog1.setTitle(R.string.language);
-                    dialog1.setAdapter(_langAdapter, (DialogInterface dialog, int position)-> {
-                        LinearLayout row = (LinearLayout) LayoutInflater.from(_context).inflate(R.layout.form_new_category_language, null);
-                        Button btn = row.findViewById(R.id.btn_language);
-                        ImageButton imb = row.findViewById(R.id.imb_remove);
-                        EditText edt = row.findViewById(R.id.edt_name);
-
-                        String lang = _langList.remove(position);
-                        imb.setOnClickListener((View v) -> {
-                            _langList.add(lang);
-                            _lnlForm.removeView(row);
-                            _langMap.remove(lang);
-                            _rowInsertIndex--;
-                            _langAdapter.notifyDataSetChanged();
-                        });
-
-                        btn.setText(lang);
-                        _lnlForm.addView(row, _rowInsertIndex);
-                        _langMap.put(lang, edt);
-                        _rowInsertIndex++;
-                        _langAdapter.notifyDataSetChanged();
-                    });
-                    dialog1.setNegativeButton(R.string.cancel, (DialogInterface d, int which) -> {
-                    });
-                    dialog1.show();
-                    break;
-            }
+                    finish();
+                });
+                dialog.setNegativeButton(R.string.no, (DialogInterface d, int which) -> { });
+                dialog.show();
+                break;
         }
     }
 
-    private boolean checkBeforeSave() {
-        if (_edtName.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, R.string.err_please_enter_name, Toast.LENGTH_SHORT).show();
-            return false;
+    public void onBackPressed(int tag) {
+        switch (tag) {
+            case CategoryCreationColorFragment.TAG_INT:
+                super.onBackPressed();
+                break;
+            case CategoryCreationLanguageFragment.TAG_INT:
+                _viewPager.setCurrentItem(CategoryCreationColorFragment.TAG_INT);
+                break;
+            case CategoryCreationIconFragment.TAG_INT:
+                _viewPager.setCurrentItem(CategoryCreationLanguageFragment.TAG_INT);
+                break;
         }
+    }
 
-        for (EditText edt: _langMap.values()) {
-            if (edt.getText().toString().trim().equals("")) {
-                Toast.makeText(this, R.string.err_please_enter_name, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        }
-
-        return true;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /*** ads ***/

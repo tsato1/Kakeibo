@@ -17,6 +17,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.kakeibo.R;
 import com.kakeibo.db.ItemDBAdapter;
+import com.kakeibo.util.UtilCategory;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     public static final String TAG = SettingsFragment.class.getSimpleName();
@@ -66,13 +67,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else if (str.equals(getString(R.string.pref_key_start_date_of_month))) {
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_add_remove_reorder))) {
+//            if (banner ads remove) {
+//
+//            }
             startActivity(new Intent(_activity, CategoryPlacementActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_reorder))) {
             startActivity(new Intent(_activity, CategoryReorderActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_creation))) {
+            if (UtilCategory.addNewCategory(_context, null)==-2) {
+                String s = getString(R.string.err_reached_max_count_colon) +
+                        UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
+                        getString(R.string.msg_delete_some_categories); //todo 5 for ordinary version, 100 for paid, 1000 for b2b
+                Toast.makeText(_context, s, Toast.LENGTH_LONG).show();
+                return false;
+            }
             startActivity(new Intent(_activity, CategoryCreationActivity.class));
+            return true;
+        } else if (str.equals(getString(R.string.pref_key_category_edition))) {
+            startActivity(new Intent(_activity, CategoryEditionActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_delete_all_data))) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(_activity);
@@ -108,7 +122,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         itemDbAdapter.open();
 
         if(itemDbAdapter.deleteAllItems()) {
-            Toast.makeText(getActivity(), getString(R.string.msg_all_delete_success), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.msg_all_delete_success), Toast.LENGTH_LONG).show();
         }
 
         itemDbAdapter.close();

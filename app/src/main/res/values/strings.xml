@@ -52,6 +52,11 @@
     <string name="icon_colon">Icon:</string>
     <string name="default_icons">Default Icons</string>
 
+    <string name="stroke_thickness">Stroke Thickness</string>
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+
     <string name="add_search_criterion">Add Search Criteria</string>
     <string name="edit_item">Edit item</string>
     <string name="how_to_perform_search">How to perform Search</string>
@@ -81,7 +86,7 @@
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
     <string name="err_memo_empty">Search word in Memo is empty.</string>
     <string name="err_from_date_older">From Date has to be younger than To Date.</string>
-    <string name="err_please_enter_name">Category name cannot empty.</string>
+    <string name="err_please_enter_name">Category name cannot be empty.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
@@ -138,11 +143,16 @@
     <string name="version_etc">Installed version, etc</string>
     <string name="purchased_items">Purchased Items</string>
     <string name="create_new_category">Create a new Category</string>
+    <string name="edit_new_category">Edit a new Category</string>
     <string name="err_cannot_add_category">Cannot add any more. Please note the maximum count </string>
     <string name="quest_determine_category_order">The icons will be displayed in the specified order. Do you want to proceed?</string>
     <string name="rearrancement_completed">Rearrangement completed</string>
     <string name="quest_new_category_do_you_want_to_proceed">A new Category is about to be created. Do you want to proceed?</string>
-    <string name="msg_new_category_created">A new Category now is created</string>
+    <string name="msg_new_category_created">A new Category is created.</string>
+    <string name="err_reached_max_count_colon">You have reached the maximum count: </string>
+    <string name="msg_delete_some_categories">Please delete from \'Edit Categories\'</string>
+    <string name="err_new_category_not_created">"Something is not right. New Category is not created."</string>
+    <string name="err_nothing_selected_select_one">Nothing is selected. Please select one.</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
@@ -155,6 +165,7 @@
     <string name="pref_key_category_add_remove_reorder" translatable="false">pref_key_category_add_remove_reorder</string>
     <string name="pref_key_category_reorder" translatable="false">pref_key_category_reorder</string>
     <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>
+    <string name="pref_key_category_edition" translatable="false">pref_key_category_edition</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
     <string name="pref_key_about" translatable="false">pref_key_about</string>
 
@@ -162,7 +173,6 @@
     <string name="dash" translatable="false">-</string>
     <string name="percent" translatable="false">%</string>
     <string name="toggle" translatable="false">toggle</string>
-    <string name="def_num_columns" translatable="false">4</string>
     <string name="title_search_criteria">Search Criteria</string>
     <string name="pref_ringtone_silent">Silent</string>
     <string name="pref_header_data_sync">Data Sync</string>

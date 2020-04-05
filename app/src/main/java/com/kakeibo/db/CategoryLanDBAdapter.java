@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.kakeibo.KkbCategory;
+import com.kakeibo.util.UtilDate;
 
 public class CategoryLanDBAdapter extends DBAdapter {
     private static final String TAG = CategoryLanDBAdapter.class.getSimpleName();
@@ -53,16 +54,21 @@ public class CategoryLanDBAdapter extends DBAdapter {
         DBAdapter.getInstance().closeDatabase();
     }
 
-    public boolean deleteItem(int id) {
-        return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
+    public boolean deleteItem(int categoryCode) {
+        return _db.delete(TABLE_NAME, COL_CODE + "=" + categoryCode, null) > 0;
     }
 
-    public Cursor getAllCategoryStrs(String langCode) {
+    public Cursor getAllCategoryStrsOfTheLanguage (String langCode) {
         String query = "SELECT "+langCode+" FROM " + TABLE_NAME + " ORDER BY " + COL_CODE;
         return _db.rawQuery(query, new String[]{});
     }
 
-    public void saveCategoryLan(TmpCategory category) {
+    public Cursor getCategoryStrsByCode (int categoryCode) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_CODE + "=" +categoryCode;
+        return _db.rawQuery(query, new String[]{});
+    }
+
+    public long saveCategoryLan(TmpCategory category) {
         ContentValues values = new ContentValues();
         values.put(COL_CODE, category.code);
         values.put(COL_ARA, category.ara);
@@ -78,10 +84,13 @@ public class CategoryLanDBAdapter extends DBAdapter {
         values.put(COL_POR, category.por);
         values.put(COL_RUS, category.rus);
         values.put(COL_TUR, category.tur);
+        values.put(COL_VIE, category.vie);
         values.put(COL_Hans, category.hans);
         values.put(COL_Hant, category.hant);
-        _db.insertOrThrow(TABLE_NAME, null, values);
+        long row = _db.insertOrThrow(TABLE_NAME, null, values);
 
         Log.d(TAG, "saveItem() called");
+
+        return row;
     }
 }

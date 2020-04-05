@@ -78,7 +78,7 @@ public class CategoryReorderActivity extends AppCompatActivity
         dialog.setTitle(R.string.reorder_categories);
         dialog.setMessage(R.string.quest_determine_category_order);
         dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-            Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_LONG).show();
             UtilCategory.updateDspTable(getApplicationContext(), list);
             finish();
         });

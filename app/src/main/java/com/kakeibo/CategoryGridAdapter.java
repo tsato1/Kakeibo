@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kakeibo.util.UtilDrawing;
+
 import java.util.List;
 
 public class CategoryGridAdapter extends BaseAdapter {
@@ -50,7 +52,13 @@ public class CategoryGridAdapter extends BaseAdapter {
         }
 
         final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.imvCategory.setImageDrawable(_context.getDrawable(kkbCategory.getDrawable()));
+
+        if (kkbCategory.getDrawable() == -1) { // ==-1: category is created by user -> use byte array
+            viewHolder.imvCategory.setImageBitmap(UtilDrawing.bytesToBitmap(kkbCategory.getImage()));
+        } else { // default category -> use drawable
+            viewHolder.imvCategory.setImageDrawable(_context.getDrawable(kkbCategory.getDrawable()));
+        }
+
         viewHolder.txvCategory.setText(kkbCategory.getName());
 
         viewHolder.rllCategoryCell.setOnClickListener((View v) -> {

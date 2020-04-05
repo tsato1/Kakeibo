@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import com.kakeibo.util.UtilDrawing;
 import com.takahidesato.android.dynamicgrid.BaseDynamicGridAdapter;
 
 public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
+    private Context _context;
 
     public CategoryDynamicGridAdapter(Context context, List<?> items, int columnCount) {
         super(context, items, columnCount);
@@ -29,7 +31,13 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
         }
 
         KkbCategory item = (KkbCategory) getItem(position);
-        holder.build(item.getName(), item.getDrawable());
+
+        if (item.getDrawable() == -1) { // ==-1: category is created by user -> use byte array
+            holder.build(item.getName(), item.getImage());
+        } else { // default category -> use drawable
+            holder.build(item.getName(), item.getDrawable());
+        }
+
         return convertView;
     }
 
@@ -45,6 +53,11 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
         void build(String title, int drawable) {
             titleText.setText(title);
             image.setImageResource(drawable);
+        }
+
+        void build(String title, byte[] img) {
+            titleText.setText(title);
+            image.setImageBitmap(UtilDrawing.bytesToBitmap(img));
         }
     }
 }

@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.kakeibo.KkbCategory;
+import com.kakeibo.util.UtilDate;
+
+import java.sql.Blob;
 
 
 public class CategoryDBAdapter extends DBAdapter {
@@ -19,6 +22,7 @@ public class CategoryDBAdapter extends DBAdapter {
     public static final String COL_COLOR = "color"; // 0=income color, 1=expense color, 11-20=custom
     public static final String COL_SIGNIFICANCE = "sign"; //0=insignificant 1=mid 2=significant
     public static final String COL_DRAWABLE = "drawable";
+    public static final String COL_IMAGE = "image";                     //added on dbv=6
     public static final String COL_LOCATION = "location";               //deprecated on dbv=6
     public static final String COL_SUB_CATEGORIES = "sub_categories";   //deprecated on dbv=6
     public static final String COL_PARENT = "parent";
@@ -42,8 +46,8 @@ public class CategoryDBAdapter extends DBAdapter {
         DBAdapter.getInstance().closeDatabase();
     }
 
-    public boolean deleteItem(int id) {
-        return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
+    public boolean deleteItem(int categoryCode) {
+        return _db.delete(TABLE_NAME, COL_CODE + "=" + categoryCode, null) > 0;
     }
 
     public Cursor getParentCategories() {
@@ -56,7 +60,9 @@ public class CategoryDBAdapter extends DBAdapter {
                 "SELECT "+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
                         langCode+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_COLOR+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_DRAWABLE+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_IMAGE+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_PARENT+
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + CategoryLanDBAdapter.TABLE_NAME +
@@ -72,7 +78,9 @@ public class CategoryDBAdapter extends DBAdapter {
                 "SELECT "+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
                         langCode+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_COLOR+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_DRAWABLE+","+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_IMAGE+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_PARENT+
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + CategoryLanDBAdapter.TABLE_NAME +
@@ -89,21 +97,58 @@ public class CategoryDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
-    public void saveCategory(KkbCategory category) {
+//    public Cursor getCustomKkbCategories(String langCode) {
+//        String query =
+//                "SELECT "+
+//                        COL_CODE+","+
+//                        COL_COLOR+","+
+//                        COL_DRAWABLE+","+
+//                        COL_IMAGE+","+
+//                        COL_PARENT+
+//                        " FROM " + TABLE_NAME +
+//                        " WHERE " + COL_CODE + " BETWEEN 1000 and 1015 " +
+//                        " ORDER BY " + COL_CODE;
+//        return _db.rawQuery(query, new String[]{});
+//    }
+
+    public long saveCategory(KkbCategory category) {
         ContentValues values = new ContentValues();
         values.put(COL_CODE, category.getCode());
         values.put(COL_COLOR, category.getColor());
         values.put(COL_SIGNIFICANCE, category.getSignificance());
         values.put(COL_DRAWABLE, category.getDrawable());
-        values.put(COL_LOCATION, category.getLocation());
+        values.put(COL_IMAGE, category.getImage());
+//        values.put(COL_LOCATION, category.getLocation()); //deprecated
         values.put(COL_PARENT, category.getParent());
         values.put(COL_DESC, category.getDescription());
-        values.put(COL_SAVED_DATE, category.getSavedDate());
+        values.put(COL_SAVED_DATE, UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS));
 
         SQLiteDatabase db = DBAdapter.getInstance().openDatabase();
-        db.insertOrThrow(TABLE_NAME, null, values);
+        long row = db.insertOrThrow(TABLE_NAME, null, values);
         DBAdapter.getInstance().closeDatabase();
 
         Log.d(TAG, "saveItem() called");
+        return row;
+    }
+
+    /***
+     * user-created categories should be having the CODE between 1000 and 2000
+     *
+     * this fun returns the CODE that doesn't exist in the current table and therefore can be used for a newly created category
+     * ***/
+    public Cursor calcCodeForNewCategory() {
+        String query =
+                "SELECT "+ COL_CODE + " + 1" +
+                        " FROM " + TABLE_NAME + " t " +
+                        " WHERE NOT EXISTS " +
+                        "(" +
+                        "   SELECT " + COL_CODE +
+                        "   FROM " + TABLE_NAME +
+                        "   WHERE " + COL_CODE + " = t." + COL_CODE + " + 1" +
+                        ")" +
+                        " AND " + COL_CODE +" BETWEEN 1000 and 2000" +
+                        " ORDER BY " + COL_CODE +
+                        " LIMIT 1";
+        return _db.rawQuery(query, new String[]{});
     }
 }

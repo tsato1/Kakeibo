@@ -58,10 +58,10 @@ public class CategoryPlacementActivity extends AppCompatActivity
         setContentView(R.layout.activity_settings_category_placement);
 
         /*** this part is to handle unexpected crashes ***/
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-        if (getIntent().getBooleanExtra("crash", false)) {
-            Log.e(TAG, "crashed");
-        }
+//        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+//        if (getIntent().getBooleanExtra("crash", false)) {
+//            Log.e(TAG, "crashed");
+//        }
 
         /*** hide home button on actionbar ***/
         if (getSupportActionBar() != null) {
@@ -157,8 +157,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position) {
                 for(int i = 0; i < NUM_PAGES; i++) {
-                    int drawableId = (i==position)?
-                            (R.drawable.dot_selected):(R.drawable.dot_not_selected);
+                    int drawableId = (i==position)? (R.drawable.dot_selected):(R.drawable.dot_not_selected);
                     Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                     _lstDots.get(i).setImageDrawable(drawable);
                 }
@@ -206,7 +205,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
                 dialog.setTitle(R.string.reorder_categories);
                 dialog.setMessage(R.string.quest_determine_category_order);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-                    Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_LONG).show();
                     UtilCategory.updateDspTable(getApplicationContext(), list);
                     finish();
                 });

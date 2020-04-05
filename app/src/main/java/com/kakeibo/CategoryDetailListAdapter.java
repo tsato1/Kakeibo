@@ -50,7 +50,7 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         Item item = getItem(position);
 
         if (null == convertView) {
-            convertView = inflater.inflate(R.layout.dialog_row_search, null);
+            convertView = inflater.inflate(R.layout.row_dialog_category_detail_item, null);
 
             final TextView txvEventDate = convertView.findViewById(R.id.btn_event_date);
             final TextView txvCategory = convertView.findViewById(R.id.txv_category);

@@ -44,6 +44,12 @@
     <!-- settings -->
     <dimen name="pager_dots">18dp</dimen>
     <dimen name="fragment_padding">14dp</dimen>
+    <dimen name="new_category_drawable_size">50dp</dimen>
+    <dimen name="draw_view_canvas_sides">250dp</dimen>
+    <dimen name="draw_view_buttons_sides">46dp</dimen>
+    <dimen name="draw_view_thickness_small">12dp</dimen>
+    <dimen name="draw_view_thickness_medium">25dp</dimen>
+    <dimen name="draw_view_thickness_large">36dp</dimen>
 
     <!-- character size -->
     <dimen name="char_size_big">16sp</dimen>

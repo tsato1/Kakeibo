@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryGridAdapter;
+import com.kakeibo.KkbApplication;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
@@ -65,11 +66,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        PreferenceManager.setDefaultValues(_activity, R.xml.preferences, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(_activity);
-        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
-        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
-        _sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
+        _sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
 
         _selectedCategoryCodeList = new ArrayList<>();
 
