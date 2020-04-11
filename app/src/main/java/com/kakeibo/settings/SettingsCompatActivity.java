@@ -19,6 +19,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
+import com.kakeibo.util.UtilAds;
 
 public class SettingsCompatActivity extends AppCompatActivity
         implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -40,8 +41,11 @@ public class SettingsCompatActivity extends AppCompatActivity
                 .replace(R.id.frl_settings_container, new SettingsFragment())
                 .commit();
 
-        initAd();
-        loadBanner();
+        /*** ads ***/
+        if (UtilAds.isBannerAdsDisplayAgreed()) {
+            initAd();
+            loadBanner();
+        }
 
         _activity = this;
     }

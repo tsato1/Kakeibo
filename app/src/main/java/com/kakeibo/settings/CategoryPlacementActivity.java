@@ -23,9 +23,9 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
-import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
 import com.kakeibo.ViewPagerAdapter;
+import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
@@ -70,8 +70,10 @@ public class CategoryPlacementActivity extends AppCompatActivity
         }
 
         /*** ads ***/
-        initAd();
-        loadBanner();
+        if (UtilAds.isBannerAdsDisplayAgreed()) {
+            initAd();
+            loadBanner();
+        }
 
         /*** find views ***/
         _viewPager = findViewById(R.id.view_pager);
@@ -135,9 +137,9 @@ public class CategoryPlacementActivity extends AppCompatActivity
             ImageView dot = new ImageView(this);
 
             if (i==0) {
-                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_selected));
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_color_primary));
             } else {
-                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_not_selected));
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_color_accent));
             }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -157,7 +159,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position) {
                 for(int i = 0; i < NUM_PAGES; i++) {
-                    int drawableId = (i==position)? (R.drawable.dot_selected):(R.drawable.dot_not_selected);
+                    int drawableId = (i==position)? (R.drawable.dot_color_primary):(R.drawable.dot_color_accent);
                     Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                     _lstDots.get(i).setImageDrawable(drawable);
                 }
@@ -205,7 +207,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
                 dialog.setTitle(R.string.reorder_categories);
                 dialog.setMessage(R.string.quest_determine_category_order);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-                    Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show();
                     UtilCategory.updateDspTable(getApplicationContext(), list);
                     finish();
                 });

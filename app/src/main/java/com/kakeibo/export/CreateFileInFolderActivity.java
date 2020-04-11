@@ -1,8 +1,6 @@
 package com.kakeibo.export;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +15,7 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 import com.kakeibo.BuildConfig;
+import com.kakeibo.KkbApplication;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilFiles;
@@ -125,11 +124,9 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     }
 
     public void loadSharedPreference() {
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String f = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
+        int dateFormat = KkbApplication.getDateFormat(R.string.pref_key_date_format);
 
-        switch (Integer.parseInt(f)) {
+        switch (dateFormat) {
             case 1: // MDY
                 mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_MDY) + " kk:mm:ss";
                 break;

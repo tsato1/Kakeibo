@@ -1,7 +1,6 @@
 package com.kakeibo.settings;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +16,8 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.kakeibo.R;
 import com.kakeibo.db.ItemDBAdapter;
+import com.kakeibo.db.KkbAppDBAdapter;
+import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -67,15 +68,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else if (str.equals(getString(R.string.pref_key_start_date_of_month))) {
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_add_remove_reorder))) {
-//            if (banner ads remove) {
-//
-//            }
+            if (!UtilAds.isBannerAdsDisplayAgreed()) {
+                handleAgreement();
+                return false;
+            }
             startActivity(new Intent(_activity, CategoryPlacementActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_reorder))) {
+            if (!UtilAds.isBannerAdsDisplayAgreed()) {
+                handleAgreement();
+                return false;
+            }
             startActivity(new Intent(_activity, CategoryReorderActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_creation))) {
+            if (!UtilAds.isBannerAdsDisplayAgreed()) {
+                handleAgreement();
+                return false;
+            }
             if (UtilCategory.addNewCategory(_context, null)==-2) {
                 String s = getString(R.string.err_reached_max_count_colon) +
                         UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
@@ -86,6 +96,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             startActivity(new Intent(_activity, CategoryCreationActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_edition))) {
+            if (!UtilAds.isBannerAdsDisplayAgreed()) {
+                handleAgreement();
+                return false;
+            }
             startActivity(new Intent(_activity, CategoryEditionActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_delete_all_data))) {
@@ -115,6 +129,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else {
             return super.onPreferenceTreeClick(preference);
         }
+    }
+
+    private void handleAgreement() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
+        dialog.setIcon(R.mipmap.ic_mikan);
+        dialog.setTitle(R.string.category_management);
+        dialog.setMessage(getString(R.string.quest_do_you_want_to_manage_categories));
+        dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
+            d.dismiss();
+            AlertDialog.Builder dialog2 = new AlertDialog.Builder(_context);
+            dialog2.setIcon(R.drawable.ic_warning_black_24dp);
+            dialog2.setTitle(R.string.warning);
+            dialog2.setMessage(getString(R.string.quest_irreversible_operation_do_you_want_to_proceed));
+            dialog2.setPositiveButton(R.string.yes, (DialogInterface d2, int which2) -> {
+                KkbAppDBAdapter kkbAppDBAdapter = new KkbAppDBAdapter();
+                kkbAppDBAdapter.open();
+                if (kkbAppDBAdapter.setValueInt2(KkbAppDBAdapter.COL_VAL_INT_2_SHOWADS)) {
+                    Toast.makeText(_context, R.string.msg_access_to_category_management, Toast.LENGTH_LONG).show();
+                }
+                kkbAppDBAdapter.close();
+            });
+            dialog2.setNegativeButton(R.string.no, null);
+            dialog2.create();
+            dialog2.show();
+        });
+        dialog.setNegativeButton(R.string.no, null);
+        dialog.create();
+        dialog.show();
     }
 
     private void deleteAllItems() {

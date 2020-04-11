@@ -39,7 +39,6 @@
     <string name="updated_on_colon">Tarihinde kaydedildi:</string>
 
     <string name="add_search_criterion">Arama Kriteri Ekle</string>
-    <string name="how_to_perform_search">Arama nasıl yapılır</string>
     <string name="date_range">Tarih Aralığı</string>
     <string name="from">Itibaren</string>
     <string name="to">Kadar</string>
@@ -80,7 +79,6 @@
 
     <string name="edit_item">Ögeyi düzenle</string>
     <string name="search_result">Arama sonuçları</string>
-    <string name="title_search_criteria">Arama Kriteri:</string>
     <string name="returning_to_monthly_report">Aylık rapora dönme</string>
 
     <!-- Export -->
@@ -99,9 +97,6 @@
 
     <string name="date_format">Tarih Formatı</string>
     <string name="remove_ads">Reklamları kaldırmak</string>
-    <string name="pref_desc_remove_ads">Kakeibo Pro\'ya Yükseltme</string>
-    <string name="pref_title_category">Kategori</string>
-    <string name="pref_title_currency">Para birimi</string>
     <string name="fraction_digits">Kesir Basamağı</string>
 
     <!-- Setting for in-app data -->
@@ -112,9 +107,7 @@
     <string name="msg_all_delete_success">Tüm öğeler başarıyla silindi.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Veri ve Senkronizasyon</string>
 
-    <string name="pref_title_sync_frequency">Senkronizasyon frekansı</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -146,17 +139,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">Sistem senkronizasyon ayarları</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Bildirimler</string>
 
-    <string name="pref_title_new_message_notifications">Yeni mesaj bildirimleri</string>
-
-    <string name="pref_title_ringtone">Zil</string>
-    <string name="pref_ringtone_silent">Sessiz</string>
-
-    <string name="pref_title_vibrate">Titremek</string>
     <string name="memo">Muhtıra</string>
     <string name="amount">Miktar</string>
     <string name="err_from_date_older">\"Kadar Itibaren\"\'nın \"Tarih Kadar\"\'den küçük olması gerekir.</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">Web sitesine atla</string>
     <string name="about_this_app">Bu uygulama hakkında</string>
     <string name="version_etc">Yüklü sürüm vb.</string>
-    <string name="remove_add_reorder_categories">Kategorileri Kaldırma, Ekleme ve Yeniden Sıralama</string>
     <string name="reorder_categories">Kategorileri Yeniden Sırala</string>
-    <string name="create_new_category">Yeni bir Kategori oluşturun</string>
+    <string name="create_category">Yeni bir Kategori oluşturun</string>
     <string name="num_columns">Satır başına Kategori sayısı</string>
-    <string name="remove_categories">Kategorileri Kaldır</string>
-    <string name="add_categories">Kategori Ekle</string>
     <string name="the_app_version">Uygulama sürümü</string>
     <string name="purchased_items">Satın alınan ürünler</string>
-    <string name="inst_tap_icon_to_remove_categories">Kategorileri kaldırmak için lütfen simgelere dokunun.</string>
-    <string name="inst_tap_icon_to_add_categories">Kategori eklemek için lütfen simgelere dokunun.</string>
     <string name="in_app_purchases">Uygulama içi satın alma işlemleri</string>
     <string name="remaining_spots_colon">"Kalan noktalar: "</string>
     <string name="inst_long_tap_to_move_icons">Simgeleri taşımak için uzun dokunun.</string>
     <string name="err_cannot_add_category">Maks. Değere ulaştığınız için daha fazla ekleyemezsiniz</string>
     <string name="inst_keep_pressing_longer">Daha uzun süre basmaya devam edin</string>
-    <string name="display_of_icons">Simgeleri görüntüleme</string>
     <string name="quest_determine_category_order">Simgeler belirtilen sırada görüntülenir. Devam etmek istiyor musunuz?</string>
+    <string name="expense">Gider</string>
+    <string name="err_reached_max_count_colon">"Maksimum sayıya ulaştınız: "</string>
+    <string name="err_please_enter_name">Kategori adı boş bırakılamaz.</string>
+    <string name="err_nothing_selected_select_one">Hiçbir şey seçilmedi. Lütfen birini seçin.</string>
+    <string name="err_category_not_created">Bazışeyler doğru değil. Yeni Kategori oluşturulmadı.</string>
+    <string name="category_management">Kategori yönetimi</string>
+    <string name="choose_category_color">Kategori türünü seçin</string>
+    <string name="custom_categories">Özel Kategoriler</string>
+    <string name="hide_categories">Gizlenecek kategorileri seçin</string>
+    <string name="hide_display_reorder_categories">Kategorileri Gizle, Göster ve Yeniden Sırala</string>
+    <string name="display_categories">Görüntülenecek kategorileri seçin</string>
+    <string name="hint_name_max_8_characters">İsim: En fazla 8 karakter</string>
+    <string name="icon_colon">ikon:</string>
+    <string name="language">Dil</string>
+    <string name="large">Büyük</string>
+    <string name="medium">Orta</string>
+    <string name="max_number_of_categories_colon">"Maksimum kategori sayısı: "</string>
+    <string name="msg_access_to_category_management">Kategori yönetimine erişim izni verilir.</string>
+    <string name="msg_category_created">Bir Kategori oluşturuldu.</string>
+    <string name="msg_delete_some_categories">Lütfen \'Özel Kategoriler\'den silin</string>
+    <string name="no_custom_category">Özel kategori bulunamadı</string>
+    <string name="add">Ekle</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">"Bir Kategori oluşturmak üzeredir. Devam etmek istiyor musunuz? "</string>
+    <string name="quest_do_you_want_to_manage_categories">"Kategorileri artık yönetebilirsiniz; Ancak, banner reklamlar her zaman ekranda gösterilir. Devam etmek istiyor musunuz? "</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">Bu eylem geri döndürülemez. Devam etmek istiyor musunuz?</string>
+    <string name="reorder_categories_for_display">GİRİŞ ekranında görüntülenecek Kategorileri yeniden sıralayın</string>
+    <string name="small">Küçük</string>
+    <string name="stroke_thickness">Strok Kalınlığı</string>
+    <string name="warning">Uyarı</string>
 </resources>

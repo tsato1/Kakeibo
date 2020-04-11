@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.kakeibo.R;
+import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.db.TmpCategory;
 import com.kakeibo.util.UtilCategory;
 
@@ -24,6 +26,7 @@ public class CategoryCreationColorFragment extends Fragment {
     private Activity _activity;
     private Button _btnIncome, _btnExpense, _btnBack, _btnNext;
     private ImageView _imvIncomeOverlay, _imvExpenseOverlay;
+    private TextView _txvDescription;
 
     private static int _selectedColor = -1;
 
@@ -65,10 +68,13 @@ public class CategoryCreationColorFragment extends Fragment {
         _btnNext = view.findViewById(R.id.btn_next);
         _imvIncomeOverlay = view.findViewById(R.id.imv_category_add_in);
         _imvExpenseOverlay = view.findViewById(R.id.imv_category_add_ex);
+        _txvDescription = view.findViewById(R.id.txv_description);
         _btnIncome.setOnClickListener(new ButtonClickListener());
         _btnExpense.setOnClickListener(new ButtonClickListener());
         _btnBack.setOnClickListener(new ButtonClickListener());
         _btnNext.setOnClickListener(new ButtonClickListener());
+        String str = getString(R.string.max_number_of_categories_colon) + UtilCategory.NUM_MAX_CUSTOM_CATEGORIES;
+        _txvDescription.setText(str);
     }
 
     class ButtonClickListener implements View.OnClickListener {

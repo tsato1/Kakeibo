@@ -20,6 +20,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.kakeibo.BuildConfig;
 import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
+import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
@@ -53,8 +54,10 @@ public class CategoryReorderActivity extends AppCompatActivity
         }
 
         /*** ads ***/
-        initAd();
-        loadBanner();
+        if (UtilAds.isBannerAdsDisplayAgreed()) {
+            initAd();
+            loadBanner();
+        }
 
         _fragmentReorder = CategoryPlacementReorderFragment.newInstance();
 
@@ -78,7 +81,7 @@ public class CategoryReorderActivity extends AppCompatActivity
         dialog.setTitle(R.string.reorder_categories);
         dialog.setMessage(R.string.quest_determine_category_order);
         dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-            Toast.makeText(this, R.string.rearrancement_completed, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show();
             UtilCategory.updateDspTable(getApplicationContext(), list);
             finish();
         });

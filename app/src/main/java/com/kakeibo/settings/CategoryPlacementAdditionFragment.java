@@ -2,7 +2,6 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryGridAdapter;
 import com.kakeibo.KkbApplication;
@@ -71,7 +69,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
+        _sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
 
         findViews(view);
 
@@ -87,7 +85,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _btnBack.setOnClickListener(new ItemClickListener());
         _btnNext.setOnClickListener(new ItemClickListener());
         _txvTitle = view.findViewById(R.id.txv_title);
-        _txvTitle.setText(R.string.add_categories);
+        _txvTitle.setText(R.string.display_categories);
         _txvDescription = view.findViewById(R.id.txv_description);
         _txvDescription.setText(R.string.inst_tap_plus_to_add_criteria);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);

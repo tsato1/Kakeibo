@@ -5,10 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Long tap to edit or delete"/>-->
+    <TextView
+        android:id="@+id/txv_no_custom_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="@string/no_custom_category"/>
 
     <ListView
         android:id="@+id/lsv_custom_categories"

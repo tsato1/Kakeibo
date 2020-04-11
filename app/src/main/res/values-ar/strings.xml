@@ -36,7 +36,6 @@
     <string name="updated_on_colon">تم الحفظ في:</string>
 
     <string name="add_search_criterion">إضافة معايير البحث</string>
-    <string name="how_to_perform_search">كيفية إجراء البحث</string>
     <string name="date_range">نطاق الموعد</string>
     <string name="from">من</string>
     <string name="amount_range">نطاق المبلغ</string>
@@ -74,7 +73,6 @@
 
     <string name="edit_item">تعديل عنصر</string>
     <string name="search_result">نتيجة البحث</string>
-    <string name="title_search_criteria">معايير البحث:</string>
     <string name="returning_to_monthly_report">العودة إلى التقرير الشهري</string>
 
     <!-- Export -->
@@ -93,9 +91,6 @@
 
     <string name="date_format">صيغة التاريخ</string>
     <string name="remove_ads">ازالة الاعلانات</string>
-    <string name="pref_desc_remove_ads">الترقية إلى Kakeibo Pro</string>
-    <string name="pref_title_category">الفئة</string>
-    <string name="pref_title_currency">دقة</string>
     <string name="fraction_digits">أرقام الكسر</string>
 
     <!-- Setting for in-app data -->
@@ -106,9 +101,7 @@
     <string name="msg_all_delete_success">تم حذف جميع العناصر بنجاح.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">البيانات والمزامنة</string>
 
-    <string name="pref_title_sync_frequency">تردد المزامنة</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -140,17 +133,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">إعدادات مزامنة النظام</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">إخطارات</string>
 
-    <string name="pref_title_new_message_notifications">إعلامات رسالة جديدة</string>
-
-    <string name="pref_title_ringtone">نغمة رنين</string>
-    <string name="pref_ringtone_silent">صامت</string>
-
-    <string name="pref_title_vibrate">تذبذب</string>
     <string name="memo">مذكرة</string>
     <string name="err_from_date_older">يجب أن يكون \"من التاريخ\" أصغر من \"إلى تاريخ\"</string>
     <string name="amount">مبلغ</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">"القفز الى الموقع "</string>
     <string name="about_this_app">"عن هذا التطبيق "</string>
     <string name="version_etc">"الإصدار المثبت ، الخ "</string>
-    <string name="remove_add_reorder_categories">"إزالة ، إضافة وإعادة ترتيب الفئات "</string>
     <string name="reorder_categories">"إعادة ترتيب الفئات "</string>
-    <string name="create_new_category">"إنشاء فئة جديدة "</string>
+    <string name="create_category">"إنشاء فئة جديدة "</string>
     <string name="num_columns">"عدد الفئات في كل صف "</string>
-    <string name="remove_categories">"إزالة الفئات "</string>
-    <string name="add_categories">"إضافة فئات "</string>
     <string name="the_app_version">"إصدار التطبيق "</string>
     <string name="purchased_items">"البنود التي تم شراؤها "</string>
-    <string name="inst_tap_icon_to_remove_categories">"يرجى النقر على الرموز لإزالة الفئات. "</string>
-    <string name="inst_tap_icon_to_add_categories">"يرجى النقر على الرموز لإضافة فئات. "</string>
     <string name="in_app_purchases">"عمليات الشراء داخل التطبيق "</string>
     <string name="remaining_spots_colon">"المواقع المتبقية: "</string>
     <string name="inst_long_tap_to_move_icons">اضغط لفترة طويلة لتحريك الرموز.</string>
     <string name="err_cannot_add_category">"لا يمكنك إضافة المزيد لأنك بلغت الحد الأقصى "</string>
     <string name="inst_keep_pressing_longer">اضغط لفترة أطول</string>
-    <string name="display_of_icons">"عرض الرموز "</string>
     <string name="quest_determine_category_order">سيتم عرض الرموز بالترتيب المحدد. هل تريد المتابعة؟</string>
+    <string name="expense">مصروف</string>
+    <string name="err_reached_max_count_colon">"لقد وصلت إلى الحد الأقصى للعدد: "</string>
+    <string name="err_please_enter_name">لا يمكن أن يكون اسم الفئة فارغًا.</string>
+    <string name="err_nothing_selected_select_one">لم يتم تحديد شيء. رجاءا اختر واحدة.</string>
+    <string name="err_category_not_created">هناك شئ غير صحيح. لم يتم إنشاء الفئة الجديدة.</string>
+    <string name="category_management">إدارة الفئة</string>
+    <string name="choose_category_color">حدد نوع الفئة</string>
+    <string name="custom_categories">الفئات المخصصة</string>
+    <string name="hide_categories">حدد الفئات لإخفائها</string>
+    <string name="hide_display_reorder_categories">إخفاء الفئات والعرض وإعادة الترتيب</string>
+    <string name="display_categories">حدد الفئات لعرضها</string>
+    <string name="hint_name_max_8_characters">الاسم: الحد الأقصى 8 أحرف</string>
+    <string name="icon_colon">أيقونة:</string>
+    <string name="language">لغة</string>
+    <string name="large">كبير</string>
+    <string name="medium">الأوسط</string>
+    <string name="max_number_of_categories_colon">"الحد الأقصى لعدد الفئات: "</string>
+    <string name="msg_access_to_category_management">تم منح الوصول إلى إدارة الفئة.</string>
+    <string name="msg_category_created">تم إنشاء فئة.</string>
+    <string name="msg_delete_some_categories">يرجى الحذف من \"الفئات المخصصة\"</string>
+    <string name="no_custom_category">لم يتم العثور على فئة مخصصة</string>
+    <string name="add">أضف</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">الفئة على وشك الإنشاء. هل تريد المتابعة؟</string>
+    <string name="quest_do_you_want_to_manage_categories">يمكنك إدارة الفئات من الآن فصاعدًا ؛ ومع ذلك ، سيتم دائمًا عرض إعلانات البانر على الشاشة. هل تريد المتابعة؟</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">هذا العمل لا رجعة فيه. هل تريد المتابعة؟</string>
+    <string name="reorder_categories_for_display">"إعادة ترتيب الفئات لعرضها على شاشة إدخال "</string>
+    <string name="small">صغير</string>
+    <string name="stroke_thickness">سمك السكتة الدماغية</string>
+    <string name="warning">تحذير</string>
 </resources>

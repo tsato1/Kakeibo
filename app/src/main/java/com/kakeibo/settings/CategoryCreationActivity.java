@@ -28,6 +28,7 @@ import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.ViewPagerAdapter;
 import com.kakeibo.db.TmpCategory;
+import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
@@ -76,8 +77,10 @@ public class CategoryCreationActivity extends AppCompatActivity {
         }
 
         /*** ads ***/
-        initAd();
-        loadBanner();
+        if (UtilAds.isBannerAdsDisplayAgreed()) {
+            initAd();
+            loadBanner();
+        }
 
         /*** find views ***/
         _viewPager = findViewById(R.id.view_pager);
@@ -138,9 +141,9 @@ public class CategoryCreationActivity extends AppCompatActivity {
             ImageView dot = new ImageView(this);
 
             if (i==0) {
-                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_selected));
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_color_primary));
             } else {
-                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_not_selected));
+                dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dot_color_accent));
             }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -160,7 +163,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 for(int i = 0; i < NUM_PAGES; i++) {
-                    int drawableId = (i==position)? (R.drawable.dot_selected):(R.drawable.dot_not_selected);
+                    int drawableId = (i==position)? (R.drawable.dot_color_primary):(R.drawable.dot_color_accent);
                     Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                     _lstDots.get(i).setImageDrawable(drawable);
                 }
@@ -185,13 +188,13 @@ public class CategoryCreationActivity extends AppCompatActivity {
             case CategoryCreationIconFragment.TAG_INT:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
                 dialog.setIcon(R.mipmap.ic_mikan);
-                dialog.setTitle(R.string.create_new_category);
-                dialog.setMessage(R.string.quest_new_category_do_you_want_to_proceed);
+                dialog.setTitle(R.string.create_category);
+                dialog.setMessage(R.string.quest_category_creation_do_you_want_to_proceed);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
                     if (UtilCategory.addNewCategory(_context, tmpCategory)==-1) {
-                        Toast.makeText(_context, getString(R.string.err_new_category_not_created), Toast.LENGTH_LONG).show();
+                        Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(_context, R.string.msg_new_category_created, Toast.LENGTH_LONG).show();
+                        Toast.makeText(_context, R.string.msg_category_created, Toast.LENGTH_LONG).show();
                     }
                     finish();
                 });

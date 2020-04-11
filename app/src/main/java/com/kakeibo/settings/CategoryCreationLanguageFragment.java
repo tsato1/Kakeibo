@@ -77,11 +77,7 @@ public class CategoryCreationLanguageFragment extends Fragment {
 
         /*** language setup ***/
         _btnLanguage.setText(UtilSystem.getCurrentLangCode(_activity));
-        _langList.add(CategoryLanDBAdapter.COL_ENG);
-        _langList.add(CategoryLanDBAdapter.COL_SPA);
-        _langList.add(CategoryLanDBAdapter.COL_FRA);
-        _langList.add(CategoryLanDBAdapter.COL_HIN);
-        _langList.add(CategoryLanDBAdapter.COL_IND);
+        _langList = UtilSystem.getAllSupportedLanguages();
         _langAdapter = new ArrayAdapter<>(_activity, android.R.layout.simple_list_item_1, _langList);
         _langMap.put(_btnLanguage.getText().toString(), _edtName);
 

@@ -38,7 +38,6 @@
     <string name="updated_on_colon">Zapisano w:</string>
 
     <string name="add_search_criterion">Dodaj kryteria wyszukiwania</string>
-    <string name="how_to_perform_search">Jak przeprowadzić wyszukiwanie</string>
     <string name="date_range">Zakres dat</string>
     <string name="from">Od</string>
     <string name="to">Do</string>
@@ -79,7 +78,6 @@
 
     <string name="edit_item">Edytuj rzecz</string>
     <string name="search_result">Wynik wyszukiwania</string>
-    <string name="title_search_criteria">Kryteria wyszukiwania:</string>
     <string name="returning_to_monthly_report">Wracając do raportu miesięcznego</string>
 
     <!-- Export -->
@@ -98,9 +96,6 @@
 
     <string name="date_format">Format daty</string>
     <string name="remove_ads">Usuń reklamy</string>
-    <string name="pref_desc_remove_ads">Uaktualnij do Kakeibo Pro</string>
-    <string name="pref_title_category">Kategoria</string>
-    <string name="pref_title_currency">Waluta</string>
     <string name="fraction_digits">Cyfry ułamkowe</string>
 
     <!-- Setting for in-app data -->
@@ -111,9 +106,7 @@
     <string name="msg_all_delete_success">Wszystkie elementy zostały pomyślnie usunięte.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Dane i synchronizacja</string>
 
-    <string name="pref_title_sync_frequency">Częstotliwość synchronizacji</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -145,17 +138,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">Ustawienia synchronizacji systemu</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Powiadomienia</string>
 
-    <string name="pref_title_new_message_notifications">Powiadomienia o nowych wiadomościach</string>
-
-    <string name="pref_title_ringtone">Dzwonek</string>
-    <string name="pref_ringtone_silent">Cichy</string>
-
-    <string name="pref_title_vibrate">Wibrować</string>
     <string name="memo">Notatka</string>
     <string name="amount">Ilość</string>
     <string name="err_from_date_older">„Od daty” musi być młodsze niż „Do daty”.</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">Przejdź do strony internetowej</string>
     <string name="about_this_app">O tej aplikacji</string>
     <string name="version_etc">Zainstalowana wersja itp.</string>
-    <string name="remove_add_reorder_categories">Usuń, dodaj i zmień kolejność kategorii</string>
     <string name="reorder_categories">Zmień kolejność kategorii</string>
-    <string name="create_new_category">Utwórz nową kategorię</string>
+    <string name="create_category">Utwórz nową kategorię</string>
     <string name="num_columns">Liczba kategorii w rzędzie</string>
-    <string name="remove_categories">Usuń kategorie</string>
-    <string name="add_categories">Dodaj kategorie</string>
     <string name="the_app_version">Wersja aplikacji</string>
     <string name="purchased_items">Zakupione przedmioty</string>
-    <string name="inst_tap_icon_to_remove_categories">Wybierz ikony, aby usunąć kategorie.</string>
-    <string name="inst_tap_icon_to_add_categories">Wybierz ikony, aby dodać kategorie.</string>
     <string name="in_app_purchases">Zakupy w aplikacji</string>
     <string name="remaining_spots_colon">"Pozostałe miejsca: "</string>
     <string name="inst_long_tap_to_move_icons">Naciśnij długo, aby przenieść ikony.</string>
     <string name="err_cannot_add_category">Nie możesz dodać więcej, ponieważ osiągnąłeś maks</string>
     <string name="inst_keep_pressing_longer">Naciskaj dłużej</string>
-    <string name="display_of_icons">Wyświetlanie ikon</string>
     <string name="quest_determine_category_order">Ikony będą wyświetlane w określonej kolejności. Czy chcesz kontynuować?</string>
+    <string name="expense">Koszt</string>
+    <string name="err_reached_max_count_colon">"Osiągnąłeś maksymalną liczbę: "</string>
+    <string name="err_please_enter_name">Nazwa kategorii nie może być pusta.</string>
+    <string name="err_nothing_selected_select_one">Nic nie jest wybrane. Proszę wybrać jeden.</string>
+    <string name="err_category_not_created">Coś jest nie tak. Nowa kategoria nie została utworzona.</string>
+    <string name="category_management">Zarządzanie Kategoriami</string>
+    <string name="choose_category_color">Wybierz typ kategorii</string>
+    <string name="custom_categories">Niestandardowe Kategorie</string>
+    <string name="hide_categories">Wybierz Kategorie do ukrycia</string>
+    <string name="hide_display_reorder_categories">Ukryj, wyświetl i uporządkuj kategorie</string>
+    <string name="display_categories">Wybierz Kategorie do wyświetlenia</string>
+    <string name="hint_name_max_8_characters">Nazwa: maks. 8 znaków</string>
+    <string name="icon_colon">Ikona:</string>
+    <string name="language">Język</string>
+    <string name="large">Duży</string>
+    <string name="medium">Środkowy</string>
+    <string name="max_number_of_categories_colon">"Maksymalna liczba kategorii: "</string>
+    <string name="msg_access_to_category_management">Udzielono dostępu do zarządzania kategoriami.</string>
+    <string name="msg_category_created">Kategoria została utworzona.</string>
+    <string name="msg_delete_some_categories">Usuń z „Niestandardowych kategorii”</string>
+    <string name="no_custom_category">Nie znaleziono kategorii niestandardowej</string>
+    <string name="add">Dodaj</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">Wkrótce zostanie utworzona Kategoria. Czy chcesz kontynuować?</string>
+    <string name="quest_do_you_want_to_manage_categories">Od teraz możesz zarządzać kategoriami; Jednak banery reklamowe będą zawsze wyświetlane na ekranie. Czy chcesz kontynuować?</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">To działanie jest nieodwracalne. Czy chcesz kontynuować?</string>
+    <string name="reorder_categories_for_display">Zmień kolejność kategorii, aby wyświetlić na ekranie WKŁAD</string>
+    <string name="small">Mały</string>
+    <string name="stroke_thickness">Grubość obrysu</string>
+    <string name="warning">Ostrzeżenie</string>
 </resources>

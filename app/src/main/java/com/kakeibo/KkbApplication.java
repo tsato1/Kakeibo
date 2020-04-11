@@ -9,9 +9,13 @@ import androidx.preference.PreferenceManager;
 
 import com.kakeibo.db.DBAdapter;
 import com.kakeibo.db.DBHelper;
+import com.kakeibo.util.UtilDate;
+
+import java.util.Currency;
+import java.util.Locale;
 
 public class KkbApplication extends Application {
-    private int _version;
+    private int _version; // version is valInt1
     private static SharedPreferences _preferences;
 
     public static KkbApplication _instance;
@@ -43,20 +47,41 @@ public class KkbApplication extends Application {
         return _preferences;
     }
 
+    /*** dateFormat ***/
+    public static int getDateFormat(int key) {
+        String strKey = _instance.getString(key);
+        String dateFormatIndex = getSharedPreferences().getString(strKey, UtilDate.DATE_FORMAT_YMD);
+        return Integer.parseInt(dateFormatIndex);
+    }
+
+    public static int getFractionDigits(int key) {
+        /*** fraction digits ***/
+        String strKey = _instance.getString(key);
+
+        Locale locale = Locale.getDefault();
+        int defValue = 0;
+        try {
+            Currency currency = Currency.getInstance(locale);
+            defValue = currency.getDefaultFractionDigits();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        String digitsIndex = getSharedPreferences().getString(strKey, ""+defValue);
+        String[] fractionDigits = _instance.getResources().getStringArray(R.array.pref_list_fraction_digits);
+        return Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
+    }
+
     /*** num category icons per row ***/
-    public static int getNumColumns(String key) {
-        String numColumnsIndex = getSharedPreferences().getString(key, "4");
+    public static int getNumColumns(int key) {
+        String strKey = _instance.getString(key);
+        String numColumnsIndex = getSharedPreferences().getString(strKey, "1");
         String[] numColumns = _instance.getResources().getStringArray(R.array.pref_list_num_columns);
         return Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
     }
 
-    public void setVersion(int version) {
-        this._version = version;
-    }
+//    public void setVersion(int version) { this._version = version; } // do
 
-    public int getVersion() {
-        return _version;
-    }
+    public int getVersion() { return _version; }
 }
 
 // set

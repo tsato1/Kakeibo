@@ -361,7 +361,7 @@ public class UtilCategory {
         }
         Log.d("asdf", "asdf3    newCode = " + newCode);
 
-        /*** allow only 10 custom categories ***/
+        /*** allow only 5 custom categories ***/
         if (newCode >= CUSTOM_CATEGORY_CODE_START + NUM_MAX_CUSTOM_CATEGORIES) { return -2; }
         /*** catch null ***/
         if (tmpCategory == null) { return -3; }
@@ -387,6 +387,6 @@ public class UtilCategory {
 
         reloadCategoryLists(context);
 
-        return row1==-1&&row2==-1? -1: 1; // 1==success, -1==failure
+        return row1==-1&&row2==-1? -1: 1; // 1==success, -1 or -2==failure
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="week_name">
+        <item>CN</item>
+        <item>T.Hai</item>
+        <item>T.Ba</item>
+        <item>T.Tư</item>
+        <item>T.Năm</item>
+        <item>T.Sáu</item>
+        <item>T.Bảy</item>
+    </string-array>
+
+<!--    <string-array name="default_category">-->
+<!--        <item>INGRE</item>-->
+<!--        <item>MERCAN</item>-->
+<!--        <item>COMIDA</item>-->
+<!--        <item>UTIL</item>-->
+<!--        <item>SALUD</item>-->
+<!--        <item>EDU</item>-->
+<!--        <item>VESTID</item>-->
+<!--        <item>TRANS</item>-->
+<!--        <item>ENTRET</item>-->
+<!--        <item>SEGURO</item>-->
+<!--        <item>IMPUES</item>-->
+<!--        <item>OTROS</item>-->
+<!--        <item>MSCTA</item>-->
+<!--        <item>SOCIAL</item>-->
+<!--        <item>COSME</item>-->
+<!--        <item>VVENDA</item>-->
+<!--    </string-array>-->
+</resources>

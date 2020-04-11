@@ -2,7 +2,6 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryGridAdapter;
 import com.kakeibo.KkbApplication;
@@ -39,7 +37,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
     private Activity _activity;
     private GridView _grvCategory;
     private Button _btnBack, _btnNext;
-    private TextView _txvTitle, _txvDescription;
+    private TextView _txvTitle;
     private RelativeLayout _rllBackground;
 
     public static CategoryPlacementRemovalFragment newInstance() {
@@ -66,7 +64,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
+        _sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
 
         _selectedCategoryCodeList = new ArrayList<>();
 
@@ -77,9 +75,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _btnNext.setOnClickListener(new ItemClickListener());
 
         _txvTitle = view.findViewById(R.id.txv_title);
-        _txvTitle.setText(R.string.remove_categories);
-        _txvDescription = view.findViewById(R.id.txv_description);
-        _txvDescription.setText(R.string.inst_tap_icon_to_remove_categories);
+        _txvTitle.setText(R.string.hide_categories);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 

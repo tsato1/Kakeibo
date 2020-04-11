@@ -77,7 +77,7 @@ public class TabFragment1 extends Fragment {
         _btnDate.setText(UtilDate.getTodaysDateWithDay(MainActivity.sDateFormat, MainActivity.sWeekName));
         _edtAmount.setText("");
         _edtMemo.setText("");
-        _grvCategory.setNumColumns(KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns)));
+        _grvCategory.setNumColumns(KkbApplication.getNumColumns(R.string.pref_key_num_columns));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class TabFragment1 extends Fragment {
 
         final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _kkbCategoryList);
         _grvCategory = view.findViewById(R.id.grv_category);
-        _grvCategory.setNumColumns(MainActivity.sNumColumns);
+        _grvCategory.setNumColumns(KkbApplication.getNumColumns(R.string.pref_key_num_columns));
         _grvCategory.setAdapter(categoryGridAdapter);
         _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

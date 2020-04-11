@@ -65,7 +65,7 @@
                     <ImageView
                         android:layout_width="@dimen/small_imv_square_sides"
                         android:layout_height="@dimen/small_imv_square_sides"
-                        android:src="@drawable/dot_selected"
+                        android:src="@drawable/dot_color_primary"
                         android:contentDescription="@string/income_colon"/>
                     <TextView
                         android:id="@+id/txv_income_colon"
@@ -83,7 +83,7 @@
                     <ImageView
                         android:layout_width="@dimen/small_imv_square_sides"
                         android:layout_height="@dimen/small_imv_square_sides"
-                        android:src="@drawable/dot_not_selected"
+                        android:src="@drawable/dot_color_accent"
                         android:contentDescription="@string/expense_colon"/>
                     <TextView
                         android:id="@+id/txv_expense_colon"
@@ -101,7 +101,7 @@
                     <ImageView
                         android:layout_width="@dimen/small_imv_square_sides"
                         android:layout_height="@dimen/small_imv_square_sides"
-                        android:src="@drawable/dot_w_background_color"
+                        android:src="@drawable/dot_color_background"
                         android:contentDescription="@string/expense_colon"/>
                     <TextView
                         android:id="@+id/txv_balance_colon"

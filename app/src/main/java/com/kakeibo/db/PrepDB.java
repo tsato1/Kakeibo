@@ -233,6 +233,7 @@ class PrepDB {
         income.por = "RENDA";
         income.rus = "доход";
         income.tur = "GELİR";
+        income.vie = "THU NHẬP";
         income.hans = "收入";
         income.hant = "收入";
         list.add(income);
@@ -254,6 +255,7 @@ class PrepDB {
         commodity.por = "MERCADORIA";
         commodity.rus = "товар";
         commodity.tur = "EMTİA";
+        commodity.vie = "HÀNG HÓA";
         commodity.hans = "商品";
         commodity.hant = "商品";
         list.add(commodity);
@@ -275,6 +277,7 @@ class PrepDB {
         meal.por = "REFEIÇÃO";
         meal.rus = "еда";
         meal.tur = "YEMEK";
+        meal.vie = "BỮA ĂN";
         meal.hans = "膳食";
         meal.hant = "膳食";
         list.add(meal);
@@ -296,6 +299,7 @@ class PrepDB {
         util.por = "UTIL";
         util.rus = "Утилита";
         util.tur = "YARAR";
+        util.vie = "TIỆN ÍCH";
         util.hans = "效用";
         util.hant = "效用";
         list.add(util);
@@ -317,6 +321,7 @@ class PrepDB {
         health.por = "SAÚDE";
         health.rus = "Здоровье";
         health.tur = "SAĞLIK";
+        health.vie = "SỨC KHỎE";
         health.hans = "健康";
         health.hant = "健康";
         list.add(health);
@@ -338,6 +343,7 @@ class PrepDB {
         edu.por = "EDUCAÇÃO";
         edu.rus = "образование";
         edu.tur = "EĞİTİM";
+        edu.vie = "GIÁO DỤC";
         edu.hans = "教育";
         edu.hant = "教育";
         list.add(edu);
@@ -359,6 +365,7 @@ class PrepDB {
         cloth.por = "ROUPAS";
         cloth.rus = "Одежда";
         cloth.tur = "GİYİM";
+        cloth.vie = "QUẦN ÁO";
         cloth.hans = "衣服";
         cloth.hant = "衣服";
         list.add(cloth);
@@ -380,6 +387,7 @@ class PrepDB {
         trans.por = "TRANSPORTE";
         trans.rus = "Транспорт";
         trans.tur = "ULAŞIM";
+        trans.vie = "VẬN CHUYỂN";
         trans.hans = "运输";
         trans.hant = "運輸";
         list.add(trans);
@@ -401,6 +409,7 @@ class PrepDB {
         ent.por = "ENTRETENIMENTO";
         ent.rus = "Развлечения";
         ent.tur = "EĞLENCE";
+        ent.vie = "SỰ GIẢI TRÍ";
         ent.hans = "娱乐";
         ent.hant = "娛樂";
         list.add(ent);
@@ -422,6 +431,7 @@ class PrepDB {
         ins.por = "SEGURO";
         ins.rus = "страхование";
         ins.tur = "SİGORTA";
+        ins.vie = "BẢO HIỂM";
         ins.hans = "保险";
         ins.hant = "保險";
         list.add(ins);
@@ -443,6 +453,7 @@ class PrepDB {
         tax.por = "IMPOSTO";
         tax.rus = "налог";
         tax.tur = "VERGİ";
+        tax.vie = "THUẾ";
         tax.hans = "税";
         tax.hant = "稅";
         list.add(tax);
@@ -464,6 +475,7 @@ class PrepDB {
         other.por = "OUTRO";
         other.rus = "Другие";
         other.tur = "DİĞER";
+        other.vie = "KHÁC";
         other.hans = "其他";
         other.hant = "其他";
         list.add(other);
@@ -485,6 +497,7 @@ class PrepDB {
         pet.por = "ANIMAL";
         pet.rus = "домашнее животное";
         pet.tur = "EVCİL HAYVAN";
+        pet.vie = "VẬT NUÔI";
         pet.hans = "宠物";
         pet.hant = "寵物";
         list.add(pet);
@@ -506,6 +519,7 @@ class PrepDB {
         social.por = "SOCIAL";
         social.rus = "Социальное";
         social.tur = "SOSYAL";
+        social.vie = "XÃ HỘI";
         social.hans = "社会的";
         social.hant = "社會的";
         list.add(social);
@@ -527,6 +541,7 @@ class PrepDB {
         cosme.por = "COSME";
         cosme.rus = "Косме";
         cosme.tur = "COSME";
+        cosme.vie = "MỸ PHẨM";
         cosme.hans = "化妆品";
         cosme.hant = "化妝品";
         list.add(cosme);
@@ -548,6 +563,7 @@ class PrepDB {
         housing.por = "HABITAÇÃO";
         housing.rus = "Корпус";
         housing.tur = "KONUT";
+        housing.vie = "NHÀ Ở";
         housing.hans = "住房";
         housing.hant = "住房";
         list.add(housing);
@@ -582,7 +598,7 @@ class PrepDB {
             values.put(CategoryLanDBAdapter.COL_POR, list.get(i).por);
             values.put(CategoryLanDBAdapter.COL_RUS, list.get(i).rus);
             values.put(CategoryLanDBAdapter.COL_TUR, list.get(i).tur);
-            values.put(CategoryLanDBAdapter.COL_VIE, "");
+            values.put(CategoryLanDBAdapter.COL_VIE, list.get(i).vie);
             values.put(CategoryLanDBAdapter.COL_Hans, list.get(i).hans);
             values.put(CategoryLanDBAdapter.COL_Hant, list.get(i).hant);
             db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values);
@@ -610,16 +626,17 @@ class PrepDB {
         bonus.ara="علاوة";
         bonus.eng="EXTRA";
         bonus.spa="EXTRA";
-        bonus.fra="SUPPLÉ";
+        bonus.fra="SUPPLÉ.";
         bonus.hin="बक्शीश";
         bonus.ind="TAMBAHAN";
-        bonus.ita="SUPPLE";
+        bonus.ita="SUPPLE.";
         bonus.jpn="ボーナス";
         bonus.kor="보너스";
         bonus.pol="DODATKOWY";
         bonus.por="ADICIONAL";
         bonus.rus="допол";
         bonus.tur="EK";
+        bonus.vie="THÊM";
         bonus.hans="奖金";
         bonus.hant="獎金";
         list.add(bonus);
@@ -641,6 +658,7 @@ class PrepDB {
         allowance.por="MESADA";
         allowance.rus="РЕЗЕРВЫ";
         allowance.tur="ÖDENEK";
+        allowance.vie="PHỤ CẤP";
         allowance.hans="津贴";
         allowance.hant="津貼";
         list.add(allowance);
@@ -662,6 +680,7 @@ class PrepDB {
         inv.por="INV";
         inv.rus="инвест";
         inv.tur="YATIRIM";
+        inv.vie="ĐẦU TƯ";
         inv.hans="投资";
         inv.hant="投資";
         list.add(inv);
@@ -683,6 +702,7 @@ class PrepDB {
         rent.por="ALUGAR";
         rent.rus="аренда";
         rent.tur="KIRA";
+        rent.vie="THUÊ";
         rent.hans="房租";
         rent.hant="房租";
         list.add(rent);
@@ -704,6 +724,7 @@ class PrepDB {
         ex_inv.por="INV";
         ex_inv.rus="инвест";
         ex_inv.tur="YATIRIM";
+        ex_inv.vie="ĐẦU TƯ";
         ex_inv.hans="投资";
         ex_inv.hant="投資";
         list.add(ex_inv);
@@ -725,6 +746,7 @@ class PrepDB {
         ex_rent.por="ALUGAR";
         ex_rent.rus="аренда";
         ex_rent.tur="KIRA";
+        ex_rent.vie="THUÊ";
         ex_rent.hans="房租";
         ex_rent.hant="房租";
         list.add(ex_rent);
@@ -754,7 +776,7 @@ class PrepDB {
             values1.put(CategoryLanDBAdapter.COL_POR, c.por);
             values1.put(CategoryLanDBAdapter.COL_RUS, c.rus);
             values1.put(CategoryLanDBAdapter.COL_TUR, c.tur);
-            values1.put(CategoryLanDBAdapter.COL_VIE, "");
+            values1.put(CategoryLanDBAdapter.COL_VIE, c.vie);
             values1.put(CategoryLanDBAdapter.COL_Hans, c.hans);
             values1.put(CategoryLanDBAdapter.COL_Hant, c.hant);
             db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values1);

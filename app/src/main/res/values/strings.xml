@@ -23,6 +23,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
+    <string name="add">Add</string>
     <string name="next">NEXT</string>
     <string name="done">DONE</string>
     <string name="back">BACK</string>
@@ -31,11 +32,11 @@
     <string name="export">Export</string>
     <string name="export_date">Export [Date]</string>
     <string name="export_category">Export [Category]</string>
-    <string name="item_detail">Item Detail</string>
     <string name="currency">Currency</string>
     <string name="category">Category</string>
     <string name="event_date">Event Date</string>
     <string name="updated_date">Updated Date</string>
+    <string name="item_detail">Item Detail</string>
 
     <string name="income_colon">Income:</string>
     <string name="expense_colon">Expense:</string>
@@ -46,11 +47,8 @@
     <string name="category_colon">Category:</string>
     <string name="event_date_colon">Event Date:</string>
     <string name="updated_on_colon">Saved on:</string>
-    <string name="color_colon">Color:</string>
-    <string name="name_colon">Name:</string>
     <string name="language">Language</string>
     <string name="icon_colon">Icon:</string>
-    <string name="default_icons">Default Icons</string>
 
     <string name="stroke_thickness">Stroke Thickness</string>
     <string name="small">Small</string>
@@ -59,7 +57,6 @@
 
     <string name="add_search_criterion">Add Search Criteria</string>
     <string name="edit_item">Edit item</string>
-    <string name="how_to_perform_search">How to perform Search</string>
     <string name="returning_to_monthly_report">Returning to monthly report</string>
     <string name="date_range">Date Range</string>
     <string name="from">From</string>
@@ -71,7 +68,7 @@
     <string name="swipe_to_delete">Swipe to Delete</string>
     <string name="search_result">Search Result</string>
     <string name="how_to_use_app">How to use this app</string>
-    <string name="jump_to_website">Jump to the website</string>
+    <string name="jump_to_website">Jump to website</string>
 
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
     <string name="err_please_choose_from_date">Please choose From Date.</string>
@@ -86,7 +83,7 @@
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
     <string name="err_memo_empty">Search word in Memo is empty.</string>
     <string name="err_from_date_older">From Date has to be younger than To Date.</string>
-    <string name="err_please_enter_name">Category name cannot be empty.</string>
+    <string name="err_please_enter_name">The Category name cannot be empty.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
@@ -113,46 +110,52 @@
     <string name="file_created">File saved on cloud.</string>
     <string name="file_create_error">An error occurred while trying to create the file. Please try again later.</string>
     <string name="select_folder">Select a folder</string>
-    <string name="folder_not_selected">No folder selected, canceling uploading.</string>
+    <string name="folder_not_selected">No folder selected. Canceling uploading.</string>
     <string name="nothing_to_export">There is nothing to export.</string>
     <string name="empty_report">The report is empty.</string>
     <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
 
     <!-- Settings -->
     <string name="general">General</string>
+    <string name="warning">Warning</string>
     <string name="date_format">Date Format</string>
     <string name="remove_ads">Remove Ads</string>
-    <string name="pref_desc_remove_ads">Upgrade to Kakeibo Pro</string>
     <string name="in_app_data">In-App Data</string>
     <string name="fraction_digits">Fraction Digits</string>
+    <string name="category_management">Category Management</string>
     <string name="delete_all_items">Delete all items</string>
     <string name="about_this_app">About this App</string>
     <string name="in_app_purchases">In-App Purchases</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
-    <string name="remove_add_reorder_categories">Remove, Add and Reorder Categories</string>
+    <string name="hide_display_reorder_categories">Hide, Display and Reorder Categories</string>
     <string name="reorder_categories">Reorder Categories</string>
+    <string name="reorder_categories_for_display">Reorder Categories to display on INPUT screen</string>
     <string name="num_columns">Number of Categories per row</string>
-    <string name="remove_categories">Remove Categories</string>
-    <string name="add_categories">Add Categories</string>
+    <string name="hide_categories">Select Categories to hide</string>
+    <string name="display_categories">Select Categories to display</string>
     <string name="the_app_version">The app version</string>
-    <string name="inst_tap_icon_to_remove_categories">Please tap icons to remove categories.</string>
-    <string name="inst_tap_icon_to_add_categories">Please tap icons to add categories.</string>
     <string name="inst_long_tap_to_move_icons">Long tap to move icons.</string>
     <string name="inst_keep_pressing_longer">Push longer</string>
     <string name="remaining_spots_colon">Remaining spots: </string>
     <string name="version_etc">Installed version, etc</string>
     <string name="purchased_items">Purchased Items</string>
-    <string name="create_new_category">Create a new Category</string>
-    <string name="edit_new_category">Edit a new Category</string>
-    <string name="err_cannot_add_category">Cannot add any more. Please note the maximum count </string>
+    <string name="create_category">Create a Category</string>
+    <string name="custom_categories">Custom Categories</string>
+    <string name="no_custom_category">No Custom Category found</string>
+    <string name="err_cannot_add_category">"Cannot add any more. Please note the maximum count "</string>
     <string name="quest_determine_category_order">The icons will be displayed in the specified order. Do you want to proceed?</string>
-    <string name="rearrancement_completed">Rearrangement completed</string>
-    <string name="quest_new_category_do_you_want_to_proceed">A new Category is about to be created. Do you want to proceed?</string>
-    <string name="msg_new_category_created">A new Category is created.</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">A Category is about to be created. Do you want to proceed?</string>
+    <string name="msg_category_created">A Category is created.</string>
     <string name="err_reached_max_count_colon">You have reached the maximum count: </string>
-    <string name="msg_delete_some_categories">Please delete from \'Edit Categories\'</string>
-    <string name="err_new_category_not_created">"Something is not right. New Category is not created."</string>
+    <string name="msg_delete_some_categories">Please delete from \'Custom Categories\'</string>
+    <string name="err_category_not_created">Something is not right. The Category is not created.</string>
     <string name="err_nothing_selected_select_one">Nothing is selected. Please select one.</string>
+    <string name="quest_do_you_want_to_manage_categories">You can manage Categories from now on; However, banner ads will be always shown on the screen. Do you want to proceed?</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">This action is irreversible. Do you want to proceed?</string>
+    <string name="msg_access_to_category_management">Access to Category management is granted.</string>
+    <string name="choose_category_color">Select the type of Category</string>
+    <string name="max_number_of_categories_colon">Max number of categories: </string>
+    <string name="category_name_add_lang">Please write the category name. Tap the add button for different languages.</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
@@ -173,16 +176,4 @@
     <string name="dash" translatable="false">-</string>
     <string name="percent" translatable="false">%</string>
     <string name="toggle" translatable="false">toggle</string>
-    <string name="title_search_criteria">Search Criteria</string>
-    <string name="pref_ringtone_silent">Silent</string>
-    <string name="pref_header_data_sync">Data Sync</string>
-    <string name="pref_title_sync_frequency">Sync Frequency</string>
-    <string name="pref_title_system_sync_settings">System Sync Settings</string>
-    <string name="pref_header_notifications">Notifications</string>
-    <string name="pref_title_new_message_notifications">New Message Notifications</string>
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_title_category">Category</string>
-    <string name="pref_title_currency">Currency</string>
-    <string name="pref_title_vibrate">Vibrate</string>
-    <string name="add">Add</string>
 </resources>

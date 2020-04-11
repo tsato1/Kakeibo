@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/general"
-        android:icon="@drawable/ic_general_black">
+        android:icon="@drawable/ic_info_black_24dp">
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/pref_list_date_format"
@@ -22,25 +22,6 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/fraction_digits" />
-<!--        <Preference-->
-<!--            android:key="@string/pref_key_start_date_of_month"-->
-<!--            android:title="@string/start_date_of_month"/>-->
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/category"
-        android:icon="@drawable/ic_category_meal_black">
-        <Preference
-            android:key="@string/pref_key_category_add_remove_reorder"
-            android:title="@string/remove_add_reorder_categories"/>
-        <Preference
-            android:key="@string/pref_key_category_reorder"
-            android:title="@string/reorder_categories"/>
-        <Preference
-            android:key="@string/pref_key_category_creation"
-            android:title="@string/create_new_category"/>
-        <Preference
-            android:key="@string/pref_key_category_edition"
-            android:title="@string/edit_new_category"/>
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/pref_list_num_columns"
@@ -50,6 +31,25 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/num_columns" />
+<!--        <Preference-->
+<!--            android:key="@string/pref_key_start_date_of_month"-->
+<!--            android:title="@string/start_date_of_month"/>-->
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/category"
+        android:icon="@drawable/ic_group_work_black_24dp">
+        <Preference
+            android:key="@string/pref_key_category_add_remove_reorder"
+            android:title="@string/hide_display_reorder_categories"/>
+        <Preference
+            android:key="@string/pref_key_category_reorder"
+            android:title="@string/reorder_categories"/>
+        <Preference
+            android:key="@string/pref_key_category_creation"
+            android:title="@string/create_category"/>
+        <Preference
+            android:key="@string/pref_key_category_edition"
+            android:title="@string/custom_categories"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/in_app_data"
@@ -70,7 +70,7 @@
 <!--    </PreferenceCategory>-->
     <PreferenceCategory
         android:title="@string/about_this_app"
-        android:icon="@drawable/ic_launcher_round_black">
+        android:icon="@drawable/ic_mikan_24dp">
         <Preference
             android:key="@string/pref_key_about"
             android:title="@string/version_etc">

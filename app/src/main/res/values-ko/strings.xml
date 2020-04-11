@@ -39,7 +39,6 @@
     <string name="updated_on_colon">절약:</string>
 
     <string name="add_search_criterion">검색 기준 추가</string>
-    <string name="how_to_perform_search">검색 방법</string>
     <string name="date_range">날짜 범위</string>
     <string name="from">에서</string>
     <string name="to">에</string>
@@ -80,7 +79,6 @@
 
     <string name="edit_item">항목 편집</string>
     <string name="search_result">검색 결과</string>
-    <string name="title_search_criteria">검색 조건:</string>
     <string name="returning_to_monthly_report">월간 보고서로 돌아 가기</string>
 
     <!-- Export -->
@@ -99,9 +97,6 @@
 
     <string name="date_format">날짜 형식</string>
     <string name="remove_ads">광고를 제거하다</string>
-    <string name="pref_desc_remove_ads">Kakeibo Pro로 업그레이드</string>
-    <string name="pref_title_category">범주</string>
-    <string name="pref_title_currency">통화</string>
     <string name="fraction_digits">분수 자리</string>
 
     <!-- Setting for in-app data -->
@@ -112,9 +107,7 @@
     <string name="msg_all_delete_success">모든 항목이 성공적으로 삭제되었습니다.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">데이터 및 동기화</string>
 
-    <string name="pref_title_sync_frequency">동기 주파수</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -146,17 +139,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">시스템 동기화 설정</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">알림</string>
 
-    <string name="pref_title_new_message_notifications">새로운 메시지 알림</string>
-
-    <string name="pref_title_ringtone">벨소리</string>
-    <string name="pref_ringtone_silent">조용한</string>
-
-    <string name="pref_title_vibrate">설레다</string>
     <string name="memo">메모</string>
     <string name="amount">양</string>
     <string name="err_from_date_older">시작 날짜는 종료 날짜보다 작아야합니다.</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">웹 사이트로 이동</string>
     <string name="about_this_app">이 앱에 대하여</string>
     <string name="version_etc">설치된 버전 등</string>
-    <string name="remove_add_reorder_categories">카테고리 제거, 추가 및 재정렬</string>
     <string name="reorder_categories">재정렬 카테고리</string>
-    <string name="create_new_category">새로운 카테고리 만들기</string>
+    <string name="create_category">새로운 카테고리 만들기</string>
     <string name="num_columns">행당 카테고리 수</string>
-    <string name="remove_categories">카테고리 제거</string>
-    <string name="add_categories">카테고리 추가</string>
     <string name="the_app_version">앱 버전</string>
     <string name="purchased_items">구매 한 품목</string>
-    <string name="inst_tap_icon_to_remove_categories">아이콘을 눌러 범주를 제거하십시오.</string>
-    <string name="inst_tap_icon_to_add_categories">아이콘을 탭하여 카테고리를 추가하십시오.</string>
     <string name="in_app_purchases">인앱 구매</string>
-    <string name="remaining_spots_colon">"남은 반점 : "</string>
+    <string name="remaining_spots_colon">여유</string>
     <string name="inst_long_tap_to_move_icons">길게 누르면 아이콘이 이동합니다.</string>
     <string name="err_cannot_add_category">최대 값에 도달했기 때문에 더 이상 추가 할 수 없습니다</string>
     <string name="inst_keep_pressing_longer">길게 누름합니다</string>
-    <string name="display_of_icons">아이콘 표시</string>
     <string name="quest_determine_category_order">아이콘은 지정된 순서대로 표시됩니다. 진행 하시겠습니까?</string>
+    <string name="expense">비용</string>
+    <string name="err_reached_max_count_colon">"자작의 카테고리가 최대치에 도달했습니다 : "</string>
+    <string name="err_please_enter_name">카테고리 이름을 입력하십시오.</string>
+    <string name="err_nothing_selected_select_one">"아무것도 선택되어 있지 않습니다. 하나 선택하십시오. "</string>
+    <string name="err_category_not_created">"오류 : 새로운 카테고리가 생성되지 않았습니다. "</string>
+    <string name="category_management">카테고리 관리</string>
+    <string name="choose_category_color">카테고리 유형을 선택하십시오</string>
+    <string name="custom_categories">맞춤 카테고리</string>
+    <string name="hide_categories">숨길 카테고리를 선택하십시오</string>
+    <string name="hide_display_reorder_categories">카테고리 숨기기, 표시, 정렬</string>
+    <string name="display_categories">표시 할 카테고리를 선택하십시오</string>
+    <string name="hint_name_max_8_characters">이름 : 최대 8 자</string>
+    <string name="icon_colon">아이콘:</string>
+    <string name="language">언어</string>
+    <string name="large">큰</string>
+    <string name="medium">가운데</string>
+    <string name="max_number_of_categories_colon">"최대 카테고리 수: "</string>
+    <string name="msg_access_to_category_management">카테고리 관리에 대한 액세스 권한이 부여되었습니다.</string>
+    <string name="msg_category_created">카테고리가 작성되었습니다.</string>
+    <string name="msg_delete_some_categories">\'맞춤 카테고리\'에서 삭제하십시오</string>
+    <string name="no_custom_category">맞춤 카테고리를 찾을 수 없습니다</string>
+    <string name="add">더하다</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">지정된 조건 하에서 카테고리가 생성됩니다. 하시겠습니까?</string>
+    <string name="quest_do_you_want_to_manage_categories">카테고리 작업 (생성, 편집, 삭제 등)을 할 수 있지만, 화면 하단에 광고가 표시됩니다. 하시겠습니까?</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">이 작업을 한 번하면 원래 상태로 되돌릴 수 없습니다. 계속 하시겠습니까?</string>
+    <string name="reorder_categories_for_display">입력 화면에 표시 할 순서대로 정렬하십시오</string>
+    <string name="small">작은</string>
+    <string name="stroke_thickness">선 두께</string>
+    <string name="warning">주의</string>
 </resources>

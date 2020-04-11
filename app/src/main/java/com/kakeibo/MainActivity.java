@@ -2,15 +2,12 @@ package com.kakeibo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -30,31 +27,38 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.kakeibo.settings.SettingsCompatActivity;
+import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
-import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilSystem;
 
-import java.util.Currency;
-import java.util.Locale;
-
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
-////todo bug for arabic check query some arabic languages in the date part
-
+//roadmap
+//todo tab for different topic
+//todo sync from google drive
+//todo bar graph
+//todo data sync - firebase
+//todo discard holograph library
 //future fix////
+//todo bug for arabic check query some arabic languages in the date part
 //todo edit doesn't save item tabfragment2D -> kotlin version
 //todo expected/unexpected, favorite
 //todo textsize for all the textviews
-
-//todo ask if user wants category management or ads -> hide ads depending on answer
-//todo string translateion - vie
-//todo sharedpreferences in KkbApplication
-//todo ads code -> Utility
-//todo custom categories trim in circle -> can see the square edge
-
-// todo new categories max 10: TEST!
+//current------------
+//todo tell user max number of custom categories they can make
+//done-------
+//todo new categories max 10: TEST!
 //todo custom category too big in reorder fragment -> dimen 50dp TEST!
+//todo ask if user wants category management or ads -> hide ads depending on answer
+//todo sharedpreferences in KkbApplication
+//todo custom categories trim in circle -> can see the square edge
+//todo CategoryCreationActivity language options
+//todo delete paid
+//todo string delete unused strings
+//todo string translateion
+//put aside----
+//todo ads code -> Utility
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -115,8 +119,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         /*** ads ***/
-        initAd();
-        loadBanner();
+        if (UtilAds.isBannerAdsDisplayAgreed()) {
+            initAd();
+            loadBanner();
+        }
 
         /*** viewPager ***/
         viewPager = findViewById(R.id.viewpager);
@@ -193,30 +199,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadSharedPreference() {
-        SharedPreferences pref = KkbApplication.getSharedPreferences();
+//        SharedPreferences pref = KkbApplication.getSharedPreferences();
 
-        /*** dateFormat ***/
-        String dateFormatIndex = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
-        sDateFormat = Integer.parseInt(dateFormatIndex);
+//        /*** dateFormat ***/
+//        String dateFormatIndex = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
+//        sDateFormat = Integer.parseInt(dateFormatIndex);
+        sDateFormat = KkbApplication.getDateFormat(R.string.pref_key_date_format);
 
         /*** fraction digits ***/
-        Locale locale = Locale.getDefault();
-        int defValue = 0;
-        try {
-            Currency currency = Currency.getInstance(locale);
-            defValue = currency.getDefaultFractionDigits();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        String digitsIndex = pref.getString(getString(R.string.pref_key_fraction_digits), String.valueOf(defValue));
-        String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
-        sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
+//        Locale locale = Locale.getDefault();
+//        int defValue = 0;
+//        try {
+//            Currency currency = Currency.getInstance(locale);
+//            defValue = currency.getDefaultFractionDigits();
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        }
+//        String digitsIndex = pref.getString(getString(R.string.pref_key_fraction_digits), String.valueOf(defValue));
+//        String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
+//        sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
+        sFractionDigits = KkbApplication.getFractionDigits(R.string.pref_key_fraction_digits);
 
         /*** num category icons per row ***/
 //        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
 //        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
 //        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
-        sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
+        sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
 
         Log.d(TAG, "sDateFormat:"+sDateFormat+
                 " sFractionDigits:"+sFractionDigits+

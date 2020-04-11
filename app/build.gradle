@@ -12,7 +12,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
 
-        versionCode 24
+        versionCode 29
         versionName "${versionMajor}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 

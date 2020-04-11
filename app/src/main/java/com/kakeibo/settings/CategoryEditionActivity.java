@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,8 +29,7 @@ import com.kakeibo.BuildConfig;
 import com.kakeibo.CategoryListAdapter;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
-import com.kakeibo.db.CategoryDBAdapter;
-import com.kakeibo.db.CategoryLanDBAdapter;
+import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.List;
@@ -43,6 +43,7 @@ public class CategoryEditionActivity extends AppCompatActivity {
 
     private Context _context;
     private Button _btnBack;
+    private TextView _txvNoCustomCategory;
     private ListView _lsvCustomCategories;
     private CategoryListAdapter _categoryListAdapter;
     private List<KkbCategory> _customKkbCategoriesList;
@@ -66,11 +67,14 @@ public class CategoryEditionActivity extends AppCompatActivity {
         }
 
         /*** ads ***/
-        initAd();
-        loadBanner();
+        if (UtilAds.isBannerAdsDisplayAgreed()) {
+            initAd();
+            loadBanner();
+        }
 
         /*** findViews ***/
         _btnBack = findViewById(R.id.btn_back);
+        _txvNoCustomCategory = findViewById(R.id.txv_no_custom_category);
         _lsvCustomCategories = findViewById(R.id.lsv_custom_categories);
         _btnBack.setOnClickListener((View view) -> { onBackPressed(); });
 
@@ -80,6 +84,9 @@ public class CategoryEditionActivity extends AppCompatActivity {
         _customKkbCategoriesList = UtilCategory.getCustomKkbCategoryList(_context);
         _categoryListAdapter = new CategoryListAdapter(_context, 0, _customKkbCategoriesList);
         _lsvCustomCategories.setAdapter(_categoryListAdapter);
+
+        if (_customKkbCategoriesList.isEmpty()) _txvNoCustomCategory.setVisibility(View.VISIBLE);
+        else _txvNoCustomCategory.setVisibility(View.GONE);
     }
 
     class ItemClickListener implements AdapterView.OnItemClickListener {
@@ -135,6 +142,8 @@ public class CategoryEditionActivity extends AppCompatActivity {
                     if (UtilCategory.deleteCustomKkbCategory(_context, kkbCategory.getCode())) {
                         Toast.makeText(_context, getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_LONG).show();
                         _categoryListAdapter.notifyDataSetChanged();
+                        if (_customKkbCategoriesList.isEmpty()) _txvNoCustomCategory.setVisibility(View.VISIBLE);
+                        else _txvNoCustomCategory.setVisibility(View.GONE);
                     }
                 });
                 dialog.setNegativeButton(R.string.no, null);

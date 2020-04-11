@@ -39,7 +39,6 @@
     <string name="updated_on_colon">Сохранено в:</string>
 
     <string name="add_search_criterion">Добавить критерии поиска</string>
-    <string name="how_to_perform_search">Как выполнить поиск</string>
     <string name="date_range">Диапазон дат</string>
     <string name="from">От</string>
     <string name="to">к</string>
@@ -79,7 +78,6 @@
 
     <string name="edit_item">Изменить элемент</string>
     <string name="search_result">Результат поиска</string>
-    <string name="title_search_criteria">Критерий поиска:</string>
     <string name="returning_to_monthly_report">Возвращаясь к ежемесячному отчету</string>
 
     <!-- Export -->
@@ -98,9 +96,6 @@
 
     <string name="date_format">Формат даты</string>
     <string name="remove_ads">Удалить рекламу</string>
-    <string name="pref_desc_remove_ads">Обновление до Kakeibo Pro</string>
-    <string name="pref_title_category">категория</string>
-    <string name="pref_title_currency">валюта</string>
     <string name="fraction_digits">Цифры дроби</string>
 
     <!-- Setting for in-app data -->
@@ -111,9 +106,7 @@
     <string name="msg_all_delete_success">Все элементы были успешно удалены.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Данные и синхронизация</string>
 
-    <string name="pref_title_sync_frequency">Частота синхронизации</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -145,17 +138,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">Настройки системной синхронизации</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Уведомления</string>
 
-    <string name="pref_title_new_message_notifications">Уведомления о новых сообщениях</string>
-
-    <string name="pref_title_ringtone">Мелодия</string>
-    <string name="pref_ringtone_silent">бесшумный</string>
-
-    <string name="pref_title_vibrate">вибрировать</string>
     <string name="memo">меморандум</string>
     <string name="amount">Количество</string>
     <string name="err_from_date_older">От датa должен быть моложе к дата.</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">Перейти на сайт</string>
     <string name="about_this_app">Об этом приложении</string>
     <string name="version_etc">Установленная версия и др.</string>
-    <string name="remove_add_reorder_categories">Удалить, добавить и изменить порядок категорий</string>
     <string name="reorder_categories">Изменить порядок категорий</string>
-    <string name="create_new_category">Создать новую категорию</string>
+    <string name="create_category">Создать новую категорию</string>
     <string name="num_columns">Количество категорий в строке</string>
-    <string name="remove_categories">Удалить категории</string>
-    <string name="add_categories">Добавить категории</string>
     <string name="the_app_version">Версия приложения</string>
     <string name="purchased_items">Купленные товары</string>
-    <string name="inst_tap_icon_to_remove_categories">Пожалуйста, нажмите значки, чтобы удалить категории.</string>
-    <string name="inst_tap_icon_to_add_categories">Пожалуйста, нажмите значки, чтобы добавить категории.</string>
     <string name="in_app_purchases">Покупки в приложении</string>
     <string name="remaining_spots_colon">"Оставшиеся пятна: "</string>
     <string name="inst_long_tap_to_move_icons">Длинное нажатие, чтобы переместить значки.</string>
     <string name="err_cannot_add_category">Вы не можете добавить больше, потому что вы достигли максимума</string>
     <string name="inst_keep_pressing_longer">Продолжайте нажимать дольше</string>
-    <string name="display_of_icons">Отображение иконок</string>
     <string name="quest_determine_category_order">Иконки будут отображаться в указанном порядке. Вы хотите продолжить</string>
+    <string name="expense">расходы</string>
+    <string name="err_reached_max_count_colon">"Вы достигли максимального количества: "</string>
+    <string name="err_please_enter_name">Название категории не может быть пустым.</string>
+    <string name="err_nothing_selected_select_one">Ничего не выбрано. Пожалуйста, выберите один.</string>
+    <string name="err_category_not_created">Что-то неправильно. Новая категория не создана.</string>
+    <string name="category_management">Управление категориями</string>
+    <string name="choose_category_color">Выберите тип категории</string>
+    <string name="custom_categories">Пользовательские категории</string>
+    <string name="hide_categories">Выберите категории, чтобы скрыть</string>
+    <string name="hide_display_reorder_categories">Скрыть, отобразить и изменить порядок категорий</string>
+    <string name="display_categories">Выберите категории для отображения</string>
+    <string name="hint_name_max_8_characters">Имя: максимум 8 символов</string>
+    <string name="icon_colon">Икона:</string>
+    <string name="language">язык</string>
+    <string name="large">большой</string>
+    <string name="medium">Средний</string>
+    <string name="max_number_of_categories_colon">"Максимальное количество категорий: "</string>
+    <string name="msg_access_to_category_management">Доступ к управлению категориями предоставляется.</string>
+    <string name="msg_category_created">Категория была создана.</string>
+    <string name="msg_delete_some_categories">Пожалуйста, удалите из \"Пользовательские категории\"</string>
+    <string name="no_custom_category">Пользовательская категория не найдена</string>
+    <string name="add">Добавить</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">Категория собирается быть создана. Вы хотите продолжить?</string>
+    <string name="quest_do_you_want_to_manage_categories">Вы можете управлять категориями отныне; Однако рекламные баннеры всегда будут отображаться на экране. Вы хотите продолжить?</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">Это действие необратимо. Вы хотите продолжить?</string>
+    <string name="reorder_categories_for_display">Изменение порядка категорий для отображения на экране ВХОД</string>
+    <string name="small">Небольшой</string>
+    <string name="stroke_thickness">Толщина хода</string>
+    <string name="warning">Предупреждение</string>
 </resources>

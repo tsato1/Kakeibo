@@ -18,12 +18,6 @@ public class SettingsAboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_about);
-
-        /*** this part is to handle unexpected crashes ***/
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-        if (getIntent().getBooleanExtra("crash", false)) {
-            Log.e(TAG, "crashed");
-        }
     }
 
     /*** call set up in layout xml ***/

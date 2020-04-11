@@ -2,7 +2,6 @@ package com.kakeibo.settings;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import com.kakeibo.CategoryDynamicGridAdapter;
 import com.kakeibo.KkbApplication;
@@ -68,7 +66,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = KkbApplication.getNumColumns(getString(R.string.pref_key_num_columns));
+        _sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
 
         findViews(view);
 
@@ -83,7 +81,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _btnBack.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
         _btnNext.setOnClickListener(new CategoryPlacementReorderFragment.ItemClickListener());
         _txvTitle = view.findViewById(R.id.txv_title);
-        _txvTitle.setText(R.string.reorder_categories);
+        _txvTitle.setText(R.string.reorder_categories_for_display);
         _txvDescription = view.findViewById(R.id.txv_description);
         _txvDescription.setText(R.string.inst_long_tap_to_move_icons);
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);

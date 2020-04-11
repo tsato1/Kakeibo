@@ -37,7 +37,6 @@
     <string name="updated_on_colon">Disimpan pada:</string>
 
     <string name="add_search_criterion">Tambahkan Kriteria Pencarian</string>
-    <string name="how_to_perform_search">Cara melakukan Pencarian</string>
     <string name="date_range">Rentang Tanggal</string>
     <string name="from">Dari</string>
     <string name="amount_range">Kisaran Jumlah</string>
@@ -77,7 +76,6 @@
 
     <string name="edit_item">Edit item</string>
     <string name="search_result">Hasil Pencarian</string>
-    <string name="title_search_criteria">Kriteria Pencarian:</string>
     <string name="returning_to_monthly_report">Kembali ke laporan bulanan</string>
 
     <!-- Export -->
@@ -96,9 +94,6 @@
 
     <string name="date_format">Format Tanggal</string>
     <string name="remove_ads">Hilangkan iklan</string>
-    <string name="pref_desc_remove_ads">Tingkatkan ke Kakeibo Pro</string>
-    <string name="pref_title_category">Kategori</string>
-    <string name="pref_title_currency">Mata uang</string>
     <string name="fraction_digits">Digit Pecahan</string>
 
     <!-- Setting for in-app data -->
@@ -109,9 +104,7 @@
     <string name="msg_all_delete_success">Semua item berhasil dihapus.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data dan Sinkronisasi</string>
 
-    <string name="pref_title_sync_frequency">Frekuensi sinkronisasi</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -143,17 +136,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">Pengaturan sinkronisasi sistem</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifikasi</string>
 
-    <string name="pref_title_new_message_notifications">Notifikasi pesan baru</string>
-
-    <string name="pref_title_ringtone">Nada dering</string>
-    <string name="pref_ringtone_silent">Diam</string>
-
-    <string name="pref_title_vibrate">Bergetar</string>
     <string name="memo">Memo</string>
     <string name="amount">Jumlah</string>
     <string name="err_from_date_older">\'Dari Tanggal\' harus lebih muda dari \'Ke Tanggal\'.</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">Pergi ke situs web</string>
     <string name="about_this_app">Tentang aplikasi ini</string>
     <string name="version_etc">Versi yang diinstal, dll.</string>
-    <string name="remove_add_reorder_categories">Hapus, Tambah, dan Atur Ulang Kategori</string>
     <string name="reorder_categories">Susun Ulang Kategori</string>
-    <string name="create_new_category">Buat Kategori baru</string>
+    <string name="create_category">Buat Kategori baru</string>
     <string name="num_columns">Jumlah Kategori per baris</string>
-    <string name="remove_categories">Hapus Kategori</string>
-    <string name="add_categories">Tambahkan Kategori</string>
     <string name="the_app_version">Versi aplikasi</string>
     <string name="purchased_items">Barang yang dibeli</string>
-    <string name="inst_tap_icon_to_remove_categories">Silakan ketuk ikon untuk menghapus kategori.</string>
-    <string name="inst_tap_icon_to_add_categories">Ketuk ikon untuk menambahkan kategori.</string>
     <string name="in_app_purchases">Pembelian Dalam Aplikasi</string>
     <string name="remaining_spots_colon">"Tempat yang tersisa: "</string>
     <string name="inst_long_tap_to_move_icons">Ketuk panjang untuk memindahkan ikon.</string>
     <string name="err_cannot_add_category">"Anda tidak dapat menambahkan lagi karena Anda telah mencapai maks "</string>
     <string name="inst_keep_pressing_longer">"Mendorong lebih lama "</string>
-    <string name="display_of_icons">Tampilan ikon</string>
     <string name="quest_determine_category_order">Ikon akan ditampilkan dalam urutan yang ditentukan. Apakah Anda ingin melanjutkan?</string>
+    <string name="expense">Biaya</string>
+    <string name="err_reached_max_count_colon">"Anda telah mencapai jumlah maksimum: "</string>
+    <string name="err_please_enter_name">Nama kategori tidak boleh kosong.</string>
+    <string name="err_nothing_selected_select_one">Tidak ada yang dipilih. Tolong pilih satu.</string>
+    <string name="err_category_not_created">Ada yang tidak beres. Kategori baru tidak dibuat.</string>
+    <string name="category_management">Manajemen kategori</string>
+    <string name="choose_category_color">Pilih jenis Kategori</string>
+    <string name="custom_categories">Kategori Khusus</string>
+    <string name="hide_categories">Pilih kategori untuk disembunyikan</string>
+    <string name="hide_display_reorder_categories">Sembunyikan, Tampilkan, dan Atur Ulang Kategori</string>
+    <string name="display_categories">Pilih Kategori untuk ditampilkan</string>
+    <string name="hint_name_max_8_characters">Nama: Maks 8 karakter</string>
+    <string name="icon_colon">Ikon</string>
+    <string name="language">Bahasa</string>
+    <string name="large">Besar</string>
+    <string name="medium">Tengah</string>
+    <string name="max_number_of_categories_colon">"Jumlah kategori maksimum: "</string>
+    <string name="msg_access_to_category_management">Akses ke manajemen kategori telah diberikan.</string>
+    <string name="msg_category_created">Kategori telah dibuat.</string>
+    <string name="msg_delete_some_categories">Harap hapus dari \'Kategori Khusus\'</string>
+    <string name="no_custom_category">Kategori Kustom tidak ditemukan</string>
+    <string name="add">Menambahkan</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">Kategori akan segera dibuat. Apakah Anda ingin melanjutkan?</string>
+    <string name="quest_do_you_want_to_manage_categories">Anda dapat mengelola Kategori mulai sekarang; Namun, iklan spanduk akan selalu ditampilkan di layar. Apakah Anda ingin melanjutkan?</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">Tindakan ini tidak dapat diubah. Apakah Anda ingin melanjutkan?</string>
+    <string name="reorder_categories_for_display">Susun ulang Kategori untuk ditampilkan pada layar MEMASUKKAN</string>
+    <string name="small">Kecil</string>
+    <string name="stroke_thickness">Ketebalan Stroke</string>
+    <string name="warning">Peringatan</string>
 </resources>

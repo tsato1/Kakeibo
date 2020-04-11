@@ -6,11 +6,32 @@ import android.util.Log;
 
 import com.kakeibo.db.CategoryLanDBAdapter;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class UtilSystem {
     private final static String TAG = UtilSystem.class.getSimpleName();
+    private final static String[] langStrs = {
+            CategoryLanDBAdapter.COL_ARA,
+            CategoryLanDBAdapter.COL_ENG,
+            CategoryLanDBAdapter.COL_SPA,
+            CategoryLanDBAdapter.COL_FRA,
+            CategoryLanDBAdapter.COL_HIN,
+            CategoryLanDBAdapter.COL_IND,
+            CategoryLanDBAdapter.COL_ITA,
+            CategoryLanDBAdapter.COL_JPN,
+            CategoryLanDBAdapter.COL_KOR,
+            CategoryLanDBAdapter.COL_POL,
+            CategoryLanDBAdapter.COL_POR,
+            CategoryLanDBAdapter.COL_RUS,
+            CategoryLanDBAdapter.COL_TUR,
+            CategoryLanDBAdapter.COL_VIE,
+//            CategoryLanDBAdapter.COL_Hans,
+//            CategoryLanDBAdapter.COL_Hant
+    };
     private static String mPrevLang = "eng";
+    private final static List<String> _langList = Arrays.asList(langStrs);
 
     private static Locale getCurrentLocale(Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
@@ -41,7 +62,9 @@ public class UtilSystem {
                 !langCode.equals(new Locale(CategoryLanDBAdapter.COL_POL).getISO3Language()) &&
                 !langCode.equals(new Locale(CategoryLanDBAdapter.COL_POR).getISO3Language()) &&
                 !langCode.equals(new Locale(CategoryLanDBAdapter.COL_RUS).getISO3Language()) &&
-                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_TUR).getISO3Language())) {
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_TUR).getISO3Language()) &&
+                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_VIE).getISO3Language())
+        ) {
             langCode = CategoryLanDBAdapter.COL_ENG;
         }
         /*** for Chinese ***/
@@ -64,5 +87,9 @@ public class UtilSystem {
 
     public static boolean isLangChanged(Context context) {
         return !mPrevLang.equals(getCurrentLangCode(context));
+    }
+
+    public static List<String> getAllSupportedLanguages() {
+        return _langList;
     }
 }

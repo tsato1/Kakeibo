@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.kakeibo.db.KkbAppDBAdapter.COL_VAL_INT_2_DEFAULT;
+import static com.kakeibo.db.KkbAppDBAdapter.COL_VAL_INT_3_DEFAULT;
 import static com.kakeibo.db.KkbAppDBAdapter.TABLE_KKBAPP;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -302,8 +304,8 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesDBVersion.put(KkbAppDBAdapter.COL_TYPE, KkbAppDBAdapter.COL_VAL_INT);
         valuesDBVersion.put(KkbAppDBAdapter.COL_UPDATE_DATE, strDate);
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_1, dbVersion); // 0=original user from version before ads
-        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_2, -1);
-        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_3, -1);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_2, COL_VAL_INT_2_DEFAULT);
+        valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_INT_3, COL_VAL_INT_3_DEFAULT);
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_1, "");
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_2, "");
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_3, "");

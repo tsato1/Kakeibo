@@ -38,7 +38,6 @@
     <string name="updated_on_colon">Guardado em:</string>
 
     <string name="add_search_criterion">Adicionar critérios de pesquisa</string>
-    <string name="how_to_perform_search">Como executar a pesquisa</string>
     <string name="date_range">Gama de Data</string>
     <string name="from">Da</string>
     <string name="amount_range">Gama de Montante</string>
@@ -78,7 +77,6 @@
 
     <string name="edit_item">Editar item</string>
     <string name="search_result">Resultado da pesquisa</string>
-    <string name="title_search_criteria">Critérios de pesquisa:</string>
     <string name="returning_to_monthly_report">Retornando ao relatório mensal</string>
 
     <!-- Export -->
@@ -97,9 +95,6 @@
 
     <string name="date_format">Formato de data</string>
     <string name="remove_ads">Remover propagandas</string>
-    <string name="pref_desc_remove_ads">Atualize para o Kakeibo Pro</string>
-    <string name="pref_title_category">Categoria</string>
-    <string name="pref_title_currency">Moeda</string>
     <string name="fraction_digits">Dígitos de frações</string>
 
     <!-- Setting for in-app data -->
@@ -110,9 +105,7 @@
     <string name="msg_all_delete_success">Todos os itens foram excluídos com sucesso.</string>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Dados e sincronização</string>
 
-    <string name="pref_title_sync_frequency">Frequência de sincronização</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -144,17 +137,8 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">Configurações de sincronização do sistema</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notificações</string>
 
-    <string name="pref_title_new_message_notifications">Notificações de novas mensagens</string>
-
-    <string name="pref_title_ringtone">toque</string>
-    <string name="pref_ringtone_silent">Silencioso</string>
-
-    <string name="pref_title_vibrate">Vibrar</string>
     <string name="memo">Memorando</string>
     <string name="amount">Montante</string>
     <string name="err_from_date_older">Da data deve ser menor que a Para data.</string>
@@ -166,21 +150,44 @@
     <string name="jump_to_website">Ir para o site</string>
     <string name="about_this_app">Sobre este aplicativo</string>
     <string name="version_etc">Versão instalada, etc.</string>
-    <string name="remove_add_reorder_categories">Remover, adicionar e reordenar categorias</string>
     <string name="reorder_categories">Reordenar categorias</string>
-    <string name="create_new_category">Crie uma nova categoria</string>
+    <string name="create_category">Crie uma nova categoria</string>
     <string name="num_columns">Número de categorias por linha</string>
-    <string name="remove_categories">Remover categorias</string>
-    <string name="add_categories">Adicionar categorias</string>
     <string name="the_app_version">A versão do aplicativo</string>
     <string name="purchased_items">Itens comprados</string>
-    <string name="inst_tap_icon_to_remove_categories">Por favor, toque nos ícones para remover categorias.</string>
-    <string name="inst_tap_icon_to_add_categories">Por favor, toque nos ícones para adicionar categorias.</string>
     <string name="in_app_purchases">Compras dentro do aplicativo</string>
     <string name="remaining_spots_colon">"Pontos restantes: "</string>
     <string name="inst_long_tap_to_move_icons">Toque longo para mover os ícones.</string>
     <string name="err_cannot_add_category">Você não pode adicionar mais porque atingiu o valor máximo</string>
     <string name="inst_keep_pressing_longer">Continue pressionando por mais tempo</string>
-    <string name="display_of_icons">Exibição de ícones</string>
     <string name="quest_determine_category_order">Os ícones serão exibidos na ordem especificada. Você quer prosseguir?</string>
+    <string name="expense">Despesa</string>
+    <string name="err_reached_max_count_colon">"Você atingiu a contagem máxima: "</string>
+    <string name="err_please_enter_name">O nome da categoria não pode estar vazio.</string>
+    <string name="err_nothing_selected_select_one">Nada está selecionado. Por favor escolha um.</string>
+    <string name="err_category_not_created">Algo está errado. Nova categoria não criada.</string>
+    <string name="category_management">Gerenciamento de Categoria</string>
+    <string name="choose_category_color">Selecione o tipo de categoria</string>
+    <string name="custom_categories">Categorias personalizadas</string>
+    <string name="hide_categories">Selecione categorias para ocultar</string>
+    <string name="hide_display_reorder_categories">Ocultar, exibir e reordenar categorias</string>
+    <string name="display_categories">Selecione Categorias para exibir</string>
+    <string name="hint_name_max_8_characters">Nome: máximo de 8 caracteres</string>
+    <string name="icon_colon">Ícone:</string>
+    <string name="language">Língua</string>
+    <string name="large">ampla</string>
+    <string name="medium">Meio</string>
+    <string name="max_number_of_categories_colon">"Número máximo de categorias: "</string>
+    <string name="msg_access_to_category_management">O acesso ao gerenciamento de categorias é concedido.</string>
+    <string name="msg_category_created">Uma categoria foi criada.</string>
+    <string name="msg_delete_some_categories">Exclua de \'Categorias personalizadas\'</string>
+    <string name="no_custom_category">Categoria personalizada não encontrada</string>
+    <string name="add">Adicionar</string>
+    <string name="quest_category_creation_do_you_want_to_proceed">Uma categoria está prestes a ser criada. Você quer prosseguir?</string>
+    <string name="quest_do_you_want_to_manage_categories">Você pode gerenciar categorias a partir de agora; No entanto, os anúncios em banner sempre serão mostrados na tela. Você quer prosseguir?</string>
+    <string name="quest_irreversible_operation_do_you_want_to_proceed">Essa ação é irreversível. Você quer prosseguir?</string>
+    <string name="reorder_categories_for_display">Reordenar categorias para exibir na tela ENTRADA</string>
+    <string name="small">Pequena</string>
+    <string name="stroke_thickness">Espessura do curso</string>
+    <string name="warning">Aviso</string>
 </resources>
