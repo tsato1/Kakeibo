@@ -12,8 +12,8 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
 
-        versionCode 29
-        versionName "${versionMajor}.${versionMinor}.${versionDB}"
+        versionCode 33
+        versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
         multiDexEnabled true
@@ -26,7 +26,7 @@ android {
     }
     buildTypes {
         buildTypes.each {
-            it.buildConfigField('int', 'versionMajor', "${versionMajor}")
+//            it.buildConfigField('int', 'versionMajor', "${versionMajor}")
             it.buildConfigField('int', 'versionDB', "${versionDB}")
         }
         release {
@@ -67,16 +67,16 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'com.android.billingclient:billing:2.1.0'
+    implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.0.1'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
-    implementation 'com.google.firebase:firebase-core:17.2.3'
-    implementation 'com.google.firebase:firebase-ads:19.0.0'
+    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-ads:19.0.1'
     implementation 'com.google.firebase:firebase-auth:19.3.0'
-    implementation 'com.google.firebase:firebase-analytics:17.2.3'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation 'com.adcolony:sdk:4.1.0'
     implementation('com.google.api-client:google-api-client-android:1.23.0') {

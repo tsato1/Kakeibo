@@ -51,6 +51,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TabFragment2C extends Fragment implements OnChartValueSelectedListener {
     private final static String TAG = TabFragment2C.class.getSimpleName();
@@ -287,12 +288,12 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
             List<Item> searchResultList = new ArrayList<>();
             searchResultList.clear();
 
-            String[] queries = sQuery.getQueryCs();
+            Map<Integer, String> queries = sQuery.getQueryCs();
 
-            Log.d(TAG, "loadItems: " + queries[tmp.getCategoryCode()]);
+            Log.d(TAG, "loadItems: " + queries.get(tmp.getCategoryCode()));
 
             _itemDbAdapter.open();
-            Cursor c = _itemDbAdapter.getItemsByRawQuery(queries[tmp.getCategoryCode()]);
+            Cursor c = _itemDbAdapter.getItemsByRawQuery(queries.get(tmp.getCategoryCode()));
 
             if (c.moveToFirst()) {
                 do {
@@ -355,11 +356,12 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
                         ""
                 );
 
-                if(c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)) == 0) {
+                if (UtilCategory.getCategoryColor(_activity, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_INCOME) {
+//todo should be disposable                if(c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)) == 0) {
                     _balance.addIncome(item.getAmount());
                     balanceDay = balanceDay.add(item.getAmount());
                     _itemCategoryInList.add(item);
-                } else {
+                } else if (UtilCategory.getCategoryColor(_activity, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_EXPENSE) {
                     _balance.addExpense(item.getAmount());
                     balanceDay = balanceDay.subtract(item.getAmount());
                     _itemCategoryExList.add(item);
@@ -438,6 +440,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
         if (_itemCategoryExList.isEmpty() || _itemCategoryInList.isEmpty()) {
             Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+            return;
         }
 
         AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);

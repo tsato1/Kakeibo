@@ -93,10 +93,10 @@ public class CategoryCreationIconFragment extends Fragment {
             switch (view.getId()) {
                 case R.id.imb_clear_canvas:
                     _drawView.clearCanvas();
-                    if (_tmpCategory.color == 0) { // income
+                    if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) { // income
                         _drawView.setBackground(ContextCompat.getDrawable(_activity,
                                 R.drawable.new_category_background_income));
-                    } else if (_tmpCategory.color == 1) { // expense
+                    } else if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) { // expense
                         _drawView.setBackground(ContextCompat.getDrawable(_activity,
                                 R.drawable.new_category_background_expense));
                     }
@@ -150,11 +150,11 @@ public class CategoryCreationIconFragment extends Fragment {
         _tmpCategory = tmpCategory;
 
         /*** When called from CategoryCreationActivity ***/
-        if (_tmpCategory.color == 0) { // income
+        if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) { // income
             _drawView.setBackground(ContextCompat.getDrawable(_activity,
                     R.drawable.new_category_background_income));
 
-        } else if (_tmpCategory.color == 1) { // expense
+        } else if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) { // expense
             _drawView.setBackground(ContextCompat.getDrawable(_activity,
                     R.drawable.new_category_background_expense));
         }
@@ -163,13 +163,13 @@ public class CategoryCreationIconFragment extends Fragment {
         if (_categoryCode != -1) {
             byte[] bytes = UtilCategory.getCategoryImage(_activity, _categoryCode);
             Bitmap bitmap = UtilDrawing.bytesToBitmap(bytes);
-            if (tmpCategory.color == 0) {
+            if (tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) {
                 int fromColor = ContextCompat.getColor(_activity, R.color.colorAccent);
                 int toColor = ContextCompat.getColor(_activity, R.color.colorPrimary);
                 bitmap = UtilDrawing.replaceColor(bitmap, fromColor, toColor);
                 Drawable drawable = UtilDrawing.bitmapToDrawalbe(_activity, bitmap);
                 _drawView.setBackground(drawable);
-            } else if (tmpCategory.color == 1) {
+            } else if (tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) {
                 int fromColor = ContextCompat.getColor(_activity, R.color.colorPrimary);
                 int toColor = ContextCompat.getColor(_activity, R.color.colorAccent);
                 bitmap = UtilDrawing.replaceColor(bitmap, fromColor, toColor);

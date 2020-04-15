@@ -128,7 +128,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             cardView = itemView.findViewById(R.id.cdv_category);
             btnCategory = itemView.findViewById(R.id.btn_card_category);
             btnCategory.setOnClickListener((View view) -> {
-                kkbCategoriesList = UtilCategory.getAllKkbCategoryList(_context);
+                kkbCategoriesList = UtilCategory.getDspKkbCategoryList(_context);
                 CategoryListAdapter adapter =
                         new CategoryListAdapter(_context, 0, kkbCategoriesList);
                 AlertDialog.Builder builder = new AlertDialog.Builder(_context);

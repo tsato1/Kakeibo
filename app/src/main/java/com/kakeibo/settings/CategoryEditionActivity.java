@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
@@ -29,6 +30,7 @@ import com.kakeibo.BuildConfig;
 import com.kakeibo.CategoryListAdapter;
 import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
+import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
@@ -92,14 +94,25 @@ public class CategoryEditionActivity extends AppCompatActivity {
     class ItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            StringBuilder message = new StringBuilder();
-            List<String> allLangStrings = UtilCategory.getCategoryLangStrs(_customKkbCategoriesList.get(position).getCode());
-            for (String str: allLangStrings) {
-                String[] strs = str.split(","); /*** ex: "ENG, income" ***/
-                if (strs.length<=1 || strs[1].trim().isEmpty()) continue;
+            /*** for future use : this is for showing different language strings ***/
+//            StringBuilder message = new StringBuilder();
+//            List<String> allLangStrings = UtilCategory.getCategoryLangStrs(_customKkbCategoriesList.get(position).getCode());
+//            for (String str: allLangStrings) {
+//                String[] strs = str.split(","); /*** ex: "ENG, income" ***/
+//                if (strs.length<=1 || strs[1].trim().isEmpty()) continue;
+//
+//                message.append(strs[0]).append(": ").append(strs[1]).append("\n");
+//            }
 
-                message.append(strs[0]).append(": ").append(strs[1]).append("\n");
+            String updateDate = "";
+            CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+            categoryDBAdapter.open();
+            Cursor c = categoryDBAdapter.getUpdateDate(_customKkbCategoriesList.get(position).getCode());
+            if (c!=null && c.moveToFirst()) {
+                updateDate = c.getString(0);
             }
+            categoryDBAdapter.close();
+            String message = getString(R.string.updated_on_colon) + updateDate;
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
             dialog.setIcon(R.mipmap.ic_mikan);

@@ -1,6 +1,11 @@
 package com.kakeibo.util;
 
+import android.content.Context;
+
 import com.kakeibo.db.ItemDBAdapter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.kakeibo.db.ItemDBAdapter.COL_AMOUNT;
 import static com.kakeibo.db.ItemDBAdapter.COL_CATEGORY_CODE;
@@ -12,17 +17,17 @@ public class UtilQuery {
     public static final String ASC = "ASC";
     public static final String SUM_AMOUNT = "SUM(amount)";
 
-    private static StringBuilder[] builderCs; /*** for category detailed list ***/
+    private static Map<Integer, StringBuilder> builderCs; /*** for category detailed list ***/
     private static StringBuilder builderC; /*** for category list ***/
     private static StringBuilder builderD; /*** for expandable date list ***/
     private static boolean where;
     private static boolean orderC;
     private static boolean orderD;
 
-    public static void init() {
-        builderCs = new StringBuilder[UtilCategory.NUM_MAX_DSP_CATEGORIES];
-        for (int i=0; i<builderCs.length; ++i) {
-            builderCs[i] = new StringBuilder("SELECT * FROM ITEMS");
+    public static void init(Context context) {
+        builderCs = new HashMap<>();
+        for (Integer code: UtilCategory.getAllCategoryCodeList(context)) {
+            builderCs.put(code, new StringBuilder("SELECT * FROM ITEMS"));
         }
         builderC = new StringBuilder("SELECT " + SUM_AMOUNT + ", " +
                 ItemDBAdapter.COL_CATEGORY_CODE +
@@ -36,7 +41,7 @@ public class UtilQuery {
     /*** has to be DB format ***/
     public static void setDate(String fromDate, String toDate) {
         if (!where) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" WHERE ");
             }
             builderC.append(" WHERE ");
@@ -44,7 +49,7 @@ public class UtilQuery {
             where = true;
         }
         else {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" AND ");
             }
             builderC.append(" AND ");
@@ -53,14 +58,14 @@ public class UtilQuery {
 
         if (toDate==null || "".equals(toDate)) {
             String ym = "\'" + fromDate.split("-")[0] + "-" + fromDate.split("-")[1] + "\'";
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append("strftime('%Y-%m', " + COL_EVENT_DATE).append(") = ").append(ym);
             }
             builderC.append("strftime('%Y-%m', " + COL_EVENT_DATE).append(") = ").append(ym);
             builderD.append("strftime('%Y-%m', " + COL_EVENT_DATE).append(") = ").append(ym);
         }
         else {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(COL_EVENT_DATE + " between strftime('%Y-%m-%d', '").append(fromDate)
                         .append("') and strftime('%Y-%m-%d', '").append(toDate).append("')");
             }
@@ -73,7 +78,7 @@ public class UtilQuery {
 
     public static void setAmount(long min, long max) {
         if (!where) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" WHERE ");
             }
             builderC.append(" WHERE ");
@@ -81,14 +86,14 @@ public class UtilQuery {
             where = true;
         }
         else {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" AND ");
             }
             builderC.append(" AND ");
             builderD.append(" AND ");
         }
 
-        for (StringBuilder builder :builderCs) {
+        for (StringBuilder builder :builderCs.values()) {
             builder.append(COL_AMOUNT + " BETWEEN ").append(min).append(" AND ").append(max);
         }
         builderC.append(COL_AMOUNT + " BETWEEN ").append(min).append(" AND ").append(max);
@@ -97,7 +102,7 @@ public class UtilQuery {
 
     public static void setCategoryCode(String categoryCode) {
         if (!where) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" WHERE ");
             }
             builderC.append(" WHERE ");
@@ -105,7 +110,7 @@ public class UtilQuery {
             where = true;
         }
         else {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" AND ");
             }
             builderC.append(" AND ");
@@ -113,7 +118,8 @@ public class UtilQuery {
         }
 
         if (categoryCode != null) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
+
                 builder.append(COL_CATEGORY_CODE + "=").append(categoryCode);
             }
             builderC.append(COL_CATEGORY_CODE + "=").append(categoryCode);
@@ -123,7 +129,7 @@ public class UtilQuery {
 
     public static void setMemo(String memo) {
         if (!where) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" WHERE ");
             }
             builderC.append(" WHERE ");
@@ -131,7 +137,7 @@ public class UtilQuery {
             where = true;
         }
         else {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" AND ");
             }
             builderC.append(" AND ");
@@ -139,7 +145,7 @@ public class UtilQuery {
         }
 
         if (!"".equals(memo)) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(COL_MEMO + "=" + "\'").append(memo).append("\'");
             }
             builderC.append(COL_MEMO + "=" + "\'").append(memo).append("\'");
@@ -149,19 +155,20 @@ public class UtilQuery {
 
     public static void setCsWhere(String col) {
         if (!where) {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" WHERE ");
             }
             where = true;
         }
         else {
-            for (StringBuilder builder :builderCs) {
+            for (StringBuilder builder :builderCs.values()) {
                 builder.append(" AND ");
             }
         }
-        for (int i = 0; i < builderCs.length; ++i) {
-
-            builderCs[i].append(col).append("=").append(i);
+        for (Map.Entry<Integer, StringBuilder> entry: builderCs.entrySet()) {
+            StringBuilder sb = entry.getValue();
+            sb.append(col).append("=").append(entry.getKey());
+            builderCs.put(entry.getKey(), sb);
         }
     }
 
@@ -191,10 +198,10 @@ public class UtilQuery {
         builderC.append(" GROUP BY ").append(colGroupBy);
     }
 
-    public static String[] buildQueryCs() {
-        String[] out = new String[builderCs.length];
-        for (int i = 0; i< builderCs.length; ++i) {
-            out[i] = builderCs[i].toString();
+    public static Map<Integer, String> buildQueryCs() {
+        Map<Integer, String> out = new HashMap<>();
+        for (Map.Entry<Integer, StringBuilder> entry: builderCs.entrySet()) {
+            out.put(entry.getKey(), entry.getValue().toString());
         }
         return out;
     }

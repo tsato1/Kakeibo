@@ -46,7 +46,7 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 //todo expected/unexpected, favorite
 //todo textsize for all the textviews
 //current------------
-//todo tell user max number of custom categories they can make
+
 //done-------
 //todo new categories max 10: TEST!
 //todo custom category too big in reorder fragment -> dimen 50dp TEST!
@@ -57,6 +57,7 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 //todo delete paid
 //todo string delete unused strings
 //todo string translateion
+//todo tell user max number of custom categories they can make
 //put aside----
 //todo ads code -> Utility
 

@@ -18,8 +18,9 @@ public class UtilCategory {
     private static String TAG = UtilCategory.class.getSimpleName();
 
     private static List<Integer> sDspKkbCategoryCodeList = new ArrayList<>(); // ordered by location
+    private static List<Integer> sAllKkbCategoryCodeList = new ArrayList<>(); // ordered by code
     private static SparseArray<KkbCategory> sAllKkbCategoryArr = new SparseArray<>();
-    private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//ordered by category code
+//    private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//ordered by category code
     private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//ordered by location
     private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();
     private static List<KkbCategory> sCustomKkbCategoryList = new ArrayList<>();
@@ -27,6 +28,9 @@ public class UtilCategory {
     public final static int NUM_MAX_DSP_CATEGORIES = 16;
     public final static int CUSTOM_CATEGORY_CODE_START = 1000;
     public final static int NUM_MAX_CUSTOM_CATEGORIES = 5;
+
+    public final static int CATEGORY_COLOR_INCOME = 1;
+    public final static int CATEGORY_COLOR_EXPENSE = 0;
 
     public static void reloadCategoryLists(Context context) {
         setAllKkbCategoryArr(context);
@@ -40,7 +44,8 @@ public class UtilCategory {
 
         String langCode = UtilSystem.getCurrentLangCode(context);
 
-        sAllKkbCategoryList.clear();
+//        sAllKkbCategoryList.clear();
+        sAllKkbCategoryCodeList.clear();
         sCustomKkbCategoryList.clear();
         CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
         categoryDBAdapter.open();
@@ -58,7 +63,8 @@ public class UtilCategory {
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
                         "",
                         "");
-                sAllKkbCategoryList.add(kkbCategory);
+//                sAllKkbCategoryList.add(kkbCategory);
+                sAllKkbCategoryCodeList.add(kkbCategory.getCode());
                 if (kkbCategory.getCode()>=CUSTOM_CATEGORY_CODE_START) sCustomKkbCategoryList.add(kkbCategory);
             } while (c.moveToNext());
         }
@@ -188,13 +194,21 @@ public class UtilCategory {
         return sDspKkbCategoryCodeList;
     }
 
-    public static List<KkbCategory> getAllKkbCategoryList(Context context) {
-        if (sAllKkbCategoryList !=null && !sAllKkbCategoryList.isEmpty()) return sAllKkbCategoryList;
+    public static List<Integer> getAllCategoryCodeList(Context context) {
+        if (sAllKkbCategoryCodeList != null && !sAllKkbCategoryCodeList.isEmpty()) return sAllKkbCategoryCodeList;
 
         setAllKkbCategoryList(context);
 
-        return sAllKkbCategoryList;
+        return sAllKkbCategoryCodeList;
     }
+
+//    public static List<KkbCategory> getAllKkbCategoryList(Context context) {
+//        if (sAllKkbCategoryList !=null && !sAllKkbCategoryList.isEmpty()) return sAllKkbCategoryList;
+//
+//        setAllKkbCategoryList(context);
+//
+//        return sAllKkbCategoryList;
+//    }
 
     public static List<KkbCategory> getDspKkbCategoryList(Context context) {
         if (sDspKkbCategoryList !=null && !sDspKkbCategoryList.isEmpty()) return sDspKkbCategoryList;

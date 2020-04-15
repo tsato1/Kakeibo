@@ -19,7 +19,7 @@ public class CategoryDBAdapter extends DBAdapter {
     public static final String COL_ID = "_id";
     public static final String COL_CODE = "code";
     public static final String COL_NAME = "name";                       //deprecated on dbv=6
-    public static final String COL_COLOR = "color"; // 0=income color, 1=expense color, 11-20=custom
+    public static final String COL_COLOR = "color"; // 1=income, 0=expense, 11-20=custom
     public static final String COL_SIGNIFICANCE = "sign"; //0=insignificant 1=mid 2=significant
     public static final String COL_DRAWABLE = "drawable";
     public static final String COL_IMAGE = "image";                     //added on dbv=6
@@ -97,6 +97,12 @@ public class CategoryDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
+    public Cursor getUpdateDate(int categoryCode) {
+        String query = "SELECT " + COL_SAVED_DATE + " FROM " + TABLE_NAME + " WHERE " + COL_CODE + "=" + categoryCode;
+        return _db.rawQuery(query, new String[]{});
+    }
+
+    //todo disposable ?
 //    public Cursor getCustomKkbCategories(String langCode) {
 //        String query =
 //                "SELECT "+

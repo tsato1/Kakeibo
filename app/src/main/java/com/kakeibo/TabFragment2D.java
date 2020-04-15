@@ -245,7 +245,7 @@ public class TabFragment2D extends Fragment {
                 btnCategory.setHint(""+item.getCategoryCode());
                 btnCategory.setOnClickListener((View v2) -> {
                     /*** ordered by location ***/
-                    List<KkbCategory> kkbCategoriesList = UtilCategory.getAllKkbCategoryList(_activity);
+                    List<KkbCategory> kkbCategoriesList = UtilCategory.getDspKkbCategoryList(_activity);
                     CategoryListAdapter adapter =
                             new CategoryListAdapter(_activity, 0, kkbCategoriesList);
                     androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_activity);
@@ -392,10 +392,11 @@ public class TabFragment2D extends Fragment {
                         c.getString(c.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
                 );
 
-                if(c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)) == 0) {
+                if (UtilCategory.getCategoryColor(_activity, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_INCOME) {
+//todo should be disposable //                if(c.getInt(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE)) == 0) {
                     balance.addIncome(item.getAmount());
                     balanceDay = balanceDay.add(item.getAmount());
-                } else {
+                } else if (UtilCategory.getCategoryColor(_activity, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_EXPENSE) {
                     balance.addExpense(item.getAmount());
                     balanceDay = balanceDay.subtract(item.getAmount());
                 }
@@ -450,6 +451,7 @@ public class TabFragment2D extends Fragment {
 
         if (lstDateHeader.size()==0 || hmpChildData.size()==0) {
             Toast.makeText(_activity, R.string.nothing_to_export, Toast.LENGTH_SHORT).show();
+            return;
         }
 
         AlertDialog.Builder dialogExport = new AlertDialog.Builder(_activity);

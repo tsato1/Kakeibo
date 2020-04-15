@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kakeibo.util.UtilCategory;
+import com.kakeibo.util.UtilDrawing;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -29,14 +30,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _lstDateHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Item>> _hmpChildData;
-    private TypedArray _trrMipmaps;
+//todo should be disposable    private TypedArray _trrMipmaps;
 
     ExpandableListAdapter(Context context, List<String> dateHeaderList, HashMap<String, List<Item>> childDataHashMap) {
         this._context = context;
         this._lstDateHeader = dateHeaderList;
         this._hmpChildData = childDataHashMap;
 
-        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
+//todo should be disposable        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
     @Override
@@ -70,7 +71,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         Item item = (Item)baseItem;
 
         /*** imv category ***/
-        childViewHolder.imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+//todo should be disposable        childViewHolder.imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+        if (UtilCategory.getCategoryDrawable(_context, item.getCategoryCode()) == -1) { // ==-1: category is created by user -> use byte array
+            childViewHolder.imvCategory.setImageBitmap(
+                    UtilDrawing.bytesToBitmap(UtilCategory.getCategoryImage(_context, item.getCategoryCode()))
+            );
+        } else { // default category -> use drawable
+            childViewHolder.imvCategory.setImageDrawable(
+                    _context.getDrawable(UtilCategory.getCategoryDrawable(_context, item.getCategoryCode()))
+            );
+        }
 
         /*** memo ***/
         if (item.getMemo().length() >= 15) {
@@ -85,12 +95,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         childViewHolder.txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
 
         /*** amount ***/
-        SpannableString spannableString;
-        if (item.getCategoryCode() <= 0) {
+        SpannableString spannableString = new SpannableString("");
+        if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==0) {
+//todo should be disposable        if (item.getCategoryCode() <= 0) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-        } else {
+        } else if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==1) {
             String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);

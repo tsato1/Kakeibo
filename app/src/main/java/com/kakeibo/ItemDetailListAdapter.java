@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kakeibo.util.UtilCategory;
+import com.kakeibo.util.UtilDrawing;
 
 import java.util.List;
 
@@ -24,14 +25,14 @@ import java.util.List;
 public class ItemDetailListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater _layoutInflater;
     private Context _context;
-    private TypedArray _trrMipmaps;
+//todo should be disposable    private TypedArray _trrMipmaps;
 
     ItemDetailListAdapter(Context context, int id, List<Item> objects) {
         super(context, id, objects);
         this._context = context;
         _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
+//todo should be disposable        _trrMipmaps = _context.getResources().obtainTypedArray(R.array.category_drawables);
     }
 
     @NonNull
@@ -55,27 +56,35 @@ public class ItemDetailListAdapter extends ArrayAdapter<Item> {
         final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 
         /*** category ***/
-        viewHolder.imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+//todo should be disposable        viewHolder.imvCategory.setImageResource(_trrMipmaps.getResourceId(item.getCategoryCode(), 0));
+        if (UtilCategory.getCategoryDrawable(_context, item.getCategoryCode()) == -1) { // ==-1: category is created by user -> use byte array
+            viewHolder.imvCategory.setImageBitmap(
+                    UtilDrawing.bytesToBitmap(UtilCategory.getCategoryImage(_context, item.getCategoryCode()))
+            );
+        } else { // default category -> use drawable
+            viewHolder.imvCategory.setImageDrawable(
+                    _context.getDrawable(UtilCategory.getCategoryDrawable(_context, item.getCategoryCode()))
+            );
+        }
+
         viewHolder.txvCategory.setText(UtilCategory.getCategoryStr(_context, item.getCategoryCode()));
 
-        /*** amount ***/
+        /*** amount & percent ***/
         SpannableString spannableString;
-        if (item.getCategoryCode() <= 0) {//todo 0 is not the only income
+        if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_INCOME) {
+//todo should be disposable        if (item.getCategoryCode() <= 0) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
             viewHolder.txvAmount.setText(spannableString);
-        } else {
+
+            viewHolder.imvPercent.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        } else if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_EXPENSE) {
             String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);
             viewHolder.txvAmount.setText(spannableString);
-        }
 
-        /*** percent ***/
-        if (item.getCategoryCode() <= 0) {
-            viewHolder.imvPercent.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        } else {
             viewHolder.imvPercent.setBackgroundColor(Color.parseColor(MainActivity.categoryColor[position]));
         }
 

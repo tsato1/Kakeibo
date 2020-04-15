@@ -318,7 +318,7 @@ public class TabFragment3 extends Fragment implements RecyclerItemTouchHelperLis
 
     void doSearch() {
         Query query = new Query(Query.QUERY_TYPE_SEARCH);
-        UtilQuery.init();
+        UtilQuery.init(_context);
 
         if (checkBeforeSearch()) {
             UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);

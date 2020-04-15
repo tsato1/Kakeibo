@@ -3,51 +3,38 @@ package com.kakeibo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Query implements Parcelable {
     static final int QUERY_TYPE_NEW = 0;
     static final int QUERY_TYPE_SEARCH = 1;
 
     private static int type;
-    private static String[] queryCs;
+    private static Map<Integer, String> queryCs = new HashMap<>();
     private static String queryC;
     private static String queryD;
 
-    Query (int type) {
-        this.type = type;
-    }
+    Query (int type) { this.type = type; }
 
-    int getType() {
-        return this.type;
-    }
+    int getType() { return this.type; }
 
-    public String[] getQueryCs() {
-        return queryCs;
-    }
+    public Map<Integer, String> getQueryCs() { return queryCs; }
 
-    public String getQueryC() {
-        return queryC;
-    }
+    public String getQueryC() { return queryC; }
 
-    String getQueryD() {
-        return queryD;
-    }
+    String getQueryD() { return queryD; }
 
-    void setQueryCs(String[] queries) {
-        queryCs = queries;
-    }
+    void setQueryCs(Map<Integer, String> queries) { queryCs = queries; }
 
-    void setQueryC(String query) {
-        queryC = query;
-    }
+    void setQueryC(String query) { queryC = query; }
 
-    void setQueryD(String query) {
-        queryD = query;
-    }
+    void setQueryD(String query) { queryD = query; }
 
     /******** parcel ********/
     private Query (Parcel in) {
         this.type = in.readInt();
-        this.queryCs = in.createStringArray();
+        in.readMap(queryCs, String.class.getClassLoader());
         this.queryC = in.readString();
         this.queryD = in.readString();
     }
@@ -60,7 +47,7 @@ public class Query implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.type);
-        dest.writeStringArray(this.queryCs);
+        dest.writeMap(this.queryCs);
         dest.writeString(this.queryC);
         dest.writeString(this.queryD);
     }

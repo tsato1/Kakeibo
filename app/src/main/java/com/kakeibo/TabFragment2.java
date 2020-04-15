@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.kakeibo.db.ItemDBAdapter;
@@ -50,7 +49,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
     private ImageButton btnPrev, btnNext, btnClose;
     private Button btnDate;
     private TextView txvIncome, txvExpense, txvBalance;
-    private ListView lsvItemCategoryIncome, lsvItemCategoryExpense;
 
     private FragmentManager _cfmDetail;
     private FragmentTransaction _ftrDetail;
@@ -80,7 +78,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
 
         /*** making query ***/
         _query = new Query(Query.QUERY_TYPE_NEW);
-        UtilQuery.init();
+        UtilQuery.init(context);
         UtilQuery.setDate(todaysDate, "");
         UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
@@ -107,15 +105,15 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         _view = inflater.inflate(R.layout.fragment_tab_2, container, false);
 
         findViews();
-
+        reset();
         return _view;
     }
 
+    /*** onResume will be called just upon viewpager page change ***/
     @Override
     public void onResume() {
         super.onResume();
         UtilKeyboard.hideSoftKeyboard(_activity);
-        reset();
     }
 
     @Override
@@ -134,8 +132,6 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         txvIncome = _view.findViewById(R.id.txv_income);
         txvExpense = _view.findViewById(R.id.txv_expense);
         txvBalance = _view.findViewById(R.id.txv_balance);
-        lsvItemCategoryIncome = _view.findViewById(R.id.lsv_income);
-        lsvItemCategoryExpense = _view.findViewById(R.id.lsv_expense);
 
         srlReload.setOnRefreshListener(()-> {
             new Handler().postDelayed(()-> {
@@ -159,7 +155,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
         String m = UtilDate.convertMtoMM(_calMonth);
 
         _query = new Query(Query.QUERY_TYPE_NEW);
-        UtilQuery.init();
+        UtilQuery.init(_activity);
         UtilQuery.setDate(y+"-"+m+"-01", ""); //todo settings start date of the month
         UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
@@ -373,7 +369,7 @@ public class TabFragment2 extends Fragment implements ItemLoadListener {
             public void onClick(DialogInterface dialog, int which) {
                 String todaysDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB);
                 _query = new Query(Query.QUERY_TYPE_NEW);
-                UtilQuery.init();
+                UtilQuery.init(_activity);
                 UtilQuery.setDate(todaysDate, "");
                 UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
                 UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);

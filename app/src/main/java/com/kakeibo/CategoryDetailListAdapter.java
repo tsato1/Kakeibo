@@ -72,12 +72,15 @@ public class CategoryDetailListAdapter extends ArrayAdapter<Item> {
         String amountText = amountColon + item.getAmount();
         viewHolder.txvAmount.setText(amountText);
 
-        SpannableString span1, span2;
-        if (0 == (item.getCategoryCode())) {//todo 0 is not the only income
+        SpannableString span1 = new SpannableString("");
+        SpannableString span2 = new SpannableString("");
+
+        if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_INCOME) {
+//todo 0 is not the only income        if (0 == (item.getCategoryCode())) {
             span1 = new SpannableString(amountColon);
             span2 = new SpannableString("+" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorBlue)), 0, 1, 0);
-        } else {
+        } else if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_EXPENSE) {
             span1 = new SpannableString(amountColon);
             span2 = new SpannableString("-" + item.getAmount());
             span2.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.colorRed)), 0, 1, 0);

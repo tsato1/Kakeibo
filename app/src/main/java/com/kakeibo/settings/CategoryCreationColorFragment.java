@@ -82,11 +82,11 @@ public class CategoryCreationColorFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_income:
-                    _selectedColor = 0;
+                    _selectedColor = UtilCategory.CATEGORY_COLOR_INCOME;
                     selectColor();
                     break;
                 case R.id.btn_expense:
-                    _selectedColor = 1;
+                    _selectedColor = UtilCategory.CATEGORY_COLOR_EXPENSE;
                     selectColor();
                     break;
                 case R.id.btn_back:
@@ -112,11 +112,11 @@ public class CategoryCreationColorFragment extends Fragment {
 
     private void selectColor() {
         switch (_selectedColor) {
-            case 0: // definition made in CategoryDBAdapter
+            case UtilCategory.CATEGORY_COLOR_INCOME: // definition made in CategoryDBAdapter
                 _imvIncomeOverlay.setVisibility(View.VISIBLE);
                 _imvExpenseOverlay.setVisibility(View.INVISIBLE);
             break;
-            case 1: // definition made in CategoryDBAdapter
+            case UtilCategory.CATEGORY_COLOR_EXPENSE: // definition made in CategoryDBAdapter
                 _imvIncomeOverlay.setVisibility(View.INVISIBLE);
                 _imvExpenseOverlay.setVisibility(View.VISIBLE);
                 break;

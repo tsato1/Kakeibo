@@ -214,7 +214,7 @@ public class TabFragment1 extends Fragment {
         itemDBAdapter.close();
 
         _query = new Query(Query.QUERY_TYPE_NEW);
-        UtilQuery.init();
+        UtilQuery.init(_activity);
         UtilQuery.setDate(eventDate, "");
         UtilQuery.setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE);
         UtilQuery.setCOrderBy(UtilQuery.SUM_AMOUNT, UtilQuery.DESC);
