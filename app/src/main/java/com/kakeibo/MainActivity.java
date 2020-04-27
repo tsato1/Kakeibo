@@ -38,7 +38,6 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 //todo tab for different topic
 //todo sync from google drive
 //todo bar graph
-//todo data sync - firebase
 //todo discard holograph library
 //future fix////
 //todo bug for arabic check query some arabic languages in the date part
@@ -46,8 +45,10 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 //todo expected/unexpected, favorite
 //todo textsize for all the textviews
 //current------------
-
+//todo firebase database
+//todo String updated date
 //done-------
+//todo getBundle fragment args parcelable
 //todo new categories max 10: TEST!
 //todo custom category too big in reorder fragment -> dimen 50dp TEST!
 //todo ask if user wants category management or ads -> hide ads depending on answer

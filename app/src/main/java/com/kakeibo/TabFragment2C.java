@@ -43,6 +43,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
+import com.kakeibo.export.ExportActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilFiles;
 import com.kakeibo.util.UtilKeyboard;
@@ -58,8 +59,8 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
     private final static int PIE_GRAPH_THICKNESS = 120;
 
-    private static Query sQuery;
-    private static ItemLoadListener sItemLoadListener;
+    private static Query _query;
+    private static ItemLoadListener _itemLoadListener;
 
     private Activity _activity;
     private View _view;
@@ -80,8 +81,8 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         TabFragment2C tabFragment2C = new TabFragment2C();
         Bundle args = new Bundle();
         args.putParcelable("query", query);
-        sQuery = query;
-        sItemLoadListener = itemLoadListener;
+        _query = query;
+        _itemLoadListener = itemLoadListener;
         tabFragment2C.setArguments(args);
         return tabFragment2C;
     }
@@ -100,6 +101,12 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume() called");
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            _query = bundle.getParcelable("query");
+        }
+
         loadItemsOrderByCategory(); /*** <- to handle come back from settings ***/
     }
 
@@ -288,7 +295,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
             List<Item> searchResultList = new ArrayList<>();
             searchResultList.clear();
 
-            Map<Integer, String> queries = sQuery.getQueryCs();
+            Map<Integer, String> queries = _query.getQueryCs();
 
             Log.d(TAG, "loadItems: " + queries.get(tmp.getCategoryCode()));
 
@@ -327,18 +334,18 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
     }
 
     public void setQuery (Query query) {
-        sQuery = query;
+        _query = query;
     }
 
     protected void loadItemsOrderByCategory () {
-        Log.d(TAG, "loadItemsOrderByCategory() "+ sQuery.getQueryC());
+        Log.d(TAG, "loadItemsOrderByCategory() "+ _query.getQueryC());
 
         _balance = Balance.newInstance(MainActivity.sFractionDigits);
 
         _itemCategoryInList.clear();
         _itemCategoryExList.clear();
         _itemDbAdapter.open();
-        Cursor c = _itemDbAdapter.getItemsByRawQuery(sQuery.getQueryC());
+        Cursor c = _itemDbAdapter.getItemsByRawQuery(_query.getQueryC());
 
         if (c!=null && c.moveToFirst()) {
             BigDecimal balanceDay = new BigDecimal(0)
@@ -377,7 +384,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         calculatePercentage();
         makePieGraph();
         setData();
-        sItemLoadListener.onItemsLoaded(_balance);
+        _itemLoadListener.onItemsLoaded(_balance);
     }
 
     private void adjustItemCategoryListViewHeight() {
@@ -457,6 +464,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
                 Thread thread = new Thread(rblSaveToFile);
                 thread.start();
 
+                //                Intent intent = new Intent(_activity, ExportActivity.class);
                 Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
                 intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_CATEGORY);
                 startActivity(intent);
@@ -470,7 +478,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
          * expecting: queryD=
          * SELECT * FROM ITEMS WHERE strftime('%Y-%m', event_date) = '2018-11' ORDER BY event_date ASC
          * ***/
-        String query = sQuery.getQueryD()
+        String query = _query.getQueryD()
                 .replace("ORDER BY event_date ASC", " ORDER BY category_code, amount DESC");
 
         Log.d(TAG, "queryToSaveLocal() "+query);

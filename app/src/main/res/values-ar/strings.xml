@@ -190,4 +190,10 @@
     <string name="small">صغير</string>
     <string name="stroke_thickness">سمك السكتة الدماغية</string>
     <string name="warning">تحذير</string>
+    <string name="draw_icon">يرجى رسم وتصميم أيقونة</string>
+    <string name="msg_custom_category_already_in_use">تم حفظ بعض عناصر Kakeibo بالفعل باستخدام هذه الفئة.</string>
+    <string name="msg_type_cannot_be_changed">يمكنك تغيير الاسم والرمز ، ولكن ليس النوع.</string>
+    <string name="msg_delete_kkb_items_first">يرجى حذف جميع عناصر Kakeibo المصنفة على أنها هذه الفئة.</string>
+    <string name="msg_category_updated">تم تحديث الفئة.</string>
+    <string name="category_name_add_lang">"يرجى كتابة اسم الفئة. اضغط على زر الإضافة للغات مختلفة. "</string>
 </resources>

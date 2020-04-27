@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.kakeibo.R;
-import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.db.TmpCategory;
 import com.kakeibo.util.UtilCategory;
 
@@ -82,10 +81,25 @@ public class CategoryCreationColorFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_income:
+                    if (UtilCategory.isCategoryAlreadyUsed(_categoryCode)) {
+                        String str1 = getString(R.string.msg_custom_category_already_in_use);
+                        String str2 = getString(R.string.msg_type_cannot_be_changed);
+                        Toast.makeText(_activity, str1+str2, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     _selectedColor = UtilCategory.CATEGORY_COLOR_INCOME;
                     selectColor();
                     break;
                 case R.id.btn_expense:
+                    /*** if this Activity is called from Settings ***/
+                    if (_categoryCode!=-1 && UtilCategory.isCategoryAlreadyUsed(_categoryCode)) {
+                        String str1 = getString(R.string.msg_custom_category_already_in_use);
+                        String str2 = getString(R.string.msg_type_cannot_be_changed);
+                        Toast.makeText(_activity, str1+str2, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     _selectedColor = UtilCategory.CATEGORY_COLOR_EXPENSE;
                     selectColor();
                     break;
@@ -99,8 +113,9 @@ public class CategoryCreationColorFragment extends Fragment {
                     }
 
                     /***
-                     * this category is to be passed and eventually saved ***/
-                    TmpCategory tmpCategory = new TmpCategory(-1, //code will be determined later
+                     * this category is to be passed and eventually saved
+                     * code will be determined later at UtilCategory.addNewCategory()***/
+                    TmpCategory tmpCategory = new TmpCategory(-1, -1,
                             _selectedColor, -1, -1, null,
                             "","","","","","","","",
                             "","","","","","","","");
@@ -110,6 +125,7 @@ public class CategoryCreationColorFragment extends Fragment {
         }
     }
 
+    /*** called from onCreate() and onClick() ***/
     private void selectColor() {
         switch (_selectedColor) {
             case UtilCategory.CATEGORY_COLOR_INCOME: // definition made in CategoryDBAdapter

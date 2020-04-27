@@ -136,4 +136,10 @@
     <string name="small">Pequeña</string>
     <string name="stroke_thickness">Espesor del trazo</string>
     <string name="warning">Advertencia</string>
+    <string name="draw_icon">Dibuja y diseña el ícono</string>
+    <string name="msg_custom_category_already_in_use">Algunos elementos de Kakeibo ya se han guardado con esta categoría.</string>
+    <string name="msg_type_cannot_be_changed">Puede cambiar el nombre y el icono, pero no el tipo.</string>
+    <string name="msg_delete_kkb_items_first">Elimine todos los elementos de Kakeibo que están categorizados como esta categoría.</string>
+    <string name="msg_category_updated">La categoría se actualiza.</string>
+    <string name="category_name_add_lang">Por favor escriba el nombre de la categoría. Toque el botón Agregar para diferentes idiomas.</string>
 </resources>

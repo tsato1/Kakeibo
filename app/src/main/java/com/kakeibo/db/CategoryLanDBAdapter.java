@@ -93,4 +93,26 @@ public class CategoryLanDBAdapter extends DBAdapter {
 
         return row;
     }
+
+    public int editCategoryLan(TmpCategory tmpCategory) {
+        ContentValues values = new ContentValues();
+        values.put(COL_ARA, tmpCategory.ara);
+        values.put(COL_ENG, tmpCategory.eng);
+        values.put(COL_SPA, tmpCategory.spa);
+        values.put(COL_FRA, tmpCategory.fra);
+        values.put(COL_HIN, tmpCategory.hin);
+        values.put(COL_IND, tmpCategory.ind);
+        values.put(COL_ITA, tmpCategory.ita);
+        values.put(COL_JPN, tmpCategory.jpn);
+        values.put(COL_KOR, tmpCategory.kor);
+        values.put(COL_POL, tmpCategory.pol);
+        values.put(COL_POR, tmpCategory.por);
+        values.put(COL_RUS, tmpCategory.rus);
+        values.put(COL_TUR, tmpCategory.tur);
+        values.put(COL_VIE, tmpCategory.vie);
+        values.put(COL_Hans, tmpCategory.hans);
+        values.put(COL_Hant, tmpCategory.hant);
+
+        return _db.update(TABLE_NAME, values, COL_CODE+"="+tmpCategory.code, null);
+    }
 }

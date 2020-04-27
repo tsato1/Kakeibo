@@ -1,6 +1,7 @@
 package com.kakeibo;
 
 public class KkbCategory {
+    private long id;
     private int code;
     private String name;
     private int color;
@@ -12,7 +13,8 @@ public class KkbCategory {
     private String description;
     private String savedDate;
 
-    public KkbCategory(int code,
+    public KkbCategory(long id,
+                       int code,
                        String name,
                        int color,
                        int significance,
@@ -33,6 +35,8 @@ public class KkbCategory {
         this.description = description;
         this.savedDate = savedDate;
     }
+
+    public long getId() { return id; }
 
     public int getCode() { return code; }
 

@@ -40,6 +40,8 @@ public class CategoryEditionActivity extends AppCompatActivity {
     private static final int MENU_ITEM_ID_DELETE = 0;
     private static final int MENU_ITEM_ID_EDIT = 1;
 
+    private static final int ACTIVITY_REQUEST_CODE = 10;
+
     private FrameLayout _adContainerView;
     private AdView _adView;
 
@@ -103,6 +105,7 @@ public class CategoryEditionActivity extends AppCompatActivity {
 //
 //                message.append(strs[0]).append(": ").append(strs[1]).append("\n");
 //            }
+            /*** ************************************************************** ***/
 
             String updateDate = "";
             CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
@@ -133,7 +136,8 @@ public class CategoryEditionActivity extends AppCompatActivity {
         }
     }
 
-    public final static String EXTRA_KEY = "CATEGORY_CODE";
+    public final static String EXTRA_KEY_CATEGORY_CODE = "CATEGORY_CODE";
+    public final static String EXTRA_KEY_ID = "_ID";
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
@@ -144,10 +148,18 @@ public class CategoryEditionActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case MENU_ITEM_ID_EDIT:
                 Intent intent = new Intent(_context, CategoryCreationActivity.class);
-                intent.putExtra(EXTRA_KEY, kkbCategory.getCode());
-                startActivityForResult(intent, 10);
+                intent.putExtra(EXTRA_KEY_CATEGORY_CODE, kkbCategory.getCode());
+                intent.putExtra(EXTRA_KEY_ID, kkbCategory.getId());
+                startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
                 break;
             case MENU_ITEM_ID_DELETE:
+                if (UtilCategory.isCategoryAlreadyUsed(kkbCategory.getCode())) {
+                    String str1 = getString(R.string.msg_custom_category_already_in_use);
+                    String str2 = getString(R.string.msg_delete_kkb_items_first);
+                    Toast.makeText(_context, str1+str2, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+
                 AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
                 dialog.setIcon(R.mipmap.ic_mikan);
                 dialog.setTitle(getString(R.string.quest_do_you_want_to_delete_item));
@@ -166,6 +178,16 @@ public class CategoryEditionActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(menuItem);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ACTIVITY_REQUEST_CODE) {
+            _categoryListAdapter.notifyDataSetChanged();
+        }
+    }
+
 
     /*** ads ***/
     private void initAd() {

@@ -9,6 +9,7 @@ import com.kakeibo.KkbCategory;
 import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.db.CategoryDspDBAdapter;
 import com.kakeibo.db.CategoryLanDBAdapter;
+import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.db.TmpCategory;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class UtilCategory {
     private static List<Integer> sDspKkbCategoryCodeList = new ArrayList<>(); // ordered by location
     private static List<Integer> sAllKkbCategoryCodeList = new ArrayList<>(); // ordered by code
     private static SparseArray<KkbCategory> sAllKkbCategoryArr = new SparseArray<>();
-//    private static List<KkbCategory> sAllKkbCategoryList = new ArrayList<>();//ordered by category code
     private static List<KkbCategory> sDspKkbCategoryList = new ArrayList<>();//ordered by location
     private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();
     private static List<KkbCategory> sCustomKkbCategoryList = new ArrayList<>();
@@ -44,7 +44,6 @@ public class UtilCategory {
 
         String langCode = UtilSystem.getCurrentLangCode(context);
 
-//        sAllKkbCategoryList.clear();
         sAllKkbCategoryCodeList.clear();
         sCustomKkbCategoryList.clear();
         CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
@@ -53,8 +52,9 @@ public class UtilCategory {
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_ID)),
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-                        c.getString(1), //second arg is category name in specified language (column name is like 'jpn')
+                        c.getString(2), //third arg is category name in specified language (column name is like 'jpn')
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_COLOR)),
                         0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
@@ -63,7 +63,6 @@ public class UtilCategory {
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
                         "",
                         "");
-//                sAllKkbCategoryList.add(kkbCategory);
                 sAllKkbCategoryCodeList.add(kkbCategory.getCode());
                 if (kkbCategory.getCode()>=CUSTOM_CATEGORY_CODE_START) sCustomKkbCategoryList.add(kkbCategory);
             } while (c.moveToNext());
@@ -83,8 +82,9 @@ public class UtilCategory {
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_ID)),
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-                        c.getString(1), //second arg is name (colum name is like 'jpn')
+                        c.getString(2), //third arg is name (colum name is like 'jpn')
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_COLOR)),
                         0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
@@ -112,8 +112,9 @@ public class UtilCategory {
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_ID)),
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-                        c.getString(1), //second arg is name (colum name is like 'jpn')
+                        c.getString(2), //third arg is name (colum name is like 'jpn')
                         0,
                         0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
@@ -141,8 +142,9 @@ public class UtilCategory {
         if (c!=null && c.moveToFirst()) {
             do {
                 KkbCategory kkbCategory = new KkbCategory(
+                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_ID)),
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-                        c.getString(1), //second arg is category name (column name is like 'jpn')
+                        c.getString(2), //third arg is category name (column name is like 'jpn')
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_COLOR)),
                         0,
                         c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
@@ -156,35 +158,6 @@ public class UtilCategory {
         }
         categoryDBAdapter.close();
     }
-
-//    private static void setCustomKkbCategoryCodeList(Context context) {
-//        Log.d(TAG, "setCustomKkbCategoryList() called");
-//
-//        String langCode = UtilSystem.getCurrentLangCode(context);
-//        Log.d(TAG, "langCode="+langCode);
-//
-//        sCustomKkbCategoryList.clear();
-//        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
-//        categoryDBAdapter.open();
-//        Cursor c = categoryDBAdapter.getCustomKkbCategories(langCode);
-//        if (c!=null && c.moveToFirst()) {
-//            do {
-//                KkbCategory kkbCategory = new KkbCategory(
-//                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_CODE)),
-//                        "",
-//                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_COLOR)),
-//                        0,
-//                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_DRAWABLE)),
-//                        c.getBlob(c.getColumnIndex(CategoryDBAdapter.COL_IMAGE)),
-//                        0,
-//                        c.getInt(c.getColumnIndex(CategoryDBAdapter.COL_PARENT)),
-//                        "",
-//                        "");
-//                sCustomKkbCategoryList.add(kkbCategory);
-//            } while (c.moveToNext());
-//        }
-//        categoryDBAdapter.close();
-//    }
 
     public static List<Integer> getDspCategoryCodeList(Context context) {
         if (sDspKkbCategoryCodeList != null && !sDspKkbCategoryCodeList.isEmpty()) return sDspKkbCategoryCodeList;
@@ -266,6 +239,7 @@ public class UtilCategory {
         return sAllKkbCategoryArr.get(categoryCode).getName();
     }
 
+    /*** can be used in later version ***/
     public static List<String> getCategoryLangStrs(int categoryCode) {
         CategoryLanDBAdapter categoryLanDBAdapter = new CategoryLanDBAdapter();
         categoryLanDBAdapter.open();
@@ -371,9 +345,9 @@ public class UtilCategory {
         int newCode = CUSTOM_CATEGORY_CODE_START;
         if (c != null && c.moveToFirst()) {
             newCode = c.getInt(0);
-            Log.d("asdf", "asdf2    newCode = " + newCode);
+            Log.d(TAG, "asdf2    newCode = " + newCode);
         }
-        Log.d("asdf", "asdf3    newCode = " + newCode);
+        Log.d(TAG, "asdf3    newCode = " + newCode);
 
         /*** allow only 5 custom categories ***/
         if (newCode >= CUSTOM_CATEGORY_CODE_START + NUM_MAX_CUSTOM_CATEGORIES) { return -2; }
@@ -381,6 +355,7 @@ public class UtilCategory {
         if (tmpCategory == null) { return -3; }
 
         long row1 = categoryDBAdapter.saveCategory(new KkbCategory(
+                -1,// will not be saved
                 newCode,
                 "", // will not be saved
                 tmpCategory.color,
@@ -402,5 +377,41 @@ public class UtilCategory {
         reloadCategoryLists(context);
 
         return row1==-1&&row2==-1? -1: 1; // 1==success, -1 or -2==failure
+    }
+
+    public static long updateCustomCategory(Context context, TmpCategory tmpCategory) {
+        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+        categoryDBAdapter.open();
+        int affectedRows1 = categoryDBAdapter.editCategory(new KkbCategory(
+                tmpCategory.id,
+                tmpCategory.code,
+                "", // will not be saved
+                tmpCategory.color,
+                0, // will not be saved (default = 0)
+                tmpCategory.drawable,
+                tmpCategory.image,
+                -1, // deprecated -> will not be saved (default = -1)
+                -1, // will not be saved (default = -1)
+                "", // will not be saved
+                "")); // will be set in categoryDBAdapter.saveCategory function
+        categoryDBAdapter.close();
+
+        CategoryLanDBAdapter categoryLanDBAdapter = new CategoryLanDBAdapter();
+        categoryLanDBAdapter.open();
+        int affectedRows2 = categoryLanDBAdapter.editCategoryLan(tmpCategory);
+        categoryLanDBAdapter.close();
+
+        reloadCategoryLists(context);
+
+        return affectedRows1==0&&affectedRows2==0? -1: 1; // 1==success, -1 or -2==failure
+    }
+
+    public static boolean isCategoryAlreadyUsed(int categoryCode) {
+        boolean out = false;
+        ItemDBAdapter itemDBAdapter = new ItemDBAdapter();
+        itemDBAdapter.open();
+        if (itemDBAdapter.getCountOfCategoryCode(categoryCode) > 0) { out = true; }
+        itemDBAdapter.close();
+        return out;
     }
 }

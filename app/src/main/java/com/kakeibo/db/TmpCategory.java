@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class TmpCategory {
+    public int id;
     public int code;
     public int color;
     public int drawable;
@@ -28,10 +29,11 @@ public class TmpCategory {
 
     public TmpCategory() {}
 
-    public TmpCategory(int code, int color, int drawable, int location, byte[] image,
+    public TmpCategory (int id, int code, int color, int drawable, int location, byte[] image,
                        String ara, String eng, String spa, String fra, String hin, String ind,
                        String ita, String jpn, String kor, String pol, String por, String rus,
                        String tur, String vie, String hans, String hant) {
+        this.id = id;
         this.code = code;
         this.color = color;
         this.drawable = drawable;

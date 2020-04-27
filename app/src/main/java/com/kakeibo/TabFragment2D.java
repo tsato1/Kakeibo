@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
+import com.kakeibo.export.ExportActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilFiles;
@@ -92,6 +93,12 @@ public class TabFragment2D extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume() called");
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            _query = bundle.getParcelable("query");
+        }
+
         loadItemsOrderByDate(); /*** <- to handle come back from settings ***/
     }
 
@@ -461,6 +468,7 @@ public class TabFragment2D extends Fragment {
         dialogExport.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //                Intent intent = new Intent(_activity, ExportActivity.class);
                 Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
                 intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_DATE);
                 startActivityForResult(intent, 10);

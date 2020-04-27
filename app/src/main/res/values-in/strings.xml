@@ -190,4 +190,10 @@
     <string name="small">Kecil</string>
     <string name="stroke_thickness">Ketebalan Stroke</string>
     <string name="warning">Peringatan</string>
+    <string name="draw_icon">Harap gambar dan ikon desain</string>
+    <string name="msg_custom_category_already_in_use">Beberapa item Kakeibo telah disimpan menggunakan Kategori ini.</string>
+    <string name="msg_type_cannot_be_changed">Anda dapat mengubah nama dan ikon, tetapi bukan jenisnya.</string>
+    <string name="msg_delete_kkb_items_first">Hapus semua item Kakeibo yang dikategorikan sebagai Kategori ini.</string>
+    <string name="msg_category_updated">Kategori ini diperbarui.</string>
+    <string name="category_name_add_lang">Silakan tulis nama kategori. Ketuk tombol tambah untuk berbagai bahasa.</string>
 </resources>

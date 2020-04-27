@@ -137,4 +137,9 @@
     <string name="warning">Cảnh báo</string>
     <string name="choose_category_color">Chọn một loại thể loại</string>
     <string name="remaining_spots_colon">Vị trí còn lại:</string>
+    <string name="draw_icon">Hãy vẽ và thiết kế biểu tượng</string>
+    <string name="msg_custom_category_already_in_use">Một số mục Kakeibo đã được lưu bằng Danh mục này.</string>
+    <string name="msg_type_cannot_be_changed">Bạn có thể thay đổi tên và biểu tượng, nhưng không phải loại.</string>
+    <string name="msg_delete_kkb_items_first">Vui lòng xóa tất cả các mục Kakeibo được phân loại là Danh mục này.</string>
+    <string name="msg_category_updated">Danh mục được cập nhật.</string>
 </resources>

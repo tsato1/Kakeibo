@@ -42,6 +42,7 @@ public class CategoryDspDBAdapter {
     public Cursor getKkbDspCategories(String langCode) {
         String query =
                 "SELECT " +
+                        CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_ID+","+
                         CategoryDspDBAdapter.TABLE_NAME+"."+ CategoryDspDBAdapter.COL_CODE+","+
                         langCode+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_DRAWABLE+","+

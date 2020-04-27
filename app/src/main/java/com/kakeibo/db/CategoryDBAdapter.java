@@ -2,6 +2,7 @@ package com.kakeibo.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -58,6 +59,7 @@ public class CategoryDBAdapter extends DBAdapter {
     public Cursor getAllKkbCategories(String langCode) {
         String query =
                 "SELECT "+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_ID+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
                         langCode+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_COLOR+","+
@@ -76,6 +78,7 @@ public class CategoryDBAdapter extends DBAdapter {
     public Cursor getNonDspKkbCategories(String langCode) {
         String query =
                 "SELECT "+
+                        CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_ID+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE+","+
                         langCode+","+
                         CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_COLOR+","+
@@ -102,21 +105,6 @@ public class CategoryDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
-    //todo disposable ?
-//    public Cursor getCustomKkbCategories(String langCode) {
-//        String query =
-//                "SELECT "+
-//                        COL_CODE+","+
-//                        COL_COLOR+","+
-//                        COL_DRAWABLE+","+
-//                        COL_IMAGE+","+
-//                        COL_PARENT+
-//                        " FROM " + TABLE_NAME +
-//                        " WHERE " + COL_CODE + " BETWEEN 1000 and 1015 " +
-//                        " ORDER BY " + COL_CODE;
-//        return _db.rawQuery(query, new String[]{});
-//    }
-
     public long saveCategory(KkbCategory category) {
         ContentValues values = new ContentValues();
         values.put(COL_CODE, category.getCode());
@@ -135,6 +123,20 @@ public class CategoryDBAdapter extends DBAdapter {
 
         Log.d(TAG, "saveItem() called");
         return row;
+    }
+
+    public int editCategory(KkbCategory kkbCategory) {
+        ContentValues values = new ContentValues();
+        values.put(COL_COLOR, kkbCategory.getColor());
+        values.put(COL_SIGNIFICANCE, kkbCategory.getSignificance());
+        values.put(COL_DRAWABLE, kkbCategory.getDrawable());
+        values.put(COL_IMAGE, kkbCategory.getImage());
+//        values.put(COL_LOCATION, category.getLocation()); //deprecated
+        values.put(COL_PARENT, kkbCategory.getParent());
+        values.put(COL_DESC, kkbCategory.getDescription());
+        values.put(COL_SAVED_DATE, UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS));
+
+        return _db.update(TABLE_NAME, values, COL_CODE+"="+kkbCategory.getCode(), null);
     }
 
     /***

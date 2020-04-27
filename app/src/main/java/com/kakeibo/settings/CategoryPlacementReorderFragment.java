@@ -97,6 +97,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
         for (Integer categoryCode: newList) {
             KkbCategory kkbCategory = new KkbCategory(
+                    -1, // not used
                     categoryCode,
                     UtilCategory.getCategoryStr(_activity, categoryCode),
                     0,

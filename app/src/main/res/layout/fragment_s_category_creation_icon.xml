@@ -4,6 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/txv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:paddingTop="@dimen/fragment_padding"
+        android:text="@string/draw_icon"/>
+
     <com.divyanshu.draw.widget.DrawView
         android:id="@+id/draw_view"
         android:layout_centerInParent="true"

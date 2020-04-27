@@ -707,8 +707,52 @@ class PrepDB {
         rent.hant="房租";
         list.add(rent);
 
+        TmpCategory ex_exp = new TmpCategory();
+        ex_exp.code=20;
+        ex_exp.color=0;
+        ex_exp.drawable=R.drawable.ic_category_expense;
+        ex_exp.ara="مصروف";
+        ex_exp.eng="EXPENS";
+        ex_exp.spa="GASTOS";
+        ex_exp.fra="FRAIS";
+        ex_exp.hin="व्यय";
+        ex_exp.ind="BIAYA";
+        ex_exp.ita="SPESE";
+        ex_exp.jpn="支出";
+        ex_exp.kor="비용";
+        ex_exp.pol="KOSZT";
+        ex_exp.por="DESPESA";
+        ex_exp.rus="РАСХОДЫ";
+        ex_exp.tur="GİDER";
+        ex_exp.vie="CHI PHÍ";
+        ex_exp.hans="费用";
+        ex_exp.hant="費用";
+        list.add(ex_exp);
+
+        TmpCategory ex_tele = new TmpCategory();
+        ex_tele.code=21;
+        ex_tele.color=0;
+        ex_tele.drawable=R.drawable.ic_category_tele;
+        ex_tele.ara="هاتف";
+        ex_tele.eng="TELE";
+        ex_tele.spa="TELÉ";
+        ex_tele.fra="TÉLÉ";
+        ex_tele.hin="फ़ोन";
+        ex_tele.ind="TELE";
+        ex_tele.ita="TELE";
+        ex_tele.jpn="通信";
+        ex_tele.kor="전화";
+        ex_tele.pol="TELE";
+        ex_tele.por="TELE";
+        ex_tele.rus="ТЕЛЕ";
+        ex_tele.tur="TELE";
+        ex_tele.vie="THOẠI";
+        ex_tele.hans="电讯";
+        ex_tele.hant="電訊";
+        list.add(ex_tele);
+
         TmpCategory ex_inv = new TmpCategory();
-        ex_inv.code=20;
+        ex_inv.code=22;
         ex_inv.color=0;
         ex_inv.drawable=R.drawable.ic_category_ex_inv;
         ex_inv.ara="استثمار";
@@ -730,7 +774,7 @@ class PrepDB {
         list.add(ex_inv);
 
         TmpCategory ex_rent = new TmpCategory();
-        ex_rent.code=21;
+        ex_rent.code=23;
         ex_rent.color=0;
         ex_rent.drawable=R.drawable.ic_category_ex_rent;
         ex_rent.ara="تأجير";

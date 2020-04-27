@@ -2,6 +2,7 @@ package com.kakeibo.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -97,8 +98,11 @@ public class ItemDBAdapter extends DBAdapter {
         return _db.rawQuery(query, new String[]{});
     }
 
-    public void saveItem(Item item)
-    {
+    public long getCountOfCategoryCode(int categoryCode) {
+        return DatabaseUtils.queryNumEntries(_db, TABLE_NAME, COL_CATEGORY_CODE+"="+categoryCode);
+    }
+
+    public void saveItem(Item item) {
         ContentValues values = new ContentValues();
         /*** amount gets multiplied the value by 1000 upon saving ***/
         values.put(COL_AMOUNT, UtilCurrency.getLongAmountFromBigDecimal(item.getAmount(), 3));

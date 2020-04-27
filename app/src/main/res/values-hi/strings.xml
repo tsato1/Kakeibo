@@ -136,4 +136,10 @@
     <string name="small">छोटा</string>
     <string name="stroke_thickness">स्ट्रोक की मोटाई</string>
     <string name="warning">चेतावनी</string>
+    <string name="draw_icon">कृपया आइकॉन बनाएं और डिज़ाइन करें</string>
+    <string name="msg_custom_category_already_in_use">इस श्रेणी का उपयोग करके कुछ काकीबो आइटम पहले ही सहेजे जा चुके हैं।</string>
+    <string name="msg_type_cannot_be_changed">आप नाम और आइकन बदल सकते हैं, लेकिन प्रकार नहीं।</string>
+    <string name="msg_delete_kkb_items_first">कृपया इस श्रेणी के रूप में वर्गीकृत किए गए सभी काकीबो आइटम हटा दें।</string>
+    <string name="msg_category_updated">श्रेणी अद्यतन किया गया है।</string>
+    <string name="category_name_add_lang">कृपया श्रेणी का नाम लिखें। विभिन्न भाषाओं के लिए ऐड बटन पर टैप करें।</string>
 </resources>

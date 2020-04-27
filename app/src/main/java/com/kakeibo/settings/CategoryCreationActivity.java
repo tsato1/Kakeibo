@@ -44,7 +44,6 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
     private FrameLayout _adContainerView;
     private AdView _adView;
-
     private Context _context;
     private NonSwipeableViewPager _viewPager;
     private ViewPagerAdapter _adapter;
@@ -52,6 +51,8 @@ public class CategoryCreationActivity extends AppCompatActivity {
     private CategoryCreationLanguageFragment _fragmentLanguage;
     private CategoryCreationIconFragment _fragmentIcon;
 
+    private static int _categoryCode = -1;
+    private static int _id = -1;
     private List<ImageView> _lstDots;
 
     @Override
@@ -62,7 +63,10 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
         /*** if this activity was called from CategoryEditionActivity ***/
         Intent intent = getIntent();
-        int categoryCode = intent.getIntExtra(CategoryEditionActivity.EXTRA_KEY, -1);
+        int categoryCode = intent.getIntExtra(CategoryEditionActivity.EXTRA_KEY_CATEGORY_CODE, -1);
+        int id = intent.getIntExtra(CategoryEditionActivity.EXTRA_KEY_ID, -1);
+        _categoryCode = categoryCode;
+        _id = id;
 
         /*** this part is to handle unexpected crashes ***/
 //        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
@@ -191,11 +195,26 @@ public class CategoryCreationActivity extends AppCompatActivity {
                 dialog.setTitle(R.string.create_category);
                 dialog.setMessage(R.string.quest_category_creation_do_you_want_to_proceed);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-                    if (UtilCategory.addNewCategory(_context, tmpCategory)==-1) {
-                        Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(_context, R.string.msg_category_created, Toast.LENGTH_LONG).show();
+                    /*** this Activity was called from SettingsActivity ***/
+                    if (_categoryCode == -1) {
+                        /*** categoryCode will be determined in UtilCategory.addNewCategory() ***/
+                        if (UtilCategory.addNewCategory(_context, tmpCategory)==-1) {
+                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(_context, R.string.msg_category_created, Toast.LENGTH_LONG).show();
+                        }
                     }
+                    /*** this Activity was called from CategoryEditionActivity ***/
+                    else {
+                        tmpCategory.id = _id;
+                        tmpCategory.code = _categoryCode;
+                        if (UtilCategory.updateCustomCategory(_context, tmpCategory)==-1) {
+                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(_context, R.string.msg_category_updated, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
                     finish();
                 });
                 dialog.setNegativeButton(R.string.no, (DialogInterface d, int which) -> { });

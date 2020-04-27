@@ -190,4 +190,10 @@
     <string name="small">Небольшой</string>
     <string name="stroke_thickness">Толщина хода</string>
     <string name="warning">Предупреждение</string>
+    <string name="draw_icon">Пожалуйста, нарисуйте и дизайн значок</string>
+    <string name="msg_custom_category_already_in_use">Некоторые предметы Kakeibo уже были сохранены с использованием этой категории.</string>
+    <string name="msg_type_cannot_be_changed">Вы можете изменить имя и значок, но не тип.</string>
+    <string name="msg_delete_kkb_items_first">Пожалуйста, удалите все предметы Kakeibo, которые относятся к этой категории.</string>
+    <string name="msg_category_updated">Категория обновлена.</string>
+    <string name="category_name_add_lang">Пожалуйста, напишите название категории. Нажмите кнопку Добавить для разных языков.</string>
 </resources>

@@ -190,4 +190,10 @@
     <string name="small">Küçük</string>
     <string name="stroke_thickness">Strok Kalınlığı</string>
     <string name="warning">Uyarı</string>
+    <string name="draw_icon">Lütfen simgeyi çizin ve tasarlayın</string>
+    <string name="msg_custom_category_already_in_use">Bazı Kakeibo öğeleri bu Kategori kullanılarak zaten kaydedildi.</string>
+    <string name="msg_type_cannot_be_changed">Adı ve simgeyi değiştirebilirsiniz, ancak türü değiştiremezsiniz.</string>
+    <string name="msg_delete_kkb_items_first">Lütfen bu Kategori olarak sınıflandırılan tüm Kakeibo öğelerini silin.</string>
+    <string name="msg_category_updated">Kategori güncellenir.</string>
+    <string name="category_name_add_lang">Lütfen kategori adını yazın. Farklı diller için ekle düğmesine dokunun.</string>
 </resources>

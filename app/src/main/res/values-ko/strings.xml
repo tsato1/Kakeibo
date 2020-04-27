@@ -190,4 +190,10 @@
     <string name="small">작은</string>
     <string name="stroke_thickness">선 두께</string>
     <string name="warning">주의</string>
+    <string name="draw_icon">아이콘을 그리고 디자인하십시오</string>
+    <string name="msg_custom_category_already_in_use">이 카테고리를 사용하여 일부 Kakeibo 항목이 이미 저장되었습니다.</string>
+    <string name="msg_type_cannot_be_changed">이름과 아이콘은 변경할 수 있지만 유형은 변경할 수 없습니다.</string>
+    <string name="msg_delete_kkb_items_first">이 카테고리로 분류 된 모든 Kakeibo 항목을 삭제하십시오.</string>
+    <string name="msg_category_updated">카테고리가 업데이트되었습니다.</string>
+    <string name="category_name_add_lang">카테고리 이름을 작성하십시오. 다른 언어의 추가 버튼을 누릅니다.</string>
 </resources>

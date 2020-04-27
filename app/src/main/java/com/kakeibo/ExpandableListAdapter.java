@@ -96,12 +96,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         /*** amount ***/
         SpannableString spannableString = new SpannableString("");
-        if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==0) {
+        if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_INCOME) {
 //todo should be disposable        if (item.getCategoryCode() <= 0) {
             String string = "+" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorBlue)), 0, 1, 0);
-        } else if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==1) {
+        } else if (UtilCategory.getCategoryColor(_context, item.getCategoryCode())==UtilCategory.CATEGORY_COLOR_EXPENSE) {
             String string = "-" + item.getAmount();
             spannableString = new SpannableString(string);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(_context, R.color.colorRed)), 0, 1, 0);

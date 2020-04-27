@@ -146,6 +146,7 @@
     <string name="quest_determine_category_order">The icons will be displayed in the specified order. Do you want to proceed?</string>
     <string name="quest_category_creation_do_you_want_to_proceed">A Category is about to be created. Do you want to proceed?</string>
     <string name="msg_category_created">A Category is created.</string>
+    <string name="msg_category_updated">The Category is updated.</string>
     <string name="err_reached_max_count_colon">You have reached the maximum count: </string>
     <string name="msg_delete_some_categories">Please delete from \'Custom Categories\'</string>
     <string name="err_category_not_created">Something is not right. The Category is not created.</string>
@@ -156,6 +157,10 @@
     <string name="choose_category_color">Select the type of Category</string>
     <string name="max_number_of_categories_colon">Max number of categories: </string>
     <string name="category_name_add_lang">Please write the category name. Tap the add button for different languages.</string>
+    <string name="draw_icon">Please draw and design icon</string>
+    <string name="msg_custom_category_already_in_use">Some Kakeibo items have already been saved using this Category.</string>
+    <string name="msg_type_cannot_be_changed">You can change the name and icon, but not the type.</string>
+    <string name="msg_delete_kkb_items_first">Please delete all the Kakeibo items that are categorized as this Category.</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>

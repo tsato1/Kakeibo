@@ -190,4 +190,10 @@
     <string name="small">Mały</string>
     <string name="stroke_thickness">Grubość obrysu</string>
     <string name="warning">Ostrzeżenie</string>
+    <string name="draw_icon">Proszę narysować i zaprojektować ikonę</string>
+    <string name="msg_custom_category_already_in_use">Niektóre przedmioty Kakeibo zostały już zapisane przy użyciu tej kategorii.</string>
+    <string name="msg_type_cannot_be_changed">Możesz zmienić nazwę i ikonę, ale nie typ.</string>
+    <string name="msg_delete_kkb_items_first">Usuń wszystkie elementy Kakeibo, które są sklasyfikowane jako ta kategoria.</string>
+    <string name="msg_category_updated">Kategoria została zaktualizowana.</string>
+    <string name="category_name_add_lang">Wpisz nazwę kategorii. Naciśnij przycisk dodawania dla różnych języków.</string>
 </resources>

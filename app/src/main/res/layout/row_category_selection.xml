@@ -9,12 +9,6 @@
     android:paddingTop="@dimen/list_row_padding_vertical"
     android:paddingBottom="@dimen/list_row_padding_vertical">
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:focusable="false"
-        android:clickable="false"/>
-
     <TextView
         android:id="@+id/txv_category"
         android:layout_width="0dp"

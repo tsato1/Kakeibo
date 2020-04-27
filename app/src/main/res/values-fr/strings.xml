@@ -136,4 +136,10 @@
     <string name="small">Petite</string>
     <string name="stroke_thickness">Épaisseur de course</string>
     <string name="warning">avertissement</string>
+    <string name="draw_icon">Veuillez dessiner et icône du design</string>
+    <string name="msg_custom_category_already_in_use">Certains éléments Kakeibo ont déjà été enregistrés à l\'aide de cette catégorie.</string>
+    <string name="msg_type_cannot_be_changed">Vous pouvez modifier le nom et l\'icône, mais pas le type.</string>
+    <string name="msg_delete_kkb_items_first">Veuillez supprimer tous les articles Kakeibo classés dans cette catégorie.</string>
+    <string name="msg_category_updated">La catégorie est mise à jour.</string>
+    <string name="category_name_add_lang">Veuillez écrire le nom de la catégorie. Appuyez sur le bouton Ajouter pour différentes langues.</string>
 </resources>

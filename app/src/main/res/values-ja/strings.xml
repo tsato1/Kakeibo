@@ -24,7 +24,7 @@
     <string name="cancel">キャンセル</string>
     <string name="report">レポート</string>
     <string name="save">保存</string>
-    <string name="updated_on_colon">変更日時：</string>
+    <string name="updated_on_colon">保存日時：</string>
     <string name="edit_item">アイテムを編集</string>
     <string name="search_result">検索結果</string>
     <string name="yes">はい</string>
@@ -137,4 +137,9 @@
     <string name="choose_category_color">カテゴリーの種類を選択してください</string>
     <string name="category_name_add_lang">カテゴリー名を入力してください．追加ボタンから他の言語での登録も可能です．</string>
     <string name="max_number_of_categories_colon">最大カテゴリー数：</string>
+    <string name="draw_icon">アイコンを描いてデザインしてください</string>
+    <string name="msg_custom_category_already_in_use">既存のKakeiboアイテムがこのカテゴリーを使用しています。</string>
+    <string name="msg_type_cannot_be_changed">名前とアイコンは変更できますが、タイプは変更できません。</string>
+    <string name="msg_delete_kkb_items_first">このカテゴリーで保存されている全Kakeiboアイテムを削除してください。</string>
+    <string name="msg_category_updated">カテゴリーが更新されました。</string>
 </resources>
