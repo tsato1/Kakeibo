@@ -43,6 +43,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.export.CreateFileInFolderActivity;
+import com.kakeibo.export.DriveServiceHelper;
 import com.kakeibo.export.ExportActivity;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilFiles;
@@ -464,8 +465,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
                 Thread thread = new Thread(rblSaveToFile);
                 thread.start();
 
-                //                Intent intent = new Intent(_activity, ExportActivity.class);
-                Intent intent = new Intent(_activity, CreateFileInFolderActivity.class);
+                Intent intent = new Intent(_activity, ExportActivity.class);
                 intent.putExtra("REPORT_VIEW_TYPE", TabFragment2.REPORT_BY_CATEGORY);
                 startActivity(intent);
             }
@@ -524,7 +524,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
             } while (c.moveToNext());
         }
 
-        UtilFiles.writeToFile(CreateFileInFolderActivity.FILE_ORDER_CATEGORY,
+        UtilFiles.writeToFile(ExportActivity.FILE_ORDER_CATEGORY,
                 _stringBuilder.toString(), _activity, Context.MODE_PRIVATE);
 
         //todo tell the CreateFileInFolderActivity that it's ready to upload

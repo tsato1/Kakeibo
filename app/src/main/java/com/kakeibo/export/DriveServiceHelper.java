@@ -1,6 +1,7 @@
 package com.kakeibo.export;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,15 +15,21 @@ import com.google.api.client.http.ByteArrayContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.kakeibo.TabFragment2;
+import com.kakeibo.util.UtilFiles;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class DriveServiceHelper {
+    private static final String MIME_TYPE = "text/csv";
+
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     private final Drive mDriveService;
 
@@ -33,14 +40,18 @@ public class DriveServiceHelper {
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    public Task<String> createFile() {
+    public Task<String> createFile(String date, int reportType, Context context) {
         return Tasks.call(mExecutor, () -> {
+            String content = "";
+            String title = "Kakeibo_Export_" + date;
+
             File metadata = new File()
                     .setParents(Collections.singletonList("root"))
-                    .setMimeType("text/plain")
-                    .setName("Untitled file");
+                    .setMimeType(MIME_TYPE)
+                    .setName(title);
+            ByteArrayContent contentStream = ByteArrayContent.fromString(MIME_TYPE, content);
 
-            File googleFile = mDriveService.files().create(metadata).execute();
+            File googleFile = mDriveService.files().create(metadata, contentStream).execute();
             if (googleFile == null) {
                 throw new IOException("Null result when requesting file creation.");
             }
@@ -110,9 +121,10 @@ public class DriveServiceHelper {
      * Returns an {@link Intent} for opening the Storage Access Framework file picker.
      */
     public Intent createFilePickerIntent() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/plain");
+        intent.setType(MIME_TYPE);
 
         return intent;
     }

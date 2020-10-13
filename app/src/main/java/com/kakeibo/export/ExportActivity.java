@@ -1,31 +1,55 @@
 package com.kakeibo.export;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.kakeibo.BuildConfig;
+import com.kakeibo.KkbApplication;
 import com.kakeibo.R;
+import com.kakeibo.TabFragment2;
+import com.kakeibo.util.UtilDate;
+import com.kakeibo.util.UtilFiles;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collections;
-import android.util.Log;
 
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ExportActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final String FILE_ORDER_DATE = "tmp_order_date.csv";
+    public static final String FILE_ORDER_CATEGORY = "tmp_order_cat.csv";
 
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_OPEN_DOCUMENT = 2;
@@ -33,27 +57,48 @@ public class ExportActivity extends AppCompatActivity {
     private DriveServiceHelper mDriveServiceHelper;
     private String mOpenFileId;
 
-    private EditText mFileTitleEditText;
-    private EditText mDocContentEditText;
+    private Context _context;
+    private static int mReportType;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mFirebaseAuth;
+    private String mStrDateFormat;
+
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+        _context = this;
 
-        // Store the EditText boxes to be updated when files are opened/created/modified.
-        mFileTitleEditText = findViewById(R.id.file_title_edittext);
-        mDocContentEditText = findViewById(R.id.doc_content_edittext);
+        mReportType = getIntent().getIntExtra("REPORT_VIEW_TYPE", 0);
 
-        // Set the onClick listeners for the button bar.
-        findViewById(R.id.open_btn).setOnClickListener(view -> openFilePicker());
-        findViewById(R.id.create_btn).setOnClickListener(view -> createFile());
-        findViewById(R.id.save_btn).setOnClickListener(view -> saveFile());
-        findViewById(R.id.query_btn).setOnClickListener(view -> query());
+        int dateFormat = KkbApplication.getDateFormat(R.string.pref_key_date_format);
+        switch (dateFormat) {
+            case 1: // MDY
+                mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_MDY) + " kk:mm:ss";
+                break;
+            case 2: // DMY
+                mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DMY) + " kk:mm:ss";
+                break;
+            default:  // YMD
+                mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_YMD) + " kk:mm:ss";
+        }
 
-        // Authenticate the user. For most apps, this should be done when the user performs an
-        // action that requires Drive access rather than in onCreate.
         requestSignIn();
+
+        /*** ads ***/
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+        mInterstitialAd = new InterstitialAd(this);
+        if (BuildConfig.DEBUG) {
+            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");/*** in debug mode ***/
+        } else {
+            mInterstitialAd.setAdUnitId(getString(R.string.main_banner_ad));
+        }
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     @Override
@@ -69,9 +114,37 @@ public class ExportActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK && resultData != null) {
                     Uri uri = resultData.getData();
                     if (uri != null) {
-                        openFileFromFilePicker(uri);
+//                        openFileFromFilePicker(uri);
+                        try {
+                            OutputStream os = getContentResolver().openOutputStream(uri);
+                            if( os != null ) {
+
+                                String content = "";
+                                if (mReportType == TabFragment2.REPORT_BY_DATE) {
+                                    content = UtilFiles.getFileValue(FILE_ORDER_DATE, _context);
+                                } else if (mReportType == TabFragment2.REPORT_BY_CATEGORY) {
+                                    content = UtilFiles.getFileValue(FILE_ORDER_CATEGORY, _context);
+                                } else {
+                                    content = "Empty Report";
+                                }
+
+                                os.write(content.getBytes());
+                                os.close();
+
+                                /*** ads ***/
+                                if (mInterstitialAd.isLoaded()) {
+                                    mInterstitialAd.show();
+                                } else {
+                                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                                }
+                            }
+                        }
+                        catch(IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                finish();
                 break;
         }
 
@@ -86,13 +159,27 @@ public class ExportActivity extends AppCompatActivity {
 
         GoogleSignInOptions signInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
                         .requestEmail()
                         .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
                         .build();
-        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        startActivityForResult(mGoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    }
 
-        // The result of the sign-in Intent is handled in onActivityResult.
-        startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    private void requestSignOut() {
+        /*** signout from firebase ***/
+        if (mFirebaseAuth != null) mFirebaseAuth.signOut();
+
+        /*** signout from googleSignInClient ***/
+        if (mGoogleSignInClient != null) {
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) { }
+                    });
+        }
     }
 
     /**
@@ -120,6 +207,25 @@ public class ExportActivity extends AppCompatActivity {
                     // The DriveServiceHelper encapsulates all REST API and SAF functionality.
                     // Its instantiation is required before handling any onClick actions.
                     mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
+
+                    /*** firebase login ***/
+                    AuthCredential authCredential = GoogleAuthProvider.getCredential(googleAccount.getIdToken(), null);
+                    mFirebaseAuth.signInWithCredential(authCredential)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                                        if (user!=null) Log.d(TAG, "Firebase user.getDisplayName()= "+ user.getDisplayName());
+                                    } else {
+                                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                        finish();
+                                    }
+                                }
+                            });
+
+                    openFilePicker();
                 })
                 .addOnFailureListener(exception -> Log.e(TAG, "Unable to sign in.", exception));
     }
@@ -148,14 +254,8 @@ public class ExportActivity extends AppCompatActivity {
 
             mDriveServiceHelper.openFileUsingStorageAccessFramework(getContentResolver(), uri)
                     .addOnSuccessListener(nameAndContent -> {
-                        String name = nameAndContent.first;
-                        String content = nameAndContent.second;
-
-                        mFileTitleEditText.setText(name);
-                        mDocContentEditText.setText(content);
-
-                        // Files opened through SAF cannot be modified.
                         setReadOnlyMode();
+                        createFile();
                     })
                     .addOnFailureListener(exception ->
                             Log.e(TAG, "Unable to open file from picker.", exception));
@@ -169,10 +269,23 @@ public class ExportActivity extends AppCompatActivity {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Creating a file.");
 
-            mDriveServiceHelper.createFile()
-                    .addOnSuccessListener(fileId -> readFile(fileId))
-                    .addOnFailureListener(exception ->
-                            Log.e(TAG, "Couldn't create file.", exception));
+            mDriveServiceHelper.createFile(UtilDate.getTodaysDate(mStrDateFormat), mReportType, _context)
+                    .addOnSuccessListener(fileId -> {
+//                        readFile(fileId);
+                        showMessage(getString(R.string.file_created));
+
+                        /*** ads ***/
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                        } else {
+                            Log.d("TAG", "The interstitial wasn't loaded yet.");
+                        }
+                        finish();
+                    })
+                    .addOnFailureListener(exception -> {
+                        Log.e(TAG, "Couldn't create file.", exception);
+                        finish();
+                    });
         }
     }
 
@@ -185,12 +298,6 @@ public class ExportActivity extends AppCompatActivity {
 
             mDriveServiceHelper.readFile(fileId)
                     .addOnSuccessListener(nameAndContent -> {
-                        String name = nameAndContent.first;
-                        String content = nameAndContent.second;
-
-                        mFileTitleEditText.setText(name);
-                        mDocContentEditText.setText(content);
-
                         setReadWriteMode(fileId);
                     })
                     .addOnFailureListener(exception ->
@@ -203,14 +310,11 @@ public class ExportActivity extends AppCompatActivity {
      */
     private void saveFile() {
         if (mDriveServiceHelper != null && mOpenFileId != null) {
-            Log.d(TAG, "Saving " + mOpenFileId);
-
-            String fileName = mFileTitleEditText.getText().toString();
-            String fileContent = mDocContentEditText.getText().toString();
-
+            String fileName = "fileName";
+            String fileContent = "fileContent";
             mDriveServiceHelper.saveFile(mOpenFileId, fileName, fileContent)
-                    .addOnFailureListener(exception ->
-                            Log.e(TAG, "Unable to save file via REST.", exception));
+            .addOnFailureListener(exception ->
+                    Log.e(TAG, "Unable to save file via REST.", exception));
         }
     }
 
@@ -219,8 +323,6 @@ public class ExportActivity extends AppCompatActivity {
      */
     private void query() {
         if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Querying for files.");
-
             mDriveServiceHelper.queryFiles()
                     .addOnSuccessListener(fileList -> {
                         StringBuilder builder = new StringBuilder();
@@ -228,9 +330,9 @@ public class ExportActivity extends AppCompatActivity {
                             builder.append(file.getName()).append("\n");
                         }
                         String fileNames = builder.toString();
-
-                        mFileTitleEditText.setText("File List");
-                        mDocContentEditText.setText(fileNames);
+                        // todo should be disposable
+//                        mFileTitleEditText.setText("File List");
+//                        mDocContentEditText.setText(fileNames);
 
                         setReadOnlyMode();
                     })
@@ -242,8 +344,6 @@ public class ExportActivity extends AppCompatActivity {
      * Updates the UI to read-only mode.
      */
     private void setReadOnlyMode() {
-        mFileTitleEditText.setEnabled(false);
-        mDocContentEditText.setEnabled(false);
         mOpenFileId = null;
     }
 
@@ -251,8 +351,19 @@ public class ExportActivity extends AppCompatActivity {
      * Updates the UI to read/write mode on the document identified by {@code fileId}.
      */
     private void setReadWriteMode(String fileId) {
-        mFileTitleEditText.setEnabled(true);
-        mDocContentEditText.setEnabled(true);
         mOpenFileId = fileId;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+        requestSignOut();
+    }
+
+    protected void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    public void screenTapped(View view) { finish(); }
 }
