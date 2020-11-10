@@ -10,7 +10,7 @@ import java.util.Currency;
  */
 public class Item
 {
-    private String id;
+    private int id;
     private BigDecimal amount;
     private int fractionDigits;
     private int categoryCode;
@@ -19,7 +19,7 @@ public class Item
     private String updateDate;
 
     /*** called from TabFragment1 before getting saved ***/
-    Item (String id, BigDecimal amount, int fractionDigits, int categoryCode, String memo, String eventDate, String updateDate) {
+    public Item (int id, BigDecimal amount, int fractionDigits, int categoryCode, String memo, String eventDate, String updateDate) {
         this.id = id;
         this.amount = amount;
         this.fractionDigits = fractionDigits;
@@ -30,7 +30,7 @@ public class Item
     }
 
     /*** called from TabFragment2 before getting displayed ***/
-    Item (String id, long amount, String currencyCode, int fractionDigits, int categoryCode,
+    public Item (int id, long amount, String currencyCode, int fractionDigits, int categoryCode,
           String memo, String eventDate, String updateDate) {
         this.id = id;
 
@@ -47,7 +47,7 @@ public class Item
         this.updateDate = updateDate;
     }
 
-    public String getId()
+    public int getId()
     {
         return this.id;
     }

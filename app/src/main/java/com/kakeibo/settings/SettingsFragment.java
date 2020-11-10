@@ -86,7 +86,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 handleAgreement();
                 return false;
             }
-            if (UtilCategory.addNewCategory(_context, null)==-2) {
+            if (UtilCategory.addNewCategory(_context, null) == -2) {
                 String s = getString(R.string.err_reached_max_count_colon) +
                         UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
                         getString(R.string.msg_delete_some_categories); //todo 5 for ordinary version, 100 for paid, 1000 for b2b
@@ -119,9 +119,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 });
                 confirmation.show();
             });
-            dialog.setNegativeButton(R.string.cancel, (DialogInterface dn, int which)-> {
+            dialog.setNegativeButton(R.string.cancel, (DialogInterface dn, int which) -> {
             });
             dialog.show();
+            return true;
+        } else if (str.equals(getString(R.string.pref_key_in_app_purchases))) {
+            startActivity(new Intent(_activity, InAppPurchasesActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_about))) {
             startActivity(new Intent(_activity, SettingsAboutActivity.class));

@@ -41,6 +41,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL);";
 
     /*** items table ***/
+    private static final String INITIAL_CREATION_TABLE_ITEM = //version 1
+            "CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " ("
+                    + ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + ItemDBAdapter.COL_AMOUNT + " TEXT NOT NULL,"
+                    + ItemDBAdapter.COL_CATEGORY + " TEXT NOT NULL,"
+                    + ItemDBAdapter.COL_MEMO + " TEXT NOT NULL,"
+                    + ItemDBAdapter.COL_EVENT_D + " TEXT NOT NULL,"
+                    + ItemDBAdapter.COL_EVENT_YM + " TEXT NOT NULL,"
+                    + ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);";
     private static final String DATABASE_CREATE_TABLE_ITEM =
             "CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " ("+
                     ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
@@ -213,7 +222,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_CATEGORY_LAN);
         db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_REVISED);
         db.execSQL(DATABASE_CREATE_TABLE_CATEGORY_LAN_REVISED);
-        PrepDB.initCategoriesTableRevised(db, DATABASE_VERSION);
+        PrepDB.initCategoriesTableRevised(db);
         /*** to add more categories ***/
         PrepDB.addMoreCategories(db);
     }

@@ -3,13 +3,857 @@ package com.kakeibo.db;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.room.OnConflictStrategy;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
 
-class PrepDB {
-    static void initCategoriesTable(SQLiteDatabase db) {
+public class PrepDB {
+    public static void initCategoriesTable(SupportSQLiteDatabase db) {
+        ArrayList<TmpCategory> list = new ArrayList<>();
+
+        TmpCategory income = new TmpCategory();
+        income.code = 0;
+        income.drawable = R.drawable.ic_category_income;
+        income.location = 0;
+        income.eng = "INCOME";
+        income.fra = "REV.";
+        income.ita = "ENTR.";
+        income.jpn = "収入";
+        income.spa = "INGRE";
+        list.add(income);
+
+        TmpCategory commodity = new TmpCategory();
+        commodity.code = 1;
+        commodity.drawable = R.drawable.ic_category_comm;
+        commodity.location = 1;
+        commodity.eng = "COMM";
+        commodity.fra = "ACHAT.";
+        commodity.ita = "ACQ.";
+        commodity.jpn = "生活雑貨";
+        commodity.spa = "MERCAN";
+        list.add(commodity);
+
+        TmpCategory meal = new TmpCategory();
+        meal.code = 2;
+        meal.drawable = R.drawable.ic_category_meal;
+        meal.location = 2;
+        meal.eng = "MEAL";
+        meal.fra = "ALIM.";
+        meal.ita = "ALIMEN.";
+        meal.jpn = "食事";
+        meal.spa = "COMIDA";
+        list.add(meal);
+
+        TmpCategory util = new TmpCategory();
+        util.code = 3;
+        util.drawable = R.drawable.ic_category_util;
+        util.location = 3;
+        util.eng = "UTIL";
+        util.fra = "FACTUR";
+        util.ita = "UTENZE";
+        util.jpn = "水道光熱";
+        util.spa = "UTIL";
+        list.add(util);
+
+        TmpCategory health = new TmpCategory();
+        health.code = 4;
+        health.drawable = R.drawable.ic_category_health;
+        health.location = 4;
+        health.eng = "HEALTH";
+        health.fra = "SANTÉ";
+        health.ita = "SALUTE";
+        health.jpn = "健康";
+        health.spa = "SALUD";
+        list.add(health);
+
+        TmpCategory edu = new TmpCategory();
+        edu.code = 5;
+        edu.drawable = R.drawable.ic_category_edu;
+        edu.location = 5;
+        edu.eng = "EDU";
+        edu.fra = "ETUDE";
+        edu.ita = "EDUCAZ";
+        edu.jpn = "教育";
+        edu.spa = "EDU";
+        list.add(edu);
+
+        TmpCategory cloth = new TmpCategory();
+        cloth.code = 6;
+        cloth.drawable = R.drawable.ic_category_cloth;
+        cloth.location = 6;
+        cloth.eng = "CLOTH";
+        cloth.fra = "VETEM.";
+        cloth.ita = "ABBIG.";
+        cloth.jpn = "衣服";
+        cloth.spa = "VESTID";
+        list.add(cloth);
+
+        TmpCategory trans = new TmpCategory();
+        trans.code = 7;
+        trans.drawable = R.drawable.ic_category_trans;
+        trans.location = 7;
+        trans.eng = "TRANS";
+        trans.fra = "TRANS.";
+        trans.ita = "TRASP.";
+        trans.jpn = "交通";
+        trans.spa = "TRANS";
+        list.add(trans);
+
+        TmpCategory ent = new TmpCategory();
+        ent.code = 8;
+        ent.drawable = R.drawable.ic_category_ent;
+        ent.location = 12;
+        ent.eng = "ENT";
+        ent.fra = "AMUSE.";
+        ent.ita = "DIVERT.";
+        ent.jpn = "娯楽";
+        ent.spa = "ENTRET";
+        list.add(ent);
+
+        TmpCategory ins = new TmpCategory();
+        ins.code=9;
+        ins.drawable = R.drawable.ic_category_ins;
+        ins.location = 13;
+        ins.eng = "INS";
+        ins.fra = "EPARG.";
+        ins.ita = "RISP.";
+        ins.jpn = "保険";
+        ins.spa = "SEGURO";
+        list.add(ins);
+
+        TmpCategory tax = new TmpCategory();
+        tax.code=10;
+        tax.drawable = R.drawable.ic_category_tax;
+        tax.location = 14;
+        tax.eng = "TAX";
+        tax.fra = "TAXE";
+        tax.ita = "TASSE";
+        tax.jpn = "税金";
+        tax.spa = "IMPUES";
+        list.add(tax);
+
+        TmpCategory other = new TmpCategory();
+        other.code=11;
+        other.drawable = R.drawable.ic_category_other;
+        other.location = 15;
+        other.eng = "OTHER";
+        other.fra = "AUTRE";
+        other.ita = "ALTRO";
+        other.jpn = "他";
+        other.spa = "OTROS";
+        list.add(other);
+
+        TmpCategory pet = new TmpCategory();
+        pet.code = 12;
+        pet.drawable = R.drawable.ic_category_pet;
+        pet.location = 8;
+        pet.eng = "PET";
+        pet.fra = "ANIM.C.";
+        pet.ita = "ANIM.D.";
+        pet.jpn = "ペット";
+        pet.spa = "MSCTA";
+        list.add(pet);
+
+        TmpCategory social = new TmpCategory();
+        social.code = 13;
+        social.drawable = R.drawable.ic_category_social;
+        social.location = 9;
+        social.eng = "SOCIAL";
+        social.fra = "SOCIAL";
+        social.ita = "SOCIAL";
+        social.jpn = "交際";
+        social.spa = "SOCIAL";
+        list.add(social);
+
+        TmpCategory cosme = new TmpCategory();
+        cosme.code=14;
+        cosme.drawable = R.drawable.ic_category_cosme;
+        cosme.location = 10;
+        cosme.eng = "COSME";
+        cosme.fra = "COSMÉ";
+        cosme.ita = "COSME";
+        cosme.jpn = "美容";
+        cosme.spa = "COSME";
+        list.add(cosme);
+
+        TmpCategory housing = new TmpCategory();
+        housing.code = 15;
+        housing.drawable = R.drawable.ic_category_housing;
+        housing.location = 11;
+        housing.eng = "HOUSNG";
+        housing.fra = "LOGMNT";
+        housing.ita = "ABITAT.";
+        housing.jpn = "居住";
+        housing.spa = "VVENDA";
+        list.add(housing);
+
+        for (TmpCategory category: list) {
+            ContentValues values = new ContentValues();
+            values.put(CategoryDBAdapter.COL_CODE, category.code);
+            values.put(CategoryDBAdapter.COL_NAME, "");
+            values.put(CategoryDBAdapter.COL_COLOR, 0);
+            values.put(CategoryDBAdapter.COL_DRAWABLE, category.drawable);
+            values.put(CategoryDBAdapter.COL_LOCATION, category.location);
+            values.put(CategoryDBAdapter.COL_SUB_CATEGORIES, 0);
+            values.put(CategoryDBAdapter.COL_DESC, "");
+            values.put(CategoryDBAdapter.COL_SAVED_DATE, "");
+//            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
+            db.insert(CategoryDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values);
+
+            ContentValues values2 = new ContentValues();
+            values2.put(CategoryLanDBAdapter.COL_CODE, category.code);
+            values2.put(CategoryLanDBAdapter.COL_NAME, "");
+            values2.put(CategoryLanDBAdapter.COL_EN, category.eng);
+            values2.put(CategoryLanDBAdapter.COL_ES, category.spa);
+            values2.put(CategoryLanDBAdapter.COL_FR, category.fra);
+            values2.put(CategoryLanDBAdapter.COL_IT, category.ita);
+            values2.put(CategoryLanDBAdapter.COL_JA, category.jpn);
+            values2.put(CategoryLanDBAdapter.COL_SAVED_DATE, "");
+//            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values2);
+            db.insert(CategoryLanDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values2);
+        }
+    }
+
+    public static void initCategoriesTableRevised(SupportSQLiteDatabase db) {
+        ArrayList<TmpCategory> list = new ArrayList<>();
+
+        TmpCategory income = new TmpCategory();
+        income.code = 0;
+        income.color = 1;
+        income.drawable = R.drawable.ic_category_income;
+        income.location = 0;
+        income.eng = "INCOME";
+        income.fra = "REV.";
+        income.ita = "ENTR.";
+        income.jpn = "収入";
+        income.spa = "INGRE";
+        income.ara = "الإيرادات";
+        income.hin = "आय";
+        income.ind = "PENDAPATAN";
+        income.kor = "수입";
+        income.pol = "DOCHÓD";
+        income.por = "RENDA";
+        income.rus = "доход";
+        income.tur = "GELİR";
+        income.vie = "THU NHẬP";
+        income.hans = "收入";
+        income.hant = "收入";
+        list.add(income);
+
+        TmpCategory commodity = new TmpCategory();
+        commodity.code = 1;
+        commodity.color = 0;
+        commodity.drawable = R.drawable.ic_category_comm;
+        commodity.location = 1;
+        commodity.eng = "COMM";
+        commodity.fra = "ACHAT.";
+        commodity.ita = "ACQ.";
+        commodity.jpn = "生活雑貨";
+        commodity.spa = "MERCAN";
+        commodity.ara = "السلع";
+        commodity.hin = "वस्तु";
+        commodity.ind = "KOMODITI";
+        commodity.kor = "상품";
+        commodity.pol = "TOWAR";
+        commodity.por = "MERCADORIA";
+        commodity.rus = "товар";
+        commodity.tur = "EMTİA";
+        commodity.vie = "HÀNG HÓA";
+        commodity.hans = "商品";
+        commodity.hant = "商品";
+        list.add(commodity);
+
+        TmpCategory meal = new TmpCategory();
+        meal.code = 2;
+        meal.color = 0;
+        meal.drawable = R.drawable.ic_category_meal;
+        meal.location = 2;
+        meal.eng = "MEAL";
+        meal.fra = "ALIM.";
+        meal.ita = "ALIMEN.";
+        meal.jpn = "食事";
+        meal.spa = "COMIDA";
+        meal.ara = "وجبة";
+        meal.hin = "भोजन";
+        meal.ind = "MAKAN";
+        meal.kor = "식사";
+        meal.pol = "POSIŁEK";
+        meal.por = "REFEIÇÃO";
+        meal.rus = "еда";
+        meal.tur = "YEMEK";
+        meal.vie = "BỮA ĂN";
+        meal.hans = "膳食";
+        meal.hant = "膳食";
+        list.add(meal);
+
+        TmpCategory util = new TmpCategory();
+        util.code = 3;
+        util.color = 0;
+        util.drawable = R.drawable.ic_category_util;
+        util.location = 3;
+        util.eng = "UTIL";
+        util.fra = "FACTUR";
+        util.ita = "UTENZE";
+        util.jpn = "水道光熱";
+        util.spa = "UTIL";
+        util.ara = "خدمة";
+        util.hin = "उपयोगिता";
+        util.ind = "UTIL";
+        util.kor = "유용";
+        util.pol = "UŻYTECZNOŚĆ";
+        util.por = "UTIL";
+        util.rus = "Утилита";
+        util.tur = "YARAR";
+        util.vie = "TIỆN ÍCH";
+        util.hans = "效用";
+        util.hant = "效用";
+        list.add(util);
+
+        TmpCategory health = new TmpCategory();
+        health.code = 4;
+        health.color = 0;
+        health.drawable = R.drawable.ic_category_health;
+        health.location = 4;
+        health.eng = "HEALTH";
+        health.fra = "SANTÉ";
+        health.ita = "SALUTE";
+        health.jpn = "健康";
+        health.spa = "SALUD";
+        health.ara = "الصحة";
+        health.hin = "स्वास्थ्य";
+        health.ind = "KESEHATAN";
+        health.kor = "건강";
+        health.pol = "ZDROWIE";
+        health.por = "SAÚDE";
+        health.rus = "Здоровье";
+        health.tur = "SAĞLIK";
+        health.vie = "SỨC KHỎE";
+        health.hans = "健康";
+        health.hant = "健康";
+        list.add(health);
+
+        TmpCategory edu = new TmpCategory();
+        edu.code = 5;
+        edu.color = 0;
+        edu.drawable = R.drawable.ic_category_edu;
+        edu.location = 5;
+        edu.eng = "EDU";
+        edu.fra = "ETUDE";
+        edu.ita = "EDUCAZ";
+        edu.jpn = "教育";
+        edu.spa = "EDU";
+        edu.ara = "التعليم";
+        edu.hin = "शिक्षा";
+        edu.ind = "PENDIDIKAN";
+        edu.kor = "교육";
+        edu.pol = "EDUKACJA";
+        edu.por = "EDUCAÇÃO";
+        edu.rus = "образование";
+        edu.tur = "EĞİTİM";
+        edu.vie = "GIÁO DỤC";
+        edu.hans = "教育";
+        edu.hant = "教育";
+        list.add(edu);
+
+        TmpCategory cloth = new TmpCategory();
+        cloth.code = 6;
+        cloth.color = 0;
+        cloth.drawable = R.drawable.ic_category_cloth;
+        cloth.location = 6;
+        cloth.eng = "CLOTH";
+        cloth.fra = "VETEM.";
+        cloth.ita = "ABBIG.";
+        cloth.jpn = "衣服";
+        cloth.spa = "VESTID";
+        cloth.ara = "ملابس";
+        cloth.hin = "कपड़ा";
+        cloth.ind = "PAKAIAN";
+        cloth.kor = "의류";
+        cloth.pol = "ODZIEŻ";
+        cloth.por = "ROUPAS";
+        cloth.rus = "Одежда";
+        cloth.tur = "GİYİM";
+        cloth.vie = "QUẦN ÁO";
+        cloth.hans = "衣服";
+        cloth.hant = "衣服";
+        list.add(cloth);
+
+        TmpCategory trans = new TmpCategory();
+        trans.code = 7;
+        trans.color = 0;
+        trans.drawable = R.drawable.ic_category_trans;
+        trans.location = 7;
+        trans.eng = "TRANS";
+        trans.fra = "TRANS.";
+        trans.ita = "TRASP.";
+        trans.jpn = "交通";
+        trans.spa = "TRANS";
+        trans.ara = "نقل";
+        trans.hin = "परिवहन";
+        trans.ind = "ANGKUTAN";
+        trans.kor = "교통";
+        trans.pol = "TRANSPORT";
+        trans.por = "TRANSPORTE";
+        trans.rus = "Транспорт";
+        trans.tur = "ULAŞIM";
+        trans.vie = "VẬN CHUYỂN";
+        trans.hans = "运输";
+        trans.hant = "運輸";
+        list.add(trans);
+
+        TmpCategory ent = new TmpCategory();
+        ent.code = 8;
+        ent.color = 0;
+        ent.drawable = R.drawable.ic_category_ent;
+        ent.location = 12;
+        ent.eng = "ENT";
+        ent.fra = "AMUSE.";
+        ent.ita = "DIVERT.";
+        ent.jpn = "娯楽";
+        ent.spa = "ENTRET";
+        ent.ara = "تسلية";
+        ent.hin = "मनोरंजन";
+        ent.ind = "HIBURAN";
+        ent.kor = "환대";
+        ent.pol = "ZABAWA";
+        ent.por = "ENTRETENIMENTO";
+        ent.rus = "Развлечения";
+        ent.tur = "EĞLENCE";
+        ent.vie = "SỰ GIẢI TRÍ";
+        ent.hans = "娱乐";
+        ent.hant = "娛樂";
+        list.add(ent);
+
+        TmpCategory ins = new TmpCategory();
+        ins.code=9;
+        ins.color = 0;
+        ins.drawable = R.drawable.ic_category_ins;
+        ins.location = 13;
+        ins.eng = "INS";
+        ins.fra = "EPARG.";
+        ins.ita = "RISP.";
+        ins.jpn = "保険";
+        ins.spa = "SEGURO";
+        ins.ara = "تأمين";
+        ins.hin = "बीमा";
+        ins.ind = "ASURANSI";
+        ins.kor = "보험";
+        ins.pol = "UBEZPIECZENIE";
+        ins.por = "SEGURO";
+        ins.rus = "страхование";
+        ins.tur = "SİGORTA";
+        ins.vie = "BẢO HIỂM";
+        ins.hans = "保险";
+        ins.hant = "保險";
+        list.add(ins);
+
+        TmpCategory tax = new TmpCategory();
+        tax.code=10;
+        tax.color = 0;
+        tax.drawable = R.drawable.ic_category_tax;
+        tax.location = 14;
+        tax.eng = "TAX";
+        tax.fra = "TAXE";
+        tax.ita = "TASSE";
+        tax.jpn = "税金";
+        tax.spa = "IMPUES";
+        tax.ara = "ضريبة";
+        tax.hin = "कर";
+        tax.ind = "PAJAK";
+        tax.kor = "세";
+        tax.pol = "PODATEK";
+        tax.por = "IMPOSTO";
+        tax.rus = "налог";
+        tax.tur = "VERGİ";
+        tax.vie = "THUẾ";
+        tax.hans = "税";
+        tax.hant = "稅";
+        list.add(tax);
+
+        TmpCategory other = new TmpCategory();
+        other.code=11;
+        other.color = 0;
+        other.drawable = R.drawable.ic_category_other;
+        other.location = 15;
+        other.eng = "OTHER";
+        other.fra = "AUTRE";
+        other.ita = "ALTRO";
+        other.jpn = "他";
+        other.spa = "OTROS";
+        other.ara = "آخر";
+        other.hin = "अन्य";
+        other.ind = "LAIN";
+        other.kor = "다른";
+        other.pol = "INNY";
+        other.por = "OUTRO";
+        other.rus = "Другие";
+        other.tur = "DİĞER";
+        other.vie = "KHÁC";
+        other.hans = "其他";
+        other.hant = "其他";
+        list.add(other);
+
+        TmpCategory pet = new TmpCategory();
+        pet.code = 12;
+        pet.color = 0;
+        pet.drawable = R.drawable.ic_category_pet;
+        pet.location = 8;
+        pet.eng = "PET";
+        pet.fra = "ANIM.C.";
+        pet.ita = "ANIM.D.";
+        pet.jpn = "ペット";
+        pet.spa = "MSCTA";
+        pet.ara = "حيوان اليف";
+        pet.hin = "पालतू";
+        pet.ind = "MEMBELAI";
+        pet.kor = "착한 애";
+        pet.pol = "ZWIERZĘ DOMOWE";
+        pet.por = "ANIMAL";
+        pet.rus = "домашнее животное";
+        pet.tur = "EVCİL HAYVAN";
+        pet.vie = "VẬT NUÔI";
+        pet.hans = "宠物";
+        pet.hant = "寵物";
+        list.add(pet);
+
+        TmpCategory social = new TmpCategory();
+        social.code = 13;
+        social.color = 0;
+        social.drawable = R.drawable.ic_category_social;
+        social.location = 9;
+        social.eng = "SOCIAL";
+        social.fra = "SOCIAL";
+        social.ita = "SOCIAL";
+        social.jpn = "交際";
+        social.spa = "SOCIAL";
+        social.ara = "اجتماعي";
+        social.hin = "सामाजिक";
+        social.ind = "SOSIAL";
+        social.kor = "사회적인";
+        social.pol = "SPOŁECZNY";
+        social.por = "SOCIAL";
+        social.rus = "Социальное";
+        social.tur = "SOSYAL";
+        social.vie = "XÃ HỘI";
+        social.hans = "社会的";
+        social.hant = "社會的";
+        list.add(social);
+
+        TmpCategory cosme = new TmpCategory();
+        cosme.code=14;
+        cosme.color = 0;
+        cosme.drawable = R.drawable.ic_category_cosme;
+        cosme.location = 10;
+        cosme.eng = "COSME";
+        cosme.fra = "COSMÉ";
+        cosme.ita = "COSME";
+        cosme.jpn = "美容";
+        cosme.spa = "COSME";
+        cosme.ara = "كوزمي";
+        cosme.hin = "अंगराग";
+        cosme.ind = "COSME";
+        cosme.kor = "화장품";
+        cosme.pol = "COSME";
+        cosme.por = "COSME";
+        cosme.rus = "Косме";
+        cosme.tur = "COSME";
+        cosme.vie = "MỸ PHẨM";
+        cosme.hans = "化妆品";
+        cosme.hant = "化妝品";
+        list.add(cosme);
+
+        TmpCategory housing = new TmpCategory();
+        housing.code = 15;
+        housing.color = 0;
+        housing.drawable = R.drawable.ic_category_housing;
+        housing.location = 11;
+        housing.eng = "HOUSNG";
+        housing.fra = "LOGMNT";
+        housing.ita = "ABITAT.";
+        housing.jpn = "居住";
+        housing.spa = "VVENDA";
+        housing.ara = "إسكان";
+        housing.hin = "आवास";
+        housing.ind = "PERUMAHAN";
+        housing.kor = "주택";
+        housing.pol = "MIESZKANIOWY";
+        housing.por = "HABITAÇÃO";
+        housing.rus = "Корпус";
+        housing.tur = "KONUT";
+        housing.vie = "NHÀ Ở";
+        housing.hans = "住房";
+        housing.hant = "住房";
+        list.add(housing);
+
+        for (int i = 0; i < 16/*UtilCategory.NUM_MAX_DSP_CATEGORIES*/; i++) {
+            ContentValues values1 = new ContentValues();
+            values1.put(CategoryDBAdapter.COL_CODE, list.get(i).code);
+            values1.put(CategoryDBAdapter.COL_COLOR, 0);
+            values1.put(CategoryDBAdapter.COL_SIGNIFICANCE, 0);
+            values1.put(CategoryDBAdapter.COL_DRAWABLE, list.get(i).drawable);
+            values1.putNull(CategoryDBAdapter.COL_IMAGE);
+            values1.put(CategoryDBAdapter.COL_PARENT, -1);
+            values1.put(CategoryDBAdapter.COL_DESC, "");
+//            values1.put(CategoryDBAdapter.COL_VAL1, 0);
+//            values1.put(CategoryDBAdapter.COL_VAL2, 0);
+//            values1.put(CategoryDBAdapter.COL_VAL3, 0);
+            values1.put(CategoryDBAdapter.COL_SAVED_DATE, "");
+//            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values1);
+            db.insert(CategoryDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values1);
+
+            ContentValues values2 = new ContentValues();
+            values2.put(CategoryLanDBAdapter.COL_CODE, list.get(i).code);
+            values2.put(CategoryLanDBAdapter.COL_ENG, list.get(i).eng);
+            values2.put(CategoryLanDBAdapter.COL_SPA, list.get(i).spa);
+            values2.put(CategoryLanDBAdapter.COL_FRA, list.get(i).fra);
+            values2.put(CategoryLanDBAdapter.COL_ITA, list.get(i).ita);
+            values2.put(CategoryLanDBAdapter.COL_JPN, list.get(i).jpn);
+            values2.put(CategoryLanDBAdapter.COL_ARA, list.get(i).ara);
+            values2.put(CategoryLanDBAdapter.COL_HIN, list.get(i).hin);
+            values2.put(CategoryLanDBAdapter.COL_IND, list.get(i).ind);
+            values2.put(CategoryLanDBAdapter.COL_KOR, list.get(i).kor);
+            values2.put(CategoryLanDBAdapter.COL_POL, list.get(i).pol);
+            values2.put(CategoryLanDBAdapter.COL_POR, list.get(i).por);
+            values2.put(CategoryLanDBAdapter.COL_RUS, list.get(i).rus);
+            values2.put(CategoryLanDBAdapter.COL_TUR, list.get(i).tur);
+            values2.put(CategoryLanDBAdapter.COL_VIE, list.get(i).vie);
+            values2.put(CategoryLanDBAdapter.COL_Hans, list.get(i).hans);
+            values2.put(CategoryLanDBAdapter.COL_Hant, list.get(i).hant);
+//            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values2);
+            db.insert(CategoryLanDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values2);
+
+            ContentValues values3 = new ContentValues();
+            values3.put(CategoryDspDBAdapter.COL_LOCATION, list.get(i).location);
+            values3.put(CategoryDspDBAdapter.COL_CODE, list.get(i).code);
+//            db.insertOrThrow(CategoryDspDBAdapter.TABLE_NAME, null, values3);
+            db.insert(CategoryDspDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values3);
+        }
+    }
+
+    public static void addMoreCategories(SupportSQLiteDatabase db) {
+        /*** change color column of Income from 0 to 1 ***/
+        String query = "UPDATE " + CategoryDBAdapter.TABLE_NAME +
+                " SET " + CategoryDBAdapter.COL_COLOR + "=1" +
+                " WHERE " + CategoryDBAdapter.COL_CODE + "=0;";
+        db.execSQL(query);
+
+        ArrayList<TmpCategory> list = new ArrayList<>();
+
+        TmpCategory bonus = new TmpCategory();
+        bonus.code=16;
+        bonus.color=1;
+        bonus.drawable=R.drawable.ic_category_bonus;
+        bonus.ara="علاوة";
+        bonus.eng="EXTRA";
+        bonus.spa="EXTRA";
+        bonus.fra="SUPPLÉ.";
+        bonus.hin="बक्शीश";
+        bonus.ind="TAMBAHAN";
+        bonus.ita="SUPPLE.";
+        bonus.jpn="ボーナス";
+        bonus.kor="보너스";
+        bonus.pol="DODATKOWY";
+        bonus.por="ADICIONAL";
+        bonus.rus="допол";
+        bonus.tur="EK";
+        bonus.vie="THÊM";
+        bonus.hans="奖金";
+        bonus.hant="獎金";
+        list.add(bonus);
+
+        TmpCategory allowance = new TmpCategory();
+        allowance.code=17;
+        allowance.color=1;
+        allowance.drawable=R.drawable.ic_category_allowance;
+        allowance.ara="بدل";
+        allowance.eng="ALLOW";
+        allowance.spa="TOLER.";
+        allowance.fra="ALLOC.";
+        allowance.hin="भत्ता";
+        allowance.ind="TUNJANGAN";
+        allowance.ita="INDENNITA";
+        allowance.jpn="お小遣い";
+        allowance.kor="수당";
+        allowance.pol="DODATEK";
+        allowance.por="MESADA";
+        allowance.rus="РЕЗЕРВЫ";
+        allowance.tur="ÖDENEK";
+        allowance.vie="PHỤ CẤP";
+        allowance.hans="津贴";
+        allowance.hant="津貼";
+        list.add(allowance);
+
+        TmpCategory inv = new TmpCategory();
+        inv.code=18;
+        inv.color=1;
+        inv.drawable=R.drawable.ic_category_in_inv;
+        inv.ara="استثمار";
+        inv.eng="INV";
+        inv.spa="INV";
+        inv.fra="INV";
+        inv.hin="निवेश";
+        inv.ind="INV";
+        inv.ita="INV";
+        inv.jpn="投資";
+        inv.kor="투자";
+        inv.pol="INW";
+        inv.por="INV";
+        inv.rus="инвест";
+        inv.tur="YATIRIM";
+        inv.vie="ĐẦU TƯ";
+        inv.hans="投资";
+        inv.hant="投資";
+        list.add(inv);
+
+        TmpCategory rent = new TmpCategory();
+        rent.code=19;
+        rent.color=1;
+        rent.drawable=R.drawable.ic_category_in_rent;
+        rent.ara="تأجير";
+        rent.eng="RENT";
+        rent.spa="ALQUIL.";
+        rent.fra="LOCAC.";
+        rent.hin="किराए";
+        rent.ind="SEWA";
+        rent.ita="AFFIT.";
+        rent.jpn="家賃";
+        rent.kor="임대";
+        rent.pol="CZYNSZ";
+        rent.por="ALUGAR";
+        rent.rus="аренда";
+        rent.tur="KIRA";
+        rent.vie="THUÊ";
+        rent.hans="房租";
+        rent.hant="房租";
+        list.add(rent);
+
+        TmpCategory ex_exp = new TmpCategory();
+        ex_exp.code=20;
+        ex_exp.color=0;
+        ex_exp.drawable=R.drawable.ic_category_expense;
+        ex_exp.ara="مصروف";
+        ex_exp.eng="EXPENS";
+        ex_exp.spa="GASTOS";
+        ex_exp.fra="FRAIS";
+        ex_exp.hin="व्यय";
+        ex_exp.ind="BIAYA";
+        ex_exp.ita="SPESE";
+        ex_exp.jpn="支出";
+        ex_exp.kor="비용";
+        ex_exp.pol="KOSZT";
+        ex_exp.por="DESPESA";
+        ex_exp.rus="РАСХОДЫ";
+        ex_exp.tur="GİDER";
+        ex_exp.vie="CHI PHÍ";
+        ex_exp.hans="费用";
+        ex_exp.hant="費用";
+        list.add(ex_exp);
+
+        TmpCategory ex_tele = new TmpCategory();
+        ex_tele.code=21;
+        ex_tele.color=0;
+        ex_tele.drawable=R.drawable.ic_category_tele;
+        ex_tele.ara="هاتف";
+        ex_tele.eng="TELE";
+        ex_tele.spa="TELÉ";
+        ex_tele.fra="TÉLÉ";
+        ex_tele.hin="फ़ोन";
+        ex_tele.ind="TELE";
+        ex_tele.ita="TELE";
+        ex_tele.jpn="通信";
+        ex_tele.kor="전화";
+        ex_tele.pol="TELE";
+        ex_tele.por="TELE";
+        ex_tele.rus="ТЕЛЕ";
+        ex_tele.tur="TELE";
+        ex_tele.vie="THOẠI";
+        ex_tele.hans="电讯";
+        ex_tele.hant="電訊";
+        list.add(ex_tele);
+
+        TmpCategory ex_inv = new TmpCategory();
+        ex_inv.code=22;
+        ex_inv.color=0;
+        ex_inv.drawable=R.drawable.ic_category_ex_inv;
+        ex_inv.ara="استثمار";
+        ex_inv.eng="INV";
+        ex_inv.spa="INV";
+        ex_inv.fra="INV";
+        ex_inv.hin="निवेश";
+        ex_inv.ind="INV";
+        ex_inv.ita="INV";
+        ex_inv.jpn="投資";
+        ex_inv.kor="투자";
+        ex_inv.pol="INW";
+        ex_inv.por="INV";
+        ex_inv.rus="инвест";
+        ex_inv.tur="YATIRIM";
+        ex_inv.vie="ĐẦU TƯ";
+        ex_inv.hans="投资";
+        ex_inv.hant="投資";
+        list.add(ex_inv);
+
+        TmpCategory ex_rent = new TmpCategory();
+        ex_rent.code=23;
+        ex_rent.color=0;
+        ex_rent.drawable=R.drawable.ic_category_ex_rent;
+        ex_rent.ara="تأجير";
+        ex_rent.eng="RENT";
+        ex_rent.spa="ALQUIL.";
+        ex_rent.fra="LOCAC.";
+        ex_rent.hin="किराए";
+        ex_rent.ind="SEWA";
+        ex_rent.ita="AFFIT.";
+        ex_rent.jpn="家賃";
+        ex_rent.kor="임대";
+        ex_rent.pol="CZYNSZ";
+        ex_rent.por="ALUGAR";
+        ex_rent.rus="аренда";
+        ex_rent.tur="KIRA";
+        ex_rent.vie="THUÊ";
+        ex_rent.hans="房租";
+        ex_rent.hant="房租";
+        list.add(ex_rent);
+
+        for (TmpCategory c : list) {
+            ContentValues values = new ContentValues();
+            values.put(CategoryDBAdapter.COL_CODE, c.code);
+            values.put(CategoryDBAdapter.COL_COLOR, c.color);
+            values.put(CategoryDBAdapter.COL_DRAWABLE, c.drawable);
+            values.putNull(CategoryDBAdapter.COL_IMAGE);
+            values.put(CategoryDBAdapter.COL_DESC, "");
+            values.put(CategoryDBAdapter.COL_SAVED_DATE, "");
+//            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
+            db.insert(CategoryDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values);
+
+            ContentValues values1 = new ContentValues();
+            values1.put(CategoryLanDBAdapter.COL_CODE, c.code);
+            values1.put(CategoryLanDBAdapter.COL_ARA, c.ara);
+            values1.put(CategoryLanDBAdapter.COL_ENG, c.eng);
+            values1.put(CategoryLanDBAdapter.COL_SPA, c.spa);
+            values1.put(CategoryLanDBAdapter.COL_FRA, c.fra);
+            values1.put(CategoryLanDBAdapter.COL_HIN, c.hin);
+            values1.put(CategoryLanDBAdapter.COL_IND, c.ind);
+            values1.put(CategoryLanDBAdapter.COL_ITA, c.ita);
+            values1.put(CategoryLanDBAdapter.COL_JPN, c.jpn);
+            values1.put(CategoryLanDBAdapter.COL_KOR, c.kor);
+            values1.put(CategoryLanDBAdapter.COL_POL, c.pol);
+            values1.put(CategoryLanDBAdapter.COL_POR, c.por);
+            values1.put(CategoryLanDBAdapter.COL_RUS, c.rus);
+            values1.put(CategoryLanDBAdapter.COL_TUR, c.tur);
+            values1.put(CategoryLanDBAdapter.COL_VIE, c.vie);
+            values1.put(CategoryLanDBAdapter.COL_Hans, c.hans);
+            values1.put(CategoryLanDBAdapter.COL_Hant, c.hant);
+//            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values1);
+            db.insert(CategoryLanDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values1);
+        }
+    }
+
+    public static void initCategoriesTable(SQLiteDatabase db) {
         ArrayList<TmpCategory> list = new ArrayList<>();
 
         TmpCategory income = new TmpCategory();
@@ -213,11 +1057,12 @@ class PrepDB {
         }
     }
 
-    public static void initCategoriesTableRevised(SQLiteDatabase db, int version) {
+    public static void initCategoriesTableRevised(SQLiteDatabase db) {
         ArrayList<TmpCategory> list = new ArrayList<>();
 
         TmpCategory income = new TmpCategory();
         income.code = 0;
+        income.color = 1;
         income.drawable = R.drawable.ic_category_income;
         income.location = 0;
         income.eng = "INCOME";
@@ -240,6 +1085,7 @@ class PrepDB {
 
         TmpCategory commodity = new TmpCategory();
         commodity.code = 1;
+        commodity.color = 0;
         commodity.drawable = R.drawable.ic_category_comm;
         commodity.location = 1;
         commodity.eng = "COMM";
@@ -262,6 +1108,7 @@ class PrepDB {
 
         TmpCategory meal = new TmpCategory();
         meal.code = 2;
+        meal.color = 0;
         meal.drawable = R.drawable.ic_category_meal;
         meal.location = 2;
         meal.eng = "MEAL";
@@ -284,6 +1131,7 @@ class PrepDB {
 
         TmpCategory util = new TmpCategory();
         util.code = 3;
+        util.color = 0;
         util.drawable = R.drawable.ic_category_util;
         util.location = 3;
         util.eng = "UTIL";
@@ -306,6 +1154,7 @@ class PrepDB {
 
         TmpCategory health = new TmpCategory();
         health.code = 4;
+        health.color = 0;
         health.drawable = R.drawable.ic_category_health;
         health.location = 4;
         health.eng = "HEALTH";
@@ -328,6 +1177,7 @@ class PrepDB {
 
         TmpCategory edu = new TmpCategory();
         edu.code = 5;
+        edu.color = 0;
         edu.drawable = R.drawable.ic_category_edu;
         edu.location = 5;
         edu.eng = "EDU";
@@ -350,6 +1200,7 @@ class PrepDB {
 
         TmpCategory cloth = new TmpCategory();
         cloth.code = 6;
+        cloth.color = 0;
         cloth.drawable = R.drawable.ic_category_cloth;
         cloth.location = 6;
         cloth.eng = "CLOTH";
@@ -372,6 +1223,7 @@ class PrepDB {
 
         TmpCategory trans = new TmpCategory();
         trans.code = 7;
+        trans.color = 0;
         trans.drawable = R.drawable.ic_category_trans;
         trans.location = 7;
         trans.eng = "TRANS";
@@ -394,6 +1246,7 @@ class PrepDB {
 
         TmpCategory ent = new TmpCategory();
         ent.code = 8;
+        ent.color = 0;
         ent.drawable = R.drawable.ic_category_ent;
         ent.location = 12;
         ent.eng = "ENT";
@@ -416,6 +1269,7 @@ class PrepDB {
 
         TmpCategory ins = new TmpCategory();
         ins.code=9;
+        ins.color = 0;
         ins.drawable = R.drawable.ic_category_ins;
         ins.location = 13;
         ins.eng = "INS";
@@ -438,6 +1292,7 @@ class PrepDB {
 
         TmpCategory tax = new TmpCategory();
         tax.code=10;
+        tax.color = 0;
         tax.drawable = R.drawable.ic_category_tax;
         tax.location = 14;
         tax.eng = "TAX";
@@ -460,6 +1315,7 @@ class PrepDB {
 
         TmpCategory other = new TmpCategory();
         other.code=11;
+        other.color = 0;
         other.drawable = R.drawable.ic_category_other;
         other.location = 15;
         other.eng = "OTHER";
@@ -482,6 +1338,7 @@ class PrepDB {
 
         TmpCategory pet = new TmpCategory();
         pet.code = 12;
+        pet.color = 0;
         pet.drawable = R.drawable.ic_category_pet;
         pet.location = 8;
         pet.eng = "PET";
@@ -504,6 +1361,7 @@ class PrepDB {
 
         TmpCategory social = new TmpCategory();
         social.code = 13;
+        social.color = 0;
         social.drawable = R.drawable.ic_category_social;
         social.location = 9;
         social.eng = "SOCIAL";
@@ -526,6 +1384,7 @@ class PrepDB {
 
         TmpCategory cosme = new TmpCategory();
         cosme.code=14;
+        cosme.color = 0;
         cosme.drawable = R.drawable.ic_category_cosme;
         cosme.location = 10;
         cosme.eng = "COSME";
@@ -548,6 +1407,7 @@ class PrepDB {
 
         TmpCategory housing = new TmpCategory();
         housing.code = 15;
+        housing.color = 0;
         housing.drawable = R.drawable.ic_category_housing;
         housing.location = 11;
         housing.eng = "HOUSNG";
@@ -568,7 +1428,7 @@ class PrepDB {
         housing.hant = "住房";
         list.add(housing);
 
-        for (int i = 0; i < UtilCategory.NUM_MAX_DSP_CATEGORIES; i++) {
+        for (int i = 0; i < 16/*UtilCategory.NUM_MAX_DSP_CATEGORIES*/; i++) {
             ContentValues values1 = new ContentValues();
             values1.put(CategoryDBAdapter.COL_CODE, list.get(i).code);
             values1.put(CategoryDBAdapter.COL_COLOR, 0);
@@ -583,34 +1443,34 @@ class PrepDB {
             values1.put(CategoryDBAdapter.COL_SAVED_DATE, "");
             db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values1);
 
-            ContentValues values = new ContentValues();
-            values.put(CategoryLanDBAdapter.COL_CODE, list.get(i).code);
-            values.put(CategoryLanDBAdapter.COL_ENG, list.get(i).eng);
-            values.put(CategoryLanDBAdapter.COL_SPA, list.get(i).spa);
-            values.put(CategoryLanDBAdapter.COL_FRA, list.get(i).fra);
-            values.put(CategoryLanDBAdapter.COL_ITA, list.get(i).ita);
-            values.put(CategoryLanDBAdapter.COL_JPN, list.get(i).jpn);
-            values.put(CategoryLanDBAdapter.COL_ARA, list.get(i).ara);
-            values.put(CategoryLanDBAdapter.COL_HIN, list.get(i).hin);
-            values.put(CategoryLanDBAdapter.COL_IND, list.get(i).ind);
-            values.put(CategoryLanDBAdapter.COL_KOR, list.get(i).kor);
-            values.put(CategoryLanDBAdapter.COL_POL, list.get(i).pol);
-            values.put(CategoryLanDBAdapter.COL_POR, list.get(i).por);
-            values.put(CategoryLanDBAdapter.COL_RUS, list.get(i).rus);
-            values.put(CategoryLanDBAdapter.COL_TUR, list.get(i).tur);
-            values.put(CategoryLanDBAdapter.COL_VIE, list.get(i).vie);
-            values.put(CategoryLanDBAdapter.COL_Hans, list.get(i).hans);
-            values.put(CategoryLanDBAdapter.COL_Hant, list.get(i).hant);
-            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values);
-
             ContentValues values2 = new ContentValues();
-            values2.put(CategoryDspDBAdapter.COL_LOCATION, list.get(i).location);
-            values2.put(CategoryDspDBAdapter.COL_CODE, list.get(i).code);
-            db.insertOrThrow(CategoryDspDBAdapter.TABLE_NAME, null, values2);
+            values2.put(CategoryLanDBAdapter.COL_CODE, list.get(i).code);
+            values2.put(CategoryLanDBAdapter.COL_ENG, list.get(i).eng);
+            values2.put(CategoryLanDBAdapter.COL_SPA, list.get(i).spa);
+            values2.put(CategoryLanDBAdapter.COL_FRA, list.get(i).fra);
+            values2.put(CategoryLanDBAdapter.COL_ITA, list.get(i).ita);
+            values2.put(CategoryLanDBAdapter.COL_JPN, list.get(i).jpn);
+            values2.put(CategoryLanDBAdapter.COL_ARA, list.get(i).ara);
+            values2.put(CategoryLanDBAdapter.COL_HIN, list.get(i).hin);
+            values2.put(CategoryLanDBAdapter.COL_IND, list.get(i).ind);
+            values2.put(CategoryLanDBAdapter.COL_KOR, list.get(i).kor);
+            values2.put(CategoryLanDBAdapter.COL_POL, list.get(i).pol);
+            values2.put(CategoryLanDBAdapter.COL_POR, list.get(i).por);
+            values2.put(CategoryLanDBAdapter.COL_RUS, list.get(i).rus);
+            values2.put(CategoryLanDBAdapter.COL_TUR, list.get(i).tur);
+            values2.put(CategoryLanDBAdapter.COL_VIE, list.get(i).vie);
+            values2.put(CategoryLanDBAdapter.COL_Hans, list.get(i).hans);
+            values2.put(CategoryLanDBAdapter.COL_Hant, list.get(i).hant);
+            db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values2);
+
+            ContentValues values3 = new ContentValues();
+            values3.put(CategoryDspDBAdapter.COL_LOCATION, list.get(i).location);
+            values3.put(CategoryDspDBAdapter.COL_CODE, list.get(i).code);
+            db.insertOrThrow(CategoryDspDBAdapter.TABLE_NAME, null, values3);
         }
     }
 
-    static void addMoreCategories(SQLiteDatabase db) {
+    public static void addMoreCategories(SQLiteDatabase db) {
         /*** change color column of Income from 0 to 1 ***/
         String query = "UPDATE " + CategoryDBAdapter.TABLE_NAME +
                 " SET " + CategoryDBAdapter.COL_COLOR + "=1" +

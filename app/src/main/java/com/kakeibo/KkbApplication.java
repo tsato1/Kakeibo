@@ -15,7 +15,7 @@ import java.util.Currency;
 import java.util.Locale;
 
 public class KkbApplication extends Application {
-    private int _version; // version is valInt1
+
     private static SharedPreferences _preferences;
 
     public static KkbApplication _instance;
@@ -78,10 +78,6 @@ public class KkbApplication extends Application {
         String[] numColumns = _instance.getResources().getStringArray(R.array.pref_list_num_columns);
         return Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
     }
-
-//    public void setVersion(int version) { this._version = version; } // do
-
-    public int getVersion() { return _version; }
 }
 
 // set

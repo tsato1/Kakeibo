@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.android.billingclient.api.Purchase;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -11,8 +13,12 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,11 +32,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.kakeibo.billing.BillingClientLifecycle;
 import com.kakeibo.settings.SettingsCompatActivity;
+import com.kakeibo.ui.BillingViewModel;
+import com.kakeibo.ui.FirebaseUserViewModel;
+import com.kakeibo.ui.SubscriptionStatusViewModel;
 import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilSystem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -65,6 +78,7 @@ import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CU
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int VIEWPAGER_OFF_SCREEN_PAGE_LIMIT = 2;
+    private static final int RC_SIGN_IN = 0;
 
 //    public static final String[] categoryColor = {
 //            "#2b381d", "#324220", "#374C22", "#40552b", "#465E2E",
@@ -85,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
     public static int sNumColumns;
     public static String[] sWeekName;
 
+    private BillingClientLifecycle billingClientLifecycle;
+    private FirebaseUserViewModel authenticationViewModel;
+    private BillingViewModel billingViewModel;
+    private SubscriptionStatusViewModel subscriptionViewModel;
     private PublisherAdView _publisherAdView;
     private FragmentManager fm;
     private ViewPager viewPager;
@@ -117,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         /*** toolbar ***/
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar); disposable!!!!!
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         /*** ads ***/
         if (UtilAds.isBannerAdsDisplayAgreed()) {
@@ -201,31 +219,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadSharedPreference() {
-//        SharedPreferences pref = KkbApplication.getSharedPreferences();
-
-//        /*** dateFormat ***/
-//        String dateFormatIndex = pref.getString(getString(R.string.pref_key_date_format), UtilDate.DATE_FORMAT_YMD);
-//        sDateFormat = Integer.parseInt(dateFormatIndex);
         sDateFormat = KkbApplication.getDateFormat(R.string.pref_key_date_format);
-
-        /*** fraction digits ***/
-//        Locale locale = Locale.getDefault();
-//        int defValue = 0;
-//        try {
-//            Currency currency = Currency.getInstance(locale);
-//            defValue = currency.getDefaultFractionDigits();
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//        }
-//        String digitsIndex = pref.getString(getString(R.string.pref_key_fraction_digits), String.valueOf(defValue));
-//        String[] fractionDigits = getResources().getStringArray(R.array.pref_list_fraction_digits);
-//        sFractionDigits = Integer.parseInt(fractionDigits[Integer.parseInt(digitsIndex)]);
         sFractionDigits = KkbApplication.getFractionDigits(R.string.pref_key_fraction_digits);
-
-        /*** num category icons per row ***/
-//        String numColumnsIndex = pref.getString(getString(R.string.pref_key_num_columns), getString(R.string.def_num_columns));
-//        String[] numColumns = getResources().getStringArray(R.array.pref_list_num_columns);
-//        sNumColumns = Integer.parseInt(numColumns[Integer.parseInt(numColumnsIndex)]);
         sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
 
         Log.d(TAG, "sDateFormat:"+sDateFormat+
@@ -286,9 +281,80 @@ public class MainActivity extends AppCompatActivity {
         return viewPager;
     }
 
+    /**
+     * Register SKUs and purchase tokens with the server.
+     */
+    private void registerPurchases(List<Purchase> purchaseList) {
+        for (Purchase purchase : purchaseList) {
+            String sku = purchase.getSku();
+            String purchaseToken = purchase.getPurchaseToken();
+            Log.d(TAG, "Register purchase with sku: " + sku + ", token: " + purchaseToken);
+            subscriptionViewModel.registerSubscription(sku, purchaseToken);
+        }
+    }
+
+    private void refreshData() {
+        billingClientLifecycle.queryPurchases();
+        subscriptionViewModel.manualRefresh();
+    }
+
+    /*** Sign in, Sign out***/
+    private void triggerSignIn() {
+        Log.d(TAG, "Attempting SIGN-IN!");
+        List<AuthUI.IdpConfig> providers = new ArrayList<>();
+        // Configure the different methods users can sign in
+        providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
+        providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                RC_SIGN_IN);
+    }
+
+    private void triggerSignOut() {
+        subscriptionViewModel.unregisterInstanceId();
+        AuthUI.getInstance().signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "User SIGNED OUT!");
+                        authenticationViewModel.updateFirebaseUser();
+                    }
+                });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            // If sign-in is successful, update ViewModel.
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Sign-in SUCCESS!");
+                authenticationViewModel.updateFirebaseUser();
+            } else {
+                Log.d(TAG, "Sign-in FAILED!");
+            }
+        } else {
+            Log.e(TAG, "Unrecognized request code: " + requestCode);
+        }
+    }
+
+    /*** menu ***/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+//        boolean isSignedIn = authenticationViewModel.isSignedIn();
+//        menu.findItem(R.id.sign_in).setVisible(!isSignedIn);
+//        menu.findItem(R.id.sign_out).setVisible(isSignedIn);
         return true;
     }
 
@@ -298,6 +364,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsCompatActivity.class));
+            return true;
+        } else if (id == R.id.sign_in) {
+//            triggerSignIn();
+            return true;
+        } else if (id == R.id.sign_out) {
+//            triggerSignOut();
             return true;
         }
 

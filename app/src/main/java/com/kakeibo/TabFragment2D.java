@@ -199,7 +199,7 @@ public class TabFragment2D extends Fragment {
                                 //Log.d("groupPosition", String.valueOf(groupPosition));
                                 //Log.d("childPosition", String.valueOf(childPosition));
                                 _itemDbAdapter.open();
-                                final int itemId = Integer.parseInt(item.getId());
+                                final int itemId = item.getId();
 
                                 if(_itemDbAdapter.deleteItem(itemId)) {
                                     Toast.makeText(_activity, getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_SHORT).show();
@@ -285,14 +285,14 @@ public class TabFragment2D extends Fragment {
                         .setView(layout)
                         .setPositiveButton(R.string.save, (DialogInterface d, int which)-> {
                             _itemDbAdapter.open();
-                            final int itemId = Integer.parseInt(item.getId());
+                            final int itemId = item.getId();
 
                             if (checkBeforeSave(edtAmount)) {
                                 if(_itemDbAdapter.deleteItem(itemId)) {
                                     String amount = edtAmount.getText().toString();
 
                                     Item tmp = new Item(
-                                            "",
+                                            0,
                                             new BigDecimal(amount),
                                             MainActivity.sFractionDigits,
                                             Integer.parseInt(btnCategory.getHint().toString()),
@@ -388,7 +388,7 @@ public class TabFragment2D extends Fragment {
                 }
 
                 Item item = new Item(
-                        c.getString(c.getColumnIndex(ItemDBAdapter.COL_ID)),
+                        c.getInt(c.getColumnIndex(ItemDBAdapter.COL_ID)),
                         c.getLong(c.getColumnIndex(ItemDBAdapter.COL_AMOUNT)),
                         "",
                         MainActivity.sFractionDigits,

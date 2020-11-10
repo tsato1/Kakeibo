@@ -199,7 +199,7 @@ public class TabFragment1 extends Fragment {
         String amount = _edtAmount.getText().toString();
 
         Item item = new Item(
-                "",
+                0,
                 new BigDecimal(amount),
                 MainActivity.sFractionDigits,
                 _selectedKkbCategory.getCode(),

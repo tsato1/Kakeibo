@@ -15,7 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme.Base"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:fullBackupContent="@xml/backup_rules"
         tools:replace="android:theme">
         <meta-data
@@ -51,26 +51,50 @@
         <activity
             android:name=".settings.SettingsCompatActivity"
             android:label="Settings"
-            android:parentActivityName="com.kakeibo.MainActivity"/>
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".settings.CategoryPlacementActivity"
             android:label="@string/hide_display_reorder_categories"
-            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+            android:parentActivityName=".settings.SettingsCompatActivity"/>
         <activity
             android:name=".settings.CategoryReorderActivity"
             android:label="@string/reorder_categories"
-            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+            android:parentActivityName="settings.SettingsCompatActivity"/>
         <activity
             android:name=".settings.CategoryCreationActivity"
             android:label="@string/create_category"
-            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+            android:parentActivityName=".settings.SettingsCompatActivity"/>
         <activity
             android:name=".settings.CategoryEditionActivity"
             android:label="@string/custom_categories"
-            android:parentActivityName="com.kakeibo.settings.SettingsCompatActivity"/>
+            android:parentActivityName=".settings.SettingsCompatActivity"/>
+        <activity android:name=".settings.InAppPurchasesActivity"
+            android:label="@string/in_app_purchases"
+            android:parentActivityName=".settings.SettingsCompatActivity"/>
         <activity
             android:name=".settings.SettingsAboutActivity"
             android:label="@string/about_this_app"
-            android:parentActivityName="com.kakeibo.settings.SettingsAboutActivity"/>
+            android:parentActivityName=".settings.SettingsAboutActivity"/>
+        <activity
+            android:name=".ui.GoogleSignInActivity"
+            android:label="Google Sign In"
+            />
+
+        <service
+            android:name=".InstanceIDService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".data.network.firebase.SubscriptionMessageService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 </manifest>

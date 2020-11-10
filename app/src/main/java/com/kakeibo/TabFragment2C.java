@@ -306,7 +306,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
             if (c.moveToFirst()) {
                 do {
                     Item item = new Item(
-                            c.getString(c.getColumnIndex(ItemDBAdapter.COL_ID)),
+                            c.getInt(c.getColumnIndex(ItemDBAdapter.COL_ID)),
                             c.getLong(c.getColumnIndex(ItemDBAdapter.COL_AMOUNT)),
                             "",
                             MainActivity.sFractionDigits,
@@ -354,7 +354,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
 
             do {
                 Item item = new Item(
-                        "",
+                        0,
                         c.getLong(c.getColumnIndex("SUM(amount)")),
                         "",
                         MainActivity.sFractionDigits,
@@ -501,7 +501,7 @@ public class TabFragment2C extends Fragment implements OnChartValueSelectedListe
         if (c!=null && c.moveToFirst()) {
             do {
                 Item item = new Item(
-                        "",
+                        0,
                         c.getLong(c.getColumnIndex(ItemDBAdapter.COL_AMOUNT)),
                         "",
                         MainActivity.sFractionDigits,

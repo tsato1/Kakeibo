@@ -6,6 +6,8 @@
     <string name="kakeibo_original" translatable="false">Kakeibo (Old)</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_signin">Sign In</string>
+    <string name="action_signout">Sign Out</string>
 
     <string name="input">INPUT</string>
     <string name="report">REPORT</string>
@@ -176,6 +178,21 @@
     <string name="pref_key_category_edition" translatable="false">pref_key_category_edition</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
     <string name="pref_key_about" translatable="false">pref_key_about</string>
+
+    <!-- Subscription options -->
+    <string name="subscription_options_label">Subscription options</string>
+    <string name="basic_button_text">Basic</string>
+    <string name="premium_button_text">Premium</string>
+    <string name="subscription_option_basic_message">Basic plan</string>
+    <string name="subscription_option_basic_message_current">Basic plan (current)</string>
+    <string name="subscription_option_basic_message_account_hold">Basic plan (on hold)</string>
+    <string name="subscription_option_basic_message_grace_period">Basic plan (payment issue)</string>
+    <string name="subscription_option_basic_message_restore">Basic plan (canceled)</string>
+    <string name="subscription_option_premium_message">Premium plan</string>
+    <string name="subscription_option_premium_message_current">Premium plan (current)</string>
+    <string name="subscription_option_premium_message_account_hold">Premium plan (on hold)</string>
+    <string name="subscription_option_premium_message_grace_period">Premium plan (payment issue)</string>
+    <string name="subscription_option_premium_message_restore">Premium plan (canceled)</string>
 
     <!-- other -->
     <string name="dash" translatable="false">-</string>

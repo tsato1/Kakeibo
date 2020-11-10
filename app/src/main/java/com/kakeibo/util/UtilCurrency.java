@@ -2,10 +2,16 @@ package com.kakeibo.util;
 
 import java.math.BigDecimal;
 
+import static com.kakeibo.MainActivity.sFractionDigits;
+
 public class UtilCurrency {
     private final static String TAG = UtilCurrency.class.getSimpleName();
     public final static String CURRENCY_NONE = "---";
     public final static String CURRENCY_OLD = "===";
+
+    public static long getLongFromBigDecimal(BigDecimal amount) {
+        return amount.multiply(BigDecimal.valueOf(1000)).longValue();
+    }
 
     public static long getLongAmountFromBigDecimal(BigDecimal amount, int currencyFractionDigits) {
         if (currencyFractionDigits == 0) {
@@ -21,20 +27,12 @@ public class UtilCurrency {
         return -1;
     }
 
-    public static BigDecimal getBigDecimalAmountFromInt(int amount, int currencyFractionDigits) {
-        return BigDecimal.valueOf(amount, currencyFractionDigits);
+    public static BigDecimal getBigDecimalFromLong(long amount) {
+        return BigDecimal.valueOf(amount)
+                .divide(BigDecimal.valueOf(1000), sFractionDigits, BigDecimal.ROUND_HALF_UP);
     }
 
     public static boolean checkAmount(String str) {
         return str.matches("\\d+(\\.\\d+)?");
-
-//        try (Scanner scanner = new Scanner(System.in)) {
-//            System.out.println("Enter an integer : ");
-//            if (scanner.hasNextInt()) {
-//                System.out.println("You entered : " + scanner.nextInt());
-//            } else {
-//                System.out.println("The input is not an integer");
-//            }
-//        }
     }
 }
