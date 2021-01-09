@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -76,18 +76,13 @@
             </TableRow>
         </TableLayout>
 
-        <GridView
-            android:id="@+id/grv_category"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_input_categories"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:columnWidth="@dimen/grv_column_width"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="@dimen/grv_vertical_spacing"
-            android:horizontalSpacing="0dp"
-            android:nestedScrollingEnabled="true"
-            android:stretchMode="spacingWidthUniform" />
+            android:layout_margin="16dp"
+            tools:listitem="@layout/item_grid" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

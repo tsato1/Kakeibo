@@ -1,4 +1,4 @@
-package com.kakeibo.room;
+package com.kakeibo;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;

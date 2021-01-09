@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import com.kakeibo.R;
 import com.kakeibo.db.CategoryLanDBAdapter;
 import com.kakeibo.db.TmpCategory;
-import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilKeyboard;
 import com.kakeibo.util.UtilSystem;
 
@@ -73,7 +72,7 @@ public class CategoryCreationLanguageFragment extends Fragment {
         findViews(view);
 
         /*** set data if the screen is navigated from CategoryEditionActivity ***/
-        if (_categoryCode!=-1) _edtName.setText(UtilCategory.getCategoryStr(_activity, _categoryCode));
+//20        if (_categoryCode!=-1) _edtName.setText(UtilCategory.getCategoryStr(_activity, _categoryCode));
 
         /*** language setup ***/
         _btnLanguage.setText(UtilSystem.getCurrentLangCode(_activity));
@@ -139,12 +138,12 @@ public class CategoryCreationLanguageFragment extends Fragment {
                     dialog1.show();
                     break;
                 case R.id.btn_back:
-                    UtilKeyboard.hideSoftKeyboard(_activity);
+                    UtilKeyboard.hideKeyboard(_activity);
                     ((CategoryCreationActivity) _activity).onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_next:
                     if (checkBeforeProceed()) {
-                        UtilKeyboard.hideSoftKeyboard(_activity);
+                        UtilKeyboard.hideKeyboard(_activity);
                         ((CategoryCreationActivity) _activity).onNextPressed(TAG_INT, _tmpCategory);
                     }
                     break;

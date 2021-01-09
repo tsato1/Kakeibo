@@ -53,7 +53,8 @@ public class CategoryCreationColorFragment extends Fragment {
         findViews(view);
 
         /*** set data if the screen is navigated from CategoryEditionActivity ***/
-        _selectedColor = _categoryCode==-1? -1: UtilCategory.getCategoryColor(_activity, _categoryCode);
+//        _selectedColor = _categoryCode==-1? -1: UtilCategory.getCategoryColor(_activity, _categoryCode);
+        _selectedColor = 100000000;
 
         selectColor();
 
@@ -81,27 +82,27 @@ public class CategoryCreationColorFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_income:
-                    if (UtilCategory.isCategoryAlreadyUsed(_categoryCode)) {
-                        String str1 = getString(R.string.msg_custom_category_already_in_use);
-                        String str2 = getString(R.string.msg_type_cannot_be_changed);
-                        Toast.makeText(_activity, str1+str2, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    _selectedColor = UtilCategory.CATEGORY_COLOR_INCOME;
-                    selectColor();
+//                    if (UtilCategory.isCategoryAlreadyUsed(_categoryCode)) {
+//                        String str1 = getString(R.string.msg_custom_category_already_in_use);
+//                        String str2 = getString(R.string.msg_type_cannot_be_changed);
+//                        Toast.makeText(_activity, str1+str2, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    _selectedColor = UtilCategory.CATEGORY_COLOR_INCOME;
+//                    selectColor();
                     break;
                 case R.id.btn_expense:
                     /*** if this Activity is called from Settings ***/
-                    if (_categoryCode!=-1 && UtilCategory.isCategoryAlreadyUsed(_categoryCode)) {
-                        String str1 = getString(R.string.msg_custom_category_already_in_use);
-                        String str2 = getString(R.string.msg_type_cannot_be_changed);
-                        Toast.makeText(_activity, str1+str2, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    _selectedColor = UtilCategory.CATEGORY_COLOR_EXPENSE;
-                    selectColor();
+//                    if (_categoryCode!=-1 && UtilCategory.isCategoryAlreadyUsed(_categoryCode)) {
+//                        String str1 = getString(R.string.msg_custom_category_already_in_use);
+//                        String str2 = getString(R.string.msg_type_cannot_be_changed);
+//                        Toast.makeText(_activity, str1+str2, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    _selectedColor = UtilCategory.CATEGORY_COLOR_EXPENSE;
+//                    selectColor();
                     break;
                 case R.id.btn_back:
                     ((CategoryCreationActivity) _activity).onBackPressed(TAG_INT);

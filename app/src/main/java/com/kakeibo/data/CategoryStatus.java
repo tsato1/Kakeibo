@@ -15,10 +15,10 @@ public class CategoryStatus {
     private long id = 1;
 
     @ColumnInfo(name = CategoryDBAdapter.COL_CODE, defaultValue = "0")
-    @NonNull
     private int code = 0;
 
-    @Ignore
+    @ColumnInfo(name = CategoryDBAdapter.COL_NAME, defaultValue = "")
+    @NonNull
     private String name = "";
 
     @ColumnInfo(name = CategoryDBAdapter.COL_COLOR, defaultValue = "0")
@@ -27,14 +27,13 @@ public class CategoryStatus {
     @ColumnInfo(name = CategoryDBAdapter.COL_SIGNIFICANCE, defaultValue = "0")
     private int significance = 0;
 
-    @ColumnInfo(name = CategoryDBAdapter.COL_DRAWABLE)
-    private int drawable;
+    @ColumnInfo(name = CategoryDBAdapter.COL_DRAWABLE, defaultValue = "0")
+    private int drawable = 0;
 
     @ColumnInfo(name = CategoryDBAdapter.COL_IMAGE)
     private byte[] image;
 
     @ColumnInfo(name = CategoryDBAdapter.COL_PARENT, defaultValue = "-1")
-    @NonNull
     private int parent = -1;
 
     @ColumnInfo(name = CategoryDBAdapter.COL_DESC, defaultValue = "")
@@ -47,6 +46,7 @@ public class CategoryStatus {
 
     public CategoryStatus(long id,
                           int code,
+                          String name,
                           int color,
                           int significance,
                           int drawable,
@@ -56,6 +56,7 @@ public class CategoryStatus {
                           String savedDate) {
         this.id = id;
         this.code = code;
+        this.name = name;
         this.color = color;
         this.significance = significance;
         this.drawable = drawable;
@@ -84,7 +85,9 @@ public class CategoryStatus {
         this.description = description;
         this.savedDate = savedDate;
     }
-
+    /***
+     * Getter
+     */
     public long getId() { return id; }
 
     public int getCode() { return code; }
@@ -104,4 +107,25 @@ public class CategoryStatus {
     public String getDescription() { return description; }
 
     public String getSavedDate() { return savedDate; }
+
+    /***
+     * Setter
+     */
+    public void setCode(int code) { this.code = code; }
+
+    public void setName(String name) { this.name = name; }
+
+    public void setColor(int color) { this.color = color; }
+
+    public void setSignificance(int significance) { this.significance = significance; }
+
+    public void setDrawable(int drawable) { this.drawable = drawable; }
+
+    public void setImage(byte[] image) { this.image = image; }
+
+    public void setParent(int parent) { this.parent = parent; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public void setSavedDate(String savedDate) { this.savedDate = savedDate; }
 }

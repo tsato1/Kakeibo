@@ -86,13 +86,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 handleAgreement();
                 return false;
             }
-            if (UtilCategory.addNewCategory(_context, null) == -2) {
-                String s = getString(R.string.err_reached_max_count_colon) +
-                        UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
-                        getString(R.string.msg_delete_some_categories); //todo 5 for ordinary version, 100 for paid, 1000 for b2b
-                Toast.makeText(_context, s, Toast.LENGTH_LONG).show();
-                return false;
-            }
+//            if (UtilCategory.addNewCategory(_context, null) == -2) {
+//                String s = getString(R.string.err_reached_max_count_colon) +
+//                        UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
+//                        getString(R.string.msg_delete_some_categories); //todo 5 for ordinary version, 100 for paid, 1000 for b2b
+//                Toast.makeText(_context, s, Toast.LENGTH_LONG).show();
+//                return false;
+//            }
             startActivity(new Intent(_activity, CategoryCreationActivity.class));
             return true;
         } else if (str.equals(getString(R.string.pref_key_category_edition))) {
@@ -163,14 +163,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void deleteAllItems() {
-        ItemDBAdapter itemDbAdapter = new ItemDBAdapter();
-        itemDbAdapter.open();
+//        ItemDBAdapter itemDbAdapter = new ItemDBAdapter();
+//        itemDbAdapter.open();
 
-        if(itemDbAdapter.deleteAllItems()) {
-            Toast.makeText(getActivity(), getString(R.string.msg_all_delete_success), Toast.LENGTH_LONG).show();
-        }
-
-        itemDbAdapter.close();
+//        if(itemDbAdapter.deleteAllItems()) {
+//            Toast.makeText(getActivity(), getString(R.string.msg_all_delete_success), Toast.LENGTH_LONG).show();
+//        }
+//
+//        itemDbAdapter.close();
     }
 
     @Override

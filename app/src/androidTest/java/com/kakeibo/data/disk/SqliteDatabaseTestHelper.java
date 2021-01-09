@@ -3,21 +3,19 @@ package com.kakeibo.data.disk;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.kakeibo.data.CategoryDspStatus;
-import com.kakeibo.data.CategoryLanStatus;
-import com.kakeibo.data.CategoryStatus;
-import com.kakeibo.data.ItemStatus;
-import com.kakeibo.data.SubscriptionStatus;
 import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.db.CategoryDspDBAdapter;
 import com.kakeibo.db.CategoryLanDBAdapter;
 import com.kakeibo.db.ItemDBAdapter;
+import com.kakeibo.db.KkbAppDBAdapter;
 import com.kakeibo.db.PrepDB;
 import com.kakeibo.util.UtilCurrency;
 
 import java.math.BigDecimal;
+
+import static com.kakeibo.db.KkbAppDBAdapter.TABLE_KKBAPP;
 
 /**
  * Helper class for working with the SQLiteDatabase.
@@ -99,6 +97,7 @@ public class SqliteDatabaseTestHelper {
     public static void insertCategoryStatus_v6(
             int id,
             int code,
+            String name,
             int color,
             int significance,
             int drawable,
@@ -122,30 +121,30 @@ public class SqliteDatabaseTestHelper {
         db.close();
     }
 
-    public static void insertCategoryLanStatus(CategoryLanStatus categoryLanStatus, SqliteTestDbOpenHelper helper) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(CategoryLanDBAdapter.COL_ID, categoryLanStatus.getId());
-        values.put(CategoryLanDBAdapter.COL_CODE, categoryLanStatus.getCode());
-        values.put(CategoryLanDBAdapter.COL_ARA, categoryLanStatus.getAra());
-        values.put(CategoryLanDBAdapter.COL_ENG, categoryLanStatus.getEng());
-        values.put(CategoryLanDBAdapter.COL_SPA, categoryLanStatus.getSpa());
-        values.put(CategoryLanDBAdapter.COL_FRA, categoryLanStatus.getFra());
-        values.put(CategoryLanDBAdapter.COL_HIN, categoryLanStatus.getHin());
-        values.put(CategoryLanDBAdapter.COL_IND, categoryLanStatus.getInd());
-        values.put(CategoryLanDBAdapter.COL_ITA, categoryLanStatus.getIta());
-        values.put(CategoryLanDBAdapter.COL_JPN, categoryLanStatus.getJpn());
-        values.put(CategoryLanDBAdapter.COL_KOR, categoryLanStatus.getKor());
-        values.put(CategoryLanDBAdapter.COL_POL, categoryLanStatus.getPol());
-        values.put(CategoryLanDBAdapter.COL_POR, categoryLanStatus.getPor());
-        values.put(CategoryLanDBAdapter.COL_RUS, categoryLanStatus.getRus());
-        values.put(CategoryLanDBAdapter.COL_TUR, categoryLanStatus.getTur());
-        values.put(CategoryLanDBAdapter.COL_VIE, categoryLanStatus.getVie());
-        values.put(CategoryLanDBAdapter.COL_Hans, categoryLanStatus.getHans());
-        values.put(CategoryLanDBAdapter.COL_Hant, categoryLanStatus.getHant());
-        db.insertWithOnConflict(CategoryLanDBAdapter.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
-    }
+//    public static void insertCategoryLanStatus(CategoryLanStatus categoryLanStatus, SqliteTestDbOpenHelper helper) {
+//        SQLiteDatabase db = helper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(CategoryLanDBAdapter.COL_ID, categoryLanStatus.getId());
+//        values.put(CategoryLanDBAdapter.COL_CODE, categoryLanStatus.getCode());
+//        values.put(CategoryLanDBAdapter.COL_ARA, categoryLanStatus.getAra());
+//        values.put(CategoryLanDBAdapter.COL_ENG, categoryLanStatus.getEng());
+//        values.put(CategoryLanDBAdapter.COL_SPA, categoryLanStatus.getSpa());
+//        values.put(CategoryLanDBAdapter.COL_FRA, categoryLanStatus.getFra());
+//        values.put(CategoryLanDBAdapter.COL_HIN, categoryLanStatus.getHin());
+//        values.put(CategoryLanDBAdapter.COL_IND, categoryLanStatus.getInd());
+//        values.put(CategoryLanDBAdapter.COL_ITA, categoryLanStatus.getIta());
+//        values.put(CategoryLanDBAdapter.COL_JPN, categoryLanStatus.getJpn());
+//        values.put(CategoryLanDBAdapter.COL_KOR, categoryLanStatus.getKor());
+//        values.put(CategoryLanDBAdapter.COL_POL, categoryLanStatus.getPol());
+//        values.put(CategoryLanDBAdapter.COL_POR, categoryLanStatus.getPor());
+//        values.put(CategoryLanDBAdapter.COL_RUS, categoryLanStatus.getRus());
+//        values.put(CategoryLanDBAdapter.COL_TUR, categoryLanStatus.getTur());
+//        values.put(CategoryLanDBAdapter.COL_VIE, categoryLanStatus.getVie());
+//        values.put(CategoryLanDBAdapter.COL_Hans, categoryLanStatus.getHans());
+//        values.put(CategoryLanDBAdapter.COL_Hant, categoryLanStatus.getHant());
+//        db.insertWithOnConflict(CategoryLanDBAdapter.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+//        db.close();
+//    }
 
     public static void insertCategoryDspStatus(CategoryDspStatus categoryDspStatus, SqliteTestDbOpenHelper helper) {
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -157,9 +156,48 @@ public class SqliteDatabaseTestHelper {
         db.close();
     }
 
-    /***
-     * database schema for v1 and v2 are the same
-     */
+    public static void insertKkbApp(
+            int id,
+            String name,
+            String type,
+            String updateDate,
+            int intVal1, int intVal2, int intVal3,
+            String strVal1, String strVal2, String strVal3,
+            SqliteTestDbOpenHelper helper) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KkbAppDBAdapter.COL_ID, id);
+        values.put(KkbAppDBAdapter.COL_NAME, name);
+        values.put(KkbAppDBAdapter.COL_TYPE, type);
+        values.put(KkbAppDBAdapter.COL_UPDATE_DATE, updateDate);
+        values.put(KkbAppDBAdapter.COL_VAL_INT_1, intVal1);
+        values.put(KkbAppDBAdapter.COL_VAL_INT_2, intVal2);
+        values.put(KkbAppDBAdapter.COL_VAL_INT_3, intVal3);
+        values.put(KkbAppDBAdapter.COL_VAL_STR_1, strVal1);
+        values.put(KkbAppDBAdapter.COL_VAL_STR_2, strVal2);
+        values.put(KkbAppDBAdapter.COL_VAL_STR_3, strVal3);
+        db.insertWithOnConflict(TABLE_KKBAPP, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+    }
+
+    public static void createKkbAppTable(SqliteTestDbOpenHelper helper) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.execSQL("CREATE TABLE " + TABLE_KKBAPP + " (" +
+                KkbAppDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                KkbAppDBAdapter.COL_NAME + " TEXT NOT NULL," +
+                KkbAppDBAdapter.COL_TYPE + " TEXT NOT NULL," +
+                KkbAppDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL," +
+                KkbAppDBAdapter.COL_VAL_INT_1 + " INTEGER DEFAULT 0," +
+                KkbAppDBAdapter.COL_VAL_INT_2 + " INTEGER DEFAULT 0," +
+                KkbAppDBAdapter.COL_VAL_INT_3 + " INTEGER DEFAULT 0," +
+                KkbAppDBAdapter.COL_VAL_STR_1 + " TEXT NOT NULL," +
+                KkbAppDBAdapter.COL_VAL_STR_2 + " TEXT NOT NULL," +
+                KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL);");
+
+        db.close();
+    }
+
     public static void createItemsTable(SqliteTestDbOpenHelper helper) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -175,10 +213,16 @@ public class SqliteDatabaseTestHelper {
         db.close();
     }
 
+    public static void createCategoryDspTable(SqliteTestDbOpenHelper helper) {
+        SQLiteDatabase database = helper.getWritableDatabase();
+        database.execSQL("CREATE TABLE " + CategoryDspDBAdapter.TABLE_NAME + " (" +
+                CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
+                CategoryDspDBAdapter.COL_LOCATION + " INTEGER DEFAULT 0," +
+                CategoryDspDBAdapter.COL_CODE + " INTEGER DEFAULT 0);");
+    }
+
     public static void createCategoriesTable(SqliteTestDbOpenHelper helper) {
         SQLiteDatabase database = helper.getWritableDatabase();
-
-        /*** Category table ***/
         database.execSQL(
                 "CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
                         CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
@@ -311,6 +355,12 @@ public class SqliteDatabaseTestHelper {
         database.execSQL("DROP TABLE "+ ItemDBAdapter.TABLE_NAME +"_old;");
     }
 
+    public static void prepareTables(SqliteTestDbOpenHelper helper) {
+        SQLiteDatabase database = helper.getWritableDatabase();
+
+
+    }
+
     public static void upgrade_categories_5_6(SqliteTestDbOpenHelper helper) {
         SQLiteDatabase database = helper.getWritableDatabase();
 
@@ -321,8 +371,6 @@ public class SqliteDatabaseTestHelper {
                 CategoryDspDBAdapter.COL_CODE + " INTEGER DEFAULT 0);");
 
         database.execSQL("DROP TABLE "+ CategoryDBAdapter.TABLE_NAME);
-        database.execSQL("DROP TABLE "+ CategoryLanDBAdapter.TABLE_NAME);
-
         database.execSQL("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
                 CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                 CategoryDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
@@ -336,6 +384,8 @@ public class SqliteDatabaseTestHelper {
                 CategoryDBAdapter.COL_VAL2 + " INTEGER DEFAULT 0," +
                 CategoryDBAdapter.COL_VAL3 + " INTEGER DEFAULT 0," +
                 CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);");
+
+        database.execSQL("DROP TABLE "+ CategoryLanDBAdapter.TABLE_NAME);
         database.execSQL("CREATE TABLE " + CategoryLanDBAdapter.TABLE_NAME + " (" +
                 CategoryLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                 CategoryLanDBAdapter.COL_CODE + " INTEGER DEFAULT 0," +
@@ -366,13 +416,12 @@ public class SqliteDatabaseTestHelper {
      */
     public static void clearDatabase(SqliteTestDbOpenHelper helper) {
         SQLiteDatabase db = helper.getWritableDatabase();
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_KKBAPP);
         db.execSQL("DROP TABLE IF EXISTS " + ItemDBAdapter.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS subscriptions");
         db.execSQL("DROP TABLE IF EXISTS " + CategoryDBAdapter.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CategoryLanDBAdapter.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CategoryDspDBAdapter.TABLE_NAME);
-
         db.close();
     }
 }

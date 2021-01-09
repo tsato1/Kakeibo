@@ -3,23 +3,13 @@ package com.kakeibo.data.disk;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
-import com.kakeibo.data.CategoryDspStatus;
-import com.kakeibo.data.CategoryLanStatus;
+import com.kakeibo.LiveDataTestUtil;
 import com.kakeibo.data.CategoryStatus;
 import com.kakeibo.data.ItemStatus;
-import com.kakeibo.db.CategoryDBAdapter;
-import com.kakeibo.db.CategoryDspDBAdapter;
-import com.kakeibo.db.CategoryLanDBAdapter;
-import com.kakeibo.db.ItemDBAdapter;
-import com.kakeibo.room.LiveDataTestUtil;
-import com.kakeibo.util.UtilCurrency;
-
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import com.kakeibo.data.KkbAppStatus;
 
 import androidx.room.Room;
 import androidx.room.testing.MigrationTestHelper;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -37,7 +27,7 @@ import java.util.List;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_1_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_2_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_3_7;
-import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_7;
+import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_5;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_5_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_6_7;
 import static org.junit.Assert.assertEquals;
@@ -55,7 +45,7 @@ public class MigrationTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private static final String TEST_DB_NAME = "kakeibo.db";
-    public static final int DATABASE_OLD_VERSION = 6;
+    public static final int DATABASE_OLD_VERSION = 4;
     public static final int DATABASE_NEW_VERSION = 7;
 
     // Helper for creating Room databases and migrations
@@ -76,8 +66,10 @@ public class MigrationTest {
                 TEST_DB_NAME,
                 DATABASE_OLD_VERSION);
         // We're creating the table for every test, to ensure that the table is in the correct state
+        SqliteDatabaseTestHelper.createKkbAppTable(mSqliteTestDbHelper);
         SqliteDatabaseTestHelper.createItemsTable(mSqliteTestDbHelper);
         SqliteDatabaseTestHelper.createCategoriesTable(mSqliteTestDbHelper);
+        SqliteDatabaseTestHelper.createCategoryDspTable(mSqliteTestDbHelper);
     }
 
     @After
@@ -163,8 +155,6 @@ public class MigrationTest {
 
     @Test
     public void migrationFrom3To7_containsCorrectData() throws IOException {
-        // Create the database with the initial version 1 schema and insert one item
-        // MAKE THE VARIABLE: DATABASE_OLD_VERSION to 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         SqliteDatabaseTestHelper.insertItemStatusToSqlite_v1_2(
                 16,
                 "11116",
@@ -222,9 +212,44 @@ public class MigrationTest {
         }
     }
 
+    // db version 4 has just additional KkbApp table
     @Test
     public void migrationFrom4To7_containsCorrectData() throws IOException {
-        // db version 4 has just additional KkbApp table. items table is the same
+        SqliteDatabaseTestHelper.upgrade_categories_5_6(mSqliteTestDbHelper);
+
+        SqliteDatabaseTestHelper.insertKkbApp(
+                1,
+                "name", "type", "updateDate",
+                1, 2, 3, "1", "2", "3",
+                mSqliteTestDbHelper);
+
+        mMigrationTestHelper.runMigrationsAndValidate(
+                TEST_DB_NAME,
+                DATABASE_NEW_VERSION,
+                true,
+                MIGRATION_4_5,
+                MIGRATION_5_7);
+
+        // Get the latest, migrated, version of the database
+        AppDatabase latestDb = getMigratedRoomDatabase();
+
+        // Check that the correct data is in the database
+        try {
+            KkbAppStatus kkbAppStatus = LiveDataTestUtil.getOrAwaitValue(
+                    latestDb.kkbAppStatusDao().getFirst());
+            assertEquals(kkbAppStatus.getId(), 1);
+            assertEquals(kkbAppStatus.getName(), "name");
+            assertEquals(kkbAppStatus.getType(), "type");
+            assertEquals(kkbAppStatus.getUpdateDate(), "updateDate");
+            assertEquals(kkbAppStatus.getValInt1(), 1);
+            assertEquals(kkbAppStatus.getValInt2(), 2);
+            assertEquals(kkbAppStatus.getValInt3(), 3);
+            assertEquals(kkbAppStatus.getValStr1(), "1");
+            assertEquals(kkbAppStatus.getValStr2(), "2");
+            assertEquals(kkbAppStatus.getValStr3(), "3");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -236,6 +261,7 @@ public class MigrationTest {
         SqliteDatabaseTestHelper.insertCategoryStatus_v6(
                 3,
                 57,
+                "category name",
                 57,
                 0,
                 57,
@@ -256,7 +282,8 @@ public class MigrationTest {
 
         // Check that the correct data is in the database
         try {
-            List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(latestDb.categoryStatusDao().getAll());
+            List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(
+                    latestDb.categoryStatusDao().getAllStatusesLiveData());
             CategoryStatus dbCategoryStatus = dbCategoryStatuses.get(0);
             assertEquals(dbCategoryStatus.getId(), 1);
             assertEquals(dbCategoryStatus.getCode(), 0); // Income=0
@@ -296,12 +323,13 @@ public class MigrationTest {
         SqliteDatabaseTestHelper.upgrade_categories_5_6(mSqliteTestDbHelper);
 
         SqliteDatabaseTestHelper.insertCategoryStatus_v6(
-                3,
-                67,
+                25,
+                1001,
+                "category name",
                 67,
                 0,
                 67,
-                null,
+                new byte[]{0,1,2,3,4},
                 67,
                 "description test",
                 "2020/08/06",
@@ -318,10 +346,12 @@ public class MigrationTest {
 
         // Check that the correct data is in the database
         try {
-            List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(latestDb.categoryStatusDao().getAll());
+            List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(
+                    latestDb.categoryStatusDao().getAllStatusesLiveData());
             CategoryStatus dbCategoryStatus = dbCategoryStatuses.get(0);
             assertEquals(dbCategoryStatus.getId(), 1);
             assertEquals(dbCategoryStatus.getCode(), 0); // Income=0
+            assertEquals(dbCategoryStatus.getName(), "");
             assertEquals(dbCategoryStatus.getColor(), 1); // Income=1
             assertEquals(dbCategoryStatus.getSignificance(), 0);
             assertEquals(dbCategoryStatus.getParent(), -1);
@@ -331,22 +361,42 @@ public class MigrationTest {
             dbCategoryStatus = dbCategoryStatuses.get(1);
             assertEquals(dbCategoryStatus.getId(), 2);
             assertEquals(dbCategoryStatus.getCode(), 1); // Comm = 1
+            assertEquals(dbCategoryStatus.getName(), "");
             assertEquals(dbCategoryStatus.getColor(), 0); // Expense = 0
             assertEquals(dbCategoryStatus.getSignificance(), 0);
             assertEquals(dbCategoryStatus.getParent(), -1);
             assertEquals(dbCategoryStatus.getDescription(), "");
             assertEquals(dbCategoryStatus.getSavedDate(), "");
 
-            dbCategoryStatus = dbCategoryStatuses.get(2);
-            assertEquals(dbCategoryStatus.getId(), 3);
-            assertEquals(dbCategoryStatus.getCode(), 67);
+            dbCategoryStatus = dbCategoryStatuses.get(23);
+            assertEquals(dbCategoryStatus.getId(), 24);
+            assertEquals(dbCategoryStatus.getCode(), 23);
+            assertEquals(dbCategoryStatus.getName(), "");
+            assertEquals(dbCategoryStatus.getColor(), 0); // Expense = 0, Income = 1
+            assertEquals(dbCategoryStatus.getSignificance(), 0);
+            assertEquals(dbCategoryStatus.getParent(), -1);
+            assertEquals(dbCategoryStatus.getDescription(), "");
+            assertEquals(dbCategoryStatus.getSavedDate(), "");
+
+            dbCategoryStatus = dbCategoryStatuses.get(24);
+            assertEquals(dbCategoryStatus.getId(), 25);
+            assertEquals(dbCategoryStatus.getCode(), 1001);
+            assertEquals(dbCategoryStatus.getName(), "category name");
             assertEquals(dbCategoryStatus.getColor(), 67);
             assertEquals(dbCategoryStatus.getSignificance(), 0);
             assertEquals(dbCategoryStatus.getDrawable(), 67);
-            assertNull(dbCategoryStatus.getImage());
+//            assertNull(dbCategoryStatus.getImage());
             assertEquals(dbCategoryStatus.getParent(), 67);
             assertEquals(dbCategoryStatus.getDescription(), "description test");
             assertEquals(dbCategoryStatus.getSavedDate(), "2020/08/06");
+
+
+//            List<CategoryLanStatus> dbCategoryLanStatuses = LiveDataTestUtil.getOrAwaitValue(
+//                    latestDb.categoryLanStatusDao().getAll());
+//            CategoryLanStatus dbCategoryLanStatus = dbCategoryLanStatuses.get(0);
+//            assertEquals(dbCategoryLanStatus.getId(), 1);
+//            assertEquals(dbCategoryLanStatus.getCode(), 1);
+//            assertEquals(dbCategoryLanStatus.getEng(), "Income");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -359,7 +409,7 @@ public class MigrationTest {
                         MIGRATION_1_7,
                         MIGRATION_2_7,
                         MIGRATION_3_7,
-                        MIGRATION_4_7,
+                        MIGRATION_4_5,
                         MIGRATION_5_7,
                         MIGRATION_6_7)
                 .build();

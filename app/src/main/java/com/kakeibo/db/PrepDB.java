@@ -7,9 +7,12 @@ import androidx.room.OnConflictStrategy;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kakeibo.R;
+import com.kakeibo.data.CategoryDspStatus;
+import com.kakeibo.data.CategoryStatus;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PrepDB {
     public static void initCategoriesTable(SupportSQLiteDatabase db) {
@@ -1685,5 +1688,84 @@ public class PrepDB {
             values1.put(CategoryLanDBAdapter.COL_Hant, c.hant);
             db.insertOrThrow(CategoryLanDBAdapter.TABLE_NAME, null, values1);
         }
+    }
+
+    public static List<CategoryStatus> prepCategoryStatuses() {
+        List<CategoryStatus> out = new ArrayList<>();
+        out.add(new CategoryStatus(1, 0, "INCOME", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_income, null, -1, "", ""));
+        out.add(new CategoryStatus(2, 1, "COMM", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_comm, null, -1, "", ""));
+        out.add(new CategoryStatus(3, 2, "MEAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_meal, null, -1, "", ""));
+        out.add(new CategoryStatus(4, 3, "UTIL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_util, null, -1, "", ""));
+        out.add(new CategoryStatus(5, 4, "HEALTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_health, null, -1, "", ""));
+        out.add(new CategoryStatus(6, 5, "EDU", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_edu, null, -1, "", ""));
+        out.add(new CategoryStatus(7, 6, "CLOTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_cloth, null, -1, "", ""));
+        out.add(new CategoryStatus(8, 7, "TRANS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_trans, null, -1, "", ""));
+        out.add(new CategoryStatus(9, 8, "ENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ent, null, -1, "", ""));
+        out.add(new CategoryStatus(10, 9, "INS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ins, null, -1, "", ""));
+        out.add(new CategoryStatus(11, 10, "TAX", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_tax, null, -1, "", ""));
+        out.add(new CategoryStatus(12, 11, "OTHER", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_other, null, -1, "", ""));
+        out.add(new CategoryStatus(13, 12, "PET", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_pet, null, -1, "", ""));
+        out.add(new CategoryStatus(14, 13, "SOCIAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_social, null, -1, "", ""));
+        out.add(new CategoryStatus(15, 14, "COSME", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_cosme, null, -1, "", ""));
+        out.add(new CategoryStatus(16, 15, "HOUSNG", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_housing, null, -1, "", ""));
+        out.add(new CategoryStatus(17, 16, "EXTRA", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_bonus, null, -1, "", ""));
+        out.add(new CategoryStatus(18, 17, "ALLOW", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_allowance, null, -1, "", ""));
+        out.add(new CategoryStatus(19, 18, "INV", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_in_inv, null, -1, "", ""));
+        out.add(new CategoryStatus(20, 19, "RENT", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_in_rent, null, -1, "", ""));
+        out.add(new CategoryStatus(21, 20, "EXPENS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_expense, null, -1, "", ""));
+        out.add(new CategoryStatus(22, 21, "TELE", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_tele, null, -1, "", ""));
+        out.add(new CategoryStatus(23, 22, "INV", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ex_inv, null, -1, "", ""));
+        out.add(new CategoryStatus(24, 23, "RENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ex_rent, null, -1, "", ""));
+        return out;
+    }
+
+//    public static List<CategoryLanStatus> prepLanCategoryStatuses() {
+//        List<CategoryLanStatus> out = new ArrayList<>();
+//        out.add(new CategoryLanStatus(1, 0, "الإيرادات", "INCOME", "INGRE", "REV.", "आय", "ENTR.", "ENTR.", "収入", "수입", "DOCHÓD", "RENDA", "доход", "GELİR", "THU NHẬP", "收入", "收入"));
+//        out.add(new CategoryLanStatus(2, 1, "السلع", "COMM", "MERCAN", "ACHAT.", "वस्तु", "KOMODITI", "ACQ.", "生活雑貨", "상품", "TOWAR", "MERCADORIA", "товар", "EMTİA", "HÀNG HÓA", "商品", "商品"));
+//        out.add(new CategoryLanStatus(3, 2, "وجبة", "MEAL", "COMIDA", "ALIM.", "भोजन", "MAKAN", "ALIMEN.", "食事", "식사", "POSIŁEK", "REFEIÇÃO", "еда", "YEMEK", "BỮA ĂN", "膳食", "膳食"));
+//        out.add(new CategoryLanStatus(4, 3, "خدمة", "UTIL", "UTIL", "FACTUR", "उपयोगिता", "UTIL", "UTENZE", "水道光熱", "유용", "UŻYTECZNOŚĆ", "UTIL", "Утилита", "YARAR", "TIỆN ÍCH", "效用", "效用"));
+//        out.add(new CategoryLanStatus(5, 4, "الصحة", "HEALTH", "SALUD", "SANTÉ", "स्वास्थ्य", "KESEHATAN", "SALUTE", "健康", "건강", "ZDROWIE", "SAÚDE", "Здоровье", "SAĞLIK", "SỨC KHỎE", "健康", "健康"));
+//        out.add(new CategoryLanStatus(6, 5, "التعليم", "EDU", "EDU", "ETUDE", "शिक्षा", "PENDIDIKAN", "EDUCAZ", "教育", "교육", "EDUKACJA", "EDUCAÇÃO", "образование", "EĞİTİM", "GIÁO DỤC", "教育", "教育"));
+//        out.add(new CategoryLanStatus(7, 6, "ملابس", "CLOTH", "VESTID", "VETEM.", "कपड़ा", "PAKAIAN", "ABBIG.", "衣服", "의류", "ODZIEŻ", "ROUPAS", "Одежда", "GİYİM", "QUẦN ÁO", "衣服", "衣服"));
+//        out.add(new CategoryLanStatus(8, 7, "نقل", "TRANS", "TRANS", "TRANS.", "परिवहन", "ANGKUTAN", "TRASP.", "交通", "교통", "TRANSPORT", "TRANSPORTE", "Транспорт", "ULAŞIM", "VẬN CHUYỂN", "运输", "運輸"));
+//        out.add(new CategoryLanStatus(9, 8, "تسلية", "ENT", "ENTRET", "AMUSE.", "मनोरंजन", "HIBURAN", "DIVERT.", "娯楽", "환대", "ZABAWA", "ENTRETENIMENTO", "Развлечения", "EĞLENCE", "SỰ GIẢI TRÍ", "娱乐", "娛樂"));
+//        out.add(new CategoryLanStatus(10, 9, "تأمين", "INS", "SEGURO", "EPARG.", "बीमा", "ASURANSI", "RISP.", "保険", "보험", "UBEZPIECZENIE", "SEGURO", "страхование", "SİGORTA", "BẢO HIỂM", "保险", "保險"));
+//        out.add(new CategoryLanStatus(11, 10, "ضريبة", "TAX", "IMPUES", "TAXE", "कर", "PAJAK", "TASSE", "税金", "세", "PODATEK", "IMPOSTO", "налог", "VERGİ", "THUẾ", "税", "稅"));
+//        out.add(new CategoryLanStatus(12, 11, "آخر", "OTHER", "OTROS", "AUTRE", "अन्य", "LAIN", "ALTRO", "他", "다른", "INNY", "OUTRO", "Другие", "DİĞER", "KHÁC", "其他", "其他"));
+//        out.add(new CategoryLanStatus(13, 12, "حيوان اليف", "PET", "MSCTA", "ANIM.C.", "पालतू", "MEMBELAI", "ANIM.D.", "ペット", "착한 애", "ZWIERZĘ DOMOWE", "ANIMAL", "домашнее животное", "EVCİL HAYVAN", "VẬT NUÔI", "宠物", "寵物"));
+//        out.add(new CategoryLanStatus(14, 13, "اجتماعي", "SOCIAL", "SOCIAL", "SOCIAL", "सामाजिक", "SOSIAL", "SOCIAL", "交際", "사회적인", "SPOŁECZNY", "SOCIAL", "Социальное", "SOSYAL", "XÃ HỘI", "社会的", "社會的"));
+//        out.add(new CategoryLanStatus(15, 14, "كوزمي", "COSME", "COSME", "COSMÉ", "अंगराग", "COSME", "COSME", "美容", "화장품", "COSME", "COSME", "Косме", "COSME", "MỸ PHẨM", "化妆品", "化妝品"));
+//        out.add(new CategoryLanStatus(16, 15, "إسكان", "HOUSNG", "VVENDA", "LOGMNT", "आवास", "PERUMAHAN", "ABITAT.", "居住", "주택", "MIESZKANIOWY", "HABITAÇÃO", "Корпус", "KONUT", "NHÀ Ở", "住房", "住房"));
+//        out.add(new CategoryLanStatus(17, 16, "علاوة", "EXTRA", "EXTRA", "SUPPLÉ.", "बक्शीश", "TAMBAHAN", "SUPPLE.", "ボーナス", "보너스", "DODATKOWY", "ADICIONAL", "допол", "EK", "THÊM", "奖金", "獎金"));
+//        out.add(new CategoryLanStatus(18, 17, "بدل", "ALLOW", "TOLER.", "ALLOC.", "भत्ता", "TUNJANGAN", "INDENNITA", "小遣い", "수당", "DODATEK", "MESADA", "РЕЗЕРВЫ", "ÖDENEK", "PHỤ CẤP", "津贴", "津貼"));
+//        out.add(new CategoryLanStatus(19, 18, "استثمار", "INV", "INV", "INV", "निवेश", "INV", "INV","投資", "투자", "INW", "INV", "инвест", "YATIRIM", "ĐẦU TƯ", "投资", "投資"));
+//        out.add(new CategoryLanStatus(20, 19, "تأجير", "RENT", "ALQUIL.", "LOCAC.", "किराए", "SEWA", "AFFIT.", "家賃", "임대", "CZYNSZ", "ALUGAR", "аренда", "KIRA", "THUÊ", "房租", "房租"));
+//        out.add(new CategoryLanStatus(21, 20, "مصروف", "EXPENS", "GASTOS", "FRAIS", "व्यय", "BIAYA", "SPESE", "支出", "비용", "KOSZT", "DESPESA", "РАСХОДЫ", "GİDER", "CHI PHÍ", "费用", "費用"));
+//        out.add(new CategoryLanStatus(22, 21, "هاتف", "TELE", "TELÉ", "TÉLÉ", "फ़ोन", "TELE", "TELE", "通信", "전화", "TELE", "TELE", "ТЕЛЕ", "TELE", "THOẠI", "电讯", "電訊"));
+//        out.add(new CategoryLanStatus(23, 22, "استثمار", "INV", "INV", "INV", "निवेश", "INV", "INV", "投資", "투자", "INW", "INV", "инвест", "YATIRIM", "ĐẦU TƯ", "投资", "投資"));
+//        out.add(new CategoryLanStatus(24, 23, "تأجير", "RENT", "ALQUIL.", "LOCAC.", "किराए", "SEWA", "AFFIT.", "家賃", "임대", "CZYNSZ", "ALUGAR", "аренда", "KIRA", "THUÊ", "房租", "房租"));
+//        return out;
+//    }
+
+    public static List<CategoryDspStatus> prepDspCategoryStatuses() {
+        List<CategoryDspStatus> out = new ArrayList<>();
+        out.add(new CategoryDspStatus(1, 0, 0));
+        out.add(new CategoryDspStatus(2, 1, 1));
+        out.add(new CategoryDspStatus(3, 2, 2));
+        out.add(new CategoryDspStatus(4, 3, 3));
+        out.add(new CategoryDspStatus(5, 4, 4));
+        out.add(new CategoryDspStatus(6, 5, 5));
+        out.add(new CategoryDspStatus(7, 6, 6));
+        out.add(new CategoryDspStatus(8, 7, 7));
+        out.add(new CategoryDspStatus(9, 12, 8));
+        out.add(new CategoryDspStatus(10, 13, 9));
+        out.add(new CategoryDspStatus(11, 14, 10));
+        out.add(new CategoryDspStatus(12, 15, 11));
+        out.add(new CategoryDspStatus(13, 8, 12));
+        out.add(new CategoryDspStatus(14, 9, 13));
+        out.add(new CategoryDspStatus(15, 10, 14));
+        out.add(new CategoryDspStatus(16, 11, 15));
+        return out;
     }
 }

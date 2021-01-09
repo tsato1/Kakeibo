@@ -33,8 +33,16 @@ public class DataRepository {
      * The mediator provides an easy way for us to use LiveData for both the local data source
      * and the network data source, without implementing a new callback interface.
      */
-    private MediatorLiveData<List<SubscriptionStatus>> subscriptions =
-            new MediatorLiveData<>();
+    private MediatorLiveData<List<SubscriptionStatus>> subscriptions = new MediatorLiveData<>();
+
+    private LiveData<List<ItemStatus>> items;
+//    private LiveData<List<CategoryStatus>> categories;
+    private LiveData<List<Integer>> categoryCodes;
+    private LiveData<List<CategoryDspStatus>> categoryDspStatuses;
+    private LiveData<List<CategoryStatus>> categoryStatusesForDsp;
+//    private LiveData<List<Integer>> dspCategoryCodes;
+//    private LiveData<List<CategoryStatus>> nonDspCategories;
+
 
     /**
      * Live data with basic content
@@ -82,6 +90,75 @@ public class DataRepository {
                         subscriptions.postValue(subscriptionStatuses);
                     }
                 });
+
+        // Database changes are observed by the ViewModel.
+        items = localDataSource.items;
+//        items.addSource(localDataSource.items,
+//                new Observer<List<ItemStatus>>() {
+//                    @Override
+//                    public void onChanged(List<ItemStatus> itemStatuses) {
+//                        int numOfItems = itemStatuses == null ?
+//                                0 : itemStatuses.size();
+//                        Log.d("Repository", "Items updated: "
+//                                + numOfItems);
+//                        items.postValue(itemStatuses);
+//                    }
+//                });
+
+        // Database changes are observed by the ViewModel.
+//        categories = localDataSource.categories;
+//        categories.addSource(localDataSource.categories,
+//                new Observer<List<CategoryStatus>>() {
+//                    @Override
+//                    public void onChanged(List<CategoryStatus> categoryStatuses) {
+//                        int numOfCategories = categoryStatuses == null ?
+//                                0 : categoryStatuses.size();
+//                        Log.d("Repository", "Categories updated: "
+//                                + numOfCategories);
+//                        categories.postValue(categoryStatuses);
+//                    }
+//                });
+
+        categoryCodes = localDataSource.categoryCodes;
+//        categoryCodes.addSource(localDataSource.categoryCodes,
+//                new Observer<List<Integer>>() {
+//                    @Override
+//                    public void onChanged(List<Integer> codes) {
+//                        int numOfCategories = codes == null ?
+//                                0 : codes.size();
+//                        Log.d("Repository", "categoryCodes updated: "
+//                                + numOfCategories);
+//                        categoryCodes.postValue(codes);
+//                    }
+//                });
+
+        categoryDspStatuses = localDataSource.categoryDspStatuses;
+        categoryStatusesForDsp = localDataSource.categoryStatusesForDsp;
+//        nonDspCategories = localDataSource.nonDspCategories;
+//        dspCategories.addSource(localDataSource.dspCategories,
+//                new Observer<List<CategoryStatus>>() {
+//                    @Override
+//                    public void onChanged(List<CategoryStatus> categoryStatuses) {
+//                        int numOfCategories = categoryStatuses == null ?
+//                                0 : categoryStatuses.size();
+//                        Log.d("Repository", "dspCategories updated: "
+//                                + numOfCategories);
+//                        dspCategories.postValue(categoryStatuses);
+//                    }
+//                });
+
+//        dspCategoryCodes = localDataSource.dspCategoryCodes;
+//        dspCategoryCodes.addSource(localDataSource.dspCategoryCodes,
+//                new Observer<List<Integer>>() {
+//                    @Override
+//                    public void onChanged(List<Integer> codes) {
+//                        int numOfCategories = codes == null ?
+//                                0 : codes.size();
+//                        Log.d("Repository", "dspCategoryCodes updated: "
+//                                + numOfCategories);
+//                        dspCategoryCodes.postValue(codes);
+//                    }
+//                });
 
         // Observed network changes are store in the database.
         // The database changes will propagate to the ViewModel.
@@ -326,5 +403,77 @@ public class DataRepository {
         localDataSource.deleteLocalUserData();
         basicContent.postValue(null);
         premiumContent.postValue(null);
+    }
+
+    /**
+     * ItemStatus
+     */
+    public LiveData<List<ItemStatus>> getAll() {
+        return items;
+    }
+
+    public void insertItemStatus(ItemStatus itemStatus) {
+        localDataSource.insertItemStatus(itemStatus);
+    }
+
+    public void deleteAllItemStatuses() {
+        localDataSource.deleteAllItemStatus();
+    }
+
+    /**
+     * CategoryStatus
+     */
+//    public LiveData<List<CategoryStatus>> getCategories() {
+//        return categories;
+//    }
+
+    public LiveData<List<Integer>> getCategoryCodes() {
+        return categoryCodes;
+    }
+
+    public void insertCategoryStatus(CategoryStatus categoryStatus) {
+        localDataSource.insertCategoryStatus(categoryStatus);
+    }
+
+    public void deleteAllCategoryStatuses() {
+        localDataSource.deleteAllCategoryStatus();
+    }
+
+    /**
+     * CategoryLanStatus
+     */
+//    public void insertCategoryLanStatus(CategoryLanStatus categoryLanStatus) {
+//        localDataSource.insertCategoryLanStatus(categoryLanStatus);
+//    }
+//
+//    public void deleteAllCategoryLanStatuses() {
+//        localDataSource.deleteAllCategoryLanStatus();
+//    }
+//
+    /**
+     * CategoryDspStatus
+     */
+    public LiveData<List<CategoryDspStatus>> getCategoryDspStatuses() {
+        return categoryDspStatuses;
+    }
+
+    public LiveData<List<CategoryStatus>> getCategoryStatusesForDsp() {
+        return categoryStatusesForDsp;
+    }
+
+//    public LiveData<List<CategoryStatus>> getNonDspCategories() {
+//        return nonDspCategories;
+//    }
+
+//    public LiveData<List<Integer>> getCategoryDspCodes() {
+//        return dspCategoryCodes;
+//    }
+
+    public void updateAllCategoryDspStatuses(List<Integer> categoryCodes) {
+        localDataSource.updateDspTable(categoryCodes);
+    }
+
+    public void deleteAllCategoryDspStatuses() {
+        localDataSource.deleteAllCategoryDspStatus();
     }
 }

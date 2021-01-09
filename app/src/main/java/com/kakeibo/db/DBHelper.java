@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import androidx.room.OnConflictStrategy;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilCurrency;
@@ -27,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "kakeibo.db";
     private static final int DATABASE_VERSION = BuildConfig.versionDB;
 
-    private static final String DATABASE_CREATE_TABLE_KKBAPP =
+    public static final String DATABASE_CREATE_TABLE_KKBAPP =
             "CREATE TABLE " + TABLE_KKBAPP + " (" +
                     KkbAppDBAdapter.COL_ID + " INTEGER PRIMARY KEY," +
                     KkbAppDBAdapter.COL_NAME + " TEXT NOT NULL," +
@@ -185,12 +188,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "oldVersion=" + oldVersion + " : newVersion=" + newVersion);
 
-        ItemDBAdapter itemDBAdapter = new ItemDBAdapter();
-        itemDBAdapter.open();
-        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
-        categoryDBAdapter.open();
-        CategoryLanDBAdapter categoryLanDBAdapter = new CategoryLanDBAdapter();
-        categoryLanDBAdapter.open();
+//        ItemDBAdapter itemDBAdapter = new ItemDBAdapter();
+//        itemDBAdapter.open();
+//        CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+//        categoryDBAdapter.open();
+//        CategoryLanDBAdapter categoryLanDBAdapter = new CategoryLanDBAdapter();
+//        categoryLanDBAdapter.open();
 
         if (oldVersion < 2) {
             upgradeVersion2(db);
@@ -211,9 +214,9 @@ public class DBHelper extends SQLiteOpenHelper {
             upgradeVersion7(db);
         }
 
-        itemDBAdapter.close();
-        categoryDBAdapter.close();
-        categoryLanDBAdapter.close();
+//        itemDBAdapter.close();
+//        categoryDBAdapter.close();
+//        categoryLanDBAdapter.close();
     }
 
     private void upgradeVersion7(SQLiteDatabase db) {
@@ -320,6 +323,4 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesDBVersion.put(KkbAppDBAdapter.COL_VAL_STR_3, "");
         db.insertOrThrow(TABLE_KKBAPP, null, valuesDBVersion);
     }
-
-
 }

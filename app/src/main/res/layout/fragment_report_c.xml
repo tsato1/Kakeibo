@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdv_in_ex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_view_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/balance_colon"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/char_size_mid" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/horizontal_bar_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/horizontal_bar_height"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdv_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_view_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/income_colon"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/char_size_mid" />
+
+                    <com.echo.holographlibrary.PieGraph
+                        android:id="@+id/pie_graph_income"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/pie_graph_height"
+                        android:layout_marginTop="@dimen/pie_graph_margin_vertical"
+                        android:layout_marginBottom="@dimen/pie_graph_margin_vertical"/>
+
+                    <ListView
+                        android:id="@+id/lsv_income"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdv_expense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_view_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/expense_colon"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/char_size_mid" />
+
+                    <com.echo.holographlibrary.PieGraph
+                        android:id="@+id/pie_graph_expense"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/pie_graph_height"
+                        android:layout_marginTop="@dimen/pie_graph_margin_vertical"
+                        android:layout_marginBottom="@dimen/pie_graph_margin_vertical"/>
+
+                    <ListView
+                        android:id="@+id/lsv_expense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="billingViewModel"
+            type="com.kakeibo.ui.BillingViewModel" />
+
+        <variable
+            name="subscriptionViewModel"
+            type="com.kakeibo.ui.SubscriptionStatusViewModel" />
+
+        <variable
+            name="categoryStatusViewModel"
+            type="com.kakeibo.ui.categories.CategoryStatusViewModel" />
+    </data>
+
+</layout>

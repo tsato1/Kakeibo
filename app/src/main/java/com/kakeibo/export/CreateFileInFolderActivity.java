@@ -15,8 +15,8 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 import com.kakeibo.BuildConfig;
-import com.kakeibo.KkbApplication;
 import com.kakeibo.R;
+import com.kakeibo.SubApp;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilFiles;
 
@@ -124,7 +124,7 @@ public class CreateFileInFolderActivity extends BaseExportActivity {
     }
 
     public void loadSharedPreference() {
-        int dateFormat = KkbApplication.getDateFormat(R.string.pref_key_date_format);
+        int dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format);
 
         switch (dateFormat) {
             case 1: // MDY

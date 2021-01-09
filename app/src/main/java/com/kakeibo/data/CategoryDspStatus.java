@@ -2,6 +2,7 @@ package com.kakeibo.data;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.kakeibo.db.CategoryDspDBAdapter;
@@ -20,6 +21,12 @@ public class CategoryDspStatus {
 
     public CategoryDspStatus(long id, int location, int code) {
         this.id = id;
+        this.location = location;
+        this.code = code;
+    }
+
+    @Ignore
+    public CategoryDspStatus(int location, int code) {
         this.location = location;
         this.code = code;
     }

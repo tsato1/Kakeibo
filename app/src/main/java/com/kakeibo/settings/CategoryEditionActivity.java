@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
@@ -16,7 +15,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,12 +25,11 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
-import com.kakeibo.CategoryListAdapter;
-import com.kakeibo.KkbCategory;
+import com.kakeibo.data.CategoryStatus;
+import com.kakeibo.ui.categories.CategoryListAdapter;
 import com.kakeibo.R;
 import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.util.UtilAds;
-import com.kakeibo.util.UtilCategory;
 
 import java.util.List;
 
@@ -50,7 +47,7 @@ public class CategoryEditionActivity extends AppCompatActivity {
     private TextView _txvNoCustomCategory;
     private ListView _lsvCustomCategories;
     private CategoryListAdapter _categoryListAdapter;
-    private List<KkbCategory> _customKkbCategoriesList;
+    private List<CategoryStatus> _customKkbCategoriesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +82,7 @@ public class CategoryEditionActivity extends AppCompatActivity {
         /*** setup listview ***/
         _lsvCustomCategories.setOnItemClickListener(new ItemClickListener());
         _lsvCustomCategories.setOnCreateContextMenuListener(new ItemContextClickListener());
-        _customKkbCategoriesList = UtilCategory.getCustomKkbCategoryList(_context);
+        _customKkbCategoriesList = null;//UtilCategory.getCustomKkbCategoryList(_context);
         _categoryListAdapter = new CategoryListAdapter(_context, 0, _customKkbCategoriesList);
         _lsvCustomCategories.setAdapter(_categoryListAdapter);
 
@@ -109,12 +106,12 @@ public class CategoryEditionActivity extends AppCompatActivity {
 
             String updateDate = "";
             CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
-            categoryDBAdapter.open();
-            Cursor c = categoryDBAdapter.getUpdateDate(_customKkbCategoriesList.get(position).getCode());
-            if (c!=null && c.moveToFirst()) {
-                updateDate = c.getString(0);
-            }
-            categoryDBAdapter.close();
+//            categoryDBAdapter.open();
+//            Cursor c = categoryDBAdapter.getUpdateDate(_customKkbCategoriesList.get(position).getCode());
+//            if (c!=null && c.moveToFirst()) {
+//                updateDate = c.getString(0);
+//            }
+//            categoryDBAdapter.close();
             String message = getString(R.string.updated_on_colon) + updateDate;
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
@@ -142,38 +139,38 @@ public class CategoryEditionActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
         ListView.AdapterContextMenuInfo info = (ListView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-        final KkbCategory kkbCategory = _categoryListAdapter.getItem(info.position);
-        if (kkbCategory == null) return false;
+        final CategoryStatus categoryStatus = _categoryListAdapter.getItem(info.position);
+        if (categoryStatus == null) return false;
 
         switch (menuItem.getItemId()) {
             case MENU_ITEM_ID_EDIT:
                 Intent intent = new Intent(_context, CategoryCreationActivity.class);
-                intent.putExtra(EXTRA_KEY_CATEGORY_CODE, kkbCategory.getCode());
-                intent.putExtra(EXTRA_KEY_ID, kkbCategory.getId());
+                intent.putExtra(EXTRA_KEY_CATEGORY_CODE, categoryStatus.getCode());
+                intent.putExtra(EXTRA_KEY_ID, categoryStatus.getId());
                 startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
                 break;
             case MENU_ITEM_ID_DELETE:
-                if (UtilCategory.isCategoryAlreadyUsed(kkbCategory.getCode())) {
-                    String str1 = getString(R.string.msg_custom_category_already_in_use);
-                    String str2 = getString(R.string.msg_delete_kkb_items_first);
-                    Toast.makeText(_context, str1+str2, Toast.LENGTH_LONG).show();
-                    return false;
-                }
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
-                dialog.setIcon(R.mipmap.ic_mikan);
-                dialog.setTitle(getString(R.string.quest_do_you_want_to_delete_item));
-                dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
-                    if (UtilCategory.deleteCustomKkbCategory(_context, kkbCategory.getCode())) {
-                        Toast.makeText(_context, getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_LONG).show();
-                        _categoryListAdapter.notifyDataSetChanged();
-                        if (_customKkbCategoriesList.isEmpty()) _txvNoCustomCategory.setVisibility(View.VISIBLE);
-                        else _txvNoCustomCategory.setVisibility(View.GONE);
-                    }
-                });
-                dialog.setNegativeButton(R.string.no, null);
-                dialog.create();
-                dialog.show();
+//                if (UtilCategory.isCategoryAlreadyUsed(categoryStatus.getCode())) {
+//                    String str1 = getString(R.string.msg_custom_category_already_in_use);
+//                    String str2 = getString(R.string.msg_delete_kkb_items_first);
+//                    Toast.makeText(_context, str1+str2, Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
+//                dialog.setIcon(R.mipmap.ic_mikan);
+//                dialog.setTitle(getString(R.string.quest_do_you_want_to_delete_item));
+//                dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
+//                    if (UtilCategory.deleteCustomKkbCategory(_context, categoryStatus.getCode())) {
+//                        Toast.makeText(_context, getString(R.string.msg_item_successfully_deleted), Toast.LENGTH_LONG).show();
+//                        _categoryListAdapter.notifyDataSetChanged();
+//                        if (_customKkbCategoriesList.isEmpty()) _txvNoCustomCategory.setVisibility(View.VISIBLE);
+//                        else _txvNoCustomCategory.setVisibility(View.GONE);
+//                    }
+//                });
+//                dialog.setNegativeButton(R.string.no, null);
+//                dialog.create();
+//                dialog.show();
                 break;
         }
         return super.onContextItemSelected(menuItem);

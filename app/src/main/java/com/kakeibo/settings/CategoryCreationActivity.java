@@ -198,21 +198,21 @@ public class CategoryCreationActivity extends AppCompatActivity {
                     /*** this Activity was called from SettingsActivity ***/
                     if (_categoryCode == -1) {
                         /*** categoryCode will be determined in UtilCategory.addNewCategory() ***/
-                        if (UtilCategory.addNewCategory(_context, tmpCategory)==-1) {
-                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(_context, R.string.msg_category_created, Toast.LENGTH_LONG).show();
-                        }
+//                        if (UtilCategory.addNewCategory(_context, tmpCategory)==-1) {
+//                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
+//                        } else {
+//                            Toast.makeText(_context, R.string.msg_category_created, Toast.LENGTH_LONG).show();
+//                        }
                     }
                     /*** this Activity was called from CategoryEditionActivity ***/
                     else {
                         tmpCategory.id = _id;
                         tmpCategory.code = _categoryCode;
-                        if (UtilCategory.updateCustomCategory(_context, tmpCategory)==-1) {
-                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(_context, R.string.msg_category_updated, Toast.LENGTH_LONG).show();
-                        }
+//                        if (UtilCategory.updateCustomCategory(_context, tmpCategory)==-1) {
+//                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
+//                        } else {
+//                            Toast.makeText(_context, R.string.msg_category_updated, Toast.LENGTH_LONG).show();
+//                        }
                     }
 
                     finish();

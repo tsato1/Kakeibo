@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:updateHomeViews="@{subscriptionViewModel.subscriptions}">
+
+
+            </LinearLayout>
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:loadingProgressBar="@{subscriptionViewModel.loading}" />
+
+        </FrameLayout>
+
+    </ScrollView>
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="billingViewModel"
+            type="com.kakeibo.ui.BillingViewModel" />
+
+        <variable
+            name="subscriptionViewModel"
+            type="com.kakeibo.ui.SubscriptionStatusViewModel" />
+
+        <variable
+            name="itemStatusViewModel"
+            type="com.kakeibo.ui.ItemStatusViewModel" />
+
+        <variable
+            name="categoryStatusViewModel"
+            type="com.kakeibo.ui.categories.CategoryStatusViewModel" />
+    </data>
+
+</layout>

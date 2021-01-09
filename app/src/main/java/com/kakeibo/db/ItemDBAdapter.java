@@ -6,7 +6,7 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.kakeibo.Item;
+//import com.kakeibo.Item;
 import com.kakeibo.util.UtilCurrency;
 import com.kakeibo.util.UtilDate;
 
@@ -26,91 +26,91 @@ public class ItemDBAdapter extends DBAdapter {
     public static final String COL_EVENT_DATE = "event_date";
     public static final String COL_UPDATE_DATE = "update_date";
 
-    private SQLiteDatabase _db;
-
-    public ItemDBAdapter() {
-    }
-
-    public ItemDBAdapter open() throws SQLException {
-        _db = DBAdapter.getInstance().openDatabase();
-        return this;
-    }
-
-    public void close() {
-        DBAdapter.getInstance().closeDatabase();
-    }
-
-    public boolean deleteItem(int id) {
-        return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
-    }
-
-    public boolean deleteAllItems()
-    {
-        return _db.delete(TABLE_NAME, null, null) > 0;
-    }
-
-    public Cursor getAllItemsInMonth (String y, String m)
-    {
-        String ym = "\'" + y + "-" + m + "\'";
-        String query = "SELECT * FROM " + TABLE_NAME +
-                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
-                " ORDER BY " + COL_EVENT_DATE;
-        return _db.rawQuery(query, new String[]{});
-    }
-
-    public Cursor getCountAllItemsInMonth (String y, String m)
-    {
-        String ym = "\'" + y + "-" + m + "\'";
-        String query = "SELECT COUNT(*) FROM " + TABLE_NAME +
-                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
-                " ORDER BY " + COL_EVENT_DATE;
-        return _db.rawQuery(query, new String[]{});
-    }
-
-    public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
-        String ym = "'" + y + "-" + m + "'";
-        String query = "SELECT * FROM " + TABLE_NAME +
-                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
-                " AND " + COL_CATEGORY_CODE + " = ? " +
-                " ORDER BY " + COL_EVENT_DATE;
-        return _db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
-    }
-
-    public Cursor getItemsByRawQuery (String query) {
-        if (query==null) {
-            Calendar cal = Calendar.getInstance();
-            int m = cal.get(Calendar.MONTH) + 1;
-            int y = cal.get(Calendar.YEAR);
-
-            return getAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
-        }
-        return _db.rawQuery(query, new String[]{});
-    }
-
-    public Cursor getCountItemsByRawQuery (String query) {
-        if (query==null) {
-            Calendar cal = Calendar.getInstance();
-            int m = cal.get(Calendar.MONTH) + 1;
-            int y = cal.get(Calendar.YEAR);
-
-            return getCountAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
-        }
-        return _db.rawQuery(query, new String[]{});
-    }
-
-    public long getCountOfCategoryCode(int categoryCode) {
-        return DatabaseUtils.queryNumEntries(_db, TABLE_NAME, COL_CATEGORY_CODE+"="+categoryCode);
-    }
-
-    public void saveItem(Item item) {
-        ContentValues values = new ContentValues();
-        /*** amount gets multiplied the value by 1000 upon saving ***/
-        values.put(COL_AMOUNT, UtilCurrency.getLongAmountFromBigDecimal(item.getAmount(), 3));
-        values.put(COL_CURRENCY_CODE, UtilCurrency.CURRENCY_NONE);
-        values.put(COL_CATEGORY_CODE, item.getCategoryCode());
-        values.put(COL_MEMO, item.getMemo());
-        values.put(COL_EVENT_DATE, item.getEventDate());
-        values.put(COL_UPDATE_DATE, item.getUpdateDate());
-        _db.insertOrThrow(TABLE_NAME, null, values);
-    }
+//    private SQLiteDatabase _db;
+//
+//    public ItemDBAdapter() {
+//    }
+//
+//    public ItemDBAdapter open() throws SQLException {
+//        _db = DBAdapter.getInstance().openDatabase();
+//        return this;
+//    }
+//
+//    public void close() {
+//        DBAdapter.getInstance().closeDatabase();
+//    }
+//
+//    public boolean deleteItem(int id) {
+//        return _db.delete(TABLE_NAME, COL_ID + "=" + id, null) > 0;
+//    }
+//
+//    public boolean deleteAllItems()
+//    {
+//        return _db.delete(TABLE_NAME, null, null) > 0;
+//    }
+//
+//    public Cursor getAllItemsInMonth (String y, String m)
+//    {
+//        String ym = "\'" + y + "-" + m + "\'";
+//        String query = "SELECT * FROM " + TABLE_NAME +
+//                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
+//                " ORDER BY " + COL_EVENT_DATE;
+//        return _db.rawQuery(query, new String[]{});
+//    }
+//
+//    public Cursor getCountAllItemsInMonth (String y, String m)
+//    {
+//        String ym = "\'" + y + "-" + m + "\'";
+//        String query = "SELECT COUNT(*) FROM " + TABLE_NAME +
+//                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
+//                " ORDER BY " + COL_EVENT_DATE;
+//        return _db.rawQuery(query, new String[]{});
+//    }
+//
+//    public Cursor getAllItemsInCategoryInMonth (String y, String m, int categoryCode) {
+//        String ym = "'" + y + "-" + m + "'";
+//        String query = "SELECT * FROM " + TABLE_NAME +
+//                " WHERE strftime('%Y-%m', " + COL_EVENT_DATE + ") = " + ym +
+//                " AND " + COL_CATEGORY_CODE + " = ? " +
+//                " ORDER BY " + COL_EVENT_DATE;
+//        return _db.rawQuery(query, new String[]{String.valueOf(categoryCode)});
+//    }
+//
+//    public Cursor getItemsByRawQuery (String query) {
+//        if (query==null) {
+//            Calendar cal = Calendar.getInstance();
+//            int m = cal.get(Calendar.MONTH) + 1;
+//            int y = cal.get(Calendar.YEAR);
+//
+//            return getAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
+//        }
+//        return _db.rawQuery(query, new String[]{});
+//    }
+//
+//    public Cursor getCountItemsByRawQuery (String query) {
+//        if (query==null) {
+//            Calendar cal = Calendar.getInstance();
+//            int m = cal.get(Calendar.MONTH) + 1;
+//            int y = cal.get(Calendar.YEAR);
+//
+//            return getCountAllItemsInMonth(String.valueOf(y), UtilDate.convertMtoMM(m));
+//        }
+//        return _db.rawQuery(query, new String[]{});
+//    }
+//
+//    public long getCountOfCategoryCode(int categoryCode) {
+//        return DatabaseUtils.queryNumEntries(_db, TABLE_NAME, COL_CATEGORY_CODE+"="+categoryCode);
+//    }
+//
+//    public void saveItem(Item item) {
+//        ContentValues values = new ContentValues();
+//        /*** amount gets multiplied the value by 1000 upon saving ***/
+//        values.put(COL_AMOUNT, UtilCurrency.getLongAmountFromBigDecimal(item.getAmount(), 3));
+//        values.put(COL_CURRENCY_CODE, UtilCurrency.CURRENCY_NONE);
+//        values.put(COL_CATEGORY_CODE, item.getCategoryCode());
+//        values.put(COL_MEMO, item.getMemo());
+//        values.put(COL_EVENT_DATE, item.getEventDate());
+//        values.put(COL_UPDATE_DATE, item.getUpdateDate());
+//        _db.insertOrThrow(TABLE_NAME, null, values);
+//    }
 }

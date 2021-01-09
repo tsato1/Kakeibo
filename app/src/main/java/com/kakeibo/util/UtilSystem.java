@@ -49,6 +49,27 @@ public class UtilSystem {
         String langCode = locale.getISO3Language();
         String langScrt = locale.getScript();
 
+        langCode = getCurrentLangCode(langCode);
+
+        /*** for Chinese ***/
+//        if (!"".equals(langScrt) &&
+//                !langScrt.equals(new Locale(CategoryLanDBAdapter.COL_Hans).getScript())) {
+//            langCode = CategoryLanDBAdapter.COL_Hans;
+//        } else if (!"".equals(langScrt) &&
+//                !langScrt.equals(new Locale(CategoryLanDBAdapter.COL_Hant).getScript())) {
+//            langCode = CategoryLanDBAdapter.COL_Hant;
+//        }
+
+        Log.d(TAG, "prevCode = " + mPrevLang +
+                " currCode = " + langCode +
+                ", locale.getScript() = " + langScrt +
+                ", locale.getISO3Language() = " + locale.getISO3Language());
+
+        mPrevLang = langCode;
+        return langCode;
+    }
+
+    public static String getCurrentLangCode(String langCode) {
         if (!"".equals(langCode) &&
 //                !langCode.equals(new Locale(CategoryLanDBAdapter.COL_ARA).getISO3Language()) &&
                 !langCode.equals(new Locale(CategoryLanDBAdapter.COL_ENG).getISO3Language()) &&
@@ -67,21 +88,7 @@ public class UtilSystem {
         ) {
             langCode = CategoryLanDBAdapter.COL_ENG;
         }
-        /*** for Chinese ***/
-//        if (!"".equals(langScrt) &&
-//                !langScrt.equals(new Locale(CategoryLanDBAdapter.COL_Hans).getScript())) {
-//            langCode = CategoryLanDBAdapter.COL_Hans;
-//        } else if (!"".equals(langScrt) &&
-//                !langScrt.equals(new Locale(CategoryLanDBAdapter.COL_Hant).getScript())) {
-//            langCode = CategoryLanDBAdapter.COL_Hant;
-//        }
 
-        Log.d(TAG, "prevCode = " + mPrevLang +
-                " currCode = " + langCode +
-                ", locale.getScript() = " + langScrt +
-                ", locale.getISO3Language() = " + locale.getISO3Language());
-
-        mPrevLang = langCode;
         return langCode;
     }
 

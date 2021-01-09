@@ -12,6 +12,7 @@ public class InstanceIDService extends FirebaseMessagingService {
     public void onNewToken(String s) {
         super.onNewToken(s);
         Log.d("NEW_TOKEN",s);
+        sendRegistrationToServer(s);
     }
 
     //deprecated , with FirebaseInstanceService

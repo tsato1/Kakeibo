@@ -104,7 +104,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
         addDots();
 
         /*** initializing the set with dspCategories ***/
-        _modCategoryCodeList = new ArrayList<>(UtilCategory.getDspCategoryCodeList(getApplicationContext())); // ordered by location
+//        _modCategoryCodeList = new ArrayList<>(UtilCategory.getDspCategoryCodeList(getApplicationContext())); // ordered by location
     }
 
     @Override
@@ -208,7 +208,7 @@ public class CategoryPlacementActivity extends AppCompatActivity
                 dialog.setMessage(R.string.quest_determine_category_order);
                 dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
                     Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show();
-                    UtilCategory.updateDspTable(getApplicationContext(), list);
+//                    UtilCategory.updateDspTable(getApplicationContext(), list);
                     finish();
                 });
                 dialog.setNegativeButton(R.string.no, (DialogInterface d, int which) -> {});

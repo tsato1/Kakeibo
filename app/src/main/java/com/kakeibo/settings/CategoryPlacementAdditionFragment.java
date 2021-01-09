@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -19,10 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.kakeibo.CategoryGridAdapter;
-import com.kakeibo.KkbApplication;
-import com.kakeibo.KkbCategory;
+import com.kakeibo.data.CategoryStatus;
 import com.kakeibo.R;
+import com.kakeibo.SubApp;
 import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     public static final String TAG = CategoryPlacementAdditionFragment.class.getSimpleName();
     public static final int TAG_INT = 1;
 
-    private static List<KkbCategory> _nonDspKkbCategoryList;
+    private static List<CategoryStatus> _nonDspCategoryList;
     private static HashSet<Integer> _selectedCategoryCodeSet;
     private static int _sNumColumns;
 
@@ -69,7 +67,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
+        _sNumColumns = SubApp.getNumColumns(R.string.pref_key_num_columns);
 
         findViews(view);
 
@@ -77,7 +75,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
     }
 
     private void findViews(View view) {
-        _nonDspKkbCategoryList = UtilCategory.getNonDspKkbCategoryList(_activity);
+        _nonDspCategoryList = null;//((SubApp) getContext()).getRepository().getNonDspCategories();
         _selectedCategoryCodeSet = new HashSet<>();
 
         _btnBack = view.findViewById(R.id.btn_back);
@@ -91,17 +89,17 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
-        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, _nonDspKkbCategoryList);
-        _grvCategory = view.findViewById(R.id.grv_category);
-        _grvCategory.setNumColumns(_sNumColumns);
-        _grvCategory.setAdapter(categoryGridAdapter);
-        _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_addition);
-                toggle(_nonDspKkbCategoryList.get(position).getCode(), imvCategoryOverlay);
-            }
-        });
+//        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, null); ///////////////////////
+//        _grvCategory = view.findViewById(R.id.grv_category);
+//        _grvCategory.setNumColumns(_sNumColumns);
+//        _grvCategory.setAdapter(categoryGridAdapter);
+//        _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_addition);
+//                toggle(_nonDspKkbCategoryList.get(position).getCode(), imvCategoryOverlay);
+//            }
+//        });
     }
 
     private void toggle(Integer categoryCode, ImageView imv) {

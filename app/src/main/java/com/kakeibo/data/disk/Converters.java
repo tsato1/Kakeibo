@@ -1,7 +1,6 @@
 package com.kakeibo.data.disk;
 
 import androidx.room.TypeConverter;
-import com.kakeibo.MainActivity;
 import com.kakeibo.util.UtilCurrency;
 import java.math.BigDecimal;
 

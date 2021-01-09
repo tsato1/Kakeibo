@@ -18,7 +18,6 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
-import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
 import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
@@ -42,10 +41,10 @@ public class CategoryReorderActivity extends AppCompatActivity
         setContentView(R.layout.activity_settings_category_reorder);
 
         /*** this part is to handle unexpected crashes ***/
-        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
-        if (getIntent().getBooleanExtra("crash", false)) {
-            Log.e(TAG, "crashed");
-        }
+//        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+//        if (getIntent().getBooleanExtra("crash", false)) {
+//            Log.e(TAG, "crashed");
+//        }
 
         /*** hide home button on actionbar ***/
         if (getSupportActionBar() != null) {
@@ -70,8 +69,8 @@ public class CategoryReorderActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        List<Integer> list = new ArrayList<>(UtilCategory.getDspCategoryCodeList(getApplicationContext())); // ordered by location
-        _fragmentReorder.setItemsOnGrid(list, new ArrayList<>());
+//        List<Integer> list = new ArrayList<>(UtilCategory.getDspCategoryCodeList(getApplicationContext())); // ordered by location
+//        _fragmentReorder.setItemsOnGrid(list, new ArrayList<>());
     }
 
     @Override
@@ -82,7 +81,7 @@ public class CategoryReorderActivity extends AppCompatActivity
         dialog.setMessage(R.string.quest_determine_category_order);
         dialog.setPositiveButton(R.string.yes, (DialogInterface d, int which) -> {
             Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show();
-            UtilCategory.updateDspTable(getApplicationContext(), list);
+//            UtilCategory.updateDspTable(getApplicationContext(), list);
             finish();
         });
         dialog.setNegativeButton(R.string.no, (DialogInterface d, int which) -> {});

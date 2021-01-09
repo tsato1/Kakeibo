@@ -193,6 +193,35 @@
     <string name="subscription_option_premium_message_account_hold">Premium plan (on hold)</string>
     <string name="subscription_option_premium_message_grace_period">Premium plan (payment issue)</string>
     <string name="subscription_option_premium_message_restore">Premium plan (canceled)</string>
+    <string name="no_basic_content">Loading basic content</string>
+    <string name="no_premium_content">Loading premium content</string>
+    <!-- Active subscriptions -->
+    <string name="premium_message">You have a Premium subscription</string>
+    <string name="basic_message">You have a Basic subscription</string>
+    <string name="basic_content_text">Welcome to the basic classy taxi, driving through the peaceful cool of the night.</string>
+    <string name="premium_content_text">Welcome to the premium space taxi, flying through the endless possibilities of space.</string>
+    <!-- Paywall -->
+    <string name="paywall_message">Subscribe to a Basic or Premium plan</string>
+    <string name="premium_paywall_message">You need to subscribe to a Premium plan</string>
+    <!-- Upgrade -->
+    <string name="premium_upgrade_message">You currently have a Basic plan. Upgrade to enjoy the benefits of the Premium plan.</string>
+    <string name="upgrade_button_text">Upgrade</string>
+    <!-- Manage subscriptions -->
+    <string name="manage_subscription_label">Manage subscriptions</string>
+    <string name="manage_subscription_message">Manage your subscription on Google Play.</string>
+    <string name="google_play_subscriptions">Google Play Subscriptions</string>
+    <!-- Minor subscription notices -->
+    <string name="grace_period_message">Something’s wrong with your subscription, but you’ve still got access during a temporary grace period. Tap to fix it.</string>
+    <string name="restore_message_with_date">Your subscription is canceled and will expire on %1$s. Tap to restore your subscription.</string>
+    <!-- Different account is using subscription -->
+    <string name="transfer_message">Wrong taxi? A different account is already using your subscription, but you can transfer your subscription to this account.</string>
+    <string name="transfer_message_with_sku">Wrong taxi? A different account is already using your %1$s subscription, but you can transfer your subscription to this account.</string>
+    <string name="transfer_message_with_two_skus">Wrong taxi? A different account is already using your %1$s and %2$s subscriptions, but you can transfer your subscriptions to this account.</string>
+    <string name="transfer_button_text">Transfer</string>
+    <!-- Account hold -->
+    <string name="account_hold_message">Classy Taxi is stuck! Your account is on hold because there’s a problem with your payment method. Update your payment method or add a new one to restore your subscription.</string>
+    <string name="fix_button_text">Manage payment methods</string>
+
 
     <!-- other -->
     <string name="dash" translatable="false">-</string>

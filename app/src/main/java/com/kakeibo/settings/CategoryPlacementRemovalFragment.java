@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -18,14 +17,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.kakeibo.CategoryGridAdapter;
-import com.kakeibo.KkbApplication;
-import com.kakeibo.KkbCategory;
 import com.kakeibo.R;
-import com.kakeibo.util.UtilCategory;
+import com.kakeibo.SubApp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CategoryPlacementRemovalFragment extends Fragment {
     public static final String TAG = CategoryPlacementRemovalFragment.class.getSimpleName();
@@ -64,7 +59,7 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
+        _sNumColumns = SubApp.getNumColumns(R.string.pref_key_num_columns);
 
         _selectedCategoryCodeList = new ArrayList<>();
 
@@ -79,19 +74,19 @@ public class CategoryPlacementRemovalFragment extends Fragment {
         _rllBackground = view.findViewById(R.id.rll_settings_category_placement);
         _rllBackground.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 
-        List<KkbCategory> kkbDspCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
-        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, kkbDspCategoryList);
-        _grvCategory = view.findViewById(R.id.grv_category);
-        _grvCategory.setNumColumns(_sNumColumns);
-        _grvCategory.setAdapter(categoryGridAdapter);
-        _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick() called: position="+position);
-                ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_removal);
-                toggle(kkbDspCategoryList.get(position).getCode(), imvCategoryOverlay);
-            }
-        });
+//        List<CategoryStatus> kkbDspCategoryList = UtilCategory.getDspKkbCategoryList(_activity);
+//        final CategoryGridAdapter categoryGridAdapter = new CategoryGridAdapter(_activity, null);/////////////
+//        _grvCategory = view.findViewById(R.id.grv_category);
+//        _grvCategory.setNumColumns(_sNumColumns);
+//        _grvCategory.setAdapter(categoryGridAdapter);
+//        _grvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d(TAG, "onItemClick() called: position="+position);
+//                ImageView imvCategoryOverlay = view.findViewById(R.id.imv_category_removal);
+//                toggle(kkbDspCategoryList.get(position).getCode(), imvCategoryOverlay);
+//            }
+//        });
 
         return view;
     }

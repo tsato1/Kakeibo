@@ -1,4 +1,4 @@
-package com.kakeibo.room
+package com.kakeibo
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

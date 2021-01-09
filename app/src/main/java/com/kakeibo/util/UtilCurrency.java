@@ -1,8 +1,9 @@
 package com.kakeibo.util;
 
-import java.math.BigDecimal;
+import com.kakeibo.R;
+import com.kakeibo.SubApp;
 
-import static com.kakeibo.MainActivity.sFractionDigits;
+import java.math.BigDecimal;
 
 public class UtilCurrency {
     private final static String TAG = UtilCurrency.class.getSimpleName();
@@ -29,7 +30,9 @@ public class UtilCurrency {
 
     public static BigDecimal getBigDecimalFromLong(long amount) {
         return BigDecimal.valueOf(amount)
-                .divide(BigDecimal.valueOf(1000), sFractionDigits, BigDecimal.ROUND_HALF_UP);
+                .divide(BigDecimal.valueOf(1000),
+                        SubApp.getFractionDigits(R.string.pref_key_fraction_digits),
+                        BigDecimal.ROUND_HALF_UP);
     }
 
     public static boolean checkAmount(String str) {

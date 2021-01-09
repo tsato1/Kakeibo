@@ -2,8 +2,91 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "88eb1f4b7c40aa7a65285755971ded88",
+    "identityHash": "2706f9727b1a3f7dc814648da595688c",
     "entities": [
+      {
+        "tableName": "kkbapp",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL DEFAULT '', `type` TEXT NOT NULL DEFAULT '', `update_date` TEXT NOT NULL DEFAULT '', `value_int_1` INTEGER NOT NULL DEFAULT 0, `value_int_2` INTEGER NOT NULL DEFAULT -1, `value_int_3` INTEGER NOT NULL DEFAULT 0, `value_str_1` TEXT NOT NULL DEFAULT '', `value_str_2` TEXT NOT NULL DEFAULT '', `value_str_3` TEXT NOT NULL DEFAULT '')",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "update_date",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "valInt1",
+            "columnName": "value_int_1",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "valInt2",
+            "columnName": "value_int_2",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "valInt3",
+            "columnName": "value_int_3",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "valStr1",
+            "columnName": "value_str_1",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "valStr2",
+            "columnName": "value_str_2",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "valStr3",
+            "columnName": "value_str_3",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "items",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `currency_code` TEXT NOT NULL DEFAULT '---', `category_code` INTEGER NOT NULL DEFAULT 0, `memo` TEXT NOT NULL, `event_date` TEXT NOT NULL, `update_date` TEXT NOT NULL)",
@@ -64,7 +147,7 @@
       },
       {
         "tableName": "categories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` INTEGER NOT NULL DEFAULT 0, `color` INTEGER NOT NULL DEFAULT 0, `sign` INTEGER NOT NULL DEFAULT 0, `drawable` INTEGER NOT NULL, `image` BLOB, `parent` INTEGER NOT NULL DEFAULT -1, `description` TEXT NOT NULL DEFAULT '', `saved_date` TEXT NOT NULL DEFAULT '')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` INTEGER NOT NULL DEFAULT 0, `name` TEXT NOT NULL DEFAULT '', `color` INTEGER NOT NULL DEFAULT 0, `sign` INTEGER NOT NULL DEFAULT 0, `drawable` INTEGER NOT NULL DEFAULT 0, `image` BLOB, `parent` INTEGER NOT NULL DEFAULT -1, `description` TEXT NOT NULL DEFAULT '', `saved_date` TEXT NOT NULL DEFAULT '')",
         "fields": [
           {
             "fieldPath": "id",
@@ -78,6 +161,13 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
           },
           {
             "fieldPath": "color",
@@ -97,7 +187,8 @@
             "fieldPath": "drawable",
             "columnName": "drawable",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "image",
@@ -125,128 +216,6 @@
             "affinity": "TEXT",
             "notNull": true,
             "defaultValue": "''"
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "_id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "categories_lan",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` INTEGER NOT NULL, `ara` TEXT NOT NULL, `eng` TEXT NOT NULL, `spa` TEXT NOT NULL, `fra` TEXT NOT NULL, `hin` TEXT NOT NULL, `ind` TEXT NOT NULL, `ita` TEXT NOT NULL, `jpn` TEXT NOT NULL, `kor` TEXT NOT NULL, `pol` TEXT NOT NULL, `por` TEXT NOT NULL, `rus` TEXT NOT NULL, `tur` TEXT NOT NULL, `vie` TEXT NOT NULL, `Hans` TEXT NOT NULL, `Hant` TEXT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "code",
-            "columnName": "code",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ara",
-            "columnName": "ara",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "eng",
-            "columnName": "eng",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "spa",
-            "columnName": "spa",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "fra",
-            "columnName": "fra",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hin",
-            "columnName": "hin",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ind",
-            "columnName": "ind",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ita",
-            "columnName": "ita",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "jpn",
-            "columnName": "jpn",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "kor",
-            "columnName": "kor",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "pol",
-            "columnName": "pol",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "por",
-            "columnName": "por",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rus",
-            "columnName": "rus",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "tur",
-            "columnName": "tur",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "vie",
-            "columnName": "vie",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hans",
-            "columnName": "Hans",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hant",
-            "columnName": "Hant",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -380,7 +349,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '88eb1f4b7c40aa7a65285755971ded88')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2706f9727b1a3f7dc814648da595688c')"
     ]
   }
 }

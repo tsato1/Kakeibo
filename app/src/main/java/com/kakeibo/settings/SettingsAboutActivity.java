@@ -8,7 +8,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kakeibo.MyExceptionHandler;
 import com.kakeibo.R;
 
 public class SettingsAboutActivity extends AppCompatActivity {

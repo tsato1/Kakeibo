@@ -7,7 +7,8 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.kakeibo.MainActivity;
+import com.kakeibo.R;
+import com.kakeibo.SubApp;
 import com.kakeibo.data.disk.Converters;
 import com.kakeibo.db.ItemDBAdapter;
 import com.kakeibo.util.UtilCurrency;
@@ -158,7 +159,9 @@ public class ItemStatus {
 
     public BigDecimal getAmount() {
         if (UtilCurrency.CURRENCY_NONE.equals(this.currencyCode)) {
-            this.amount.divide(BigDecimal.valueOf(1000), MainActivity.sFractionDigits, BigDecimal.ROUND_HALF_UP);
+            this.amount.divide(BigDecimal.valueOf(1000),
+                    SubApp.getFractionDigits(R.string.pref_key_fraction_digits),
+                    BigDecimal.ROUND_HALF_UP);
         }
         return this.amount;
     }

@@ -23,9 +23,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakeibo.BuildConfig;
-import com.kakeibo.KkbApplication;
 import com.kakeibo.R;
-import com.kakeibo.TabFragment2;
+import com.kakeibo.SubApp;
+import com.kakeibo.ui.TabFragment2;
 import com.kakeibo.util.UtilDate;
 import com.kakeibo.util.UtilFiles;
 
@@ -73,7 +73,7 @@ public class ExportActivity extends AppCompatActivity {
 
         mReportType = getIntent().getIntExtra("REPORT_VIEW_TYPE", 0);
 
-        int dateFormat = KkbApplication.getDateFormat(R.string.pref_key_date_format);
+        int dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format);
         switch (dateFormat) {
             case 1: // MDY
                 mStrDateFormat = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_MDY) + " kk:mm:ss";

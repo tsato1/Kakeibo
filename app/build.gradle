@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -40,13 +42,8 @@ android {
 
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
-
-        // used by the room flavors to avoid duplication
-//        room.java.srcDirs += "src/room_common/java"
-//        room2.java.srcDirs += "src/room_common/java"
-//        room3.java.srcDirs += "src/room_common/java"
-
         androidTest.java.srcDirs += "src/androidTestRoom_Common/java"
+        main.java.srcDirs += 'src/main/kotlin'
     }
 
     buildTypes {
@@ -83,46 +80,60 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Kotlin Libraries
-//    implementation "androidx.core:core-ktx:+"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     // Android Support Libraries
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.leanback:leanback-preference:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.browser:browser:1.3.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.5.0'
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
+    implementation 'com.google.android.gms:play-services-basement:17.5.0'
+
+
+    // Kotlin Libraries
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
+//    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
+
+    // Room Libraries
+    implementation "androidx.room:room-runtime:2.2.6"
+    annotationProcessor "androidx.room:room-compiler:2.2.6"
 
     // Billing Libraries
-    implementation 'com.android.billingclient:billing:3.0.1'
+    implementation "com.android.billingclient:billing:$billingVersion"
 
     // Firebase Libraries
     // These libraries versions are known to be compatible with each other.
     // If you encounter a build error "Cannot Access Hide", it means the Firebase libraries'
     // versions you are using are not compatible.
-    implementation 'com.firebaseui:firebase-ui-auth:3.3.0'
-    implementation 'com.google.firebase:firebase-core:17.5.1'
-    implementation 'com.google.firebase:firebase-ads:19.5.0'
-    implementation 'com.google.firebase:firebase-auth:19.4.0'
-    implementation 'com.google.firebase:firebase-analytics:17.6.0'
-    implementation 'com.google.firebase:firebase-firestore:21.7.1'
-    implementation 'com.google.firebase:firebase-functions:19.1.0'
-    implementation 'com.google.firebase:firebase-messaging:20.3.0'
+    // Firebase libraries.
+    implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
+    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
+    implementation "com.google.firebase:firebase-functions:$firebaseFunctionsVersion"
+    implementation "com.google.firebase:firebase-messaging:$firebaseMessagingVersion"
+    implementation 'com.google.firebase:firebase-ads:19.6.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-firestore:22.0.1'
+    implementation "com.firebaseui:firebase-ui-auth:$firebaseUiVersion"
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
 
     // Ads Libraries
@@ -132,8 +143,8 @@ dependencies {
     // Room Architecture Components.
 //    implementation 'android.arch.persistence.room:runtime:1.1.1'
 //    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
-    implementation "androidx.room:room-runtime:2.2.5"
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-runtime:2.2.6"
+    annotationProcessor "androidx.room:room-compiler:2.2.6"
 
     // ViewModel and LiveData extensions.
     implementation 'android.arch.lifecycle:extensions:1.1.1'
@@ -153,6 +164,9 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
     implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
+    implementation 'com.github.bumptech.glide:glide:4.4.0'
+
+//    annotationProcessor 'androidx.databinding:databinding-compiler:4.1.1'
 
     // Testing Libraries
     testImplementation 'junit:junit:4.12'
@@ -161,7 +175,7 @@ dependencies {
     androidTestImplementation 'androidx.test:core:1.3.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.room:room-testing:2.1.0'
+    androidTestImplementation 'androidx.room:room-testing:2.2.6'
 
 }
 repositories {

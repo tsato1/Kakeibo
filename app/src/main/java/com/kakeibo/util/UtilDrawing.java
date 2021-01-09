@@ -106,4 +106,12 @@ public class UtilDrawing {
 
         return result;
     }
+
+    public static String getIconNameFromDrawableId(Context context, int drawableId) {
+        return context.getResources().getResourceEntryName(drawableId);
+    }
+
+    public static int getDrawableIdFromIconName(Context context, String iconName) {
+        return context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
+    }
 }

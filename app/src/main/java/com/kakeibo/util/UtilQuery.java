@@ -1,10 +1,10 @@
 package com.kakeibo.util;
 
-import android.content.Context;
-
 import com.kakeibo.db.ItemDBAdapter;
+import com.kakeibo.ui.Query;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.kakeibo.db.ItemDBAdapter.COL_AMOUNT;
@@ -24,9 +24,9 @@ public class UtilQuery {
     private static boolean orderC;
     private static boolean orderD;
 
-    public static void init(Context context) {
+    public static void init(List<Integer> categoryCodes) {
         builderCs = new HashMap<>();
-        for (Integer code: UtilCategory.getAllCategoryCodeList(context)) {
+        for (Integer code: categoryCodes) {
             builderCs.put(code, new StringBuilder("SELECT * FROM ITEMS"));
         }
         builderC = new StringBuilder("SELECT " + SUM_AMOUNT + ", " +
@@ -198,7 +198,11 @@ public class UtilQuery {
         builderC.append(" GROUP BY ").append(colGroupBy);
     }
 
-    public static Map<Integer, String> buildQueryCs() {
+    private static String buildQueryC() {
+        return builderC.toString();
+    }
+
+    private static Map<Integer, String> buildQueryCs() {
         Map<Integer, String> out = new HashMap<>();
         for (Map.Entry<Integer, StringBuilder> entry: builderCs.entrySet()) {
             out.put(entry.getKey(), entry.getValue().toString());
@@ -206,12 +210,13 @@ public class UtilQuery {
         return out;
     }
 
-    public static String buildQueryC() {
-        return builderC.toString();
-    }
-
-    public static String buildQueryD() {
+    private static String buildQueryD() {
         return builderD.toString();
     }
 
+    public static void build(Query query) {
+        query.setQueryC(buildQueryC());
+        query.setQueryCs(buildQueryCs());
+        query.setQueryD(buildQueryD());
+    }
 }

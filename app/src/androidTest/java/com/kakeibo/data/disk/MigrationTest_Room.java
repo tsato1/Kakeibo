@@ -13,14 +13,14 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.kakeibo.data.CategoryDspStatus;
-import com.kakeibo.data.CategoryLanStatus;
 import com.kakeibo.data.CategoryStatus;
 import com.kakeibo.data.ItemStatus;
 import com.kakeibo.db.CategoryDBAdapter;
 import com.kakeibo.db.CategoryDspDBAdapter;
 import com.kakeibo.db.CategoryLanDBAdapter;
 import com.kakeibo.db.ItemDBAdapter;
-import com.kakeibo.room.LiveDataTestUtil;
+import com.kakeibo.LiveDataTestUtil;
+import com.kakeibo.db.KkbAppDBAdapter;
 import com.kakeibo.util.UtilCurrency;
 
 import org.junit.After;
@@ -36,11 +36,10 @@ import java.util.List;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_1_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_2_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_3_7;
-import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_7;
+import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_5;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_5_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_6_7;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MigrationTest_Room {
@@ -64,6 +63,7 @@ public class MigrationTest_Room {
 
     @After
     public void tearDown() {
+        mDb.execSQL("DROP TABLE IF EXISTS " + KkbAppDBAdapter.TABLE_KKBAPP);
         mDb.execSQL("DROP TABLE IF EXISTS " + ItemDBAdapter.TABLE_NAME);
         mDb.execSQL("DROP TABLE IF EXISTS subscriptions");
         mDb.execSQL("DROP TABLE IF EXISTS " + CategoryDBAdapter.TABLE_NAME);
@@ -87,13 +87,14 @@ public class MigrationTest_Room {
                 "2020-11-11",
                 "2020-11-22",
                 mDb);
+        byte[] b = new byte[]{0,1,0};
         insertCategoryStatus(
                 0,
                 7,
                 7,
                 7,
                 7,
-                null,
+                b,
                 8,
                 "desc!",
                 "2020-07-07",
@@ -101,9 +102,9 @@ public class MigrationTest_Room {
         insertCategoryLanStatus(
                 0,
                 7,
-                "ara!", "eng!", "spa!", "fra!", "hin!", "ind!", "ita!",
-                "jpn!", "kor!", "pol!", "por!", "rus!", "tur!", "vie!",
-                "Hans!", "Hant!",
+                "ara!", "eng!", "spa!", "fra!", "hin!", "ind!",
+                "ita!", "jpn!", "kor!", "pol!", "por!", "rus!",
+                "tur!", "vie!", "Hans!", "Hant!",
                 mDb);
         insertCategoryDspStatus(
                 1,
@@ -116,7 +117,8 @@ public class MigrationTest_Room {
 
         // verify that the data is correct
         try {
-            List<ItemStatus> dbItemStatuses = LiveDataTestUtil.getOrAwaitValue(appDatabase.itemStatusDao().getAll());
+            List<ItemStatus> dbItemStatuses = LiveDataTestUtil.getOrAwaitValue(
+                    appDatabase.itemStatusDao().getAll());
             ItemStatus dbItemStatus = dbItemStatuses.get(0);
             assertEquals(dbItemStatus.getId(), 7);
             assertEquals(dbItemStatus.getAmount(), new BigDecimal(7));
@@ -126,25 +128,47 @@ public class MigrationTest_Room {
             assertEquals(dbItemStatus.getEventDate(),"2020-11-11");
             assertEquals(dbItemStatus.getUpdateDate(),"2020-11-22");
 
-            List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(appDatabase.categoryStatusDao().getAll());
+            List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(
+                    appDatabase.categoryStatusDao().getAllStatusesLiveData());
             CategoryStatus dbCategoryStatus = dbCategoryStatuses.get(0);
             assertEquals(dbCategoryStatus.getId(), 0);
             assertEquals(dbCategoryStatus.getCode(), 7);
             assertEquals(dbCategoryStatus.getColor(), 7);
             assertEquals(dbCategoryStatus.getSignificance(), 7);
             assertEquals(dbCategoryStatus.getDrawable(), 7);
-            assertNull(dbCategoryStatus.getImage());
+//            assertEquals(dbCategoryStatus.getImage(), b);
             assertEquals(dbCategoryStatus.getParent(), 8);
             assertEquals(dbCategoryStatus.getDescription(), "desc!");
             assertEquals(dbCategoryStatus.getSavedDate(), "2020-07-07");
 
-            List<CategoryLanStatus> dbCategroyLanStatuses = LiveDataTestUtil.getOrAwaitValue(appDatabase.categoryLanStatusDao().getAll());
-            CategoryLanStatus dbCategoryLanStatus = dbCategroyLanStatuses.get(0);
-            assertEquals(dbCategoryLanStatus.getId(), 0);
-            assertEquals(dbCategoryLanStatus.getCode(), 7);
-            assertEquals(dbCategoryLanStatus.getJpn(), "jpn!");
 
-            List<CategoryDspStatus> dbCategoryDspStatuses = LiveDataTestUtil.getOrAwaitValue(appDatabase.categoryDspStatusDao().getAll());
+
+
+            List<CategoryStatus> dspCategories = LiveDataTestUtil.getOrAwaitValue(
+                    appDatabase.categoryDspStatusDao().getCategoryStatusesForDsp());
+            CategoryStatus categoryStatus = dspCategories.get(0);
+            assertEquals(categoryStatus.getId(), 1);
+            assertEquals(categoryStatus.getCode(), 7);
+            assertEquals(categoryStatus.getName(), "");//arbitrary column name doesn't work
+            assertEquals(categoryStatus.getColor(), 7);
+            assertEquals(categoryStatus.getSignificance(), 7);
+            assertEquals(categoryStatus.getDrawable(), 7);
+//            assertEquals(dbCategoryStatus.getImage(), b);
+            assertEquals(categoryStatus.getParent(), 8);
+            assertEquals(categoryStatus.getDescription(), "desc!");
+            assertEquals(categoryStatus.getSavedDate(), "2020-07-07");
+
+
+//
+//            List<CategoryLanStatus> dbCategroyLanStatuses = LiveDataTestUtil.getOrAwaitValue(
+//                    appDatabase.categoryLanStatusDao().getAll());
+//            CategoryLanStatus dbCategoryLanStatus = dbCategroyLanStatuses.get(0);
+//            assertEquals(dbCategoryLanStatus.getId(), 0);
+//            assertEquals(dbCategoryLanStatus.getCode(), 7);
+//            assertEquals(dbCategoryLanStatus.getJpn(), "jpn!");
+
+            List<CategoryDspStatus> dbCategoryDspStatuses = LiveDataTestUtil.getOrAwaitValue(
+                    appDatabase.categoryDspStatusDao().getAll());
             CategoryDspStatus dbCategoryDspStatus = dbCategoryDspStatuses.get(0);
             assertEquals(dbCategoryDspStatus.getId(), 1);
             assertEquals(dbCategoryDspStatus.getCode(), 7);
@@ -192,7 +216,7 @@ public class MigrationTest_Room {
                         MIGRATION_1_7,
                         MIGRATION_2_7,
                         MIGRATION_3_7,
-                        MIGRATION_4_7,
+                        MIGRATION_4_5,
                         MIGRATION_5_7,
                         MIGRATION_6_7)
                 .build();

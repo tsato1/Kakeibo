@@ -17,12 +17,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.kakeibo.CategoryDynamicGridAdapter;
-import com.kakeibo.KkbApplication;
-import com.kakeibo.KkbCategory;
+import com.kakeibo.data.CategoryStatus;
+import com.kakeibo.ui.categories.CategoryDynamicGridAdapter;
 import com.kakeibo.R;
 
-import com.kakeibo.util.UtilCategory;
+import com.kakeibo.SubApp;
 import com.takahidesato.android.dynamicgrid.DynamicGridView;
 
 import java.util.ArrayList;
@@ -34,8 +33,8 @@ public class CategoryPlacementReorderFragment extends Fragment {
 
     private static SettingsCategoryEventListener _sEventListener;
 
-    private static List<KkbCategory> _newKkbCategoryList;
-    private static List<KkbCategory> _addedKkbCategoryList;
+    private static List<CategoryStatus> _newKkbCategoryList;
+    private static List<CategoryStatus> _addedKkbCategoryList;
     private static int _sNumColumns;
 
     DynamicGridView _dgvCategory;
@@ -66,7 +65,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = KkbApplication.getNumColumns(R.string.pref_key_num_columns);
+        _sNumColumns = SubApp.getNumColumns(R.string.pref_key_num_columns);
 
         findViews(view);
 
@@ -96,18 +95,20 @@ public class CategoryPlacementReorderFragment extends Fragment {
         _newKkbCategoryList = new ArrayList<>();
 
         for (Integer categoryCode: newList) {
-            KkbCategory kkbCategory = new KkbCategory(
+            CategoryStatus categoryStatus = new CategoryStatus(
                     -1, // not used
                     categoryCode,
-                    UtilCategory.getCategoryStr(_activity, categoryCode),
+                    "name",
+                    0,//UtilCategory.getCategoryStr(_activity, categoryCode),
                     0,
+                    0,//UtilCategory.getCategoryDrawable(_activity, categoryCode),
+                    new byte[]{0},//UtilCategory.getCategoryImage(_activity, categoryCode),
                     0,
-                    UtilCategory.getCategoryDrawable(_activity, categoryCode),
-                    UtilCategory.getCategoryImage(_activity, categoryCode),
-                    0, 0, "",""
-                    );
-            if (addedList.contains(categoryCode)) _addedKkbCategoryList.add(kkbCategory);
-            _newKkbCategoryList.add(kkbCategory);
+                    "",
+                    ""
+            );
+            if (addedList.contains(categoryCode)) _addedKkbCategoryList.add(categoryStatus);
+            _newKkbCategoryList.add(categoryStatus);
         }
 
         _adpGridCategory = new CategoryDynamicGridAdapter(_activity, _newKkbCategoryList, _sNumColumns);
@@ -161,8 +162,8 @@ public class CategoryPlacementReorderFragment extends Fragment {
                     List<Object> list = _adpGridCategory.getItems();
                     List<Integer> out = new ArrayList<>();
                     for (Object item: list) {
-                        KkbCategory category = (KkbCategory) item;
-                        out.add(category.getCode());
+                        CategoryStatus categoryStatus = (CategoryStatus) item;
+                        out.add(categoryStatus.getCode());
                     }
                     _sEventListener.onNextPressed(TAG_INT, out);
                     break;

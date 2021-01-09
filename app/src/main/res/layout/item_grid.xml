@@ -1,25 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:minHeight="96dp"
-    android:gravity="center"
-    android:orientation="vertical">
+    <data>
+        <variable
+            name="category"
+            type="com.kakeibo.data.CategoryStatus" />
+        <variable
+            name="itemSaveListener"
+            type="com.kakeibo.ui.ItemSaveListener" />
+    </data>
 
-    <ImageView
-        android:id="@+id/item_img"
+    <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:minHeight="@dimen/grv_item_min_height"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{()->itemSaveListener.onItemSaved(category.code)}">
 
-    <TextView
-        android:id="@+id/item_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:gravity="center" />
+        <ImageView
+            android:id="@+id/item_img"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:focusable="false"
+            setImage="@{category}"
+            android:contentDescription="@string/category"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_img"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:clickable="false"
+            android:focusable="false"
+            android:text="@{category.name}"/>
+    </RelativeLayout>
+</layout>

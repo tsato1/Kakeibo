@@ -1,5 +1,8 @@
 <resources>
     <!-- General -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
     <dimen name="activity_margin">8dp</dimen>
     <dimen name="card_view_padding">12dp</dimen>
     <dimen name="card_view_margin">4dp</dimen>
@@ -9,6 +12,7 @@
     <dimen name="list_row_padding_horizontal">22dp</dimen>
     <dimen name="list_row_padding_vertical">6dp</dimen>
     <dimen name="ic_arrow_sides">40dp</dimen>
+
     <!-- dialog -->
     <dimen name="dialog_alert_default_padding">19dp</dimen>
 
@@ -17,6 +21,7 @@
     <dimen name="imv_category_padding_bottom">22dp</dimen>
     <dimen name="grv_column_width">80dp</dimen>
     <dimen name="grv_vertical_spacing">4dp</dimen>
+    <dimen name="grv_item_min_height">96dp</dimen>
 
     <!-- fragment2 -->
     <dimen name="imv_exit_search_sides">30dp</dimen>
