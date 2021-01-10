@@ -27,8 +27,9 @@ public class CategoryStatus {
     @ColumnInfo(name = CategoryDBAdapter.COL_SIGNIFICANCE, defaultValue = "0")
     private int significance = 0;
 
-    @ColumnInfo(name = CategoryDBAdapter.COL_DRAWABLE, defaultValue = "0")
-    private int drawable = 0;
+    @ColumnInfo(name = CategoryDBAdapter.COL_DRAWABLE, defaultValue = "")
+    @NonNull
+    private String drawable = "";
 
     @ColumnInfo(name = CategoryDBAdapter.COL_IMAGE)
     private byte[] image;
@@ -49,7 +50,7 @@ public class CategoryStatus {
                           String name,
                           int color,
                           int significance,
-                          int drawable,
+                          String drawable,
                           byte[] image,
                           int parent,
                           String description,
@@ -71,7 +72,7 @@ public class CategoryStatus {
                           int code,
                           int color,
                           int significance,
-                          int drawable,
+                          String drawable,
                           byte[] image,
                           int parent,
                           String description,
@@ -98,7 +99,7 @@ public class CategoryStatus {
 
     public int getSignificance() { return significance; }
 
-    public int getDrawable() { return drawable; }
+    public String getDrawable() { return drawable; }
 
     public byte[] getImage() { return image; }
 
@@ -119,7 +120,7 @@ public class CategoryStatus {
 
     public void setSignificance(int significance) { this.significance = significance; }
 
-    public void setDrawable(int drawable) { this.drawable = drawable; }
+    public void setDrawable(String drawable) { this.drawable = drawable; }
 
     public void setImage(byte[] image) { this.image = image; }
 

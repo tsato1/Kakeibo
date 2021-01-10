@@ -101,7 +101,7 @@ public class CategoryPlacementReorderFragment extends Fragment {
                     "name",
                     0,//UtilCategory.getCategoryStr(_activity, categoryCode),
                     0,
-                    0,//UtilCategory.getCategoryDrawable(_activity, categoryCode),
+                    "todo todo todo",//UtilCategory.getCategoryDrawable(_activity, categoryCode),
                     new byte[]{0},//UtilCategory.getCategoryImage(_activity, categoryCode),
                     0,
                     "",

@@ -1692,30 +1692,30 @@ public class PrepDB {
 
     public static List<CategoryStatus> prepCategoryStatuses() {
         List<CategoryStatus> out = new ArrayList<>();
-        out.add(new CategoryStatus(1, 0, "INCOME", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_income, null, -1, "", ""));
-        out.add(new CategoryStatus(2, 1, "COMM", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_comm, null, -1, "", ""));
-        out.add(new CategoryStatus(3, 2, "MEAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_meal, null, -1, "", ""));
-        out.add(new CategoryStatus(4, 3, "UTIL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_util, null, -1, "", ""));
-        out.add(new CategoryStatus(5, 4, "HEALTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_health, null, -1, "", ""));
-        out.add(new CategoryStatus(6, 5, "EDU", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_edu, null, -1, "", ""));
-        out.add(new CategoryStatus(7, 6, "CLOTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_cloth, null, -1, "", ""));
-        out.add(new CategoryStatus(8, 7, "TRANS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_trans, null, -1, "", ""));
-        out.add(new CategoryStatus(9, 8, "ENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ent, null, -1, "", ""));
-        out.add(new CategoryStatus(10, 9, "INS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ins, null, -1, "", ""));
-        out.add(new CategoryStatus(11, 10, "TAX", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_tax, null, -1, "", ""));
-        out.add(new CategoryStatus(12, 11, "OTHER", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_other, null, -1, "", ""));
-        out.add(new CategoryStatus(13, 12, "PET", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_pet, null, -1, "", ""));
-        out.add(new CategoryStatus(14, 13, "SOCIAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_social, null, -1, "", ""));
-        out.add(new CategoryStatus(15, 14, "COSME", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_cosme, null, -1, "", ""));
-        out.add(new CategoryStatus(16, 15, "HOUSNG", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_housing, null, -1, "", ""));
-        out.add(new CategoryStatus(17, 16, "EXTRA", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_bonus, null, -1, "", ""));
-        out.add(new CategoryStatus(18, 17, "ALLOW", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_allowance, null, -1, "", ""));
-        out.add(new CategoryStatus(19, 18, "INV", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_in_inv, null, -1, "", ""));
-        out.add(new CategoryStatus(20, 19, "RENT", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_in_rent, null, -1, "", ""));
-        out.add(new CategoryStatus(21, 20, "EXPENS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_expense, null, -1, "", ""));
-        out.add(new CategoryStatus(22, 21, "TELE", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_tele, null, -1, "", ""));
-        out.add(new CategoryStatus(23, 22, "INV", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ex_inv, null, -1, "", ""));
-        out.add(new CategoryStatus(24, 23, "RENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, R.drawable.ic_category_ex_rent, null, -1, "", ""));
+        out.add(new CategoryStatus(1, 0, "INCOME", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_income", null, -1, "", ""));
+        out.add(new CategoryStatus(2, 1, "COMM", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_comm", null, -1, "", ""));
+        out.add(new CategoryStatus(3, 2, "MEAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_meal", null, -1, "", ""));
+        out.add(new CategoryStatus(4, 3, "UTIL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_util", null, -1, "", ""));
+        out.add(new CategoryStatus(5, 4, "HEALTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_health", null, -1, "", ""));
+        out.add(new CategoryStatus(6, 5, "EDU", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_edu", null, -1, "", ""));
+        out.add(new CategoryStatus(7, 6, "CLOTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_cloth", null, -1, "", ""));
+        out.add(new CategoryStatus(8, 7, "TRANS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_trans", null, -1, "", ""));
+        out.add(new CategoryStatus(9, 8, "ENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ent", null, -1, "", ""));
+        out.add(new CategoryStatus(10, 9, "INS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ins", null, -1, "", ""));
+        out.add(new CategoryStatus(11, 10, "TAX", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_tax", null, -1, "", ""));
+        out.add(new CategoryStatus(12, 11, "OTHER", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_other", null, -1, "", ""));
+        out.add(new CategoryStatus(13, 12, "PET", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_pet", null, -1, "", ""));
+        out.add(new CategoryStatus(14, 13, "SOCIAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_social", null, -1, "", ""));
+        out.add(new CategoryStatus(15, 14, "COSME", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_cosme", null, -1, "", ""));
+        out.add(new CategoryStatus(16, 15, "HOUSNG", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_housing", null, -1, "", ""));
+        out.add(new CategoryStatus(17, 16, "EXTRA", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_bonus", null, -1, "", ""));
+        out.add(new CategoryStatus(18, 17, "ALLOW", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_allowance", null, -1, "", ""));
+        out.add(new CategoryStatus(19, 18, "INV", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_in_inv", null, -1, "", ""));
+        out.add(new CategoryStatus(20, 19, "RENT", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_in_rent", null, -1, "", ""));
+        out.add(new CategoryStatus(21, 20, "EXPENS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_expense", null, -1, "", ""));
+        out.add(new CategoryStatus(22, 21, "TELE", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_tele", null, -1, "", ""));
+        out.add(new CategoryStatus(23, 22, "INV", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ex_inv", null, -1, "", ""));
+        out.add(new CategoryStatus(24, 23, "RENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ex_rent", null, -1, "", ""));
         return out;
     }
 

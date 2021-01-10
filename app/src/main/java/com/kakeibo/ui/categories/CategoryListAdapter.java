@@ -46,12 +46,19 @@ public class CategoryListAdapter extends ArrayAdapter<CategoryStatus> {
 //        String categoryText = UtilCategory.getCategoryStr(getContext(), categoryStatus.getCode());
 //        viewHolder.txvCategory.setText(categoryText);
 
-        if (categoryStatus.getDrawable() == -1) { // ==-1: category is created by user -> use byte array
-            viewHolder.imvCategory.setImageBitmap(
-                    UtilDrawing.bytesToBitmap(categoryStatus.getImage()));
-        } else { // default category -> use drawable
-            viewHolder.imvCategory.setImageDrawable(
-                    ContextCompat.getDrawable(_context, categoryStatus.getDrawable()));
+        //should be disposable
+//        if (categoryStatus.getDrawable() == -1) { // ==-1: category is created by user -> use byte array
+//            viewHolder.imvCategory.setImageBitmap(
+//                    UtilDrawing.bytesToBitmap(categoryStatus.getImage()));
+//        } else { // default category -> use drawable
+//            viewHolder.imvCategory.setImageDrawable(
+//                    ContextCompat.getDrawable(_context, categoryStatus.getDrawable()));
+//        }
+        if (categoryStatus.getCode() < UtilCategory.CUSTOM_CATEGORY_CODE_START) { // default category -> use drawable
+//            viewHolder.build(categoryStatus.getName(),
+//                    UtilDrawing.getDrawableIdFromIconName(getContext(), categoryStatus.getDrawable()));
+        } else { // category is created by user -> use byte array
+//            viewHolder.build(categoryStatus.getName(), categoryStatus.getImage());
         }
 
         return convertView;

@@ -10,9 +10,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilCurrency;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PrepDB7 {
     public static void migrate_1_7(SupportSQLiteDatabase database) {
         /*** subscriptions table ***/
@@ -625,14 +622,111 @@ public class PrepDB7 {
                 "CAST ("+ CategoryDBAdapter.COL_CODE+" AS INTEGER),"+
                 CategoryDBAdapter.COL_COLOR+","+
                 CategoryDBAdapter.COL_SIGNIFICANCE+","+
-                CategoryDBAdapter.COL_DRAWABLE+","+
+                "'',"+ // COL_DRAWABLE is now TEXT
                 CategoryDBAdapter.COL_IMAGE+","+
                 CategoryDBAdapter.COL_PARENT+","+
                 CategoryDBAdapter.COL_DESC+","+
                 CategoryDBAdapter.COL_SAVED_DATE+" FROM "+ CategoryDBAdapter.TABLE_NAME +"_old;");
         database.execSQL("DROP TABLE "+ CategoryDBAdapter.TABLE_NAME +"_old;");
+
+        Cursor cursor = database.query(
+                "SELECT * FROM " + CategoryDBAdapter.TABLE_NAME +
+                        " WHERE " + CategoryDBAdapter.COL_CODE + "<" + UtilCategory.CUSTOM_CATEGORY_CODE_START+
+                        " ORDER BY " + CategoryDBAdapter.COL_CODE);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int code = cursor.getInt(cursor.getColumnIndex(CategoryDBAdapter.COL_CODE));
+
+                String categoryName;
+                String drawableName;
+                if (code == 0) {
+                    categoryName = "INCOME";
+                    drawableName = "ic_category_income";
+                } else if (code == 1) {
+                    categoryName = "COMM";
+                    drawableName = "ic_category_comm";
+                } else if (code == 2) {
+                    categoryName = "MEAL";
+                    drawableName = "ic_category_meal";
+                } else if (code == 3) {
+                    categoryName = "UTIL";
+                    drawableName = "ic_category_util";
+                } else if (code == 4) {
+                    categoryName = "HEALTH";
+                    drawableName = "ic_category_health";
+                } else if (code == 5) {
+                    categoryName = "EDU";
+                    drawableName = "ic_category_edu";
+                } else if (code == 6) {
+                    categoryName = "CLOTH";
+                    drawableName = "ic_category_cloth";
+                } else if (code == 7) {
+                    categoryName = "TRANS";
+                    drawableName = "ic_category_trans";
+                } else if (code == 8) {
+                    categoryName = "ENT";
+                    drawableName = "ic_category_ent";
+                } else if (code == 9) {
+                    categoryName = "INS";
+                    drawableName = "ic_category_ins";
+                } else if (code == 10) {
+                    categoryName = "TAX";
+                    drawableName = "ic_category_tax";
+                } else if (code == 11) {
+                    categoryName = "OTHER";
+                    drawableName = "ic_category_other";
+                } else if (code == 12) {
+                    categoryName = "PET";
+                    drawableName = "ic_category_pet";
+                } else if (code == 13) {
+                    categoryName = "SOCIAL";
+                    drawableName = "ic_category_social";
+                } else if (code == 14) {
+                    categoryName = "COSME";
+                    drawableName = "ic_category_cosme";
+                } else if (code == 15) {
+                    categoryName = "HOUSNG";
+                    drawableName = "ic_category_housing";
+                } else if (code == 16) {
+                    categoryName = "EXTRA";
+                    drawableName = "ic_category_bonus";
+                } else if (code == 17) {
+                    categoryName = "ALLOW";
+                    drawableName = "ic_category_allowance";
+                } else if (code == 18) {
+                    categoryName = "INV";
+                    drawableName = "ic_category_in_inv";
+                } else if (code == 19) {
+                    categoryName = "RENT";
+                    drawableName = "ic_category_in_rent";
+                } else if (code == 20) {
+                    categoryName = "EXPENS";
+                    drawableName = "ic_category_expense";
+                } else if (code == 21) {
+                    categoryName = "TELE";
+                    drawableName = "ic_category_tele";
+                } else if (code == 22) {
+                    categoryName = "INV";
+                    drawableName = "ic_category_ex_inv";
+                } else if (code == 23) {
+                    categoryName = "RENT";
+                    drawableName = "ic_category_ex_rent";
+                } else {
+                    continue;
+                }
+
+                database.execSQL(
+                        "UPDATE " + CategoryDBAdapter.TABLE_NAME +
+                        " SET "
+                                + CategoryDBAdapter.COL_DRAWABLE + "='" + drawableName +"',"
+                                + CategoryDBAdapter.COL_NAME + "='" + categoryName +"'" +
+                                " WHERE " + CategoryDBAdapter.COL_CODE + "=" + code);
+            } while (cursor.moveToNext());
+        }
+
+
         /*** CategoryLan table ***/
-        Log.d("migrate_6_7" , "coming here to process categoryLan table");
 
         Cursor c = database.query(
                 "SELECT * FROM "+CategoryLanDBAdapter.TABLE_NAME +
@@ -641,38 +735,50 @@ public class PrepDB7 {
             do {
                 int code = c.getInt(c.getColumnIndex(CategoryLanDBAdapter.COL_CODE));
 
-                Log.d("migrate_6_7" , "code="+code);
-
                 String name = "";
                 if(!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ARA)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ARA));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ENG)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ENG)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ENG));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_FRA)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_FRA)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_FRA));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_SPA)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_SPA)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_SPA));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_HIN)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_HIN)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_HIN));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_IND)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_IND)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_IND));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ITA)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ITA)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_ITA));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_JPN)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_JPN)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_JPN));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_KOR)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_KOR)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_KOR));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_POL)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_POL)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_POL));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_POR)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_POR)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_POR));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_RUS)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_RUS)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_RUS));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_VIE)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_VIE)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_VIE));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hans)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hans)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hans));
-                } else if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hant)))) {
+                }
+                if (!"".equals(c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hant)))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hant));
                 }
 

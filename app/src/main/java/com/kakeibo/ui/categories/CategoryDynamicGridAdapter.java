@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.kakeibo.R;
 import com.kakeibo.data.CategoryStatus;
+import com.kakeibo.util.UtilCategory;
 import com.kakeibo.util.UtilDrawing;
 import com.takahidesato.android.dynamicgrid.BaseDynamicGridAdapter;
 
@@ -33,11 +34,12 @@ public class CategoryDynamicGridAdapter extends BaseDynamicGridAdapter {
 
         CategoryStatus categoryStatus = (CategoryStatus) getItem(position);
 
-        if (categoryStatus.getDrawable() == -1) { // ==-1: category is created by user -> use byte array
-            holder.build(categoryStatus.getName(), categoryStatus.getImage());
-        } else { // default category -> use drawable
-            holder.build(categoryStatus.getName(), categoryStatus.getDrawable());
-        }
+//        if (categoryStatus.getCode() < UtilCategory.CUSTOM_CATEGORY_CODE_START) { // default category -> use drawable
+//            holder.build(categoryStatus.getName(),
+//                    UtilDrawing.getDrawableIdFromIconName(getContext(), categoryStatus.getDrawable()));
+//        } else { // category is created by user -> use byte array
+//            holder.build(categoryStatus.getName(), categoryStatus.getImage());
+//        }
 
         return convertView;
     }
