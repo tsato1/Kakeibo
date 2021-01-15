@@ -68,10 +68,10 @@ public class CategoryEditionActivity extends AppCompatActivity {
         }
 
         /*** ads ***/
-        if (UtilAds.isBannerAdsDisplayAgreed()) {
-            initAd();
-            loadBanner();
-        }
+//        if (UtilAds.isBannerAdsDisplayAgreed()) {
+//            initAd();
+//            loadBanner();
+//        }
 
         /*** findViews ***/
         _btnBack = findViewById(R.id.btn_back);
@@ -105,7 +105,7 @@ public class CategoryEditionActivity extends AppCompatActivity {
             /*** ************************************************************** ***/
 
             String updateDate = "";
-            CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
+//            CategoryDBAdapter categoryDBAdapter = new CategoryDBAdapter();
 //            categoryDBAdapter.open();
 //            Cursor c = categoryDBAdapter.getUpdateDate(_customKkbCategoriesList.get(position).getCode());
 //            if (c!=null && c.moveToFirst()) {

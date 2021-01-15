@@ -18,10 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.kakeibo.R;
-import com.kakeibo.db.CategoryLanDBAdapter;
 import com.kakeibo.db.TmpCategory;
-import com.kakeibo.util.UtilKeyboard;
-import com.kakeibo.util.UtilSystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,8 +72,8 @@ public class CategoryCreationLanguageFragment extends Fragment {
 //20        if (_categoryCode!=-1) _edtName.setText(UtilCategory.getCategoryStr(_activity, _categoryCode));
 
         /*** language setup ***/
-        _btnLanguage.setText(UtilSystem.getCurrentLangCode(_activity));
-        _langList = UtilSystem.getAllSupportedLanguages();
+//        _btnLanguage.setText(UtilSystem.getCurrentLangCode(_activity));
+//        _langList = UtilSystem.getAllSupportedLanguages();
         _langAdapter = new ArrayAdapter<>(_activity, android.R.layout.simple_list_item_1, _langList);
         _langMap.put(_btnLanguage.getText().toString(), _edtName);
 
@@ -138,12 +135,12 @@ public class CategoryCreationLanguageFragment extends Fragment {
                     dialog1.show();
                     break;
                 case R.id.btn_back:
-                    UtilKeyboard.hideKeyboard(_activity);
+//                    UtilKeyboard.hideKeyboard(_activity);
                     ((CategoryCreationActivity) _activity).onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_next:
                     if (checkBeforeProceed()) {
-                        UtilKeyboard.hideKeyboard(_activity);
+//                        UtilKeyboard.hideKeyboard(_activity);
                         ((CategoryCreationActivity) _activity).onNextPressed(TAG_INT, _tmpCategory);
                     }
                     break;
@@ -171,39 +168,39 @@ public class CategoryCreationLanguageFragment extends Fragment {
                 return false;
             }
 
-            if (key.equals(CategoryLanDBAdapter.COL_ARA)) {
-                _tmpCategory.ara = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_ENG)) {
-                _tmpCategory.eng = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_SPA)) {
-                _tmpCategory.spa = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_FRA)) {
-                _tmpCategory.fra = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_HIN)) {
-                _tmpCategory.hin = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_IND)) {
-                _tmpCategory.ind = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_ITA)) {
-                _tmpCategory.ita = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_JPN)) {
-                _tmpCategory.jpn = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_KOR)) {
-                _tmpCategory.kor = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_POL)) {
-                _tmpCategory.pol = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_POR)) {
-                _tmpCategory.por = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_RUS)) {
-                _tmpCategory.rus = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_TUR)) {
-                _tmpCategory.tur = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_VIE)) {
-                _tmpCategory.vie = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_Hans)) {
-                _tmpCategory.hans = edt.getText().toString();
-            } else if (key.equals(CategoryLanDBAdapter.COL_Hant)) {
-                _tmpCategory.hant = edt.getText().toString();
-            }
+//            if (key.equals(CategoryLanDBAdapter.COL_ARA)) {
+//                _tmpCategory.ara = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_ENG)) {
+//                _tmpCategory.eng = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_SPA)) {
+//                _tmpCategory.spa = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_FRA)) {
+//                _tmpCategory.fra = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_HIN)) {
+//                _tmpCategory.hin = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_IND)) {
+//                _tmpCategory.ind = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_ITA)) {
+//                _tmpCategory.ita = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_JPN)) {
+//                _tmpCategory.jpn = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_KOR)) {
+//                _tmpCategory.kor = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_POL)) {
+//                _tmpCategory.pol = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_POR)) {
+//                _tmpCategory.por = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_RUS)) {
+//                _tmpCategory.rus = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_TUR)) {
+//                _tmpCategory.tur = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_VIE)) {
+//                _tmpCategory.vie = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_Hans)) {
+//                _tmpCategory.hans = edt.getText().toString();
+//            } else if (key.equals(CategoryLanDBAdapter.COL_Hant)) {
+//                _tmpCategory.hant = edt.getText().toString();
+//            }
         }
 
         return true;

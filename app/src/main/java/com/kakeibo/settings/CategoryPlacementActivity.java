@@ -24,7 +24,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
-import com.kakeibo.ViewPagerAdapter;
+import com.kakeibo.ui.ViewPagerAdapter;
 import com.kakeibo.util.UtilAds;
 import com.kakeibo.util.UtilCategory;
 
@@ -70,10 +70,10 @@ public class CategoryPlacementActivity extends AppCompatActivity
         }
 
         /*** ads ***/
-        if (UtilAds.isBannerAdsDisplayAgreed()) {
-            initAd();
-            loadBanner();
-        }
+//        if (UtilAds.isBannerAdsDisplayAgreed()) {
+//            initAd();
+//            loadBanner();
+//        }
 
         /*** find views ***/
         _viewPager = findViewById(R.id.view_pager);

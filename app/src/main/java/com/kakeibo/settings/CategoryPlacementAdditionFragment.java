@@ -67,7 +67,7 @@ public class CategoryPlacementAdditionFragment extends Fragment {
         _activity = getActivity();
 
         /*** SharedPreference: num category icons per row ***/
-        _sNumColumns = SubApp.getNumColumns(R.string.pref_key_num_columns);
+        _sNumColumns = 2;//SubApp.getNumColumns(R.string.pref_key_num_columns);
 
         findViews(view);
 

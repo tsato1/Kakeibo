@@ -283,7 +283,7 @@ public class MigrationTest {
         // Check that the correct data is in the database
         try {
             List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(
-                    latestDb.categoryStatusDao().getAllStatusesLiveData());
+                    latestDb.categoryStatusDao().getAll());
             CategoryStatus dbCategoryStatus = dbCategoryStatuses.get(0);
             assertEquals(dbCategoryStatus.getId(), 1);
             assertEquals(dbCategoryStatus.getCode(), 0); // Income=0
@@ -347,7 +347,7 @@ public class MigrationTest {
         // Check that the correct data is in the database
         try {
             List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(
-                    latestDb.categoryStatusDao().getAllStatusesLiveData());
+                    latestDb.categoryStatusDao().getAll());
             CategoryStatus dbCategoryStatus = dbCategoryStatuses.get(0);
             assertEquals(dbCategoryStatus.getId(), 1);
             assertEquals(dbCategoryStatus.getCode(), 0); // Income=0

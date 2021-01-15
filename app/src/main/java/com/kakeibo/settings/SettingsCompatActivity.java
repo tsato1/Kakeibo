@@ -42,10 +42,10 @@ public class SettingsCompatActivity extends AppCompatActivity
                 .commit();
 
         /*** ads ***/
-        if (UtilAds.isBannerAdsDisplayAgreed()) {
-            initAd();
-            loadBanner();
-        }
+//        if (UtilAds.isBannerAdsDisplayAgreed()) {
+//            initAd();
+//            loadBanner();
+//        }
 
         _activity = this;
     }

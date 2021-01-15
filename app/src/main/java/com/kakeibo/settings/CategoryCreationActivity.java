@@ -12,7 +12,6 @@ import android.view.Display;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -26,10 +25,9 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
-import com.kakeibo.ViewPagerAdapter;
+import com.kakeibo.ui.ViewPagerAdapter;
 import com.kakeibo.db.TmpCategory;
 import com.kakeibo.util.UtilAds;
-import com.kakeibo.util.UtilCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,10 +79,10 @@ public class CategoryCreationActivity extends AppCompatActivity {
         }
 
         /*** ads ***/
-        if (UtilAds.isBannerAdsDisplayAgreed()) {
-            initAd();
-            loadBanner();
-        }
+//        if (UtilAds.isBannerAdsDisplayAgreed()) {
+//            initAd();
+//            loadBanner();
+//        }
 
         /*** find views ***/
         _viewPager = findViewById(R.id.view_pager);
@@ -206,8 +204,8 @@ public class CategoryCreationActivity extends AppCompatActivity {
                     }
                     /*** this Activity was called from CategoryEditionActivity ***/
                     else {
-                        tmpCategory.id = _id;
-                        tmpCategory.code = _categoryCode;
+//                        tmpCategory.id = _id;
+//                        tmpCategory.code = _categoryCode;
 //                        if (UtilCategory.updateCustomCategory(_context, tmpCategory)==-1) {
 //                            Toast.makeText(_context, getString(R.string.err_category_not_created), Toast.LENGTH_LONG).show();
 //                        } else {

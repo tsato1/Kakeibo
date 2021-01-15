@@ -1,5 +1,5 @@
-package com.kakeibo.ui;
-
-public interface ItemSaveListener {
-    void onItemSaved(int categoryCode);
-}
+//package com.kakeibo.ui;
+//
+//public interface ItemSaveListener {
+//    void onItemSaved(int categoryCode);
+//}

@@ -129,7 +129,7 @@ public class MigrationTest_Room {
             assertEquals(dbItemStatus.getUpdateDate(),"2020-11-22");
 
             List<CategoryStatus> dbCategoryStatuses = LiveDataTestUtil.getOrAwaitValue(
-                    appDatabase.categoryStatusDao().getAllStatusesLiveData());
+                    appDatabase.categoryStatusDao().getAll());
             CategoryStatus dbCategoryStatus = dbCategoryStatuses.get(0);
             assertEquals(dbCategoryStatus.getId(), 0);
             assertEquals(dbCategoryStatus.getCode(), 7);

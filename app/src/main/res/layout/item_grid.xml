@@ -28,7 +28,7 @@
             android:clickable="false"
             android:focusable="false"
             app:context="@{context}"
-            app:cateogry="@{category}"
+            app:category="@{category}"
             android:contentDescription="@string/category"/>
 
         <TextView

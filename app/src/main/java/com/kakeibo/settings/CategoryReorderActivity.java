@@ -53,10 +53,10 @@ public class CategoryReorderActivity extends AppCompatActivity
         }
 
         /*** ads ***/
-        if (UtilAds.isBannerAdsDisplayAgreed()) {
-            initAd();
-            loadBanner();
-        }
+//        if (UtilAds.isBannerAdsDisplayAgreed()) {
+//            initAd();
+//            loadBanner();
+//        }
 
         _fragmentReorder = CategoryPlacementReorderFragment.newInstance();
 

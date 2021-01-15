@@ -18,6 +18,6 @@ class ItemStatusViewModel(application: Application) : AndroidViewModel(applicati
     init {
         val subApp = application as SubApp
         _repository = subApp.repository
-        all = _repository.all
+        all = _repository.items
     }
 }

@@ -93,13 +93,13 @@ public class CategoryCreationIconFragment extends Fragment {
             switch (view.getId()) {
                 case R.id.imb_clear_canvas:
                     _drawView.clearCanvas();
-                    if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) { // income
-                        _drawView.setBackground(ContextCompat.getDrawable(_activity,
-                                R.drawable.new_category_background_income));
-                    } else if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) { // expense
-                        _drawView.setBackground(ContextCompat.getDrawable(_activity,
-                                R.drawable.new_category_background_expense));
-                    }
+//                    if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) { // income
+//                        _drawView.setBackground(ContextCompat.getDrawable(_activity,
+//                                R.drawable.new_category_background_income));
+//                    } else if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) { // expense
+//                        _drawView.setBackground(ContextCompat.getDrawable(_activity,
+//                                R.drawable.new_category_background_expense));
+//                    }
                     break;
                 case R.id.imb_undo:
                     _drawView.undo();
@@ -133,14 +133,14 @@ public class CategoryCreationIconFragment extends Fragment {
                     ((CategoryCreationActivity) _activity).onBackPressed(TAG_INT);
                     break;
                 case R.id.btn_done:
-                    Bitmap bitmap = _drawView.getBitmap();
-                    bitmap = UtilDrawing.getResizedBitmap(
-                            bitmap,
-                            (int) getResources().getDimension(R.dimen.new_category_drawable_size),
-                            (int) getResources().getDimension(R.dimen.new_category_drawable_size));
-                    bitmap = UtilDrawing.getBitmapClippedCircle(bitmap);
-                    _tmpCategory.image = UtilDrawing.bitmapToBytes(bitmap);
-                    ((CategoryCreationActivity) _activity).onNextPressed(TAG_INT, _tmpCategory);
+//                    Bitmap bitmap = _drawView.getBitmap();
+//                    bitmap = UtilDrawing.getResizedBitmap(
+//                            bitmap,
+//                            (int) getResources().getDimension(R.dimen.new_category_drawable_size),
+//                            (int) getResources().getDimension(R.dimen.new_category_drawable_size));
+//                    bitmap = UtilDrawing.getBitmapClippedCircle(bitmap);
+//                    _tmpCategory.image = UtilDrawing.bitmapToBytes(bitmap);
+//                    ((CategoryCreationActivity) _activity).onNextPressed(TAG_INT, _tmpCategory);
                     break;
             }
         }
@@ -150,14 +150,14 @@ public class CategoryCreationIconFragment extends Fragment {
         _tmpCategory = tmpCategory;
 
         /*** When called from CategoryCreationActivity ***/
-        if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) { // income
-            _drawView.setBackground(ContextCompat.getDrawable(_activity,
-                    R.drawable.new_category_background_income));
-
-        } else if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) { // expense
-            _drawView.setBackground(ContextCompat.getDrawable(_activity,
-                    R.drawable.new_category_background_expense));
-        }
+//        if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_INCOME) { // income
+//            _drawView.setBackground(ContextCompat.getDrawable(_activity,
+//                    R.drawable.new_category_background_income));
+//
+//        } else if (_tmpCategory.color == UtilCategory.CATEGORY_COLOR_EXPENSE) { // expense
+//            _drawView.setBackground(ContextCompat.getDrawable(_activity,
+//                    R.drawable.new_category_background_expense));
+//        }
 
         /*** _categoryCode gets passed from CategoryEditionActivity ***/
         if (_categoryCode != -1) {

@@ -1,22 +1,5 @@
 package com.kakeibo.util;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
-import android.util.SparseArray;
-
-//import com.kakeibo.KkbCategory;
-import com.kakeibo.SubApp;
-import com.kakeibo.data.DataRepository;
-import com.kakeibo.db.CategoryDBAdapter;
-import com.kakeibo.db.CategoryDspDBAdapter;
-import com.kakeibo.db.CategoryLanDBAdapter;
-import com.kakeibo.db.ItemDBAdapter;
-import com.kakeibo.db.TmpCategory;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class UtilCategory {
 //    private static String TAG = UtilCategory.class.getSimpleName();
 //
