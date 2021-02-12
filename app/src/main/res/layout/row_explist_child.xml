@@ -1,70 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lnl_explist_child"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:minHeight="60dp"
-    android:paddingRight="15dp"
-    android:paddingLeft="15dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/img_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:src="@mipmap/ic_launcher"/>
+    <data>
+        <variable
+            name="itemStatus"
+            type="com.kakeibo.data.ItemStatus" />
+        <variable
+            name="itemClickListener"
+            type="com.kakeibo.ui.listener.ItemClickListener" />
+    </data>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
+        android:id="@+id/rll_exp_list_child"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="60dp"
+        android:minHeight="60dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{(v)->itemClickListener.onItemClicked(v, itemStatus)}">
+
+        <ImageView
+            android:id="@+id/img_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@mipmap/ic_launcher"
+            android:clickable="false"
+            android:focusable="false"
+            app:context="@{context}"
+            app:categoryCode="@{itemStatus.categoryCode}"
+            android:contentDescription="@string/category"/>
 
         <TextView
             android:id="@+id/txv_category"
-            android:gravity="left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_toEndOf="@id/img_category"
+            android:clickable="false"
+            android:focusable="false"
             android:textColor="@color/colorBlack"
             android:textStyle="bold"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"/>
+            app:context="@{context}"
+            app:categoryCode="@{itemStatus.categoryCode}"/>
 
-        <TableLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TableRow>
-                <TextView
-                    android:id="@+id/txv_memo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorBlack"
-                    android:textStyle="bold"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"/>
-                <TextView
-                    android:id="@+id/txv_amount"
-                    android:gravity="right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorBlack"
-                    android:textStyle="bold"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"/>
-            </TableRow>
-        </TableLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/img_category"
+            android:padding="5dp"
+            android:clickable="false"
+            android:focusable="false">
 
-    </LinearLayout>
-</LinearLayout>
+            <TextView
+                android:id="@+id/txv_memo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:text="@{itemStatus.memo}"/>
+            <TextView
+                android:id="@+id/txv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                app:context="@{context}"
+                app:item="@{itemStatus}"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

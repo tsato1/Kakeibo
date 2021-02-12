@@ -39,19 +39,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".export.CreateFileInFolderActivity"
-            android:label="Export"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/MyMaterialTheme.NoActionBar"/>
+<!--        <activity-->
+<!--            android:name=".export.CreateFileInFolderActivity"-->
+<!--            android:label="Export"-->
+<!--            android:parentActivityName=".ui.MainActivity"-->
+<!--            android:theme="@style/MyMaterialTheme.NoActionBar"/>-->
         <activity
             android:name=".export.ExportActivity"
             android:label="Export"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".ui.MainActivity"/>
         <activity
             android:name=".settings.SettingsCompatActivity"
             android:label="Settings"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".ui.MainActivity"/>
         <activity
             android:name=".settings.CategoryPlacementActivity"
             android:label="@string/hide_display_reorder_categories"
@@ -59,7 +59,7 @@
         <activity
             android:name=".settings.CategoryReorderActivity"
             android:label="@string/reorder_categories"
-            android:parentActivityName="settings.SettingsCompatActivity"/>
+            android:parentActivityName=".settings.SettingsCompatActivity"/>
         <activity
             android:name=".settings.CategoryCreationActivity"
             android:label="@string/create_category"
@@ -75,10 +75,10 @@
             android:name=".settings.SettingsAboutActivity"
             android:label="@string/about_this_app"
             android:parentActivityName=".settings.SettingsAboutActivity"/>
-        <activity
-            android:name=".ui.GoogleSignInActivity"
-            android:label="Google Sign In"
-            />
+<!--        <activity-->
+<!--            android:name=".ui.GoogleSignInActivity"-->
+<!--            android:label="Google Sign In"-->
+<!--            />-->
 
         <service
             android:name=".InstanceIDService"

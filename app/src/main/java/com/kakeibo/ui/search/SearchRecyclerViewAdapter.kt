@@ -17,7 +17,7 @@ import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.ui.AmountTextWatcher
-import com.kakeibo.ui.categories.CategoryListAdapter
+import com.kakeibo.ui.adapter.CategoryListAdapter
 import com.kakeibo.util.UtilDate
 import java.text.SimpleDateFormat
 import java.util.*

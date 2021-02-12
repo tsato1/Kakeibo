@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.android.billingclient.api.Purchase
@@ -22,14 +21,17 @@ import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
-import com.google.firebase.auth.FirebaseUser
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
+import com.kakeibo.data.CategoryStatus
 import com.kakeibo.settings.SettingsCompatActivity
+import com.kakeibo.ui.adapter.CategoryStatusViewModel
 import com.kakeibo.ui.search.TabFragment3
+import com.kakeibo.util.QueryBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -50,6 +52,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _billingViewModel: BillingViewModel
     private lateinit var _subscriptionViewModel: SubscriptionStatusViewModel
 
+    var allCategoryStatusMap = hashMapOf<Int, CategoryStatus>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -69,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         _authenticationViewModel = ViewModelProviders.of(this)[FirebaseUserViewModel::class.java]
         _billingViewModel = ViewModelProviders.of(this)[BillingViewModel::class.java]
         _subscriptionViewModel = ViewModelProviders.of(this)[SubscriptionStatusViewModel::class.java]
+        val categoryStatusViewModel = ViewModelProviders.of(this)[CategoryStatusViewModel::class.java]
 
         _billingClientLifecycle = (application as SubApp).billingClientLifecycle
         lifecycle.addObserver(_billingClientLifecycle)
@@ -120,6 +125,14 @@ class MainActivity : AppCompatActivity() {
                 registerPurchases(it)
             }
         })
+
+        categoryStatusViewModel.all.observe(this, {
+            for (category in it) {
+                allCategoryStatusMap[category.code] = category
+            }
+//            QueryBuilder.init(it)
+        })
+
         fabStart = findViewById(R.id.fab_start)
         fabEnd = findViewById(R.id.fab_end)
         fabStart!!.setOnClickListener(FabClickListener())
@@ -144,17 +157,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.action_settings) {
-            startActivity(Intent(this, SettingsCompatActivity::class.java))
-            return true
-        } else if (id == R.id.sign_in) {
-            startActivity(Intent(this, GoogleSignInActivity::class.java))
-            return true
-        } else if (id == R.id.sign_out) {
-            return true
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsCompatActivity::class.java))
+                true
+            }
+            R.id.sign_in -> {
+                triggerSignIn()
+                true
+            }
+            R.id.sign_out -> {
+                triggerSignOut()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     /**
@@ -189,33 +206,36 @@ class MainActivity : AppCompatActivity() {
                 RC_SIGN_IN)
     }
 
-    /*
+    /**
      * Sign out with FirebaseUI Auth.
      */
     private fun triggerSignOut() {
         _subscriptionViewModel.unregisterInstanceId()
-        AuthUI.getInstance().signOut(this)
-                .addOnCompleteListener {
-                    Log.d(TAG, "User SIGNED OUT!")
-                    _authenticationViewModel.updateFirebaseUser()
-                }
+        AuthUI.getInstance().signOut(this).addOnCompleteListener {
+            Log.d(TAG, "User SIGNED OUT!")
+            _authenticationViewModel.updateFirebaseUser()
+        }
     }
 
-    /*
+    /**
      * Receive Activity result, including sign-in result.
      */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            // If sign-in is successful, update ViewModel.
-            if (resultCode == RESULT_OK) {
-                Log.d(TAG, "Sign-in SUCCESS!")
-                _authenticationViewModel.updateFirebaseUser()
-            } else {
-                Log.d(TAG, "Sign-in FAILED!")
+
+        when (requestCode) {
+            RC_SIGN_IN -> {
+                // If sign-in is successful, update ViewModel.
+                if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "Sign-in SUCCESS!")
+                    _authenticationViewModel.updateFirebaseUser()
+                } else {
+                    Log.d(TAG, "Sign-in FAILED!")
+                }
             }
-        } else {
-            Log.e(TAG, "Unrecognized request code: $requestCode")
+            else -> {
+                Log.e(TAG, "Unrecognized request code: $requestCode")
+            }
         }
     }
 

@@ -20,8 +20,14 @@ interface CategoryStatusDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(categoryStatus: CategoryStatus): Long
 
-    @Query("DELETE FROM categories")
+    @Query("DELETE FROM " + CategoryDBAdapter.TABLE_NAME)
     fun deleteAll()
+
+    @Query("SELECT " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
+    fun dspCodes(): LiveData<List<Int>>
+
+    @Query("SELECT " + CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
+    fun getAllCodes(): LiveData<List<Int>>
 
     @Query("SELECT " +
             CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_ID + "," +
@@ -88,8 +94,6 @@ interface CategoryStatusDao {
     //            " ORDER BY " + CategoryDBAdapter.TABLE_NAME+"."+CategoryDBAdapter.COL_CODE)
     //    LiveData<List<CategoryStatus>> getCustomStatusesLiveData(String langCode);
     //    @Query("SELECT "+ CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
-    @Query("SELECT " + CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
-    fun getAllCodes(): LiveData<List<Int>>
     //    List<Integer> getCategoryCodes();
     //    @Query(query)
     //    List<Integer> getTmp(String query);

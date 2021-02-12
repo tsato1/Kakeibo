@@ -18,10 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.kakeibo.data.CategoryStatus;
-import com.kakeibo.ui.categories.CategoryDynamicGridAdapter;
+import com.kakeibo.ui.adapter.CategoryDynamicGridAdapter;
 import com.kakeibo.R;
 
-import com.kakeibo.SubApp;
 import com.takahidesato.android.dynamicgrid.DynamicGridView;
 
 import java.util.ArrayList;

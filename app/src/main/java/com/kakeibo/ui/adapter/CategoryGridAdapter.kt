@@ -1,4 +1,4 @@
-package com.kakeibo.ui.categories
+package com.kakeibo.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,15 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.databinding.ItemGridBinding
-import com.kakeibo.ui.ItemSaveListener
+import com.kakeibo.ui.listener.CategoryClickListener
 import java.util.*
 
 /*
 * Used in TabFragment1, Settings
 */
-class CategoryGridAdapter(
-        private val _itemSaveListener: ItemSaveListener
-        ) : RecyclerView.Adapter<CategoryGridAdapter.ViewHolder>() {
+class CategoryGridAdapter(private val _itemSaveListener: CategoryClickListener)
+    : RecyclerView.Adapter<CategoryGridAdapter.ViewHolder>() {
 
     private var _categoryStatusList: List<CategoryStatus>? = ArrayList()
 
@@ -40,13 +39,12 @@ class CategoryGridAdapter(
         return if (_categoryStatusList != null) _categoryStatusList!!.size else 0
     }
 
-    class ViewHolder(
-            private val itemGridBinding: ItemGridBinding
-            ) : RecyclerView.ViewHolder(itemGridBinding.root) {
+    class ViewHolder(private val itemGridBinding: ItemGridBinding)
+        : RecyclerView.ViewHolder(itemGridBinding.root) {
 
-        fun bind(categoryStatus: CategoryStatus?, itemSaveListener: ItemSaveListener?) {
+        fun bind(categoryStatus: CategoryStatus, categoryClickListener: CategoryClickListener) {
             itemGridBinding.category = categoryStatus
-            itemGridBinding.itemSaveListener = itemSaveListener
+            itemGridBinding.categoryClickListener = categoryClickListener
             itemGridBinding.executePendingBindings()
         }
     }

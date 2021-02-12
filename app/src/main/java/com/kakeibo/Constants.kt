@@ -11,7 +11,7 @@ object Constants {
     // Use the fake local server data or real remote server.
     const val USE_FAKE_SERVER = false
     const val BASIC_SKU = "plus_1y"
-    const val PREMIUM_SKU = "plus_6m"
+    const val PREMIUM_SKU = "plus_1m"
     const val PLAY_STORE_SUBSCRIPTION_URL = "https://play.google.com/store/account/subscriptions"
     const val PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL = "https://play.google.com/store/account/subscriptions?sku=%s&package=%s"
 }

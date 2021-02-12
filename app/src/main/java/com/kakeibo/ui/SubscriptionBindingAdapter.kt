@@ -1,12 +1,13 @@
 package com.kakeibo.ui
 
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.kakeibo.Constants
 import com.kakeibo.R
@@ -18,8 +19,7 @@ import com.kakeibo.billing.BillingUtilities.isSubscriptionRestore
 import com.kakeibo.billing.BillingUtilities.isTransferRequired
 import com.kakeibo.data.ContentResource
 import com.kakeibo.data.SubscriptionStatus
-import com.kakeibo.util.UtilSubscription.basicTextForSubscription
-import com.kakeibo.util.UtilSubscription.premiumTextForSubscription
+import com.kakeibo.databinding.ActivityInAppPurchaseBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -112,56 +112,51 @@ fun updatePremiumContent(view: View, premiumContent: ContentResource?) {
  */
 @BindingAdapter("updateHomeViews")
 fun updateHomeViews(view: View, subscriptions: List<SubscriptionStatus>?) {
-    val restoreMsg = view.findViewById<TextView>(R.id.home_restore_message)
-    val paywallMsg = view.findViewById<View>(R.id.home_paywall_message)
-    val gracePeriodMsg = view.findViewById<View>(R.id.home_grace_period_message)
-    val transferMsg = view.findViewById<View>(R.id.home_transfer_message)
-    val accountHoldMsg = view.findViewById<View>(R.id.home_account_hold_message)
-    val basicMsg = view.findViewById<View>(R.id.home_basic_message)
-
     // Set visibility assuming no subscription is available.
-    // If a subscription is found that meets certain criteria,
-    // then the visibility of the paywall will be changed to View.GONE.
-    paywallMsg.visibility = View.VISIBLE
+    // If a subscription is found that meets certain criteria, then the visibility of the paywall
+    // will be changed to View.GONE.
+    val binding = DataBindingUtil.getBinding<ActivityInAppPurchaseBinding>(view)
+
+    binding?.homePaywallMessage?.visibility = View.VISIBLE
 
     // The remaining views start hidden. If a subscription is found that meets each criteria,
     // then the visibility will be changed to View.VISIBLE.
-    restoreMsg.visibility = View.GONE
-    gracePeriodMsg.visibility = View.GONE
-    transferMsg.visibility = View.GONE
-    accountHoldMsg.visibility = View.GONE
-    basicMsg.visibility = View.GONE
+    binding?.homeRestoreMessage?.visibility = View.GONE
+    binding?.homeGracePeriodMessage?.visibility = View.GONE
+    binding?.homeTransferMessage?.visibility = View.GONE
+    binding?.homeAccountHoldMessage?.visibility = View.GONE
+    binding?.homeBasicMessage?.visibility = View.GONE
     // Update based on subscription information.
     subscriptions?.let {
         for (subscription in subscriptions) {
             if (isSubscriptionRestore(subscription)) {
                 Log.d(TAG, "restore VISIBLE")
-//                view.home_restore_message.run {
-//                    visibility = View.VISIBLE
-//                    val expiryDate = getHumanReadableExpiryDate(subscription)
-//                    text = view.resources.getString(R.string.restore_message_with_date, expiryDate)
-//                }
-//                view.home_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.homeRestoreMessage?.run {
+                    visibility = View.VISIBLE
+                    val expiryDate = getHumanReadableExpiryDate(subscription)
+                    text = view.resources.getString(R.string.restore_message_with_date, expiryDate)
+                }
+                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isGracePeriod(subscription)) {
                 Log.d(TAG, "grace period VISIBLE")
-//                view.home_grace_period_message.visibility = View.VISIBLE
-//                view.home_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.homeGracePeriodMessage?.visibility = View.VISIBLE
+                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isTransferRequired(subscription) && subscription.sku == Constants.BASIC_SKU) {
                 Log.d(TAG, "transfer VISIBLE")
-//                view.home_transfer_message.visibility = View.VISIBLE
-//                view.home_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.homeTransferMessage?.visibility = View.VISIBLE
+                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isAccountHold(subscription)) {
                 Log.d(TAG, "account hold VISIBLE")
-//                view.home_account_hold_message.visibility = View.VISIBLE
-//                view.home_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.homeAccountHoldMessage?.visibility = View.VISIBLE
+                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isBasicContent(subscription) || isPremiumContent(subscription)) {
                 Log.d(TAG, "basic VISIBLE")
-//                view.home_basic_message.visibility = View.VISIBLE
-//                view.home_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.homeBasicMessage?.visibility = View.VISIBLE
+                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
             }
         }
     }
@@ -306,6 +301,20 @@ fun updateSettingsViews(view: View, subscriptions: List<SubscriptionStatus>?) {
     } else {
 //        view.settings_transfer_message_text.text =
 //                view.resources.getString(R.string.transfer_message)
+    }
+}
+
+@BindingAdapter("updateAdViews")
+fun updateAdViews(view: View, subscriptions: List<SubscriptionStatus>?) {
+    subscriptions?.let {
+        for (subscription in it) {
+            if (subscription.sku == Constants.BASIC_SKU || subscription.sku == Constants.PREMIUM_SKU) {
+                view.visibility = View.VISIBLE
+            }
+            else {
+                view.visibility = View.GONE
+            }
+        }
     }
 }
 

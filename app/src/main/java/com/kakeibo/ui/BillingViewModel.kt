@@ -120,7 +120,7 @@ class BillingViewModel(application: Application) : AndroidViewModel(application)
                 buy(sku = Constants.BASIC_SKU, oldSku = Constants.PREMIUM_SKU)
             }
             else -> {
-                // If the user dooes not have a subscription, buy the basic SKU.
+                // If the user does not have a subscription, buy the basic SKU.
                 buy(sku = Constants.BASIC_SKU, oldSku = null)
             }
         }

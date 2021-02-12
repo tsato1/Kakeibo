@@ -19,10 +19,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
-import com.kakeibo.util.UtilAds;
-import com.kakeibo.util.UtilCategory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryReorderActivity extends AppCompatActivity

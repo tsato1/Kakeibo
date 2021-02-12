@@ -1,4 +1,4 @@
-package com.kakeibo.ui.items
+package com.kakeibo.ui.model
 
 import java.math.BigDecimal
 import java.math.RoundingMode

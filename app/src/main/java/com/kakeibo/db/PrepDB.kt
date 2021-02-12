@@ -7,10 +7,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.R
 import com.kakeibo.data.CategoryDspStatus
 import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.KkbAppStatus
 import com.kakeibo.util.UtilCategory
 import java.util.*
 
 object PrepDB {
+
     fun initCategoriesTable(db: SupportSQLiteDatabase) {
         val list = ArrayList<TmpCategory>()
         val income = TmpCategory()
@@ -1668,5 +1670,9 @@ object PrepDB {
         out.add(CategoryDspStatus(15, 10, 14))
         out.add(CategoryDspStatus(16, 11, 15))
         return out
+    }
+
+    fun initKkbAppTable() : KkbAppStatus {
+        return KkbAppStatus(1, "", "", "", 0, -1, 0, "", "", "")
     }
 }

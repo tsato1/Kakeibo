@@ -26,16 +26,6 @@ class SubscriptionMessageService : FirebaseMessagingService() {
         }
     }
 
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-
-        // todo needs to be implemented. originally this function onNewToken was not there
-//        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-//        if(currentUser != null){
-//            FirebaseFirestore.getInstance().collection("user").document(currentUser).update("deviceToken",token)
-//        }
-    }
-
     companion object {
         private const val TAG = "SubscriptionMsgService"
         private const val REMOTE_MESSAGE_SUBSCRIPTIONS_KEY = "currentStatus"

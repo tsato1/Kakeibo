@@ -20,9 +20,10 @@ import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentInputBinding
-import com.kakeibo.ui.categories.CategoryDspStatusViewModel
-import com.kakeibo.ui.categories.CategoryGridAdapter
-import com.kakeibo.ui.categories.CategoryStatusViewModel
+import com.kakeibo.ui.adapter.CategoryDspStatusViewModel
+import com.kakeibo.ui.adapter.CategoryGridAdapter
+import com.kakeibo.ui.adapter.CategoryStatusViewModel
+import com.kakeibo.ui.listener.CategoryClickListener
 import com.kakeibo.util.QueryBuilder
 import com.kakeibo.util.QueryBuilder.build
 import com.kakeibo.util.QueryBuilder.init
@@ -45,7 +46,7 @@ import java.util.*
 /**
  * Created by T on 2015/09/14.
  */
-class TabFragment1 : Fragment(), ItemSaveListener {
+class TabFragment1 : Fragment(), CategoryClickListener {
     private var _activity: Activity? = null
     private var _btnDate: Button? = null
     private var _edtAmount: EditText? = null
@@ -70,13 +71,16 @@ class TabFragment1 : Fragment(), ItemSaveListener {
 
         val fragmentBinding: FragmentInputBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_input, container, false)
+
         fragmentBinding.lifecycleOwner = this
         fragmentBinding.billingViewModel = billingViewModel
         fragmentBinding.subscriptionViewModel = subscriptionViewModel
         fragmentBinding.itemStatusViewModel = _itemStatusViewModel
         fragmentBinding.categoryStatusViewModel = categoryStatusViewModel
         fragmentBinding.categoryDspStatusViewModel = categoryDspStatusViewModel
+
         val view = fragmentBinding.root
+
         categoryStatusViewModel.allCodes.observe(viewLifecycleOwner, {
             _query = Query(Query.QUERY_TYPE_NEW)
             init(it)
@@ -125,7 +129,7 @@ class TabFragment1 : Fragment(), ItemSaveListener {
 //                .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
-    fun checkBeforeSave(): Boolean {
+    private fun checkBeforeSave(): Boolean {
         if ("" == _edtAmount!!.text.toString()) {
             Toast.makeText(activity, R.string.err_please_enter_amount, Toast.LENGTH_SHORT).show()
             return false
@@ -141,11 +145,10 @@ class TabFragment1 : Fragment(), ItemSaveListener {
         return true
     }
 
-    override fun onItemSaved(categoryCode: Int) {
-        Log.d("onItemSaved", "categoryCode=$categoryCode")
+    override fun onCategoryClicked(categoryCode: Int) {
         if (!checkBeforeSave()) return
-        val eventDate = convertDateFormat(
-                _btnDate!!.text.toString().split("\\s+").toTypedArray()[0], _dateFormat, 3)
+
+        val eventDate = convertDateFormat(_btnDate!!.text.toString().split(" ")[0], _dateFormat, 3)
         val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
         val amount = _edtAmount!!.text.toString()
         val itemStatus = ItemStatus(
@@ -156,6 +159,7 @@ class TabFragment1 : Fragment(), ItemSaveListener {
                 eventDate,
                 updateDate
         )
+
         _itemStatusViewModel!!.insert(itemStatus)
         Toast.makeText(activity, resources.getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show()
         setDate(eventDate, "")
@@ -164,7 +168,7 @@ class TabFragment1 : Fragment(), ItemSaveListener {
         setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE)
         setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, QueryBuilder.ASC)
         build(_query!!)
-        (_activity as MainActivity?)!!.onItemSaved(_query!!, eventDate)
+        (_activity as MainActivity).onItemSaved(_query!!, eventDate)
         _btnDate!!.text = getTodaysDateWithDay(_dateFormat, _weekNames!!)
     }
 
@@ -234,6 +238,7 @@ class TabFragment1 : Fragment(), ItemSaveListener {
         private var _dateFormat = 0
         private var _numColumns = 0
         private var _query: Query? = null
+
         fun newInstance(): TabFragment1 {
             val tabFragment1 = TabFragment1()
             val args = Bundle()

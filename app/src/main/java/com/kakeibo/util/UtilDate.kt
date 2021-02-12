@@ -36,7 +36,7 @@ object UtilDate {
         return sdFormat.format(cal.time) + " [" + weekName[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
     }
 
-    fun getTodaysDate(format: String?): String {
+    fun getTodaysDate(format: String): String {
         val cal = Calendar.getInstance()
         val sdFormat = SimpleDateFormat(format, Locale.getDefault())
         sdFormat.calendar = cal
@@ -52,8 +52,13 @@ object UtilDate {
         return sdFormat.format(cal.time)
     }
 
+    /* '2021-02-11' -> '2021-02' */
+    fun getTodaysYM(): String {
+        return getTodaysDate(DATE_FORMAT_DB).substring(0, 7)
+    }
+
     fun getDateWithDayFromDBDate(dbDate: String, weekName: Array<String>, dateFormat: Int): String {
-        val ymd = dbDate.split("[ ]").toTypedArray()[0].split("[-]").toTypedArray()
+        val ymd = dbDate.split(" ")[0].split("-")
         val cal = GregorianCalendar(ymd[0].toInt(),
                 ymd[1].toInt() - 1, ymd[2].toInt())
         val date = cal.time
@@ -63,7 +68,7 @@ object UtilDate {
 
     fun getDateFromDBDate(dbDate: String, dateFormat: Int): String {
         Log.d(TAG, "getDateWithDayFromDBDate() dbDate: $dbDate")
-        val ymd = dbDate.split("[ ]").toTypedArray()[0].split("[-]").toTypedArray()
+        val ymd = dbDate.split(" ")[0].split("-")
         val cal = GregorianCalendar(ymd[0].toInt(),
                 ymd[1].toInt() - 1, ymd[2].toInt())
         val date = cal.time
@@ -89,7 +94,7 @@ object UtilDate {
         var out = ""
         if (fromFormat == toFormat) return date
         if ((fromFormat == 3 || fromFormat == 4) && (toFormat == 0 || toFormat == 1 || toFormat == 2)) {
-            val ymd = date.split("-").toTypedArray()
+            val ymd = date.split("-")
 
 //            if (DATE_FORMAT_YMD.equals(toFormat)) {
 //                return ymd[0] + "/" + ymd[1] + "/" + ymd[2];
@@ -100,7 +105,7 @@ object UtilDate {
 //            }
         } else if ((fromFormat == 0 || fromFormat == 1 || fromFormat == 2) && (toFormat == 3 || toFormat == 4)) {
             /*** toFormat==3  */
-            val ymd = date.split("/").toTypedArray()
+            val ymd = date.split("/")
             val y: String
             val m: String
             val d: String

@@ -1,129 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/col_root_fragment2"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:background="@color/colorBackground">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl_reload"
+    <data>
+        <variable
+            name="itemStatusViewModel"
+            type="com.kakeibo.ui.ItemStatusViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/col_root_fragment2"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:background="@color/colorBackground">
 
-        <LinearLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_reload"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/buttonBarStyle">
-                <ImageButton
-                    android:id="@+id/btn_prev"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/ic_left_arrow"
-                    android:contentDescription="@string/previous"
-                    style="?android:attr/buttonBarButtonStyle"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include layout="@layout/date_banner"/>
+
                 <ImageButton
                     android:id="@+id/btn_exit_search_result"
                     android:layout_width="@dimen/imv_exit_search_sides"
                     android:layout_height="@dimen/imv_exit_search_sides"
-                    android:layout_alignParentStart="true"
                     android:background="@drawable/btn_roundcorner"
                     android:src="@drawable/ic_close_white"
                     android:contentDescription="@string/close"
+                    android:visibility="gone"
                     style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_date"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+
+                <TableLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textStyle="bold" />
-                <ImageButton
-                    android:id="@+id/btn_next"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_right_arrow"
-                    android:contentDescription="@string/next"
-                    style="?android:attr/buttonBarButtonStyle"/>
-            </RelativeLayout>
+                    android:paddingStart="@dimen/tbl_padding_horizontal"
+                    android:paddingEnd="@dimen/tbl_padding_horizontal"
+                    android:paddingTop="@dimen/tbl_padding_vertical"
+                    android:paddingBottom="@dimen/tbl_padding_vertical">
+                    <TableRow>
+                        <ImageView
+                            android:layout_width="@dimen/small_imv_square_sides"
+                            android:layout_height="@dimen/small_imv_square_sides"
+                            android:src="@drawable/dot_color_primary"
+                            android:contentDescription="@string/income_colon"/>
+                        <TextView
+                            android:id="@+id/txv_income_colon"
+                            android:text="@string/income_colon"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/txv_income"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"/>
+                    </TableRow>
+                    <TableRow>
+                        <ImageView
+                            android:layout_width="@dimen/small_imv_square_sides"
+                            android:layout_height="@dimen/small_imv_square_sides"
+                            android:src="@drawable/dot_color_accent"
+                            android:contentDescription="@string/expense_colon"/>
+                        <TextView
+                            android:id="@+id/txv_expense_colon"
+                            android:text="@string/expense_colon"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/txv_expense"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"/>
+                    </TableRow>
+                    <TableRow>
+                        <ImageView
+                            android:layout_width="@dimen/small_imv_square_sides"
+                            android:layout_height="@dimen/small_imv_square_sides"
+                            android:src="@drawable/dot_color_background"
+                            android:contentDescription="@string/expense_colon"/>
+                        <TextView
+                            android:id="@+id/txv_balance_colon"
+                            android:text="@string/balance_colon"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/txv_balance"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"/>
+                    </TableRow>
+                </TableLayout>
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/tbl_padding_horizontal"
-                android:paddingEnd="@dimen/tbl_padding_horizontal"
-                android:paddingTop="@dimen/tbl_padding_vertical"
-                android:paddingBottom="@dimen/tbl_padding_vertical">
-                <TableRow>
-                    <ImageView
-                        android:layout_width="@dimen/small_imv_square_sides"
-                        android:layout_height="@dimen/small_imv_square_sides"
-                        android:src="@drawable/dot_color_primary"
-                        android:contentDescription="@string/income_colon"/>
-                    <TextView
-                        android:id="@+id/txv_income_colon"
-                        android:text="@string/income_colon"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/txv_income"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold"/>
-                </TableRow>
-                <TableRow>
-                    <ImageView
-                        android:layout_width="@dimen/small_imv_square_sides"
-                        android:layout_height="@dimen/small_imv_square_sides"
-                        android:src="@drawable/dot_color_accent"
-                        android:contentDescription="@string/expense_colon"/>
-                    <TextView
-                        android:id="@+id/txv_expense_colon"
-                        android:text="@string/expense_colon"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/txv_expense"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold"/>
-                </TableRow>
-                <TableRow>
-                    <ImageView
-                        android:layout_width="@dimen/small_imv_square_sides"
-                        android:layout_height="@dimen/small_imv_square_sides"
-                        android:src="@drawable/dot_color_background"
-                        android:contentDescription="@string/expense_colon"/>
-                    <TextView
-                        android:id="@+id/txv_balance_colon"
-                        android:text="@string/balance_colon"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/txv_balance"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold"/>
-                </TableRow>
-            </TableLayout>
+                <include
+                    layout="@layout/fragment_report_c"
+                    android:id="@+id/fragment_report_c"
+                    android:visibility="gone" />
 
-            <FrameLayout
-                android:id="@+id/frl_tab2_container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
+                <include
+                    layout="@layout/fragment_report_d"
+                    android:id="@+id/fragment_report_d"
+                     />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

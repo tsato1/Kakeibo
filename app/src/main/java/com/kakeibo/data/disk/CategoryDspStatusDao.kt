@@ -18,9 +18,6 @@ interface CategoryDspStatusDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(dspCategories: List<CategoryDspStatus>)
 
-    @Query("DELETE FROM categories_dsp")
+    @Query("DELETE FROM " + CategoryDspDBAdapter.TABLE_NAME)
     fun deleteAll()
-
-    @Query("SELECT " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
-    fun dspCodes(): LiveData<List<Int>>
 }

@@ -11,7 +11,7 @@ import java.math.BigDecimal
 class ItemStatus {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ItemDBAdapter.COL_ID)
-    var id: Long = 1
+    var id: Long = 0
         private set
 
     @ColumnInfo(name = ItemDBAdapter.COL_AMOUNT)
@@ -60,7 +60,7 @@ class ItemStatus {
 
     /*** called from TabFragment1 before getting saved  */
     @Ignore
-    constructor( // without id for id auto-increment
+    constructor( // without id: id auto-increment
             amount: BigDecimal,
             currencyCode: String,
             categoryCode: Int,
@@ -94,47 +94,47 @@ class ItemStatus {
     //        this.updateDate = updateDate;
     //    }
     /*** called from TabFragment2 before getting displayed  */
-    @Ignore
-    constructor( // without id for id auto-increment
-            amount: Long,
-            currencyCode: String,
-            fractionDigits: Int,
-            categoryCode: Int,
-            memo: String,
-            eventDate: String,
-            updateDate: String) {
-        if (UtilCurrency.CURRENCY_OLD == currencyCode) {
-            this.amount = BigDecimal.valueOf(amount, 0)
-        }
-        this.amount = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(1000), fractionDigits, BigDecimal.ROUND_HALF_UP)
-        this.fractionDigits = fractionDigits
-        this.categoryCode = categoryCode
-        this.memo = memo
-        this.eventDate = eventDate
-        this.updateDate = updateDate
-    }
-
-    @Ignore
-    constructor(
-            id: Long,
-            amount: Long,
-            currencyCode: String,
-            fractionDigits: Int,
-            categoryCode: Int,
-            memo: String,
-            eventDate: String,
-            updateDate: String) {
-        this.id = id
-        if (UtilCurrency.CURRENCY_OLD == currencyCode) {
-            this.amount = BigDecimal.valueOf(amount, 0)
-        }
-        this.amount = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(1000), fractionDigits, BigDecimal.ROUND_HALF_UP)
-        this.fractionDigits = fractionDigits
-        this.categoryCode = categoryCode
-        this.memo = memo
-        this.eventDate = eventDate
-        this.updateDate = updateDate
-    }
+//    @Ignore
+//    constructor( // without id for id auto-increment
+//            amount: Long,
+//            currencyCode: String,
+//            fractionDigits: Int,
+//            categoryCode: Int,
+//            memo: String,
+//            eventDate: String,
+//            updateDate: String) {
+//        if (UtilCurrency.CURRENCY_OLD == currencyCode) {
+//            this.amount = BigDecimal.valueOf(amount, 0)
+//        }
+//        this.amount = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(1000), fractionDigits, BigDecimal.ROUND_HALF_UP)
+//        this.fractionDigits = fractionDigits
+//        this.categoryCode = categoryCode
+//        this.memo = memo
+//        this.eventDate = eventDate
+//        this.updateDate = updateDate
+//    }
+//
+//    @Ignore
+//    constructor(
+//            id: Long,
+//            amount: Long,
+//            currencyCode: String,
+//            fractionDigits: Int,
+//            categoryCode: Int,
+//            memo: String,
+//            eventDate: String,
+//            updateDate: String) {
+//        this.id = id
+//        if (UtilCurrency.CURRENCY_OLD == currencyCode) {
+//            this.amount = BigDecimal.valueOf(amount, 0)
+//        }
+//        this.amount = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(1000), fractionDigits, BigDecimal.ROUND_HALF_UP)
+//        this.fractionDigits = fractionDigits
+//        this.categoryCode = categoryCode
+//        this.memo = memo
+//        this.eventDate = eventDate
+//        this.updateDate = updateDate
+//    }
 
     fun getAmount(): BigDecimal {
         if (UtilCurrency.CURRENCY_NONE == currencyCode) {

@@ -16,6 +16,7 @@ object PrepDB7 {
         /*** item table
          * migration_1_2
          */
+        //todo *1000 for amount !!!
         database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME +
                 " ADD COLUMN " + ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0;")
         val c = database.query("SELECT " + ItemDBAdapter.COL_ID + ", " +
@@ -151,6 +152,7 @@ object PrepDB7 {
                 " ADD COLUMN " + ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0;"))
 
         //not necessary because no item exists in the table
+        //todo *1000 for amount
 //        Cursor c = database.query("SELECT " + ItemDBAdapter.COL_ID + ", " +
 //                ItemDBAdapter.COL_CATEGORY + " FROM " + ItemDBAdapter.TABLE_NAME);
 //

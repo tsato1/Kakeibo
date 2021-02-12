@@ -7,8 +7,8 @@
             name="category"
             type="com.kakeibo.data.CategoryStatus" />
         <variable
-            name="itemSaveListener"
-            type="com.kakeibo.ui.ItemSaveListener" />
+            name="categoryClickListener"
+            type="com.kakeibo.ui.listener.CategoryClickListener" />
     </data>
 
     <RelativeLayout
@@ -18,7 +18,7 @@
         android:gravity="center"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{()->itemSaveListener.onItemSaved(category.code)}">
+        android:onClick="@{()->categoryClickListener.onCategoryClicked(category.code)}">
 
         <ImageView
             android:id="@+id/item_img"

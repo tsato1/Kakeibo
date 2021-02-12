@@ -408,19 +408,5 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
                 INSTANCE ?: synchronized(this) {
                     INSTANCE ?: ServerFunctionsImpl().also { INSTANCE = it }
                 }
-
-//        @Volatile
-//        private var INSTANCE: ServerFunctions? = null
-//        val instance: ServerFunctions?
-//            get() {
-//                if (INSTANCE == null) {
-//                    synchronized(ServerFunctionsImpl::class.java) {
-//                        if (INSTANCE == null) {
-//                            INSTANCE = ServerFunctionsImpl()
-//                        }
-//                    }
-//                }
-//                return INSTANCE
-//            }
     }
 }

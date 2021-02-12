@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemStatusViewModel"
+            type="com.kakeibo.ui.ItemStatusViewModel" />
+        <variable
+            name="categoryStatusViewModel"
+            type="com.kakeibo.ui.adapter.CategoryStatusViewModel" />
+    </data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -115,21 +125,4 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <data>
-        <import type="android.view.View" />
-
-        <variable
-            name="billingViewModel"
-            type="com.kakeibo.ui.BillingViewModel" />
-
-        <variable
-            name="subscriptionViewModel"
-            type="com.kakeibo.ui.SubscriptionStatusViewModel" />
-
-        <variable
-            name="categoryStatusViewModel"
-            type="com.kakeibo.ui.categories.CategoryStatusViewModel" />
-    </data>
-
 </layout>

@@ -1,4 +1,4 @@
-package com.kakeibo.ui.items
+package com.kakeibo.ui.model
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,7 +10,6 @@ import android.widget.TextView
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.data.ItemStatus
-import com.kakeibo.util.UtilDate
 
 /**
  * Created by T on 2015/09/24.

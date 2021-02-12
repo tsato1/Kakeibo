@@ -26,10 +26,8 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.data.CategoryStatus;
-import com.kakeibo.ui.categories.CategoryListAdapter;
+import com.kakeibo.ui.adapter.CategoryListAdapter;
 import com.kakeibo.R;
-import com.kakeibo.db.CategoryDBAdapter;
-import com.kakeibo.util.UtilAds;
 
 import java.util.List;
 

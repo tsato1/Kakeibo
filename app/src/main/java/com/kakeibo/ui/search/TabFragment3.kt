@@ -24,8 +24,8 @@ import com.kakeibo.SubApp
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentSearchBinding
 import com.kakeibo.ui.*
-import com.kakeibo.ui.categories.CategoryDspStatusViewModel
-import com.kakeibo.ui.categories.CategoryStatusViewModel
+import com.kakeibo.ui.adapter.CategoryDspStatusViewModel
+import com.kakeibo.ui.adapter.CategoryStatusViewModel
 import com.kakeibo.ui.search.SearchRecyclerViewAdapter.*
 import com.kakeibo.util.QueryBuilder
 import com.kakeibo.util.QueryBuilder.build
@@ -38,7 +38,6 @@ import com.kakeibo.util.QueryBuilder.setCsWhere
 import com.kakeibo.util.QueryBuilder.setDOrderBy
 import com.kakeibo.util.QueryBuilder.setDate
 import com.kakeibo.util.QueryBuilder.setMemo
-import com.kakeibo.util.UtilCurrency.getLongAmountFromBigDecimal
 import com.kakeibo.util.UtilDate.compareDate
 import com.kakeibo.util.UtilDate.convertDateFormat
 import java.math.BigDecimal
@@ -185,8 +184,10 @@ class TabFragment3 : Fragment(), RecyclerItemTouchHelperListener {
                     return false
                 }
                 /*** using 3 (multiply by 1000) to compare with what's stored in db  */
-                setAmount(getLongAmountFromBigDecimal(bigMin, 3),
-                        getLongAmountFromBigDecimal(bigMax, 3))
+                setAmount(bigMin.multiply(BigDecimal.valueOf(1000)).toLong(),
+                        bigMax.multiply(BigDecimal.valueOf(1000)).toLong())
+//                setAmount(getLongAmountFromBigDecimal(bigMin, 3),
+//                        getLongAmountFromBigDecimal(bigMax, 3))
             }
         }
         val indexCategoryCard = _lstCards!!.indexOf(Card(Card.TYPE_CATEGORY, 0))

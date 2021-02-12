@@ -27,7 +27,6 @@ import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
 import com.kakeibo.ui.ViewPagerAdapter;
 import com.kakeibo.db.TmpCategory;
-import com.kakeibo.util.UtilAds;
 
 import java.util.ArrayList;
 import java.util.List;

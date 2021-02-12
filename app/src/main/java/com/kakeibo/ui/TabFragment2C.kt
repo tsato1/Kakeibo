@@ -18,7 +18,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.echo.holographlibrary.PieGraph
 import com.echo.holographlibrary.PieSlice
 import com.github.mikephil.charting.charts.HorizontalBarChart
@@ -33,13 +32,11 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
 import com.kakeibo.Constants
 import com.kakeibo.R
-import com.kakeibo.SubApp
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentReportCBinding
 import com.kakeibo.export.ExportActivity
-import com.kakeibo.ui.categories.CategoryStatusViewModel
-import com.kakeibo.ui.items.Balance
-import com.kakeibo.ui.items.ItemDetailListAdapter
+import com.kakeibo.ui.model.Balance
+import com.kakeibo.ui.model.ItemDetailListAdapter
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -59,22 +56,22 @@ class TabFragment2C : Fragment(), OnChartValueSelectedListener {
     private var _lsvCategoryEx: ListView? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _activity = activity
-        _fractionDigits = SubApp.getFractionDigits(R.string.pref_key_fraction_digits)
-        val billingViewModel = ViewModelProviders.of(requireActivity())[BillingViewModel::class.java]
-        val subscriptionViewModel = ViewModelProviders.of(requireActivity())[SubscriptionStatusViewModel::class.java]
-        val categoryStatusViewModel = ViewModelProviders.of(requireActivity())[CategoryStatusViewModel::class.java]
+//        _fractionDigits = SubApp.getFractionDigits(R.string.pref_key_fraction_digits)
+//        val billingViewModel = ViewModelProviders.of(requireActivity())[BillingViewModel::class.java]
+//        val subscriptionViewModel = ViewModelProviders.of(requireActivity())[SubscriptionStatusViewModel::class.java]
+//        val categoryStatusViewModel = ViewModelProviders.of(requireActivity())[CategoryStatusViewModel::class.java]
         val fragmentBinding: FragmentReportCBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_report_c, container, false)
-        fragmentBinding.lifecycleOwner = this
-        fragmentBinding.billingViewModel = billingViewModel
-        fragmentBinding.subscriptionViewModel = subscriptionViewModel
-        fragmentBinding.categoryStatusViewModel = categoryStatusViewModel
+//        fragmentBinding.lifecycleOwner = this
+//        fragmentBinding.billingViewModel = billingViewModel
+//        fragmentBinding.subscriptionViewModel = subscriptionViewModel
+//        fragmentBinding.categoryStatusViewModel = categoryStatusViewModel
         val view = fragmentBinding.root
-        _horizontalBarChart = view.findViewById(R.id.horizontal_bar_chart)
-        _inPieGraph = view.findViewById(R.id.pie_graph_income)
-        _exPieGraph = view.findViewById(R.id.pie_graph_expense)
-        _lsvCategoryIn = view.findViewById(R.id.lsv_income)
-        _lsvCategoryEx = view.findViewById(R.id.lsv_expense)
-        setUpGraphes()
+//        _horizontalBarChart = view.findViewById(R.id.horizontal_bar_chart)
+//        _inPieGraph = view.findViewById(R.id.pie_graph_income)
+//        _exPieGraph = view.findViewById(R.id.pie_graph_expense)
+//        _lsvCategoryIn = view.findViewById(R.id.lsv_income)
+//        _lsvCategoryEx = view.findViewById(R.id.lsv_expense)
+//        setUpGraphes()
         return view
     }
 

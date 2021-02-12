@@ -28,9 +28,15 @@ class DataRepository private constructor(
     val subscriptions = MediatorLiveData<List<SubscriptionStatus>>()
 
     /**
+     * KkbApp
+     */
+    val kkbApp: LiveData<KkbAppStatus>
+
+    /**
      * ItemStatus
      */
     val items: LiveData<List<ItemStatus>>
+    val itemsByMonth: LiveData<List<ItemStatus>>
 
     /**
      * CategoryStatus
@@ -57,12 +63,15 @@ class DataRepository private constructor(
     val loading: LiveData<Boolean>
         get() = webDataSource.loading
 
-    fun updateSubscriptionsFromNetwork(
-            remoteSubscriptions: List<SubscriptionStatus>?) {
+    fun updateSubscriptionsFromNetwork(remoteSubscriptions: List<SubscriptionStatus>?) {
+
         val oldSubscriptions = subscriptions.value!!
         val purchases = billingClientLifecycle.purchases.value
-        val subscriptions = mergeSubscriptionsAndPurchases(oldSubscriptions, remoteSubscriptions, purchases)
+        val subscriptions =
+                mergeSubscriptionsAndPurchases(oldSubscriptions, remoteSubscriptions, purchases)
+
         remoteSubscriptions?.let { acknowledgeRegisteredPurchaseTokens(it) }
+
         // Store the subscription information when it changes.
         localDataSource.updateSubscriptions(subscriptions)
 
@@ -80,6 +89,7 @@ class DataRepository private constructor(
                     updatePremium = true
                 }
             }
+
             if (updateBasic) {
                 // Fetch the basic content.
                 webDataSource.updateBasicContent()
@@ -120,15 +130,13 @@ class DataRepository private constructor(
     private fun mergeSubscriptionsAndPurchases(
             oldSubscriptions: List<SubscriptionStatus>?,
             newSubscriptions: List<SubscriptionStatus>?,
-            purchases: List<Purchase>?): List<SubscriptionStatus> {
+            purchases: List<Purchase>?
+    ): List<SubscriptionStatus> {
 
         val subscriptionStatuses: MutableList<SubscriptionStatus> = ArrayList()
 
         purchases?.let { updateLocalPurchaseTokens(newSubscriptions, it) }
-
-        if (newSubscriptions != null) {
-            subscriptionStatuses.addAll(newSubscriptions)
-        }
+        newSubscriptions?.let { subscriptionStatuses.addAll(newSubscriptions) }
 
         // Find old subscriptions that are in purchases but not in new subscriptions.
         if (purchases != null && oldSubscriptions != null) {
@@ -138,15 +146,15 @@ class DataRepository private constructor(
                     // another user. It should be included in the output if the SKU
                     // and purchase token match their previous value.
                     for (purchase in purchases) {
-                        if (purchase.sku == oldSubscription.sku && purchase.purchaseToken == oldSubscription.purchaseToken) {
+                        if (purchase.sku == oldSubscription.sku
+                                && purchase.purchaseToken == oldSubscription.purchaseToken) {
                             // The old subscription that was already owned subscription should
                             // be added to the new subscriptions.
                             // Look through the new subscriptions to see if it is there.
                             var foundNewSubscription = false
                             if (newSubscriptions != null) {
                                 for (newSubscription in newSubscriptions) {
-                                    if (TextUtils.equals(newSubscription.sku,
-                                                    oldSubscription.sku)) {
+                                    if (TextUtils.equals(newSubscription.sku, oldSubscription.sku)) {
                                         foundNewSubscription = true
                                     }
                                 }
@@ -170,7 +178,8 @@ class DataRepository private constructor(
      */
     private fun updateLocalPurchaseTokens(
             subscriptions: List<SubscriptionStatus>?,
-            purchases: List<Purchase>?): Boolean {
+            purchases: List<Purchase>?
+    ): Boolean {
 
         var hasChanged = false
 
@@ -247,36 +256,51 @@ class DataRepository private constructor(
      * Items, Categories, etc
      *
      */
-    fun insertItemStatus(itemStatus: ItemStatus?) {
-        localDataSource.insertItemStatus(itemStatus!!)
+    fun updateKkbApp(kkbAppStatus: KkbAppStatus) {
+        localDataSource.updateKkbApp(kkbAppStatus)
     }
 
-    fun insertCategory(categoryStatus: CategoryStatus?) {
-        localDataSource.insertCategoryStatus(categoryStatus!!)
+    fun updateVal2(val2: Int) {
+        localDataSource.updateVal2(val2)
     }
 
-    fun insertCategoryDspStatus(categoryDspStatuses: List<CategoryDspStatus>?) {
+    fun insertItem(itemStatus: ItemStatus) {
+        localDataSource.insertItem(itemStatus)
+    }
+
+    fun getItemsByMonth(year: String, month: String) {
+        localDataSource.getItemsByMonth(year, month)
+    }
+
+    fun insertCategory(categoryStatus: CategoryStatus) {
+        localDataSource.insertCategory(categoryStatus)
+    }
+
+    fun insertCategoryMap() {
+        // no need?
+    }
+
+    fun insertCategoryCodes(categoryCodes: List<Int>) {
+//        localDataSource.insertCategoryDsps(categoryCodes!!)
+    }
+
+    fun insertCategoryDsps(categoryDspStatuses: List<CategoryDspStatus>) {
 //        localDataSource.insertAllCategories(categoryDspStatuses!!)
     }
 
-    fun updateAllCategoryDspStatuses(categoryCodes: List<Int>?) {
-        localDataSource.insertAllCategoryDsps(categoryCodes!!)
+    fun deleteAllItems() {
+        localDataSource.deleteAllItems()
     }
 
-    fun deleteAllItemStatuses() {
-        localDataSource.deleteAllItemStatus()
+    fun deleteAllCategories() {
+        localDataSource.deleteAllCategories()
     }
 
-    fun deleteAllCategoryStatuses() {
-        localDataSource.deleteAllCategoryStatus()
-    }
-
-    fun deleteAllCategoryDspStatuses() {
-        localDataSource.deleteAllCategoryDspStatus()
+    fun deleteAllCategoryDsps() {
+        localDataSource.deleteAllCategoryDsps()
     }
 
     companion object {
-
         @Volatile
         private var INSTANCE: DataRepository? = null
 
@@ -292,7 +316,6 @@ class DataRepository private constructor(
     }
 
     init {
-
         // Update content from the web.
         // We are using a MediatorLiveData so that we can clear the data immediately
         // when the subscription changes.
@@ -311,8 +334,32 @@ class DataRepository private constructor(
             subscriptions.postValue(it)
         }
 
+        // Observed network changes are store in the database.
+        // The database changes will propagate to the ViewModel.
+        // We could write different logic to ensure that the network call completes when
+        // the UI component is inactive.
+        subscriptions.addSource(webDataSource.subscriptions) {
+            updateSubscriptionsFromNetwork(it)
+        }
+
+        // When the list of purchases changes, we need to update the subscription status
+        // to indicate whether the subscription is local or not. It is local if the
+        // the Google Play Billing APIs return a Purchase record for the SKU. It is not
+        // local if there is no record of the subscription on the device.
+        subscriptions.addSource(billingClientLifecycle.purchases) {
+            val subscriptionStatuses = subscriptions.value
+            if (subscriptionStatuses != null) {
+                val hasChanged = updateLocalPurchaseTokens(subscriptionStatuses, it)
+                if (hasChanged) {
+                    localDataSource.updateSubscriptions(subscriptionStatuses)
+                }
+            }
+        }
+
         // Database changes are observed by the ViewModel.
+        kkbApp = localDataSource.kkbApp
         items = localDataSource.items
+        itemsByMonth = localDataSource.itemsByMonth
         //        items.addSource(localDataSource.items,
 //                new Observer<List<ItemStatus>>() {
 //                    @Override
@@ -351,7 +398,7 @@ class DataRepository private constructor(
 //                        categoryCodes.postValue(codes);
 //                    }
 //                });
-        categoryDspStatuses = localDataSource.categoryDspStatuses
+        categoryDspStatuses = localDataSource.categoryDsps
 //        categoryStatusesForDsp = localDataSource.categoryStatusesForDsp
         //        nonDspCategories = localDataSource.nonDspCategories;
 //        dspCategories.addSource(localDataSource.dspCategories,
@@ -379,26 +426,5 @@ class DataRepository private constructor(
 //                    }
 //                });
 
-        // Observed network changes are store in the database.
-        // The database changes will propagate to the ViewModel.
-        // We could write different logic to ensure that the network call completes when
-        // the UI component is inactive.
-        subscriptions.addSource(webDataSource.subscriptions) {
-            updateSubscriptionsFromNetwork(it)
-        }
-
-        // When the list of purchases changes, we need to update the subscription status
-        // to indicate whether the subscription is local or not. It is local if the
-        // the Google Play Billing APIs return a Purchase record for the SKU. It is not
-        // local if there is no record of the subscription on the device.
-        subscriptions.addSource(billingClientLifecycle.purchases) {
-            val subscriptionStatuses = subscriptions.value
-            if (subscriptionStatuses != null) {
-                val hasChanged = updateLocalPurchaseTokens(subscriptionStatuses, it)
-                if (hasChanged) {
-                    localDataSource.updateSubscriptions(subscriptionStatuses)
-                }
-            }
-        }
     }
 }

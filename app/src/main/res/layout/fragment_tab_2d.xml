@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <com.kakeibo.ui.items.NonScrollExpandableListView
+        <com.kakeibo.ui.model.NonScrollExpandableListView
             android:id="@+id/lsv_expandable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

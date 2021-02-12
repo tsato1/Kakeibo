@@ -1,4 +1,4 @@
-package com.kakeibo.ui.items
+package com.kakeibo.ui.model
 
 import android.content.Context
 import android.view.LayoutInflater

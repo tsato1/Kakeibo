@@ -78,8 +78,7 @@ object BillingUtilities {
      * In this example, the method will return true. This is the same as the result from
      * [deviceHasGooglePlaySubscription].
      */
-    fun serverHasSubscription(
-            subscriptions: List<SubscriptionStatus>?, sku: String): Boolean {
+    fun serverHasSubscription(subscriptions: List<SubscriptionStatus>?, sku: String): Boolean {
         return getSubscriptionForSku(subscriptions, sku) != null
     }
 

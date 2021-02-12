@@ -107,11 +107,11 @@
 
         <variable
             name="categoryStatusViewModel"
-            type="com.kakeibo.ui.categories.CategoryStatusViewModel" />
+            type="com.kakeibo.ui.adapter.CategoryStatusViewModel" />
 
         <variable
             name="categoryDspStatusViewModel"
-            type="com.kakeibo.ui.categories.CategoryDspStatusViewModel" />
+            type="com.kakeibo.ui.adapter.CategoryDspStatusViewModel" />
     </data>
 
 </layout>

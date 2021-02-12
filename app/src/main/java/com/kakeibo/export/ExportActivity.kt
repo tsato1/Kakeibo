@@ -160,7 +160,8 @@ class ExportActivity : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     // Sign in success, update UI with the signed-in user's information
                                     val user = mFirebaseAuth!!.currentUser
-                                    if (user != null) Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
+                                    if (user != null)
+                                        Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
                                 } else {
                                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                                     finish()
@@ -168,7 +169,8 @@ class ExportActivity : AppCompatActivity() {
                             }
                     openFilePicker()
                 }
-                .addOnFailureListener { exception: Exception? -> Log.e(TAG, "Unable to sign in.", exception) }
+                .addOnFailureListener { exception: Exception? ->
+                    Log.e(TAG, "Unable to sign in.", exception) }
     }
 
     /**
@@ -194,9 +196,9 @@ class ExportActivity : AppCompatActivity() {
             mDriveServiceHelper!!.openFileUsingStorageAccessFramework(contentResolver, uri)
                     .addOnSuccessListener { nameAndContent: Pair<String?, String?>? ->
                         setReadOnlyMode()
-                        createFile()
-                    }
-                    .addOnFailureListener { exception: Exception? -> Log.e(TAG, "Unable to open file from picker.", exception) }
+                        createFile() }
+                    .addOnFailureListener { exception: Exception?
+                        -> Log.e(TAG, "Unable to open file from picker.", exception) }
         }
     }
 
@@ -206,7 +208,7 @@ class ExportActivity : AppCompatActivity() {
     private fun createFile() {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Creating a file.")
-            mDriveServiceHelper!!.createFile(getTodaysDate(mStrDateFormat), mReportType, _context)
+            mDriveServiceHelper!!.createFile(getTodaysDate(mStrDateFormat!!), mReportType, _context)
                     .addOnSuccessListener { fileId: String? ->
 //                        readFile(fileId);
                         showMessage(getString(R.string.file_created))
@@ -232,8 +234,10 @@ class ExportActivity : AppCompatActivity() {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Reading file $fileId")
             mDriveServiceHelper!!.readFile(fileId)
-                    .addOnSuccessListener { nameAndContent: Pair<String, String> -> setReadWriteMode(fileId) }
-                    .addOnFailureListener { exception: Exception? -> Log.e(TAG, "Couldn't read file.", exception) }
+                    .addOnSuccessListener { nameAndContent: Pair<String, String> ->
+                        setReadWriteMode(fileId) }
+                    .addOnFailureListener { exception: Exception? ->
+                        Log.e(TAG, "Couldn't read file.", exception) }
         }
     }
 
@@ -245,7 +249,8 @@ class ExportActivity : AppCompatActivity() {
             val fileName = "fileName"
             val fileContent = "fileContent"
             mDriveServiceHelper!!.saveFile(mOpenFileId, fileName, fileContent)
-                    .addOnFailureListener { exception: Exception? -> Log.e(TAG, "Unable to save file via REST.", exception) }
+                    .addOnFailureListener { exception: Exception? ->
+                        Log.e(TAG, "Unable to save file via REST.", exception) }
         }
     }
 
@@ -266,7 +271,8 @@ class ExportActivity : AppCompatActivity() {
 //                        mDocContentEditText.setText(fileNames);
                         setReadOnlyMode()
                     }
-                    .addOnFailureListener { exception: Exception? -> Log.e(TAG, "Unable to query files.", exception) }
+                    .addOnFailureListener { exception: Exception? ->
+                        Log.e(TAG, "Unable to query files.", exception) }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.kakeibo.ui.categories
+package com.kakeibo.ui.adapter
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

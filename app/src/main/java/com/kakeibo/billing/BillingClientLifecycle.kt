@@ -3,16 +3,27 @@ package com.kakeibo.billing
 import android.app.Activity
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 import com.android.billingclient.api.*
 import com.kakeibo.Constants
+import com.kakeibo.Security
 import com.kakeibo.ui.SingleLiveEvent
+import java.io.IOException
 import java.util.*
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableList
+import kotlin.collections.MutableMap
+import kotlin.collections.emptyMap
+import kotlin.collections.set
 
-class BillingClientLifecycle private constructor(private val app: Application) : LifecycleObserver, PurchasesUpdatedListener, BillingClientStateListener, SkuDetailsResponseListener {
+
+class BillingClientLifecycle private constructor(private val app: Application) :
+        LifecycleObserver,
+        PurchasesUpdatedListener,
+        BillingClientStateListener,
+        SkuDetailsResponseListener {
+
     /**
      * The purchase event is observable. Only one observer will be notified.
      */
@@ -21,6 +32,12 @@ class BillingClientLifecycle private constructor(private val app: Application) :
     /**
      * Purchases are observable. This list will be updated when the Billing Library
      * detects new or existing purchases. All observers will be notified.
+     *
+     * 1. This is the list of all the purchases the user has for an in-app item or subscription.
+     * 2. These purchases have to be acknowledged by either the app or the backend (recommended
+     *      via the backend, but both are possible)
+     * 3. This purchases list includes payments which are still pending and also the payments
+     *      that are not acknowledged yet.
      */
     var purchases = MutableLiveData<List<Purchase>?>()
 
@@ -28,7 +45,24 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      * SkuDetails for all known SKUs.
      */
     var skusWithSkuDetails = MutableLiveData<Map<String, SkuDetails>>()
+
+
+//    var isSubscriptionActive =
+//            Transformations.map<List<Purchase>, Any>(purchases) { purchases: List<Purchase> ->
+//        var hasSubscription = false
+//        for (purchase in purchases) {
+//            if (Constants.PREMIUM_SKU == purchase.sku
+//                    && purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+//                    && purchase.isAcknowledged) {
+//                hasSubscription = true
+//            }
+//        }
+//        hasSubscription
+//    }
+
+
     private var billingClient: BillingClient? = null
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun create() {
         Log.d(TAG, "ON_CREATE")
@@ -56,6 +90,9 @@ class BillingClientLifecycle private constructor(private val app: Application) :
         }
     }
 
+    /*
+     * result of calling [.billingClient.startConnection()]
+     */
     override fun onBillingSetupFinished(billingResult: BillingResult) {
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
@@ -84,7 +121,7 @@ class BillingClientLifecycle private constructor(private val app: Application) :
         val debugMessage = billingResult.debugMessage
         when (responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                Log.i(TAG, "onSkuDetailsResponse: $responseCode $debugMessage")
+                Log.i(TAG, "onSkuDetailsResponse: responseCode=$responseCode $debugMessage")
                 if (skuDetailsList == null) {
                     Log.w(TAG, "onSkuDetailsResponse: null SkuDetails list")
                     skusWithSkuDetails.postValue(emptyMap())
@@ -167,9 +204,71 @@ class BillingClientLifecycle private constructor(private val app: Application) :
             Log.d(TAG, "processPurchases: Purchase list has not changed")
             return
         }
+
         purchaseUpdateEvent.postValue(purchasesList)
         purchases.postValue(purchasesList)
-        purchasesList?.let { logAcknowledgementStatus(it) }
+
+        purchasesList?.let {
+            handlePurchases(it)
+            logAcknowledgementStatus(it)
+        }
+    }
+
+    /*
+     * called from processPurchases()
+     * based on https://programtown.com/how-to-make-in-app-purchase-multiple-subscription-in-android-kotlin-using-google-play-billing-library/
+     */
+    private fun handlePurchases(purchasesList: List<Purchase>) {
+        for (purchase in purchasesList) {
+            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                if (!verifyValidSignature(purchase.originalJson, purchase.signature)) {
+                    // Invalid purchase, show error to user
+                    Log.d(TAG, "Error : Invalid Purchase")
+//                        Toast.makeText(applicationContext, "Error : Invalid Purchase", Toast.LENGTH_SHORT).show()
+                    continue //skip current iteration only because other items in purchase list must be checked if present
+                }
+                // else purchase is valid
+                //if item is purchased/subscribed and not Acknowledged
+                if (!purchase.isAcknowledged) {
+//                    val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+//                            .setPurchaseToken(purchase.purchaseToken)
+//                            .build()
+//                    billingClient!!.acknowledgePurchase(acknowledgePurchaseParams
+//                    ) { billingResult ->
+//                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                            //if purchase is acknowledged, then saved value in preference
+                            Log.d(TAG, purchase.sku + " Item acknowledged and Subscribed")
+//                            saveSubscribeItemValueToPref(subcribeItemIDs[index], true)
+//                                Toast.makeText(applicationContext, subcribeItemIDs[index] + " Item Subscribed", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+                } else {
+                    // Grant entitlement to the user on item purchase
+//                    if (!getSubscribeItemValueFromPref(purchase.sku)) {
+                        Log.d(TAG, purchase.sku + " Item already Subscribed.")
+//                        saveSubscribeItemValueToPref(subcribeItemIDs[index], true)
+//                        Toast.makeText(applicationContext, subcribeItemIDs[index] + " Item Subscribed.", Toast.LENGTH_SHORT).show()
+//                    }
+                }
+            } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
+                Log.d(TAG, purchase.sku + " Purchase is Pending. Please complete Transaction")
+//                    Toast.makeText(applicationContext, subcribeItemIDs[index] + " Purchase is Pending. Please complete Transaction", Toast.LENGTH_SHORT).show()
+            } else if (purchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
+                //mark purchase false in case of UNSPECIFIED_STATE
+                Log.w(TAG, purchase.sku + " Purchase Status Unknown")
+//                saveSubscribeItemValueToPref(subcribeItemIDs[index], false)
+//                    Toast.makeText(applicationContext, subcribeItemIDs[index] + " Purchase Status Unknown", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+     fun verifyValidSignature(signedData: String, signature: String): Boolean {
+        return try {
+            val base64Key = Security.getBase64PublicKey("baqadiq3rJgLK0T28VTozDLeLECFdI9HlsGMPW4l5WGN4fK6PTEE1oAEq+5JEO1/pxNtQ2Duhp3KFe5xUXBJ7TanIHI+n8ykF9BV0YatCqXMWlcCR0eSYkeU9It7gVasHOgAUFCMrFJaaFtlVz3gVhBZlL1Zpip+QTBE81qxrlLrvFHjtA/7SIiCqM6gmddPhKuMaYpBt878WbQAho5/Yf9SnE524tuLZlDRIVSDW4ZdJ101Ig/duTlR0ZXsTyG62xRNRhUVluViuszpYlyfmQzsGtA3fNI124wUTtEO0kc8JDcsT74jXB3e2gI8SJ3xHY1zmv89zeSRHJUUS8jQmuyskWjIaeqackGcbiima8qacoaafeqab0W9gIKHQKGbnaJibiim")
+            Security.verifyPurchase(base64Key, signedData, signature)
+        } catch (e: IOException) {
+            false
+        }
     }
 
     /**
@@ -194,8 +293,7 @@ class BillingClientLifecycle private constructor(private val app: Application) :
                 ack_no++
             }
         }
-        Log.d(TAG, "logAcknowledgementStatus: acknowledged=" + ack_yes +
-                " unacknowledged=" + ack_no)
+        Log.d(TAG, "logAcknowledgementStatus: acknowledged=" + ack_yes + " unacknowledged=" + ack_no)
     }
 
     /**
@@ -210,7 +308,7 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      * In order to make purchases, you need the [SkuDetails] for the item or subscription.
      * This is an asynchronous call that will receive a result in [.onSkuDetailsResponse].
      */
-    fun querySkuDetails() {
+    private fun querySkuDetails() {
         Log.d(TAG, "querySkuDetails")
         val skus: MutableList<String> = ArrayList()
         skus.add(Constants.BASIC_SKU)

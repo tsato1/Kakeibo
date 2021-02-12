@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemStatusViewModel"
+            type="com.kakeibo.ui.ItemStatusViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/lnl_exp_list_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:background="@color/colorEmboss">
+
+        <ImageView
+            android:id="@+id/close_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ok"
+            app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
+
+        <ImageView
+            android:id="@+id/up_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/close"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_baseline_arrow_drop_up_24" />
+
+        <TextView
+            android:id="@+id/txv_header_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:paddingEnd="0dp"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txv_header_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{itemStatusViewModel.calcDaySum}"/>
+
+    </LinearLayout>
+</layout>

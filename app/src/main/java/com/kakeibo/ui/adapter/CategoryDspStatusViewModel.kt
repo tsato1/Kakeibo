@@ -1,4 +1,4 @@
-package com.kakeibo.ui.categories
+package com.kakeibo.ui.adapter
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,6 +14,6 @@ class CategoryDspStatusViewModel(application: Application) : AndroidViewModel(ap
     val all: LiveData<List<CategoryDspStatus>> = repository.categoryDspStatuses
 
     fun insert(categoryDspStatuses: List<CategoryDspStatus>) {
-        repository.insertCategoryDspStatus(categoryDspStatuses)
+        repository.insertCategoryDsps(categoryDspStatuses)
     }
 }
