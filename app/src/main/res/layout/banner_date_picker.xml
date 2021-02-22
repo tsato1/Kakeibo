@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="medium"
+            type="com.kakeibo.ui.model.Medium" />
+    </data>
+    
+    <LinearLayout
+        android:id="@+id/lnl_date_picker_banner"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        bind:context="@{context}"
+        bind:place="@{medium.currentlyShown}"
+        style="?android:attr/buttonBarStyle">
+
+        <ImageButton
+            android:id="@+id/btn_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_left_arrow"
+            android:contentDescription="@string/previous"
+            android:visibility="@{medium.currentlyShown==medium.REPORT_S? View.GONE: View.VISIBLE}"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:id="@+id/btn_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <ImageButton
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow"
+            android:contentDescription="@string/next"
+            android:visibility="@{medium.currentlyShown==medium.REPORT_S? View.GONE: View.VISIBLE}"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+</layout>

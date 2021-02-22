@@ -24,7 +24,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kakeibo.BuildConfig;
 import com.kakeibo.R;
-import com.kakeibo.ui.ViewPagerAdapter;
+import com.kakeibo.ui.adapter.ViewPagerAdapter;
 
 import com.kakeibo.util.UtilCategory;
 

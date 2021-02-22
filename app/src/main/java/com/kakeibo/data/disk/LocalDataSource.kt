@@ -17,10 +17,9 @@ class LocalDataSource private constructor(
     val kkbApp = appDatabase.kkbAppStatusDao().getFirst()
     val subscriptions = appDatabase.subscriptionStatusDao().getAll()
     val items = appDatabase.itemStatusDao().getAll()
-    var itemsByMonth = appDatabase.itemStatusDao().getItemsByMonth(UtilDate.getTodaysYM())
+    var itemsByMonth = appDatabase.itemStatusDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
     val categories = appDatabase.categoryStatusDao().getAll()
     val categoriesForDisplay = appDatabase.categoryStatusDao().getCategoriesForDisplay()
-    val categoryCodes = appDatabase.categoryStatusDao().getAllCodes()
     val categoryDsps = appDatabase.categoryDspStatusDao().getAll()
 
     /***
@@ -91,6 +90,12 @@ class LocalDataSource private constructor(
     }
 
     fun deleteAllItems() = insertItems(listOf())
+
+    fun deleteItem(id: Long) {
+        executor.execute {
+            appDatabase.itemStatusDao().delete(id)
+        }
+    }
 
     fun queryItems(query: SupportSQLiteQuery): List<ItemStatus>? {
 //        return appDatabase.itemStatusDao().queryItems(query);

@@ -1,40 +1,39 @@
 package com.kakeibo.ui
 
+import ItemDBAdapter
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.text.SpannableString
-import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnLongClickListener
+import android.view.View.*
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
+import android.widget.*
+import androidx.core.graphics.toColorInt
 import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.echo.holographlibrary.PieGraph
+import com.echo.holographlibrary.PieSlice
+import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
-import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentReportBinding
 import com.kakeibo.ui.adapter.ExpandableListAdapter
-import com.kakeibo.ui.listener.ItemClickListener
+import com.kakeibo.ui.adapter.ReportCListAdapter
+import com.kakeibo.ui.listener.ItemLoadListener
 import com.kakeibo.ui.model.Balance
 import com.kakeibo.ui.model.ExpandableListRowModel
+import com.kakeibo.ui.model.Medium
+import com.kakeibo.ui.model.Query
+import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.QueryBuilder
 import com.kakeibo.util.QueryBuilder.build
 import com.kakeibo.util.QueryBuilder.init
@@ -43,17 +42,18 @@ import com.kakeibo.util.QueryBuilder.setCOrderBy
 import com.kakeibo.util.QueryBuilder.setCsWhere
 import com.kakeibo.util.QueryBuilder.setDOrderBy
 import com.kakeibo.util.QueryBuilder.setDate
+import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.convertMtoMM
 import com.kakeibo.util.UtilDate.getTodaysDate
-import java.util.*
+import java.math.BigDecimal
 import javax.annotation.Nonnull
-import kotlin.collections.ArrayList
+
 
 /**
  * Created by T on 2015/09/14.
  */
-class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
+class TabFragment2 : Fragment(), ItemLoadListener {
 
     companion object {
         private val TAG = TabFragment2::class.java.simpleName
@@ -78,25 +78,14 @@ class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
     }
 
     private var _activity: Activity? = null
-    private var rootView: CoordinatorLayout? = null
-    private var fragmentReportC: NestedScrollView? = null
-    private var fragmentReportD: NestedScrollView? = null
+    private var _context: Context? = null
     private var srlReload: SwipeRefreshLayout? = null
-    private var btnPrev: ImageButton? = null
-    private var btnNext: ImageButton? = null
     private var btnClose: ImageButton? = null
-    private var btnDate: Button? = null
-    private var txvIncome: TextView? = null
-    private var txvExpense: TextView? = null
-    private var txvBalance: TextView? = null
-    //    private var _fragmentManager: FragmentManager? = null
-//    private var _ftrDetail: FragmentTransaction? = null
-//    private var _tabFragment2C: TabFragment2C? = null
-//    private var _tabFragment2D: TabFragment2D? = null
-    private var _balance: Balance? = null
+    private var _itemStatusViewModel: ItemStatusViewModel? = null
 
     override fun onAttach(@Nonnull context: Context) {
         super.onAttach(context)
+        _context = context
 
         _dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
         val todaysDate = getTodaysDate(UtilDate.DATE_FORMAT_DB)
@@ -113,70 +102,115 @@ class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
         setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE)
         setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, QueryBuilder.ASC)
         build(_query!!)
-
-        /*** preparing fragment in detail view  */
-//        _fragmentManager = childFragmentManager
-//        _ftrDetail = _fragmentManager!!.beginTransaction()
-//        _tabFragment2D = TabFragment2D.newInstance(this, _query)
-//        _ftrDetail!!.replace(R.id.frl_tab2_container, _tabFragment2D!!)
-//        _ftrDetail!!.addToBackStack(null)
-//        _ftrDetail!!.commit()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _activity = activity
         _weekNames = resources.getStringArray(R.array.week_name)
 
-        val itemStatusViewModel =
-                ViewModelProviders.of(requireActivity())[ItemStatusViewModel::class.java]
-
+        _itemStatusViewModel = ViewModelProviders.of(requireActivity())[ItemStatusViewModel::class.java]
         val fragmentBinding: FragmentReportBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_report, container, false)
-
-        fragmentBinding.itemStatusViewModel = itemStatusViewModel
-
+        fragmentBinding.lifecycleOwner = this
+        fragmentBinding.itemStatusViewModel = _itemStatusViewModel
         val view = fragmentBinding.root
+
+        val reportCBinding = fragmentBinding.fragmentReportC
+        reportCBinding.itemStatusViewModel = _itemStatusViewModel
+
+        val bannerDatePickerBinding = fragmentBinding.bannerDatePicker
+        bannerDatePickerBinding.medium = MainActivity.medium
+
+        val incomePieGraph: PieGraph = view.findViewById(R.id.pie_graph_income)
+        val expensePieGraph: PieGraph = view.findViewById(R.id.pie_graph_expense)
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
         val expandableList: MutableList<ExpandableListRowModel> = ArrayList()
-        val expandableAdapter = ExpandableListAdapter(expandableList, this)
-        val layoutManager = LinearLayoutManager(context)
-        expandableListView.layoutManager = layoutManager
-        expandableListView.adapter = expandableAdapter
+        val expandableListAdapter = ExpandableListAdapter(expandableList, _itemStatusViewModel!!)
+        expandableListView.adapter = expandableListAdapter
         expandableListView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        itemStatusViewModel.itemsByMonth.observe(viewLifecycleOwner, {
+        _itemStatusViewModel!!.allByDate.observe(viewLifecycleOwner, { map ->
             expandableList.clear()
-            expandableAdapter.setMasterMap(it.toSortedMap())
+            expandableListAdapter.setMasterMap(map.toSortedMap(
+                    compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
+            )
         })
 
-        rootView = view.findViewById(R.id.col_root_fragment2)
-        fragmentReportC = view.findViewById(R.id.fragment_report_c)
-        fragmentReportD = view.findViewById(R.id.fragment_report_d)
+        val incomeListView: RecyclerView = view.findViewById(R.id.rcv_income)
+        val incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME)
+        incomeListView.adapter = incomeListAdapter
+        val expenseListView: RecyclerView = view.findViewById(R.id.rcv_expense)
+        val expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE)
+        expenseListView.adapter = expenseListAdapter
+        _itemStatusViewModel!!.allByCategory.observe(viewLifecycleOwner, { allByCategory ->
+            incomeListAdapter.setAllByCategory(allByCategory.filter { it.key.second > BigDecimal(0) })
+            expenseListAdapter.setAllByCategory(allByCategory.filter { it.key.second < BigDecimal(0) })
+        })
+
+        val btnC: Button = view.findViewById(R.id.btn_c)
+        val btnD: Button = view.findViewById(R.id.btn_d)
+        val reportC: NestedScrollView = view.findViewById(R.id.fragment_report_c)
+        val reportD: NestedScrollView = view.findViewById(R.id.fragment_report_d)
+        btnC.setOnClickListener { v ->
+            reportC.visibility = VISIBLE
+            reportD.visibility = GONE
+            MainActivity.medium.currentlyShown.set(Medium.REPORT_C)
+            bannerDatePickerBinding.executePendingBindings()
+        }
+        btnD.setOnClickListener { v ->
+            reportC.visibility = GONE
+            reportD.visibility = VISIBLE
+            MainActivity.medium.currentlyShown.set(Medium.REPORT_D)
+            bannerDatePickerBinding.executePendingBindings()
+        }
 
         srlReload = view.findViewById(R.id.srl_reload)
-        btnPrev = view.findViewById(R.id.btn_prev)
-        btnDate = view.findViewById(R.id.btn_date)
-        btnNext = view.findViewById(R.id.btn_next)
         btnClose = view.findViewById(R.id.btn_exit_search_result)
-        txvIncome = view.findViewById(R.id.txv_income)
-        txvExpense = view.findViewById(R.id.txv_expense)
-        txvBalance = view.findViewById(R.id.txv_balance)
         srlReload?.setOnRefreshListener {
             Handler().postDelayed({
                 srlReload?.isRefreshing = false
                 reset()
             }, SWIPE_REFRESH_MILLI_SECOND.toLong())
         }
-        btnPrev?.setOnClickListener(ButtonClickListener())
-        btnDate?.setOnClickListener(ButtonClickListener())
-        btnNext?.setOnClickListener(ButtonClickListener())
         btnClose?.setOnClickListener(ButtonClickListener())
-        btnDate?.setOnLongClickListener(ButtonLongClickListener())
-        reset()
+//        reset()
 
         return view
+    }
+
+    private fun updateBarChart() {
+
+    }
+
+    private fun updateIncomePieGraph(pieGraph: PieGraph, incomeList: List<BigDecimal>) {
+        pieGraph.removeSlices()
+        var inPieSlice: PieSlice
+
+        val size = Constants.CATEGORY_EXPENSE_COLORS.size
+        for ((i, item) in incomeList.withIndex()) {
+            inPieSlice = PieSlice()
+            inPieSlice.color =
+                    if (i < size) Constants.CATEGORY_INCOME_COLORS[i].toColorInt()
+                    else Constants.CATEGORY_INCOME_COLORS[size - 1].toColorInt()
+            inPieSlice.value = item.toFloat()
+            pieGraph.addSlice(inPieSlice)
+        }
+    }
+
+    private fun updateExpensePieGraph(pieGraph: PieGraph, expenseList: List<BigDecimal>) {
+        pieGraph.removeSlices()
+        var exPieSlice: PieSlice
+
+        val size = Constants.CATEGORY_EXPENSE_COLORS.size
+        for ((i, item) in expenseList.withIndex()) {
+            exPieSlice = PieSlice()
+            exPieSlice.color =
+                    if (i < size) Constants.CATEGORY_EXPENSE_COLORS[i].toColorInt()
+                    else Constants.CATEGORY_EXPENSE_COLORS[size - 1].toColorInt()
+            exPieSlice.value = item.toFloat()
+            pieGraph.addSlice(exPieSlice)
+        }
     }
 
     /*** onResume will be called just upon viewpager page change  */
@@ -211,85 +245,11 @@ class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
         build(_query!!)
     }
 
-    internal inner class ButtonLongClickListener : OnLongClickListener {
-        override fun onLongClick(view: View): Boolean {
-            return true
-        }
-    }
-
     internal inner class ButtonClickListener : View.OnClickListener {
         override fun onClick(view: View) {
             when (view.id) {
-                R.id.btn_date -> toggleViews()
-                R.id.btn_prev -> {
-                    _calMonth--
-                    if (_calMonth <= 0) {
-                        _calMonth = 12
-                        _calYear--
-                        if (_calYear <= 0) {
-                            _calYear = Calendar.getInstance()[Calendar.YEAR]
-                        }
-                    }
-                    btnDate!!.text = textBtnDate
-                    buildQuery()
-//                    if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2C) {
-//                        _tabFragment2C = _fragmentManager!!.findFragmentById(R.id.frl_tab2_container) as TabFragment2C?
-//                        _tabFragment2C!!.setQuery(_query)
-//                        _tabFragment2C!!.loadItemsOrderByCategory()
-//                    } else if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2D) {
-//                        _tabFragment2D = _fragmentManager!!.findFragmentById(R.id.frl_tab2_container) as TabFragment2D?
-//                        _tabFragment2D!!.setQuery(_query)
-//                        _tabFragment2D!!.loadItemsOrderByDate()
-//                    }
-                }
-                R.id.btn_next -> {
-                    _calMonth++
-                    if (_calMonth > 12) {
-                        _calMonth = 1
-                        _calYear++
-                    }
-                    btnDate!!.text = textBtnDate
-                    buildQuery()
-//                    if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2C) {
-//                        _tabFragment2C = _fragmentManager!!.findFragmentById(R.id.frl_tab2_container) as TabFragment2C?
-//                        _tabFragment2C!!.setQuery(_query)
-//                        _tabFragment2C!!.loadItemsOrderByCategory()
-//                    } else if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2D) {
-//                        _tabFragment2D = _fragmentManager!!.findFragmentById(R.id.frl_tab2_container) as TabFragment2D?
-//                        _tabFragment2D!!.setQuery(_query)
-//                        _tabFragment2D!!.loadItemsOrderByDate()
-//                    }
-                }
                 R.id.btn_exit_search_result -> exitSearchResult()
             }
-        }
-    }
-
-    private val textBtnDate: String
-        get() {
-            val year = _calYear
-            val month = _calMonth
-            val str: String
-            str = when (_dateFormat) {
-                1, 2 -> convertMtoMM(month) + "/" + year
-                else -> year.toString() + "/" + convertMtoMM(month)
-            }
-            return str
-        }
-
-    private fun makeBalanceTable() {
-        txvIncome!!.text = _balance!!.income.toString()
-        txvExpense!!.text = _balance!!.expense.toString()
-        if (_balance!!.inMinusOut() < 0) {
-            txvBalance!!.setTextColor(ContextCompat.getColor(_activity!!, R.color.colorRed))
-            txvBalance!!.text = _balance!!.balance.toString()
-        } else if (_balance!!.inMinusOut() > 0) {
-            txvBalance!!.setTextColor(ContextCompat.getColor(_activity!!, R.color.colorBlue))
-            val str = "+" + _balance!!.balance
-            txvBalance!!.text = str
-        } else {
-            txvBalance!!.setTextColor(ContextCompat.getColor(_activity!!, R.color.colorBlack))
-            txvBalance!!.text = _balance!!.balance.toString()
         }
     }
 
@@ -297,20 +257,20 @@ class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
         Log.d(TAG, "reset() called")
         when (_query!!.type) {
             Query.QUERY_TYPE_NEW -> {
-                if (_eventDate == null || "" == _eventDate) {
-                    val cal = Calendar.getInstance()
-                    _calMonth = cal[Calendar.MONTH] + 1
-                    _calYear = cal[Calendar.YEAR]
-                } else {
-                    _calMonth = _eventDate!!.split("-").toTypedArray()[1].toInt()
-                    _calYear = _eventDate!!.split("-").toTypedArray()[0].toInt()
-                }
-                btnDate!!.text = textBtnDate
-                btnNext!!.visibility = View.VISIBLE
-                btnPrev!!.visibility = View.VISIBLE
-                btnClose!!.visibility = View.GONE
-                rootView!!.setBackgroundColor(
-                        ContextCompat.getColor(requireContext(), R.color.colorBackground))
+//                if (_eventDate == null || "" == _eventDate) {
+//                    val cal = Calendar.getInstance()
+//                    _calMonth = cal[Calendar.MONTH] + 1
+//                    _calYear = cal[Calendar.YEAR]
+//                } else {
+//                    _calMonth = _eventDate!!.split("-").toTypedArray()[1].toInt()
+//                    _calYear = _eventDate!!.split("-").toTypedArray()[0].toInt()
+//                }
+//                btnDate!!.text = textBtnDate
+//                btnNext!!.visibility = View.VISIBLE
+//                btnPrev!!.visibility = View.VISIBLE
+//                btnClose!!.visibility = View.GONE
+//                rootView!!.setBackgroundColor(
+//                        ContextCompat.getColor(requireContext(), R.color.colorBackground))
             }
             Query.QUERY_TYPE_SEARCH -> {
 //                btnDate!!.text = getString(R.string.search_result)
@@ -348,31 +308,11 @@ class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
 
     override fun onItemsLoaded(balance: Balance) {
         Log.d(TAG, "onItemsLoaded() called")
-        _balance = balance
-        makeBalanceTable()
 //        if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2D) {
 //            if (_eventDate == null || "" == _eventDate) {
 //                _eventDate = getTodaysDate(UtilDate.DATE_FORMAT_DB)
 //            }
 //            _tabFragment2D!!.focusOnSavedItem(_eventDate!!)
-//        }
-    }
-
-    private fun toggleViews() {
-//        if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2C) {
-//            Log.d(TAG, "2c detail fragment is visible")
-//            _ftrDetail = _fragmentManager!!.beginTransaction()
-//            _tabFragment2D = TabFragment2D.newInstance(this@TabFragment2, _query)
-//            _ftrDetail!!.replace(R.id.frl_tab2_container, _tabFragment2D!!)
-//            _ftrDetail!!.addToBackStack(null)
-//            _ftrDetail!!.commit()
-//        } else if (_fragmentManager!!.findFragmentById(R.id.frl_tab2_container) is TabFragment2D) {
-//            Log.d(TAG, "2d detail fragment is visible")
-//            _ftrDetail = _fragmentManager!!.beginTransaction()
-//            _tabFragment2C = TabFragment2C.newInstance(this@TabFragment2, _query)
-//            _ftrDetail!!.replace(R.id.frl_tab2_container, _tabFragment2C!!)
-//            _ftrDetail!!.addToBackStack(null)
-//            _ftrDetail!!.commit()
 //        }
     }
 
@@ -414,46 +354,5 @@ class TabFragment2 : Fragment(), ItemLoadListener, ItemClickListener {
         }
         dialogSaveSearch.show()
         return true
-    }
-
-    override fun onItemClicked(view: View, itemStatus: ItemStatus) {
-        val item = itemStatus
-
-        val inflater = _activity!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val layout = inflater.inflate(R.layout.dialog_item_detail, view.findViewById(R.id.layout_root))
-
-        val txvCategory = layout.findViewById<TextView>(R.id.txv_detail_category)
-        val txvAmount = layout.findViewById<TextView>(R.id.txv_detail_amount)
-        val txvMemo = layout.findViewById<TextView>(R.id.txv_detail_memo)
-        val txvRegistrationDate = layout.findViewById<TextView>(R.id.txv_detail_registration)
-
-        val categoryText = getString(R.string.category_colon)// todo + UtilCategory.getCategoryStr(getContext(), item.getCategoryCode());
-        txvCategory.text = categoryText
-
-        val span1: SpannableString
-        val span2: SpannableString
-        if (item.categoryCode <= 0) {
-            span1 = SpannableString(getString(R.string.amount_colon))
-            span2 = SpannableString("+" + item.getAmount())
-            span2.setSpan(ForegroundColorSpan(Color.BLUE), 0, 1, 0)
-        } else {
-            span1 = SpannableString(getString(R.string.amount_colon))
-            span2 = SpannableString("-" + item.getAmount())
-            span2.setSpan(ForegroundColorSpan(Color.RED), 0, 1, 0)
-        }
-        txvAmount.text = TextUtils.concat(span1, span2)
-
-        val memoText = getString(R.string.memo_colon) + item.memo
-        txvMemo.text = memoText
-
-        val savedOnText = getString(R.string.updated_on_colon) +
-                UtilDate.getDateWithDayFromDBDate(item.updateDate, _weekNames!!, _dateFormat)
-        txvRegistrationDate.text = savedOnText
-
-        AlertDialog.Builder(_activity)
-                .setIcon(R.mipmap.ic_mikan)
-                .setTitle(resources.getString(R.string.item_detail))
-                .setView(layout)
-                .show()
     }
 }

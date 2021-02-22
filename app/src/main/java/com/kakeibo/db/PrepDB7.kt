@@ -64,7 +64,7 @@ object PrepDB7 {
                 eventDate = eventYM.replace('/', '-') + "-" + eventD
                 values.put(ItemDBAdapter.COL_EVENT_DATE, eventDate)
                 /*** update_date  */
-                updateDate = updateDate.split("\\s+").toTypedArray()[0].replace('/', '-') + " 00:00:00"
+                updateDate = updateDate.split(" ")[0].replace('/', '-') + " 00:00:00"
                 values.put(ItemDBAdapter.COL_UPDATE_DATE, updateDate)
                 /*** flipping negative to positive */
                 val amount = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
@@ -201,7 +201,7 @@ object PrepDB7 {
                 eventDate = eventYM.replace('/', '-') + "-" + eventD
                 values.put(ItemDBAdapter.COL_EVENT_DATE, eventDate)
                 /*** update_date  */
-                updateDate = updateDate.split("\\s+").toTypedArray()[0].replace('/', '-') + " 00:00:00"
+                updateDate = updateDate.split(" ")[0].replace('/', '-') + " 00:00:00"
                 values.put(ItemDBAdapter.COL_UPDATE_DATE, updateDate)
                 /*** flipping negative to positive */
                 val amount = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_AMOUNT))

@@ -45,7 +45,7 @@
 <!--            android:parentActivityName=".ui.MainActivity"-->
 <!--            android:theme="@style/MyMaterialTheme.NoActionBar"/>-->
         <activity
-            android:name=".export.ExportActivity"
+            android:name="com.kakeibo.ui.ExportActivity"
             android:label="Export"
             android:parentActivityName=".ui.MainActivity"/>
         <activity

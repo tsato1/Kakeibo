@@ -1,75 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/txv_event_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/event_date_colon"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-    <Button
-        android:id="@+id/btn_event_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorBlack"
-        style="?android:attr/buttonBarButtonStyle"/>
-    <TextView
-        android:id="@+id/txv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/category_colon"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-    <Button
-        android:id="@+id/btn_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorBlack"
-        android:hint="@string/category"
-        style="?android:attr/buttonBarButtonStyle"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/amount_colon"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
+    <data>
+        <variable
+            name="itemStatus"
+            type="com.kakeibo.data.ItemStatus" />
+    </data>
+
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <EditText
-            android:id="@+id/edt_amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLength="10"
-            android:inputType="numberDecimal"
-            android:digits="0123456789."
-            android:hint="@string/hint_amount_spent_or_earned"/>
-        <Button
-            android:id="@+id/btn_currency"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txv_event_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/event_date_colon"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack" />
+
+        <Button
+            android:id="@+id/btn_event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorBlack"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <TextView
+            android:id="@+id/txv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_colon"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack" />
+
+        <Button
+            android:id="@+id/btn_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorBlack"
+            android:hint="@string/category"
             style="?android:attr/buttonBarButtonStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amount_colon"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edt_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="10"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
+                android:hint="@string/hint_amount_spent_or_earned"
+                android:autofillHints="@string/hint_amount_spent_or_earned"/>
+
+            <Button
+                android:id="@+id/btn_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/memo_colon"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+        <EditText
+            android:id="@+id/edt_memo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="20"
+            android:hint="@string/hint_memo_max_20_characters"
+            android:autofillHints="@string/hint_memo_max_20_characters"/>
+
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/memo_colon"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-    <EditText
-        android:id="@+id/edt_memo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLength="20"
-        android:hint="@string/hint_memo_max_20_characters"/>
-</LinearLayout>
+
+</layout>

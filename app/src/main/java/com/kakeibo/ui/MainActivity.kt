@@ -10,9 +10,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.android.billingclient.api.Purchase
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig
@@ -20,16 +21,19 @@ import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
+import com.google.android.material.tabs.TabLayoutMediator
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.settings.SettingsCompatActivity
-import com.kakeibo.ui.adapter.CategoryStatusViewModel
-import com.kakeibo.ui.search.TabFragment3
-import com.kakeibo.util.QueryBuilder
+import com.kakeibo.ui.model.Medium
+import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.model.Query
+import com.kakeibo.ui.viewmodel.BillingViewModel
+import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
+import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,37 +42,78 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
         private const val RC_SIGN_IN = 0
-        private var fabStart: FloatingActionButton? = null
-        private var fabEnd: FloatingActionButton? = null
+
+        var medium = Medium()
+        lateinit var allCategoryStatusMap: Map<Int, CategoryStatus>
+        lateinit var allDspCategoryList: List<CategoryStatus>
+
+        lateinit var weekNames: Array<String>
+        var dateFormat: Int = 0
+        var numColumns: Int = 0
+
+        private lateinit var fabStart: FloatingActionButton
+        private lateinit var fabEnd: FloatingActionButton
     }
 
-    private lateinit var _myFragmentPagerAdapter: SmartFragmentStatePagerAdapter
-
-    private lateinit var _viewPager: ViewPager
+    private lateinit var _smartPagerAdapter: SmartPagerAdapter
+    private lateinit var _viewPager: ViewPager2
 
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
-
     private lateinit var _authenticationViewModel: FirebaseUserViewModel
     private lateinit var _billingViewModel: BillingViewModel
     private lateinit var _subscriptionViewModel: SubscriptionStatusViewModel
 
-    var allCategoryStatusMap = hashMapOf<Int, CategoryStatus>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        weekNames = resources.getStringArray(R.array.week_name)
+        dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
+        numColumns = SubApp.getNumColumns(R.string.pref_key_num_columns)
+
         setSupportActionBar(findViewById<View>(R.id.toolbar) as Toolbar)
+        _smartPagerAdapter = SmartPagerAdapter(this)
+        _viewPager = findViewById(R.id.view_pager)
+        _viewPager.adapter = _smartPagerAdapter
+        val tabLayout = findViewById<TabLayout>(R.id.tabs)
+        TabLayoutMediator(tabLayout, _viewPager) { tab, position ->
+            when(position) {
+                0 -> tab.text = getString(R.string.input)
+                1 -> tab.text = getString(R.string.report)
+                2 -> tab.text = getString(R.string.search)
+            }
+        }.attach()
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab!!.position) {
+                    0 -> {
+                        medium.currentlyShown.set(Medium.FRAGMENT_INPUT)
+                        fabStart.visibility = View.GONE
+                        fabEnd.visibility = View.GONE
+                    }
+                    1 -> {
+                        medium.currentlyShown.set(Medium.REPORT_D)
+                        fabStart.visibility = View.GONE
+                        fabEnd.setImageResource(R.drawable.ic_cloud_upload_white)
+                        fabEnd.visibility = View.VISIBLE
+                    }
+                    2 -> {
+                        medium.currentlyShown.set(Medium.FRAGMENT_SEARCH)
+                        fabStart.setImageResource(R.drawable.ic_add_white)
+                        fabStart.visibility = View.VISIBLE
+                        fabEnd.setImageResource(R.drawable.ic_search_white)
+                        fabEnd.visibility = View.VISIBLE
+                    }
+                    else -> {}
+                }
+            }
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        _myFragmentPagerAdapter = SmartPagerAdapter(supportFragmentManager)
-        // Set up the ViewPager with the sections adapter.
-        _viewPager = findViewById(R.id.viewpager)
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
 
-        val tabs = findViewById<TabLayout>(R.id.tabs)
-        _viewPager.setAdapter(_myFragmentPagerAdapter)
-        _viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabs))
-        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(_viewPager))
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
 
         _authenticationViewModel = ViewModelProviders.of(this)[FirebaseUserViewModel::class.java]
         _billingViewModel = ViewModelProviders.of(this)[BillingViewModel::class.java]
@@ -126,17 +171,34 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        categoryStatusViewModel.all.observe(this, {
-            for (category in it) {
-                allCategoryStatusMap[category.code] = category
-            }
-//            QueryBuilder.init(it)
+//        categoryStatusViewModel.all.observe(this, {
+//            for (category in it) {
+//                allCategoryStatusMap[category.code] = category
+//            }
+////            QueryBuilder.init(it)
+//        })
+        categoryStatusViewModel.allMap.observe(this, {
+            allCategoryStatusMap = it
+        })
+        categoryStatusViewModel.allDsp.observe(this, {
+            allDspCategoryList = it
         })
 
         fabStart = findViewById(R.id.fab_start)
         fabEnd = findViewById(R.id.fab_end)
-        fabStart!!.setOnClickListener(FabClickListener())
-        fabEnd!!.setOnClickListener(FabClickListener())
+        fabStart.setOnClickListener(FabClickListener())
+        fabEnd.setOnClickListener(FabClickListener())
+    }
+
+    override fun onBackPressed() {
+        if (_viewPager.currentItem == 3) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed()
+        } else {
+            // Otherwise, select the previous step.
+            _viewPager.currentItem = _viewPager.currentItem - 1
+        }
     }
 
     /**
@@ -239,48 +301,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    class SmartPagerAdapter(fragmentManager: FragmentManager?) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        // Returns total number of pages
-        override fun getCount(): Int {
-            return NUM_ITEMS
-        }
+    class SmartPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+        val fragments: MutableList<Fragment> = mutableListOf()
 
-        // Returns the fragment to display for that page
-        override fun getItem(position: Int): Fragment {
+        override fun getItemCount(): Int = 3
+
+        override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> {
-                    fabStart!!.visibility = View.GONE
-                    fabEnd!!.visibility = View.GONE
-                    TabFragment1.newInstance()
+                    val fragment1 = TabFragment1.newInstance()
+                    fragments.add(fragment1)
+                    fragment1
                 }
                 1 -> {
-                    fabStart!!.visibility = View.GONE
-                    fabEnd!!.setImageResource(R.drawable.ic_cloud_upload_white)
-                    fabEnd!!.visibility = View.VISIBLE
-                    TabFragment2.newInstance()
+                    val fragment2 = TabFragment2.newInstance()
+                    fragments.add(fragment2)
+                    fragment2
                 }
                 2 -> {
-                    fabStart!!.setImageResource(R.drawable.ic_add_white)
-                    fabStart!!.visibility = View.VISIBLE
-                    fabEnd!!.setImageResource(R.drawable.ic_search_white)
-                    fabEnd!!.visibility = View.VISIBLE
-                    TabFragment3.newInstance()
+                    val fragment3 = TabFragment3.newInstance()
+                    fragments.add(fragment3)
+                    fragment3
                 }
                 else -> {
-                    fabStart!!.visibility = View.GONE
-                    fabEnd!!.visibility = View.GONE
-                    TabFragment1.newInstance()
+                    val fragment1 = TabFragment1.newInstance()
+                    fragments.add(fragment1)
+                    fragment1
                 }
             }
-        }
-
-        // Returns the page title for the top indicator
-        override fun getPageTitle(position: Int): CharSequence? {
-            return "Page $position"
-        }
-
-        companion object {
-            private const val NUM_ITEMS = 3
         }
     }
 
@@ -292,8 +340,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onItemSaved() queryC=" + query.queryC)
         Log.d(TAG, "onItemSaved() queryD=" + query.queryD)
         try {
-            (_myFragmentPagerAdapter.getItem(1) as TabFragment2)
-                    .focusOnSavedItem(query, eventDate)
+            (_smartPagerAdapter.fragments[1] as TabFragment2).focusOnSavedItem(query, eventDate)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -307,8 +354,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onSearch() queryC=" + query.queryC)
         Log.d(TAG, "onSearch() queryD=" + query.queryD)
         try {
-            (_myFragmentPagerAdapter.getItem(1) as TabFragment2)
-                    .onSearch(query, fromDate, toDate)
+            (_smartPagerAdapter.fragments[1] as TabFragment2).onSearch(query, fromDate, toDate)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -318,16 +364,14 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(view: View) {
             if (view.id == R.id.fab_start) {
                 if (_viewPager.currentItem == 2) {
-                    (_myFragmentPagerAdapter.getRegisteredFragment(2) as TabFragment3)
-                            .addCriteria()
+                    (_smartPagerAdapter.fragments[2] as TabFragment3).addCriteria()
                 }
-            } else if (view.id == R.id.fab_end) {
+            }
+            else if (view.id == R.id.fab_end) {
                 if (_viewPager.currentItem == 1) {
-                    (_myFragmentPagerAdapter.getRegisteredFragment(1) as TabFragment2)
-                            .export()
+                    (_smartPagerAdapter.fragments[1] as TabFragment2).export()
                 } else if (_viewPager.currentItem == 2) {
-                    (_myFragmentPagerAdapter.getRegisteredFragment(2) as TabFragment3)
-                            .doSearch()
+                    (_smartPagerAdapter.fragments[2] as TabFragment3).doSearch()
                 }
             }
         }

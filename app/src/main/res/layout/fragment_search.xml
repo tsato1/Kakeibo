@@ -27,23 +27,23 @@
 
         <variable
             name="billingViewModel"
-            type="com.kakeibo.ui.BillingViewModel" />
+            type="com.kakeibo.ui.viewmodel.BillingViewModel" />
 
         <variable
             name="subscriptionViewModel"
-            type="com.kakeibo.ui.SubscriptionStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel" />
 
         <variable
             name="itemStatusViewModel"
-            type="com.kakeibo.ui.ItemStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
 
         <variable
             name="categoryStatusViewModel"
-            type="com.kakeibo.ui.adapter.CategoryStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
 
         <variable
             name="categoryDspStatusViewModel"
-            type="com.kakeibo.ui.adapter.CategoryDspStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.CategoryDspStatusViewModel" />
     </data>
 
 </layout>

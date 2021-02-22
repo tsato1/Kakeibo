@@ -312,7 +312,7 @@ public class SqliteDatabaseTestHelper {
                 values.put(ItemDBAdapter.COL_EVENT_DATE, eventDate);
 
                 /*** update_date ***/
-                updateDate = updateDate.split("\\s+")[0].replace('/','-') + " 00:00:00";
+                updateDate = updateDate.split(" ")[0].replace('/','-') + " 00:00:00";
                 values.put(ItemDBAdapter.COL_UPDATE_DATE, updateDate);
 
                 /*** flipping negative to positive***/

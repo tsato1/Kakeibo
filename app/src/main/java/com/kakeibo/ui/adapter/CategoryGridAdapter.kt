@@ -13,7 +13,7 @@ import java.util.*
 /*
 * Used in TabFragment1, Settings
 */
-class CategoryGridAdapter(private val _itemSaveListener: CategoryClickListener)
+class CategoryGridAdapter(private val _categoryClickListener: CategoryClickListener)
     : RecyclerView.Adapter<CategoryGridAdapter.ViewHolder>() {
 
     private var _categoryStatusList: List<CategoryStatus>? = ArrayList()
@@ -32,20 +32,20 @@ class CategoryGridAdapter(private val _itemSaveListener: CategoryClickListener)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val categoryStatus = _categoryStatusList!![position]
-        holder.bind(categoryStatus, _itemSaveListener)
+        holder.bind(categoryStatus, _categoryClickListener)
     }
 
     override fun getItemCount(): Int {
         return if (_categoryStatusList != null) _categoryStatusList!!.size else 0
     }
 
-    class ViewHolder(private val itemGridBinding: ItemGridBinding)
-        : RecyclerView.ViewHolder(itemGridBinding.root) {
+    class ViewHolder(private val binding: ItemGridBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(categoryStatus: CategoryStatus, categoryClickListener: CategoryClickListener) {
-            itemGridBinding.category = categoryStatus
-            itemGridBinding.categoryClickListener = categoryClickListener
-            itemGridBinding.executePendingBindings()
+            binding.category = categoryStatus
+            binding.categoryClickListener = categoryClickListener
+            binding.executePendingBindings()
         }
     }
 }

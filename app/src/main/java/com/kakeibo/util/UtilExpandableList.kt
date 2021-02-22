@@ -3,6 +3,7 @@ package com.kakeibo.util
 import android.util.Log
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.ui.model.ExpandableListRowModel
+import java.math.BigDecimal
 import java.util.*
 
 object UtilExpandableList {
@@ -87,14 +88,15 @@ object UtilExpandableList {
      * expands specific date (default is today's date)
      */
     fun expandOnlySpecificDate(
-            expandableMasterMap: SortedMap<String, List<ItemStatus>>,
+            expandableMasterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>>,
             expandableList: MutableList<ExpandableListRowModel>,
-            date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)) {
+            date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB))
+    {
         expandableList.clear()
         expandableList.addAll(expandableMasterMap.flatMap { entry ->
             val parent = ExpandableListRowModel(ExpandableListRowModel.PARENT, entry.key)
             val list = mutableListOf(parent)
-            if (entry.key == date) {
+            if (entry.key.first == date) {
                 list[list.size-1].isExpanded = true
                 val children = entry.value.map { child ->
                     (ExpandableListRowModel(ExpandableListRowModel.CHILD, child))
@@ -105,7 +107,9 @@ object UtilExpandableList {
         })
     }
 
-    fun createMasterListFromMasterMap(expandableMasterMap: SortedMap<String, List<ItemStatus>>): List<ExpandableListRowModel> {
+    fun createMasterListFromMasterMap(
+            expandableMasterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>>)
+    : List<ExpandableListRowModel> {
         return expandableMasterMap.flatMap { (key, value) ->
             val parents = ExpandableListRowModel(ExpandableListRowModel.PARENT, key)
             val children = value.map { child ->

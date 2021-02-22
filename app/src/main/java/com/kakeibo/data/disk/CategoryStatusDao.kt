@@ -23,12 +23,6 @@ interface CategoryStatusDao {
     @Query("DELETE FROM " + CategoryDBAdapter.TABLE_NAME)
     fun deleteAll()
 
-    @Query("SELECT " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
-    fun dspCodes(): LiveData<List<Int>>
-
-    @Query("SELECT " + CategoryDBAdapter.COL_CODE + " FROM " + CategoryDBAdapter.TABLE_NAME)
-    fun getAllCodes(): LiveData<List<Int>>
-
     @Query("SELECT " +
             CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_ID + "," +
             CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_CODE + "," +

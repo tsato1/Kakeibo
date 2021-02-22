@@ -6,7 +6,7 @@
     <data>
         <variable
             name="subscriptionViewModel"
-            type="com.kakeibo.ui.SubscriptionStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel" />
     </data>
 
     <RelativeLayout

@@ -1,6 +1,6 @@
 package com.kakeibo.util
 
-import com.kakeibo.ui.Query
+import com.kakeibo.ui.model.Query
 import java.util.*
 
 object QueryBuilder {

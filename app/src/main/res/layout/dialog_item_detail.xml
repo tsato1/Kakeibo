@@ -1,32 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_root"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
-    <TextView
-        android:id="@+id/txv_detail_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-    <TextView
-        android:id="@+id/txv_detail_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-    <TextView
-        android:id="@+id/txv_detail_memo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-    <TextView
-        android:id="@+id/txv_detail_registration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack" />
-</LinearLayout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemStatus"
+            type="com.kakeibo.data.ItemStatus" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/layout_root"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txv_event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            bind:context="@{context}"
+            bind:eventDate="@{itemStatus.eventDate}"
+            bind:colon="@{true}"/>
+
+        <TextView
+            android:id="@+id/txv_detail_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            bind:context="@{context}"
+            bind:categoryCode="@{itemStatus.categoryCode}"
+            bind:colon="@{true}"/>
+
+        <TextView
+            android:id="@+id/txv_detail_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            bind:context="@{context}"
+            bind:amount="@{itemStatus.amount.toString()}"
+            bind:colon="@{true}"/>
+
+        <TextView
+            android:id="@+id/txv_detail_memo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            bind:context="@{context}"
+            bind:memo="@{itemStatus.memo}"
+            bind:colon="@{true}"/>
+
+        <TextView
+            android:id="@+id/updated_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            bind:context="@{context}"
+            bind:updateDate="@{itemStatus.updateDate}"
+            bind:colon="@{true}"/>
+
+    </LinearLayout>
+</layout>

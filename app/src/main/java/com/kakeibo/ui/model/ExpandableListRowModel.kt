@@ -1,6 +1,7 @@
 package com.kakeibo.ui.model
 
 import com.kakeibo.data.ItemStatus
+import java.math.BigDecimal
 
 class ExpandableListRowModel {
 
@@ -12,14 +13,14 @@ class ExpandableListRowModel {
          const val EMPTYLAYOUT = 5*/
     }
 
-    lateinit var itemParent: String
+    lateinit var itemParent: Pair<String, BigDecimal>
     lateinit var itemChild : ItemStatus
     var type : Int
     var isExpanded : Boolean
     private var isCloseShown : Boolean
 
     constructor(type : Int,
-                itemParent: String,
+                itemParent: Pair<String, BigDecimal>,
                 isExpanded : Boolean = false,
                 isCloseShown : Boolean = false
     ){

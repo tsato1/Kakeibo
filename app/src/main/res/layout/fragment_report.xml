@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="itemStatusViewModel"
-            type="com.kakeibo.ui.ItemStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,7 +24,9 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <include layout="@layout/date_banner"/>
+                <include
+                    layout="@layout/banner_date_picker"
+                    android:id="@+id/banner_date_picker"/>
 
                 <ImageButton
                     android:id="@+id/btn_exit_search_result"
@@ -59,7 +61,10 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:textColor="@color/colorBlack"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            bind:context="@{context}"
+                            bind:amount="@{itemStatusViewModel.income.toString()}"
+                            bind:colon="@{false}"/>
                     </TableRow>
                     <TableRow>
                         <ImageView
@@ -77,7 +82,10 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:textColor="@color/colorBlack"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            bind:context="@{context}"
+                            bind:amount="@{itemStatusViewModel.expense.toString()}"
+                            bind:colon="@{false}"/>
                     </TableRow>
                     <TableRow>
                         <ImageView
@@ -95,9 +103,24 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:textColor="@color/colorBlack"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            bind:context="@{context}"
+                            bind:amount="@{itemStatusViewModel.balance.toString()}"
+                            bind:colon="@{false}"/>
                     </TableRow>
                 </TableLayout>
+
+                <Button
+                    android:id="@+id/btn_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="C" />
+
+                <Button
+                    android:id="@+id/btn_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="D" />
 
                 <include
                     layout="@layout/fragment_report_c"
@@ -106,8 +129,7 @@
 
                 <include
                     layout="@layout/fragment_report_d"
-                    android:id="@+id/fragment_report_d"
-                     />
+                    android:id="@+id/fragment_report_d" />
 
             </LinearLayout>
 

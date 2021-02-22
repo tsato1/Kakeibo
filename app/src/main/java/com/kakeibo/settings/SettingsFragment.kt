@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.kakeibo.R
-import com.kakeibo.ui.ItemStatusViewModel
-import com.kakeibo.ui.KkbAppViewModel
+import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.KkbAppViewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 

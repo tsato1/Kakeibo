@@ -7,21 +7,19 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.Purchase
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.AuthUI.IdpConfig
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
-import com.google.firebase.auth.FirebaseUser
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.settings.SettingsCompatActivity
-import java.util.*
+import com.kakeibo.ui.viewmodel.BillingViewModel
+import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
+import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel
 
 class GoogleSignInActivity : AppCompatActivity() {
     private lateinit var billingClientLifecycle: BillingClientLifecycle

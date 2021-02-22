@@ -13,10 +13,8 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.kakeibo.BuildConfig
-import com.kakeibo.Constants
 import com.kakeibo.R
-import com.kakeibo.ui.KkbAppViewModel
-import com.kakeibo.ui.SubscriptionStatusViewModel
+import com.kakeibo.ui.viewmodel.KkbAppViewModel
 
 class SettingsCompatActivity : AppCompatActivity(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {

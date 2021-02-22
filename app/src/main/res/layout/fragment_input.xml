@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -16,41 +16,18 @@
             android:orientation="vertical"
             android:background="@color/colorBackground">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/buttonBarStyle">
-                <ImageButton
-                    android:id="@+id/btn_prev"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_left_arrow"
-                    android:contentDescription="@string/previous"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <Button
-                    android:id="@+id/btn_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:textStyle="bold"
-                    style="?android:attr/buttonBarButtonStyle"/>
-                <ImageButton
-                    android:id="@+id/btn_next"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_right_arrow"
-                    android:contentDescription="@string/next"
-                    style="?android:attr/buttonBarButtonStyle"/>
-            </LinearLayout>
+            <include
+                layout="@layout/banner_date_picker"
+                android:id="@+id/banner_date_picker"/>
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TableRow
                     android:paddingTop="@dimen/table_row_padding_vertical"
                     android:paddingBottom="@dimen/table_row_padding_vertical">
+
                     <EditText
                         android:id="@+id/edt_amount"
                         android:layout_width="0dp"
@@ -63,9 +40,11 @@
                         android:autofillHints="@string/hint_memo_max_20_characters"
                         android:hint="@string/hint_amount_spent_or_earned"/>
                 </TableRow>
+
                 <TableRow
                     android:paddingTop="@dimen/table_row_padding_vertical"
                     android:paddingBottom="@dimen/table_row_padding_vertical">
+
                     <EditText
                         android:id="@+id/edt_memo"
                         android:layout_width="0dp"
@@ -75,43 +54,21 @@
                         android:inputType="text"
                         android:autofillHints="@string/hint_memo_max_20_characters"
                         android:hint="@string/hint_memo_max_20_characters"/>
+
                 </TableRow>
+
             </TableLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_input_categories"
+                android:id="@+id/rcv_grid"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:layout_margin="16dp"
-                android:gravity="center"
-                tools:listitem="@layout/item_grid" />
+                android:gravity="center"/>
 
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
-
-    <data>
-        <import type="android.view.View" />
-
-        <variable
-            name="billingViewModel"
-            type="com.kakeibo.ui.BillingViewModel" />
-
-        <variable
-            name="subscriptionViewModel"
-            type="com.kakeibo.ui.SubscriptionStatusViewModel" />
-
-        <variable
-            name="itemStatusViewModel"
-            type="com.kakeibo.ui.ItemStatusViewModel" />
-
-        <variable
-            name="categoryStatusViewModel"
-            type="com.kakeibo.ui.adapter.CategoryStatusViewModel" />
-
-        <variable
-            name="categoryDspStatusViewModel"
-            type="com.kakeibo.ui.adapter.CategoryDspStatusViewModel" />
-    </data>
 
 </layout>

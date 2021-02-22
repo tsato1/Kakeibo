@@ -19,6 +19,10 @@ interface ItemStatusDao {
     @Query("DELETE FROM " + ItemDBAdapter.TABLE_NAME)
     fun deleteAll()
 
+    @Query("DELETE FROM " + ItemDBAdapter.TABLE_NAME +
+            " WHERE " + ItemDBAdapter.COL_ID + "=" + ":id")
+    fun delete(id: Long): Int
+
     @RawQuery
     fun queryItems(query: SupportSQLiteQuery): List<ItemStatus>
 

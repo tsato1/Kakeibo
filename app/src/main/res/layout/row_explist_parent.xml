@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
-            name="itemStatusViewModel"
-            type="com.kakeibo.ui.ItemStatusViewModel" />
+            name="header"
+            type="com.kakeibo.ui.model.ExpandableListRowModel" />
     </data>
 
     <LinearLayout
@@ -39,7 +40,10 @@
             android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
             android:paddingEnd="0dp"
             android:textColor="@color/colorAccent"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            bind:context="@{context}"
+            bind:eventDate="@{header.itemParent.component1()}"
+            bind:colon="@{false}"/>
 
         <TextView
             android:id="@+id/txv_header_balance"
@@ -49,7 +53,9 @@
             android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
             android:textColor="@color/colorBlack"
             android:textStyle="bold"
-            android:text="@{itemStatusViewModel.calcDaySum}"/>
+            bind:context="@{context}"
+            bind:amount="@{header.itemParent.component2().toString()}"
+            bind:colon="@{false}"/>
 
     </LinearLayout>
 </layout>

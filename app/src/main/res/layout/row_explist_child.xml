@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="itemStatus"
             type="com.kakeibo.data.ItemStatus" />
-        <variable
-            name="itemClickListener"
-            type="com.kakeibo.ui.listener.ItemClickListener" />
     </data>
 
     <RelativeLayout
@@ -19,8 +16,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:clickable="true"
-        android:focusable="true"
-        android:onClick="@{(v)->itemClickListener.onItemClicked(v, itemStatus)}">
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/img_category"
@@ -30,8 +26,8 @@
             android:src="@mipmap/ic_launcher"
             android:clickable="false"
             android:focusable="false"
-            app:context="@{context}"
-            app:categoryCode="@{itemStatus.categoryCode}"
+            bind:context="@{context}"
+            bind:categoryCode="@{itemStatus.categoryCode}"
             android:contentDescription="@string/category"/>
 
         <TextView
@@ -44,8 +40,9 @@
             android:focusable="false"
             android:textColor="@color/colorBlack"
             android:textStyle="bold"
-            app:context="@{context}"
-            app:categoryCode="@{itemStatus.categoryCode}"/>
+            bind:context="@{context}"
+            bind:categoryCode="@{itemStatus.categoryCode}"
+            bind:colon="@{false}"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -67,6 +64,7 @@
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"
                 android:text="@{itemStatus.memo}"/>
+
             <TextView
                 android:id="@+id/txv_amount"
                 android:layout_width="wrap_content"
@@ -75,8 +73,9 @@
                 android:focusable="false"
                 android:textColor="@color/colorBlack"
                 android:textStyle="bold"
-                app:context="@{context}"
-                app:item="@{itemStatus}"/>
+                bind:context="@{context}"
+                bind:amount="@{itemStatus.amount.toString()}"
+                bind:colon="@{false}"/>
 
         </LinearLayout>
 

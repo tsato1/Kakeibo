@@ -11,7 +11,7 @@ import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.databinding.ActivityInAppPurchaseBinding
-import com.kakeibo.ui.BillingViewModel
+import com.kakeibo.ui.viewmodel.BillingViewModel
 
 class InAppPurchasesActivity : AppCompatActivity() {
 

@@ -42,7 +42,6 @@ class DataRepository private constructor(
      * CategoryStatus
      */
     val categories: LiveData<List<CategoryStatus>>
-    val categoryCodes: LiveData<List<Int>>
     val categoriesForDisplay: LiveData<List<CategoryStatus>>
 
     /**
@@ -292,6 +291,10 @@ class DataRepository private constructor(
         localDataSource.deleteAllItems()
     }
 
+    fun deleteItem(id: Long) {
+        localDataSource.deleteItem(id)
+    }
+
     fun deleteAllCategories() {
         localDataSource.deleteAllCategories()
     }
@@ -386,7 +389,7 @@ class DataRepository private constructor(
 //                        categories.postValue(categoryStatuses);
 //                    }
 //                });
-        categoryCodes = localDataSource.categoryCodes
+
         //        categoryCodes.addSource(localDataSource.categoryCodes,
 //                new Observer<List<Integer>>() {
 //                    @Override
