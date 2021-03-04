@@ -5,6 +5,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="java.util.List"/>
         <variable
             name="itemStatusViewModel"
             type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
@@ -81,7 +82,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/pie_graph_height"
                         android:layout_marginTop="@dimen/pie_graph_margin_vertical"
-                        android:layout_marginBottom="@dimen/pie_graph_margin_vertical"/>
+                        android:layout_marginBottom="@dimen/pie_graph_margin_vertical"
+                        bind:incomeList="@{itemStatusViewModel.itemsIncome}"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rcv_income"
@@ -118,7 +120,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/pie_graph_height"
                         android:layout_marginTop="@dimen/pie_graph_margin_vertical"
-                        android:layout_marginBottom="@dimen/pie_graph_margin_vertical"/>
+                        android:layout_marginBottom="@dimen/pie_graph_margin_vertical"
+                        bind:expenseList="@{itemStatusViewModel.itemsExpense}"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rcv_expense"

@@ -5,44 +5,64 @@ import android.content.Context
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import androidx.core.view.ViewCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
+import com.echo.holographlibrary.PieGraph
+import com.echo.holographlibrary.PieSlice
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.databinding.BannerDatePickerBinding
 import com.kakeibo.databinding.FragmentReportCBinding
 import com.kakeibo.ui.model.Medium
+import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.UtilDate
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.math.BigDecimal
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
-@BindingAdapter("bind:context", "bind:place")
-fun updateDateBannerYMD(view: View, context: Context, place: Int) {
+@ExperimentalCoroutinesApi
+@BindingAdapter("bind:context", "bind:currentlyShown", "bind:inSearch", "bind:itemViewModel")
+fun updateDateBannerYMD(view: View, context: Context,
+                        currentlyShown: Int,
+                        inSearch: Boolean,
+                        itemViewModel: ItemStatusViewModel?) {
     val binding = DataBindingUtil.getBinding<BannerDatePickerBinding>(view)
 
     binding?.let {
-        val dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
-        val weekNames = context.resources.getStringArray(R.array.week_name)
-
-        val cal = Calendar.getInstance()
-
-        it.btnDate.text = when (place) {
-            Medium.FRAGMENT_INPUT, Medium.REPORT_D -> UtilDate.getTodaysDateWithDay(dateFormat, weekNames)
-            else -> UtilDate.getTodaysYM(dateFormat)
+        if (inSearch) {
+            it.btnDate.setOnClickListener{}
+            it.btnDate.text = context.getString(R.string.search_result)
+            it.btnNext.visibility = View.GONE
+            it.btnPrev.visibility = View.GONE
+            return
         }
 
-        when (place) {
-            Medium.FRAGMENT_INPUT, Medium.REPORT_D -> {
+        val dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
+        val weekNames = context.resources.getStringArray(R.array.week_name)
+        val cal = Calendar.getInstance()
+
+        when (currentlyShown) {
+            Medium.FRAGMENT_REPORT_C, Medium.FRAGMENT_REPORT_D -> {
+                it.btnDate.text = UtilDate.getTodaysYM(dateFormat)
+                it.btnDate.setOnClickListener {}
+                it.btnNext.visibility = View.VISIBLE
+                it.btnPrev.visibility = View.VISIBLE
+            }
+            Medium.FRAGMENT_INPUT -> {
+                it.btnDate.text = UtilDate.getTodaysDateWithDay(dateFormat, weekNames)
                 it.btnDate.setOnClickListener { _ ->
                     val year = cal[Calendar.YEAR]
                     val month = cal[Calendar.MONTH] + 1
@@ -56,9 +76,8 @@ fun updateDateBannerYMD(view: View, context: Context, place: Int) {
                     }, year, month - 1, day)
                     dialog.show()
                 }
-            }
-            Medium.REPORT_C, Medium.REPORT_S -> {
-                it.btnDate.setOnClickListener{}
+                it.btnNext.visibility = View.VISIBLE
+                it.btnPrev.visibility = View.VISIBLE
             }
         }
 
@@ -66,20 +85,24 @@ fun updateDateBannerYMD(view: View, context: Context, place: Int) {
         it.btnNext.setOnClickListener { _ ->
             try {
                 val date: Date
-                val str = when (place) {
-                    Medium.FRAGMENT_INPUT, Medium.REPORT_D -> {
-                        cal.add(Calendar.DATE, 1)
-                        date = cal.time
-                        SimpleDateFormat(UtilDate.DATE_FORMATS[dateFormat],
-                                Locale.getDefault()).format(date) + " [" + weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
-                    }
-                    Medium.REPORT_C -> {
+                val str = when (currentlyShown) {
+                    Medium.FRAGMENT_REPORT_C, Medium.FRAGMENT_REPORT_D -> {
                         cal.add(Calendar.MONTH, 1)
                         date = cal.time
                         val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
-                        SimpleDateFormat(format, Locale.getDefault()).format(date)
+                        val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
+                        val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
+                        itemViewModel?.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
+                        out
                     }
-                    else -> UtilDate.getTodaysDateWithDay(dateFormat, weekNames)
+                    Medium.FRAGMENT_INPUT -> {
+                        cal.add(Calendar.DATE, 1)
+                        date = cal.time
+                        SimpleDateFormat(UtilDate.DATE_FORMATS[dateFormat],
+                                Locale.getDefault()).format(date) +
+                                " [" + weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
+                    }
+                    else -> ""
                 }
                 it.btnDate.text = str
             } catch (e: ParseException) {
@@ -91,21 +114,25 @@ fun updateDateBannerYMD(view: View, context: Context, place: Int) {
         it.btnPrev.setOnClickListener { _ ->
             try {
                 val date: Date
-                val str = when (place) {
-                    Medium.FRAGMENT_INPUT, Medium.REPORT_D -> {
+                val str = when (currentlyShown) {
+                    Medium.FRAGMENT_REPORT_C, Medium.FRAGMENT_REPORT_D -> {
+                        cal.add(Calendar.MONTH, -1)
+                        date = cal.time
+                        val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
+                        val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
+                        val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
+                        Log.d("asdf", dbDate)
+                        itemViewModel?.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
+                        out
+                    }
+                    Medium.FRAGMENT_INPUT -> {
                         cal.add(Calendar.DATE, -1)
                         date = cal.time
                         SimpleDateFormat(UtilDate.DATE_FORMATS[dateFormat],
                                 Locale.getDefault()).format(date) +
                                 " [" + weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
                     }
-                    Medium.REPORT_C -> {
-                        cal.add(Calendar.MONTH, -1)
-                        date = cal.time
-                        val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
-                        SimpleDateFormat(format, Locale.getDefault()).format(date)
-                    }
-                    else -> UtilDate.getTodaysDateWithDay(dateFormat, weekNames)
+                    else -> ""
                 }
                 it.btnDate.text = str
             } catch (e: ParseException) {
@@ -156,11 +183,6 @@ fun prepareReportCView(view:View, context: Context) {
 //        legend.setFormSize(8f);
 //        legend.setXEntrySpace(5f);
         legend.isEnabled = false
-
-        it.pieGraphIncome.thickness = 120
-        it.pieGraphExpense.thickness = 120
-        ViewCompat.setNestedScrollingEnabled(it.pieGraphIncome, true)
-        ViewCompat.setNestedScrollingEnabled(it.pieGraphExpense, true)
     }
 }
 
@@ -194,7 +216,7 @@ fun updateBarChart(horizontalBarChart: HorizontalBarChart, context: Context, inc
         expenseBarDataSet = BarDataSet(values, context.getString(R.string.expense_colon))
         incomeBarDataSet.setDrawIcons(false)
         expenseBarDataSet.setDrawIcons(false)
-        expenseBarDataSet.setColors(context.resources.getColor(R.color.colorPrimary), context.resources.getColor(R.color.colorAccent))
+        expenseBarDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary), ContextCompat.getColor(context, R.color.colorAccent))
         val dataSets = ArrayList<IBarDataSet>()
         dataSets.add(incomeBarDataSet)
         dataSets.add(expenseBarDataSet)
@@ -206,38 +228,40 @@ fun updateBarChart(horizontalBarChart: HorizontalBarChart, context: Context, inc
     }
 }
 
-//@BindingAdapter("bind:context", "bind:list")
-//fun updateIncomePieGraph(graph: PieGraph?, context: Context?, list: Array<ItemStatus>) {
-//    graph?.let {
-//        it.removeSlices()
-//        var inPieSlice: PieSlice
-//
-//        for (item in list) {
-//            inPieSlice = PieSlice()
-//            inPieSlice.color = ContextCompat.getColor(context!!, R.color.colorPrimary)
-//            inPieSlice.value = item.getAmount().toFloat()
-//            it.addSlice(inPieSlice)
-//        }
-//    }
-//}
-//
-//@BindingAdapter("bind:list")
-//fun updateExpensePieGraph(graph: PieGraph?, list: LiveData<List<ItemStatus>>?) {
-//    graph?.let { g ->
-//        g.removeSlices()
-//        var exPieSlice: PieSlice
-//
-//        val size = Constants.CATEGORY_COLORS.size
-//        list?.value?.let {
-//            for ((i, item) in it.withIndex()) {
-//                exPieSlice = PieSlice()
-//                exPieSlice.color =
-//                        if (i < size) Constants.CATEGORY_COLORS[i].toColorInt()
-//                        else Constants.CATEGORY_COLORS[size - 1].toColorInt()
-//                exPieSlice.value = item.getAmount().toFloat()
-//                g.addSlice(exPieSlice)
-//                Log.d("asdf", exPieSlice.value.toString())
-//            }
-//        }
-//    }
-//}
+@BindingAdapter("bind:incomeList")
+fun updateIncomePieGraph(pieGraph: PieGraph, incomeList: List<BigDecimal>?) {
+    val size = Constants.CATEGORY_EXPENSE_COLORS.size
+
+    incomeList?.let {
+        pieGraph.removeSlices()
+        var inPieSlice: PieSlice
+
+        for ((i, item) in incomeList.withIndex()) {
+            inPieSlice = PieSlice()
+            inPieSlice.color =
+                    if (i < size) Constants.CATEGORY_INCOME_COLORS[i].toColorInt()
+                    else Constants.CATEGORY_INCOME_COLORS[size - 1].toColorInt()
+            inPieSlice.value = item.toFloat()
+            pieGraph.addSlice(inPieSlice)
+        }
+    }
+}
+
+@BindingAdapter("bind:expenseList")
+fun updateExpensePieGraph(pieGraph: PieGraph, expenseList: List<BigDecimal>?) {
+    val size = Constants.CATEGORY_EXPENSE_COLORS.size
+
+    expenseList?.let {
+        pieGraph.removeSlices()
+        var exPieSlice: PieSlice
+
+        for ((i, item) in expenseList.withIndex()) {
+            exPieSlice = PieSlice()
+            exPieSlice.color =
+                    if (i < size) Constants.CATEGORY_EXPENSE_COLORS[i].toColorInt()
+                    else Constants.CATEGORY_EXPENSE_COLORS[size - 1].toColorInt()
+            exPieSlice.value = item.toFloat()
+            pieGraph.addSlice(exPieSlice)
+        }
+    }
+}

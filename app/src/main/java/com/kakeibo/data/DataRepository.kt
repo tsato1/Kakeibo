@@ -36,7 +36,7 @@ class DataRepository private constructor(
      * ItemStatus
      */
     val items: LiveData<List<ItemStatus>>
-    val itemsByMonth: LiveData<List<ItemStatus>>
+    val itemsThisMonth: LiveData<List<ItemStatus>>
 
     /**
      * CategoryStatus
@@ -362,7 +362,7 @@ class DataRepository private constructor(
         // Database changes are observed by the ViewModel.
         kkbApp = localDataSource.kkbApp
         items = localDataSource.items
-        itemsByMonth = localDataSource.itemsByMonth
+        itemsThisMonth = localDataSource.itemsByMonth
         //        items.addSource(localDataSource.items,
 //                new Observer<List<ItemStatus>>() {
 //                    @Override

@@ -20,25 +20,34 @@ import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.view.AmountTextWatcher
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.*
-import com.kakeibo.util.UtilDate.convertDateFormat
-import com.kakeibo.util.UtilDate.getTodaysDate
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ExpandableListAdapter(
-        private var _expandableList: MutableList<ExpandableListRowModel>,
-        private val _itemStatusViewModel: ItemStatusViewModel)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ExpandableListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private lateinit var _itemStatusViewModel: ItemStatusViewModel
+    fun setItemStatusViewMode(itemStatusViewModel: ItemStatusViewModel) {
+        _itemStatusViewModel = itemStatusViewModel
+    }
+
+    private var _expandableList: MutableList<ExpandableListRowModel> = mutableListOf()
+    fun setExpandableList(expandableList: MutableList<ExpandableListRowModel>) {
+        _expandableList = expandableList
+    }
+    fun getExpandableList(): MutableList<ExpandableListRowModel> {
+        return _expandableList
+    }
 
     private var _masterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>> = TreeMap()
-
     fun setMasterMap(masterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>>) {
         _masterMap = masterMap
-
         UtilExpandableList.expandOnlySpecificDate(_masterMap, _expandableList)
         notifyDataSetChanged()
+    }
+    fun getMasterMap(): SortedMap<Pair<String, BigDecimal>, List<ItemStatus>> {
+        return _masterMap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -194,8 +203,7 @@ class ExpandableListAdapter(
                 .toString() + " [" + MainActivity.weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
         btnEventDate.text = dateText
         btnEventDate.setOnClickListener {
-            val ymd = convertDateFormat(
-                    dateText.split(" ")[0], MainActivity.dateFormat, 3).split("-")
+            val ymd = UtilDate.getDBDate(dateText.split(" ")[0], MainActivity.dateFormat).split("-")
             val year = ymd[0].toInt()
             val month = ymd[1].toInt()
             val day = ymd[2].toInt()
@@ -210,7 +218,7 @@ class ExpandableListAdapter(
         }
         /*** category ***/
         val btnCategory: Button = layout.findViewById(R.id.btn_category)
-        val categoryName: String = MainActivity.allCategoryStatusMap[item.categoryCode]!!.name
+        val categoryName: String = MainActivity.allCategoryMap[item.categoryCode]!!.name
         btnCategory.text = categoryName
         btnCategory.hint = "" + item.categoryCode
         btnCategory.setOnClickListener {
@@ -228,7 +236,7 @@ class ExpandableListAdapter(
             val dialog: Dialog = builder.show()
             lv.setOnItemClickListener { _, _, pos: Int, _ ->
                 val selectedCategoryCode: Int = MainActivity.allDspCategoryList[pos].code
-                btnCategory.text = MainActivity.allCategoryStatusMap[selectedCategoryCode]!!.name
+                btnCategory.text = MainActivity.allCategoryMap[selectedCategoryCode]!!.name
                 btnCategory.hint = "" + selectedCategoryCode
                 dialog.dismiss()
             }
@@ -247,9 +255,9 @@ class ExpandableListAdapter(
                 .setView(layout)
                 .setPositiveButton(R.string.save) { _, _ ->
                     val categoryCode = btnCategory.hint.toString().toInt()
-                    val eventDate = convertDateFormat(btnEventDate.text.toString().split(" ")[0], MainActivity.dateFormat, 3)
-                    val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
-                    val amount = when (MainActivity.allCategoryStatusMap[categoryCode]!!.color) {
+                    val eventDate = UtilDate.getDBDate(btnEventDate.text.toString().split(" ")[0], MainActivity.dateFormat)
+                    val updateDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
+                    val amount = when (MainActivity.allCategoryMap[categoryCode]!!.color) {
                         UtilCategory.CATEGORY_COLOR_INCOME -> {
                             BigDecimal(edtAmount.text.toString())
                         }

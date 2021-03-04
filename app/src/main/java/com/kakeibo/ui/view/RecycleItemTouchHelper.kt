@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.ui.listener.RecyclerItemTouchHelperListener
-import com.kakeibo.ui.adapter.SearchRecyclerViewAdapter.*
+import com.kakeibo.ui.adapter.SearchCardListAdapter.*
 
 internal class RecyclerItemTouchHelper(
         dragDirs: Int, swipeDirs: Int,
@@ -43,18 +43,22 @@ internal class RecyclerItemTouchHelper(
     }
 
     private fun getForegroundView(viewHolder: RecyclerView.ViewHolder): View? {
-        val foregroundView: View?
-        foregroundView = if (viewHolder is ViewHolderDateRange) {
-            viewHolder.cardView
-        } else if (viewHolder is ViewHolderAmountRange) {
-            viewHolder.cardView
-        } else if (viewHolder is ViewHolderCategory) {
-            viewHolder.cardView
-        } else if (viewHolder is ViewHolderMemo) {
-            viewHolder.cardView
-        } else {
-            null
+        return when (viewHolder) {
+            is ViewHolderDateRange -> {
+                viewHolder.cardView
+            }
+            is ViewHolderAmountRange -> {
+                viewHolder.cardView
+            }
+            is ViewHolderCategory -> {
+                viewHolder.cardView
+            }
+            is ViewHolderMemo -> {
+                viewHolder.cardView
+            }
+            else -> {
+                null
+            }
         }
-        return foregroundView
     }
 }

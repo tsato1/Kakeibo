@@ -25,7 +25,7 @@ fun setImage(imageView: ImageView, context: Context, categoryStatus: CategorySta
 
 @BindingAdapter("bind:context", "bind:categoryCode")
 fun setImage(imageView: ImageView, context: Context, categoryCode: Int) {
-    val categoryStatus = MainActivity.allCategoryStatusMap[categoryCode]
+    val categoryStatus = MainActivity.allCategoryMap[categoryCode]
 
     categoryStatus?.let {
         setImage(imageView, context, categoryStatus)
@@ -34,7 +34,7 @@ fun setImage(imageView: ImageView, context: Context, categoryCode: Int) {
 
 @BindingAdapter("bind:context", "bind:categoryCode", "bind:colon")
 fun setName(textView: TextView, context: Context, categoryCode: Int, colon: Boolean) {
-    val categoryStatus = MainActivity.allCategoryStatusMap[categoryCode]
+    val categoryStatus = MainActivity.allCategoryMap[categoryCode]
     val text =
             if(colon) context.getString(R.string.category_colon) + " " + categoryStatus?.name
             else categoryStatus?.name

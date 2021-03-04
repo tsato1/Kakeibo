@@ -7,11 +7,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.android.billingclient.api.Purchase
@@ -29,11 +29,8 @@ import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.settings.SettingsCompatActivity
 import com.kakeibo.ui.model.Medium
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.model.Query
-import com.kakeibo.ui.viewmodel.BillingViewModel
-import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
-import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel
+import com.kakeibo.ui.viewmodel.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,8 +40,8 @@ class MainActivity : AppCompatActivity() {
         private const val TAG = "MainActivity"
         private const val RC_SIGN_IN = 0
 
-        var medium = Medium()
-        lateinit var allCategoryStatusMap: Map<Int, CategoryStatus>
+        lateinit var allCategoryMap: Map<Int, CategoryStatus>
+        lateinit var allCategoryList: List<CategoryStatus>
         lateinit var allDspCategoryList: List<CategoryStatus>
 
         lateinit var weekNames: Array<String>
@@ -59,9 +56,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _viewPager: ViewPager2
 
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
-    private lateinit var _authenticationViewModel: FirebaseUserViewModel
-    private lateinit var _billingViewModel: BillingViewModel
-    private lateinit var _subscriptionViewModel: SubscriptionStatusViewModel
+    private val _authenticationViewModel: FirebaseUserViewModel by viewModels()
+    private val _billingViewModel: BillingViewModel by viewModels()
+    private val _subscriptionViewModel: SubscriptionStatusViewModel by viewModels()
+    private val _medium: Medium by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,18 +85,18 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab!!.position) {
                     0 -> {
-                        medium.currentlyShown.set(Medium.FRAGMENT_INPUT)
+                        _medium.setCurrentlyShown(Medium.FRAGMENT_INPUT)
                         fabStart.visibility = View.GONE
                         fabEnd.visibility = View.GONE
                     }
                     1 -> {
-                        medium.currentlyShown.set(Medium.REPORT_D)
+                        _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT)
                         fabStart.visibility = View.GONE
                         fabEnd.setImageResource(R.drawable.ic_cloud_upload_white)
                         fabEnd.visibility = View.VISIBLE
                     }
                     2 -> {
-                        medium.currentlyShown.set(Medium.FRAGMENT_SEARCH)
+                        _medium.setCurrentlyShown(Medium.FRAGMENT_SEARCH)
                         fabStart.setImageResource(R.drawable.ic_add_white)
                         fabStart.visibility = View.VISIBLE
                         fabEnd.setImageResource(R.drawable.ic_search_white)
@@ -114,11 +112,6 @@ class MainActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
-
-        _authenticationViewModel = ViewModelProviders.of(this)[FirebaseUserViewModel::class.java]
-        _billingViewModel = ViewModelProviders.of(this)[BillingViewModel::class.java]
-        _subscriptionViewModel = ViewModelProviders.of(this)[SubscriptionStatusViewModel::class.java]
-        val categoryStatusViewModel = ViewModelProviders.of(this)[CategoryStatusViewModel::class.java]
 
         _billingClientLifecycle = (application as SubApp).billingClientLifecycle
         lifecycle.addObserver(_billingClientLifecycle)
@@ -171,14 +164,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-//        categoryStatusViewModel.all.observe(this, {
-//            for (category in it) {
-//                allCategoryStatusMap[category.code] = category
-//            }
-////            QueryBuilder.init(it)
-//        })
+        val categoryStatusViewModel: CategoryStatusViewModel by viewModels()
+        categoryStatusViewModel.all.observe(this, {
+            allCategoryList = it
+        })
         categoryStatusViewModel.allMap.observe(this, {
-            allCategoryStatusMap = it
+            allCategoryMap = it
         })
         categoryStatusViewModel.allDsp.observe(this, {
             allDspCategoryList = it
@@ -191,7 +182,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (_viewPager.currentItem == 3) {
+        if (_viewPager.currentItem <= 3) {
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed()
@@ -309,22 +300,22 @@ class MainActivity : AppCompatActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> {
-                    val fragment1 = TabFragment1.newInstance()
+                    val fragment1 = InputFragment.newInstance()
                     fragments.add(fragment1)
                     fragment1
                 }
                 1 -> {
-                    val fragment2 = TabFragment2.newInstance()
+                    val fragment2 = ReportFragment.newInstance()
                     fragments.add(fragment2)
                     fragment2
                 }
                 2 -> {
-                    val fragment3 = TabFragment3.newInstance()
+                    val fragment3 = SearchFragment.newInstance()
                     fragments.add(fragment3)
                     fragment3
                 }
                 else -> {
-                    val fragment1 = TabFragment1.newInstance()
+                    val fragment1 = InputFragment.newInstance()
                     fragments.add(fragment1)
                     fragment1
                 }
@@ -335,43 +326,31 @@ class MainActivity : AppCompatActivity() {
     /*
      * Called from TabFragment1 upon tapping one of the category buttons
      */
-    fun onItemSaved(query: Query, eventDate: String?) {
+    fun onItemSaved(date: String) {
         _viewPager.currentItem = 1 // move to tabFragment2
-        Log.d(TAG, "onItemSaved() queryC=" + query.queryC)
-        Log.d(TAG, "onItemSaved() queryD=" + query.queryD)
-        try {
-            (_smartPagerAdapter.fragments[1] as TabFragment2).focusOnSavedItem(query, eventDate)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        (_smartPagerAdapter.fragments[1] as ReportFragment).focusOnSavedItem(date)
     }
 
     /*
      * Called from TabFragment3 upon tapping search button
      */
-    fun onSearch(query: Query, fromDate: String?, toDate: String?) {
+    fun onSearch(query: Query) {
         _viewPager.currentItem = 1 // move to tabFragment2
-        Log.d(TAG, "onSearch() queryC=" + query.queryC)
-        Log.d(TAG, "onSearch() queryD=" + query.queryD)
-        try {
-            (_smartPagerAdapter.fragments[1] as TabFragment2).onSearch(query, fromDate, toDate)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        (_smartPagerAdapter.fragments[1] as ReportFragment).onSearch(query)
     }
 
     internal inner class FabClickListener : View.OnClickListener {
         override fun onClick(view: View) {
             if (view.id == R.id.fab_start) {
                 if (_viewPager.currentItem == 2) {
-                    (_smartPagerAdapter.fragments[2] as TabFragment3).addCriteria()
+                    (_smartPagerAdapter.fragments[2] as SearchFragment).addCriteria()
                 }
             }
             else if (view.id == R.id.fab_end) {
                 if (_viewPager.currentItem == 1) {
-                    (_smartPagerAdapter.fragments[1] as TabFragment2).export()
+                    (_smartPagerAdapter.fragments[1] as ReportFragment).export()
                 } else if (_viewPager.currentItem == 2) {
-                    (_smartPagerAdapter.fragments[2] as TabFragment3).doSearch()
+                    (_smartPagerAdapter.fragments[2] as SearchFragment).doSearch()
                 }
             }
         }

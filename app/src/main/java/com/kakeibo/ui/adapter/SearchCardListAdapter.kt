@@ -1,38 +1,31 @@
 package com.kakeibo.ui.adapter
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
-import com.kakeibo.SubApp
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.ui.MainActivity
 import com.kakeibo.ui.view.AmountTextWatcher
 import com.kakeibo.ui.model.SearchCriteriaCard
 import com.kakeibo.util.UtilDate
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: ArrayList<SearchCriteriaCard>)
+internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayList<SearchCriteriaCard>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private val _categoryStatusList: LiveData<List<CategoryStatus>>? = null
 
     /*** date range card  */
     internal inner class ViewHolderDateRange(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var layout: FrameLayout
-        var cardView: CardView
-        var btnFrom: Button
-        var btnTo: Button
+        var layout: FrameLayout = itemView.findViewById(R.id.frl_card_date_range)
+        var cardView: CardView = itemView.findViewById(R.id.cdv_date_range)
+        var btnFrom: Button = itemView.findViewById(R.id.btn_date_from)
+        var btnTo: Button = itemView.findViewById(R.id.btn_date_to)
 
         internal inner class ButtonClickListener : View.OnClickListener {
             override fun onClick(view: View) {
@@ -48,10 +41,10 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
             val year = cal[Calendar.YEAR]
             val month = cal[Calendar.MONTH] + 1
             val day = cal[Calendar.DAY_OF_MONTH]
-            val dialog = DatePickerDialog(itemView.context, { picker, year, month, day ->
-                val cal = GregorianCalendar(year, month, day)
-                val date = cal.time
-                val str = SimpleDateFormat(UtilDate.DATE_FORMATS[_dateFormat],
+            val dialog = DatePickerDialog(itemView.context, { _, y, m, d ->
+                val gCal = GregorianCalendar(y, m, d)
+                val date = gCal.time
+                val str = SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.dateFormat],
                         Locale.getDefault()).format(date)
                 button.text = str
             }, year, month - 1, day)
@@ -59,10 +52,6 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
         }
 
         init {
-            layout = itemView.findViewById(R.id.frl_card_date_range)
-            cardView = itemView.findViewById(R.id.cdv_date_range)
-            btnFrom = itemView.findViewById(R.id.btn_date_from)
-            btnTo = itemView.findViewById(R.id.btn_date_to)
             btnFrom.setOnClickListener(ButtonClickListener())
             btnTo.setOnClickListener(ButtonClickListener())
         }
@@ -70,16 +59,12 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
 
     /*** amount range card  */
     internal inner class ViewHolderAmountRange(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var layout: FrameLayout
-        var cardView: CardView
-        var edtMin: EditText
-        var edtMax: EditText
+        var layout: FrameLayout = itemView.findViewById(R.id.frl_card_amount_range)
+        var cardView: CardView = itemView.findViewById(R.id.cdv_amount_range)
+        var edtMin: EditText = itemView.findViewById(R.id.edt_amount_min)
+        var edtMax: EditText = itemView.findViewById(R.id.edt_amount_max)
 
         init {
-            layout = itemView.findViewById(R.id.frl_card_amount_range)
-            cardView = itemView.findViewById(R.id.cdv_amount_range)
-            edtMin = itemView.findViewById(R.id.edt_amount_min)
-            edtMax = itemView.findViewById(R.id.edt_amount_max)
             edtMin.addTextChangedListener(AmountTextWatcher(edtMin))
             edtMax.addTextChangedListener(AmountTextWatcher(edtMax))
         }
@@ -87,19 +72,14 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
 
     /*** category card  */
     internal inner class ViewHolderCategory(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var layout: FrameLayout
-        var cardView: CardView
-        var btnCategory: Button
+        var layout: FrameLayout = itemView.findViewById(R.id.frl_card_category)
+        var cardView: CardView = itemView.findViewById(R.id.cdv_category)
+        var btnCategory: Button = itemView.findViewById(R.id.btn_card_category)
         var selectedCategoryCode = 0
 
         init {
-            layout = itemView.findViewById(R.id.frl_card_category)
-            cardView = itemView.findViewById(R.id.cdv_category)
-            btnCategory = itemView.findViewById(R.id.btn_card_category)
-            btnCategory.setOnClickListener { view: View? ->
-                //_categoryStatusList = UtilCategory.getDspCategoryList(_context);
-                val adapter = CategoryListAdapter(
-                        itemView.context, 0, ArrayList())
+            btnCategory.setOnClickListener {
+                val adapter = CategoryListAdapter(itemView.context, 0, MainActivity.allCategoryList)
                 val builder = AlertDialog.Builder(itemView.context)
                 val inflater = itemView.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val convertView = inflater.inflate(R.layout.dialog_bas_search_category, null)
@@ -107,26 +87,24 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
                 builder.setCancelable(true)
                 builder.setIcon(R.mipmap.ic_mikan)
                 builder.setTitle(R.string.category)
-                builder.setNegativeButton(R.string.cancel) { dialog: DialogInterface?, which: Int -> }
+                builder.setNegativeButton(R.string.cancel) { _, _ -> }
                 val lv = convertView.findViewById<ListView>(R.id.lsv_base_search_category)
                 lv.adapter = adapter
-                val dialog: Dialog = builder.show()
-                lv.onItemClickListener = AdapterView.OnItemClickListener { parent: AdapterView<*>?, v: View?, pos: Int, id: Long -> }
+                val dialog = builder.show()
+                lv.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos: Int, _->
+                    selectedCategoryCode = MainActivity.allCategoryList[pos].code
+                    btnCategory.text = MainActivity.allCategoryMap[selectedCategoryCode]!!.name
+                    dialog.dismiss()
+                }
             }
         }
     }
 
     /*** memo card  */
     inner class ViewHolderMemo internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var layout: FrameLayout
-        var cardView: CardView
-        var edtMemo: EditText
-
-        init {
-            layout = itemView.findViewById(R.id.frl_card_memo)
-            cardView = itemView.findViewById(R.id.cdv_memo)
-            edtMemo = itemView.findViewById(R.id.edt_card_memo)
-        }
+        var layout: FrameLayout = itemView.findViewById(R.id.frl_card_memo)
+        var cardView: CardView = itemView.findViewById(R.id.cdv_memo)
+        var edtMemo: EditText = itemView.findViewById(R.id.edt_card_memo)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -170,7 +148,6 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
     }
 
     fun removeItem(position: Int) {
-        Log.d(TAG, "removeItem() called")
         _lstSearchCriteriaCards.removeAt(position)
         notifyItemRemoved(position)
     }
@@ -181,8 +158,8 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val `object` = _lstSearchCriteriaCards[position] ?: return
-        when (`object`.type) {
+        val card = _lstSearchCriteriaCards[position]
+        when (card.type) {
             SearchCriteriaCard.TYPE_DATE_RANGE -> {
                 var  viewHolderDateRange: ViewHolderDateRange? = holder as ViewHolderDateRange
             }
@@ -196,15 +173,5 @@ internal class SearchRecyclerViewAdapter(private val _lstSearchCriteriaCards: Ar
                 var viewHolderMemo: ViewHolderMemo? = holder as ViewHolderMemo
             }
         }
-    }
-
-    companion object {
-        private val TAG = SearchRecyclerViewAdapter::class.java.simpleName
-        private var _dateFormat: Int = 0
-    }
-
-    init {
-        _dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
-        //        _categoryStatusList = ((SubApp) context).getRepository().getDspCategories();
     }
 }

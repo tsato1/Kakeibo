@@ -2,7 +2,7 @@
  * 	   Created by Daniel Nadeau
  * 	   daniel.nadeau01@gmail.com
  * 	   danielnadeau.blogspot.com
- * 
+ *
  * 	   Licensed to the Apache Software Foundation (ASF) under one
        or more contributor license agreements.  See the NOTICE file
        distributed with this work for additional information
@@ -37,12 +37,12 @@ public class PieGraph extends View {
 	private ArrayList<PieSlice> slices = new ArrayList<PieSlice>();
 	private Paint paint = new Paint();
 	private Path path = new Path();
-	
+
 	private int indexSelected = -1;
-	private int thickness = 50;
+	private int thickness = 100;
 	private OnSliceClickedListener listener;
-	
-	
+
+
 	public PieGraph(Context context) {
 		super(context);
 	}
@@ -58,12 +58,12 @@ public class PieGraph extends View {
 		paint.setAntiAlias(true);
 		float midX, midY, radius, innerRadius;
 		path.reset();
-		
+
 		float currentAngle = 270;
         float currentSweep;
         int totalValue = 0;
 		float padding = 2;
-		
+
 		midX = getWidth()/2;
 		midY = getHeight()/2;
 		if (midX < midY){
@@ -73,11 +73,11 @@ public class PieGraph extends View {
 		}
 		radius -= padding;
 		innerRadius = radius - thickness;
-		
+
 		for (PieSlice slice : slices){
 			totalValue += slice.getValue();
 		}
-		
+
 		int count = 0;
 		for (PieSlice slice : slices){
 			Path p = new Path();
@@ -86,17 +86,17 @@ public class PieGraph extends View {
 			p.arcTo(new RectF(midX-radius, midY-radius, midX+radius, midY+radius), currentAngle+padding, currentSweep - padding);
 			p.arcTo(new RectF(midX-innerRadius, midY-innerRadius, midX+innerRadius, midY+innerRadius), (currentAngle+padding) + (currentSweep - padding), -(currentSweep-padding));
 			p.close();
-			
+
 			slice.setPath(p);
 			slice.setRegion(new Region((int)(midX-radius), (int)(midY-radius), (int)(midX+radius), (int)(midY+radius)));
 			canvas.drawPath(p, paint);
-			
+
 			if (indexSelected == count && listener != null){
 				path.reset();
 				paint.setColor(slice.getColor());
 				paint.setColor(Color.parseColor("#33B5E5"));
 				paint.setAlpha(100);
-				
+
 				if (slices.size() > 1) {
 					path.arcTo(new RectF(midX-radius-(padding*2), midY-radius-(padding*2), midX+radius+(padding*2), midY+radius+(padding*2)), currentAngle, currentSweep+padding);
 					path.arcTo(new RectF(midX-innerRadius+(padding*2), midY-innerRadius+(padding*2), midX+innerRadius-(padding*2), midY+innerRadius-(padding*2)), currentAngle + currentSweep + padding, -(currentSweep + padding));
@@ -104,26 +104,26 @@ public class PieGraph extends View {
 				} else {
 					path.addCircle(midX, midY, radius+padding, Direction.CW);
 				}
-				
+
 				canvas.drawPath(path, paint);
 				paint.setAlpha(255);
 			}
-			
+
 			currentAngle = currentAngle+currentSweep;
-			
+
 			count++;
 		}
-		
-		
+
+
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 
 	    Point point = new Point();
 	    point.x = (int) event.getX();
 	    point.y = (int) event.getY();
-	    
+
 	    int count = 0;
 	    for (PieSlice slice : slices){
 	    	Region r = new Region();
@@ -137,20 +137,20 @@ public class PieGraph extends View {
 	    			}
 	    			indexSelected = -1;
 	    		}
-	    		
+
 	    	}
 		    count++;
 	    }
-	    
+
 	    if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP){
 	    	postInvalidate();
 	    }
-	    
-	    
+
+
 
 	    return true;
 	}
-	
+
 	public ArrayList<PieSlice> getSlices() {
 		return slices;
 	}
@@ -168,7 +168,7 @@ public class PieGraph extends View {
 	public void setOnSliceClickedListener(OnSliceClickedListener listener) {
 		this.listener = listener;
 	}
-	
+
 	public int getThickness() {
 		return thickness;
 	}
@@ -176,7 +176,7 @@ public class PieGraph extends View {
 		this.thickness = thickness;
 		postInvalidate();
 	}
-	
+
 	public void removeSlices(){
 		for (int i = slices.size()-1; i >= 0; i--){
 			slices.remove(i);

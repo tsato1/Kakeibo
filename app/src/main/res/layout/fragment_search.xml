@@ -22,28 +22,4 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <data>
-        <import type="android.view.View" />
-
-        <variable
-            name="billingViewModel"
-            type="com.kakeibo.ui.viewmodel.BillingViewModel" />
-
-        <variable
-            name="subscriptionViewModel"
-            type="com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel" />
-
-        <variable
-            name="itemStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
-
-        <variable
-            name="categoryStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
-
-        <variable
-            name="categoryDspStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.CategoryDspStatusViewModel" />
-    </data>
-
 </layout>

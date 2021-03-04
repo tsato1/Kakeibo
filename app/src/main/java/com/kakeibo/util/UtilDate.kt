@@ -20,14 +20,6 @@ object UtilDate {
 
     val DATE_FORMATS = arrayOf(DATE_FORMAT_YMD, DATE_FORMAT_MDY, DATE_FORMAT_DMY, DATE_FORMAT_DB, DATE_FORMAT_DB_HMS)
 
-    fun convertMtoMM(calMonth: Int): String {
-        var mon = calMonth.toString()
-        if (calMonth.toString().length == 1) {  // convert m to mm (ex. 5 -> 05)
-            mon = "0$calMonth"
-        }
-        return mon
-    }
-
     fun getTodaysDateWithDay(format: Int, weekName: Array<String>): String {
         val cal = Calendar.getInstance()
         val sdFormat = SimpleDateFormat(DATE_FORMATS[format], Locale.getDefault())
@@ -88,6 +80,31 @@ object UtilDate {
         return SimpleDateFormat(DATE_FORMATS[dateFormat], Locale.getDefault()).format(date)
     }
 
+    fun getDBDate(date: String, fromFormat: Int): String {
+        val ymd = date.split("/")
+        val y: String
+        val m: String
+        val d: String
+        when (fromFormat) {
+            1 -> {
+                y = ymd[2]
+                m = ymd[0]
+                d = ymd[1]
+            }
+            2 -> {
+                y = ymd[2]
+                m = ymd[1]
+                d = ymd[0]
+            }
+            else -> {
+                y = ymd[0]
+                m = ymd[1]
+                d = ymd[2]
+            }
+        }
+        return "$y-$m-$d"
+    }
+
     /*** date1 < date2 returns -1
      * date1 = date2 return 0
      * date1 > date2 return 1  */
@@ -108,46 +125,5 @@ object UtilDate {
             e.printStackTrace()
         }
         return 0
-    }
-
-    fun convertDateFormat(date: String, fromFormat: Int, toFormat: Int): String {
-        var out = ""
-        if (fromFormat == toFormat) return date
-        if ((fromFormat == 3 || fromFormat == 4) && (toFormat == 0 || toFormat == 1 || toFormat == 2)) {
-            val ymd = date.split("-")
-
-//            if (DATE_FORMAT_YMD.equals(toFormat)) {
-//                return ymd[0] + "/" + ymd[1] + "/" + ymd[2];
-//            } else if (DATE_FORMAT_DMY.equals(toFormat)){
-//                return ymd[2] + "/" + ymd[1] + "/" + ymd[0];
-//            } else if (DATE_FORMAT_MDY.equals(toFormat)) {
-//                return ymd[1] + "/" + ymd[2] + "/" + ymd[0];
-//            }
-        } else if ((fromFormat == 0 || fromFormat == 1 || fromFormat == 2) && (toFormat == 3 || toFormat == 4)) {
-            /*** toFormat==3  */
-            val ymd = date.split("/")
-            val y: String
-            val m: String
-            val d: String
-            when (fromFormat) {
-                1 -> {
-                    y = ymd[2]
-                    m = ymd[0]
-                    d = ymd[1]
-                }
-                2 -> {
-                    y = ymd[2]
-                    m = ymd[1]
-                    d = ymd[0]
-                }
-                else -> {
-                    y = ymd[0]
-                    m = ymd[1]
-                    d = ymd[2]
-                }
-            }
-            out = "$y-$m-$d"
-        }
-        return out
     }
 }

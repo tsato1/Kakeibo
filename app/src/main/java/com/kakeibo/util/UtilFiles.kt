@@ -9,8 +9,6 @@ import java.util.*
 
 object UtilFiles {
 
-    private val TAG = UtilFiles::class.java.simpleName
-
     fun fileExists(context: Context, filename: String?): Boolean {
         val file = context.getFileStreamPath(filename)
         return !(file == null || !file.exists())
@@ -50,7 +48,7 @@ object UtilFiles {
                 sb.append("\n")
             }
             inBuff.close()
-            ArrayList(Arrays.asList(*sb.toString().split("\t").toTypedArray()))
+            ArrayList(listOf(*sb.toString().split("\t").toTypedArray()))
         } catch (e: IOException) {
             null
         }

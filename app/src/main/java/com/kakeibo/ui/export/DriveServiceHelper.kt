@@ -19,19 +19,23 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class DriveServiceHelper(private val mDriveService: Drive) {
+
+    companion object {
+        private const val MIME_TYPE = "text/csv"
+    }
+
     private val mExecutor: Executor = Executors.newSingleThreadExecutor()
 
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    fun createFile(date: String, reportType: Int, context: Context?): Task<String> {
+    fun createFile(name: String, reportType: Int, context: Context?): Task<String> {
         return Tasks.call(mExecutor, {
             val content = ""
-            val title = "Kakeibo_Export_$date"
             val metadata = File()
                     .setParents(listOf("root"))
                     .setMimeType(MIME_TYPE)
-                    .setName(title)
+                    .setName(name)
             val contentStream = ByteArrayContent.fromString(MIME_TYPE, content)
             val googleFile = mDriveService.files().create(metadata, contentStream).execute()
                     ?: throw IOException("Null result when requesting file creation.")
@@ -126,8 +130,8 @@ class DriveServiceHelper(private val mDriveService: Drive) {
 
             // Read the document's contents as a String.
             var content: String
-            contentResolver.openInputStream(uri).use { `is` ->
-                BufferedReader(InputStreamReader(`is`)).use { reader ->
+            contentResolver.openInputStream(uri).use {
+                BufferedReader(InputStreamReader(it!!)).use { reader ->
                     val stringBuilder = StringBuilder()
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
@@ -138,9 +142,5 @@ class DriveServiceHelper(private val mDriveService: Drive) {
             }
             Pair.create(name, content)
         })
-    }
-
-    companion object {
-        private const val MIME_TYPE = "text/csv"
     }
 }

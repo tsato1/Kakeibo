@@ -29,7 +29,8 @@ class ReportCListAdapter(private val categoryColor: Int) : RecyclerView.Adapter<
         /* filling the ReportCList */
         val reportCListRowList = itemMap!!.keys.map { ReportCListRowModel(it.first, it.second) }.toList()
         val sumExpense = itemMap.keys.sumOf { it.second }
-        val size = Constants.CATEGORY_EXPENSE_COLORS.size
+        val sizeIncome = Constants.CATEGORY_INCOME_COLORS.size
+        val sizeExpense = Constants.CATEGORY_EXPENSE_COLORS.size
         for ((i, reportCRow) in reportCListRowList.withIndex()) {
             val percentage = reportCRow.amount
                     .multiply(BigDecimal(100))
@@ -41,15 +42,16 @@ class ReportCListAdapter(private val categoryColor: Int) : RecyclerView.Adapter<
             when (categoryColor) {
                 UtilCategory.CATEGORY_COLOR_INCOME ->
                     reportCRow.color =
-                            if (i < size) Constants.CATEGORY_INCOME_COLORS[i].toColorInt()
-                            else Constants.CATEGORY_INCOME_COLORS[size - 1].toColorInt()
+                            if (i < sizeIncome) Constants.CATEGORY_INCOME_COLORS[i].toColorInt()
+                            else Constants.CATEGORY_INCOME_COLORS[sizeIncome - 1].toColorInt()
                 UtilCategory.CATEGORY_COLOR_EXPENSE ->
                     reportCRow.color =
-                            if (i < size) Constants.CATEGORY_EXPENSE_COLORS[i].toColorInt()
-                            else Constants.CATEGORY_EXPENSE_COLORS[size - 1].toColorInt()
+                            if (i < sizeExpense) Constants.CATEGORY_EXPENSE_COLORS[i].toColorInt()
+                            else Constants.CATEGORY_EXPENSE_COLORS[sizeExpense - 1].toColorInt()
             }
         }
         _itemList = reportCListRowList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -72,7 +74,7 @@ class ReportCListAdapter(private val categoryColor: Int) : RecyclerView.Adapter<
                     listView.adapter = adapter
                     AlertDialog.Builder(v.context)
                             .setIcon(R.mipmap.ic_mikan)
-                            .setTitle(MainActivity.allCategoryStatusMap[reportCListRowModel.categoryCode]!!.name)
+                            .setTitle(MainActivity.allCategoryMap[reportCListRowModel.categoryCode]!!.name)
                             .setPositiveButton(R.string.ok) { _, _ -> }
                             .setView(listView).create()
                             .show()

@@ -12,14 +12,14 @@ class CategoryStatusViewModel(application: Application) : AndroidViewModel(appli
 
     private val repository: DataRepository = (application as SubApp).repository
 
-    private val all: LiveData<List<CategoryStatus>> = repository.categories
+    val all: LiveData<List<CategoryStatus>> = repository.categories
+    val allDsp: LiveData<List<CategoryStatus>> = repository.categoriesForDisplay
     val allMap: LiveData<Map<Int, CategoryStatus>> = Transformations.map(all) { all ->
         all.associateBy( { it.code }, { it })
     }
     val allCodes: LiveData<List<Int>> = Transformations.map(all) { all ->
         all.map{ it.code }
     }
-    val allDsp: LiveData<List<CategoryStatus>> = repository.categoriesForDisplay
 
     fun insert(categoryStatus: CategoryStatus) {
         repository.insertCategory(categoryStatus)

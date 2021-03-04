@@ -11,7 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
@@ -21,18 +21,9 @@ import com.kakeibo.databinding.FragmentInputBinding
 import com.kakeibo.ui.adapter.CategoryGridAdapter
 import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.listener.CategoryClickListener
-import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.view.AmountTextWatcher
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.*
-import com.kakeibo.util.QueryBuilder.build
-import com.kakeibo.util.QueryBuilder.init
-import com.kakeibo.util.QueryBuilder.setCGroupBy
-import com.kakeibo.util.QueryBuilder.setCOrderBy
-import com.kakeibo.util.QueryBuilder.setCsWhere
-import com.kakeibo.util.QueryBuilder.setDOrderBy
-import com.kakeibo.util.QueryBuilder.setDate
-import com.kakeibo.util.UtilDate.convertDateFormat
 import com.kakeibo.util.UtilDate.getTodaysDate
 import com.kakeibo.util.UtilDate.getTodaysDateWithDay
 import java.math.BigDecimal
@@ -40,40 +31,33 @@ import java.math.BigDecimal
 /**
  * Created by T on 2015/09/14.
  */
-class TabFragment1 : Fragment(), CategoryClickListener {
+class InputFragment : Fragment(), CategoryClickListener {
     private var _activity: Activity? = null
     private var _btnDate: Button? = null
     private var _edtAmount: EditText? = null
     private var _edtMemo: EditText? = null
 
-    companion object {
-        private val TAG = TabFragment1::class.java.simpleName
-        private lateinit var _itemStatusViewModel: ItemStatusViewModel
-        private lateinit var _categoryStatusViewModel: CategoryStatusViewModel
-        private var _query: Query? = null
+    private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
+    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
 
-        fun newInstance(): TabFragment1 {
-            val tabFragment1 = TabFragment1()
+    companion object {
+        private val TAG = InputFragment::class.java.simpleName
+
+        fun newInstance(): InputFragment {
+            val tabFragment1 = InputFragment()
             val args = Bundle()
             tabFragment1.arguments = args
             return tabFragment1
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _activity = activity
 
-        _itemStatusViewModel =
-                ViewModelProviders.of(requireActivity())[ItemStatusViewModel::class.java]
-        _categoryStatusViewModel =
-                ViewModelProviders.of(requireActivity())[CategoryStatusViewModel::class.java]
-        val fragmentBinding: FragmentInputBinding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_input, container, false)
+        val fragmentBinding: FragmentInputBinding =
+                DataBindingUtil.inflate(inflater, R.layout.fragment_input, container, false)
         fragmentBinding.lifecycleOwner = this
         val view = fragmentBinding.root
-
-//        val bannerDatePickerBinding = fragmentBinding.bannerDatePicker
-//        bannerDatePickerBinding.medium = MainActivity.medium
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
         val categoryGridAdapter = CategoryGridAdapter(this)
@@ -82,15 +66,11 @@ class TabFragment1 : Fragment(), CategoryClickListener {
         _categoryStatusViewModel.allDsp.observe(viewLifecycleOwner, {
             categoryGridAdapter.setCategoryStatuses(it)
         })
-        _categoryStatusViewModel.allCodes.observe(viewLifecycleOwner, {
-            _query = Query(Query.QUERY_TYPE_NEW)
-            init(it)
-        })
 
         _btnDate = view.findViewById(R.id.btn_date)
         _edtAmount = view.findViewById(R.id.edt_amount)
         _edtMemo = view.findViewById(R.id.edt_memo)
-        _edtAmount?.addTextChangedListener(AmountTextWatcher(_edtAmount!!))
+        _edtAmount!!.addTextChangedListener(AmountTextWatcher(_edtAmount!!))
 
         return view
     }
@@ -112,9 +92,9 @@ class TabFragment1 : Fragment(), CategoryClickListener {
             return
         }
 
-        val eventDate = convertDateFormat(_btnDate!!.text.toString().split(" ")[0], MainActivity.dateFormat, 3)
+        val eventDate = UtilDate.getDBDate(_btnDate!!.text.toString().split(" ")[0], MainActivity.dateFormat)
         val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
-        val amount = when (MainActivity.allCategoryStatusMap[categoryCode]!!.color) {
+        val amount = when (MainActivity.allCategoryMap[categoryCode]!!.color) {
             UtilCategory.CATEGORY_COLOR_INCOME -> {
                 BigDecimal(_edtAmount!!.text.toString())
             }
@@ -136,13 +116,8 @@ class TabFragment1 : Fragment(), CategoryClickListener {
 
         _itemStatusViewModel.insert(itemStatus)
         Toast.makeText(activity, resources.getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show()
-        setDate(eventDate, "")
-        setCGroupBy(ItemDBAdapter.COL_CATEGORY_CODE)
-        setCOrderBy(QueryBuilder.SUM_AMOUNT, QueryBuilder.DESC)
-        setCsWhere(ItemDBAdapter.COL_CATEGORY_CODE)
-        setDOrderBy(ItemDBAdapter.COL_EVENT_DATE, QueryBuilder.ASC)
-        build(_query!!)
-        (_activity as MainActivity).onItemSaved(_query!!, eventDate)
+
+        (_activity as MainActivity).onItemSaved(eventDate)
         _btnDate!!.text = getTodaysDateWithDay(MainActivity.dateFormat, MainActivity.weekNames)
     }
 }
