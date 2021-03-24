@@ -1,10 +1,7 @@
 package com.kakeibo.data.disk
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.db.CategoryDBAdapter
 import com.kakeibo.db.CategoryDspDBAdapter
@@ -22,6 +19,9 @@ interface CategoryStatusDao {
 
     @Query("DELETE FROM " + CategoryDBAdapter.TABLE_NAME)
     fun deleteAll()
+
+    @Query("DELETE FROM " + CategoryDBAdapter.TABLE_NAME + " WHERE " + CategoryDBAdapter.COL_ID + " = :id")
+    fun delete(id: Long)
 
     @Query("SELECT " +
             CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_ID + "," +
@@ -41,7 +41,7 @@ interface CategoryStatusDao {
             CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_CODE + "=" +
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE +
             " ORDER BY " + CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_LOCATION)
-    fun getCategoriesForDisplay(): LiveData<List<CategoryStatus>>
+    fun getCategoriesDisplayed(): LiveData<List<CategoryStatus>>
 
     @Query("SELECT " +
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_ID + "," +
@@ -54,18 +54,15 @@ interface CategoryStatusDao {
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_DESC + "," +
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_SAVED_DATE + "," +
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_PARENT +
-            " FROM " + CategoryDBAdapter.TABLE_NAME +  //            " INNER JOIN " + CategoryLanDBAdapter.TABLE_NAME +
-            //            " ON " +
-            //            CategoryDBAdapter.TABLE_NAME+"."+ CategoryDBAdapter.COL_CODE + "=" +
-            //            CategoryLanDBAdapter.TABLE_NAME+"."+ CategoryLanDBAdapter.COL_CODE +
+            " FROM " + CategoryDBAdapter.TABLE_NAME +
             " WHERE " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE +
             " NOT IN " +
-            " (" +
+            "(" +
             " SELECT " + CategoryDspDBAdapter.COL_CODE +
             " FROM " + CategoryDspDBAdapter.TABLE_NAME +
             ")" +
             " ORDER BY " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE)
-    fun nonDspStatusesLiveData(): LiveData<List<CategoryStatus>>
+    fun getCategoriesNotDisplay(): LiveData<List<CategoryStatus>>
 
 
     //    @Query("SELECT "+

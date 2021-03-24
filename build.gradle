@@ -6,8 +6,8 @@ buildscript {
 
     ext.roomVersion = '2.2.6'
 
-    ext.billingVersion = '3.0.2'
-    ext.firebaseAuthVersion = '20.0.2'
+    ext.billingVersion = '3.0.3'
+    ext.firebaseAuthVersion = '20.0.3'
     ext.firebaseCoreVersion = '18.0.2'
     ext.firebaseFunctionsVersion = '19.2.0'
     ext.firebaseMessagingVersion = '21.0.1'
@@ -18,7 +18,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:4.1.3'
         classpath 'com.google.gms:google-services:4.3.5'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }

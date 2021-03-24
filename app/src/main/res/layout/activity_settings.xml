@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <variable
+            name="kkbAppViewModel"
+            type="com.kakeibo.ui.viewmodel.KkbAppViewModel" />
         <variable
             name="subscriptionViewModel"
             type="com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel" />
@@ -19,13 +21,25 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/ad_container"/>
 
-        <FrameLayout
+<!--        <FrameLayout-->
+<!--            android:id="@+id/ad_container"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/colorBackground"-->
+<!--            android:layout_alignParentBottom="true" />-->
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ad_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            app:updateAdViews="@{subscriptionViewModel.subscriptions}"/>
+            android:background="@color/colorBackground"
+            android:visibility="gone"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/settings_banner_ad"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+
 </layout>

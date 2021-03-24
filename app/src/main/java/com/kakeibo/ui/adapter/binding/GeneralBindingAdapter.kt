@@ -25,7 +25,6 @@ import com.kakeibo.databinding.FragmentReportCBinding
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.UtilDate
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.math.BigDecimal
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -33,9 +32,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
-@ExperimentalCoroutinesApi
 @BindingAdapter("bind:context", "bind:currentlyShown", "bind:inSearch", "bind:itemViewModel")
-fun updateDateBannerYMD(view: View, context: Context,
+fun updateDateBannerYMD(view: View,
+                        context: Context,
                         currentlyShown: Int,
                         inSearch: Boolean,
                         itemViewModel: ItemStatusViewModel?) {
@@ -121,7 +120,6 @@ fun updateDateBannerYMD(view: View, context: Context,
                         val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
                         val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
                         val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
-                        Log.d("asdf", dbDate)
                         itemViewModel?.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
                         out
                     }

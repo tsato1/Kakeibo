@@ -7,6 +7,9 @@
         <variable
             name="reportCListRowModel"
             type="com.kakeibo.ui.model.ReportCListRowModel" />
+        <variable
+            name="categoryViewModel"
+            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
     </data>
 
     <LinearLayout
@@ -23,7 +26,8 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/category"
             bind:context="@{context}"
-            bind:categoryCode="@{reportCListRowModel.categoryCode}"/>
+            bind:categoryCode="@{reportCListRowModel.categoryCode}"
+            bind:categoryViewModel="@{categoryViewModel}"/>
 
         <TextView
             android:id="@+id/txv_category"
@@ -35,7 +39,8 @@
             android:textColor="@color/colorBlack"
             bind:context="@{context}"
             bind:categoryCode="@{reportCListRowModel.categoryCode}"
-            bind:colon="@{false}"/>
+            bind:colon="@{false}"
+            bind:categoryViewModel="@{categoryViewModel}"/>
 
         <TextView
             android:id="@+id/txv_amount"

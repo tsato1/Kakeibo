@@ -1,6 +1,6 @@
-package com.kakeibo.util;
+//package com.kakeibo.util;
 
-public class UtilCategory {
+//public class UtilCategory {
 //    private static String TAG = UtilCategory.class.getSimpleName();
 //
 //    private static List<Integer> sDspKkbCategoryCodeList = new ArrayList<>(); // ordered by location
@@ -10,17 +10,17 @@ public class UtilCategory {
 //    private static List<KkbCategory> sNonDspKkbCategoryList = new ArrayList<>();
 //    private static List<KkbCategory> sCustomKkbCategoryList = new ArrayList<>();
 
-    public final static int NUM_MAX_DSP_CATEGORIES = 16;
-    public final static int CUSTOM_CATEGORY_CODE_START = 1000;
-    public final static int NUM_MAX_CUSTOM_CATEGORIES = 5;
-
-    public final static int CATEGORY_COLOR_INCOME = 1;
-    public final static int CATEGORY_COLOR_EXPENSE = 0;
-    public final static int CATEGORY_COLOR_NONE = 2;
-
-    public final static int CATEGORY_SIGN_LOW = 0;
-    public final static int CATEGORY_SIGN_MID = 1;
-    public final static int CATEGORY_SIGN_HIG = 2;
+//    public final static int NUM_MAX_DSP_CATEGORIES = 16;
+//    public final static int CUSTOM_CATEGORY_CODE_START = 1000;
+//    public final static int NUM_MAX_CUSTOM_CATEGORIES = 5;
+//
+//    public final static int CATEGORY_COLOR_INCOME = 1;
+//    public final static int CATEGORY_COLOR_EXPENSE = 0;
+//    public final static int CATEGORY_COLOR_NONE = 2;
+//
+//    public final static int CATEGORY_SIGN_LOW = 0;
+//    public final static int CATEGORY_SIGN_MID = 1;
+//    public final static int CATEGORY_SIGN_HIG = 2;
 
 //    public static void reloadCategoryLists(Context context) {
 //        setAllKkbCategoryArr(context);
@@ -404,4 +404,4 @@ public class UtilCategory {
 //        itemDBAdapter.close();
 //        return out;
 //    }
-}
+//}

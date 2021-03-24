@@ -16,7 +16,7 @@ object UtilCurrency {
                 out.setSpan(ForegroundColorSpan(Color.RED), 0, 1, 0)
                 out
             }
-            amount.substring(0, 1) == "+" -> {
+            amount == "0" -> { // amount = 0
                 SpannableString(amount)
             }
             else -> { // positive amount

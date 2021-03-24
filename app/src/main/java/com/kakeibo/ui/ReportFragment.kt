@@ -27,6 +27,7 @@ import com.kakeibo.ui.listener.ButtonClickListener
 import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
+import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.*
 import java.math.BigDecimal
@@ -52,6 +53,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
     }
 
     private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
+    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
     private val _medium: Medium by activityViewModels()
 
     private lateinit var _srlReload: SwipeRefreshLayout
@@ -62,10 +64,10 @@ class ReportFragment : Fragment(), ButtonClickListener {
     private lateinit var _allItems: List<ItemStatus>
     private lateinit var _itemsThisMonth: List<ItemStatus>
     private var _result: List<ItemStatus> = listOf()
-    private var _expandableListAdapter = ExpandableListAdapter()
-    private var _expandableList: MutableList<ExpandableListRowModel> = ArrayList()
-    private val _incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME)
-    private val _expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE)
+    private lateinit var _expandableListAdapter: ExpandableListAdapter
+    private val _expandableList: MutableList<ExpandableListRowModel> = ArrayList()
+    private lateinit var _incomeListAdapter: ReportCListAdapter
+    private lateinit var _expenseListAdapter: ReportCListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -85,14 +87,17 @@ class ReportFragment : Fragment(), ButtonClickListener {
         bannerDatePickerBinding.itemStatusViewModel = _itemStatusViewModel
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
+        _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel)
         _expandableListAdapter.setExpandableList(_expandableList)
         _expandableListAdapter.setItemStatusViewMode(_itemStatusViewModel)
         expandableListView.adapter = _expandableListAdapter
         expandableListView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         val incomeListView: RecyclerView = view.findViewById(R.id.rcv_income)
+        _incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME, _categoryStatusViewModel)
         incomeListView.adapter = _incomeListAdapter
         val expenseListView: RecyclerView = view.findViewById(R.id.rcv_expense)
+        _expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE, _categoryStatusViewModel)
         expenseListView.adapter = _expenseListAdapter
 
         _itemStatusViewModel.all.observe(viewLifecycleOwner, { all ->

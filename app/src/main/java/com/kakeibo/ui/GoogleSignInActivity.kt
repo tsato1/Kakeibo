@@ -16,7 +16,7 @@ import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
-import com.kakeibo.settings.SettingsCompatActivity
+import com.kakeibo.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.BillingViewModel
 import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
 import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel
@@ -165,7 +165,7 @@ class GoogleSignInActivity : AppCompatActivity() {
         val id = item.itemId
         when (id) {
             R.id.action_settings -> {
-                startActivity(Intent(this, SettingsCompatActivity::class.java))
+                startActivity(Intent(this, SettingsActivity::class.java))
                 return true
             }
             R.id.sign_in -> {

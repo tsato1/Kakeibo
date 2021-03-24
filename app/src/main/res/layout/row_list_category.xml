@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="categoryStatus"
+            name="category"
             type="com.kakeibo.data.CategoryStatus" />
     </data>
 
@@ -21,7 +21,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             bind:context="@{context}"
-            bind:categoryCode="@{categoryStatus.code}"
+            bind:category="@{category}"
             bind:colon="@{false}"/>
 
         <ImageView
@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/category"
             bind:context="@{context}"
-            bind:categoryCode="@{categoryStatus.code}"/>
+            bind:category="@{category}"/>
 
     </LinearLayout>
 

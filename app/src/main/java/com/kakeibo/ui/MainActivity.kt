@@ -19,6 +19,9 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -27,7 +30,7 @@ import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.data.CategoryStatus
-import com.kakeibo.settings.SettingsCompatActivity
+import com.kakeibo.settings.SettingsActivity
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.viewmodel.*
@@ -55,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _smartPagerAdapter: SmartPagerAdapter
     private lateinit var _viewPager: ViewPager2
 
+    private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
     private val _authenticationViewModel: FirebaseUserViewModel by viewModels()
     private val _billingViewModel: BillingViewModel by viewModels()
@@ -65,6 +69,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        _kkbAppViewModel.all.observe(this, {
+            val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
+
+            if (showAds) {
+                MobileAds.initialize(this) {}
+                val adView: AdView = findViewById(R.id.ad_container)
+                val adRequest = AdRequest.Builder().build()
+                adView.loadAd(adRequest)
+                adView.visibility = View.VISIBLE
+            }
+        })
+
         weekNames = resources.getStringArray(R.array.week_name)
         dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
         numColumns = SubApp.getNumColumns(R.string.pref_key_num_columns)
@@ -72,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById<View>(R.id.toolbar) as Toolbar)
         _smartPagerAdapter = SmartPagerAdapter(this)
         _viewPager = findViewById(R.id.view_pager)
+        _viewPager.offscreenPageLimit = 2
         _viewPager.adapter = _smartPagerAdapter
         val tabLayout = findViewById<TabLayout>(R.id.tabs)
         TabLayoutMediator(tabLayout, _viewPager) { tab, position ->
@@ -171,7 +188,7 @@ class MainActivity : AppCompatActivity() {
         categoryStatusViewModel.allMap.observe(this, {
             allCategoryMap = it
         })
-        categoryStatusViewModel.allDsp.observe(this, {
+        categoryStatusViewModel.dsp.observe(this, {
             allDspCategoryList = it
         })
 
@@ -212,7 +229,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(this, SettingsCompatActivity::class.java))
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             R.id.sign_in -> {

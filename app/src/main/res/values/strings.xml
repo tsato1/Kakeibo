@@ -174,8 +174,8 @@
     <string name="pref_key_category" translatable="false">pref_key_category</string>
     <string name="pref_key_category_add_remove_reorder" translatable="false">pref_key_category_add_remove_reorder</string>
     <string name="pref_key_category_reorder" translatable="false">pref_key_category_reorder</string>
-    <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>
-    <string name="pref_key_category_edition" translatable="false">pref_key_category_edition</string>
+<!--    <string name="pref_key_category_creation" translatable="false">pref_key_category_creation</string>-->
+    <string name="pref_key_category_list" translatable="false">pref_key_category_edition</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
     <string name="pref_key_about" translatable="false">pref_key_about</string>
 

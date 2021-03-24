@@ -39,17 +39,17 @@
         android:title="@string/category"
         android:icon="@drawable/ic_group_work_black_24dp">
         <Preference
+            android:key="@string/pref_key_category_list"
+            android:title="@string/custom_categories"/>
+        <Preference
             android:key="@string/pref_key_category_add_remove_reorder"
             android:title="@string/hide_display_reorder_categories"/>
         <Preference
             android:key="@string/pref_key_category_reorder"
             android:title="@string/reorder_categories"/>
-        <Preference
-            android:key="@string/pref_key_category_creation"
-            android:title="@string/create_category"/>
-        <Preference
-            android:key="@string/pref_key_category_edition"
-            android:title="@string/custom_categories"/>
+<!--        <Preference-->
+<!--            android:key="@string/pref_key_category_creation"-->
+<!--            android:title="@string/create_category"/>-->
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/in_app_data"

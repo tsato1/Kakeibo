@@ -5,6 +5,9 @@
         <variable
             name="itemStatus"
             type="com.kakeibo.data.ItemStatus" />
+        <variable
+            name="categoryViewModel"
+            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
     </data>
 
     <LinearLayout
@@ -32,7 +35,8 @@
             android:textStyle="bold"
             bind:context="@{context}"
             bind:categoryCode="@{itemStatus.categoryCode}"
-            bind:colon="@{true}"/>
+            bind:colon="@{true}"
+            bind:categoryViewModel="@{categoryViewModel}"/>
 
         <TextView
             android:id="@+id/txv_amount"

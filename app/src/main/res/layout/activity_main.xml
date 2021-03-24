@@ -52,6 +52,7 @@
             android:visibility="gone"
             android:contentDescription="@string/add"
             app:layout_behavior="com.kakeibo.ui.view.ScrollingFABBehavior"/>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_end"
             android:layout_height="wrap_content"
@@ -65,19 +66,16 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <FrameLayout
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ad_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorBackground"
-        android:layout_alignParentBottom="true"/>
-<!--    <com.google.android.gms.ads.doubleclick.PublisherAdView-->
-<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/ad_container"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        ads:adSize="BANNER"-->
-<!--        ads:adUnitId="/6499/example/banner">-->
-<!--    </com.google.android.gms.ads.doubleclick.PublisherAdView>-->
+        android:visibility="gone"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/main_banner_ad"/>
+
 </RelativeLayout>

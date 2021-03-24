@@ -18,6 +18,7 @@ import com.kakeibo.databinding.RowExplistParentBinding
 import com.kakeibo.ui.MainActivity
 import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.view.AmountTextWatcher
+import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.*
 import java.math.BigDecimal
@@ -25,7 +26,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ExpandableListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewModel)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var _itemStatusViewModel: ItemStatusViewModel
     fun setItemStatusViewMode(itemStatusViewModel: ItemStatusViewModel) {
@@ -106,7 +108,7 @@ class ExpandableListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
             ExpandableListRowModel.CHILD -> {
                 (holder as ItemChildViewHolder).bind(row.itemChild)
-
+                holder.childBinding.categoryViewModel = categoryViewModel
                 holder.childBinding.rllExpListChild.setOnClickListener {
                     val binding = DialogItemDetailBinding.inflate(LayoutInflater.from(it.context))
                     binding.itemStatus = row.itemChild
@@ -223,7 +225,7 @@ class ExpandableListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         btnCategory.hint = "" + item.categoryCode
         btnCategory.setOnClickListener {
             /*** ordered by location  */
-            val adapter = CategoryListAdapter(v.context, 0, MainActivity.allDspCategoryList)
+            val adapter = CategoryListAdapter(v.context, 0, MainActivity.allDspCategoryList) // todo exchange with CategoryViewModel
             val builder = androidx.appcompat.app.AlertDialog.Builder(v.context)
             val dInflater = v.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val convertView: View = dInflater.inflate(R.layout.dialog_bas_search_category, null)

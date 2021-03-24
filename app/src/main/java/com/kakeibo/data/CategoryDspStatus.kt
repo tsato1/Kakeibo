@@ -7,29 +7,17 @@ import androidx.room.PrimaryKey
 import com.kakeibo.db.CategoryDspDBAdapter
 
 @Entity(tableName = "categories_dsp")
-class CategoryDspStatus {
+class CategoryDspStatus(id: Long, location: Int, code: Int) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = CategoryDspDBAdapter.COL_ID)
-    var id: Long = 1
+    var id: Long = id
         private set
 
     @ColumnInfo(name = CategoryDspDBAdapter.COL_LOCATION)
-    var location: Int
+    var location: Int = location
         private set
 
     @ColumnInfo(name = CategoryDspDBAdapter.COL_CODE)
-    var code: Int
+    var code: Int = code
         private set
-
-    constructor(id: Long, location: Int, code: Int) {
-        this.id = id
-        this.location = location
-        this.code = code
-    }
-
-    @Ignore
-    constructor(location: Int, code: Int) {
-        this.location = location
-        this.code = code
-    }
 }

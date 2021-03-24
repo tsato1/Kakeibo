@@ -1,11 +1,8 @@
 package com.kakeibo.data.disk
 
-import androidx.lifecycle.LiveData
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.AppExecutors
 import com.kakeibo.data.*
 import com.kakeibo.util.UtilDate
-import java.util.*
 import java.util.concurrent.Executor
 
 class LocalDataSource private constructor(
@@ -17,9 +14,10 @@ class LocalDataSource private constructor(
     val kkbApp = appDatabase.kkbAppStatusDao().getFirst()
     val subscriptions = appDatabase.subscriptionStatusDao().getAll()
     val items = appDatabase.itemStatusDao().getAll()
-    var itemsByMonth = appDatabase.itemStatusDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
+    var itemsThisMonth = appDatabase.itemStatusDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
     val categories = appDatabase.categoryStatusDao().getAll()
-    val categoriesForDisplay = appDatabase.categoryStatusDao().getCategoriesForDisplay()
+    val categoriesDisplayed = appDatabase.categoryStatusDao().getCategoriesDisplayed()
+    val categoriesNotDisplayed = appDatabase.categoryStatusDao().getCategoriesNotDisplay()
     val categoryDsps = appDatabase.categoryDspStatusDao().getAll()
 
     /***
@@ -85,7 +83,7 @@ class LocalDataSource private constructor(
 
     fun getItemsByMonth(year: String, month: String) {
         executor.execute {
-            itemsByMonth = appDatabase.itemStatusDao().getItemsByMonth("'$year-$month'")
+            itemsThisMonth = appDatabase.itemStatusDao().getItemsByMonth("'$year-$month'")
         }
     }
 
@@ -95,22 +93,6 @@ class LocalDataSource private constructor(
         executor.execute {
             appDatabase.itemStatusDao().delete(id)
         }
-    }
-
-    fun queryItems(query: SupportSQLiteQuery): List<ItemStatus>? {
-//        return appDatabase.itemStatusDao().queryItems(query);
-//        executor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                appDatabase.runInTransaction(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        appDatabase.itemStatusDao().queryItems(query);
-//                    }
-//                });
-//            }
-//        });
-        return null
     }
 
     /***
@@ -135,12 +117,18 @@ class LocalDataSource private constructor(
 
     fun deleteAllCategories() = insertCategories(listOf())
 
+    fun deleteCategory(id: Long) {
+        executor.execute {
+            appDatabase.categoryStatusDao().delete(id)
+        }
+    }
+
     /***
      *
      * DspCategoryStatus and CategoryDspStatus table
      *
      */
-    private fun insertCategoryDsps(categoryDspStatuses: List<CategoryDspStatus>) {
+    fun insertCategoryDsps(categoryDspStatuses: List<CategoryDspStatus>) {
         executor.execute {
             appDatabase.runInTransaction {
                 appDatabase.categoryDspStatusDao().deleteAll()
@@ -148,19 +136,6 @@ class LocalDataSource private constructor(
             }
         }
     }
-
-//    fun insertCategoryDsps(categoryCodes: List<Int>) {
-//        executor.execute {
-//            appDatabase.runInTransaction {
-//                appDatabase.categoryStatusDao().deleteAll()
-//                val categoryDspStatuses: MutableList<CategoryDspStatus> = ArrayList()
-//                for (i in categoryCodes.indices) {
-//                    categoryDspStatuses.add(CategoryDspStatus( categoryCodes[i], i ))
-//                }
-//                appDatabase.categoryDspStatusDao().insertAll(categoryDspStatuses)
-//            }
-//        }
-//    }
 
     fun deleteAllCategoryDsps() = insertCategoryDsps(listOf())
 

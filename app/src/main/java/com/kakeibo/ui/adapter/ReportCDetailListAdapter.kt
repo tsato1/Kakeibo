@@ -9,8 +9,13 @@ import androidx.databinding.DataBindingUtil
 import com.kakeibo.R
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.RowListReportCDetailBinding
+import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 
-class ReportCDetailListAdapter(context: Context, resource: Int, itemList: List<ItemStatus>)
+class ReportCDetailListAdapter(
+        context: Context,
+        resource: Int,
+        itemList: List<ItemStatus>,
+        private val categoryStatusViewModel: CategoryStatusViewModel)
     : ArrayAdapter<ItemStatus>(context, resource, itemList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -18,15 +23,14 @@ class ReportCDetailListAdapter(context: Context, resource: Int, itemList: List<I
 
         val binding: RowListReportCDetailBinding
         if (rowView == null) {
-            binding = DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
-                    R.layout.row_list_report_c_detail, parent, false)
+            binding = RowListReportCDetailBinding.inflate(LayoutInflater.from(parent.context))
             rowView = binding.root
         } else {
             binding = rowView.tag as RowListReportCDetailBinding
         }
 
         binding.itemStatus = getItem(position)
+        binding.categoryViewModel = categoryStatusViewModel
         rowView.tag = binding
         return rowView
     }

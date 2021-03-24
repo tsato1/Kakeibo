@@ -12,13 +12,14 @@
     </data>
 
     <RelativeLayout
+        android:id="@+id/rll_item"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:minHeight="@dimen/grv_item_min_height"
         android:gravity="center"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{()->categoryClickListener.onCategoryClicked(category.code)}">
+        android:onClick="@{(v)->categoryClickListener.onCategoryClicked(v, category)}">
 
         <ImageView
             android:id="@+id/item_img"
@@ -31,6 +32,32 @@
             bind:category="@{category}"
             android:contentDescription="@string/category"/>
 
+        <ImageView
+            android:id="@+id/imv_category_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:contentDescription="@string/category"
+            android:src="@drawable/ic_overlay_remove"
+            android:visibility="gone"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <ImageView
+            android:id="@+id/imv_category_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:contentDescription="@string/category"
+            android:src="@drawable/ic_overlay_add"
+            android:visibility="gone"
+            style="?android:attr/buttonBarButtonStyle"/>
+
         <TextView
             android:id="@+id/item_title"
             android:layout_width="match_parent"
@@ -42,5 +69,7 @@
             android:clickable="false"
             android:focusable="false"
             android:text="@{category.name}"/>
+
     </RelativeLayout>
+
 </layout>

@@ -2,18 +2,13 @@ package com.kakeibo.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.kakeibo.R
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.databinding.ItemGridBinding
 import com.kakeibo.ui.listener.CategoryClickListener
 import java.util.*
 
-/*
-* Used in TabFragment1, Settings
-*/
-class CategoryGridAdapter(private val _categoryClickListener: CategoryClickListener)
+class CategoryGridAdapter(private val _categoryClickListener : CategoryClickListener)
     : RecyclerView.Adapter<CategoryGridAdapter.ViewHolder>() {
 
     private var _categoryStatusList: List<CategoryStatus>? = ArrayList()
@@ -24,10 +19,8 @@ class CategoryGridAdapter(private val _categoryClickListener: CategoryClickListe
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemGridBinding: ItemGridBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_grid, parent, false)
-        return ViewHolder(itemGridBinding)
+        val binding =ItemGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

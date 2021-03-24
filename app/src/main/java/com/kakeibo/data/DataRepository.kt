@@ -42,7 +42,8 @@ class DataRepository private constructor(
      * CategoryStatus
      */
     val categories: LiveData<List<CategoryStatus>>
-    val categoriesForDisplay: LiveData<List<CategoryStatus>>
+    val categoriesDisplayed: LiveData<List<CategoryStatus>>
+    val categoriesNotDisplayed: LiveData<List<CategoryStatus>>
 
     /**
      * CategoryDspStatus
@@ -275,16 +276,8 @@ class DataRepository private constructor(
         localDataSource.insertCategory(categoryStatus)
     }
 
-    fun insertCategoryMap() {
-        // no need?
-    }
-
-    fun insertCategoryCodes(categoryCodes: List<Int>) {
-//        localDataSource.insertCategoryDsps(categoryCodes!!)
-    }
-
     fun insertCategoryDsps(categoryDspStatuses: List<CategoryDspStatus>) {
-//        localDataSource.insertAllCategories(categoryDspStatuses!!)
+        localDataSource.insertCategoryDsps(categoryDspStatuses)
     }
 
     fun deleteAllItems() {
@@ -301,6 +294,10 @@ class DataRepository private constructor(
 
     fun deleteAllCategoryDsps() {
         localDataSource.deleteAllCategoryDsps()
+    }
+
+    fun deleteCategory(id: Long) {
+        localDataSource.deleteCategory(id)
     }
 
     companion object {
@@ -333,7 +330,7 @@ class DataRepository private constructor(
         // Database changes are observed by the ViewModel.
         subscriptions.addSource(localDataSource.subscriptions) {
             val numOfSubscriptions = it?.size ?: 0
-            Log.d("Repository", "Subscriptions updated: " + numOfSubscriptions)
+            Log.d("Repository", "Subscriptions updated: $numOfSubscriptions")
             subscriptions.postValue(it)
         }
 
@@ -362,72 +359,11 @@ class DataRepository private constructor(
         // Database changes are observed by the ViewModel.
         kkbApp = localDataSource.kkbApp
         items = localDataSource.items
-        itemsThisMonth = localDataSource.itemsByMonth
-        //        items.addSource(localDataSource.items,
-//                new Observer<List<ItemStatus>>() {
-//                    @Override
-//                    public void onChanged(List<ItemStatus> itemStatuses) {
-//                        int numOfItems = itemStatuses == null ?
-//                                0 : itemStatuses.size();
-//                        Log.d("Repository", "Items updated: "
-//                                + numOfItems);
-//                        items.postValue(itemStatuses);
-//                    }
-//                });
+        itemsThisMonth = localDataSource.itemsThisMonth
 
-        // Database changes are observed by the ViewModel.
         categories = localDataSource.categories
-        categoriesForDisplay = localDataSource.categoriesForDisplay
-//        categories.addSource(localDataSource.categories,
-//                new Observer<List<CategoryStatus>>() {
-//                    @Override
-//                    public void onChanged(List<CategoryStatus> categoryStatuses) {
-//                        int numOfCategories = categoryStatuses == null ?
-//                                0 : categoryStatuses.size();
-//                        Log.d("Repository", "Categories updated: "
-//                                + numOfCategories);
-//                        categories.postValue(categoryStatuses);
-//                    }
-//                });
-
-        //        categoryCodes.addSource(localDataSource.categoryCodes,
-//                new Observer<List<Integer>>() {
-//                    @Override
-//                    public void onChanged(List<Integer> codes) {
-//                        int numOfCategories = codes == null ?
-//                                0 : codes.size();
-//                        Log.d("Repository", "categoryCodes updated: "
-//                                + numOfCategories);
-//                        categoryCodes.postValue(codes);
-//                    }
-//                });
+        categoriesDisplayed = localDataSource.categoriesDisplayed
+        categoriesNotDisplayed = localDataSource.categoriesNotDisplayed
         categoryDspStatuses = localDataSource.categoryDsps
-//        categoryStatusesForDsp = localDataSource.categoryStatusesForDsp
-        //        nonDspCategories = localDataSource.nonDspCategories;
-//        dspCategories.addSource(localDataSource.dspCategories,
-//                new Observer<List<CategoryStatus>>() {
-//                    @Override
-//                    public void onChanged(List<CategoryStatus> categoryStatuses) {
-//                        int numOfCategories = categoryStatuses == null ?
-//                                0 : categoryStatuses.size();
-//                        Log.d("Repository", "dspCategories updated: "
-//                                + numOfCategories);
-//                        dspCategories.postValue(categoryStatuses);
-//                    }
-//                });
-
-//        dspCategoryCodes = localDataSource.dspCategoryCodes;
-//        dspCategoryCodes.addSource(localDataSource.dspCategoryCodes,
-//                new Observer<List<Integer>>() {
-//                    @Override
-//                    public void onChanged(List<Integer> codes) {
-//                        int numOfCategories = codes == null ?
-//                                0 : codes.size();
-//                        Log.d("Repository", "dspCategoryCodes updated: "
-//                                + numOfCategories);
-//                        dspCategoryCodes.postValue(codes);
-//                    }
-//                });
-
     }
 }

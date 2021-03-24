@@ -1,2 +1,0 @@
-Special Thanks to askerov.
-site:https://github.com/askerov/DynamicGrid

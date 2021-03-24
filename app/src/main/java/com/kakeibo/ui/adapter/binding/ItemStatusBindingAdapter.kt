@@ -14,10 +14,7 @@ import com.kakeibo.util.UtilDate
 fun setAmount(textView: TextView, context: Context, amount: String?, colon: Boolean) {
     amount?.let {
         val text =
-                if (colon) {
-                    TextUtils.concat(
-                            SpannableString(context.getString(R.string.amount_colon)),
-                            UtilCurrency.getSignedAmount(it)) }
+                if (colon) { TextUtils.concat(SpannableString(context.getString(R.string.amount_colon)), UtilCurrency.getSignedAmount(it)) }
                 else UtilCurrency.getSignedAmount(it)
         textView.text = text
     }

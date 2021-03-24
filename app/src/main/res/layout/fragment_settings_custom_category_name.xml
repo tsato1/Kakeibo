@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="customCategory"
+            type="com.kakeibo.settings.category.edit.CustomCategoryViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:text="@string/category_name_add_lang"/>
+
+        <EditText
+            android:id="@+id/edt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fragment_padding"
+            android:layout_centerInParent="true"
+            android:maxLength="8"
+            android:text="@{customCategory.name}"
+            android:hint="@string/hint_name_max_8_characters"
+            android:autofillHints="@string/hint_name_max_8_characters"
+            android:inputType="textCapCharacters"
+            android:gravity="center_vertical|end" />
+
+        <RelativeLayout
+            android:id="@+id/rll_footer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_height"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorBackground">
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:text="@string/back"
+                android:textColor="@color/colorBlack"
+                android:background="@color/colorBackground"
+                android:contentDescription="@string/back"/>
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:text="@string/next"
+                android:textColor="@color/colorBlack"
+                android:background="@color/colorBackground"
+                android:contentDescription="@string/next"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

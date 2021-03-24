@@ -13,7 +13,7 @@ class CategoryDspStatusViewModel(application: Application) : AndroidViewModel(ap
 
     val all: LiveData<List<CategoryDspStatus>> = repository.categoryDspStatuses
 
-    fun insert(categoryDspStatuses: List<CategoryDspStatus>) {
+    fun insertAll(categoryDspStatuses: List<CategoryDspStatus>) {
         repository.insertCategoryDsps(categoryDspStatuses)
     }
 }

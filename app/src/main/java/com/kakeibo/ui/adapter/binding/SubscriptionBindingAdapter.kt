@@ -1,13 +1,21 @@
 package com.kakeibo.ui
 
+import android.content.Context
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
+import com.kakeibo.BuildConfig
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.billing.BillingUtilities.isAccountHold
@@ -17,6 +25,7 @@ import com.kakeibo.billing.BillingUtilities.isPremiumContent
 import com.kakeibo.billing.BillingUtilities.isSubscriptionRestore
 import com.kakeibo.billing.BillingUtilities.isTransferRequired
 import com.kakeibo.data.ContentResource
+import com.kakeibo.data.KkbAppStatus
 import com.kakeibo.data.SubscriptionStatus
 import com.kakeibo.databinding.ActivityInAppPurchaseBinding
 import java.text.SimpleDateFormat
@@ -303,16 +312,49 @@ fun updateSettingsViews(view: View, subscriptions: List<SubscriptionStatus>?) {
     }
 }
 
-@BindingAdapter("updateAdViews")
-fun updateAdViews(view: View, subscriptions: List<SubscriptionStatus>?) {
-    subscriptions?.let {
-        for (subscription in it) {
-            if (subscription.sku == Constants.BASIC_SKU || subscription.sku == Constants.PREMIUM_SKU) {
-                view.visibility = View.VISIBLE
+@BindingAdapter("context", "kkbApp", "updateAdViews")
+fun updateAdViews(view: AdView, context: Context, kkbApp: KkbAppStatus?, subscriptions: List<SubscriptionStatus>?) {
+    Log.d("asdf","coming here")
+
+    kkbApp?.let { k ->
+        Log.d("asdf","make it visible! " + k.valInt2)
+        if (k.valInt2 == 0) { // val2 = -1:original, 0:agreed to show ads
+            MobileAds.initialize(context) { }
+
+            //Create an AdView and put it into your FrameLayout
+            val _adView = AdView(context)
+            if (BuildConfig.DEBUG) {
+                _adView.adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                /*** in debug mode  */
+            } else {
+                /* view already has Id */
             }
-            else {
-                view.visibility = View.GONE
-            }
+
+            view.addView(_adView)
+
+            _adView.adSize = AdSize.BANNER
+            _adView.loadAd(AdRequest.Builder().build())
+
+
+//            MobileAds.initialize(context) {}
+//            val adRequest = AdRequest.Builder().build()
+//            view.loadAd(adRequest)
+
+//            view.visibility = View.VISIBLE
+
+//            subscriptions?.let {
+//                for (subscription in it) {
+//                    if (subscription.sku == Constants.BASIC_SKU || subscription.sku == Constants.PREMIUM_SKU) {
+//                        view.visibility = View.VISIBLE
+//                    }
+//                    else {
+//                        view.visibility = View.GONE
+//                    }
+//                }
+//            }
+        }
+        else {
+//            view.visibility = View.GONE
         }
     }
 }

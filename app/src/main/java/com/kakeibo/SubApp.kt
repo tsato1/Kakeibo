@@ -52,27 +52,25 @@ class SubApp : Application() {
     }
 
     companion object {
-        private var _preferences: SharedPreferences? = null
-        private var _instance: SubApp? = null
-        private val sharedPreferences: SharedPreferences?
+        private lateinit var _preferences: SharedPreferences
+        private lateinit var _instance: SubApp
+        private val sharedPreferences: SharedPreferences
             get() {
-                if (_preferences == null) {
-                    PreferenceManager.setDefaultValues(_instance, R.xml.preferences, false)
-                    _preferences = PreferenceManager.getDefaultSharedPreferences(_instance)
-                }
+                PreferenceManager.setDefaultValues(_instance, R.xml.preferences, false)
+                _preferences = PreferenceManager.getDefaultSharedPreferences(_instance)
                 return _preferences
             }
 
         /*** dateFormat  */
         fun getDateFormat(key: Int): Int {
-            val strKey = _instance!!.getString(key)
-            val dateFormatIndex = sharedPreferences!!.getString(strKey, UtilDate.DATE_FORMAT_YMD)
+            val strKey = _instance.getString(key)
+            val dateFormatIndex = sharedPreferences.getString(strKey, UtilDate.DATE_FORMAT_YMD)
             return dateFormatIndex!!.toInt()
         }
 
         /*** fraction digits  */
         fun getFractionDigits(key: Int): Int {
-            val strKey = _instance!!.getString(key)
+            val strKey = _instance.getString(key)
             val locale = Locale.getDefault()
             var defValue = 0
             try {
@@ -81,16 +79,16 @@ class SubApp : Application() {
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
             }
-            val digitsIndex = sharedPreferences!!.getString(strKey, "" + defValue)
-            val fractionDigits = _instance!!.resources.getStringArray(R.array.pref_list_fraction_digits)
+            val digitsIndex = sharedPreferences.getString(strKey, "" + defValue)
+            val fractionDigits = _instance.resources.getStringArray(R.array.pref_list_fraction_digits)
             return fractionDigits[digitsIndex!!.toInt()].toInt()
         }
 
         /*** num category icons per row  */
         fun getNumColumns(key: Int): Int {
-            val strKey = _instance!!.getString(key)
-            val numColumnsIndex = sharedPreferences!!.getString(strKey, "1")
-            val numColumns = _instance!!.resources.getStringArray(R.array.pref_list_num_columns)
+            val strKey = _instance.getString(key)
+            val numColumnsIndex = sharedPreferences.getString(strKey, "1")
+            val numColumns = _instance.resources.getStringArray(R.array.pref_list_num_columns)
             return numColumns[numColumnsIndex!!.toInt()].toInt()
         }
     }

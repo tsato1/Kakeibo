@@ -6,6 +6,9 @@
         <variable
             name="itemStatus"
             type="com.kakeibo.data.ItemStatus" />
+        <variable
+            name="categoryViewModel"
+            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
     </data>
 
     <RelativeLayout
@@ -28,6 +31,7 @@
             android:focusable="false"
             bind:context="@{context}"
             bind:categoryCode="@{itemStatus.categoryCode}"
+            bind:categoryViewModel="@{categoryViewModel}"
             android:contentDescription="@string/category"/>
 
         <TextView
@@ -42,7 +46,8 @@
             android:textStyle="bold"
             bind:context="@{context}"
             bind:categoryCode="@{itemStatus.categoryCode}"
-            bind:colon="@{false}"/>
+            bind:colon="@{false}"
+            bind:categoryViewModel="@{categoryViewModel}"/>
 
         <LinearLayout
             android:orientation="horizontal"

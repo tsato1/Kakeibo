@@ -13,11 +13,15 @@ import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.RowListReportCBinding
 import com.kakeibo.ui.MainActivity
 import com.kakeibo.ui.model.ReportCListRowModel
+import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.util.UtilCategory
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class ReportCListAdapter(private val categoryColor: Int) : RecyclerView.Adapter<ReportCListAdapter.ViewHolder>() {
+class ReportCListAdapter(
+        private val categoryColor: Int,
+        private val categoryStatusViewModel: CategoryStatusViewModel)
+    : RecyclerView.Adapter<ReportCListAdapter.ViewHolder>() {
 
     private var _itemList: List<ReportCListRowModel>? = ArrayList()
 
@@ -64,13 +68,14 @@ class ReportCListAdapter(private val categoryColor: Int) : RecyclerView.Adapter<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val reportCListRowModel = _itemList!![position]
         holder.bind(reportCListRowModel)
+        holder.binding.categoryViewModel = categoryStatusViewModel
         holder.binding.lnlRowListReportC.setOnClickListener { v ->
             _itemMap?.let {
                 val map = it.mapKeys { map -> map.key.first }
                 val listView = ListView(v.context)
 
                 map[reportCListRowModel.categoryCode]?.let { list ->
-                    val adapter = ReportCDetailListAdapter(v.context, R.layout.row_list_report_c_detail, list)
+                    val adapter = ReportCDetailListAdapter(v.context, R.layout.row_list_report_c_detail, list, categoryStatusViewModel)
                     listView.adapter = adapter
                     AlertDialog.Builder(v.context)
                             .setIcon(R.mipmap.ic_mikan)

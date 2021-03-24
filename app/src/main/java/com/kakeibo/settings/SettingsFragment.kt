@@ -3,31 +3,30 @@ package com.kakeibo.settings
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.kakeibo.R
+import com.kakeibo.settings.category.edit.CustomCategoryListActivity
+import com.kakeibo.settings.category.replace.CategoryReplaceActivity
+import com.kakeibo.settings.category.replace.CategoryReorderActivity
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private var showAds: Boolean = false
+    private var _showAds: Boolean = false
 
-    private lateinit var _itemStatusViewModel: ItemStatusViewModel
-    private lateinit var _kkbAppViewModel: KkbAppViewModel
+    private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
+    private val _kkbAppViewModel: KkbAppViewModel by activityViewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
-        _itemStatusViewModel = ViewModelProviders.of(this)[ItemStatusViewModel::class.java]
-        _kkbAppViewModel = ViewModelProviders.of(this)[KkbAppViewModel::class.java]
-
         _kkbAppViewModel.all.observe( this, {
-            showAds = it?.valInt2==0 // val2 = -1:original, 0:agreed to show ads
+            _showAds = it?.valInt2==0 // val2 = -1:original, 0:agreed to show ads
         })
     }
 
@@ -43,43 +42,50 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
             getString(R.string.pref_key_category_add_remove_reorder) -> {
-                if (!showAds) {
+                if (!_showAds) {
                     handleAgreement()
                     return false
                 }
-                startActivity(Intent(activity, CategoryPlacementActivity::class.java))
+                startActivity(Intent(activity, CategoryReplaceActivity::class.java))
                 true
             }
             getString(R.string.pref_key_category_reorder) -> {
-                if (!showAds) {
+                if (!_showAds) {
                     handleAgreement()
                     return false
                 }
                 startActivity(Intent(activity, CategoryReorderActivity::class.java))
                 true
             }
-            getString(R.string.pref_key_category_creation) -> {
-                if (!showAds) {
-                    handleAgreement()
-                    return false
-                }
-
-//            if (UtilCategory.addNewCategory(_context, null) == -2) {
-//                String s = getString(R.string.err_reached_max_count_colon) +
-//                        UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
-//                        getString(R.string.msg_delete_some_categories); //todo 5 for ordinary version, 100 for paid, 1000 for b2b
-//                Toast.makeText(_context, s, Toast.LENGTH_LONG).show();
-//                return false;
+//            getString(R.string.pref_key_category_creation) -> {
+//                if (!showAds) {
+//                    handleAgreement()
+//                    return false
+//                }
+//
+//                when (_categoryStatusViewModel.canCreateNewCustomCategory()) {
+//                    -2 -> {
+//                        val s = getString(R.string.err_reached_max_count_colon) +
+//                                UtilCategory.NUM_MAX_CUSTOM_CATEGORIES + "\n" +
+//                                getString(R.string.msg_delete_some_categories) //todo 5 for ordinary version, 100 for paid, 1000 for b2b
+//                        Toast.makeText(activity, s, Toast.LENGTH_LONG).show()
+//                        return false
+//                    }
+//                    -1 -> {
+//                        Toast.makeText(activity, "Failure", Toast.LENGTH_LONG).show()
+//                        return false
+//                    }
+//                }
+//
+//                startActivity(Intent(activity, CategoryCreationActivity::class.java))
+//                true
 //            }
-                startActivity(Intent(activity, CategoryCreationActivity::class.java))
-                true
-            }
-            getString(R.string.pref_key_category_edition) -> {
-                if (!showAds) {
+            getString(R.string.pref_key_category_list) -> {
+                if (!_showAds) {
                     handleAgreement()
                     return false
                 }
-                startActivity(Intent(activity, CategoryEditionActivity::class.java))
+                startActivity(Intent(activity, CustomCategoryListActivity::class.java))
                 true
             }
             getString(R.string.pref_key_delete_all_data) -> {
@@ -87,18 +93,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 dialog.setIcon(R.mipmap.ic_mikan)
                 dialog.setTitle(getString(R.string.delete_all_items))
                 dialog.setMessage(getString(R.string.desc_delete_all_items))
-                dialog.setPositiveButton(R.string.ok) { dp: DialogInterface?, w: Int ->
+                dialog.setPositiveButton(R.string.ok) { _, _ ->
                     val confirmation = AlertDialog.Builder(requireContext())
                     confirmation.setIcon(R.drawable.ic_warning_black_24dp)
                     confirmation.setTitle(getString(R.string.delete_all_items))
                     confirmation.setMessage(getString(R.string.warn_delete_all_items))
-                    confirmation.setPositiveButton(R.string.ok) { dp2: DialogInterface?, _: Int ->
+                    confirmation.setPositiveButton(R.string.ok) { _, _ ->
                         _itemStatusViewModel.deleteAll()
                     }
-                    confirmation.setNegativeButton(R.string.cancel) { dn2: DialogInterface?, _: Int -> }
+                    confirmation.setNegativeButton(R.string.cancel) { _, _ -> }
                     confirmation.show()
                 }
-                dialog.setNegativeButton(R.string.cancel) { dn: DialogInterface?, which: Int -> }
+                dialog.setNegativeButton(R.string.cancel) { _, _ -> }
                 dialog.show()
                 true
             }
@@ -107,7 +113,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
             getString(R.string.pref_key_about) -> {
-                startActivity(Intent(activity, SettingsAboutActivity::class.java))
+                startActivity(Intent(activity, AboutActivity::class.java))
                 true
             }
             else -> {
@@ -121,13 +127,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         dialog.setIcon(R.mipmap.ic_mikan)
         dialog.setTitle(R.string.category_management)
         dialog.setMessage(getString(R.string.quest_do_you_want_to_manage_categories))
-        dialog.setPositiveButton(R.string.yes) { d: DialogInterface, which: Int ->
+        dialog.setPositiveButton(R.string.yes) { d: DialogInterface, _ ->
             d.dismiss()
             val dialog2 = AlertDialog.Builder(requireContext())
             dialog2.setIcon(R.drawable.ic_warning_black_24dp)
             dialog2.setTitle(R.string.warning)
             dialog2.setMessage(getString(R.string.quest_irreversible_operation_do_you_want_to_proceed))
-            dialog2.setPositiveButton(R.string.yes) { d2: DialogInterface?, which2: Int ->
+            dialog2.setPositiveButton(R.string.yes) { _, _ ->
                 _kkbAppViewModel.updateVal2(0)
             }
             dialog2.setNegativeButton(R.string.no, null)
@@ -142,32 +148,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             requireActivity().onBackPressed()
-            Log.d(TAG, "Home button pressed")
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        val TAG = SettingsFragment::class.java.simpleName
-//disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//        private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference: Preference, value: Any ->
-//            val stringValue = value.toString()
-//
-//            if (preference is ListPreference) {
-//                // For list preferences, look up the correct display value in
-//                // the preference's 'entries' list.
-//                val index = preference.findIndexOfValue(stringValue)
-//
-//                // Set the summary to reflect the new value.
-//                preference.setSummary(
-//                        if (index >= 0) preference.entries[index] else null)
-//            } else {
-//                // For all other preferences, set the summary to the value's
-//                // simple string representation.
-//                preference.summary = stringValue
-//            }
-//            true
-//        }
     }
 }

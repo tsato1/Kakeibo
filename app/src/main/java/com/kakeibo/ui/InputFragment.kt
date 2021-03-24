@@ -1,6 +1,5 @@
 package com.kakeibo.ui
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,13 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
 import com.kakeibo.SubApp
+import com.kakeibo.data.CategoryStatus
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentInputBinding
 import com.kakeibo.ui.adapter.CategoryGridAdapter
@@ -32,10 +31,9 @@ import java.math.BigDecimal
  * Created by T on 2015/09/14.
  */
 class InputFragment : Fragment(), CategoryClickListener {
-    private var _activity: Activity? = null
-    private var _btnDate: Button? = null
-    private var _edtAmount: EditText? = null
-    private var _edtMemo: EditText? = null
+    private lateinit var _btnDate: Button
+    private lateinit var _edtAmount: EditText
+    private lateinit var _edtMemo: EditText
 
     private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
     private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
@@ -52,25 +50,22 @@ class InputFragment : Fragment(), CategoryClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _activity = activity
-
-        val fragmentBinding: FragmentInputBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_input, container, false)
-        fragmentBinding.lifecycleOwner = this
-        val view = fragmentBinding.root
+        val binding = FragmentInputBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        val view = binding.root
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
         val categoryGridAdapter = CategoryGridAdapter(this)
         recyclerView.adapter = categoryGridAdapter
         recyclerView.layoutManager = GridLayoutManager(activity, MainActivity.numColumns)
-        _categoryStatusViewModel.allDsp.observe(viewLifecycleOwner, {
+        _categoryStatusViewModel.dsp.observe(viewLifecycleOwner, {
             categoryGridAdapter.setCategoryStatuses(it)
         })
 
         _btnDate = view.findViewById(R.id.btn_date)
         _edtAmount = view.findViewById(R.id.edt_amount)
         _edtMemo = view.findViewById(R.id.edt_memo)
-        _edtAmount!!.addTextChangedListener(AmountTextWatcher(_edtAmount!!))
+        _edtAmount.addTextChangedListener(AmountTextWatcher(_edtAmount))
 
         return view
     }
@@ -78,28 +73,28 @@ class InputFragment : Fragment(), CategoryClickListener {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume() called")
-        _btnDate!!.text = getTodaysDateWithDay(
+        _btnDate.text = getTodaysDateWithDay(
                 SubApp.getDateFormat(R.string.pref_key_date_format),
                 resources.getStringArray(R.array.week_name))
-        _edtAmount!!.setText("")
-        _edtMemo!!.setText("")
+        _edtAmount.setText("")
+        _edtMemo.setText("")
     }
 
-    override fun onCategoryClicked(categoryCode: Int) {
-        val result = UtilText.checkBeforeSave(_edtAmount!!.text.toString())
+    override fun onCategoryClicked(view: View, category: CategoryStatus) {
+        val result = UtilText.checkBeforeSave(_edtAmount.text.toString())
         if (!result.first) {
             Toast.makeText(context, requireActivity().getString(result.second), Toast.LENGTH_SHORT).show()
             return
         }
 
-        val eventDate = UtilDate.getDBDate(_btnDate!!.text.toString().split(" ")[0], MainActivity.dateFormat)
+        val eventDate = UtilDate.getDBDate(_btnDate.text.toString().split(" ")[0], MainActivity.dateFormat)
         val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
-        val amount = when (MainActivity.allCategoryMap[categoryCode]!!.color) {
+        val amount = when (category.color) {
             UtilCategory.CATEGORY_COLOR_INCOME -> {
-                BigDecimal(_edtAmount!!.text.toString())
+                BigDecimal(_edtAmount.text.toString())
             }
             UtilCategory.CATEGORY_COLOR_EXPENSE -> {
-                BigDecimal(_edtAmount!!.text.toString()).negate()
+                BigDecimal(_edtAmount.text.toString()).negate()
             }
             else -> {
                 BigDecimal(0)
@@ -108,8 +103,8 @@ class InputFragment : Fragment(), CategoryClickListener {
         val itemStatus = ItemStatus(
                 amount,
                 UtilCurrency.CURRENCY_NONE,
-                categoryCode,
-                _edtMemo!!.text.toString(),
+                category.code,
+                _edtMemo.text.toString(),
                 eventDate,
                 updateDate
         )
@@ -117,7 +112,7 @@ class InputFragment : Fragment(), CategoryClickListener {
         _itemStatusViewModel.insert(itemStatus)
         Toast.makeText(activity, resources.getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show()
 
-        (_activity as MainActivity).onItemSaved(eventDate)
-        _btnDate!!.text = getTodaysDateWithDay(MainActivity.dateFormat, MainActivity.weekNames)
+        (activity as MainActivity).onItemSaved(eventDate)
+        _btnDate.text = getTodaysDateWithDay(MainActivity.dateFormat, MainActivity.weekNames)
     }
 }

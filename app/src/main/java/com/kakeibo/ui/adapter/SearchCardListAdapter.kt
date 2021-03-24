@@ -79,7 +79,7 @@ internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayL
 
         init {
             btnCategory.setOnClickListener {
-                val adapter = CategoryListAdapter(itemView.context, 0, MainActivity.allCategoryList)
+                val adapter = CategoryListAdapter(itemView.context, 0, MainActivity.allCategoryList) // todo exchange with CategoryViewModel
                 val builder = AlertDialog.Builder(itemView.context)
                 val inflater = itemView.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val convertView = inflater.inflate(R.layout.dialog_bas_search_category, null)

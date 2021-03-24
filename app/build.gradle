@@ -106,7 +106,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.7.0'
+    implementation 'com.google.android.gms:play-services-ads:19.8.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-basement:17.6.0'
     // ViewModel and LiveData extensions.
@@ -133,9 +133,9 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
     implementation "com.google.firebase:firebase-functions:$firebaseFunctionsVersion"
     implementation "com.google.firebase:firebase-messaging:$firebaseMessagingVersion"
-    implementation 'com.google.firebase:firebase-ads:19.7.0'
+    implementation 'com.google.firebase:firebase-ads:19.8.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.2'
-    implementation 'com.google.firebase:firebase-firestore:22.1.0'
+    implementation 'com.google.firebase:firebase-firestore:22.1.1'
     implementation "com.firebaseui:firebase-ui-auth:$firebaseUiVersion"
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
 
@@ -154,7 +154,6 @@ dependencies {
 
     // Other Libraries
     implementation project(':HoloGraphLibrary')
-    implementation project(':DynamicGrid')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
     implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
