@@ -1,5 +1,6 @@
 package com.kakeibo.data
 
+import androidx.annotation.NonNull
 import androidx.room.*
 import com.kakeibo.R
 import com.kakeibo.SubApp
@@ -16,6 +17,7 @@ class ItemStatus {
 
     @ColumnInfo(name = ItemDBAdapter.COL_AMOUNT)
     @TypeConverters(Converters::class)
+    @NonNull
     private var amount: BigDecimal
 
     @ColumnInfo(name = ItemDBAdapter.COL_CURRENCY_CODE, defaultValue = UtilCurrency.CURRENCY_NONE)
@@ -74,67 +76,6 @@ class ItemStatus {
         this.eventDate = eventDate
         this.updateDate = updateDate
     }
-    /*** called from TabFragment1 before getting saved  */ //    @Ignore
-    //    public ItemStatus (
-    //            int id,
-    //            BigDecimal amount,
-    //            String currencyCode,
-    //            int fractionDigits,
-    //            int categoryCode,
-    //            String memo,
-    //            String eventDate,
-    //            String updateDate) {
-    //        this.id = id;
-    //        this.amount = amount;
-    //        this.currencyCode = currencyCode;
-    //        this.fractionDigits = fractionDigits;
-    //        this.categoryCode = categoryCode;
-    //        this.memo = memo;
-    //        this.eventDate = eventDate;
-    //        this.updateDate = updateDate;
-    //    }
-    /*** called from TabFragment2 before getting displayed  */
-//    @Ignore
-//    constructor( // without id for id auto-increment
-//            amount: Long,
-//            currencyCode: String,
-//            fractionDigits: Int,
-//            categoryCode: Int,
-//            memo: String,
-//            eventDate: String,
-//            updateDate: String) {
-//        if (UtilCurrency.CURRENCY_OLD == currencyCode) {
-//            this.amount = BigDecimal.valueOf(amount, 0)
-//        }
-//        this.amount = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(1000), fractionDigits, BigDecimal.ROUND_HALF_UP)
-//        this.fractionDigits = fractionDigits
-//        this.categoryCode = categoryCode
-//        this.memo = memo
-//        this.eventDate = eventDate
-//        this.updateDate = updateDate
-//    }
-//
-//    @Ignore
-//    constructor(
-//            id: Long,
-//            amount: Long,
-//            currencyCode: String,
-//            fractionDigits: Int,
-//            categoryCode: Int,
-//            memo: String,
-//            eventDate: String,
-//            updateDate: String) {
-//        this.id = id
-//        if (UtilCurrency.CURRENCY_OLD == currencyCode) {
-//            this.amount = BigDecimal.valueOf(amount, 0)
-//        }
-//        this.amount = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(1000), fractionDigits, BigDecimal.ROUND_HALF_UP)
-//        this.fractionDigits = fractionDigits
-//        this.categoryCode = categoryCode
-//        this.memo = memo
-//        this.eventDate = eventDate
-//        this.updateDate = updateDate
-//    }
 
     fun getAmount(): BigDecimal {
         if (UtilCurrency.CURRENCY_NONE == currencyCode) {

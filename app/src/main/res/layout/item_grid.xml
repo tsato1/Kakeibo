@@ -68,7 +68,9 @@
             android:gravity="center_horizontal"
             android:clickable="false"
             android:focusable="false"
-            android:text="@{category.name}"/>
+            bind:context="@{context}"
+            bind:category="@{category}"
+            bind:colon="@{false}"/>
 
     </RelativeLayout>
 

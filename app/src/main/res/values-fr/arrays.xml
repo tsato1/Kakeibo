@@ -10,22 +10,30 @@
         <item>SAM</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>REV.</item>-->
-<!--        <item>ACHAT.</item>-->
-<!--        <item>ALIM.</item>-->
-<!--        <item>FACTUR</item>-->
-<!--        <item>SANTE\'</item>-->
-<!--        <item>ETUDE</item>-->
-<!--        <item>VETEM.</item>-->
-<!--        <item>TRANS.</item>-->
-<!--        <item>AMUSE.</item>-->
-<!--        <item>EPARG.</item>-->
-<!--        <item>TAXE</item>-->
-<!--        <item>AUTRE</item>-->
-<!--        <item>ANIM.C.</item>-->
-<!--        <item>SOCIAL</item>-->
-<!--        <item>COSMÉ</item>-->
-<!--        <item>LOGMNT</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>REV.</item>
+        <item>ACHAT.</item>
+        <item>ALIM.</item>
+        <item>FACTUR</item>
+        <item>SANTE\'</item>
+        <item>ETUDE</item>
+        <item>VETEM.</item>
+        <item>TRANS.</item>
+        <item>AMUSE.</item>
+        <item>EPARG.</item>
+        <item>TAXE</item>
+        <item>AUTRE</item>
+        <item>ANIM.C.</item>
+        <item>SOCIAL</item>
+        <item>COSMÉ</item>
+        <item>LOGMNT</item>
+        <item>SUPPLÉ.</item>
+        <item>ALLOC.</item>
+        <item>INV</item>
+        <item>LOCAC.</item>
+        <item>FRAIS</item>
+        <item>TÉLÉ</item>
+        <item>INV</item>
+        <item>LOCAC.</item>
+    </string-array>
 </resources>

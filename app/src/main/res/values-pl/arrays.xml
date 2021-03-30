@@ -10,22 +10,30 @@
         <item>So</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>収入</item>-->
-<!--        <item>生活雑貨</item>-->
-<!--        <item>食事</item>-->
-<!--        <item>水道光熱</item>-->
-<!--        <item>健康</item>-->
-<!--        <item>教育</item>-->
-<!--        <item>衣服</item>-->
-<!--        <item>交通</item>-->
-<!--        <item>娯楽</item>-->
-<!--        <item>保険</item>-->
-<!--        <item>税金</item>-->
-<!--        <item>他</item>-->
-<!--        <item>ペット</item>-->
-<!--        <item>交際</item>-->
-<!--        <item>美容</item>-->
-<!--        <item>居住</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>DOCHÓD</item>
+        <item>TOWAR</item>
+        <item>POSIŁEK</item>
+        <item>UŻYTECZNOŚĆ</item>
+        <item>ZDROWIE</item>
+        <item>EDUKACJA</item>
+        <item>ODZIEŻ</item>
+        <item>TRANSPORT</item>
+        <item>ZABAWA</item>
+        <item>UBEZPIECZENIE</item>
+        <item>PODATEK</item>
+        <item>INNY</item>
+        <item>ZWIERZĘ DOMOWE</item>
+        <item>SPOŁECZNY</item>
+        <item>COSME</item>
+        <item>MIESZKANIOWY</item>
+        <item>DODATKOWY</item>
+        <item>DODATEK</item>
+        <item>INW</item>
+        <item>CZYNSZ</item>
+        <item>KOSZT</item>
+        <item>TELE</item>
+        <item>INW</item>
+        <item>CZYNSZ</item>
+    </string-array>
 </resources>

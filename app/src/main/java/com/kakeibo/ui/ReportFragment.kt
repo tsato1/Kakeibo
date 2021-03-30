@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,8 +20,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kakeibo.R
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentReportBinding
-import com.kakeibo.ui.adapter.ExpandableListAdapter
-import com.kakeibo.ui.adapter.ReportCListAdapter
+import com.kakeibo.ui.adapter.view.ExpandableListAdapter
+import com.kakeibo.ui.adapter.view.ReportCListAdapter
 import com.kakeibo.ui.listener.ButtonClickListener
 import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.model.Medium
@@ -42,7 +41,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
 
         var REPORT_BY_DATE = 0 //todo use medium in mainactivity
         var REPORT_BY_CATEGORY = 1
-        var REPORT_BY_AMOUNT = 2 //todo
+        var REPORT_BY_AMOUNT = 2
 
         fun newInstance(): ReportFragment {
             val tabFragment2 = ReportFragment()
@@ -72,8 +71,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val fragmentBinding: FragmentReportBinding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_report, container, false)
+        val fragmentBinding = FragmentReportBinding.inflate(inflater, container, false)
         fragmentBinding.lifecycleOwner = this
         fragmentBinding.itemStatusViewModel = _itemStatusViewModel
         val view = fragmentBinding.root
@@ -87,7 +85,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
         bannerDatePickerBinding.itemStatusViewModel = _itemStatusViewModel
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
-        _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel)
+        _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel, requireContext())
         _expandableListAdapter.setExpandableList(_expandableList)
         _expandableListAdapter.setItemStatusViewMode(_itemStatusViewModel)
         expandableListView.adapter = _expandableListAdapter

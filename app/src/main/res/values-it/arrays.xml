@@ -10,22 +10,30 @@
         <item>sab</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>ENTR.</item>-->
-<!--        <item>ACQ.</item>-->
-<!--        <item>ALIMEN.</item>-->
-<!--        <item>UTENZE</item>-->
-<!--        <item>SALUTE</item>-->
-<!--        <item>EDUCAZ</item>-->
-<!--        <item>ABBIG.</item>-->
-<!--        <item>TRASP.</item>-->
-<!--        <item>DIVERT.</item>-->
-<!--        <item>RISP.</item>-->
-<!--        <item>TASSE</item>-->
-<!--        <item>ALTRO</item>-->
-<!--        <item>ANIM.D.</item>-->
-<!--        <item>SOCIAL</item>-->
-<!--        <item>COSME</item>-->
-<!--        <item>ABITAT.</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>ENTR.</item>
+        <item>ACQ.</item>
+        <item>ALIMEN.</item>
+        <item>UTENZE</item>
+        <item>SALUTE</item>
+        <item>EDUCAZ</item>
+        <item>ABBIG.</item>
+        <item>TRASP.</item>
+        <item>DIVERT.</item>
+        <item>RISP.</item>
+        <item>TASSE</item>
+        <item>ALTRO</item>
+        <item>ANIM.D.</item>
+        <item>SOCIAL</item>
+        <item>COSME</item>
+        <item>ABITAT.</item>
+        <item>SUPPLE.</item>
+        <item>INDENNITA</item>
+        <item>INV</item>
+        <item>AFFIT.</item>
+        <item>SPESE</item>
+        <item>TELE</item>
+        <item>INV</item>
+        <item>AFFIT.</item>
+    </string-array>
 </resources>

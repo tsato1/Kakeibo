@@ -36,33 +36,33 @@ import com.kakeibo.db.PrepDB7
         private var INSTANCE: AppDatabase? = null
 
         @VisibleForTesting
-        val MIGRATION_1_7: Migration = object : Migration(1, 7) {
+        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_1_7")
-                PrepDB7.migrate_1_7(database)
+                Log.d(TAG, "migration_1_2")
+                PrepDB7.migrate_1_2(database)
             }
         }
 
         @VisibleForTesting
-        val MIGRATION_2_7: Migration = object : Migration(2, 7) {
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_2_7")
-                PrepDB7.migrate_2_7(database)
+                Log.d(TAG, "migration_2_3")
+                PrepDB7.migrate_2_3(database)
             }
         }
 
         @VisibleForTesting
-        val MIGRATION_3_7: Migration = object : Migration(3, 7) {
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_3_7")
-                PrepDB7.migrate_3_7(database)
+                Log.d(TAG, "migration_3_4")
+                PrepDB7.migrate_3_4(database)
             }
         }
 
         @VisibleForTesting
-        val MIGRATION_4_5: Migration = object : Migration(4, 7) {
+        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_4_7")
+                Log.d(TAG, "migration_4_5")
                 PrepDB7.migrate_4_5(database)
             }
         }
@@ -91,9 +91,9 @@ import com.kakeibo.db.PrepDB7
                                 AppDatabase::class.java, DATABASE_NAME)
                                 .addCallback(sAppDatabaseCallback)
                                 .addMigrations(
-                                        MIGRATION_1_7,
-                                        MIGRATION_2_7,
-                                        MIGRATION_3_7,
+                                        MIGRATION_1_2,
+                                        MIGRATION_2_3,
+                                        MIGRATION_3_4,
                                         MIGRATION_4_5,
                                         MIGRATION_5_7,
                                         MIGRATION_6_7)

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.ui.listener.RecyclerItemTouchHelperListener
-import com.kakeibo.ui.adapter.SearchCardListAdapter.*
+import com.kakeibo.ui.adapter.view.SearchCardListAdapter.*
 
 internal class RecyclerItemTouchHelper(
         dragDirs: Int, swipeDirs: Int,

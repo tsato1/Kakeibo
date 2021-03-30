@@ -10,22 +10,30 @@
         <item>토</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>収入</item>-->
-<!--        <item>生活雑貨</item>-->
-<!--        <item>食事</item>-->
-<!--        <item>水道光熱</item>-->
-<!--        <item>健康</item>-->
-<!--        <item>教育</item>-->
-<!--        <item>衣服</item>-->
-<!--        <item>交通</item>-->
-<!--        <item>娯楽</item>-->
-<!--        <item>保険</item>-->
-<!--        <item>税金</item>-->
-<!--        <item>他</item>-->
-<!--        <item>ペット</item>-->
-<!--        <item>交際</item>-->
-<!--        <item>美容</item>-->
-<!--        <item>居住</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>수입</item>
+        <item>상품</item>
+        <item>식사</item>
+        <item>유용</item>
+        <item>건강</item>
+        <item>교육</item>
+        <item>의류</item>
+        <item>교통</item>
+        <item>환대</item>
+        <item>보험</item>
+        <item>세</item>
+        <item>다른</item>
+        <item>착한 애</item>
+        <item>사회적인</item>
+        <item>화장품</item>
+        <item>주택</item>
+        <item>보너스</item>
+        <item>수당</item>
+        <item>투자</item>
+        <item>임대</item>
+        <item>비용</item>
+        <item>전화</item>
+        <item>투자</item>
+        <item>임대</item>
+    </string-array>
 </resources>

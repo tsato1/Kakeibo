@@ -10,491 +10,54 @@ import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilCurrency
 
 object PrepDB7 {
-    fun migrate_1_7(database: SupportSQLiteDatabase) {
-        /*** subscriptions table  */
-        database.execSQL("CREATE TABLE subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
-        /*** item table
-         * migration_1_2
-         */
-        //todo *1000 for amount !!!
-        database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME +
-                " ADD COLUMN " + ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0;")
-        val c = database.query("SELECT " + ItemDBAdapter.COL_ID + ", " +
-                ItemDBAdapter.COL_CATEGORY + " FROM " + ItemDBAdapter.TABLE_NAME)
-        if (c.moveToFirst()) {
-            do {
-                val catName = c.getString(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY))
-                val colId = c.getInt(c.getColumnIndex(ItemDBAdapter.COL_ID))
-                val values = ContentValues()
-                val defaultCategory = arrayOf("Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other")
-                var catCode = 0
-                for (i in defaultCategory.indices) {
-                    if (catName.equals(defaultCategory[i], ignoreCase = true)) {
-                        catCode = i
-                    } else if (catName.equals("Until", ignoreCase = true)) {
-                        catCode = 3
-                    }
-                }
-                values.put(ItemDBAdapter.COL_CATEGORY_CODE, catCode)
-                database.update(ItemDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values, ItemDBAdapter.COL_ID + "=?", arrayOf(colId.toString()))
-            } while (c.moveToNext())
-        }
-        c.close()
-        /*** item table
-         * migration_2_3
-         */
-        database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME +
-                " ADD COLUMN " + ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';")
-        val c2 = database.query(
-                "SELECT " + ItemDBAdapter.COL_ID + ", " +
-                        ItemDBAdapter.COL_AMOUNT + ", " +
-                        ItemDBAdapter.COL_EVENT_D + ", " +
-                        ItemDBAdapter.COL_EVENT_YM + "," +
-                        ItemDBAdapter.COL_UPDATE_DATE +
-                        " FROM " + ItemDBAdapter.TABLE_NAME)
-        if (c2.moveToFirst()) {
-            do {
-                val eventD = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_EVENT_D))
-                val eventYM = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_EVENT_YM))
-                var eventDate: String
-                var updateDate = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
-                val colId = c2.getInt(c2.getColumnIndex(ItemDBAdapter.COL_ID))
-                val values = ContentValues()
-                /*** event_date  */
-                eventDate = eventYM.replace('/', '-') + "-" + eventD
-                values.put(ItemDBAdapter.COL_EVENT_DATE, eventDate)
-                /*** update_date  */
-                updateDate = updateDate.split(" ")[0].replace('/', '-') + " 00:00:00"
-                values.put(ItemDBAdapter.COL_UPDATE_DATE, updateDate)
-                /*** flipping negative to positive */
-                val amount = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
-                val newAmount = Math.abs(amount.toInt())
-                values.put(ItemDBAdapter.COL_AMOUNT, newAmount * 1000)
-                /*** reflecting the result to db  */
-                database.update(ItemDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values,
-                        ItemDBAdapter.COL_ID + "=?", arrayOf(colId.toString()))
-            } while (c2.moveToNext())
-        }
-        c2.close()
-        database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
-                ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                ItemDBAdapter.COL_AMOUNT + " INTEGER NOT NULL," +
-                ItemDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_OLD + "', " +  // version1's currency code has to be '==='
-                ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                ItemDBAdapter.COL_MEMO + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);"))
-        database.execSQL(("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
-                ItemDBAdapter.COL_ID + "," +
-                ItemDBAdapter.COL_AMOUNT + "," +
-                ItemDBAdapter.COL_CATEGORY_CODE + "," +
-                ItemDBAdapter.COL_MEMO + "," +
-                ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + ") " +
-                " SELECT " +
-                ItemDBAdapter.COL_ID + "," +
-                "CAST (" + ItemDBAdapter.COL_AMOUNT + " AS INTEGER)," +
-                ItemDBAdapter.COL_CATEGORY_CODE + "," +
-                ItemDBAdapter.COL_MEMO + "," +
-                ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
-        /*** Category table  */
-        database.execSQL(
-                ("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
-                        CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_DRAWABLE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
-                        CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
-                        CategoryDBAdapter.COL_DESC + " TEXT NOT NULL," +
-                        CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);"))
-        database.execSQL(
-                ("CREATE TABLE " + CategoryLanDBAdapter.TABLE_NAME + " (" +
-                        CategoryLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryLanDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryLanDBAdapter.COL_ARA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_ENG + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_SPA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_FRA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_HIN + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_IND + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_ITA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_JPN + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_KOR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_POL + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_POR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_RUS + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_TUR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_VIE + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_Hans + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_Hant + " TEXT NOT NULL);"))
-        /*** CategoryDsp table  */
-        database.execSQL(
-                ("CREATE TABLE " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                        CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);"))
-        initCategoriesTableRevised(database)
-        addMoreCategories(database)
-    }
+    fun migrate_1_2(database: SupportSQLiteDatabase) {}
 
-    fun migrate_2_7(database: SupportSQLiteDatabase) {
-        /*** subscriptions table  */
-        database.execSQL("CREATE TABLE subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
-        /*** item table
-         * migration_1_2
-         */
-        database.execSQL(("ALTER TABLE " + ItemDBAdapter.TABLE_NAME +
-                " ADD COLUMN " + ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0;"))
+    fun migrate_2_3(database: SupportSQLiteDatabase) {}
 
-        //not necessary because no item exists in the table
-        //todo *1000 for amount
-//        Cursor c = database.query("SELECT " + ItemDBAdapter.COL_ID + ", " +
-//                ItemDBAdapter.COL_CATEGORY + " FROM " + ItemDBAdapter.TABLE_NAME);
-//
-//        if (c.moveToFirst()) {
-//            do {
-//                String catName = c.getString(c.getColumnIndex(ItemDBAdapter.COL_CATEGORY));
-//                int colId = c.getInt(c.getColumnIndex(ItemDBAdapter.COL_ID));
-//                ContentValues values = new ContentValues();
-//                String[] defaultCategory = new String[]{"Income", "Comm", "Meal", "Until", "Health", "Edu", "Cloth", "Trans", "Ent", "Ins", "Tax", "Other"};
-//                int catCode = 0;
-//
-//                for (int i=0; i<defaultCategory.length; ++i) {
-//                    if (catName.equalsIgnoreCase(defaultCategory[i])) {
-//                        catCode = i;
-//                    } else if (catName.equalsIgnoreCase("Until")) {
-//                        catCode = 3;
-//                    }
-//                }
-//
-//                values.put(ItemDBAdapter.COL_CATEGORY_CODE, catCode);
-//                database.update(ItemDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values, ItemDBAdapter.COL_ID+"=?", new String[] {String.valueOf(colId)});
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-        /*** item table
-         * migration_2_3
-         */
-        database.execSQL(("ALTER TABLE " + ItemDBAdapter.TABLE_NAME +
-                " ADD COLUMN " + ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL DEFAULT '';"))
-        val c2 = database.query(
-                ("SELECT " + ItemDBAdapter.COL_ID + ", " +
-                        ItemDBAdapter.COL_AMOUNT + ", " +
-                        ItemDBAdapter.COL_EVENT_D + ", " +
-                        ItemDBAdapter.COL_EVENT_YM + "," +
-                        ItemDBAdapter.COL_UPDATE_DATE +
-                        " FROM " + ItemDBAdapter.TABLE_NAME))
-        if (c2.moveToFirst()) {
-            do {
-                val eventD = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_EVENT_D))
-                val eventYM = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_EVENT_YM))
-                var eventDate: String
-                var updateDate = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_UPDATE_DATE))
-                val colId = c2.getInt(c2.getColumnIndex(ItemDBAdapter.COL_ID))
-                val values = ContentValues()
-                /*** event_date  */
-                eventDate = eventYM.replace('/', '-') + "-" + eventD
-                values.put(ItemDBAdapter.COL_EVENT_DATE, eventDate)
-                /*** update_date  */
-                updateDate = updateDate.split(" ")[0].replace('/', '-') + " 00:00:00"
-                values.put(ItemDBAdapter.COL_UPDATE_DATE, updateDate)
-                /*** flipping negative to positive */
-                val amount = c2.getString(c2.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
-                val newAmount = Math.abs(amount.toInt())
-                values.put(ItemDBAdapter.COL_AMOUNT, newAmount * 1000)
-                /*** reflecting the result to db  */
-                database.update(ItemDBAdapter.TABLE_NAME, OnConflictStrategy.REPLACE, values,
-                        ItemDBAdapter.COL_ID + "=?", arrayOf(colId.toString()))
-            } while (c2.moveToNext())
-        }
-        c2.close()
-        database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
-                ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                ItemDBAdapter.COL_AMOUNT + " INTEGER NOT NULL," +
-                ItemDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_OLD + "', " +  // version1's currency code has to be '==='
-                ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                ItemDBAdapter.COL_MEMO + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);"))
-        database.execSQL(("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
-                ItemDBAdapter.COL_ID + "," +
-                ItemDBAdapter.COL_AMOUNT + "," +
-                ItemDBAdapter.COL_CATEGORY_CODE + "," +
-                ItemDBAdapter.COL_MEMO + "," +
-                ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + ") " +
-                " SELECT " +
-                ItemDBAdapter.COL_ID + "," +
-                "CAST (" + ItemDBAdapter.COL_AMOUNT + " AS INTEGER)," +
-                ItemDBAdapter.COL_CATEGORY_CODE + "," +
-                ItemDBAdapter.COL_MEMO + "," +
-                ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
-        /*** Category table  */
-        database.execSQL(
-                ("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
-                        CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_DRAWABLE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
-                        CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
-                        CategoryDBAdapter.COL_DESC + " TEXT NOT NULL," +
-                        CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);"))
-        database.execSQL(
-                ("CREATE TABLE " + CategoryLanDBAdapter.TABLE_NAME + " (" +
-                        CategoryLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryLanDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryLanDBAdapter.COL_ARA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_ENG + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_SPA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_FRA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_HIN + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_IND + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_ITA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_JPN + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_KOR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_POL + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_POR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_RUS + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_TUR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_VIE + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_Hans + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_Hant + " TEXT NOT NULL);"))
-        /*** CategoryDsp table  */
-        database.execSQL(
-                ("CREATE TABLE " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                        CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);"))
-        initCategoriesTableRevised(database)
-        addMoreCategories(database)
-    }
-
-    // the differences between migrate_2_7 and migrate_3_7 are
-    // 1. the default value for CURRENCY_CODE is '---' in migrate_3_7 whereas it's '===' in migrate_2_7
-    // 2. no ALTER ADD COLUMN for CURRENCY_CODE and CATEGORY_CODE. it's done in migration_2_3. version3 already has those
-    fun migrate_3_7(database: SupportSQLiteDatabase) {
-        /*** subscriptions table  */
-        database.execSQL("CREATE TABLE subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
-        /*** items table  */
-        database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
-                ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                ItemDBAdapter.COL_AMOUNT + " INTEGER NOT NULL," +
-                ItemDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_NONE + "', " +  // version3 and up: currency code has to be '---'
-                ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                ItemDBAdapter.COL_MEMO + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);"))
-        database.execSQL(("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
-                ItemDBAdapter.COL_ID + "," +
-                ItemDBAdapter.COL_AMOUNT + "," +
-                ItemDBAdapter.COL_CURRENCY_CODE + "," +  // the version 3 already has currency_code, so it has to be migrated
-                ItemDBAdapter.COL_CATEGORY_CODE + "," +
-                ItemDBAdapter.COL_MEMO + "," +
-                ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + ") " +
-                " SELECT " +
-                ItemDBAdapter.COL_ID + "," +
-                "CAST (" + ItemDBAdapter.COL_AMOUNT + " AS INTEGER)," +
-                ItemDBAdapter.COL_CURRENCY_CODE + "," +  // the version 3 already has currency_code, so it has to be migrated
-                ItemDBAdapter.COL_CATEGORY_CODE + "," +
-                ItemDBAdapter.COL_MEMO + "," +
-                ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
-        /*** Category table  */
-        database.execSQL(
-                ("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
-                        CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_DRAWABLE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
-                        CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
-                        CategoryDBAdapter.COL_DESC + " TEXT NOT NULL," +
-                        CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL);"))
-        database.execSQL(
-                ("CREATE TABLE " + CategoryLanDBAdapter.TABLE_NAME + " (" +
-                        CategoryLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryLanDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryLanDBAdapter.COL_ARA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_ENG + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_SPA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_FRA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_HIN + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_IND + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_ITA + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_JPN + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_KOR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_POL + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_POR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_RUS + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_TUR + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_VIE + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_Hans + " TEXT NOT NULL," +
-                        CategoryLanDBAdapter.COL_Hant + " TEXT NOT NULL);"))
-        /*** CategoryDsp table  */
-        database.execSQL(
-                ("CREATE TABLE " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                        CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                        CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
-                        CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);"))
-        initCategoriesTableRevised(database)
-        addMoreCategories(database)
-    }
+    fun migrate_3_4(database: SupportSQLiteDatabase) {}
 
     fun migrate_4_5(database: SupportSQLiteDatabase) {
-        Log.d("asdf", "asdf45")
-        /*** subscriptions table  */
-        database.execSQL("CREATE TABLE subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
-        /*** KkbApp table  */
-        database.execSQL("ALTER TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " RENAME TO " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
-        database.execSQL(("CREATE TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
-                KkbAppDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                KkbAppDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
-                KkbAppDBAdapter.COL_TYPE + " TEXT NOT NULL DEFAULT ''," +
-                KkbAppDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL DEFAULT ''," +
-                KkbAppDBAdapter.COL_VAL_INT_1 + " INTEGER NOT NULL DEFAULT 0," +
-                KkbAppDBAdapter.COL_VAL_INT_2 + " INTEGER NOT NULL DEFAULT -1," +
-                KkbAppDBAdapter.COL_VAL_INT_3 + " INTEGER NOT NULL DEFAULT 0," +
-                KkbAppDBAdapter.COL_VAL_STR_1 + " TEXT NOT NULL DEFAULT ''," +
-                KkbAppDBAdapter.COL_VAL_STR_2 + " TEXT NOT NULL DEFAULT ''," +
-                KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL DEFAULT '');"))
-        database.execSQL(("INSERT INTO " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
-                KkbAppDBAdapter.COL_ID + "," +
-                KkbAppDBAdapter.COL_NAME + "," +
-                KkbAppDBAdapter.COL_TYPE + "," +  // for old items, take over the previous currency_code
-                KkbAppDBAdapter.COL_UPDATE_DATE + "," +
-                KkbAppDBAdapter.COL_VAL_INT_1 + "," +
-                KkbAppDBAdapter.COL_VAL_INT_2 + "," +
-                KkbAppDBAdapter.COL_VAL_INT_3 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_1 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_2 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_3 + ")" +
-                " SELECT " +
-                KkbAppDBAdapter.COL_ID + "," +
-                KkbAppDBAdapter.COL_NAME + "," +
-                KkbAppDBAdapter.COL_TYPE + "," +
-                KkbAppDBAdapter.COL_UPDATE_DATE + "," +
-                KkbAppDBAdapter.COL_VAL_INT_1 + "," +
-                KkbAppDBAdapter.COL_VAL_INT_2 + "," +
-                KkbAppDBAdapter.COL_VAL_INT_3 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_1 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_2 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_3 + " FROM " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;"))
-        database.execSQL("DROP TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
-        /*** Category table  */
-        database.execSQL("ALTER TABLE " + CategoryDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
+        /*
+         * Category table
+         * No categories table at db version == 4
+         * creating one for db version == 5 so that it can be modified on migrate_5_7
+         */
+        database.execSQL("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
                 CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
                 CategoryDBAdapter.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_DRAWABLE + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
-                CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
+                CategoryDBAdapter.COL_DRAWABLE + " TEXT NOT NULL DEFAULT ''," +
+                CategoryDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
                 CategoryDBAdapter.COL_DESC + " TEXT NOT NULL DEFAULT ''," +
-                CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');"))
-        database.execSQL(("INSERT INTO " + CategoryDBAdapter.TABLE_NAME + " (" +
-                CategoryDBAdapter.COL_ID + "," +
-                CategoryDBAdapter.COL_CODE + "," +
-                CategoryDBAdapter.COL_COLOR + "," +  // no inserting for significance because it cannot be specified in the version 5
-                CategoryDBAdapter.COL_DRAWABLE + "," +  // no inserting for image because it cannot be specified in the version 5
-                // no inserting for parent because it cannot be specified in the version 5
-                CategoryDBAdapter.COL_DESC + "," +
-                CategoryDBAdapter.COL_SAVED_DATE + ") " +
-                " SELECT " +
-                CategoryDBAdapter.COL_ID + "," +
-                CategoryDBAdapter.COL_CODE + "," +
-                CategoryDBAdapter.COL_COLOR + "," +
-                CategoryDBAdapter.COL_DRAWABLE + "," +
-                CategoryDBAdapter.COL_DESC + "," +
-                CategoryDBAdapter.COL_SAVED_DATE + " FROM " + CategoryDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + CategoryDBAdapter.TABLE_NAME + "_old;")
-        /*** CategoryDsp table  */
-        database.execSQL("ALTER TABLE " + CategoryDspDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE IF NOT EXISTS " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);"))
-        database.execSQL(("INSERT INTO " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                CategoryDspDBAdapter.COL_ID + "," +
-                CategoryDspDBAdapter.COL_CODE + "," +
-                CategoryDspDBAdapter.COL_LOCATION + ") " +
-                " SELECT " +
-                CategoryDspDBAdapter.COL_ID + "," +
-                CategoryDspDBAdapter.COL_CODE + "," +
-                CategoryDspDBAdapter.COL_LOCATION + " FROM " + CategoryDspDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
+                CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');")
+        var location = 0
+        for (code in 0..15) {
+            location = when (code) {
+                8 -> 12
+                9 -> 13
+                10 -> 14
+                11 -> 15
+                12 -> 8
+                13 -> 9
+                14 -> 10
+                15 -> 11
+                else -> location
+            }
+            database.execSQL("INSERT INTO " + CategoryDBAdapter.TABLE_NAME + " (" +
+                    CategoryDBAdapter.COL_LOCATION + ", " +
+                    CategoryDBAdapter.COL_CODE + ") " +
+                    " VALUES(" + location + ", " + code + ")")
+            location++
+        }
     }
 
     fun migrate_5_7(database: SupportSQLiteDatabase) {
-        /*** subscriptions table  */
-        database.execSQL("CREATE TABLE subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
-        /*** Category table  */
-        database.execSQL("ALTER TABLE " + CategoryDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
-                CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
-                CategoryDBAdapter.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_DRAWABLE + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
-                CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
-                CategoryDBAdapter.COL_DESC + " TEXT NOT NULL DEFAULT ''," +
-                CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');"))
-        database.execSQL(("INSERT INTO " + CategoryDBAdapter.TABLE_NAME + " (" +
-                CategoryDBAdapter.COL_ID + "," +
-                CategoryDBAdapter.COL_CODE + "," +
-                CategoryDBAdapter.COL_COLOR + "," +  // no inserting for significance because it cannot be specified in the version 5
-                CategoryDBAdapter.COL_DRAWABLE + "," +  // no inserting for image because it cannot be specified in the version 5
-                // no inserting for parent because it cannot be specified in the version 5
-                CategoryDBAdapter.COL_DESC + "," +
-                CategoryDBAdapter.COL_SAVED_DATE + ") " +
-                " SELECT " +
-                CategoryDBAdapter.COL_ID + "," +
-                CategoryDBAdapter.COL_CODE + "," +
-                CategoryDBAdapter.COL_COLOR + "," +
-                CategoryDBAdapter.COL_DRAWABLE + "," +
-                CategoryDBAdapter.COL_DESC + "," +
-                CategoryDBAdapter.COL_SAVED_DATE + " FROM " + CategoryDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + CategoryDBAdapter.TABLE_NAME + "_old;")
-        /*** CategoryLan table  */
-        database.execSQL("DROP TABLE IF EXISTS " + CategoryLanDBAdapter.TABLE_NAME)
-        /*** CategoryDsp table  */
-        database.execSQL("ALTER TABLE " + CategoryDspDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE IF NOT EXISTS " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);"))
-        database.execSQL(("INSERT INTO " + CategoryDspDBAdapter.TABLE_NAME + " (" +
-                CategoryDspDBAdapter.COL_ID + "," +
-                CategoryDspDBAdapter.COL_CODE + "," +
-                CategoryDspDBAdapter.COL_LOCATION + ") " +
-                " SELECT " +
-                CategoryDspDBAdapter.COL_ID + "," +
-                CategoryDspDBAdapter.COL_CODE + "," +
-                CategoryDspDBAdapter.COL_LOCATION + " FROM " + CategoryDspDBAdapter.TABLE_NAME + "_old;"))
-        database.execSQL("DROP TABLE " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
-    }
-
-    fun migrate_6_7(database: SupportSQLiteDatabase) {
-        /*** KkbApp table  */
+        /*
+         * KkbApp table
+         * (copied from migrate_6_7())
+         */
         database.execSQL("ALTER TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " RENAME TO " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
-        database.execSQL(("CREATE TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
+        database.execSQL("CREATE TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
                 KkbAppDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 KkbAppDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
                 KkbAppDBAdapter.COL_TYPE + " TEXT NOT NULL DEFAULT ''," +
@@ -504,8 +67,8 @@ object PrepDB7 {
                 KkbAppDBAdapter.COL_VAL_INT_3 + " INTEGER NOT NULL DEFAULT 0," +
                 KkbAppDBAdapter.COL_VAL_STR_1 + " TEXT NOT NULL DEFAULT ''," +
                 KkbAppDBAdapter.COL_VAL_STR_2 + " TEXT NOT NULL DEFAULT ''," +
-                KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL DEFAULT '');"))
-        database.execSQL(("INSERT INTO " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
+                KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL DEFAULT '');")
+        database.execSQL("INSERT INTO " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
                 KkbAppDBAdapter.COL_ID + "," +
                 KkbAppDBAdapter.COL_NAME + "," +
                 KkbAppDBAdapter.COL_TYPE + "," +  // for old items, take over the previous currency_code
@@ -526,11 +89,15 @@ object PrepDB7 {
                 KkbAppDBAdapter.COL_VAL_INT_3 + "," +
                 KkbAppDBAdapter.COL_VAL_STR_1 + "," +
                 KkbAppDBAdapter.COL_VAL_STR_2 + "," +
-                KkbAppDBAdapter.COL_VAL_STR_3 + " FROM " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;"))
+                KkbAppDBAdapter.COL_VAL_STR_3 + " FROM " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
         database.execSQL("DROP TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
-        /*** subscriptions table  */
-        database.execSQL("CREATE TABLE IF NOT EXISTS subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
-        /*** items table  */
+
+        /*
+         * subscriptions table (copied from migrate_6_7())
+         */
+        database.execSQL("CREATE TABLE IF NOT EXISTS subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER NOT NULL, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
+
+        /* items table */
         database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
         database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
                 ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
@@ -557,9 +124,252 @@ object PrepDB7 {
                 ItemDBAdapter.COL_EVENT_DATE + "," +
                 ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
         database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
+        val cursorItem = database.query("SELECT * FROM " + ItemDBAdapter.TABLE_NAME)
+        if (cursorItem.moveToFirst()) {
+            do {
+                val id = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_ID))
+                val code = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_CATEGORY_CODE))
+                val amount = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
+                if (code != 0) { // set value to negative only for expense // category_code == 0 is Income
+                    database.execSQL(
+                            ("UPDATE " + ItemDBAdapter.TABLE_NAME +
+                                    " SET " + ItemDBAdapter.COL_AMOUNT + "=-" + amount + // set to negative
+                                    " WHERE " + ItemDBAdapter.COL_ID + "=" + id))
+                }
+            } while (cursorItem.moveToNext())
+        }
 
-        // For category-related: Just changing the schema. No new column
-        /*** Category table  */
+        /*
+         * CategoryDsp table
+         * NO CategoryDsp table at db version = 5
+         */
+        database.execSQL("CREATE TABLE " + CategoryDspDBAdapter.TABLE_NAME + " (" +
+                CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
+                CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);")
+        database.execSQL("INSERT INTO " + CategoryDspDBAdapter.TABLE_NAME + " (" +
+                CategoryDspDBAdapter.COL_ID + "," +
+                CategoryDspDBAdapter.COL_LOCATION + "," +
+                CategoryDspDBAdapter.COL_CODE + ") " +
+                " SELECT " +
+                CategoryDBAdapter.COL_ID + "," +
+                CategoryDBAdapter.COL_CODE + "," +
+                CategoryDBAdapter.COL_LOCATION + " FROM " + CategoryDBAdapter.TABLE_NAME)
+
+        /* Category table  */
+        database.execSQL("ALTER TABLE " + CategoryDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDBAdapter.TABLE_NAME + "_old;")
+        database.execSQL("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
+                CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
+                CategoryDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
+                CategoryDBAdapter.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
+                CategoryDBAdapter.COL_SIGNIFICANCE + " INTEGER NOT NULL DEFAULT 0," +
+                CategoryDBAdapter.COL_DRAWABLE + " TEXT NOT NULL DEFAULT ''," +
+                CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
+                CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
+                CategoryDBAdapter.COL_DESC + " TEXT NOT NULL DEFAULT ''," +
+                CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');")
+        database.execSQL("INSERT INTO " + CategoryDBAdapter.TABLE_NAME + " (" +
+                CategoryDBAdapter.COL_ID + "," +
+                CategoryDBAdapter.COL_CODE + "," +
+                // not inserting for name
+                CategoryDBAdapter.COL_COLOR + "," +
+                // not inserting for significance because it cannot be specified in the version 5
+                CategoryDBAdapter.COL_DRAWABLE + "," +
+                // not inserting for image because it cannot be specified in the version 5
+                // not inserting for parent because it cannot be specified in the version 5
+                CategoryDBAdapter.COL_DESC + "," +
+                CategoryDBAdapter.COL_SAVED_DATE + ") " +
+                " SELECT " +
+                CategoryDBAdapter.COL_ID + "," +
+                CategoryDBAdapter.COL_CODE + "," +
+                CategoryDBAdapter.COL_COLOR + "," +
+                "''," +  // COL_DRAWABLE is now TEXT
+                CategoryDBAdapter.COL_DESC + "," +
+                CategoryDBAdapter.COL_SAVED_DATE + " FROM " + CategoryDBAdapter.TABLE_NAME + "_old;")
+        database.execSQL("DROP TABLE " + CategoryDBAdapter.TABLE_NAME + "_old;")
+        val cursor = database.query(
+                ("SELECT * FROM " + CategoryDBAdapter.TABLE_NAME +
+                        " WHERE " + CategoryDBAdapter.COL_CODE + "<" + UtilCategory.CUSTOM_CATEGORY_CODE_START +
+                        " ORDER BY " + CategoryDBAdapter.COL_CODE))
+        if (cursor.moveToFirst()) {
+            do {
+                val code = cursor.getInt(cursor.getColumnIndex(CategoryDBAdapter.COL_CODE))
+                var categoryName: String
+                var drawableName: String
+                var color: Int
+                if (code == 0) {
+                    categoryName = "INCOME"
+                    drawableName = "ic_category_income"
+                    color = 1
+                } else if (code == 1) {
+                    categoryName = "COMM"
+                    drawableName = "ic_category_comm"
+                    color = 0
+                } else if (code == 2) {
+                    categoryName = "MEAL"
+                    drawableName = "ic_category_meal"
+                    color = 0
+                } else if (code == 3) {
+                    categoryName = "UTIL"
+                    drawableName = "ic_category_util"
+                    color = 0
+                } else if (code == 4) {
+                    categoryName = "HEALTH"
+                    drawableName = "ic_category_health"
+                    color = 0
+                } else if (code == 5) {
+                    categoryName = "EDU"
+                    drawableName = "ic_category_edu"
+                    color = 0
+                } else if (code == 6) {
+                    categoryName = "CLOTH"
+                    drawableName = "ic_category_cloth"
+                    color = 0
+                } else if (code == 7) {
+                    categoryName = "TRANS"
+                    drawableName = "ic_category_trans"
+                    color = 0
+                } else if (code == 8) {
+                    categoryName = "ENT"
+                    drawableName = "ic_category_ent"
+                    color = 0
+                } else if (code == 9) {
+                    categoryName = "INS"
+                    drawableName = "ic_category_ins"
+                    color = 0
+                } else if (code == 10) {
+                    categoryName = "TAX"
+                    drawableName = "ic_category_tax"
+                    color = 0
+                } else if (code == 11) {
+                    categoryName = "OTHER"
+                    drawableName = "ic_category_other"
+                    color = 0
+                } else if (code == 12) {
+                    categoryName = "PET"
+                    drawableName = "ic_category_pet"
+                    color = 0
+                } else if (code == 13) {
+                    categoryName = "SOCIAL"
+                    drawableName = "ic_category_social"
+                    color = 0
+                } else if (code == 14) {
+                    categoryName = "COSME"
+                    drawableName = "ic_category_cosme"
+                    color = 0
+                } else if (code == 15) {
+                    categoryName = "HOUSNG"
+                    drawableName = "ic_category_housing"
+                    color = 0
+                } else {
+                    continue
+                }
+                database.execSQL("UPDATE " + CategoryDBAdapter.TABLE_NAME +
+                                " SET "
+                                + CategoryDBAdapter.COL_COLOR + "=" + color + ","
+                                + CategoryDBAdapter.COL_DRAWABLE + "='" + drawableName + "',"
+                                + CategoryDBAdapter.COL_NAME + "='" + categoryName + "'" +
+                                " WHERE " + CategoryDBAdapter.COL_CODE + "=" + code)
+            } while (cursor.moveToNext())
+        }
+
+        /* CategoryLan table  */
+        database.execSQL("DROP TABLE IF EXISTS " + CategoryLanDBAdapter.TABLE_NAME)
+    }
+
+    fun migrate_6_7(database: SupportSQLiteDatabase) {
+        /* KkbApp table  */
+        database.execSQL("ALTER TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " RENAME TO " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
+        database.execSQL("CREATE TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
+                KkbAppDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                KkbAppDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
+                KkbAppDBAdapter.COL_TYPE + " TEXT NOT NULL DEFAULT ''," +
+                KkbAppDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL DEFAULT ''," +
+                KkbAppDBAdapter.COL_VAL_INT_1 + " INTEGER NOT NULL DEFAULT 0," +
+                KkbAppDBAdapter.COL_VAL_INT_2 + " INTEGER NOT NULL DEFAULT -1," +
+                KkbAppDBAdapter.COL_VAL_INT_3 + " INTEGER NOT NULL DEFAULT 0," +
+                KkbAppDBAdapter.COL_VAL_STR_1 + " TEXT NOT NULL DEFAULT ''," +
+                KkbAppDBAdapter.COL_VAL_STR_2 + " TEXT NOT NULL DEFAULT ''," +
+                KkbAppDBAdapter.COL_VAL_STR_3 + " TEXT NOT NULL DEFAULT '');")
+        database.execSQL("INSERT INTO " + KkbAppDBAdapter.TABLE_KKBAPP + " (" +
+                KkbAppDBAdapter.COL_ID + "," +
+                KkbAppDBAdapter.COL_NAME + "," +
+                KkbAppDBAdapter.COL_TYPE + "," +  // for old items, take over the previous currency_code
+                KkbAppDBAdapter.COL_UPDATE_DATE + "," +
+                KkbAppDBAdapter.COL_VAL_INT_1 + "," +
+                KkbAppDBAdapter.COL_VAL_INT_2 + "," +
+                KkbAppDBAdapter.COL_VAL_INT_3 + "," +
+                KkbAppDBAdapter.COL_VAL_STR_1 + "," +
+                KkbAppDBAdapter.COL_VAL_STR_2 + "," +
+                KkbAppDBAdapter.COL_VAL_STR_3 + ")" +
+                " SELECT " +
+                KkbAppDBAdapter.COL_ID + "," +
+                KkbAppDBAdapter.COL_NAME + "," +
+                KkbAppDBAdapter.COL_TYPE + "," +
+                KkbAppDBAdapter.COL_UPDATE_DATE + "," +
+                KkbAppDBAdapter.COL_VAL_INT_1 + "," +
+                KkbAppDBAdapter.COL_VAL_INT_2 + "," +
+                KkbAppDBAdapter.COL_VAL_INT_3 + "," +
+                KkbAppDBAdapter.COL_VAL_STR_1 + "," +
+                KkbAppDBAdapter.COL_VAL_STR_2 + "," +
+                KkbAppDBAdapter.COL_VAL_STR_3 + " FROM " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
+        database.execSQL("DROP TABLE " + KkbAppDBAdapter.TABLE_KKBAPP + "_old;")
+
+        /* subscriptions table  */
+        database.execSQL("CREATE TABLE IF NOT EXISTS subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER NOT NULL, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
+
+        /* items table  */
+        database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
+        database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
+                ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                ItemDBAdapter.COL_AMOUNT + " INTEGER NOT NULL," +
+                ItemDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_NONE + "', " +  // for new items, currency_code is none
+                ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
+                ItemDBAdapter.COL_MEMO + " TEXT NOT NULL," +
+                ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
+                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);"))
+        database.execSQL(("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
+                ItemDBAdapter.COL_ID + "," +
+                ItemDBAdapter.COL_AMOUNT + "," +
+                ItemDBAdapter.COL_CURRENCY_CODE + "," +  // for old items, take over the previous currency_code
+                ItemDBAdapter.COL_CATEGORY_CODE + "," +
+                ItemDBAdapter.COL_MEMO + "," +
+                ItemDBAdapter.COL_EVENT_DATE + "," +
+                ItemDBAdapter.COL_UPDATE_DATE + ") " +
+                " SELECT " +
+                ItemDBAdapter.COL_ID + "," +
+                "CAST (" + ItemDBAdapter.COL_AMOUNT + " AS INTEGER)," +
+                ItemDBAdapter.COL_CURRENCY_CODE + "," +
+                ItemDBAdapter.COL_CATEGORY_CODE + "," +
+                ItemDBAdapter.COL_MEMO + "," +
+                ItemDBAdapter.COL_EVENT_DATE + "," +
+                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
+        database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
+        val cursorItem = database.query(
+                ("SELECT " + ItemDBAdapter.TABLE_NAME + "." + ItemDBAdapter.COL_ID + ", " +
+                        ItemDBAdapter.COL_AMOUNT + ", " +
+                        ItemDBAdapter.COL_CATEGORY_CODE + ", " +
+                        CategoryDBAdapter.COL_COLOR +
+                        " FROM " + ItemDBAdapter.TABLE_NAME +
+                        " INNER JOIN " + CategoryDBAdapter.TABLE_NAME +
+                        " ON " + CategoryDBAdapter.COL_CODE + "=" + ItemDBAdapter.COL_CATEGORY_CODE +
+                        " WHERE " + CategoryDBAdapter.COL_COLOR + "=" + UtilCategory.CATEGORY_COLOR_EXPENSE))
+        if (cursorItem.moveToFirst()) {
+            do {
+                val id = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_ID))
+                val amount = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
+                database.execSQL(
+                        ("UPDATE " + ItemDBAdapter.TABLE_NAME +
+                                " SET " + ItemDBAdapter.COL_AMOUNT + "=-" + amount + // set to negative
+                                " WHERE " + ItemDBAdapter.COL_ID + "=" + id))
+            } while (cursorItem.moveToNext())
+        }
+
+        /*
+         * Category table
+         * For category-related: Just changing the schema. No new column
+         */
         database.execSQL("ALTER TABLE " + CategoryDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDBAdapter.TABLE_NAME + "_old;")
         database.execSQL(("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
                 CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
@@ -685,7 +495,8 @@ object PrepDB7 {
                                 " WHERE " + CategoryDBAdapter.COL_CODE + "=" + code))
             } while (cursor.moveToNext())
         }
-        /*** CategoryLan table  */
+
+        /* CategoryLan table  */
         val c = database.query(
                 ("SELECT * FROM " + CategoryLanDBAdapter.TABLE_NAME +
                         " WHERE " + CategoryLanDBAdapter.COL_CODE + ">=1000"))
@@ -738,7 +549,7 @@ object PrepDB7 {
                 if ("" != c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hant))) {
                     name = c.getString(c.getColumnIndex(CategoryLanDBAdapter.COL_Hant))
                 }
-                if (("" == name)) continue
+                if ("" == name) continue
                 database.execSQL(
                         ("UPDATE " + CategoryDBAdapter.TABLE_NAME +
                                 " SET " + CategoryDBAdapter.COL_NAME + "= '" + name + "'" +
@@ -746,79 +557,21 @@ object PrepDB7 {
             } while (c.moveToNext())
         }
         database.execSQL("DROP TABLE IF EXISTS " + CategoryLanDBAdapter.TABLE_NAME)
-        //        database.execSQL("ALTER TABLE " + CategoryLanDBAdapter.TABLE_NAME + " RENAME TO " + CategoryLanDBAdapter.TABLE_NAME + "_old;");
-//        database.execSQL("CREATE TABLE " + CategoryLanDBAdapter.TABLE_NAME + " (" +
-//                CategoryLanDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-//                CategoryLanDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
-//                CategoryLanDBAdapter.COL_ARA + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_ENG + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_SPA + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_FRA + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_HIN + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_IND + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_ITA + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_JPN + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_KOR + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_POL + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_POR + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_RUS + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_TUR + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_VIE + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_Hans + " TEXT NOT NULL," +
-//                CategoryLanDBAdapter.COL_Hant + " TEXT NOT NULL);");
-//        database.execSQL("INSERT INTO " + CategoryLanDBAdapter.TABLE_NAME + " (" +
-//                CategoryLanDBAdapter.COL_ID+","+
-//                CategoryLanDBAdapter.COL_CODE+","+
-//                CategoryLanDBAdapter.COL_ARA+","+
-//                CategoryLanDBAdapter.COL_ENG+","+
-//                CategoryLanDBAdapter.COL_SPA+","+
-//                CategoryLanDBAdapter.COL_FRA+","+
-//                CategoryLanDBAdapter.COL_HIN+","+
-//                CategoryLanDBAdapter.COL_IND+","+
-//                CategoryLanDBAdapter.COL_ITA+","+
-//                CategoryLanDBAdapter.COL_JPN+","+
-//                CategoryLanDBAdapter.COL_KOR+","+
-//                CategoryLanDBAdapter.COL_POL+","+
-//                CategoryLanDBAdapter.COL_POR+","+
-//                CategoryLanDBAdapter.COL_RUS+","+
-//                CategoryLanDBAdapter.COL_TUR+","+
-//                CategoryLanDBAdapter.COL_VIE+","+
-//                CategoryLanDBAdapter.COL_Hans+","+
-//                CategoryLanDBAdapter.COL_Hant+") "+
-//                " SELECT "+
-//                CategoryLanDBAdapter.COL_ID+","+
-//                "CAST ("+ CategoryLanDBAdapter.COL_CODE+" AS INTEGER),"+
-//                CategoryLanDBAdapter.COL_ARA+","+
-//                CategoryLanDBAdapter.COL_ENG+","+
-//                CategoryLanDBAdapter.COL_SPA+","+
-//                CategoryLanDBAdapter.COL_FRA+","+
-//                CategoryLanDBAdapter.COL_HIN+","+
-//                CategoryLanDBAdapter.COL_IND+","+
-//                CategoryLanDBAdapter.COL_ITA+","+
-//                CategoryLanDBAdapter.COL_JPN+","+
-//                CategoryLanDBAdapter.COL_KOR+","+
-//                CategoryLanDBAdapter.COL_POL+","+
-//                CategoryLanDBAdapter.COL_POR+","+
-//                CategoryLanDBAdapter.COL_RUS+","+
-//                CategoryLanDBAdapter.COL_TUR+","+
-//                CategoryLanDBAdapter.COL_VIE+","+
-//                CategoryLanDBAdapter.COL_Hans+","+
-//                CategoryLanDBAdapter.COL_Hant+" FROM "+ CategoryLanDBAdapter.TABLE_NAME +"_old;");
-//        database.execSQL("DROP TABLE "+ CategoryLanDBAdapter.TABLE_NAME +"_old;");
-        /*** CategoryDsp table  */
+
+        /* CategoryDsp table  */
         database.execSQL("ALTER TABLE " + CategoryDspDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE IF NOT EXISTS " + CategoryDspDBAdapter.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + CategoryDspDBAdapter.TABLE_NAME + " (" +
                 CategoryDspDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 CategoryDspDBAdapter.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
-                CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);"))
-        database.execSQL(("INSERT INTO " + CategoryDspDBAdapter.TABLE_NAME + " (" +
+                CategoryDspDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0);")
+        database.execSQL("INSERT INTO " + CategoryDspDBAdapter.TABLE_NAME + " (" +
                 CategoryDspDBAdapter.COL_ID + "," +
                 CategoryDspDBAdapter.COL_CODE + "," +
                 CategoryDspDBAdapter.COL_LOCATION + ") " +
                 " SELECT " +
                 CategoryDspDBAdapter.COL_ID + "," +
                 "CAST (" + CategoryDspDBAdapter.COL_CODE + " AS INTEGER)," +
-                CategoryDspDBAdapter.COL_LOCATION + " FROM " + CategoryDspDBAdapter.TABLE_NAME + "_old;"))
+                CategoryDspDBAdapter.COL_LOCATION + " FROM " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
         database.execSQL("DROP TABLE " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
     }
 }

@@ -16,7 +16,7 @@ import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
-import com.kakeibo.settings.SettingsActivity
+import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.BillingViewModel
 import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
 import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel

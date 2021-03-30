@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -39,38 +38,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity-->
-<!--            android:name=".export.CreateFileInFolderActivity"-->
-<!--            android:label="Export"-->
-<!--            android:parentActivityName=".ui.MainActivity"-->
-<!--            android:theme="@style/MyMaterialTheme.NoActionBar"/>-->
         <activity
             android:name="com.kakeibo.ui.ExportActivity"
             android:label="Export"
             android:parentActivityName=".ui.MainActivity"/>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="com.kakeibo.ui.settings.SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".ui.MainActivity"/>
         <activity
-            android:name=".settings.category.replace.CategoryReplaceActivity"
+            android:name="com.kakeibo.ui.settings.category.replace.CategoryReplaceActivity"
             android:label="@string/hide_display_reorder_categories"
-            android:parentActivityName=".settings.SettingsActivity"/>
+            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
         <activity
-            android:name=".settings.category.replace.CategoryReorderActivity"
+            android:name="com.kakeibo.ui.settings.category.replace.CategoryReorderActivity"
             android:label="@string/reorder_categories"
-            android:parentActivityName=".settings.SettingsActivity"/>
+            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
         <activity
-            android:name=".settings.category.edit.CustomCategoryActivity"
+            android:name="com.kakeibo.ui.settings.category.edit.CustomCategoryActivity"
             android:label="@string/create_category"
-            android:parentActivityName=".settings.SettingsActivity"/>
+            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
         <activity
-            android:name=".settings.category.edit.CustomCategoryListActivity"
+            android:name="com.kakeibo.ui.settings.category.edit.CustomCategoryListActivity"
             android:label="@string/custom_categories"
-            android:parentActivityName=".settings.SettingsActivity"/>
-        <activity android:name=".settings.InAppPurchasesActivity"
+            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
+        <activity android:name="com.kakeibo.ui.settings.InAppPurchasesActivity"
             android:label="@string/in_app_purchases"
-            android:parentActivityName=".settings.SettingsActivity"/>
+            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
+        <activity android:name=".ui.settings.AboutActivity"
+            android:label="@string/about_this_app"
+            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
         <!--        <activity-->
 <!--            android:name=".ui.GoogleSignInActivity"-->
 <!--            android:label="Google Sign In"-->

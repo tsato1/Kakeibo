@@ -10,22 +10,30 @@
         <item>SÁB</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>INGRE</item>-->
-<!--        <item>MERCAN</item>-->
-<!--        <item>COMIDA</item>-->
-<!--        <item>UTIL</item>-->
-<!--        <item>SALUD</item>-->
-<!--        <item>EDU</item>-->
-<!--        <item>VESTID</item>-->
-<!--        <item>TRANS</item>-->
-<!--        <item>ENTRET</item>-->
-<!--        <item>SEGURO</item>-->
-<!--        <item>IMPUES</item>-->
-<!--        <item>OTROS</item>-->
-<!--        <item>MSCTA</item>-->
-<!--        <item>SOCIAL</item>-->
-<!--        <item>COSME</item>-->
-<!--        <item>VVENDA</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>INGRE</item>
+        <item>MERCAN</item>
+        <item>COMIDA</item>
+        <item>UTIL</item>
+        <item>SALUD</item>
+        <item>EDU</item>
+        <item>VESTID</item>
+        <item>TRANS</item>
+        <item>ENTRET</item>
+        <item>SEGURO</item>
+        <item>IMPUES</item>
+        <item>OTROS</item>
+        <item>MSCTA</item>
+        <item>SOCIAL</item>
+        <item>COSME</item>
+        <item>VVENDA</item>
+        <item>EXTRA</item>
+        <item>TOLER.</item>
+        <item>INV</item>
+        <item>ALQUIL.</item>
+        <item>GASTOS</item>
+        <item>TELÉ</item>
+        <item>INV</item>
+        <item>ALQUIL.</item>
+    </string-array>
 </resources>

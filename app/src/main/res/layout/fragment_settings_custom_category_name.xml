@@ -4,7 +4,7 @@
     <data>
         <variable
             name="customCategory"
-            type="com.kakeibo.settings.category.edit.CustomCategoryViewModel" />
+            type="com.kakeibo.ui.settings.category.edit.CustomCategoryViewModel" />
     </data>
 
     <RelativeLayout

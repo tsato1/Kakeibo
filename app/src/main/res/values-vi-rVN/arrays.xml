@@ -10,22 +10,30 @@
         <item>T.Bảy</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>INGRE</item>-->
-<!--        <item>MERCAN</item>-->
-<!--        <item>COMIDA</item>-->
-<!--        <item>UTIL</item>-->
-<!--        <item>SALUD</item>-->
-<!--        <item>EDU</item>-->
-<!--        <item>VESTID</item>-->
-<!--        <item>TRANS</item>-->
-<!--        <item>ENTRET</item>-->
-<!--        <item>SEGURO</item>-->
-<!--        <item>IMPUES</item>-->
-<!--        <item>OTROS</item>-->
-<!--        <item>MSCTA</item>-->
-<!--        <item>SOCIAL</item>-->
-<!--        <item>COSME</item>-->
-<!--        <item>VVENDA</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>THU NHẬP</item>
+        <item>HÀNG HÓA</item>
+        <item>BỮA ĂN</item>
+        <item>TIỆN ÍCH</item>
+        <item>SỨC KHỎE</item>
+        <item>GIÁO DỤC</item>
+        <item>QUẦN ÁO</item>
+        <item>VẬN CHUYỂN</item>
+        <item>SỰ GIẢI TRÍ</item>
+        <item>BẢO HIỂM</item>
+        <item>THUẾ</item>
+        <item>KHÁC</item>
+        <item>VẬT NUÔI</item>
+        <item>XÃ HỘI</item>
+        <item>MỸ PHẨM</item>
+        <item>NHÀ Ở</item>
+        <item>THÊM</item>
+        <item>PHỤ CẤP</item>
+        <item>ĐẦU TƯ</item>
+        <item>THUÊ</item>
+        <item>CHI PHÍ</item>
+        <item>THOẠI</item>
+        <item>ĐẦU TƯ</item>
+        <item>THUÊ</item>
+    </string-array>
 </resources>

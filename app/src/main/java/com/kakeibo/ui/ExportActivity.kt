@@ -87,12 +87,16 @@ class ExportActivity : AppCompatActivity() {
                         try {
                             val os = contentResolver.openOutputStream(uri)
                             if (os != null) {
-                                val content: String? = if (mReportType == ReportFragment.REPORT_BY_DATE) {
-                                    UtilFiles.getFileValue(FILE_ORDER_DATE, this)
-                                } else if (mReportType == ReportFragment.REPORT_BY_CATEGORY) {
-                                    UtilFiles.getFileValue(FILE_ORDER_CATEGORY, this)
-                                } else {
-                                    "Empty Report"
+                                val content: String? = when (mReportType) {
+                                    ReportFragment.REPORT_BY_DATE -> {
+                                        UtilFiles.getFileValue(FILE_ORDER_DATE, this)
+                                    }
+                                    ReportFragment.REPORT_BY_CATEGORY -> {
+                                        UtilFiles.getFileValue(FILE_ORDER_CATEGORY, this)
+                                    }
+                                    else -> {
+                                        "Empty Report"
+                                    }
                                 }
                                 os.write(content!!.toByteArray())
                                 os.close()

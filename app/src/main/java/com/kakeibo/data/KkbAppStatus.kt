@@ -12,10 +12,10 @@ class KkbAppStatus(
         var id: Long = 1,
 
         @ColumnInfo(name = KkbAppDBAdapter.COL_NAME, defaultValue = "")
-        var name: String? = null,
+        var name: String,
 
         @ColumnInfo(name = KkbAppDBAdapter.COL_TYPE, defaultValue = "")
-        var type: String? = null,
+        var type: String,
 
         @ColumnInfo(name = KkbAppDBAdapter.COL_UPDATE_DATE, defaultValue = "")
         var updateDate: String,

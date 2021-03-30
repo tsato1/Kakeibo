@@ -30,7 +30,7 @@ import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.data.CategoryStatus
-import com.kakeibo.settings.SettingsActivity
+import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.viewmodel.*
@@ -331,11 +331,7 @@ class MainActivity : AppCompatActivity() {
                     fragments.add(fragment3)
                     fragment3
                 }
-                else -> {
-                    val fragment1 = InputFragment.newInstance()
-                    fragments.add(fragment1)
-                    fragment1
-                }
+                else -> throw Exception("unknown item type")
             }
         }
     }

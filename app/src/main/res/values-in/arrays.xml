@@ -10,22 +10,30 @@
         <item>Sab</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>収入</item>-->
-<!--        <item>生活雑貨</item>-->
-<!--        <item>食事</item>-->
-<!--        <item>水道光熱</item>-->
-<!--        <item>健康</item>-->
-<!--        <item>教育</item>-->
-<!--        <item>衣服</item>-->
-<!--        <item>交通</item>-->
-<!--        <item>娯楽</item>-->
-<!--        <item>保険</item>-->
-<!--        <item>税金</item>-->
-<!--        <item>他</item>-->
-<!--        <item>ペット</item>-->
-<!--        <item>交際</item>-->
-<!--        <item>美容</item>-->
-<!--        <item>居住</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>PENDAPATAN</item>
+        <item>KOMODITI</item>
+        <item>MAKAN</item>
+        <item>UTIL</item>
+        <item>KESEHATAN</item>
+        <item>PENDIDIKAN</item>
+        <item>PAKAIAN</item>
+        <item>ANGKUTAN</item>
+        <item>HIBURAN</item>
+        <item>ASURANSI</item>
+        <item>PAJAK</item>
+        <item>LAIN</item>
+        <item>MEMBELAI</item>
+        <item>SOSIAL</item>
+        <item>COSME</item>
+        <item>PERUMAHAN</item>
+        <item>TAMBAHAN</item>
+        <item>TUNJANGAN</item>
+        <item>INV</item>
+        <item>SEWA</item>
+        <item>BIAYA</item>
+        <item>TELE</item>
+        <item>INV</item>
+        <item>SEWA</item>
+    </string-array>
 </resources>

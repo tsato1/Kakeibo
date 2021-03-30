@@ -1,7 +1,7 @@
 package com.kakeibo.util
 
 import com.kakeibo.data.ItemStatus
-import com.kakeibo.ui.adapter.ExpandableListAdapter
+import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.model.ExpandableListRowModel
 import java.math.BigDecimal
 import java.util.*

@@ -33,9 +33,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.kakeibo.data.disk.AppDatabase.MIGRATION_1_7;
-import static com.kakeibo.data.disk.AppDatabase.MIGRATION_2_7;
-import static com.kakeibo.data.disk.AppDatabase.MIGRATION_3_7;
+import static com.kakeibo.data.disk.AppDatabase.MIGRATION_1_2;
+import static com.kakeibo.data.disk.AppDatabase.MIGRATION_2_3;
+import static com.kakeibo.data.disk.AppDatabase.MIGRATION_3_4;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_5;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_5_7;
 import static com.kakeibo.data.disk.AppDatabase.MIGRATION_6_7;
@@ -213,9 +213,9 @@ public class MigrationTest_Room {
         AppDatabase database = Room.databaseBuilder(ApplicationProvider.getApplicationContext(),
                 AppDatabase.class, TEST_DB_NAME)
                 .addMigrations(
-                        MIGRATION_1_7,
-                        MIGRATION_2_7,
-                        MIGRATION_3_7,
+                        MIGRATION_1_2,
+                        MIGRATION_2_3,
+                        MIGRATION_3_4,
                         MIGRATION_4_5,
                         MIGRATION_5_7,
                         MIGRATION_6_7)

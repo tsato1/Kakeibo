@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "10a6ce93d300acdd2858e077c8c148dc",
+    "identityHash": "7b9a841fe310141d1bdb9eb7d20a596d",
     "entities": [
       {
         "tableName": "kkbapp",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT DEFAULT '', `type` TEXT DEFAULT '', `update_date` TEXT NOT NULL DEFAULT '', `value_int_1` INTEGER NOT NULL DEFAULT 0, `value_int_2` INTEGER NOT NULL DEFAULT -1, `value_int_3` INTEGER NOT NULL DEFAULT 0, `value_str_1` TEXT NOT NULL DEFAULT '', `value_str_2` TEXT NOT NULL DEFAULT '', `value_str_3` TEXT NOT NULL DEFAULT '')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL DEFAULT '', `type` TEXT NOT NULL DEFAULT '', `update_date` TEXT NOT NULL DEFAULT '', `value_int_1` INTEGER NOT NULL DEFAULT 0, `value_int_2` INTEGER NOT NULL DEFAULT -1, `value_int_3` INTEGER NOT NULL DEFAULT 0, `value_str_1` TEXT NOT NULL DEFAULT '', `value_str_2` TEXT NOT NULL DEFAULT '', `value_str_3` TEXT NOT NULL DEFAULT '')",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,14 +18,14 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false,
+            "notNull": true,
             "defaultValue": "''"
           },
           {
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
-            "notNull": false,
+            "notNull": true,
             "defaultValue": "''"
           },
           {
@@ -89,7 +89,7 @@
       },
       {
         "tableName": "items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER, `currency_code` TEXT NOT NULL DEFAULT '---', `category_code` INTEGER NOT NULL DEFAULT 0, `memo` TEXT NOT NULL, `event_date` TEXT NOT NULL, `update_date` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `currency_code` TEXT NOT NULL DEFAULT '---', `category_code` INTEGER NOT NULL DEFAULT 0, `memo` TEXT NOT NULL, `event_date` TEXT NOT NULL, `update_date` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -101,7 +101,7 @@
             "fieldPath": "amount",
             "columnName": "amount",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "currencyCode",
@@ -349,7 +349,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '10a6ce93d300acdd2858e077c8c148dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7b9a841fe310141d1bdb9eb7d20a596d')"
     ]
   }
 }

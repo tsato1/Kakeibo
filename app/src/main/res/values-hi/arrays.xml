@@ -10,22 +10,30 @@
         <item>शनिवार</item>
     </string-array>
 
-<!--    <string-array name="default_category">-->
-<!--        <item>INGRE</item>-->
-<!--        <item>MERCAN</item>-->
-<!--        <item>COMIDA</item>-->
-<!--        <item>UTIL</item>-->
-<!--        <item>SALUD</item>-->
-<!--        <item>EDU</item>-->
-<!--        <item>VESTID</item>-->
-<!--        <item>TRANS</item>-->
-<!--        <item>ENTRET</item>-->
-<!--        <item>SEGURO</item>-->
-<!--        <item>IMPUES</item>-->
-<!--        <item>OTROS</item>-->
-<!--        <item>MSCTA</item>-->
-<!--        <item>SOCIAL</item>-->
-<!--        <item>COSME</item>-->
-<!--        <item>VVENDA</item>-->
-<!--    </string-array>-->
+    <string-array name="default_category">
+        <item>आय</item>
+        <item>वस्तु</item>
+        <item>भोजन</item>
+        <item>उपयोगिता</item>
+        <item>स्वास्थ्य</item>
+        <item>शिक्षा</item>
+        <item>कपड़ा</item>
+        <item>परिवहन</item>
+        <item>मनोरंजन</item>
+        <item>बीमा</item>
+        <item>कर</item>
+        <item>अन्य</item>
+        <item>पालतू</item>
+        <item>सामाजिक</item>
+        <item>अंगराग</item>
+        <item>आवास</item>
+        <item>बक्शीश</item>
+        <item>भत्ता</item>
+        <item>निवेश</item>
+        <item>किराए</item>
+        <item>व्यय</item>
+        <item>फ़ोन</item>
+        <item>निवेश</item>
+        <item>किराए</item>
+    </string-array>
 </resources>

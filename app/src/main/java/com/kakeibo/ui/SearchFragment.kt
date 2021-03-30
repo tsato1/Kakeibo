@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -23,8 +22,8 @@ import com.kakeibo.databinding.FragmentSearchBinding
 import com.kakeibo.ui.model.SearchCriteriaCard
 import com.kakeibo.ui.view.RecyclerItemTouchHelper
 import com.kakeibo.ui.listener.RecyclerItemTouchHelperListener
-import com.kakeibo.ui.adapter.SearchCardListAdapter
-import com.kakeibo.ui.adapter.SearchCardListAdapter.*
+import com.kakeibo.ui.adapter.view.SearchCardListAdapter
+import com.kakeibo.ui.adapter.view.SearchCardListAdapter.*
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
@@ -63,10 +62,9 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
 
         val itemStatusViewModel: ItemStatusViewModel by activityViewModels()
         val categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
-        val fragmentBinding: FragmentSearchBinding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_search, container, false)
-        fragmentBinding.lifecycleOwner = this
-        val view = fragmentBinding.root
+        val binding = FragmentSearchBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        val view = binding.root
 
         itemStatusViewModel.all.observe(viewLifecycleOwner, {
             _allItems = it

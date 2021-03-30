@@ -17,9 +17,10 @@ import com.kakeibo.SubApp
 import com.kakeibo.data.CategoryStatus
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentInputBinding
-import com.kakeibo.ui.adapter.CategoryGridAdapter
 import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.listener.CategoryClickListener
+import com.kakeibo.ui.settings.category.replace.GridItem
+import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
 import com.kakeibo.ui.view.AmountTextWatcher
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.*
@@ -54,12 +55,16 @@ class InputFragment : Fragment(), CategoryClickListener {
         binding.lifecycleOwner = this
         val view = binding.root
 
+        val list = ArrayList<GridItem>()
+
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
-        val categoryGridAdapter = CategoryGridAdapter(this)
-        recyclerView.adapter = categoryGridAdapter
+        val recyclerViewAdapter = RecyclerViewAdapter(list, this)
         recyclerView.layoutManager = GridLayoutManager(activity, MainActivity.numColumns)
+        recyclerView.adapter = recyclerViewAdapter
         _categoryStatusViewModel.dsp.observe(viewLifecycleOwner, {
-            categoryGridAdapter.setCategoryStatuses(it)
+            list.clear()
+            it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }
+            recyclerViewAdapter.notifyDataSetChanged()
         })
 
         _btnDate = view.findViewById(R.id.btn_date)
@@ -88,7 +93,7 @@ class InputFragment : Fragment(), CategoryClickListener {
         }
 
         val eventDate = UtilDate.getDBDate(_btnDate.text.toString().split(" ")[0], MainActivity.dateFormat)
-        val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
+        val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_KMS)
         val amount = when (category.color) {
             UtilCategory.CATEGORY_COLOR_INCOME -> {
                 BigDecimal(_edtAmount.text.toString())

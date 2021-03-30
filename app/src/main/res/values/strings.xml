@@ -93,6 +93,7 @@
 
     <string name="msg_item_successfully_saved">The item is successfully saved.</string>
     <string name="msg_item_successfully_deleted">The item is successfully deleted.</string>
+    <string name="msg_category_successfully_deleted">The category is successfully deleted.</string>
     <string name="msg_change_successfully_saved">The change is successfully saved.</string>
     <string name="msg_no_result_found">No result found.</string>
     <string name="msg_card_is_removed">Card is removed.</string>

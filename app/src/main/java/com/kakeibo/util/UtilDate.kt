@@ -16,7 +16,8 @@ object UtilDate {
     const val DATE_FORMAT_MDY = "MM/dd/yyyy"
     const val DATE_FORMAT_DMY = "dd/MM/yyyy"
     const val DATE_FORMAT_DB = "yyyy-MM-dd"
-    const val DATE_FORMAT_DB_HMS = "yyyy-MM-dd HH:mm:ss" //todo kk:mm:ss migration
+    const val DATE_FORMAT_DB_HMS = "yyyy-MM-dd HH:mm:ss" // old UpdatedDate
+    const val DATE_FORMAT_DB_KMS = "yyyy-MM-dd kk:mm:ss"
 
     val DATE_FORMATS = arrayOf(DATE_FORMAT_YMD, DATE_FORMAT_MDY, DATE_FORMAT_DMY, DATE_FORMAT_DB, DATE_FORMAT_DB_HMS)
 
