@@ -38,4 +38,7 @@ class Medium : ViewModel() {
     fun setInSearchResult(value: Boolean) {
         inSearchResult.value = value
     }
+    fun getInSearchResult(): Boolean {
+        return inSearchResult.value!!
+    }
 }

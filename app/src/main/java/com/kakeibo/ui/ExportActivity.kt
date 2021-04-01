@@ -28,6 +28,7 @@ import com.kakeibo.R
 import com.kakeibo.BuildConfig
 import com.kakeibo.SubApp
 import com.kakeibo.ui.export.DriveServiceHelper
+import com.kakeibo.ui.model.Medium
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.getTodaysDate
 import com.kakeibo.util.UtilFiles
@@ -49,7 +50,6 @@ class ExportActivity : AppCompatActivity() {
     private var mOpenFileId: String? = null
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var mFirebaseAuth: FirebaseAuth? = null
-
     private var _interstitialAd: InterstitialAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +58,10 @@ class ExportActivity : AppCompatActivity() {
         mReportType = intent.getIntExtra("REPORT_VIEW_TYPE", 0)
         requestSignIn()
         
-        /*** ads  */
+        /* ads */
         val adRequest = AdRequest.Builder().build()
         var adUnitId = getString(R.string.main_banner_ad)
-        if (BuildConfig.DEBUG) { /*** in debug mode  */
+        if (BuildConfig.DEBUG) { /* in debug mode */
             adUnitId = "ca-app-pub-3940256099942544/1033173712"
         }
         InterstitialAd.load(this, adUnitId, adRequest, object : InterstitialAdLoadCallback() {
@@ -88,10 +88,10 @@ class ExportActivity : AppCompatActivity() {
                             val os = contentResolver.openOutputStream(uri)
                             if (os != null) {
                                 val content: String? = when (mReportType) {
-                                    ReportFragment.REPORT_BY_DATE -> {
+                                    Medium.FRAGMENT_REPORT_D -> {
                                         UtilFiles.getFileValue(FILE_ORDER_DATE, this)
                                     }
-                                    ReportFragment.REPORT_BY_CATEGORY -> {
+                                    Medium.FRAGMENT_REPORT_C -> {
                                         UtilFiles.getFileValue(FILE_ORDER_CATEGORY, this)
                                     }
                                     else -> {
@@ -101,7 +101,7 @@ class ExportActivity : AppCompatActivity() {
                                 os.write(content!!.toByteArray())
                                 os.close()
                                 
-                                /*** ads  */
+                                /* ads */
                                 if (_interstitialAd != null) {
                                     _interstitialAd!!.show(this)
                                 } else {
@@ -119,7 +119,7 @@ class ExportActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, resultData)
     }
 
-    /**
+    /*
      * Starts a sign-in activity using [.REQUEST_CODE_SIGN_IN].
      */
     private fun requestSignIn() {
@@ -131,20 +131,19 @@ class ExportActivity : AppCompatActivity() {
                 .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions)
         mFirebaseAuth = FirebaseAuth.getInstance()
-        startActivityForResult(mGoogleSignInClient!!.getSignInIntent(), REQUEST_CODE_SIGN_IN)
-    }
-
-    private fun requestSignOut() {
-        /*** signout from firebase  */
-        if (mFirebaseAuth != null) mFirebaseAuth!!.signOut()
-        /*** signout from googleSignInClient  */
-        if (mGoogleSignInClient != null) {
-            mGoogleSignInClient!!.signOut()
-                    .addOnCompleteListener(this) { }
+        mGoogleSignInClient?.let {
+            startActivityForResult(it.signInIntent, REQUEST_CODE_SIGN_IN)
         }
     }
 
-    /**
+    private fun requestSignOut() {
+        /* signout from firebase */
+        mFirebaseAuth?.signOut()
+        /* signout from googleSignInClient */
+        mGoogleSignInClient?.let { it.signOut().addOnCompleteListener(this) { } }
+    }
+
+    /*
      * Handles the `result` of a completed sign-in activity initiated from [ ][.requestSignIn].
      */
     private fun handleSignInResult(result: Intent) {
@@ -166,141 +165,153 @@ class ExportActivity : AppCompatActivity() {
                     // The DriveServiceHelper encapsulates all REST API and SAF functionality.
                     // Its instantiation is required before handling any onClick actions.
                     mDriveServiceHelper = DriveServiceHelper(googleDriveService)
-                    /*** firebase login  */
+                    /* firebase login  */
                     val authCredential = GoogleAuthProvider.getCredential(googleAccount.idToken, null)
-                    mFirebaseAuth!!.signInWithCredential(authCredential)
-                            .addOnCompleteListener(this) { task ->
-                                if (task.isSuccessful) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    val user = mFirebaseAuth!!.currentUser
-                                    if (user != null)
-                                        Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
-                                } else {
-                                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                                    finish()
-                                }
+                    mFirebaseAuth?.let {
+                        it.signInWithCredential(authCredential).addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                    val user = it.currentUser
+                                if (user != null)
+                                    Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
+                            } else {
+                                Log.w(TAG, "signInWithCredential:failure", task.exception)
+                                finish()
                             }
+                        }
+                    }
                     openFilePicker()
                 }
                 .addOnFailureListener { exception: Exception? ->
                     Log.e(TAG, "Unable to sign in.", exception) }
     }
 
-    /**
+    /*
      * Opens the Storage Access Framework file picker using [.REQUEST_CODE_OPEN_DOCUMENT].
      */
     private fun openFilePicker() {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Opening file picker.")
-            val pickerIntent = mDriveServiceHelper!!.createFilePickerIntent()
+            val pickerIntent = mDriveServiceHelper?.createFilePickerIntent()
 
             // The result of the SAF Intent is handled in onActivityResult.
             startActivityForResult(pickerIntent, REQUEST_CODE_OPEN_DOCUMENT)
         }
     }
 
-    /**
+    /*
      * Opens a file from its `uri` returned from the Storage Access Framework file picker
      * initiated by [.openFilePicker].
      */
     private fun openFileFromFilePicker(uri: Uri) {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Opening " + uri.path)
-            mDriveServiceHelper!!.openFileUsingStorageAccessFramework(contentResolver, uri)
-                    .addOnSuccessListener { nameAndContent: Pair<String?, String?>? ->
-                        setReadOnlyMode()
-                        createFile() }
-                    .addOnFailureListener { exception: Exception?
-                        -> Log.e(TAG, "Unable to open file from picker.", exception) }
+            mDriveServiceHelper?.let {
+                it.openFileUsingStorageAccessFramework(contentResolver, uri)
+                        .addOnSuccessListener {
+                            setReadOnlyMode()
+                            createFile()
+                        }
+                        .addOnFailureListener { exception: Exception? ->
+                            Log.e(TAG, "Unable to open file from picker.", exception)
+                        }
+            }
         }
     }
 
-    /**
+    /*
      * Creates a new file via the Drive REST API.
      */
     private fun createFile() {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Creating a file.")
-            val dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
-            val strDateFormat = when (dateFormat) {
+            val strDateFormat = when (SubApp.getDateFormat(R.string.pref_key_date_format)) {
                 1 -> getTodaysDate(UtilDate.DATE_FORMAT_MDY) + " kk:mm:ss"
                 2 -> getTodaysDate(UtilDate.DATE_FORMAT_DMY) + " kk:mm:ss"
                 else -> getTodaysDate(UtilDate.DATE_FORMAT_YMD) + " kk:mm:ss"
             }
             val fileName = "Kakeibo_Export_${getTodaysDate(strDateFormat)}"
-            mDriveServiceHelper!!.createFile(fileName, mReportType, this)
-                    .addOnSuccessListener { fileId: String? ->
-                        showMessage(getString(R.string.file_created))
-                        /*** ads  */
-                        if (_interstitialAd != null) {
-                            _interstitialAd!!.show(this)
-                            UtilFiles.deleteFile(fileName, this)
-                        } else {
-                            Log.d("TAG", "The interstitial wasn't loaded yet.")
+            mDriveServiceHelper?.let {
+                it.createFile(fileName, mReportType, this)
+                        .addOnSuccessListener { fileId: String? ->
+                            showMessage(getString(R.string.file_created))
+                            /* ads  */
+                            if (_interstitialAd != null) {
+                                _interstitialAd!!.show(this)
+                                UtilFiles.deleteFile(fileName, this)
+                            } else {
+                                Log.d("TAG", "The interstitial wasn't loaded yet.")
+                            }
+                            finish()
                         }
-                        finish()
-                    }
-                    .addOnFailureListener { exception: Exception? ->
-                        Log.e(TAG, "Couldn't create file.", exception)
-                        finish()
-                    }
+                        .addOnFailureListener { exception: Exception? ->
+                            Log.e(TAG, "Couldn't create file.", exception)
+                            finish()
+                        }
+            }
         }
     }
 
-    /**
+    /*
      * Retrieves the title and content of a file identified by `fileId` and populates the UI.
      */
     private fun readFile(fileId: String) {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Reading file $fileId")
-            mDriveServiceHelper!!.readFile(fileId)
-                    .addOnSuccessListener { nameAndContent: Pair<String, String> ->
-                        setReadWriteMode(fileId) }
-                    .addOnFailureListener { exception: Exception? ->
-                        Log.e(TAG, "Couldn't read file.", exception) }
+            mDriveServiceHelper?.let {
+                it.readFile(fileId)
+                        .addOnSuccessListener { nameAndContent: Pair<String, String> ->
+                            setReadWriteMode(fileId) }
+                        .addOnFailureListener { exception: Exception? ->
+                            Log.e(TAG, "Couldn't read file.", exception) }
+            }
         }
     }
 
-    /**
+    /*
      * Saves the currently opened file created via [.createFile] if one exists.
      */
     private fun saveFile() {
         if (mDriveServiceHelper != null && mOpenFileId != null) {
             val fileName = "fileName"
             val fileContent = "fileContent"
-            mDriveServiceHelper!!.saveFile(mOpenFileId, fileName, fileContent)
-                    .addOnFailureListener { exception: Exception? ->
-                        Log.e(TAG, "Unable to save file via REST.", exception) }
+            mDriveServiceHelper?.let {
+                it.saveFile(mOpenFileId, fileName, fileContent)
+                        .addOnFailureListener { exception: Exception? ->
+                            Log.e(TAG, "Unable to save file via REST.", exception) }
+            }
         }
     }
 
-    /**
+    /*
      * Queries the Drive REST API for files visible to this app and lists them in the content view.
      */
     private fun query() {
         if (mDriveServiceHelper != null) {
-            mDriveServiceHelper!!.queryFiles()
-                    .addOnSuccessListener { fileList: FileList ->
-                        val builder = StringBuilder()
-                        for (file in fileList.files) {
-                            builder.append(file.name).append("\n")
+            mDriveServiceHelper?.let {
+                it.queryFiles()
+                        .addOnSuccessListener { fileList: FileList ->
+                            val builder = StringBuilder()
+                            for (file in fileList.files) {
+                                builder.append(file.name).append("\n")
+                            }
+                            val fileNames = builder.toString()
+                            setReadOnlyMode()
                         }
-                        val fileNames = builder.toString()
-                        setReadOnlyMode()
-                    }
-                    .addOnFailureListener { exception: Exception? ->
-                        Log.e(TAG, "Unable to query files.", exception) }
+                        .addOnFailureListener { exception: Exception? ->
+                            Log.e(TAG, "Unable to query files.", exception) }
+            }
         }
     }
 
-    /**
+    /*
      * Updates the UI to read-only mode.
      */
     private fun setReadOnlyMode() {
         mOpenFileId = null
     }
 
-    /**
+    /*
      * Updates the UI to read/write mode on the document identified by `fileId`.
      */
     private fun setReadWriteMode(fileId: String) {

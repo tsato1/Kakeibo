@@ -52,13 +52,13 @@ class CustomCategoryListActivity : AppCompatActivity() {
         setContentView(binding.root)
         _context = this
 
-        /*** hide home button on actionbar  */
+        /* hide home button on actionbar */
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(false)
             supportActionBar!!.setHomeButtonEnabled(false)
         }
 
-        /*** ads  */
+        /* ads */
         _kkbAppViewModel.all.observe(this, {
             val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
 
@@ -70,7 +70,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
             }
         })
 
-        /* findViews  */
+        /* findViews */
         _btnBack = findViewById(R.id.btn_back)
         _fabAdd = findViewById(R.id.fab_add)
         _btnBack.setOnClickListener { onBackPressed() }
@@ -145,6 +145,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
                     dialog.setTitle(R.string.delete)
                     dialog.setMessage(R.string.msg_delete_some_categories)
                     dialog.setPositiveButton(R.string.ok) { _, _ ->
+                        //todo if none of the items use this category, delete
                         _categoryStatusViewModel.delete(categoryStatus.id)
                         Toast.makeText(this, R.string.msg_category_successfully_deleted, Toast.LENGTH_LONG).show()
                     }

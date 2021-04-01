@@ -8,136 +8,187 @@
             type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/col_root_fragment2"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:orientation="vertical">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srl_reload"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="0dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:background="@color/colorBackground">
+            android:layout_weight="1">
 
-            <LinearLayout
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/srl_reload"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_margin="4dp"
+                android:background="@color/colorBackground">
 
-                <include
-                    layout="@layout/banner_date_picker"
-                    android:id="@+id/banner_date_picker"/>
-
-                <TableLayout
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/tbl_padding_horizontal"
-                    android:paddingEnd="@dimen/tbl_padding_horizontal"
-                    android:paddingTop="@dimen/tbl_padding_vertical"
-                    android:paddingBottom="@dimen/tbl_padding_vertical">
-                    <TableRow>
-                        <ImageView
-                            android:layout_width="@dimen/small_imv_square_sides"
-                            android:layout_height="@dimen/small_imv_square_sides"
-                            android:src="@drawable/dot_color_primary"
-                            android:contentDescription="@string/income_colon"/>
-                        <TextView
-                            android:id="@+id/txv_income_colon"
-                            android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <include
+                            layout="@layout/banner_date_picker"
+                            android:id="@+id/banner_date_picker"/>
+
+                        <TableLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/income_colon"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/txv_income"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"
-                            bind:context="@{context}"
-                            bind:amount="@{itemStatusViewModel.income.toString()}"
-                            bind:colon="@{false}"/>
-                    </TableRow>
-                    <TableRow>
-                        <ImageView
-                            android:layout_width="@dimen/small_imv_square_sides"
-                            android:layout_height="@dimen/small_imv_square_sides"
-                            android:src="@drawable/dot_color_accent"
-                            android:contentDescription="@string/expense_colon"/>
-                        <TextView
-                            android:id="@+id/txv_expense_colon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/expense_colon"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/txv_expense"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"
-                            bind:context="@{context}"
-                            bind:amount="@{itemStatusViewModel.expense.toString()}"
-                            bind:colon="@{false}"/>
-                    </TableRow>
-                    <TableRow>
-                        <ImageView
-                            android:layout_width="@dimen/small_imv_square_sides"
-                            android:layout_height="@dimen/small_imv_square_sides"
-                            android:src="@drawable/dot_color_background"
-                            android:contentDescription="@string/expense_colon"/>
-                        <TextView
-                            android:id="@+id/txv_balance_colon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/balance_colon"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/txv_balance"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:textColor="@color/colorBlack"
-                            android:textStyle="bold"
-                            bind:context="@{context}"
-                            bind:amount="@{itemStatusViewModel.balance.toString()}"
-                            bind:colon="@{false}"/>
-                    </TableRow>
-                </TableLayout>
+                            android:paddingStart="@dimen/tbl_padding_horizontal"
+                            android:paddingEnd="@dimen/tbl_padding_horizontal"
+                            android:paddingTop="@dimen/tbl_padding_vertical"
+                            android:paddingBottom="@dimen/tbl_padding_vertical">
 
-                <Button
-                    android:id="@+id/btn_c"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="C" />
+                            <TableRow>
 
-                <Button
-                    android:id="@+id/btn_d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="D" />
+                                <ImageView
+                                    android:layout_width="@dimen/small_imv_square_sides"
+                                    android:layout_height="@dimen/small_imv_square_sides"
+                                    android:src="@drawable/dot_color_primary"
+                                    android:contentDescription="@string/income_colon"/>
 
-                <include
-                    layout="@layout/fragment_report_c"
-                    android:id="@+id/fragment_report_c"
-                    android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/txv_income_colon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/income_colon"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"/>
 
-                <include
-                    layout="@layout/fragment_report_d"
-                    android:id="@+id/fragment_report_d" />
+                                <TextView
+                                    android:id="@+id/txv_income"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"
+                                    bind:context="@{context}"
+                                    bind:amount="@{itemStatusViewModel.income.toString()}"
+                                    bind:colon="@{false}"/>
 
-            </LinearLayout>
+                            </TableRow>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                            <TableRow>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                                <ImageView
+                                    android:layout_width="@dimen/small_imv_square_sides"
+                                    android:layout_height="@dimen/small_imv_square_sides"
+                                    android:src="@drawable/dot_color_accent"
+                                    android:contentDescription="@string/expense_colon"/>
+
+                                <TextView
+                                    android:id="@+id/txv_expense_colon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/expense_colon"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:id="@+id/txv_expense"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"
+                                    bind:context="@{context}"
+                                    bind:amount="@{itemStatusViewModel.expense.toString()}"
+                                    bind:colon="@{false}"/>
+
+                            </TableRow>
+
+                            <TableRow>
+
+                                <ImageView
+                                    android:layout_width="@dimen/small_imv_square_sides"
+                                    android:layout_height="@dimen/small_imv_square_sides"
+                                    android:src="@drawable/dot_color_background"
+                                    android:contentDescription="@string/expense_colon"/>
+
+                                <TextView
+                                    android:id="@+id/txv_balance_colon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/balance_colon"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:id="@+id/txv_balance"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"
+                                    bind:context="@{context}"
+                                    bind:amount="@{itemStatusViewModel.balance.toString()}"
+                                    bind:colon="@{false}"/>
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                        <include
+                            layout="@layout/fragment_report_c"
+                            android:id="@+id/fragment_report_c"
+                            android:visibility="gone" />
+
+                        <include
+                            android:id="@+id/fragment_report_d"
+                            layout="@layout/fragment_report_d" />
+
+                        <include
+                            layout="@layout/fragment_report_a"
+                            android:id="@+id/fragment_report_a"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                </androidx.core.widget.NestedScrollView>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+            <Button
+                android:id="@+id/btn_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+            <Button
+                android:id="@+id/btn_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </layout>

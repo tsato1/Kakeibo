@@ -85,14 +85,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 dialog.show()
                 true
             }
-            getString(R.string.pref_key_in_app_purchases) -> {
-                startActivity(Intent(activity, InAppPurchasesActivity::class.java))
-                true
-            }
-            getString(R.string.pref_key_about) -> {
-                startActivity(Intent(activity, AboutActivity::class.java))
-                true
-            }
+//            getString(R.string.pref_key_in_app_purchases) -> {
+//                startActivity(Intent(activity, InAppPurchasesActivity::class.java))
+//                true
+//            }
+//            getString(R.string.pref_key_about) -> {
+//                startActivity(Intent(activity, AboutActivity::class.java))
+//                true
+//            }
             else -> {
                 super.onPreferenceTreeClick(preference)
             }

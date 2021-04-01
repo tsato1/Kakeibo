@@ -7,7 +7,7 @@
 
         <variable
             name="clickListener"
-            type="com.kakeibo.ui.listener.ButtonClickListener" />
+            type="com.kakeibo.ui.listener.SimpleClickListener" />
         <variable
             name="medium"
             type="com.kakeibo.ui.model.Medium" />
@@ -35,7 +35,7 @@
             android:src="@drawable/ic_close_white"
             android:contentDescription="@string/close"
             android:visibility="gone"
-            android:onClick="@{()->clickListener.onButtonClicked()}"
+            android:onClick="@{()->clickListener.onClick()}"
             style="?android:attr/buttonBarButtonStyle"/>
 
         <ImageButton

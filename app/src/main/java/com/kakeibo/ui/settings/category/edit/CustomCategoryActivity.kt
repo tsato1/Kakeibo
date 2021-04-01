@@ -46,13 +46,13 @@ class CustomCategoryActivity : AppCompatActivity() {
 
         _context = this
 
-        /*** hide home button on actionbar  */
+        /* hide home button on actionbar */
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(false)
             supportActionBar!!.setHomeButtonEnabled(false)
         }
 
-        /*** ads  */
+        /* ads */
         _kkbAppViewModel.all.observe(this, {
             val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
 
@@ -69,7 +69,7 @@ class CustomCategoryActivity : AppCompatActivity() {
         _viewPager.adapter = _smartPagerAdapter
         _viewPager.isUserInputEnabled = false
 
-        /* if this activity was called from CategoryEditionActivity  */
+        /* if this activity was called from CategoryEditionActivity */
         val id = intent.getLongExtra(CustomCategoryListActivity.EXTRA_KEY_CATEGORY_ID, -1)
         val code = intent.getIntExtra(CustomCategoryListActivity.EXTRA_KEY_CATEGORY_CODE, -1)
         _categoryStatusViewModel.allMap.observe(this, {

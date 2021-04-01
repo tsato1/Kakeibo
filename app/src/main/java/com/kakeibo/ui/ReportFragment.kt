@@ -1,17 +1,16 @@
 package com.kakeibo.ui
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,8 +21,7 @@ import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentReportBinding
 import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.adapter.view.ReportCListAdapter
-import com.kakeibo.ui.listener.ButtonClickListener
-import com.kakeibo.ui.model.ExpandableListRowModel
+import com.kakeibo.ui.listener.SimpleClickListener
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
@@ -34,14 +32,10 @@ import java.math.BigDecimal
 /**
  * Created by T on 2015/09/14.
  */
-class ReportFragment : Fragment(), ButtonClickListener {
+class ReportFragment : Fragment(), SimpleClickListener {
 
     companion object {
         private const val SWIPE_REFRESH_MILLI_SECOND = 400
-
-        var REPORT_BY_DATE = 0 //todo use medium in mainactivity
-        var REPORT_BY_CATEGORY = 1
-        var REPORT_BY_AMOUNT = 2
 
         fun newInstance(): ReportFragment {
             val tabFragment2 = ReportFragment()
@@ -57,14 +51,14 @@ class ReportFragment : Fragment(), ButtonClickListener {
 
     private lateinit var _srlReload: SwipeRefreshLayout
     private lateinit var _btnClose: ImageButton
-    private lateinit var _reportC: NestedScrollView
-    private lateinit var _reportD: NestedScrollView
+    private lateinit var _reportA: LinearLayout
+    private lateinit var _reportC: LinearLayout
+    private lateinit var _reportD: LinearLayout
 
     private lateinit var _allItems: List<ItemStatus>
     private lateinit var _itemsThisMonth: List<ItemStatus>
     private var _result: List<ItemStatus> = listOf()
     private lateinit var _expandableListAdapter: ExpandableListAdapter
-    private val _expandableList: MutableList<ExpandableListRowModel> = ArrayList()
     private lateinit var _incomeListAdapter: ReportCListAdapter
     private lateinit var _expenseListAdapter: ReportCListAdapter
 
@@ -86,7 +80,6 @@ class ReportFragment : Fragment(), ButtonClickListener {
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
         _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel, requireContext())
-        _expandableListAdapter.setExpandableList(_expandableList)
         _expandableListAdapter.setItemStatusViewMode(_itemStatusViewModel)
         expandableListView.adapter = _expandableListAdapter
         expandableListView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -108,7 +101,6 @@ class ReportFragment : Fragment(), ButtonClickListener {
                     .groupBy { it.eventDate }
                     .mapKeys { entry -> Pair(entry.key, entry.value.sumOf { it.getAmount() }) }
                     .toSortedMap(compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
-            _expandableList.clear()
             _expandableListAdapter.setMasterMap(masterMap)
 
             val allThisMonthByCategory = allThisMonth.groupBy { it.categoryCode }
@@ -117,17 +109,28 @@ class ReportFragment : Fragment(), ButtonClickListener {
             _expenseListAdapter.setAllByCategory(allThisMonthByCategory.filter { it.key.second < BigDecimal(0) })
         })
 
+        val btnA: Button = view.findViewById(R.id.btn_a)
         val btnC: Button = view.findViewById(R.id.btn_c)
         val btnD: Button = view.findViewById(R.id.btn_d)
+        _reportA = view.findViewById(R.id.fragment_report_a)
         _reportC = view.findViewById(R.id.fragment_report_c)
         _reportD = view.findViewById(R.id.fragment_report_d)
+        btnA.setOnClickListener { v ->
+            _reportA.visibility = VISIBLE
+            _reportC.visibility = GONE
+            _reportD.visibility = GONE
+            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_A)
+            bannerDatePickerBinding.executePendingBindings()
+        }
         btnC.setOnClickListener { v ->
+            _reportA.visibility = GONE
             _reportC.visibility = VISIBLE
             _reportD.visibility = GONE
             _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_C)
             bannerDatePickerBinding.executePendingBindings()
         }
         btnD.setOnClickListener { v ->
+            _reportA.visibility = GONE
             _reportC.visibility = GONE
             _reportD.visibility = VISIBLE
             _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_D)
@@ -147,61 +150,65 @@ class ReportFragment : Fragment(), ButtonClickListener {
 
     /* Called by MainActivity */
     fun export() {
-        if (_result.isEmpty()) {
-            Toast.makeText(requireContext(), R.string.nothing_to_export, Toast.LENGTH_SHORT).show()
-            return
-        }
+        val message: String
 
-        val message = ""
         when (_medium.getCurrentlyShown()) {
             Medium.FRAGMENT_REPORT_C -> {
-                _result = _result.sortedBy { it.categoryCode }
-                getString(R.string.quest_export_this_report_C)
+                message = getString(R.string.quest_export_this_report_C)
+                Log.d("asdf","c")
+
+                _result = if (_medium.getInSearchResult()) {
+                    if (_result.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.nothing_to_export, Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    _result.sortedBy { it.categoryCode }
+                } else {
+                    if (_itemsThisMonth.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.nothing_to_export, Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    _itemsThisMonth.sortedBy { it.categoryCode }
+                }
             }
             Medium.FRAGMENT_REPORT_D -> {
-                _result = _result.sortedBy { it.eventDate }
-                getString(R.string.quest_export_this_report_D)
+                Log.d("asdf","DDDDDDD")
+                message = getString(R.string.quest_export_this_report_D)
+
+                _result = if (_medium.getInSearchResult()) {
+                    if (_result.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.nothing_to_export, Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    _result.sortedBy { it.eventDate }
+                } else {
+                    if (_itemsThisMonth.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.nothing_to_export, Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    _itemsThisMonth.sortedBy { it.eventDate }
+                }
             }
+            else -> return
         }
+
+        _result.forEach { Log.d("asdf","asdfasdf = "+it.memo) }
+
         val dialogExport = AlertDialog.Builder(requireContext())
         dialogExport.setIcon(R.mipmap.ic_mikan)
         dialogExport.setTitle(getString(R.string.export_category))
         dialogExport.setMessage(message)
         dialogExport.setPositiveButton(R.string.yes) { _, _ ->
-            val runnable = Runnable {
-                val stringBuilder = StringBuilder()
-                stringBuilder.setLength(0)
-                stringBuilder.append(resources.getString(R.string.category))
-                stringBuilder.append(",")
-                stringBuilder.append(resources.getString(R.string.amount))
-                stringBuilder.append(",")
-                stringBuilder.append(resources.getString(R.string.memo))
-                stringBuilder.append(",")
-                stringBuilder.append(resources.getString(R.string.event_date))
-                stringBuilder.append(",")
-                stringBuilder.append(resources.getString(R.string.updated_date))
-                stringBuilder.append("\n")
-
-                for (item in _result) {
-                    stringBuilder.append(MainActivity.allCategoryMap[item.categoryCode]!!.name)
-                    stringBuilder.append(",")
-                    stringBuilder.append(item.getAmount())
-                    stringBuilder.append(",")
-                    stringBuilder.append(item.memo)
-                    stringBuilder.append(",")
-                    stringBuilder.append(item.eventDate)
-                    stringBuilder.append(",")
-                    stringBuilder.append(item.updateDate)
-                    stringBuilder.append("\n")
-                }
-
-                UtilFiles.writeToFile(ExportActivity.FILE_ORDER_CATEGORY,
-                        stringBuilder.toString(), requireActivity(), Context.MODE_PRIVATE)
+            val fileName = when (_medium.getCurrentlyShown()) {
+                Medium.FRAGMENT_REPORT_C -> ExportActivity.FILE_ORDER_CATEGORY
+                Medium.FRAGMENT_REPORT_D -> ExportActivity.FILE_ORDER_DATE
+                else -> ""
             }
-            val thread = Thread(runnable)
-            thread.start()
+
+            UtilExport.build(requireContext(), _result, MainActivity.allCategoryMap, fileName)
+
             val intent = Intent(requireContext(), ExportActivity::class.java)
-            intent.putExtra("REPORT_VIEW_TYPE", REPORT_BY_CATEGORY)
+            intent.putExtra("REPORT_VIEW_TYPE", _medium.getCurrentlyShown())
             startActivity(intent)
         }
         dialogExport.show()
@@ -209,6 +216,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
 
     /* Called by MainActivity */
     fun focusOnSavedItem(date: String) {
+        _reportA.visibility = GONE
         _reportC.visibility = GONE
         _reportD.visibility = VISIBLE
         UtilExpandableList.expandOnlySpecificDate(_expandableListAdapter, date)
@@ -227,7 +235,6 @@ class ReportFragment : Fragment(), ButtonClickListener {
                 .groupBy { it.eventDate }
                 .mapKeys { entry -> Pair(entry.key, entry.value.sumOf { it.getAmount() }) }
                 .toSortedMap(compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
-        _expandableList.clear()
         _expandableListAdapter.setMasterMap(masterMap)
 
         val allItemsByCategory = _result.groupBy { it.categoryCode }
@@ -239,7 +246,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
     }
 
     /* exiting search */
-    override fun onButtonClicked() {
+    override fun onClick() {
         val dialog = AlertDialog.Builder(requireContext())
         dialog.setIcon(R.mipmap.ic_mikan)
         dialog.setTitle(getString(R.string.returning_to_monthly_report))
@@ -254,7 +261,6 @@ class ReportFragment : Fragment(), ButtonClickListener {
                     .groupBy { it.eventDate }
                     .mapKeys { entry -> Pair(entry.key, entry.value.sumOf { it.getAmount() }) }
                     .toSortedMap(compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
-            _expandableList.clear()
             _expandableListAdapter.setMasterMap(masterMap)
 
             val allItemsThisMonthByCategory = _itemsThisMonth.groupBy { it.categoryCode }
@@ -264,6 +270,7 @@ class ReportFragment : Fragment(), ButtonClickListener {
 
             _medium.setInSearchResult(false)
             _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_D)
+            _reportA.visibility = GONE
             _reportC.visibility = GONE
             _reportD.visibility = VISIBLE
         }

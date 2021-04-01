@@ -8,8 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -23,6 +25,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kakeibo.Constants
@@ -30,14 +33,17 @@ import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.data.CategoryStatus
-import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
+import com.kakeibo.ui.settings.AboutActivity
+import com.kakeibo.ui.settings.InAppPurchasesActivity
+import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         private const val TAG = "MainActivity"
@@ -57,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var _smartPagerAdapter: SmartPagerAdapter
     private lateinit var _viewPager: ViewPager2
+    private lateinit var _drawerLayout: DrawerLayout
+    private lateinit var _navigationView: NavigationView
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
@@ -69,23 +77,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        _kkbAppViewModel.all.observe(this, {
-            val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
-
-            if (showAds) {
-                MobileAds.initialize(this) {}
-                val adView: AdView = findViewById(R.id.ad_container)
-                val adRequest = AdRequest.Builder().build()
-                adView.loadAd(adRequest)
-                adView.visibility = View.VISIBLE
-            }
-        })
-
         weekNames = resources.getStringArray(R.array.week_name)
         dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
         numColumns = SubApp.getNumColumns(R.string.pref_key_num_columns)
 
-        setSupportActionBar(findViewById<View>(R.id.toolbar) as Toolbar)
+        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+
+        _drawerLayout = findViewById(R.id.drawer_layout)
+        _navigationView = findViewById(R.id.nav_view)
+        _navigationView.setNavigationItemSelectedListener(this)
+
+        val toggle = ActionBarDrawerToggle(this, _drawerLayout, toolbar, R.string.open, R.string.close)
+        _drawerLayout.addDrawerListener(toggle)
+        toggle.isDrawerIndicatorEnabled = true
+        toggle.syncState()
+
         _smartPagerAdapter = SmartPagerAdapter(this)
         _viewPager = findViewById(R.id.view_pager)
         _viewPager.offscreenPageLimit = 2
@@ -119,7 +126,8 @@ class MainActivity : AppCompatActivity() {
                         fabEnd.setImageResource(R.drawable.ic_search_white)
                         fabEnd.visibility = View.VISIBLE
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
             }
 
@@ -127,6 +135,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+
+        _kkbAppViewModel.all.observe(this, {
+            val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
+
+            if (showAds) {
+                MobileAds.initialize(this) {}
+                val adView: AdView = findViewById(R.id.ad_container)
+                val adRequest = AdRequest.Builder().build()
+                adView.loadAd(adRequest)
+                adView.visibility = View.VISIBLE
             }
         })
 
@@ -209,7 +229,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
+    /*
      * Register SKUs and purchase tokens with the server.
      */
     private fun registerPurchases(purchaseList: List<Purchase>) {
@@ -221,8 +241,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun refreshData() {
+        _billingClientLifecycle.queryPurchases()
+        _subscriptionViewModel.manualRefresh()
+//        invalidateOptionsMenu()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val isSignedIn = _authenticationViewModel.isSignedIn()
+        Log.d("asdf", "firebase signed in="+isSignedIn)
+//        menu.findItem(R.id.sign_in).isVisible = !isSignedIn
+//        menu.findItem(R.id.sign_out).isVisible = isSignedIn
         return true
     }
 
@@ -232,6 +266,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.sign_in -> {
                 triggerSignIn()
                 true
@@ -240,23 +280,16 @@ class MainActivity : AppCompatActivity() {
                 triggerSignOut()
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            R.id.in_app_purchases -> {
+                startActivity(Intent(this, InAppPurchasesActivity::class.java))
+                true
+            }
+            R.id.about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+                true
+            }
+            else -> true
         }
-    }
-
-    /**
-     * Update menu based on sign-in state. Called in response to [.invalidateOptionsMenu].
-     */
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val isSignedIn = _authenticationViewModel.isSignedIn()
-        menu.findItem(R.id.sign_in).isVisible = !isSignedIn
-        menu.findItem(R.id.sign_out).isVisible = isSignedIn
-        return true
-    }
-
-    private fun refreshData() {
-        _billingClientLifecycle.queryPurchases()
-        _subscriptionViewModel.manualRefresh()
     }
 
     /*
@@ -276,7 +309,7 @@ class MainActivity : AppCompatActivity() {
                 RC_SIGN_IN)
     }
 
-    /**
+    /*
      * Sign out with FirebaseUI Auth.
      */
     private fun triggerSignOut() {
@@ -287,12 +320,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
+    /*
      * Receive Activity result, including sign-in result.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        refreshData()
         when (requestCode) {
             RC_SIGN_IN -> {
                 // If sign-in is successful, update ViewModel.

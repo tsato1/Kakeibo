@@ -24,7 +24,6 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewModel, val _context: Context)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -34,9 +33,6 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
     }
 
     private var _expandableList: MutableList<ExpandableListRowModel> = mutableListOf()
-    fun setExpandableList(expandableList: MutableList<ExpandableListRowModel>) {
-        _expandableList = expandableList
-    }
     fun getExpandableList(): MutableList<ExpandableListRowModel> {
         return _expandableList
     }

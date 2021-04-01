@@ -31,9 +31,6 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/num_columns" />
-<!--        <Preference-->
-<!--            android:key="@string/pref_key_start_date_of_month"-->
-<!--            android:title="@string/start_date_of_month"/>-->
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/category"
@@ -47,9 +44,6 @@
         <Preference
             android:key="@string/pref_key_category_reorder"
             android:title="@string/reorder_categories"/>
-<!--        <Preference-->
-<!--            android:key="@string/pref_key_category_creation"-->
-<!--            android:title="@string/create_category"/>-->
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/in_app_data"
@@ -61,19 +55,19 @@
             android:positiveButtonText="@string/yes">
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/in_app_purchases">
-        <Preference
-            android:key="@string/pref_key_in_app_purchases"
-            android:title="@string/in_app_purchases">
-        </Preference>
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/about_this_app"
-        android:icon="@drawable/ic_mikan">
-        <Preference
-            android:key="@string/pref_key_about"
-            android:title="@string/version_etc">
-        </Preference>
-    </PreferenceCategory>
+<!--    <PreferenceCategory-->
+<!--        android:title="@string/in_app_purchases">-->
+<!--        <Preference-->
+<!--            android:key="@string/pref_key_in_app_purchases"-->
+<!--            android:title="@string/in_app_purchases">-->
+<!--        </Preference>-->
+<!--    </PreferenceCategory>-->
+<!--    <PreferenceCategory-->
+<!--        android:title="@string/about_this_app"-->
+<!--        android:icon="@drawable/ic_mikan">-->
+<!--        <Preference-->
+<!--            android:key="@string/pref_key_about"-->
+<!--            android:title="@string/version_etc">-->
+<!--        </Preference>-->
+<!--    </PreferenceCategory>-->
 </PreferenceScreen>
