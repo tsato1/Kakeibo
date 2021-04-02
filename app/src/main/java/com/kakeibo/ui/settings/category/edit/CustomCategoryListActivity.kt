@@ -25,6 +25,7 @@ import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 import com.kakeibo.util.UtilCategory
 
+
 class CustomCategoryListActivity : AppCompatActivity() {
 
     companion object {
@@ -140,12 +141,18 @@ class CustomCategoryListActivity : AppCompatActivity() {
             }
             MENU_ITEM_ID_DELETE -> {
                 categoryStatus?.let {
+                    if (_categoryStatusViewModel.isCategoryAlreadyUsed(it.code)) {
+                        val str1 = getString(R.string.msg_custom_category_already_in_use)
+                        val str2 = getString(R.string.msg_delete_kkb_items_first)
+                        Toast.makeText(_context, str1 + str2, Toast.LENGTH_LONG).show()
+                        return false
+                    }
+
                     val dialog = AlertDialog.Builder(this)
                     dialog.setIcon(R.mipmap.ic_mikan)
                     dialog.setTitle(R.string.delete)
                     dialog.setMessage(R.string.msg_delete_some_categories)
                     dialog.setPositiveButton(R.string.ok) { _, _ ->
-                        //todo if none of the items use this category, delete
                         _categoryStatusViewModel.delete(categoryStatus.id)
                         Toast.makeText(this, R.string.msg_category_successfully_deleted, Toast.LENGTH_LONG).show()
                     }
