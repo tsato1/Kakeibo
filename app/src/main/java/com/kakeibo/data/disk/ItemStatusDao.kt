@@ -27,6 +27,11 @@ interface ItemStatusDao {
     fun queryItems(query: SupportSQLiteQuery): List<ItemStatus>
 
     @Query("SELECT * FROM " + ItemDBAdapter.TABLE_NAME +
+            " WHERE strftime('%Y', " + ItemDBAdapter.COL_EVENT_DATE + ") = :y " +
+            " ORDER BY " + ItemDBAdapter.COL_EVENT_DATE)
+    fun getItemsByYear(y: String): LiveData<List<ItemStatus>>
+
+    @Query("SELECT * FROM " + ItemDBAdapter.TABLE_NAME +
             " WHERE strftime('%Y-%m', " + ItemDBAdapter.COL_EVENT_DATE + ") = :ym " +
             " ORDER BY " + ItemDBAdapter.COL_EVENT_DATE)
     fun getItemsByMonth(ym: String): LiveData<List<ItemStatus>>

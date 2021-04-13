@@ -7,10 +7,14 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -42,14 +46,12 @@ import com.kakeibo.ui.viewmodel.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         private const val TAG = "MainActivity"
         private const val RC_SIGN_IN = 0
 
-        lateinit var allCategoryMap: Map<Int, CategoryStatus>
         lateinit var allCategoryList: List<CategoryStatus>
         lateinit var allDspCategoryList: List<CategoryStatus>
 
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var _smartPagerAdapter: SmartPagerAdapter
     private lateinit var _viewPager: ViewPager2
     private lateinit var _drawerLayout: DrawerLayout
-    private lateinit var _navigationView: NavigationView
+    private lateinit var _navView: NavigationView
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
@@ -85,8 +87,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         _drawerLayout = findViewById(R.id.drawer_layout)
-        _navigationView = findViewById(R.id.nav_view)
-        _navigationView.setNavigationItemSelectedListener(this)
+
+        _navView = findViewById(R.id.nav_view)
+        _navView.setNavigationItemSelectedListener(this)
+        val navHeaderView = _navView.getHeaderView(0)
 
         val toggle = ActionBarDrawerToggle(this, _drawerLayout, toolbar, R.string.open, R.string.close)
         _drawerLayout.addDrawerListener(toggle)
@@ -153,47 +157,52 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         _billingClientLifecycle = (application as SubApp).billingClientLifecycle
         lifecycle.addObserver(_billingClientLifecycle)
 
-        // Register purchases when they change.
+        /* Register purchases when they change. */
         _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
             it?.let {
                 registerPurchases(it)
             }
         })
 
-        // Launch billing flow when user clicks button to buy something.
+        /* Launch billing flow when user clicks button to buy something. */
         _billingViewModel.buyEvent.observe(this, {
             it?.let {
                 _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
             }
         })
 
-        // Open the Play Store when event is triggered.
+        /* Open the Play Store when event is triggered. */
         _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
             Log.i(TAG, "Viewing subscriptions on the Google Play Store")
             val sku = it
             val url = if (sku == null) {
-                // If the SKU is not specified, just open the Google Play subscriptions URL.
+                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
                 Constants.PLAY_STORE_SUBSCRIPTION_URL
             } else {
-                // If the SKU is specified, open the deeplink for this SKU on Google Play.
+                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
                 String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
             }
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(url)
-//            startActivity(intent)
         })
 
-        // Update authentication UI.
         _authenticationViewModel.firebaseUser.observe(this, {
             invalidateOptionsMenu()
+
             if (it == null) {
-//                triggerSignIn()
+                navHeaderView.findViewById<ImageView>(R.id.imv_user_profile).setBackgroundResource(R.mipmap.ic_launcher_round)
+                navHeaderView.findViewById<TextView>(R.id.txv_user_name).text = getString(R.string.app_name)
+                navHeaderView.findViewById<TextView>(R.id.txv_user_email).text = getString(R.string.not_signed_in)
+                Log.d(TAG, "currently NOT logged in to firebase")
             } else {
+                navHeaderView.findViewById<ImageView>(R.id.imv_user_profile).setImageURI(it.photoUrl)
+                navHeaderView.findViewById<TextView>(R.id.txv_user_name).text = it.displayName
+                navHeaderView.findViewById<TextView>(R.id.txv_user_email).text = it.email
                 Log.d(TAG, "CURRENT user: " + it.email + " " + it.displayName)
             }
         })
 
-        // Update subscription information when user changes.
+        /* Update subscription information when user changes. */
         _authenticationViewModel.userChangeEvent.observe(this, {
             _subscriptionViewModel.userChanged()
             _billingClientLifecycle.purchaseUpdateEvent.value?.let {
@@ -205,9 +214,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         categoryStatusViewModel.all.observe(this, {
             allCategoryList = it
         })
-        categoryStatusViewModel.allMap.observe(this, {
-            allCategoryMap = it
-        })
         categoryStatusViewModel.dsp.observe(this, {
             allDspCategoryList = it
         })
@@ -217,6 +223,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fabStart.setOnClickListener(FabClickListener())
         fabEnd.setOnClickListener(FabClickListener())
     }
+
+    override fun onStart() {
+        super.onStart()
+        refreshData()
+    }
+
+//    override fun onResume() {
+//        super.onResume()
+//        _smartPagerAdapter?.let {
+//
+//        }
+//    } // todo _smartPagerAdapter == null ????
 
     override fun onBackPressed() {
         if (_viewPager.currentItem <= 3) {
@@ -244,19 +262,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun refreshData() {
         _billingClientLifecycle.queryPurchases()
         _subscriptionViewModel.manualRefresh()
-//        invalidateOptionsMenu()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val isSignedIn = _authenticationViewModel.isSignedIn()
-        Log.d("asdf", "firebase signed in="+isSignedIn)
-//        menu.findItem(R.id.sign_in).isVisible = !isSignedIn
-//        menu.findItem(R.id.sign_out).isVisible = isSignedIn
+        _navView.menu.get(0).isVisible = !isSignedIn
+        _navView.menu.get(1).isVisible = isSignedIn
+
         return true
     }
 
@@ -273,6 +287,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.sign_in -> {
+//                startActivity(Intent(this, SignInActivity::class.java))
                 triggerSignIn()
                 true
             }
@@ -298,7 +313,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun triggerSignIn() {
         Log.d(TAG, "Attempting SIGN-IN!")
         val providers: MutableList<IdpConfig> = ArrayList()
-        // Configure the different methods users can sign in
         providers.add(EmailBuilder().build())
         providers.add(GoogleBuilder().build())
         startActivityForResult(
@@ -317,6 +331,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AuthUI.getInstance().signOut(this).addOnCompleteListener {
             Log.d(TAG, "User SIGNED OUT!")
             _authenticationViewModel.updateFirebaseUser()
+            Toast.makeText(this, R.string.sign_out_success, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -328,12 +343,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         refreshData()
         when (requestCode) {
             RC_SIGN_IN -> {
-                // If sign-in is successful, update ViewModel.
                 if (resultCode == RESULT_OK) {
-                    Log.d(TAG, "Sign-in SUCCESS!")
+                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
                     _authenticationViewModel.updateFirebaseUser()
                 } else {
-                    Log.d(TAG, "Sign-in FAILED!")
+                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
                 }
             }
             else -> {

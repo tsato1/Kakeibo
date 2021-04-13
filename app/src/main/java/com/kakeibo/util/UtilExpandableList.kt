@@ -11,14 +11,14 @@ object UtilExpandableList {
      * expands specific date (default is today's date)
      */
     fun expandOnlySpecificDate(
-            expandableMasterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>>,
+            expandableMasterMap: SortedMap<ExpandableListRowModel.Header, List<ItemStatus>>,
             expandableList: MutableList<ExpandableListRowModel>,
             date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)) {
         expandableList.clear()
         expandableList.addAll(expandableMasterMap.flatMap { entry ->
             val parent = ExpandableListRowModel(ExpandableListRowModel.PARENT, entry.key)
             val list = mutableListOf(parent)
-            if (entry.key.first == date) {
+            if (entry.key.date == date) {
                 list[list.size-1].isExpanded = true
                 val children = entry.value.map { child ->
                     (ExpandableListRowModel(ExpandableListRowModel.CHILD, child))

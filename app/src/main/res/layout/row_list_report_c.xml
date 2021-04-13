@@ -27,7 +27,7 @@
             android:contentDescription="@string/category"
             bind:context="@{context}"
             bind:categoryCode="@{reportCListRowModel.categoryCode}"
-            bind:categoryViewModel="@{categoryViewModel}"/>
+            bind:masterMap="@{categoryViewModel.allMap}"/>
 
         <TextView
             android:id="@+id/txv_category"
@@ -36,18 +36,18 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:layout_gravity="start"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:categoryCode="@{reportCListRowModel.categoryCode}"
             bind:colon="@{false}"
-            bind:categoryViewModel="@{categoryViewModel}"/>
+            bind:masterMap="@{categoryViewModel.allMap}"/>
 
         <TextView
             android:id="@+id/txv_amount"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:amount="@{reportCListRowModel.amount.toString()}"
             bind:colon="@{false}"/>
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             android:text="@{reportCListRowModel.percentage}" />
 
     </LinearLayout>

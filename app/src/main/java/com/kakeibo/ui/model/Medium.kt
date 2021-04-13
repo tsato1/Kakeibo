@@ -8,23 +8,23 @@ class Medium : ViewModel() {
     companion object {
         const val FRAGMENT_INPUT = 0
         const val FRAGMENT_REPORT = 10
-        const val FRAGMENT_REPORT_A = 11 // Report by Amount
-        const val FRAGMENT_REPORT_B = 12 // Report by B
-        const val FRAGMENT_REPORT_C = 13 // Report by Category
-        const val FRAGMENT_REPORT_D = 14 // Report by Date
+        const val FRAGMENT_REPORT_CATEGORY_YEARLY = 11 // Report by Category - Yearly
+        const val FRAGMENT_REPORT_DATE_YEARLY = 12 // Report by Date - Yearly
+        const val FRAGMENT_REPORT_CATEGORY_MONTHLY = 13 // Report by Category - Monthly
+        const val FRAGMENT_REPORT_DATE_MONTHLY = 14 // Report by Date - Monthly
         const val FRAGMENT_SEARCH = 20
     }
 
-    private var previouslyShown: Int = FRAGMENT_REPORT_D
+    private var previouslyShown: Int = FRAGMENT_REPORT_DATE_MONTHLY
     val currentlyShown = MutableLiveData(FRAGMENT_INPUT)
     fun setCurrentlyShown(value: Int) {
         if (value == FRAGMENT_REPORT) {
             currentlyShown.value = previouslyShown
         } else {
-            if (currentlyShown.value == FRAGMENT_REPORT_A ||
-                    currentlyShown.value == FRAGMENT_REPORT_B ||
-                    currentlyShown.value == FRAGMENT_REPORT_C ||
-                    currentlyShown.value == FRAGMENT_REPORT_D) {
+            if (currentlyShown.value == FRAGMENT_REPORT_CATEGORY_YEARLY ||
+                    currentlyShown.value == FRAGMENT_REPORT_DATE_YEARLY ||
+                    currentlyShown.value == FRAGMENT_REPORT_CATEGORY_MONTHLY ||
+                    currentlyShown.value == FRAGMENT_REPORT_DATE_MONTHLY) {
                 previouslyShown = currentlyShown.value!!
             }
             currentlyShown.value = value

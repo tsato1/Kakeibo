@@ -15,9 +15,6 @@ import com.kakeibo.ui.viewmodel.BillingViewModel
 
 class InAppPurchasesActivity : AppCompatActivity() {
 
-    //todo node js version 10
-    //todo billing view model SingleLiveData put only in one observable
-
     companion object {
         private val TAG = InAppPurchasesActivity::class.simpleName
     }
@@ -28,7 +25,7 @@ class InAppPurchasesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_in_app_purchase)
+        binding = ActivityInAppPurchaseBinding.inflate(layoutInflater)
         val billingViewModel = ViewModelProvider(this).get(BillingViewModel::class.java)
         binding.billingViewModel = billingViewModel
 

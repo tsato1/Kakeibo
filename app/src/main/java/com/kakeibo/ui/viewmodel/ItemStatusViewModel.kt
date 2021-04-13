@@ -13,6 +13,8 @@ class ItemStatusViewModel(application: Application) : AndroidViewModel(applicati
 
     val all: LiveData<List<ItemStatus>> = repository.items
 
+    private val itemsThisYear: LiveData<List<ItemStatus>> = repository.itemsThisYear
+
     private val itemsThisMonth: LiveData<List<ItemStatus>> = repository.itemsThisMonth
     private val itemsMutable = MutableLiveData<List<ItemStatus>>()
     val items = MediatorLiveData<List<ItemStatus>>()
@@ -20,7 +22,7 @@ class ItemStatusViewModel(application: Application) : AndroidViewModel(applicati
         items.addSource(itemsMutable) { value -> items.value = value }
         items.addSource(itemsThisMonth) { value -> items.value = value }
     }
-    fun setMutableAll(input: List<ItemStatus>) { // for showing search result or Report_C and D
+    fun setMutableAll(input: List<ItemStatus>) { // for showing search result
         itemsMutable.value = input
     }
     fun setItemsThisMonth() { // to go back to default report (this month)
@@ -40,18 +42,20 @@ class ItemStatusViewModel(application: Application) : AndroidViewModel(applicati
                         .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
     }
     /* used in PieGraph in ReportC */
-    val itemsIncome: LiveData<List<BigDecimal>> =
-            Transformations.map(itemsByCategory) { allByCategory ->
-                allByCategory.keys.map { it.second }
-                        .filter { it > BigDecimal(0) }
-                        .sortedDescending()
+    val itemsIncome: LiveData<List<Pair<Int, BigDecimal>>> = Transformations.map(itemsByCategory) { map ->
+        map.keys.map { it }
+                .filter { it.second > BigDecimal(0) }
+                .map { Pair(it.first, it.second) }
+                .sortedWith(compareBy({it.second}, {it.first}))
+                .asReversed()
     }
     /* used in PieGraph in ReportC */
-    val itemsExpense: LiveData<List<BigDecimal>> =
-            Transformations.map(itemsByCategory) { allByCategory ->
-                allByCategory.keys.map { it.second }
-                        .filter { it < BigDecimal(0) }
-                        .sortedDescending()
+    val itemsExpense: LiveData<List<Pair<Int, BigDecimal>>> = Transformations.map(itemsByCategory) { map ->
+        map.keys.map { it }
+                .filter { it.second < BigDecimal(0) }
+                .map { Pair(it.first, it.second.abs()) }
+                .sortedWith(compareBy({it.second}, {it.first}))
+                .asReversed()
     }
 
     val income: LiveData<BigDecimal> = Transformations.map(items) { items ->

@@ -2,17 +2,8 @@
 
 buildscript {
     ext.kotlin_version = '1.4.32'
-
     ext.roomVersion = '2.2.6'
-
-    ext.billingVersion = '3.0.3'
-    ext.firebaseAuthVersion = '20.0.3'
-    ext.firebaseCoreVersion = '18.0.2'
-    ext.firebaseFunctionsVersion = '19.2.0'
-    ext.firebaseMessagingVersion = '21.0.1'
-    ext.firebaseUiVersion = '3.3.0'
-
-    ext.nav_version = "2.3.4"
+    ext.nav_version = "2.3.5"
 
     repositories {
         google()

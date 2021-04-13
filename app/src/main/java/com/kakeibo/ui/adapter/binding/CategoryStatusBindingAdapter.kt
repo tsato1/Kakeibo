@@ -6,30 +6,28 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.kakeibo.R
 import com.kakeibo.data.CategoryStatus
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDrawing.bytesToBitmap
 import com.kakeibo.util.UtilDrawing.getDrawableIdFromIconName
 
 @BindingAdapter("bind:context", "bind:category")
-fun setImage(imageView: ImageView, context: Context, categoryStatus: CategoryStatus) {
-    if (categoryStatus.code < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
-        imageView.setImageResource(getDrawableIdFromIconName(context, categoryStatus.drawable))
-    } else {
-        categoryStatus.image?.let {
-            imageView.setImageBitmap(bytesToBitmap(it))
+fun setImage(imageView: ImageView, context: Context, categoryStatus: CategoryStatus?) {
+    categoryStatus?.let {
+        if (categoryStatus.code < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+            imageView.setImageResource(getDrawableIdFromIconName(context, categoryStatus.drawable))
+        } else {
+            categoryStatus.image?.let {
+                imageView.setImageBitmap(bytesToBitmap(it))
+            }
         }
     }
 }
 
-@BindingAdapter("bind:context", "bind:categoryCode", "bind:categoryViewModel")
-fun setImage(imageView: ImageView, context: Context, categoryCode: Int, categoryStatusViewModel: CategoryStatusViewModel?) {
-    categoryStatusViewModel?.let {
-        val categoryStatus = it.allMap.value!![categoryCode]
-
-        categoryStatus?.let {
-            setImage(imageView, context, categoryStatus)
-        }
+@BindingAdapter("bind:context", "bind:categoryCode", "bind:masterMap")
+fun setImage(imageView: ImageView, context: Context, categoryCode: Int, masterMap: Map<Int, CategoryStatus>?) {
+    masterMap?.let {
+        val categoryStatus = it[categoryCode]
+        setImage(imageView, context, categoryStatus)
     }
 }
 
@@ -48,10 +46,10 @@ fun setName(textView: TextView, context: Context, category: CategoryStatus?, col
     }
 }
 
-@BindingAdapter("bind:context", "bind:categoryCode", "bind:colon", "bind:categoryViewModel")
-fun setName(textView: TextView, context: Context, categoryCode: Int, colon: Boolean, categoryStatusViewModel: CategoryStatusViewModel?) {
-    categoryStatusViewModel?.let {
-        val category = it.allMap.value!![categoryCode]
+@BindingAdapter("bind:context", "bind:categoryCode", "bind:colon", "bind:masterMap")
+fun setName(textView: TextView, context: Context, categoryCode: Int, colon: Boolean, masterMap: Map<Int, CategoryStatus>?) {
+    masterMap?.let {
+        val category = it[categoryCode]
         setName(textView, context, category, colon)
     }
 }

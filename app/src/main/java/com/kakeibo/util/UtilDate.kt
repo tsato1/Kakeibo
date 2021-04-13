@@ -45,12 +45,15 @@ object UtilDate {
         return sdFormat.format(cal.time)
     }
 
+    fun getTodaysY(): String {
+        return getTodaysDate(DATE_FORMAT_DB).substring(0, 4)
+    }
+
     fun getTodaysYM(format: String): String {
         return when (format) {
             DATE_FORMAT_DB -> getTodaysDate(DATE_FORMAT_DB).substring(0, 7) /* '2021-02-11' -> '2021-02' */
             DATE_FORMAT_YMD -> getTodaysDate(DATE_FORMAT_YMD).substring(0, 7) /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_DMY -> getTodaysDate(DATE_FORMAT_DMY).substring(3) /* '11-02-2021' -> '02-2021' */
-            DATE_FORMAT_MDY -> getTodaysDate(DATE_FORMAT_DMY).substring(3) /* '02-11-2011' -> '02-2021' : caution-> using DATE_FORMAT_DMY */
+            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> getTodaysDate(DATE_FORMAT_DMY).substring(3) /* '11-02-2021' -> '02-2021' */
             else -> getTodaysDate(DATE_FORMAT_DB).substring(0, 7)
         }
     }

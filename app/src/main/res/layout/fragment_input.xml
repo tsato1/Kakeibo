@@ -8,8 +8,9 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="2dp"
         android:fillViewport="true"
-        android:background="@color/colorBackground">
+        android:background="@color/color_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,6 +40,7 @@
                         android:textIsSelectable="false"
                         android:autofillHints="@string/hint_memo_max_20_characters"
                         android:hint="@string/hint_amount_spent_or_earned"/>
+
                 </TableRow>
 
                 <TableRow

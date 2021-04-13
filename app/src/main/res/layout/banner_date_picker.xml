@@ -29,8 +29,8 @@
 
         <ImageButton
             android:id="@+id/btn_exit_search_result"
-            android:layout_width="@dimen/imv_exit_search_sides"
-            android:layout_height="@dimen/imv_exit_search_sides"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/btn_roundcorner"
             android:src="@drawable/ic_close_white"
             android:contentDescription="@string/close"
@@ -40,8 +40,8 @@
 
         <ImageButton
             android:id="@+id/btn_prev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/ic_left_arrow"
             android:contentDescription="@string/previous"
             style="?android:attr/buttonBarButtonStyle"/>
@@ -57,8 +57,8 @@
 
         <ImageButton
             android:id="@+id/btn_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/ic_right_arrow"
             android:contentDescription="@string/next"
             style="?android:attr/buttonBarButtonStyle"/>

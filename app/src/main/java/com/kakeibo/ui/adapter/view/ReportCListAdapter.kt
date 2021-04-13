@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.RowListReportCBinding
-import com.kakeibo.ui.MainActivity
 import com.kakeibo.ui.model.ReportCListRowModel
 import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
 import com.kakeibo.util.UtilCategory
@@ -19,18 +19,19 @@ import java.math.RoundingMode
 
 class ReportCListAdapter(
         private val categoryColor: Int,
-        private val categoryStatusViewModel: CategoryStatusViewModel)
+        private val categoryStatusViewModel: CategoryStatusViewModel,
+        private val lifecycleOwner: LifecycleOwner)
     : RecyclerView.Adapter<ReportCListAdapter.ViewHolder>() {
 
-    private var _itemList: List<ReportCListRowModel>? = ArrayList()
+    private var _itemList: List<ReportCListRowModel> = ArrayList()
 
-    private var _itemMap: Map<Pair<Int, BigDecimal>, List<ItemStatus>>? = HashMap()
+    private var _itemMap: Map<Pair<Int, BigDecimal>, List<ItemStatus>> = HashMap()
 
-    fun setAllByCategory(itemMap: Map<Pair<Int, BigDecimal>, List<ItemStatus>>?) {
+    fun setAllByCategory(itemMap: Map<Pair<Int, BigDecimal>, List<ItemStatus>>) {
         _itemMap = itemMap
 
         /* filling the ReportCList */
-        val reportCListRowList = itemMap!!.keys.map { ReportCListRowModel(it.first, it.second) }.toList()
+        val reportCListRowList = itemMap.keys.map { ReportCListRowModel(it.first, it.second) }.toList().sortedBy { it.amount }
         val sumExpense = itemMap.keys.sumOf { it.second }
         val sizeIncome = Constants.CATEGORY_INCOME_COLORS.size
         val sizeExpense = Constants.CATEGORY_EXPENSE_COLORS.size
@@ -63,37 +64,36 @@ class ReportCListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val reportCListRowModel = _itemList!![position]
-        holder.bind(reportCListRowModel)
-        holder.binding.categoryViewModel = categoryStatusViewModel
+        val reportCListRowModel = _itemList[position]
+        holder.bind(lifecycleOwner, reportCListRowModel, categoryStatusViewModel)
         holder.binding.lnlRowListReportC.setOnClickListener { v ->
-            _itemMap?.let {
-                val map = it.mapKeys { map -> map.key.first }
-                val listView = ListView(v.context)
+            val map = _itemMap.mapKeys { it.key.first }
+            val listView = ListView(v.context)
 
-                map[reportCListRowModel.categoryCode]?.let { list ->
-                    val adapter = ReportCDetailListAdapter(v.context, R.layout.row_list_report_c_detail, list, categoryStatusViewModel)
-                    listView.adapter = adapter
-                    AlertDialog.Builder(v.context)
-                            .setIcon(R.mipmap.ic_mikan)
-                            .setTitle(MainActivity.allCategoryMap[reportCListRowModel.categoryCode]!!.name)
-                            .setPositiveButton(R.string.ok) { _, _ -> }
-                            .setView(listView).create()
-                            .show()
-                }
+            map[reportCListRowModel.categoryCode]?.let { list ->
+                val adapter = ReportCDetailListAdapter(v.context, R.layout.row_list_report_c_detail, list, categoryStatusViewModel)
+                listView.adapter = adapter
+                AlertDialog.Builder(v.context)
+                        .setIcon(R.mipmap.ic_mikan)
+                        .setTitle(categoryStatusViewModel.allMap.value!![reportCListRowModel.categoryCode]!!.name)
+                        .setPositiveButton(R.string.ok) { _, _ -> }
+                        .setView(listView).create()
+                        .show()
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return if (_itemList != null) _itemList!!.size else 0
+        return _itemList.size
     }
 
     class ViewHolder(val binding: RowListReportCBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(reportCListRowModel: ReportCListRowModel) {
+        fun bind(lifecycleOwner: LifecycleOwner, reportCListRowModel: ReportCListRowModel, categoryStatusViewModel: CategoryStatusViewModel) {
+            binding.lifecycleOwner = lifecycleOwner
             binding.reportCListRowModel = reportCListRowModel
+            binding.categoryViewModel = categoryStatusViewModel
             binding.executePendingBindings()
         }
     }

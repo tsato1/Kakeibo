@@ -5,7 +5,7 @@
         android:id="@+id/col_root_fragment3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground_search">
+        android:background="@color/color_background_search">
 
         <TextView
             android:id="@+id/txv_inst_search"

@@ -7,19 +7,20 @@
         <item
             android:id="@+id/sign_in"
             android:icon="@drawable/ic_baseline_login_24"
-            android:title="@string/action_signin"
-            android:visible="true"
+            android:title="@string/sign_in"
+            android:visible="false"
             android:orderInCategory="10"/>
         <item
             android:id="@+id/sign_out"
             android:icon="@drawable/ic_baseline_login_24"
-            android:title="@string/action_signout"
+            android:title="@string/sign_out"
             android:visible="false"
             android:orderInCategory="10"/>
         <item
             android:id="@+id/in_app_purchases"
             android:icon="@drawable/ic_baseline_shopping_cart_24"
             android:title="@string/in_app_purchases"
+            android:visible="false"
             android:orderInCategory="11"/>
         <item
             android:id="@+id/about"

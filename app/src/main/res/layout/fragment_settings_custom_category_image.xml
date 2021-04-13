@@ -31,7 +31,7 @@
             android:layout_width="@dimen/draw_view_buttons_sides"
             android:layout_height="@dimen/draw_view_buttons_sides"
             android:src="@drawable/ic_brightness_1_accent_24dp"
-            android:background="@color/colorEmboss"
+            android:background="@color/color_emboss"
             android:contentDescription="@string/cancel"
             style="?android:attr/buttonBarButtonStyle" />
 
@@ -40,7 +40,7 @@
             android:layout_width="@dimen/draw_view_buttons_sides"
             android:layout_height="@dimen/draw_view_buttons_sides"
             android:src="@drawable/ic_undo_accent_24dp"
-            android:background="@color/colorEmboss"
+            android:background="@color/color_emboss"
             android:contentDescription="@string/next"
             style="?android:attr/buttonBarButtonStyle"/>
 
@@ -49,7 +49,7 @@
             android:layout_width="@dimen/draw_view_buttons_sides"
             android:layout_height="@dimen/draw_view_buttons_sides"
             android:src="@drawable/ic_redo_accent_24dp"
-            android:background="@color/colorEmboss"
+            android:background="@color/color_emboss"
             android:contentDescription="@string/back"
             style="?android:attr/buttonBarButtonStyle"/>
 
@@ -58,7 +58,7 @@
             android:layout_width="@dimen/draw_view_buttons_sides"
             android:layout_height="@dimen/draw_view_buttons_sides"
             android:src="@drawable/ic_swap_vertical_circle_accent_24dp"
-            android:background="@color/colorEmboss"
+            android:background="@color/color_emboss"
             android:contentDescription="@string/stroke_thickness"
             style="?android:attr/buttonBarButtonStyle"/>
 
@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/tab_height"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorBackground">
+        android:background="@color/color_background">
 
         <Button
             android:id="@+id/btn_back"
@@ -78,8 +78,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:text="@string/back"
-            android:textColor="@color/colorBlack"
-            android:background="@color/colorBackground"
+            android:textColor="@color/color_black"
+            android:background="@color/color_background"
             android:contentDescription="@string/back"/>
 
         <Button
@@ -89,8 +89,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:text="@string/done"
-            android:textColor="@color/colorBlack"
-            android:background="@color/colorBackground"
+            android:textColor="@color/color_black"
+            android:background="@color/color_background"
             android:contentDescription="@string/next"/>
     </RelativeLayout>
 

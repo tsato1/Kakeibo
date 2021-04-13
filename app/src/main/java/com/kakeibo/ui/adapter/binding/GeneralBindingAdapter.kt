@@ -2,15 +2,12 @@ package com.kakeibo.ui.adapter.binding
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.toColorInt
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import com.echo.holographlibrary.PieGraph
-import com.echo.holographlibrary.PieSlice
+import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -20,8 +17,10 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
+import com.kakeibo.data.CategoryStatus
 import com.kakeibo.databinding.BannerDatePickerBinding
-import com.kakeibo.databinding.FragmentReportCBinding
+import com.kakeibo.databinding.FragmentReportCategoryYearlyBinding
+import com.kakeibo.databinding.FragmentReportCategoryMonthlyBinding
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.viewmodel.ItemStatusViewModel
 import com.kakeibo.util.UtilDate
@@ -54,7 +53,7 @@ fun updateDateBannerYMD(view: View,
         val cal = Calendar.getInstance()
 
         when (currentlyShown) {
-            Medium.FRAGMENT_REPORT_C, Medium.FRAGMENT_REPORT_D -> {
+            Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY, Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
                 it.btnDate.text = UtilDate.getTodaysYM(dateFormat)
                 it.btnDate.setOnClickListener {}
                 it.btnNext.visibility = View.VISIBLE
@@ -85,7 +84,7 @@ fun updateDateBannerYMD(view: View,
             try {
                 val date: Date
                 val str = when (currentlyShown) {
-                    Medium.FRAGMENT_REPORT_C, Medium.FRAGMENT_REPORT_D -> {
+                    Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY, Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
                         cal.add(Calendar.MONTH, 1)
                         date = cal.time
                         val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
@@ -114,7 +113,7 @@ fun updateDateBannerYMD(view: View,
             try {
                 val date: Date
                 val str = when (currentlyShown) {
-                    Medium.FRAGMENT_REPORT_C, Medium.FRAGMENT_REPORT_D -> {
+                    Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY, Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
                         cal.add(Calendar.MONTH, -1)
                         date = cal.time
                         val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
@@ -142,7 +141,7 @@ fun updateDateBannerYMD(view: View,
 
 @BindingAdapter("bind:context")
 fun prepareReportCView(view:View, context: Context) {
-    val binding = DataBindingUtil.getBinding<FragmentReportCBinding>(view)
+    val binding = DataBindingUtil.getBinding<FragmentReportCategoryMonthlyBinding>(view)
 
     binding?.let {
         it.horizontalBarChart.setDrawBarShadow(false)
@@ -153,7 +152,7 @@ fun prepareReportCView(view:View, context: Context) {
         it.horizontalBarChart.isHighlightPerDragEnabled = false
         it.horizontalBarChart.isHighlightPerTapEnabled = false
         it.horizontalBarChart.isDoubleTapToZoomEnabled = false
-        it.horizontalBarChart.setNoDataTextColor(R.color.colorBlack)
+        it.horizontalBarChart.setNoDataTextColor(R.color.color_black)
         it.horizontalBarChart.setPinchZoom(false)
         it.horizontalBarChart.description.isEnabled = false
 //        it.horizontalBarChart.setOnChartValueSelectedListener(OnChartValueSelectedListener)
@@ -214,7 +213,7 @@ fun updateBarChart(horizontalBarChart: HorizontalBarChart, context: Context, inc
         expenseBarDataSet = BarDataSet(values, context.getString(R.string.expense_colon))
         incomeBarDataSet.setDrawIcons(false)
         expenseBarDataSet.setDrawIcons(false)
-        expenseBarDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary), ContextCompat.getColor(context, R.color.colorAccent))
+        expenseBarDataSet.setColors(ContextCompat.getColor(context, R.color.color_primary), ContextCompat.getColor(context, R.color.color_accent))
         val dataSets = ArrayList<IBarDataSet>()
         dataSets.add(incomeBarDataSet)
         dataSets.add(expenseBarDataSet)
@@ -226,40 +225,41 @@ fun updateBarChart(horizontalBarChart: HorizontalBarChart, context: Context, inc
     }
 }
 
-@BindingAdapter("bind:incomeList")
-fun updateIncomePieGraph(pieGraph: PieGraph, incomeList: List<BigDecimal>?) {
-    val size = Constants.CATEGORY_EXPENSE_COLORS.size
-
+@BindingAdapter("bind:incomeList", "bind:context", "bind:masterMap")
+fun updateIncomePieGraph(pieGraph: AAChartView, incomeList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, CategoryStatus>?) {
     incomeList?.let {
-        pieGraph.removeSlices()
-        var inPieSlice: PieSlice
+        masterMap?.let {
+            val arr = incomeList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
+            val aaChartModel = AAChartModel()
+                    .chartType(AAChartType.Pie)
+//            .title("title")
+//            .subtitle("subtitle")
+//            .backgroundColor("")
+                    .colorsTheme(Constants.CATEGORY_INCOME_COLORS as Array<Any>)
+                    .dataLabelsEnabled(true)
+                    .series(arrayOf(AASeriesElement().name(context.getString(R.string.income)).data(arr as Array<Any>)))
 
-        for ((i, item) in incomeList.withIndex()) {
-            inPieSlice = PieSlice()
-            inPieSlice.color =
-                    if (i < size) Constants.CATEGORY_INCOME_COLORS[i].toColorInt()
-                    else Constants.CATEGORY_INCOME_COLORS[size - 1].toColorInt()
-            inPieSlice.value = item.toFloat()
-            pieGraph.addSlice(inPieSlice)
+            pieGraph.aa_drawChartWithChartModel(aaChartModel)
         }
     }
 }
 
-@BindingAdapter("bind:expenseList")
-fun updateExpensePieGraph(pieGraph: PieGraph, expenseList: List<BigDecimal>?) {
-    val size = Constants.CATEGORY_EXPENSE_COLORS.size
-
+@BindingAdapter("bind:expenseList", "bind:context", "bind:masterMap")
+fun updateExpensePieGraph(pieGraph: AAChartView, expenseList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, CategoryStatus>?) {
     expenseList?.let {
-        pieGraph.removeSlices()
-        var exPieSlice: PieSlice
+        masterMap?.let {
+            val arr = expenseList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
 
-        for ((i, item) in expenseList.withIndex()) {
-            exPieSlice = PieSlice()
-            exPieSlice.color =
-                    if (i < size) Constants.CATEGORY_EXPENSE_COLORS[i].toColorInt()
-                    else Constants.CATEGORY_EXPENSE_COLORS[size - 1].toColorInt()
-            exPieSlice.value = item.toFloat()
-            pieGraph.addSlice(exPieSlice)
+            val aaChartModel = AAChartModel()
+                    .chartType(AAChartType.Pie)
+//            .title("title")
+//            .subtitle("subtitle")
+//            .backgroundColor("")
+                    .colorsTheme(Constants.CATEGORY_EXPENSE_COLORS as Array<Any>)
+                    .dataLabelsEnabled(true)
+                    .series(arrayOf(AASeriesElement().name(context.getString(R.string.expense)).data(arr as Array<Any>)))
+
+            pieGraph.aa_drawChartWithChartModel(aaChartModel)
         }
     }
 }

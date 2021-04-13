@@ -12,7 +12,6 @@ object Constants {
             "#FDBD91", "#feccaa", "#fedac2", "#fee9da", "#fef7f2"
     )
 
-    // Use the fake local server data or real remote server.
     const val USE_FAKE_SERVER = false
     const val BASIC_SKU = "plus_1y"
     const val PREMIUM_SKU = "plus_1m"

@@ -21,14 +21,14 @@
             android:layout_height="wrap_content"
             android:text="@string/event_date_colon"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack" />
+            android:textColor="@color/color_black" />
 
         <Button
             android:id="@+id/btn_event_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             style="?android:attr/buttonBarButtonStyle" />
 
         <TextView
@@ -37,14 +37,14 @@
             android:layout_height="wrap_content"
             android:text="@string/category_colon"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack" />
+            android:textColor="@color/color_black" />
 
         <Button
             android:id="@+id/btn_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             android:hint="@string/category"
             style="?android:attr/buttonBarButtonStyle"/>
 
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:text="@string/amount_colon"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/color_black"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text="@string/memo_colon"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/color_black"/>
 
         <EditText
             android:id="@+id/edt_memo"

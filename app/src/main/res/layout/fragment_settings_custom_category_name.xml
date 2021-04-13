@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorBackground">
+            android:background="@color/color_background">
 
             <Button
                 android:id="@+id/btn_back"
@@ -46,8 +46,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
                 android:text="@string/back"
-                android:textColor="@color/colorBlack"
-                android:background="@color/colorBackground"
+                android:textColor="@color/color_black"
+                android:background="@color/color_background"
                 android:contentDescription="@string/back"/>
 
             <Button
@@ -57,8 +57,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:text="@string/next"
-                android:textColor="@color/colorBlack"
-                android:background="@color/colorBackground"
+                android:textColor="@color/color_black"
+                android:background="@color/color_background"
                 android:contentDescription="@string/next"/>
 
         </RelativeLayout>

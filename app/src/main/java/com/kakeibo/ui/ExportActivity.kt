@@ -6,16 +6,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.Task
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
@@ -24,11 +28,12 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.kakeibo.R
 import com.kakeibo.BuildConfig
+import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.ui.export.DriveServiceHelper
 import com.kakeibo.ui.model.Medium
+import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.getTodaysDate
 import com.kakeibo.util.UtilFiles
@@ -52,12 +57,24 @@ class ExportActivity : AppCompatActivity() {
     private var mFirebaseAuth: FirebaseAuth? = null
     private var _interstitialAd: InterstitialAd? = null
 
+    private val _authenticationViewModel: FirebaseUserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_export)
         mReportType = intent.getIntExtra("REPORT_VIEW_TYPE", 0)
-        requestSignIn()
-        
+
+        _authenticationViewModel.firebaseUser.observe(this, {
+            if (it == null) {
+                requestSignIn()
+            } else {
+                val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
+                googleAccount?.let {
+                    a(googleAccount)
+                }
+            }
+        })
+
         /* ads */
         val adRequest = AdRequest.Builder().build()
         var adUnitId = getString(R.string.main_banner_ad)
@@ -73,50 +90,6 @@ class ExportActivity : AppCompatActivity() {
                 _interstitialAd = null
             }
         })
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        when (requestCode) {
-            REQUEST_CODE_SIGN_IN -> if (resultCode == RESULT_OK && resultData != null) {
-                handleSignInResult(resultData)
-            }
-            REQUEST_CODE_OPEN_DOCUMENT -> {
-                if (resultCode == RESULT_OK && resultData != null) {
-                    val uri = resultData.data
-                    if (uri != null) {
-                        try {
-                            val os = contentResolver.openOutputStream(uri)
-                            if (os != null) {
-                                val content: String? = when (mReportType) {
-                                    Medium.FRAGMENT_REPORT_D -> {
-                                        UtilFiles.getFileValue(FILE_ORDER_DATE, this)
-                                    }
-                                    Medium.FRAGMENT_REPORT_C -> {
-                                        UtilFiles.getFileValue(FILE_ORDER_CATEGORY, this)
-                                    }
-                                    else -> {
-                                        "Empty Report"
-                                    }
-                                }
-                                os.write(content!!.toByteArray())
-                                os.close()
-                                
-                                /* ads */
-                                if (_interstitialAd != null) {
-                                    _interstitialAd!!.show(this)
-                                } else {
-                                    Log.d("TAG", "The interstitial wasn't loaded yet.")
-                                }
-                            }
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-                finish()
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, resultData)
     }
 
     /*
@@ -136,17 +109,103 @@ class ExportActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestSignOut() {
-        /* signout from firebase */
-        mFirebaseAuth?.signOut()
-        /* signout from googleSignInClient */
-        mGoogleSignInClient?.let { it.signOut().addOnCompleteListener(this) { } }
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE_SIGN_IN -> if (resultCode == RESULT_OK && resultData != null) {
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(resultData)
+                handleSignInResult(task)
+            }
+            REQUEST_CODE_OPEN_DOCUMENT -> {
+                if (resultCode == RESULT_OK && resultData != null) {
+                    val uri = resultData.data
+                    if (uri != null) {
+                        try {
+                            val os = contentResolver.openOutputStream(uri)
+                            if (os != null) {
+                                val content: String? = when (mReportType) {
+                                    Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
+                                        UtilFiles.getFileValue(FILE_ORDER_DATE, this)
+                                    }
+                                    Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY -> {
+                                        UtilFiles.getFileValue(FILE_ORDER_CATEGORY, this)
+                                    }
+                                    else -> {
+                                        "Empty Report"
+                                    }
+                                }
+                                os.write(content!!.toByteArray())
+                                os.close()
+
+                                /* ads */
+                                if (_interstitialAd != null) {
+                                    _interstitialAd!!.show(this)
+                                } else {
+                                    Log.d("TAG", "The interstitial wasn't loaded yet.")
+                                }
+                            }
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+                finish()
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, resultData)
     }
 
     /*
      * Handles the `result` of a completed sign-in activity initiated from [ ][.requestSignIn].
      */
-    private fun handleSignInResult(result: Intent) {
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val googleAccount = completedTask.getResult(ApiException::class.java)
+            a(googleAccount)
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.e(TAG, "signInResult:failed code=" + e.statusCode)
+            Toast.makeText(this, "Google Sign-in failed. Error: $e", Toast.LENGTH_LONG).show()
+            finish()
+        }
+    }
+
+    private fun a(googleAccount: GoogleSignInAccount) {
+        // Signed in successfully, show authenticated UI.
+        // Use the authenticated account to sign in to the Drive service.
+            val credential = GoogleAccountCredential.usingOAuth2(this, setOf(DriveScopes.DRIVE_FILE))
+            credential.selectedAccount = googleAccount.account
+            val googleDriveService = Drive.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    GsonFactory(),
+                    credential)
+                    .setApplicationName("Drive API Migration")
+                    .build()
+
+            // The DriveServiceHelper encapsulates all REST API and SAF functionality.
+            // Its instantiation is required before handling any onClick actions.
+            mDriveServiceHelper = DriveServiceHelper(googleDriveService)
+            /* firebase login  */
+            val authCredential = GoogleAuthProvider.getCredential(googleAccount.idToken, null)
+            mFirebaseAuth?.let {
+                it.signInWithCredential(authCredential).addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        val user = it.currentUser
+                        if (user != null) Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
+
+                        _authenticationViewModel.updateFirebaseUser()
+                    } else {
+                        Log.w(TAG, "signInWithCredential:failure", task.exception)
+                        Toast.makeText(this, "signInWithCredential:failure", Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+                }
+            }
+            openFilePicker()
+    }
+
+    private fun handleSignInResult1(result: Intent) {
         GoogleSignIn.getSignedInAccountFromIntent(result)
                 .addOnSuccessListener { googleAccount: GoogleSignInAccount ->
                     Log.d(TAG, "Signed in as " + googleAccount.email)
@@ -171,11 +230,13 @@ class ExportActivity : AppCompatActivity() {
                         it.signInWithCredential(authCredential).addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
-                                    val user = it.currentUser
-                                if (user != null)
-                                    Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
+                                val user = it.currentUser
+                                if (user != null) Log.d(TAG, "Firebase user.getDisplayName()= " + user.displayName)
+
+                                _authenticationViewModel.updateFirebaseUser()
                             } else {
                                 Log.w(TAG, "signInWithCredential:failure", task.exception)
+                                Toast.makeText(this, "signInWithCredential:failure", Toast.LENGTH_LONG).show()
                                 finish()
                             }
                         }
@@ -183,7 +244,8 @@ class ExportActivity : AppCompatActivity() {
                     openFilePicker()
                 }
                 .addOnFailureListener { exception: Exception? ->
-                    Log.e(TAG, "Unable to sign in.", exception) }
+                    Log.e(TAG, "Unable to sign in.", exception)
+                }
     }
 
     /*
@@ -234,18 +296,17 @@ class ExportActivity : AppCompatActivity() {
             mDriveServiceHelper?.let {
                 it.createFile(fileName, mReportType, this)
                         .addOnSuccessListener { fileId: String? ->
-                            showMessage(getString(R.string.file_created))
+                            Toast.makeText(this, R.string.file_created, Toast.LENGTH_LONG).show()
                             /* ads  */
-                            if (_interstitialAd != null) {
+                            _interstitialAd?.let {
                                 _interstitialAd!!.show(this)
                                 UtilFiles.deleteFile(fileName, this)
-                            } else {
-                                Log.d("TAG", "The interstitial wasn't loaded yet.")
                             }
                             finish()
                         }
                         .addOnFailureListener { exception: Exception? ->
                             Log.e(TAG, "Couldn't create file.", exception)
+                            Toast.makeText(this, "Couldn't create file.", Toast.LENGTH_LONG).show()
                             finish()
                         }
             }
@@ -321,11 +382,14 @@ class ExportActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop() called")
-        requestSignOut()
+//        requestSignOut()
     }
 
-    protected fun showMessage(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    private fun requestSignOut() {
+        /* signout from firebase */
+        mFirebaseAuth?.signOut()
+        /* signout from googleSignInClient */
+        mGoogleSignInClient?.let { it.signOut().addOnCompleteListener(this) { } }
     }
 
     fun screenTapped(view: View?) {

@@ -10,7 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import com.bumptech.glide.Glide
+//import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -61,9 +61,9 @@ fun updateBasicContent(view: View, basicContent: ContentResource?) {
         image.run {
             Log.d(TAG, "Loading image for basic content: $url")
             visibility = View.VISIBLE
-            Glide.with(view.context)
-                    .load(url)
-                    .into(this)
+//            Glide.with(view.context)
+//                    .load(url)
+//                    .into(this)
         }
         textView.run {
             text = view.resources.getString(R.string.basic_content_text)

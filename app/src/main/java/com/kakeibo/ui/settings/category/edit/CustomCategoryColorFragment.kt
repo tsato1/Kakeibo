@@ -66,10 +66,18 @@ class CustomCategoryColorFragment : Fragment() {
         override fun onClick(view: View) {
             when (view.id) {
                 R.id.btn_income -> {
+                    if (_customCategoryViewModel.code.value != -1) {
+                        Toast.makeText(requireContext(), "You can't change type on Edit.", Toast.LENGTH_LONG).show()
+                        return
+                    }
                     _customCategoryViewModel.setColor(UtilCategory.CATEGORY_COLOR_INCOME)
                     selectColor()
                 }
                 R.id.btn_expense -> {
+                    if (_customCategoryViewModel.code.value != -1) {
+                        Toast.makeText(requireContext(), "You can't change type on Edit.", Toast.LENGTH_LONG).show()
+                        return
+                    }
                     _customCategoryViewModel.setColor(UtilCategory.CATEGORY_COLOR_EXPENSE)
                     selectColor()
                 }

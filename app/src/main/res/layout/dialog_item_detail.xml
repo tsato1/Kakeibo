@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:eventDate="@{itemStatus.eventDate}"
             bind:colon="@{true}"/>
@@ -34,18 +34,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:categoryCode="@{itemStatus.categoryCode}"
             bind:colon="@{true}"
-            bind:categoryViewModel="@{categoryViewModel}"/>
+            bind:masterMap="@{categoryViewModel.allMap}"/>
 
         <TextView
             android:id="@+id/txv_detail_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:amount="@{itemStatus.amount.toString()}"
             bind:colon="@{true}"/>
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:memo="@{itemStatus.memo}"
             bind:colon="@{true}"/>
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             bind:context="@{context}"
             bind:updateDate="@{itemStatus.updateDate}"
             bind:colon="@{true}"/>

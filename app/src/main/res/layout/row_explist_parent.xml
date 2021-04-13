@@ -12,16 +12,15 @@
     <LinearLayout
         android:id="@+id/lnl_exp_list_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:orientation="horizontal"
-        android:padding="4dp"
-        android:background="@color/colorEmboss">
+        android:background="@color/color_emboss">
 
         <ImageView
             android:id="@+id/close_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/ok"
+            android:contentDescription="@string/open"
             app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
 
         <ImageView
@@ -33,29 +32,45 @@
             app:srcCompat="@drawable/ic_baseline_arrow_drop_up_24" />
 
         <TextView
-            android:id="@+id/txv_header_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:paddingStart="6dp"
             android:paddingEnd="0dp"
-            android:textColor="@color/colorAccent"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/color_accent"
             android:textStyle="bold"
             bind:context="@{context}"
-            bind:eventDate="@{header.itemParent.component1()}"
+            bind:eventDate="@{header.itemParent.date}"
             bind:colon="@{false}"/>
 
         <TextView
-            android:id="@+id/txv_header_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="0dp"
-            android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
-            android:textColor="@color/colorBlack"
+            android:singleLine="true"
+            android:layout_marginEnd="10dp"
+            android:gravity="end"
+            android:layout_gravity="center_vertical|end"
+            android:textColor="@color/color_black"
             android:textStyle="bold"
             bind:context="@{context}"
-            bind:amount="@{header.itemParent.component2().toString()}"
+            bind:amount="@{header.itemParent.income.toString()}"
+            bind:colon="@{false}"/>
+
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:paddingStart="0dp"
+            android:paddingEnd="12dp"
+            android:gravity="end"
+            android:layout_gravity="center_vertical|end"
+            android:textColor="@color/color_black"
+            android:textStyle="bold"
+            bind:context="@{context}"
+            bind:amount="@{header.itemParent.expence.toString()}"
             bind:colon="@{false}"/>
 
     </LinearLayout>
+
 </layout>

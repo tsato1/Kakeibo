@@ -68,10 +68,9 @@
         <activity android:name=".ui.settings.AboutActivity"
             android:label="@string/about_this_app"
             android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>
-        <!--        <activity-->
-<!--            android:name=".ui.GoogleSignInActivity"-->
-<!--            android:label="Google Sign In"-->
-<!--            />-->
+        <activity android:name=".ui.SignInActivity"
+            android:label="Sign In"
+            android:parentActivityName=".ui.MainActivity"/>
 
         <service
             android:name=".InstanceIDService"

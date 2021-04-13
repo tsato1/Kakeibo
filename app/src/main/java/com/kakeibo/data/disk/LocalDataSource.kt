@@ -14,6 +14,7 @@ class LocalDataSource private constructor(
     val kkbApp = appDatabase.kkbAppStatusDao().getFirst()
     val subscriptions = appDatabase.subscriptionStatusDao().getAll()
     val items = appDatabase.itemStatusDao().getAll()
+    var itemsThisYear = appDatabase.itemStatusDao().getItemsByYear(UtilDate.getTodaysY())
     var itemsThisMonth = appDatabase.itemStatusDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
     val categories = appDatabase.categoryStatusDao().getAll()
     val categoriesDisplayed = appDatabase.categoryStatusDao().getCategoriesDisplayed()

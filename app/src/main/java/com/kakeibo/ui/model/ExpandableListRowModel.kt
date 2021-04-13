@@ -13,14 +13,16 @@ class ExpandableListRowModel {
          const val EMPTYLAYOUT = 5*/
     }
 
-    lateinit var itemParent: Pair<String, BigDecimal>
+    class Header(val date: String, val income: BigDecimal, val expence: BigDecimal)
+
+    lateinit var itemParent: Header
     lateinit var itemChild : ItemStatus
     var type : Int
     var isExpanded : Boolean
     private var isCloseShown : Boolean
 
     constructor(type : Int,
-                itemParent: Pair<String, BigDecimal>,
+                itemParent: Header,
                 isExpanded : Boolean = false,
                 isCloseShown : Boolean = false
     ){

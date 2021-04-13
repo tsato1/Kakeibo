@@ -3,5 +3,5 @@
     android:shape="oval" android:useLevel="true"
     android:dither="true">
     <size android:height="144px" android:width="144px"/>
-    <solid android:color="@color/colorAccent"/>
+    <solid android:color="@color/color_accent"/>
 </shape>

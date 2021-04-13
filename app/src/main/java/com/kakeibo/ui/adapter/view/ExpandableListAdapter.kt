@@ -4,14 +4,14 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.DialogItemDetailBinding
+import com.kakeibo.databinding.DialogItemEditBinding
 import com.kakeibo.databinding.RowExplistChildBinding
 import com.kakeibo.databinding.RowExplistParentBinding
 import com.kakeibo.ui.MainActivity
@@ -24,7 +24,7 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewModel, val _context: Context)
+class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewModel, private val _lifecycleOwner: LifecycleOwner)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var _itemStatusViewModel: ItemStatusViewModel
@@ -37,13 +37,13 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
         return _expandableList
     }
 
-    private var _masterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>> = TreeMap()
-    fun setMasterMap(masterMap: SortedMap<Pair<String, BigDecimal>, List<ItemStatus>>) {
+    private var _masterMap: SortedMap<ExpandableListRowModel.Header, List<ItemStatus>> = TreeMap()
+    fun setMasterMap(masterMap: SortedMap<ExpandableListRowModel.Header, List<ItemStatus>>) {
         _masterMap = masterMap
         UtilExpandableList.expandOnlySpecificDate(_masterMap, _expandableList)
         notifyDataSetChanged()
     }
-    fun getMasterMap(): SortedMap<Pair<String, BigDecimal>, List<ItemStatus>> {
+    fun getMasterMap(): SortedMap<ExpandableListRowModel.Header, List<ItemStatus>> {
         return _masterMap
     }
 
@@ -89,38 +89,22 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
                     }
                 }
             }
+
             ExpandableListRowModel.CHILD -> {
-                (holder as ItemChildViewHolder).bind(row.itemChild)
-                holder.childBinding.categoryViewModel = categoryViewModel
+                (holder as ItemChildViewHolder).bind(_lifecycleOwner, row.itemChild, _categoryViewModel)
                 holder.childBinding.rllExpListChild.setOnClickListener {
                     val binding = DialogItemDetailBinding.inflate(LayoutInflater.from(it.context))
                     binding.itemStatus = row.itemChild
-                    binding.categoryViewModel = categoryViewModel
+                    binding.categoryViewModel = _categoryViewModel
 
                     AlertDialog.Builder(it.context)
                             .setIcon(R.mipmap.ic_mikan)
                             .setTitle(it.context.getString(R.string.item_detail))
                             .setView(binding.root)
                             .setPositiveButton(R.string.close) { _, _ -> }
-                            .setNeutralButton(R.string.edit) { _, _ ->
-                                showEditDialog(it, row.itemChild)
-                            }
+                            .setNegativeButton(R.string.delete) {_, _ -> showDeleteDialog(it, row.itemChild) }
+                            .setNeutralButton(R.string.edit) { _, _ -> showEditDialog(it, row.itemChild) }
                             .show()
-                }
-
-                holder.childBinding.rllExpListChild.setOnLongClickListener {
-                    AlertDialog.Builder(it.context)
-                            .setIcon(R.mipmap.ic_mikan)
-                            .setTitle(it.context.getString(R.string.quest_do_you_want_to_delete_item))
-                            .setPositiveButton(R.string.yes) { _, _ ->
-                                _itemStatusViewModel.delete(row.itemChild.id)
-                                Toast.makeText(it.context,
-                                        it.context.getString(R.string.msg_item_successfully_deleted),
-                                        Toast.LENGTH_SHORT).show()
-                            }
-                            .setNegativeButton(R.string.no, null)
-                            .show()
-                    true
                 }
             }
         }
@@ -128,7 +112,7 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
 
     override fun getItemViewType(position: Int): Int = _expandableList[position].type
 
-    private fun expandRow(position: Int, header: Pair<String, BigDecimal>) {
+    private fun expandRow(position: Int, header: ExpandableListRowModel.Header) {
         var nextPosition = position
 
         _masterMap[header]?.let {
@@ -168,27 +152,41 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
     class ItemChildViewHolder(val childBinding: RowExplistChildBinding)
         : RecyclerView.ViewHolder(childBinding.root) {
 
-        fun bind(itemStatus: ItemStatus) {
+        fun bind(lifecycleOwner: LifecycleOwner, itemStatus: ItemStatus, categoryViewModel: CategoryStatusViewModel) {
+            childBinding.lifecycleOwner = lifecycleOwner
             childBinding.itemStatus = itemStatus
+            childBinding.categoryViewModel = categoryViewModel
         }
     }
 
+    private fun showDeleteDialog(v: View, item: ItemStatus) {
+        AlertDialog.Builder(v.context)
+                .setIcon(R.mipmap.ic_mikan)
+                .setTitle(v.context.getString(R.string.quest_do_you_want_to_delete_item))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    _itemStatusViewModel.delete(item.id)
+                    Toast.makeText(v.context,
+                            v.context.getString(R.string.msg_item_successfully_deleted),
+                            Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
+    }
+
     private fun showEditDialog(v: View, item: ItemStatus) {
-//        val binding = DialogItemEditBinding.inflate(LayoutInflater.from(v.context))
-//        binding.itemStatus = item
-        val inflater = v.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val layout = inflater.inflate(R.layout.dialog_item_edit, v.findViewById(R.id.layout_root))
+        val binding = DialogItemEditBinding.inflate(LayoutInflater.from(v.context))
+        binding.lifecycleOwner = _lifecycleOwner
+        binding.itemStatus = item
 
         /*** event date ***/
-        val btnEventDate: Button = layout.findViewById(R.id.btn_event_date)
         val eventDates = item.eventDate.split("-")
         val cal = GregorianCalendar(eventDates[0].toInt(), eventDates[1].toInt()-1, eventDates[2].toInt())
         val date = cal.time
         val dateText = SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.dateFormat],
                 Locale.getDefault()).format(date)
                 .toString() + " [" + MainActivity.weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
-        btnEventDate.text = dateText
-        btnEventDate.setOnClickListener {
+        binding.btnEventDate.text = dateText
+        binding.btnEventDate.setOnClickListener {
             val ymd = UtilDate.getDBDate(dateText.split(" ")[0], MainActivity.dateFormat).split("-")
             val year = ymd[0].toInt()
             val month = ymd[1].toInt()
@@ -198,22 +196,20 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
                 val str: String = SimpleDateFormat(UtilDate.DATE_FORMATS[MainActivity.dateFormat],
                         Locale.getDefault()).format(gCal.time).toString() +
                         " [" + MainActivity.weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
-                btnEventDate.text = str
+                binding.btnEventDate.text = str
             }, year, month - 1, day)
             dialog.show()
         }
         /*** category ***/
-        val btnCategory: Button = layout.findViewById(R.id.btn_category)
-        val categoryName: String =
+        binding.btnCategory.text =
                 if (item.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
-                    _context.resources.getStringArray(R.array.default_category)[item.categoryCode]
+                    v.context.resources.getStringArray(R.array.default_category)[item.categoryCode]
                 }
                 else {
-                    MainActivity.allCategoryMap[item.categoryCode]!!.name
+                    _categoryViewModel.allMap.value!![item.categoryCode]!!.name
                 }
-        btnCategory.text = categoryName
-        btnCategory.hint = "" + item.categoryCode
-        btnCategory.setOnClickListener {
+        binding.btnCategory.hint = "" + item.categoryCode
+        binding.btnCategory.setOnClickListener {
             /*** ordered by location  */
             val adapter = CategoryListAdapter(v.context, 0, MainActivity.allDspCategoryList)
             val builder = androidx.appcompat.app.AlertDialog.Builder(v.context)
@@ -229,39 +225,37 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
             val dialog: Dialog = builder.show()
             lv.setOnItemClickListener { _, _, pos: Int, _ ->
                 val selectedCategoryCode: Int = MainActivity.allDspCategoryList[pos].code
-                btnCategory.text =
-                        if (item.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
-                            _context.resources.getStringArray(R.array.default_category)[item.categoryCode]
+                binding.btnCategory.text =
+                        if (selectedCategoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                            v.context.resources.getStringArray(R.array.default_category)[selectedCategoryCode]
                         }
                         else {
-                            MainActivity.allCategoryMap[item.categoryCode]!!.name
+                            _categoryViewModel.allMap.value!![selectedCategoryCode]!!.name
                         }
-                btnCategory.hint = "" + selectedCategoryCode
+                binding.btnCategory.hint = "" + selectedCategoryCode
                 dialog.dismiss()
             }
         }
         /*** amount***/
-        val edtAmount = layout.findViewById<EditText>(R.id.edt_amount)
-        edtAmount.addTextChangedListener(AmountTextWatcher(edtAmount))
-        edtAmount.setText(java.lang.String.valueOf(item.getAmount().abs()))
+        binding.edtAmount.addTextChangedListener(AmountTextWatcher(binding.edtAmount))
+        binding.edtAmount.setText(java.lang.String.valueOf(item.getAmount().abs()))
         /*** memo ***/
-        val edtMemo = layout.findViewById<EditText>(R.id.edt_memo)
-        edtMemo.setText(item.memo)
+        binding.edtMemo.setText(item.memo)
 
         AlertDialog.Builder(v.context)
                 .setIcon(R.mipmap.ic_mikan)
                 .setTitle(v.context.getString(R.string.edit_item))
-                .setView(layout)
+                .setView(binding.root)
                 .setPositiveButton(R.string.save) { _, _ ->
-                    val categoryCode = btnCategory.hint.toString().toInt()
-                    val eventDate = UtilDate.getDBDate(btnEventDate.text.toString().split(" ")[0], MainActivity.dateFormat)
+                    val categoryCode = binding.btnCategory.hint.toString().toInt()
+                    val eventDate = UtilDate.getDBDate(binding.btnEventDate.text.toString().split(" ")[0], MainActivity.dateFormat)
                     val updateDate = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB_HMS)
-                    val amount = when (MainActivity.allCategoryMap[categoryCode]!!.color) {
+                    val amount = when (_categoryViewModel.allMap.value!![categoryCode]!!.color) {
                         UtilCategory.CATEGORY_COLOR_INCOME -> {
-                            BigDecimal(edtAmount.text.toString())
+                            BigDecimal(binding.edtAmount.text.toString())
                         }
                         UtilCategory.CATEGORY_COLOR_EXPENSE -> {
-                            BigDecimal(edtAmount.text.toString()).negate()
+                            BigDecimal(binding.edtAmount.text.toString()).negate()
                         }
                         else -> {
                             BigDecimal(0)
@@ -273,12 +267,12 @@ class ExpandableListAdapter(private val categoryViewModel: CategoryStatusViewMod
                             amount,
                             UtilCurrency.CURRENCY_NONE,
                             categoryCode,
-                            edtMemo.text.toString(),
+                            binding.edtMemo.text.toString(),
                             eventDate,
                             updateDate
                     )
 
-                    val result = UtilText.checkBeforeSave(edtAmount.text.toString())
+                    val result = UtilText.checkBeforeSave(binding.edtAmount.text.toString())
                     if (!result.first) {
                         Toast.makeText(v.context,
                                 v.context.getString(result.second),

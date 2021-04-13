@@ -52,13 +52,13 @@ class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
         setContentView(binding.root)
 
         numColumns = SubApp.getNumColumns(R.string.pref_key_num_columns)
-        /*** hide home button on actionbar  */
+        /* hide home button on actionbar  */
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(false)
             supportActionBar!!.setHomeButtonEnabled(false)
         }
 
-        /*** ads  */
+        /* ads  */
         _kkbAppViewModel.all.observe(this, {
             _showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
 
@@ -83,10 +83,6 @@ class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
 
                     override fun onAdClicked() {
                         // Code to be executed when the user clicks on an ad.
-                    }
-
-                    override fun onAdLeftApplication() {
-                        // Code to be executed when the user has left the app.
                     }
 
                     override fun onAdClosed() {

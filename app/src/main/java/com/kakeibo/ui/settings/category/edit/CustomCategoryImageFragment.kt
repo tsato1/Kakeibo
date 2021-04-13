@@ -46,7 +46,7 @@ class CustomCategoryImageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_settings_custom_category_image, container, false)
         findViews(view)
 
-        _drawView.setColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
+        _drawView.setColor(ContextCompat.getColor(requireContext(), R.color.color_background))
         _drawView.setStrokeWidth(resources.getDimension(R.dimen.draw_view_thickness_medium))
         _thicknessList = resources.getStringArray(R.array.thickness)
         when (_customCategoryViewModel.color.value) {

@@ -239,7 +239,7 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
             for (i in _lstChoices.indices) {
                 if (_lstChoices[i] == _searchCriteria[cardItem.type]) _lstChoices.removeAt(i)
             }
-        }.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+        }.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.color_primary))
         snackbar.show()
     }
 

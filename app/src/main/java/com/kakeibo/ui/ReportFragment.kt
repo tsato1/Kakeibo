@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -17,11 +16,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kakeibo.R
+import com.kakeibo.data.CategoryStatus
 import com.kakeibo.data.ItemStatus
 import com.kakeibo.databinding.FragmentReportBinding
 import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.adapter.view.ReportCListAdapter
 import com.kakeibo.ui.listener.SimpleClickListener
+import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
@@ -51,12 +52,14 @@ class ReportFragment : Fragment(), SimpleClickListener {
 
     private lateinit var _srlReload: SwipeRefreshLayout
     private lateinit var _btnClose: ImageButton
-    private lateinit var _reportA: LinearLayout
-    private lateinit var _reportC: LinearLayout
-    private lateinit var _reportD: LinearLayout
+    private lateinit var _reportCategoryYearly: LinearLayout
+    private lateinit var _reportDateYearly: LinearLayout
+    private lateinit var _reportCategoryMonthly: LinearLayout
+    private lateinit var _reportDateMonthly: LinearLayout
 
     private lateinit var _allItems: List<ItemStatus>
     private lateinit var _itemsThisMonth: List<ItemStatus>
+    private lateinit var _allCategoriesMap: Map<Int, CategoryStatus>
     private var _result: List<ItemStatus> = listOf()
     private lateinit var _expandableListAdapter: ExpandableListAdapter
     private lateinit var _incomeListAdapter: ReportCListAdapter
@@ -70,70 +73,99 @@ class ReportFragment : Fragment(), SimpleClickListener {
         fragmentBinding.itemStatusViewModel = _itemStatusViewModel
         val view = fragmentBinding.root
 
-        val reportCBinding = fragmentBinding.fragmentReportC
-        reportCBinding.itemStatusViewModel = _itemStatusViewModel
+        val reportCategoryMonthlyBinding = fragmentBinding.fragmentReportCategoryMonthly
+        reportCategoryMonthlyBinding.lifecycleOwner = this
+        reportCategoryMonthlyBinding.itemStatusViewModel = _itemStatusViewModel
+        reportCategoryMonthlyBinding.categoryStatusViewModel = _categoryStatusViewModel
+
+        val reportCategoryYearlyBinding = fragmentBinding.fragmentReportCategoryYearly
+        reportCategoryYearlyBinding.lifecycleOwner = this
+        reportCategoryYearlyBinding.itemStatusViewModel = _itemStatusViewModel
+        reportCategoryYearlyBinding.categoryStatusViewModel = _categoryStatusViewModel
 
         val bannerDatePickerBinding = fragmentBinding.bannerDatePicker
+        bannerDatePickerBinding.lifecycleOwner = this
         bannerDatePickerBinding.medium = _medium
         bannerDatePickerBinding.clickListener = this
         bannerDatePickerBinding.itemStatusViewModel = _itemStatusViewModel
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
-        _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel, requireContext())
+        _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel, this)
         _expandableListAdapter.setItemStatusViewMode(_itemStatusViewModel)
         expandableListView.adapter = _expandableListAdapter
         expandableListView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         val incomeListView: RecyclerView = view.findViewById(R.id.rcv_income)
-        _incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME, _categoryStatusViewModel)
+        _incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME, _categoryStatusViewModel, this)
         incomeListView.adapter = _incomeListAdapter
         val expenseListView: RecyclerView = view.findViewById(R.id.rcv_expense)
-        _expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE, _categoryStatusViewModel)
+        _expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE, _categoryStatusViewModel, this)
         expenseListView.adapter = _expenseListAdapter
 
-        _itemStatusViewModel.all.observe(viewLifecycleOwner, { all ->
-            _allItems = all
+        _itemStatusViewModel.all.observe(viewLifecycleOwner, {
+            _allItems = it
+        })
+        _categoryStatusViewModel.allMap.observe(viewLifecycleOwner, {
+            _allCategoriesMap = it
         })
         _itemStatusViewModel.items.observe(viewLifecycleOwner, { allThisMonth ->
             _itemsThisMonth = allThisMonth
 
             val masterMap = allThisMonth
                     .groupBy { it.eventDate }
-                    .mapKeys { entry -> Pair(entry.key, entry.value.sumOf { it.getAmount() }) }
-                    .toSortedMap(compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
+                    .mapKeys { entry ->
+                        ExpandableListRowModel.Header(
+                                entry.key,
+                                entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
+                                entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
+                    .toSortedMap(compareBy { it.date })
             _expandableListAdapter.setMasterMap(masterMap)
 
-            val allThisMonthByCategory = allThisMonth.groupBy { it.categoryCode }
+            val allThisMonthByCategory = allThisMonth
+                    .groupBy { it.categoryCode }
                     .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
             _incomeListAdapter.setAllByCategory(allThisMonthByCategory.filter { it.key.second > BigDecimal(0) })
             _expenseListAdapter.setAllByCategory(allThisMonthByCategory.filter { it.key.second < BigDecimal(0) })
         })
 
-        val btnA: Button = view.findViewById(R.id.btn_a)
-        val btnC: Button = view.findViewById(R.id.btn_c)
-        val btnD: Button = view.findViewById(R.id.btn_d)
-        _reportA = view.findViewById(R.id.fragment_report_a)
-        _reportC = view.findViewById(R.id.fragment_report_c)
-        _reportD = view.findViewById(R.id.fragment_report_d)
+        val btnA: Button = view.findViewById(R.id.btn_category_yearly)
+        val btnB: Button = view.findViewById(R.id.btn_date_yearly)
+        val btnC: Button = view.findViewById(R.id.btn_category_monthly)
+        val btnD: Button = view.findViewById(R.id.btn_date_monthly)
+        _reportCategoryYearly = view.findViewById(R.id.fragment_report_category_yearly)
+        _reportDateYearly = view.findViewById(R.id.fragment_report_date_yearly)
+        _reportCategoryMonthly = view.findViewById(R.id.fragment_report_category_monthly)
+        _reportDateMonthly = view.findViewById(R.id.fragment_report_date_monthly)
         btnA.setOnClickListener { v ->
-            _reportA.visibility = VISIBLE
-            _reportC.visibility = GONE
-            _reportD.visibility = GONE
-            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_A)
+            _reportCategoryYearly.visibility = VISIBLE
+            _reportDateYearly.visibility = GONE
+            _reportCategoryMonthly.visibility = GONE
+            _reportDateMonthly.visibility = GONE
+            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_CATEGORY_YEARLY)
+            bannerDatePickerBinding.executePendingBindings()
+        }
+        btnB.setOnClickListener { v ->
+            _reportCategoryYearly.visibility = GONE
+            _reportDateYearly.visibility = VISIBLE
+            _reportCategoryMonthly.visibility = GONE
+            _reportDateMonthly.visibility = GONE
+            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_CATEGORY_YEARLY)
             bannerDatePickerBinding.executePendingBindings()
         }
         btnC.setOnClickListener { v ->
-            _reportA.visibility = GONE
-            _reportC.visibility = VISIBLE
-            _reportD.visibility = GONE
-            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_C)
+            _reportCategoryYearly.visibility = GONE
+            _reportDateYearly.visibility = GONE
+            _reportCategoryMonthly.visibility = VISIBLE
+            _reportDateMonthly.visibility = GONE
+            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY)
             bannerDatePickerBinding.executePendingBindings()
         }
         btnD.setOnClickListener { v ->
-            _reportA.visibility = GONE
-            _reportC.visibility = GONE
-            _reportD.visibility = VISIBLE
-            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_D)
+            _reportCategoryYearly.visibility = GONE
+            _reportDateYearly.visibility = GONE
+            _reportCategoryMonthly.visibility = GONE
+            _reportDateMonthly.visibility = VISIBLE
+            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_DATE_MONTHLY)
             bannerDatePickerBinding.executePendingBindings()
         }
 
@@ -153,9 +185,8 @@ class ReportFragment : Fragment(), SimpleClickListener {
         val message: String
 
         when (_medium.getCurrentlyShown()) {
-            Medium.FRAGMENT_REPORT_C -> {
+            Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY -> {
                 message = getString(R.string.quest_export_this_report_C)
-                Log.d("asdf","c")
 
                 _result = if (_medium.getInSearchResult()) {
                     if (_result.isEmpty()) {
@@ -171,8 +202,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
                     _itemsThisMonth.sortedBy { it.categoryCode }
                 }
             }
-            Medium.FRAGMENT_REPORT_D -> {
-                Log.d("asdf","DDDDDDD")
+            Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
                 message = getString(R.string.quest_export_this_report_D)
 
                 _result = if (_medium.getInSearchResult()) {
@@ -192,20 +222,18 @@ class ReportFragment : Fragment(), SimpleClickListener {
             else -> return
         }
 
-        _result.forEach { Log.d("asdf","asdfasdf = "+it.memo) }
-
         val dialogExport = AlertDialog.Builder(requireContext())
         dialogExport.setIcon(R.mipmap.ic_mikan)
         dialogExport.setTitle(getString(R.string.export_category))
         dialogExport.setMessage(message)
         dialogExport.setPositiveButton(R.string.yes) { _, _ ->
             val fileName = when (_medium.getCurrentlyShown()) {
-                Medium.FRAGMENT_REPORT_C -> ExportActivity.FILE_ORDER_CATEGORY
-                Medium.FRAGMENT_REPORT_D -> ExportActivity.FILE_ORDER_DATE
+                Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY -> ExportActivity.FILE_ORDER_CATEGORY
+                Medium.FRAGMENT_REPORT_DATE_MONTHLY -> ExportActivity.FILE_ORDER_DATE
                 else -> ""
             }
 
-            UtilExport.build(requireContext(), _result, MainActivity.allCategoryMap, fileName)
+            UtilExport.build(requireContext(), _result, _allCategoriesMap, fileName)
 
             val intent = Intent(requireContext(), ExportActivity::class.java)
             intent.putExtra("REPORT_VIEW_TYPE", _medium.getCurrentlyShown())
@@ -216,28 +244,33 @@ class ReportFragment : Fragment(), SimpleClickListener {
 
     /* Called by MainActivity */
     fun focusOnSavedItem(date: String) {
-        _reportA.visibility = GONE
-        _reportC.visibility = GONE
-        _reportD.visibility = VISIBLE
+        _reportCategoryYearly.visibility = GONE
+        _reportCategoryMonthly.visibility = GONE
+        _reportDateMonthly.visibility = VISIBLE
         UtilExpandableList.expandOnlySpecificDate(_expandableListAdapter, date)
-        _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_D)
+        _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_DATE_MONTHLY)
     }
 
     /* Called by MainActivity */
     fun onSearch(query: Query) {
         _btnClose.visibility = VISIBLE
-        _srlReload.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorBackground_search))
+        _srlReload.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_background_search))
 
         _result = UtilQuery.query(_allItems, query)
 
         _itemStatusViewModel.setMutableAll(_result)
         val masterMap = _result
                 .groupBy { it.eventDate }
-                .mapKeys { entry -> Pair(entry.key, entry.value.sumOf { it.getAmount() }) }
-                .toSortedMap(compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
+                .mapKeys { entry ->
+                    ExpandableListRowModel.Header(
+                            entry.key,
+                            entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
+                            entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
+                .toSortedMap(compareBy { it.date })
         _expandableListAdapter.setMasterMap(masterMap)
 
-        val allItemsByCategory = _result.groupBy { it.categoryCode }
+        val allItemsByCategory = _result
+                .groupBy { it.categoryCode }
                 .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
         _incomeListAdapter.setAllByCategory(allItemsByCategory.filter { it.key.second > BigDecimal(0) })
         _expenseListAdapter.setAllByCategory(allItemsByCategory.filter { it.key.second < BigDecimal(0) })
@@ -253,26 +286,31 @@ class ReportFragment : Fragment(), SimpleClickListener {
         dialog.setMessage(getString(R.string.msg_exit_search))
         dialog.setPositiveButton(R.string.ok) { _, _ ->
             _btnClose.visibility = GONE
-            _srlReload.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
+            _srlReload.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_background))
 
             _itemStatusViewModel.setItemsThisMonth()
 
             val masterMap = _itemsThisMonth
                     .groupBy { it.eventDate }
-                    .mapKeys { entry -> Pair(entry.key, entry.value.sumOf { it.getAmount() }) }
-                    .toSortedMap(compareBy<Pair<String, BigDecimal>> { it.first }.thenBy { it.second })
+                    .mapKeys { entry ->
+                        ExpandableListRowModel.Header(
+                                entry.key,
+                                entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
+                                entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
+                    .toSortedMap(compareBy { it.date })
             _expandableListAdapter.setMasterMap(masterMap)
 
-            val allItemsThisMonthByCategory = _itemsThisMonth.groupBy { it.categoryCode }
+            val allItemsThisMonthByCategory = _itemsThisMonth
+                    .groupBy { it.categoryCode }
                     .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
             _incomeListAdapter.setAllByCategory(allItemsThisMonthByCategory.filter { it.key.second > BigDecimal(0) })
             _expenseListAdapter.setAllByCategory(allItemsThisMonthByCategory.filter { it.key.second < BigDecimal(0) })
 
             _medium.setInSearchResult(false)
-            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_D)
-            _reportA.visibility = GONE
-            _reportC.visibility = GONE
-            _reportD.visibility = VISIBLE
+            _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_DATE_MONTHLY)
+            _reportCategoryYearly.visibility = GONE
+            _reportCategoryMonthly.visibility = GONE
+            _reportDateMonthly.visibility = VISIBLE
         }
         dialog.show()
     }

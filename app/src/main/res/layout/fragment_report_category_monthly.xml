@@ -5,10 +5,12 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="java.util.List"/>
         <variable
             name="itemStatusViewModel"
             type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
+        <variable
+            name="categoryStatusViewModel"
+            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
     </data>
 
     <LinearLayout
@@ -34,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/balance_colon"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/color_black"
                     android:textStyle="bold"
                     android:textSize="@dimen/char_size_mid" />
 
@@ -67,22 +69,24 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/income_colon"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/color_black"
                     android:textStyle="bold"
                     android:textSize="@dimen/char_size_mid" />
 
-                <com.echo.holographlibrary.PieGraph
+                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/pie_graph_income"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/pie_graph_height"
                     android:layout_marginTop="@dimen/pie_graph_margin_vertical"
                     android:layout_marginBottom="@dimen/pie_graph_margin_vertical"
-                    bind:incomeList="@{itemStatusViewModel.itemsIncome}"/>
+                    bind:incomeList="@{itemStatusViewModel.itemsIncome}"
+                    bind:context="@{context}"
+                    bind:masterMap="@{categoryStatusViewModel.allMap}"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_income"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             </LinearLayout>
@@ -105,22 +109,24 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/expense_colon"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/color_black"
                     android:textStyle="bold"
                     android:textSize="@dimen/char_size_mid" />
 
-                <com.echo.holographlibrary.PieGraph
+                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/pie_graph_expense"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/pie_graph_height"
                     android:layout_marginTop="@dimen/pie_graph_margin_vertical"
                     android:layout_marginBottom="@dimen/pie_graph_margin_vertical"
-                    bind:expenseList="@{itemStatusViewModel.itemsExpense}"/>
+                    bind:expenseList="@{itemStatusViewModel.itemsExpense}"
+                    bind:context="@{context}"
+                    bind:masterMap="@{categoryStatusViewModel.allMap}"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_expense"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             </LinearLayout>
