@@ -5,27 +5,27 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.kakeibo.SubApp
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.data.DataRepository
 import com.kakeibo.util.UtilCategory
 
-class CategoryStatusViewModel(application: Application) : AndroidViewModel(application) {
+class CategoryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: DataRepository = (application as SubApp).repository
 
-    val all: LiveData<List<CategoryStatus>> = repository.categories
-    val allMap: LiveData<Map<Int, CategoryStatus>> = Transformations.map(all) { all ->
+    val all: LiveData<List<Category>> = repository.categories
+    val allMap: LiveData<Map<Int, Category>> = Transformations.map(all) { all ->
         all.associateBy( { it.code }, { it })
     }
 
-    val dsp: LiveData<List<CategoryStatus>> = repository.categoriesDisplayed
-    val nonDsp: LiveData<List<CategoryStatus>> = repository.categoriesNotDisplayed
-    val custom: LiveData<List<CategoryStatus>> = Transformations.map(all) { all ->
+    val dsp: LiveData<List<Category>> = repository.categoriesDisplayed
+    val nonDsp: LiveData<List<Category>> = repository.categoriesNotDisplayed
+    val custom: LiveData<List<Category>> = Transformations.map(all) { all ->
         all.filter { it.code >= UtilCategory.CUSTOM_CATEGORY_CODE_START }
     }
 
-    fun insert(categoryStatus: CategoryStatus) {
-        repository.insertCategory(categoryStatus)
+    fun insert(category: Category) {
+        repository.insertCategory(category)
     }
 
     fun delete(id: Long) {

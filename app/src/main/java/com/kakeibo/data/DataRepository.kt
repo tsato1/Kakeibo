@@ -25,31 +25,31 @@ class DataRepository private constructor(
      * The mediator provides an easy way for us to use LiveData for both the local data source
      * and the network data source, without implementing a new callback interface.
      */
-    val subscriptions = MediatorLiveData<List<SubscriptionStatus>>()
+    val subscriptions = MediatorLiveData<List<Subscription>>()
 
     /**
      * KkbApp
      */
-    val kkbApp: LiveData<KkbAppStatus>
+    val kkbApp: LiveData<KkbApp>
 
     /**
-     * ItemStatus
+     * Item
      */
-    val items: LiveData<List<ItemStatus>>
-    val itemsThisYear: LiveData<List<ItemStatus>>
-    val itemsThisMonth: LiveData<List<ItemStatus>>
+    val items: LiveData<List<Item>>
+    val itemsThisYear: LiveData<List<Item>>
+    val itemsThisMonth: LiveData<List<Item>>
 
     /**
-     * CategoryStatus
+     * Category
      */
-    val categories: LiveData<List<CategoryStatus>>
-    val categoriesDisplayed: LiveData<List<CategoryStatus>>
-    val categoriesNotDisplayed: LiveData<List<CategoryStatus>>
+    val categories: LiveData<List<Category>>
+    val categoriesDisplayed: LiveData<List<Category>>
+    val categoriesNotDisplayed: LiveData<List<Category>>
 
     /**
-     * CategoryDspStatus
+     * CategoryDsp
      */
-    val categoryDspStatuses: LiveData<List<CategoryDspStatus>>
+    val categoryDsps: LiveData<List<CategoryDsp>>
 
     /**
      * Live data with basic content
@@ -64,7 +64,7 @@ class DataRepository private constructor(
     val loading: LiveData<Boolean>
         get() = webDataSource.loading
 
-    fun updateSubscriptionsFromNetwork(remoteSubscriptions: List<SubscriptionStatus>?) {
+    fun updateSubscriptionsFromNetwork(remoteSubscriptions: List<Subscription>?) {
 
         val oldSubscriptions = subscriptions.value!!
         val purchases = billingClientLifecycle.purchases.value
@@ -111,7 +111,7 @@ class DataRepository private constructor(
     /**
      * Acknowledge subscriptions that have been registered by the server.
      */
-    private fun acknowledgeRegisteredPurchaseTokens(remoteSubscriptions: List<SubscriptionStatus>) {
+    private fun acknowledgeRegisteredPurchaseTokens(remoteSubscriptions: List<Subscription>) {
         for (remoteSubscription in remoteSubscriptions) {
             val purchaseTkn = remoteSubscription.purchaseToken
             billingClientLifecycle.acknowledgePurchase(purchaseTkn)
@@ -129,15 +129,15 @@ class DataRepository private constructor(
      * and the purchase token for the subscription is still on this device.
      */
     private fun mergeSubscriptionsAndPurchases(
-            oldSubscriptions: List<SubscriptionStatus>?,
-            newSubscriptions: List<SubscriptionStatus>?,
+            oldSubscriptions: List<Subscription>?,
+            newSubscriptions: List<Subscription>?,
             purchases: List<Purchase>?
-    ): List<SubscriptionStatus> {
+    ): List<Subscription> {
 
-        val subscriptionStatuses: MutableList<SubscriptionStatus> = ArrayList()
+        val subscriptions: MutableList<Subscription> = ArrayList()
 
         purchases?.let { updateLocalPurchaseTokens(newSubscriptions, it) }
-        newSubscriptions?.let { subscriptionStatuses.addAll(newSubscriptions) }
+        newSubscriptions?.let { subscriptions.addAll(newSubscriptions) }
 
         // Find old subscriptions that are in purchases but not in new subscriptions.
         if (purchases != null && oldSubscriptions != null) {
@@ -163,14 +163,14 @@ class DataRepository private constructor(
                             if (!foundNewSubscription) {
                                 // The old subscription should be added to the output.
                                 // It matches a local purchase.
-                                subscriptionStatuses.add(oldSubscription)
+                                subscriptions.add(oldSubscription)
                             }
                         }
                     }
                 }
             }
         }
-        return subscriptionStatuses
+        return subscriptions
     }
 
     /**
@@ -178,7 +178,7 @@ class DataRepository private constructor(
      * Return true if any of the values changed.
      */
     private fun updateLocalPurchaseTokens(
-            subscriptions: List<SubscriptionStatus>?,
+            subscriptions: List<Subscription>?,
             purchases: List<Purchase>?
     ): Boolean {
 
@@ -212,7 +212,7 @@ class DataRepository private constructor(
      * Fetch subscriptions from the server and update local data source.
      */
     fun fetchSubscriptions() {
-        webDataSource.updateSubscriptionStatus()
+        webDataSource.updateSubscription()
     }
 
     /**
@@ -257,28 +257,28 @@ class DataRepository private constructor(
      * Items, Categories, etc
      *
      */
-    fun updateKkbApp(kkbAppStatus: KkbAppStatus) {
-        localDataSource.updateKkbApp(kkbAppStatus)
+    fun updateKkbApp(kkbApp: KkbApp) {
+        localDataSource.updateKkbApp(kkbApp)
     }
 
     fun updateVal2(val2: Int) {
         localDataSource.updateVal2(val2)
     }
 
-    fun insertItem(itemStatus: ItemStatus) {
-        localDataSource.insertItem(itemStatus)
+    fun insertItem(item: Item) {
+        localDataSource.insertItem(item)
     }
 
     fun getItemsByMonth(year: String, month: String) {
         localDataSource.getItemsByMonth(year, month)
     }
 
-    fun insertCategory(categoryStatus: CategoryStatus) {
-        localDataSource.insertCategory(categoryStatus)
+    fun insertCategory(category: Category) {
+        localDataSource.insertCategory(category)
     }
 
-    fun insertCategoryDsps(categoryDspStatuses: List<CategoryDspStatus>) {
-        localDataSource.insertCategoryDsps(categoryDspStatuses)
+    fun insertCategoryDsps(categoryDsps: List<CategoryDsp>) {
+        localDataSource.insertCategoryDsps(categoryDsps)
     }
 
     fun deleteAllItems() {
@@ -348,11 +348,11 @@ class DataRepository private constructor(
         // the Google Play Billing APIs return a Purchase record for the SKU. It is not
         // local if there is no record of the subscription on the device.
         subscriptions.addSource(billingClientLifecycle.purchases) {
-            val subscriptionStatuses = subscriptions.value
-            if (subscriptionStatuses != null) {
-                val hasChanged = updateLocalPurchaseTokens(subscriptionStatuses, it)
+            val subscriptions = subscriptions.value
+            if (subscriptions != null) {
+                val hasChanged = updateLocalPurchaseTokens(subscriptions, it)
                 if (hasChanged) {
-                    localDataSource.updateSubscriptions(subscriptionStatuses)
+                    localDataSource.updateSubscriptions(subscriptions)
                 }
             }
         }
@@ -366,6 +366,6 @@ class DataRepository private constructor(
         categories = localDataSource.categories
         categoriesDisplayed = localDataSource.categoriesDisplayed
         categoriesNotDisplayed = localDataSource.categoriesNotDisplayed
-        categoryDspStatuses = localDataSource.categoryDsps
+        categoryDsps = localDataSource.categoryDsps
     }
 }

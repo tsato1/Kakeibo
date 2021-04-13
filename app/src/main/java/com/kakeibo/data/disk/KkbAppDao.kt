@@ -2,16 +2,16 @@ package com.kakeibo.data.disk
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.kakeibo.data.KkbAppStatus
+import com.kakeibo.data.KkbApp
 import com.kakeibo.db.KkbAppDBAdapter
 
 @Dao
-interface KkbAppStatusDao {
+interface KkbAppDao {
     @Query("SELECT * FROM " + KkbAppDBAdapter.TABLE_KKBAPP + " LIMIT 1;")
-    fun getFirst(): LiveData<KkbAppStatus>
+    fun getFirst(): LiveData<KkbApp>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(kkbAppStatus: KkbAppStatus): Long
+    fun insert(kkbApp: KkbApp): Long
 
     @Query("DELETE FROM " + KkbAppDBAdapter.TABLE_KKBAPP)
     fun deleteAll()

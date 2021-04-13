@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import com.kakeibo.databinding.RowListReportCDetailBinding
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 
 class ReportCDetailListAdapter(
         context: Context,
         resource: Int,
-        itemList: List<ItemStatus>,
-        private val categoryStatusViewModel: CategoryStatusViewModel)
-    : ArrayAdapter<ItemStatus>(context, resource, itemList) {
+        itemList: List<Item>,
+        private val categoryViewModel: CategoryViewModel)
+    : ArrayAdapter<Item>(context, resource, itemList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var rowView = convertView
@@ -28,7 +28,7 @@ class ReportCDetailListAdapter(
         }
 
         binding.itemStatus = getItem(position)
-        binding.categoryViewModel = categoryStatusViewModel
+        binding.categoryViewModel = categoryViewModel
         rowView.tag = binding
         return rowView
     }

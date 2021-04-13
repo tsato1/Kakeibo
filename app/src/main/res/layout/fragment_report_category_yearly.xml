@@ -7,10 +7,10 @@
     <data>
         <variable
             name="itemStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.ItemViewModel" />
         <variable
             name="categoryStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.CategoryViewModel" />
     </data>
 
     <LinearLayout

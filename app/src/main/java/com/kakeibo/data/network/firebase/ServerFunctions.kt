@@ -2,7 +2,7 @@ package com.kakeibo.data.network.firebase
 
 import androidx.lifecycle.LiveData
 import com.kakeibo.data.ContentResource
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 
 /**
  * Interface to perform the Firebase Function calls and expose the results with
@@ -22,7 +22,7 @@ interface ServerFunctions {
      *
      * Must be observed and active in order to receive updates from the server.
      */
-    val subscriptions: LiveData<List<SubscriptionStatus>>
+    val subscriptions: LiveData<List<Subscription>>
 
     /**
      * The basic content URL.

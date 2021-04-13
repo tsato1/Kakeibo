@@ -16,19 +16,19 @@ import com.kakeibo.db.PrepDB7
 
 @Database(
         entities = [
-            KkbAppStatus::class,
-            ItemStatus::class,
-            CategoryStatus::class,
-            CategoryDspStatus::class,
-            SubscriptionStatus::class],
+            KkbApp::class,
+            Item::class,
+            Category::class,
+            CategoryDsp::class,
+            Subscription::class],
         version = BuildConfig.versionDB
 ) abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun kkbAppStatusDao(): KkbAppStatusDao
-    abstract fun itemStatusDao(): ItemStatusDao
-    abstract fun categoryStatusDao(): CategoryStatusDao
-    abstract fun categoryDspStatusDao(): CategoryDspStatusDao
-    abstract fun subscriptionStatusDao(): SubscriptionStatusDao
+    abstract fun kkbAppDao(): KkbAppDao
+    abstract fun itemDao(): ItemDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun categoryDspDao(): CategoryDspDao
+    abstract fun subscriptionDao(): SubscriptionDao
 
     companion object {
         private val TAG = AppDatabase::class.java.simpleName
@@ -113,9 +113,9 @@ import com.kakeibo.db.PrepDB7
         }
 
         private class PopulateDbAsync (db: AppDatabase) : AsyncTask<Unit, Unit, Unit>() {
-            private val mKkbAppStatusDao = db.kkbAppStatusDao()
-            private val mCategoryStatusDao = db.categoryStatusDao()
-            private val mCategoryDspStatusDao = db.categoryDspStatusDao()
+            private val mKkbAppStatusDao = db.kkbAppDao()
+            private val mCategoryStatusDao = db.categoryDao()
+            private val mCategoryDspStatusDao = db.categoryDspDao()
 
             override fun doInBackground(vararg params: Unit) {
                 mKkbAppStatusDao.insert(PrepDB.initKkbAppTable())

@@ -11,11 +11,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.databinding.FragmentSettingsCategoryReplaceBinding
 import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
 import com.kakeibo.ui.listener.CategoryClickListener
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.util.UtilCategory
 
 class CategoryReplaceAddFragment : Fragment(), CategoryClickListener {
@@ -39,7 +39,7 @@ class CategoryReplaceAddFragment : Fragment(), CategoryClickListener {
 
     private val _medium: Medium by activityViewModels()
 
-    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
+    private val _categoryViewModel: CategoryViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentSettingsCategoryReplaceBinding.inflate(inflater, container, false)
@@ -51,7 +51,7 @@ class CategoryReplaceAddFragment : Fragment(), CategoryClickListener {
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
         recyclerView.layoutManager = GridLayoutManager(activity, CategoryReplaceActivity.numColumns)
         recyclerView.adapter = RecyclerViewAdapter(list, this)
-        _categoryStatusViewModel.nonDsp.observe(viewLifecycleOwner, {
+        _categoryViewModel.nonDsp.observe(viewLifecycleOwner, {
             list.clear()
             it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }
         })
@@ -112,7 +112,7 @@ class CategoryReplaceAddFragment : Fragment(), CategoryClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCategoryClicked(view: View, category: CategoryStatus) {
+    override fun onCategoryClicked(view: View, category: Category) {
         val imv: ImageView = view.findViewById(R.id.imv_category_add)
 
         if (_medium.addedCategoryList.contains(category)) {

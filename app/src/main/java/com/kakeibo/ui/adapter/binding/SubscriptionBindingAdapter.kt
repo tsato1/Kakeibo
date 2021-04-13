@@ -1,15 +1,12 @@
 package com.kakeibo.ui
 
 import android.content.Context
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.databinding.DataBindingUtil
 //import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -25,9 +22,8 @@ import com.kakeibo.billing.BillingUtilities.isPremiumContent
 import com.kakeibo.billing.BillingUtilities.isSubscriptionRestore
 import com.kakeibo.billing.BillingUtilities.isTransferRequired
 import com.kakeibo.data.ContentResource
-import com.kakeibo.data.KkbAppStatus
-import com.kakeibo.data.SubscriptionStatus
-import com.kakeibo.databinding.ActivityInAppPurchaseBinding
+import com.kakeibo.data.KkbApp
+import com.kakeibo.data.Subscription
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -119,7 +115,7 @@ fun updatePremiumContent(view: View, premiumContent: ContentResource?) {
  * See the layout XML files for the app:updateHomeViews attribute.
  */
 @BindingAdapter("updateHomeViews")
-fun updateHomeViews(view: View, subscriptions: List<SubscriptionStatus>?) {
+fun updateHomeViews(view: View, subscriptions: List<Subscription>?) {
 //    // Set visibility assuming no subscription is available.
 //    // If a subscription is found that meets certain criteria, then the visibility of the paywall
 //    // will be changed to View.GONE.
@@ -178,7 +174,7 @@ fun updateHomeViews(view: View, subscriptions: List<SubscriptionStatus>?) {
  * See the layout XML files for the app:updatePremiumViews attribute.
  */
 @BindingAdapter("updatePremiumViews")
-fun updatePremiumViews(view: View, subscriptions: List<SubscriptionStatus>?) {
+fun updatePremiumViews(view: View, subscriptions: List<Subscription>?) {
     // Set visibility assuming no subscription is available.
     // If a subscription is found that meets certain criteria, then the visibility of the paywall
     // will be changed to View.GONE.
@@ -254,7 +250,7 @@ fun updatePremiumViews(view: View, subscriptions: List<SubscriptionStatus>?) {
  * See the layout XML files for the app:updateSettingsViews attribute.
  */
 @BindingAdapter("updateSettingsViews")
-fun updateSettingsViews(view: View, subscriptions: List<SubscriptionStatus>?) {
+fun updateSettingsViews(view: View, subscriptions: List<Subscription>?) {
     // Set default button text: it might be overridden based on the subscription state.
 //    view.subscription_option_premium_button.text =
 //            view.resources.getString(R.string.subscription_option_premium_message)
@@ -313,7 +309,7 @@ fun updateSettingsViews(view: View, subscriptions: List<SubscriptionStatus>?) {
 }
 
 @BindingAdapter("context", "kkbApp", "updateAdViews")
-fun updateAdViews(view: AdView, context: Context, kkbApp: KkbAppStatus?, subscriptions: List<SubscriptionStatus>?) {
+fun updateAdViews(view: AdView, context: Context, kkbApp: KkbApp?, subscriptions: List<Subscription>?) {
     Log.d("asdf","coming here")
 
     kkbApp?.let { k ->
@@ -362,7 +358,7 @@ fun updateAdViews(view: AdView, context: Context, kkbApp: KkbAppStatus?, subscri
 /**
  * Get a readable expiry date from a subscription.
  */
-private fun getHumanReadableExpiryDate(subscription: SubscriptionStatus): String {
+private fun getHumanReadableExpiryDate(subscription: Subscription): String {
     val milliSeconds = subscription.activeUntilMillisec
     val formatter = SimpleDateFormat.getDateInstance()
     val calendar = Calendar.getInstance()

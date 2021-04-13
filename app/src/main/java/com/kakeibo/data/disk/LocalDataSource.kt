@@ -11,28 +11,28 @@ class LocalDataSource private constructor(
     /**
      * Get the list of subscriptions from the localDataSource and get notified when the data changes.
      */
-    val kkbApp = appDatabase.kkbAppStatusDao().getFirst()
-    val subscriptions = appDatabase.subscriptionStatusDao().getAll()
-    val items = appDatabase.itemStatusDao().getAll()
-    var itemsThisYear = appDatabase.itemStatusDao().getItemsByYear(UtilDate.getTodaysY())
-    var itemsThisMonth = appDatabase.itemStatusDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
-    val categories = appDatabase.categoryStatusDao().getAll()
-    val categoriesDisplayed = appDatabase.categoryStatusDao().getCategoriesDisplayed()
-    val categoriesNotDisplayed = appDatabase.categoryStatusDao().getCategoriesNotDisplay()
-    val categoryDsps = appDatabase.categoryDspStatusDao().getAll()
+    val kkbApp = appDatabase.kkbAppDao().getFirst()
+    val subscriptions = appDatabase.subscriptionDao().getAll()
+    val items = appDatabase.itemDao().getAll()
+    var itemsThisYear = appDatabase.itemDao().getItemsByYear(UtilDate.getTodaysY())
+    var itemsThisMonth = appDatabase.itemDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
+    val categories = appDatabase.categoryDao().getAll()
+    val categoriesDisplayed = appDatabase.categoryDao().getCategoriesDisplayed()
+    val categoriesNotDisplayed = appDatabase.categoryDao().getCategoriesNotDisplay()
+    val categoryDsps = appDatabase.categoryDspDao().getAll()
 
     /***
      *
      * Subscriptions
      *
      */
-    fun updateSubscriptions(subscriptions: List<SubscriptionStatus>) {
+    fun updateSubscriptions(subscriptions: List<Subscription>) {
         executor.execute {
             appDatabase.runInTransaction {
                 // Delete existing subscriptions.
-                appDatabase.subscriptionStatusDao().deleteAll()
+                appDatabase.subscriptionDao().deleteAll()
                 // Put new subscriptions data into localDataSource.
-                appDatabase.subscriptionStatusDao().insertAll(subscriptions)
+                appDatabase.subscriptionDao().insertAll(subscriptions)
             }
         }
     }
@@ -45,11 +45,11 @@ class LocalDataSource private constructor(
      * kkbAppStatus
      *
      */
-    fun updateKkbApp(kkbAppStatus: KkbAppStatus) {
+    fun updateKkbApp(kkbApp: KkbApp) {
         executor.execute {
             appDatabase.runInTransaction {
-                appDatabase.kkbAppStatusDao().deleteAll()
-                appDatabase.kkbAppStatusDao().insert(kkbAppStatus)
+                appDatabase.kkbAppDao().deleteAll()
+                appDatabase.kkbAppDao().insert(kkbApp)
             }
         }
     }
@@ -57,7 +57,7 @@ class LocalDataSource private constructor(
     fun updateVal2(val2: Int) {
         executor.execute {
             appDatabase.runInTransaction {
-                appDatabase.kkbAppStatusDao().updateVal2(val2)
+                appDatabase.kkbAppDao().updateVal2(val2)
             }
         }
     }
@@ -67,24 +67,24 @@ class LocalDataSource private constructor(
      * ItemStatus
      *
      */
-    private fun insertItems(itemStatuses: List<ItemStatus>) {
+    private fun insertItems(items: List<Item>) {
         executor.execute {
             appDatabase.runInTransaction {
-                appDatabase.itemStatusDao().deleteAll()
-                appDatabase.itemStatusDao().insertAll(itemStatuses)
+                appDatabase.itemDao().deleteAll()
+                appDatabase.itemDao().insertAll(items)
             }
         }
     }
 
-    fun insertItem(itemStatus: ItemStatus) {
+    fun insertItem(item: Item) {
         executor.execute {
-            appDatabase.runInTransaction { appDatabase.itemStatusDao().insert(itemStatus) }
+            appDatabase.runInTransaction { appDatabase.itemDao().insert(item) }
         }
     }
 
     fun getItemsByMonth(year: String, month: String) {
         executor.execute {
-            itemsThisMonth = appDatabase.itemStatusDao().getItemsByMonth("'$year-$month'")
+            itemsThisMonth = appDatabase.itemDao().getItemsByMonth("'$year-$month'")
         }
     }
 
@@ -92,7 +92,7 @@ class LocalDataSource private constructor(
 
     fun deleteItem(id: Long) {
         executor.execute {
-            appDatabase.itemStatusDao().delete(id)
+            appDatabase.itemDao().delete(id)
         }
     }
 
@@ -101,18 +101,18 @@ class LocalDataSource private constructor(
      * CategoryStatus
      *
      */
-    private fun insertCategories(categoryStatuses: List<CategoryStatus>) {
+    private fun insertCategories(categories: List<Category>) {
         executor.execute {
             appDatabase.runInTransaction {
-                appDatabase.categoryStatusDao().deleteAll()
-                appDatabase.categoryStatusDao().insertAll(categoryStatuses)
+                appDatabase.categoryDao().deleteAll()
+                appDatabase.categoryDao().insertAll(categories)
             }
         }
     }
 
-    fun insertCategory(categoryStatus: CategoryStatus) {
+    fun insertCategory(category: Category) {
         executor.execute {
-            appDatabase.runInTransaction { appDatabase.categoryStatusDao().insert(categoryStatus) }
+            appDatabase.runInTransaction { appDatabase.categoryDao().insert(category) }
         }
     }
 
@@ -120,7 +120,7 @@ class LocalDataSource private constructor(
 
     fun deleteCategory(id: Long) {
         executor.execute {
-            appDatabase.categoryStatusDao().delete(id)
+            appDatabase.categoryDao().delete(id)
         }
     }
 
@@ -129,11 +129,11 @@ class LocalDataSource private constructor(
      * DspCategoryStatus and CategoryDspStatus table
      *
      */
-    fun insertCategoryDsps(categoryDspStatuses: List<CategoryDspStatus>) {
+    fun insertCategoryDsps(categoryDsps: List<CategoryDsp>) {
         executor.execute {
             appDatabase.runInTransaction {
-                appDatabase.categoryDspStatusDao().deleteAll()
-                appDatabase.categoryDspStatusDao().insertAll(categoryDspStatuses)
+                appDatabase.categoryDspDao().deleteAll()
+                appDatabase.categoryDspDao().insertAll(categoryDsps)
             }
         }
     }

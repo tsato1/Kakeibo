@@ -8,7 +8,7 @@
             type="com.kakeibo.ui.viewmodel.KkbAppViewModel" />
         <variable
             name="subscriptionViewModel"
-            type="com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.SubscriptionViewModel" />
     </data>
 
     <RelativeLayout

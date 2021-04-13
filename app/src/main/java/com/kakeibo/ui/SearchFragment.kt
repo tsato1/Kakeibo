@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.kakeibo.R
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import com.kakeibo.databinding.FragmentSearchBinding
 import com.kakeibo.ui.model.SearchCriteriaCard
 import com.kakeibo.ui.view.RecyclerItemTouchHelper
@@ -25,8 +25,8 @@ import com.kakeibo.ui.listener.RecyclerItemTouchHelperListener
 import com.kakeibo.ui.adapter.view.SearchCardListAdapter
 import com.kakeibo.ui.adapter.view.SearchCardListAdapter.*
 import com.kakeibo.ui.model.Query
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
-import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
+import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.compareDate
 import com.kakeibo.util.UtilQuery
@@ -52,7 +52,7 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
     private lateinit var _lstSearchCriteriaCards: ArrayList<SearchCriteriaCard> // for cards displayed
     private lateinit var _lstChoices: ArrayList<String> // for choices shown in dialog upon tapping fab
 
-    private lateinit var _allItems: List<ItemStatus>
+    private lateinit var _allItems: List<Item>
     private var _query = Query()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -60,13 +60,13 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
         _lstSearchCriteriaCards = ArrayList()
         _lstChoices = ArrayList(listOf(*_searchCriteria))
 
-        val itemStatusViewModel: ItemStatusViewModel by activityViewModels()
-        val categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
+        val itemViewModel: ItemViewModel by activityViewModels()
+        val categoryViewModel: CategoryViewModel by activityViewModels()
         val binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         val view = binding.root
 
-        itemStatusViewModel.all.observe(viewLifecycleOwner, {
+        itemViewModel.all.observe(viewLifecycleOwner, {
             _allItems = it
         })
 
@@ -78,7 +78,7 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
         _recyclerView.adapter = _searchAdapter
         _recyclerView.layoutManager = LinearLayoutManager(context)
         _recyclerView.itemAnimator = DefaultItemAnimator()
-        categoryStatusViewModel.all.observe(viewLifecycleOwner, { all ->
+        categoryViewModel.all.observe(viewLifecycleOwner, { all ->
 
         })
         val ithCallback: ItemTouchHelper.SimpleCallback = RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this)

@@ -17,12 +17,11 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.databinding.BannerDatePickerBinding
-import com.kakeibo.databinding.FragmentReportCategoryYearlyBinding
 import com.kakeibo.databinding.FragmentReportCategoryMonthlyBinding
 import com.kakeibo.ui.model.Medium
-import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.UtilDate
 import java.math.BigDecimal
 import java.text.ParseException
@@ -36,7 +35,7 @@ fun updateDateBannerYMD(view: View,
                         context: Context,
                         currentlyShown: Int,
                         inSearch: Boolean,
-                        itemViewModel: ItemStatusViewModel?) {
+                        itemViewModel: ItemViewModel?) {
     val binding = DataBindingUtil.getBinding<BannerDatePickerBinding>(view)
 
     binding?.let {
@@ -226,7 +225,7 @@ fun updateBarChart(horizontalBarChart: HorizontalBarChart, context: Context, inc
 }
 
 @BindingAdapter("bind:incomeList", "bind:context", "bind:masterMap")
-fun updateIncomePieGraph(pieGraph: AAChartView, incomeList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, CategoryStatus>?) {
+fun updateIncomePieGraph(pieGraph: AAChartView, incomeList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, Category>?) {
     incomeList?.let {
         masterMap?.let {
             val arr = incomeList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
@@ -245,7 +244,7 @@ fun updateIncomePieGraph(pieGraph: AAChartView, incomeList: List<Pair<Int, BigDe
 }
 
 @BindingAdapter("bind:expenseList", "bind:context", "bind:masterMap")
-fun updateExpensePieGraph(pieGraph: AAChartView, expenseList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, CategoryStatus>?) {
+fun updateExpensePieGraph(pieGraph: AAChartView, expenseList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, Category>?) {
     expenseList?.let {
         masterMap?.let {
             val arr = expenseList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()

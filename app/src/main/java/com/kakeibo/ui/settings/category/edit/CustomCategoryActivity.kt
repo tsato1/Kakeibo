@@ -17,8 +17,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.kakeibo.R
-import com.kakeibo.data.CategoryStatus
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.data.Category
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 import com.kakeibo.util.UtilDate
 import java.util.*
@@ -37,7 +37,7 @@ class CustomCategoryActivity : AppCompatActivity() {
     private val _lstDots: MutableList<ImageView> = ArrayList()
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by viewModels()
+    private val _categoryViewModel: CategoryViewModel by viewModels()
     private val _customCategoryViewModel: CustomCategoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +72,7 @@ class CustomCategoryActivity : AppCompatActivity() {
         /* if this activity was called from CategoryEditionActivity */
         val id = intent.getLongExtra(CustomCategoryListActivity.EXTRA_KEY_CATEGORY_ID, -1)
         val code = intent.getIntExtra(CustomCategoryListActivity.EXTRA_KEY_CATEGORY_CODE, -1)
-        _categoryStatusViewModel.allMap.observe(this, {
+        _categoryViewModel.allMap.observe(this, {
             when (code) {
                 -1 -> {_customCategoryViewModel.reset()} /* for Category creation */
                 else -> { /* for Category edit */
@@ -139,10 +139,10 @@ class CustomCategoryActivity : AppCompatActivity() {
                 dialog.setPositiveButton(R.string.yes) { _, _ ->
                     /* Category creation */
                     if (_customCategoryViewModel.code.value == -1) {
-                        _categoryStatusViewModel.insert(
-                                CategoryStatus(
+                        _categoryViewModel.insert(
+                                Category(
                                         0,
-                                        _categoryStatusViewModel.getCodeForNewCustomCategory(),
+                                        _categoryViewModel.getCodeForNewCustomCategory(),
                                         _customCategoryViewModel.name.value!!,
                                         _customCategoryViewModel.color.value!!,
                                         _customCategoryViewModel.significance.value!!,
@@ -156,8 +156,8 @@ class CustomCategoryActivity : AppCompatActivity() {
                     }
                     /* Category edit */
                     else {
-                        _categoryStatusViewModel.insert(
-                                CategoryStatus(
+                        _categoryViewModel.insert(
+                                Category(
                                         _customCategoryViewModel.id.value!!,
                                         _customCategoryViewModel.code.value!!,
                                         _customCategoryViewModel.name.value!!,

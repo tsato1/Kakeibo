@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.OnConflictStrategy
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.R
-import com.kakeibo.data.CategoryDspStatus
-import com.kakeibo.data.CategoryStatus
-import com.kakeibo.data.KkbAppStatus
+import com.kakeibo.data.CategoryDsp
+import com.kakeibo.data.Category
+import com.kakeibo.data.KkbApp
 import com.kakeibo.util.UtilCategory
 import java.util.*
 
@@ -1592,32 +1592,32 @@ object PrepDB {
         }
     }
 
-    fun prepCategoryStatuses(): List<CategoryStatus> {
-        val out: MutableList<CategoryStatus> = ArrayList()
-        out.add(CategoryStatus(1, 0, "INCOME", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_income", null, -1, "", ""))
-        out.add(CategoryStatus(2, 1, "COMM", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_comm", null, -1, "", ""))
-        out.add(CategoryStatus(3, 2, "MEAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_meal", null, -1, "", ""))
-        out.add(CategoryStatus(4, 3, "UTIL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_util", null, -1, "", ""))
-        out.add(CategoryStatus(5, 4, "HEALTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_health", null, -1, "", ""))
-        out.add(CategoryStatus(6, 5, "EDU", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_edu", null, -1, "", ""))
-        out.add(CategoryStatus(7, 6, "CLOTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_cloth", null, -1, "", ""))
-        out.add(CategoryStatus(8, 7, "TRANS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_trans", null, -1, "", ""))
-        out.add(CategoryStatus(9, 8, "ENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ent", null, -1, "", ""))
-        out.add(CategoryStatus(10, 9, "INS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ins", null, -1, "", ""))
-        out.add(CategoryStatus(11, 10, "TAX", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_tax", null, -1, "", ""))
-        out.add(CategoryStatus(12, 11, "OTHER", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_other", null, -1, "", ""))
-        out.add(CategoryStatus(13, 12, "PET", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_pet", null, -1, "", ""))
-        out.add(CategoryStatus(14, 13, "SOCIAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_social", null, -1, "", ""))
-        out.add(CategoryStatus(15, 14, "COSME", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_cosme", null, -1, "", ""))
-        out.add(CategoryStatus(16, 15, "HOUSNG", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_housing", null, -1, "", ""))
-        out.add(CategoryStatus(17, 16, "EXTRA", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_bonus", null, -1, "", ""))
-        out.add(CategoryStatus(18, 17, "ALLOW", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_allowance", null, -1, "", ""))
-        out.add(CategoryStatus(19, 18, "INV", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_in_inv", null, -1, "", ""))
-        out.add(CategoryStatus(20, 19, "RENT", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_in_rent", null, -1, "", ""))
-        out.add(CategoryStatus(21, 20, "EXPENS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_expense", null, -1, "", ""))
-        out.add(CategoryStatus(22, 21, "TELE", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_tele", null, -1, "", ""))
-        out.add(CategoryStatus(23, 22, "INV", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ex_inv", null, -1, "", ""))
-        out.add(CategoryStatus(24, 23, "RENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ex_rent", null, -1, "", ""))
+    fun prepCategoryStatuses(): List<Category> {
+        val out: MutableList<Category> = ArrayList()
+        out.add(Category(1, 0, "INCOME", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_income", null, -1, "", ""))
+        out.add(Category(2, 1, "COMM", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_comm", null, -1, "", ""))
+        out.add(Category(3, 2, "MEAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_meal", null, -1, "", ""))
+        out.add(Category(4, 3, "UTIL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_util", null, -1, "", ""))
+        out.add(Category(5, 4, "HEALTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_health", null, -1, "", ""))
+        out.add(Category(6, 5, "EDU", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_edu", null, -1, "", ""))
+        out.add(Category(7, 6, "CLOTH", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_cloth", null, -1, "", ""))
+        out.add(Category(8, 7, "TRANS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_trans", null, -1, "", ""))
+        out.add(Category(9, 8, "ENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ent", null, -1, "", ""))
+        out.add(Category(10, 9, "INS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ins", null, -1, "", ""))
+        out.add(Category(11, 10, "TAX", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_tax", null, -1, "", ""))
+        out.add(Category(12, 11, "OTHER", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_other", null, -1, "", ""))
+        out.add(Category(13, 12, "PET", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_pet", null, -1, "", ""))
+        out.add(Category(14, 13, "SOCIAL", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_social", null, -1, "", ""))
+        out.add(Category(15, 14, "COSME", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_cosme", null, -1, "", ""))
+        out.add(Category(16, 15, "HOUSNG", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_housing", null, -1, "", ""))
+        out.add(Category(17, 16, "EXTRA", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_bonus", null, -1, "", ""))
+        out.add(Category(18, 17, "ALLOW", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_allowance", null, -1, "", ""))
+        out.add(Category(19, 18, "INV", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_in_inv", null, -1, "", ""))
+        out.add(Category(20, 19, "RENT", UtilCategory.CATEGORY_COLOR_INCOME, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_in_rent", null, -1, "", ""))
+        out.add(Category(21, 20, "EXPENS", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_expense", null, -1, "", ""))
+        out.add(Category(22, 21, "TELE", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_tele", null, -1, "", ""))
+        out.add(Category(23, 22, "INV", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ex_inv", null, -1, "", ""))
+        out.add(Category(24, 23, "RENT", UtilCategory.CATEGORY_COLOR_EXPENSE, UtilCategory.CATEGORY_SIGN_LOW, "ic_category_ex_rent", null, -1, "", ""))
         out.toMutableList()
         return out
     }
@@ -1651,28 +1651,28 @@ object PrepDB {
     //        return out;
     //    }
 
-    fun prepDspCategoryStatuses(): List<CategoryDspStatus> {
-        val out: MutableList<CategoryDspStatus> = ArrayList()
-        out.add(CategoryDspStatus(1, 0, 0))
-        out.add(CategoryDspStatus(2, 1, 1))
-        out.add(CategoryDspStatus(3, 2, 2))
-        out.add(CategoryDspStatus(4, 3, 3))
-        out.add(CategoryDspStatus(5, 4, 4))
-        out.add(CategoryDspStatus(6, 5, 5))
-        out.add(CategoryDspStatus(7, 6, 6))
-        out.add(CategoryDspStatus(8, 7, 7))
-        out.add(CategoryDspStatus(9, 12, 8))
-        out.add(CategoryDspStatus(10, 13, 9))
-        out.add(CategoryDspStatus(11, 14, 10))
-        out.add(CategoryDspStatus(12, 15, 11))
-        out.add(CategoryDspStatus(13, 8, 12))
-        out.add(CategoryDspStatus(14, 9, 13))
-        out.add(CategoryDspStatus(15, 10, 14))
-        out.add(CategoryDspStatus(16, 11, 15))
+    fun prepDspCategoryStatuses(): List<CategoryDsp> {
+        val out: MutableList<CategoryDsp> = ArrayList()
+        out.add(CategoryDsp(1, 0, 0))
+        out.add(CategoryDsp(2, 1, 1))
+        out.add(CategoryDsp(3, 2, 2))
+        out.add(CategoryDsp(4, 3, 3))
+        out.add(CategoryDsp(5, 4, 4))
+        out.add(CategoryDsp(6, 5, 5))
+        out.add(CategoryDsp(7, 6, 6))
+        out.add(CategoryDsp(8, 7, 7))
+        out.add(CategoryDsp(9, 12, 8))
+        out.add(CategoryDsp(10, 13, 9))
+        out.add(CategoryDsp(11, 14, 10))
+        out.add(CategoryDsp(12, 15, 11))
+        out.add(CategoryDsp(13, 8, 12))
+        out.add(CategoryDsp(14, 9, 13))
+        out.add(CategoryDsp(15, 10, 14))
+        out.add(CategoryDsp(16, 11, 15))
         return out
     }
 
-    fun initKkbAppTable() : KkbAppStatus {
-        return KkbAppStatus(1, "", "", "", 0, -1, 0, "", "", "")
+    fun initKkbAppTable() : KkbApp {
+        return KkbApp(1, "", "", "", 0, -1, 0, "", "", "")
     }
 }

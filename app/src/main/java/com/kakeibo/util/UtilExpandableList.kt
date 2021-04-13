@@ -1,9 +1,8 @@
 package com.kakeibo.util
 
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.model.ExpandableListRowModel
-import java.math.BigDecimal
 import java.util.*
 
 object UtilExpandableList {
@@ -11,7 +10,7 @@ object UtilExpandableList {
      * expands specific date (default is today's date)
      */
     fun expandOnlySpecificDate(
-            expandableMasterMap: SortedMap<ExpandableListRowModel.Header, List<ItemStatus>>,
+            expandableMasterMap: SortedMap<ExpandableListRowModel.Header, List<Item>>,
             expandableList: MutableList<ExpandableListRowModel>,
             date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)) {
         expandableList.clear()

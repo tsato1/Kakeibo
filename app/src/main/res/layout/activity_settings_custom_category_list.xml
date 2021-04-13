@@ -6,10 +6,10 @@
     <data>
         <import type="android.view.View"/>
         <import type="androidx.databinding.ObservableArrayList"/>
-        <import type="com.kakeibo.data.CategoryStatus"/>
+        <import type="com.kakeibo.data.Category"/>
         <variable
             name="list"
-            type="ObservableArrayList&lt;CategoryStatus&gt;" />
+            type="ObservableArrayList&lt;Category&gt;" />
     </data>
 
     <RelativeLayout

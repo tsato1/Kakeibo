@@ -18,10 +18,10 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kakeibo.R
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.databinding.ActivitySettingsCustomCategoryListBinding
 import com.kakeibo.ui.adapter.view.CategoryListAdapter
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 import com.kakeibo.util.UtilCategory
 
@@ -40,11 +40,11 @@ class CustomCategoryListActivity : AppCompatActivity() {
     private lateinit var _btnBack: Button
     private lateinit var _fabAdd: FloatingActionButton
 
-    private val _customCategoryList = ObservableArrayList<CategoryStatus>()
+    private val _customCategoryList = ObservableArrayList<Category>()
     private lateinit var _categoryListAdapter: CategoryListAdapter
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by viewModels()
+    private val _categoryViewModel: CategoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +76,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
         _fabAdd = findViewById(R.id.fab_add)
         _btnBack.setOnClickListener { onBackPressed() }
         _fabAdd.setOnClickListener {
-            when (_categoryStatusViewModel.canCreateNewCustomCategory()) {
+            when (_categoryViewModel.canCreateNewCustomCategory()) {
                 -2 -> {
                     val s = getString(R.string.err_reached_max_count_colon) +
                             UtilCategory.NUM_MAX_CUSTOM_CATEGORY + "\n" +
@@ -98,7 +98,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
         categoryListView.setOnCreateContextMenuListener(ItemContextClickListener())
         _categoryListAdapter = CategoryListAdapter(_context, 0, _customCategoryList)
         categoryListView.adapter = _categoryListAdapter
-        _categoryStatusViewModel.custom.observe(this, {
+        _categoryViewModel.custom.observe(this, {
             _customCategoryList.clear()
             _customCategoryList.addAll(it)
             _categoryListAdapter.notifyDataSetChanged()
@@ -141,7 +141,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
             }
             MENU_ITEM_ID_DELETE -> {
                 categoryStatus?.let {
-                    if (_categoryStatusViewModel.isCategoryAlreadyUsed(it.code)) {
+                    if (_categoryViewModel.isCategoryAlreadyUsed(it.code)) {
                         val str1 = getString(R.string.msg_custom_category_already_in_use)
                         val str2 = getString(R.string.msg_delete_kkb_items_first)
                         Toast.makeText(_context, str1 + str2, Toast.LENGTH_LONG).show()
@@ -153,7 +153,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
                     dialog.setTitle(R.string.delete)
                     dialog.setMessage(R.string.msg_delete_some_categories)
                     dialog.setPositiveButton(R.string.ok) { _, _ ->
-                        _categoryStatusViewModel.delete(categoryStatus.id)
+                        _categoryViewModel.delete(categoryStatus.id)
                         Toast.makeText(this, R.string.msg_category_successfully_deleted, Toast.LENGTH_LONG).show()
                     }
                     dialog.create()

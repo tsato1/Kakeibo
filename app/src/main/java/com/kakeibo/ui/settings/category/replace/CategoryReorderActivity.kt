@@ -9,8 +9,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.kakeibo.R
-import com.kakeibo.data.CategoryDspStatus
-import com.kakeibo.ui.viewmodel.CategoryDspStatusViewModel
+import com.kakeibo.data.CategoryDsp
+import com.kakeibo.ui.viewmodel.CategoryDspViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 
 class CategoryReorderActivity : AppCompatActivity(), EventClickListener {
@@ -19,7 +19,7 @@ class CategoryReorderActivity : AppCompatActivity(), EventClickListener {
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private val _medium: Medium by viewModels()
-    private val _categoryDspStatusViewModel: CategoryDspStatusViewModel by viewModels()
+    private val _categoryDspViewModel: CategoryDspViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +59,8 @@ class CategoryReorderActivity : AppCompatActivity(), EventClickListener {
         dialog.setPositiveButton(R.string.yes) { _, _ ->
             Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show()
 
-            _categoryDspStatusViewModel.insertAll(_medium.newCategoryList.mapIndexed {
-                index, category -> CategoryDspStatus(category.id, index, category.code)
+            _categoryDspViewModel.insertAll(_medium.newCategoryList.mapIndexed {
+                index, category -> CategoryDsp(category.id, index, category.code)
             })
             finish()
         }

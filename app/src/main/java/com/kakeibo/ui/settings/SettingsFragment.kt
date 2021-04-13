@@ -12,14 +12,14 @@ import com.kakeibo.R
 import com.kakeibo.ui.settings.category.edit.CustomCategoryListActivity
 import com.kakeibo.ui.settings.category.replace.CategoryReplaceActivity
 import com.kakeibo.ui.settings.category.replace.CategoryReorderActivity
-import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private var _showAds: Boolean = false
 
-    private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
+    private val _itemViewModel: ItemViewModel by activityViewModels()
     private val _kkbAppViewModel: KkbAppViewModel by activityViewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -76,7 +76,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     confirmation.setTitle(getString(R.string.delete_all_items))
                     confirmation.setMessage(getString(R.string.warn_delete_all_items))
                     confirmation.setPositiveButton(R.string.ok) { _, _ ->
-                        _itemStatusViewModel.deleteAll()
+                        _itemViewModel.deleteAll()
                     }
                     confirmation.setNegativeButton(R.string.cancel) { _, _ -> }
                     confirmation.show()

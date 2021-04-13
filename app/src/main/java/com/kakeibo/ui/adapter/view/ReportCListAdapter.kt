@@ -9,25 +9,25 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.Constants
 import com.kakeibo.R
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import com.kakeibo.databinding.RowListReportCBinding
 import com.kakeibo.ui.model.ReportCListRowModel
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.util.UtilCategory
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class ReportCListAdapter(
         private val categoryColor: Int,
-        private val categoryStatusViewModel: CategoryStatusViewModel,
+        private val categoryViewModel: CategoryViewModel,
         private val lifecycleOwner: LifecycleOwner)
     : RecyclerView.Adapter<ReportCListAdapter.ViewHolder>() {
 
     private var _itemList: List<ReportCListRowModel> = ArrayList()
 
-    private var _itemMap: Map<Pair<Int, BigDecimal>, List<ItemStatus>> = HashMap()
+    private var _itemMap: Map<Pair<Int, BigDecimal>, List<Item>> = HashMap()
 
-    fun setAllByCategory(itemMap: Map<Pair<Int, BigDecimal>, List<ItemStatus>>) {
+    fun setAllByCategory(itemMap: Map<Pair<Int, BigDecimal>, List<Item>>) {
         _itemMap = itemMap
 
         /* filling the ReportCList */
@@ -65,17 +65,17 @@ class ReportCListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val reportCListRowModel = _itemList[position]
-        holder.bind(lifecycleOwner, reportCListRowModel, categoryStatusViewModel)
+        holder.bind(lifecycleOwner, reportCListRowModel, categoryViewModel)
         holder.binding.lnlRowListReportC.setOnClickListener { v ->
             val map = _itemMap.mapKeys { it.key.first }
             val listView = ListView(v.context)
 
             map[reportCListRowModel.categoryCode]?.let { list ->
-                val adapter = ReportCDetailListAdapter(v.context, R.layout.row_list_report_c_detail, list, categoryStatusViewModel)
+                val adapter = ReportCDetailListAdapter(v.context, R.layout.row_list_report_c_detail, list, categoryViewModel)
                 listView.adapter = adapter
                 AlertDialog.Builder(v.context)
                         .setIcon(R.mipmap.ic_mikan)
-                        .setTitle(categoryStatusViewModel.allMap.value!![reportCListRowModel.categoryCode]!!.name)
+                        .setTitle(categoryViewModel.allMap.value!![reportCListRowModel.categoryCode]!!.name)
                         .setPositiveButton(R.string.ok) { _, _ -> }
                         .setView(listView).create()
                         .show()
@@ -90,10 +90,10 @@ class ReportCListAdapter(
     class ViewHolder(val binding: RowListReportCBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(lifecycleOwner: LifecycleOwner, reportCListRowModel: ReportCListRowModel, categoryStatusViewModel: CategoryStatusViewModel) {
+        fun bind(lifecycleOwner: LifecycleOwner, reportCListRowModel: ReportCListRowModel, categoryViewModel: CategoryViewModel) {
             binding.lifecycleOwner = lifecycleOwner
             binding.reportCListRowModel = reportCListRowModel
-            binding.categoryViewModel = categoryStatusViewModel
+            binding.categoryViewModel = categoryViewModel
             binding.executePendingBindings()
         }
     }

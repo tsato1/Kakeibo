@@ -2,20 +2,20 @@ package com.kakeibo.data.disk
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.db.CategoryDBAdapter
 import com.kakeibo.db.CategoryDspDBAdapter
 
 @Dao
-interface CategoryStatusDao {
+interface CategoryDao {
     @Query("SELECT * FROM " + CategoryDBAdapter.TABLE_NAME)
-    fun getAll(): LiveData<List<CategoryStatus>>
+    fun getAll(): LiveData<List<Category>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(categories: List<CategoryStatus>)
+    fun insertAll(categories: List<Category>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(categoryStatus: CategoryStatus): Long
+    fun insert(category: Category): Long
 
     @Query("DELETE FROM " + CategoryDBAdapter.TABLE_NAME)
     fun deleteAll()
@@ -41,7 +41,7 @@ interface CategoryStatusDao {
             CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_CODE + "=" +
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE +
             " ORDER BY " + CategoryDspDBAdapter.TABLE_NAME + "." + CategoryDspDBAdapter.COL_LOCATION)
-    fun getCategoriesDisplayed(): LiveData<List<CategoryStatus>>
+    fun getCategoriesDisplayed(): LiveData<List<Category>>
 
     @Query("SELECT " +
             CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_ID + "," +
@@ -62,7 +62,7 @@ interface CategoryStatusDao {
             " FROM " + CategoryDspDBAdapter.TABLE_NAME +
             ")" +
             " ORDER BY " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE)
-    fun getCategoriesNotDisplay(): LiveData<List<CategoryStatus>>
+    fun getCategoriesNotDisplay(): LiveData<List<Category>>
 
 
     //    @Query("SELECT "+

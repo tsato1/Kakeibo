@@ -8,11 +8,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.databinding.FragmentSettingsCategoryReplaceBinding
 import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
 import com.kakeibo.ui.listener.CategoryClickListener
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 
 class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
 
@@ -31,7 +31,7 @@ class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
     private lateinit var _nextButton: Button
 
     private val _medium: Medium by activityViewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
+    private val _categoryViewModel: CategoryViewModel by activityViewModels()
 
     enum class ItemActionState {
         IDLE, LONG_TOUCH_OR_SOMETHING_ELSE, DRAG, SWIPE, HANDLED_LONG_TOUCH
@@ -54,7 +54,7 @@ class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
         recyclerView.layoutManager = GridLayoutManager(activity, CategoryReplaceActivity.numColumns)
         recyclerView.adapter = RecyclerViewAdapter(list, this)
-        _categoryStatusViewModel.dsp.observe(viewLifecycleOwner, {
+        _categoryViewModel.dsp.observe(viewLifecycleOwner, {
             list.clear()
             it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }
         })
@@ -98,7 +98,7 @@ class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCategoryClicked(view: View, category: CategoryStatus) {
+    override fun onCategoryClicked(view: View, category: Category) {
         val imv: ImageView = view.findViewById(R.id.imv_category_remove)
 
         if (_medium.removedCategoryList.contains(category)) {

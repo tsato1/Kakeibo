@@ -4,17 +4,17 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.kakeibo.SubApp
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 
 class SubscriptionMessageService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val data = remoteMessage.data
         if (data.isNotEmpty()) {
-            var result: List<SubscriptionStatus>? = null
+            var result: List<Subscription>? = null
             if (REMOTE_MESSAGE_SUBSCRIPTIONS_KEY in data) {
                 result = data[REMOTE_MESSAGE_SUBSCRIPTIONS_KEY]?.let {
-                    SubscriptionStatus.listFromJsonString(it)
+                    Subscription.listFromJsonString(it)
                 }
             }
             if (result == null) {

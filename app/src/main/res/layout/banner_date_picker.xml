@@ -12,8 +12,8 @@
             name="medium"
             type="com.kakeibo.ui.model.Medium" />
         <variable
-            name="itemStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
+            name="itemViewModel"
+            type="com.kakeibo.ui.viewmodel.ItemViewModel" />
     </data>
     
     <LinearLayout
@@ -24,7 +24,7 @@
         bind:context="@{context}"
         bind:currentlyShown="@{medium.currentlyShown}"
         bind:inSearch="@{medium.inSearchResult}"
-        bind:itemViewModel="@{itemStatusViewModel}"
+        bind:itemViewModel="@{itemViewModel}"
         style="?android:attr/buttonBarStyle">
 
         <ImageButton

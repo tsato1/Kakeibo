@@ -4,25 +4,25 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.kakeibo.SubApp
 import com.kakeibo.data.DataRepository
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import java.math.BigDecimal
 
-class ItemStatusViewModel(application: Application) : AndroidViewModel(application) {
+class ItemViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: DataRepository = (application as SubApp).repository
 
-    val all: LiveData<List<ItemStatus>> = repository.items
+    val all: LiveData<List<Item>> = repository.items
 
-    private val itemsThisYear: LiveData<List<ItemStatus>> = repository.itemsThisYear
+    private val itemsThisYear: LiveData<List<Item>> = repository.itemsThisYear
 
-    private val itemsThisMonth: LiveData<List<ItemStatus>> = repository.itemsThisMonth
-    private val itemsMutable = MutableLiveData<List<ItemStatus>>()
-    val items = MediatorLiveData<List<ItemStatus>>()
+    private val itemsThisMonth: LiveData<List<Item>> = repository.itemsThisMonth
+    private val itemsMutable = MutableLiveData<List<Item>>()
+    val items = MediatorLiveData<List<Item>>()
     init {
         items.addSource(itemsMutable) { value -> items.value = value }
         items.addSource(itemsThisMonth) { value -> items.value = value }
     }
-    fun setMutableAll(input: List<ItemStatus>) { // for showing search result
+    fun setMutableAll(input: List<Item>) { // for showing search result
         itemsMutable.value = input
     }
     fun setItemsThisMonth() { // to go back to default report (this month)
@@ -36,7 +36,7 @@ class ItemStatusViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    private val itemsByCategory: LiveData<Map<Pair<Int, BigDecimal>, List<ItemStatus>>> =
+    private val itemsByCategory: LiveData<Map<Pair<Int, BigDecimal>, List<Item>>> =
             Transformations.map(items) { all ->
                 all.groupBy { it.categoryCode }
                         .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
@@ -68,8 +68,8 @@ class ItemStatusViewModel(application: Application) : AndroidViewModel(applicati
         items.sumOf { it.getAmount() }
     }
 
-    fun insert(itemStatus: ItemStatus) {
-        repository.insertItem(itemStatus)
+    fun insert(item: Item) {
+        repository.insertItem(item)
     }
 
     fun deleteAll() {

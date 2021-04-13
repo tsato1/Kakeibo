@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="itemStatusViewModel"
-            type="com.kakeibo.ui.viewmodel.ItemStatusViewModel" />
+            name="itemViewModel"
+            type="com.kakeibo.ui.viewmodel.ItemViewModel" />
     </data>
 
     <LinearLayout
@@ -69,7 +69,7 @@
                                     android:textColor="@color/color_black"
                                     android:textStyle="bold"
                                     bind:context="@{context}"
-                                    bind:amount="@{itemStatusViewModel.income.toString()}"
+                                    bind:amount="@{itemViewModel.income.toString()}"
                                     bind:colon="@{false}"/>
 
                             </TableRow>
@@ -99,7 +99,7 @@
                                     android:textColor="@color/color_black"
                                     android:textStyle="bold"
                                     bind:context="@{context}"
-                                    bind:amount="@{itemStatusViewModel.expense.toString()}"
+                                    bind:amount="@{itemViewModel.expense.toString()}"
                                     bind:colon="@{false}"/>
 
                             </TableRow>
@@ -129,7 +129,7 @@
                                     android:textColor="@color/color_black"
                                     android:textStyle="bold"
                                     bind:context="@{context}"
-                                    bind:amount="@{itemStatusViewModel.balance.toString()}"
+                                    bind:amount="@{itemViewModel.balance.toString()}"
                                     bind:colon="@{false}"/>
 
                             </TableRow>

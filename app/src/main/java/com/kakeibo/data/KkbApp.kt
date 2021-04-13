@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.kakeibo.db.KkbAppDBAdapter
 
 @Entity(tableName = KkbAppDBAdapter.TABLE_KKBAPP)
-class KkbAppStatus(
+class KkbApp(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = KkbAppDBAdapter.COL_ID)
         var id: Long = 1,

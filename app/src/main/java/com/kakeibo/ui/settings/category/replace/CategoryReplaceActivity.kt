@@ -16,12 +16,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.ads.*
 import com.kakeibo.R
 import com.kakeibo.SubApp
-import com.kakeibo.data.CategoryDspStatus
+import com.kakeibo.data.CategoryDsp
 import com.kakeibo.databinding.ActivitySettingsCategoryReplaceBinding
-import com.kakeibo.ui.viewmodel.CategoryDspStatusViewModel
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryDspViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
-import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel
+import com.kakeibo.ui.viewmodel.SubscriptionViewModel
 import java.util.*
 
 class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
@@ -38,10 +38,10 @@ class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
     private val _lstDots: MutableList<ImageView> = ArrayList()
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
-    private val _subscriptionViewModel: SubscriptionStatusViewModel by viewModels()
+    private val _subscriptionViewModel: SubscriptionViewModel by viewModels()
     private val _medium: Medium by viewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by viewModels()
-    private val _categoryDspStatusViewModel: CategoryDspStatusViewModel by viewModels()
+    private val _categoryViewModel: CategoryViewModel by viewModels()
+    private val _categoryDspViewModel: CategoryDspViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,7 +111,7 @@ class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
 
         addDots()
 
-        _categoryStatusViewModel.dsp.observe(this, {
+        _categoryViewModel.dsp.observe(this, {
             _medium.newCategoryList.clear()
             _medium.newCategoryList.addAll(it)
         })
@@ -171,8 +171,8 @@ class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
                 dialog.setPositiveButton(R.string.yes) { _, _ ->
                     Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show()
 
-                    _categoryDspStatusViewModel.insertAll(_medium.newCategoryList.mapIndexed { index, category ->
-                        CategoryDspStatus(category.id, index, category.code)
+                    _categoryDspViewModel.insertAll(_medium.newCategoryList.mapIndexed { index, category ->
+                        CategoryDsp(category.id, index, category.code)
                     })
                     finish()
                 }

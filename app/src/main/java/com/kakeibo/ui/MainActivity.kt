@@ -36,7 +36,7 @@ import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.settings.AboutActivity
@@ -52,8 +52,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private const val TAG = "MainActivity"
         private const val RC_SIGN_IN = 0
 
-        lateinit var allCategoryList: List<CategoryStatus>
-        lateinit var allDspCategoryList: List<CategoryStatus>
+        lateinit var allCategoryList: List<Category>
+        lateinit var allDspCategoryList: List<Category>
 
         lateinit var weekNames: Array<String>
         var dateFormat: Int = 0
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
     private val _authenticationViewModel: FirebaseUserViewModel by viewModels()
     private val _billingViewModel: BillingViewModel by viewModels()
-    private val _subscriptionViewModel: SubscriptionStatusViewModel by viewModels()
+    private val _subscriptionViewModel: SubscriptionViewModel by viewModels()
     private val _medium: Medium by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -210,11 +210,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        val categoryStatusViewModel: CategoryStatusViewModel by viewModels()
-        categoryStatusViewModel.all.observe(this, {
+        val categoryViewModel: CategoryViewModel by viewModels()
+        categoryViewModel.all.observe(this, {
             allCategoryList = it
         })
-        categoryStatusViewModel.dsp.observe(this, {
+        categoryViewModel.dsp.observe(this, {
             allDspCategoryList = it
         })
 

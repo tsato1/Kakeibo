@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import com.kakeibo.databinding.DialogItemDetailBinding
 import com.kakeibo.databinding.DialogItemEditBinding
 import com.kakeibo.databinding.RowExplistChildBinding
@@ -17,19 +17,19 @@ import com.kakeibo.databinding.RowExplistParentBinding
 import com.kakeibo.ui.MainActivity
 import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.view.AmountTextWatcher
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
-import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
+import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.*
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewModel, private val _lifecycleOwner: LifecycleOwner)
+class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, private val _lifecycleOwner: LifecycleOwner)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private lateinit var _itemStatusViewModel: ItemStatusViewModel
-    fun setItemStatusViewMode(itemStatusViewModel: ItemStatusViewModel) {
-        _itemStatusViewModel = itemStatusViewModel
+    private lateinit var _itemViewModel: ItemViewModel
+    fun setItemStatusViewMode(itemViewModel: ItemViewModel) {
+        _itemViewModel = itemViewModel
     }
 
     private var _expandableList: MutableList<ExpandableListRowModel> = mutableListOf()
@@ -37,13 +37,13 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewMo
         return _expandableList
     }
 
-    private var _masterMap: SortedMap<ExpandableListRowModel.Header, List<ItemStatus>> = TreeMap()
-    fun setMasterMap(masterMap: SortedMap<ExpandableListRowModel.Header, List<ItemStatus>>) {
+    private var _masterMap: SortedMap<ExpandableListRowModel.Header, List<Item>> = TreeMap()
+    fun setMasterMap(masterMap: SortedMap<ExpandableListRowModel.Header, List<Item>>) {
         _masterMap = masterMap
         UtilExpandableList.expandOnlySpecificDate(_masterMap, _expandableList)
         notifyDataSetChanged()
     }
-    fun getMasterMap(): SortedMap<ExpandableListRowModel.Header, List<ItemStatus>> {
+    fun getMasterMap(): SortedMap<ExpandableListRowModel.Header, List<Item>> {
         return _masterMap
     }
 
@@ -152,19 +152,19 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewMo
     class ItemChildViewHolder(val childBinding: RowExplistChildBinding)
         : RecyclerView.ViewHolder(childBinding.root) {
 
-        fun bind(lifecycleOwner: LifecycleOwner, itemStatus: ItemStatus, categoryViewModel: CategoryStatusViewModel) {
+        fun bind(lifecycleOwner: LifecycleOwner, item: Item, categoryViewModel: CategoryViewModel) {
             childBinding.lifecycleOwner = lifecycleOwner
-            childBinding.itemStatus = itemStatus
+            childBinding.item = item
             childBinding.categoryViewModel = categoryViewModel
         }
     }
 
-    private fun showDeleteDialog(v: View, item: ItemStatus) {
+    private fun showDeleteDialog(v: View, item: Item) {
         AlertDialog.Builder(v.context)
                 .setIcon(R.mipmap.ic_mikan)
                 .setTitle(v.context.getString(R.string.quest_do_you_want_to_delete_item))
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    _itemStatusViewModel.delete(item.id)
+                    _itemViewModel.delete(item.id)
                     Toast.makeText(v.context,
                             v.context.getString(R.string.msg_item_successfully_deleted),
                             Toast.LENGTH_SHORT).show()
@@ -173,7 +173,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewMo
                 .show()
     }
 
-    private fun showEditDialog(v: View, item: ItemStatus) {
+    private fun showEditDialog(v: View, item: Item) {
         val binding = DialogItemEditBinding.inflate(LayoutInflater.from(v.context))
         binding.lifecycleOwner = _lifecycleOwner
         binding.itemStatus = item
@@ -262,7 +262,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewMo
                         }
                     }
 
-                    val itemStatus = ItemStatus(
+                    val itemStatus = Item(
                             item.id,
                             amount,
                             UtilCurrency.CURRENCY_NONE,
@@ -278,7 +278,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryStatusViewMo
                                 v.context.getString(result.second),
                                 Toast.LENGTH_SHORT).show()
                     } else {
-                        _itemStatusViewModel.insert(itemStatus)
+                        _itemViewModel.insert(itemStatus)
 
                         Toast.makeText(v.context,
                                 v.context.getString(R.string.msg_change_successfully_saved),

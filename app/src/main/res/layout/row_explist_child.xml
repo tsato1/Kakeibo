@@ -4,11 +4,11 @@
 
     <data>
         <variable
-            name="itemStatus"
-            type="com.kakeibo.data.ItemStatus" />
+            name="item"
+            type="com.kakeibo.data.Item" />
         <variable
             name="categoryViewModel"
-            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.CategoryViewModel" />
     </data>
 
     <RelativeLayout
@@ -30,7 +30,7 @@
             android:clickable="false"
             android:focusable="false"
             bind:context="@{context}"
-            bind:categoryCode="@{itemStatus.categoryCode}"
+            bind:categoryCode="@{item.categoryCode}"
             bind:masterMap="@{categoryViewModel.allMap}"
             android:contentDescription="@string/category"/>
 
@@ -46,7 +46,7 @@
             android:textColor="@color/color_black"
             android:textStyle="bold"
             bind:context="@{context}"
-            bind:categoryCode="@{itemStatus.categoryCode}"
+            bind:categoryCode="@{item.categoryCode}"
             bind:colon="@{false}"
             bind:masterMap="@{categoryViewModel.allMap}"/>
 
@@ -70,7 +70,7 @@
                 android:focusable="false"
                 android:textColor="@color/color_black"
                 android:textStyle="bold"
-                android:text="@{itemStatus.memo}"/>
+                android:text="@{item.memo}"/>
 
             <TextView
                 android:id="@+id/txv_amount"
@@ -81,7 +81,7 @@
                 android:textColor="@color/color_black"
                 android:textStyle="bold"
                 bind:context="@{context}"
-                bind:amount="@{itemStatus.amount.toString()}"
+                bind:amount="@{item.amount.toString()}"
                 bind:colon="@{false}"/>
 
         </LinearLayout>

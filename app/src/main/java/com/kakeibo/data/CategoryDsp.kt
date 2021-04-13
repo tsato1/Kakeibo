@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.kakeibo.db.CategoryDspDBAdapter
 
 @Entity(tableName = "categories_dsp")
-class CategoryDspStatus(id: Long, location: Int, code: Int) {
+class CategoryDsp(id: Long, location: Int, code: Int) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = CategoryDspDBAdapter.COL_ID)
     var id: Long = id

@@ -6,9 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.google.firebase.iid.FirebaseInstanceId
 import com.kakeibo.SubApp
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 
-class SubscriptionStatusViewModel(application: Application) : AndroidViewModel(application) {
+class SubscriptionViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Data repository.
      */
@@ -23,7 +23,7 @@ class SubscriptionStatusViewModel(application: Application) : AndroidViewModel(a
     /**
      * Subscriptions LiveData
      */
-    val subscriptions: LiveData<List<SubscriptionStatus>> = repository.subscriptions
+    val subscriptions: LiveData<List<Subscription>> = repository.subscriptions
     val basicContent = repository.basicContent
     val premiumContent = repository.premiumContent
 

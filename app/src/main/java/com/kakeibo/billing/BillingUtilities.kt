@@ -2,14 +2,14 @@ package com.kakeibo.billing
 
 import com.android.billingclient.api.Purchase
 import com.kakeibo.Constants
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 
 object BillingUtilities {
     /**
      * Return subscription for the provided SKU, if it exists.
      */
     fun getSubscriptionForSku(
-            subscriptions: List<SubscriptionStatus>?, sku: String): SubscriptionStatus? {
+            subscriptions: List<Subscription>?, sku: String): Subscription? {
         if (subscriptions != null) {
             for (subscription in subscriptions) {
                 if (sku == subscription.sku) {
@@ -78,14 +78,14 @@ object BillingUtilities {
      * In this example, the method will return true. This is the same as the result from
      * [deviceHasGooglePlaySubscription].
      */
-    fun serverHasSubscription(subscriptions: List<SubscriptionStatus>?, sku: String): Boolean {
+    fun serverHasSubscription(subscriptions: List<Subscription>?, sku: String): Boolean {
         return getSubscriptionForSku(subscriptions, sku) != null
     }
 
     /**
      * Returns true if the grace period option should be shown.
      */
-    fun isGracePeriod(subscription: SubscriptionStatus?): Boolean {
+    fun isGracePeriod(subscription: Subscription?): Boolean {
         return subscription != null &&
                 subscription.isEntitlementActive &&
                 subscription.isGracePeriod &&
@@ -95,7 +95,7 @@ object BillingUtilities {
     /**
      * Returns true if the subscription restore option should be shown.
      */
-    fun isSubscriptionRestore(subscription: SubscriptionStatus?): Boolean {
+    fun isSubscriptionRestore(subscription: Subscription?): Boolean {
         return subscription != null &&
                 subscription.isEntitlementActive &&
                 !subscription.willRenew &&
@@ -105,7 +105,7 @@ object BillingUtilities {
     /**
      * Returns true if the basic content should be shown.
      */
-    fun isBasicContent(subscription: SubscriptionStatus?): Boolean {
+    fun isBasicContent(subscription: Subscription?): Boolean {
         return subscription != null &&
                 subscription.isEntitlementActive && Constants.BASIC_SKU == subscription.sku &&
                 !subscription.subAlreadyOwned
@@ -114,7 +114,7 @@ object BillingUtilities {
     /**
      * Returns true if premium content should be shown.
      */
-    fun isPremiumContent(subscription: SubscriptionStatus?): Boolean {
+    fun isPremiumContent(subscription: Subscription?): Boolean {
         return subscription != null &&
                 subscription.isEntitlementActive && Constants.PREMIUM_SKU == subscription.sku &&
                 !subscription.subAlreadyOwned
@@ -123,7 +123,7 @@ object BillingUtilities {
     /**
      * Returns true if account hold should be shown.
      */
-    fun isAccountHold(subscription: SubscriptionStatus?): Boolean {
+    fun isAccountHold(subscription: Subscription?): Boolean {
         return subscription != null &&
                 !subscription.isEntitlementActive &&
                 subscription.isAccountHold &&
@@ -133,7 +133,7 @@ object BillingUtilities {
     /**
      * Returns true if the subscription is already owned and requires a transfer to this account.
      */
-    fun isTransferRequired(subscription: SubscriptionStatus?): Boolean {
+    fun isTransferRequired(subscription: Subscription?): Boolean {
         return subscription != null && subscription.subAlreadyOwned
     }
 }

@@ -11,7 +11,7 @@ import com.kakeibo.billing.BillingUtilities.deviceHasGooglePlaySubscription
 import com.kakeibo.billing.BillingUtilities.getPurchaseForSku
 import com.kakeibo.billing.BillingUtilities.getSubscriptionForSku
 import com.kakeibo.billing.BillingUtilities.serverHasSubscription
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 import com.kakeibo.ui.SingleLiveEvent
 
 class BillingViewModel(application: Application) : AndroidViewModel(application) {
@@ -237,7 +237,7 @@ class BillingViewModel(application: Application) : AndroidViewModel(application)
      * Determine if the old SKU can be replaced.
      */
     private fun isOldSkuReplaceable(
-            subscriptions: List<SubscriptionStatus>?,
+            subscriptions: List<Subscription>?,
             purchases: List<Purchase>?,
             oldSku: String?
     ): Boolean {

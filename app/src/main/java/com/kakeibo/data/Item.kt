@@ -9,7 +9,7 @@ import com.kakeibo.util.UtilCurrency
 import java.math.BigDecimal
 
 @Entity(tableName = "items")
-class ItemStatus {
+class Item {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ItemDBAdapter.COL_ID)
     var id: Long = 0

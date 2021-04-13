@@ -14,15 +14,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
 import com.kakeibo.SubApp
-import com.kakeibo.data.CategoryStatus
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Category
+import com.kakeibo.data.Item
 import com.kakeibo.databinding.FragmentInputBinding
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.listener.CategoryClickListener
 import com.kakeibo.ui.settings.category.replace.GridItem
 import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
 import com.kakeibo.ui.view.AmountTextWatcher
-import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.*
 import com.kakeibo.util.UtilDate.getTodaysDate
 import com.kakeibo.util.UtilDate.getTodaysDateWithDay
@@ -36,8 +36,8 @@ class InputFragment : Fragment(), CategoryClickListener {
     private lateinit var _edtAmount: EditText
     private lateinit var _edtMemo: EditText
 
-    private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
+    private val _itemViewModel: ItemViewModel by activityViewModels()
+    private val _categoryViewModel: CategoryViewModel by activityViewModels()
 
     companion object {
         private val TAG = InputFragment::class.java.simpleName
@@ -61,7 +61,7 @@ class InputFragment : Fragment(), CategoryClickListener {
         val recyclerViewAdapter = RecyclerViewAdapter(list, this)
         recyclerView.layoutManager = GridLayoutManager(activity, MainActivity.numColumns)
         recyclerView.adapter = recyclerViewAdapter
-        _categoryStatusViewModel.dsp.observe(viewLifecycleOwner, {
+        _categoryViewModel.dsp.observe(viewLifecycleOwner, {
             list.clear()
             it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }
             recyclerViewAdapter.notifyDataSetChanged()
@@ -85,7 +85,7 @@ class InputFragment : Fragment(), CategoryClickListener {
         _edtMemo.setText("")
     }
 
-    override fun onCategoryClicked(view: View, category: CategoryStatus) {
+    override fun onCategoryClicked(view: View, category: Category) {
         val result = UtilText.checkBeforeSave(_edtAmount.text.toString())
         if (!result.first) {
             Toast.makeText(context, requireActivity().getString(result.second), Toast.LENGTH_SHORT).show()
@@ -105,7 +105,7 @@ class InputFragment : Fragment(), CategoryClickListener {
                 BigDecimal(0)
             }
         }
-        val itemStatus = ItemStatus(
+        val itemStatus = Item(
                 amount,
                 UtilCurrency.CURRENCY_NONE,
                 category.code,
@@ -114,7 +114,7 @@ class InputFragment : Fragment(), CategoryClickListener {
                 updateDate
         )
 
-        _itemStatusViewModel.insert(itemStatus)
+        _itemViewModel.insert(itemStatus)
         Toast.makeText(activity, resources.getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show()
 
         (activity as MainActivity).onItemSaved(eventDate)

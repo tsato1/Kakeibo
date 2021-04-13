@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kakeibo.R
-import com.kakeibo.data.CategoryStatus
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Category
+import com.kakeibo.data.Item
 import com.kakeibo.databinding.FragmentReportBinding
 import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.adapter.view.ReportCListAdapter
@@ -25,8 +25,8 @@ import com.kakeibo.ui.listener.SimpleClickListener
 import com.kakeibo.ui.model.ExpandableListRowModel
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
-import com.kakeibo.ui.viewmodel.ItemStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
+import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.*
 import java.math.BigDecimal
 
@@ -46,8 +46,8 @@ class ReportFragment : Fragment(), SimpleClickListener {
         }
     }
 
-    private val _itemStatusViewModel: ItemStatusViewModel by activityViewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
+    private val _itemViewModel: ItemViewModel by activityViewModels()
+    private val _categoryViewModel: CategoryViewModel by activityViewModels()
     private val _medium: Medium by activityViewModels()
 
     private lateinit var _srlReload: SwipeRefreshLayout
@@ -57,10 +57,10 @@ class ReportFragment : Fragment(), SimpleClickListener {
     private lateinit var _reportCategoryMonthly: LinearLayout
     private lateinit var _reportDateMonthly: LinearLayout
 
-    private lateinit var _allItems: List<ItemStatus>
-    private lateinit var _itemsThisMonth: List<ItemStatus>
-    private lateinit var _allCategoriesMap: Map<Int, CategoryStatus>
-    private var _result: List<ItemStatus> = listOf()
+    private lateinit var _allItems: List<Item>
+    private lateinit var _itemsThisMonth: List<Item>
+    private lateinit var _allCategoriesMap: Map<Int, Category>
+    private var _result: List<Item> = listOf()
     private lateinit var _expandableListAdapter: ExpandableListAdapter
     private lateinit var _incomeListAdapter: ReportCListAdapter
     private lateinit var _expenseListAdapter: ReportCListAdapter
@@ -70,45 +70,45 @@ class ReportFragment : Fragment(), SimpleClickListener {
 
         val fragmentBinding = FragmentReportBinding.inflate(inflater, container, false)
         fragmentBinding.lifecycleOwner = this
-        fragmentBinding.itemStatusViewModel = _itemStatusViewModel
+        fragmentBinding.itemViewModel = _itemViewModel
         val view = fragmentBinding.root
 
         val reportCategoryMonthlyBinding = fragmentBinding.fragmentReportCategoryMonthly
         reportCategoryMonthlyBinding.lifecycleOwner = this
-        reportCategoryMonthlyBinding.itemStatusViewModel = _itemStatusViewModel
-        reportCategoryMonthlyBinding.categoryStatusViewModel = _categoryStatusViewModel
+        reportCategoryMonthlyBinding.itemStatusViewModel = _itemViewModel
+        reportCategoryMonthlyBinding.categoryStatusViewModel = _categoryViewModel
 
         val reportCategoryYearlyBinding = fragmentBinding.fragmentReportCategoryYearly
         reportCategoryYearlyBinding.lifecycleOwner = this
-        reportCategoryYearlyBinding.itemStatusViewModel = _itemStatusViewModel
-        reportCategoryYearlyBinding.categoryStatusViewModel = _categoryStatusViewModel
+        reportCategoryYearlyBinding.itemStatusViewModel = _itemViewModel
+        reportCategoryYearlyBinding.categoryStatusViewModel = _categoryViewModel
 
         val bannerDatePickerBinding = fragmentBinding.bannerDatePicker
         bannerDatePickerBinding.lifecycleOwner = this
         bannerDatePickerBinding.medium = _medium
         bannerDatePickerBinding.clickListener = this
-        bannerDatePickerBinding.itemStatusViewModel = _itemStatusViewModel
+        bannerDatePickerBinding.itemViewModel = _itemViewModel
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
-        _expandableListAdapter = ExpandableListAdapter(_categoryStatusViewModel, this)
-        _expandableListAdapter.setItemStatusViewMode(_itemStatusViewModel)
+        _expandableListAdapter = ExpandableListAdapter(_categoryViewModel, this)
+        _expandableListAdapter.setItemStatusViewMode(_itemViewModel)
         expandableListView.adapter = _expandableListAdapter
         expandableListView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         val incomeListView: RecyclerView = view.findViewById(R.id.rcv_income)
-        _incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME, _categoryStatusViewModel, this)
+        _incomeListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_INCOME, _categoryViewModel, this)
         incomeListView.adapter = _incomeListAdapter
         val expenseListView: RecyclerView = view.findViewById(R.id.rcv_expense)
-        _expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE, _categoryStatusViewModel, this)
+        _expenseListAdapter = ReportCListAdapter(UtilCategory.CATEGORY_COLOR_EXPENSE, _categoryViewModel, this)
         expenseListView.adapter = _expenseListAdapter
 
-        _itemStatusViewModel.all.observe(viewLifecycleOwner, {
+        _itemViewModel.all.observe(viewLifecycleOwner, {
             _allItems = it
         })
-        _categoryStatusViewModel.allMap.observe(viewLifecycleOwner, {
+        _categoryViewModel.allMap.observe(viewLifecycleOwner, {
             _allCategoriesMap = it
         })
-        _itemStatusViewModel.items.observe(viewLifecycleOwner, { allThisMonth ->
+        _itemViewModel.items.observe(viewLifecycleOwner, { allThisMonth ->
             _itemsThisMonth = allThisMonth
 
             val masterMap = allThisMonth
@@ -258,7 +258,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
 
         _result = UtilQuery.query(_allItems, query)
 
-        _itemStatusViewModel.setMutableAll(_result)
+        _itemViewModel.setMutableAll(_result)
         val masterMap = _result
                 .groupBy { it.eventDate }
                 .mapKeys { entry ->
@@ -288,7 +288,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
             _btnClose.visibility = GONE
             _srlReload.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_background))
 
-            _itemStatusViewModel.setItemsThisMonth()
+            _itemViewModel.setItemsThisMonth()
 
             val masterMap = _itemsThisMonth
                     .groupBy { it.eventDate }

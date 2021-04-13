@@ -9,7 +9,7 @@
             type="com.kakeibo.ui.model.ReportCListRowModel" />
         <variable
             name="categoryViewModel"
-            type="com.kakeibo.ui.viewmodel.CategoryStatusViewModel" />
+            type="com.kakeibo.ui.viewmodel.CategoryViewModel" />
     </data>
 
     <LinearLayout

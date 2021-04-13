@@ -2,7 +2,7 @@ package com.kakeibo.data.network
 
 import androidx.lifecycle.LiveData
 import com.kakeibo.AppExecutors
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 import com.kakeibo.data.network.firebase.ServerFunctions
 import java.util.concurrent.Executor
 
@@ -20,7 +20,7 @@ class WebDataSource private constructor(
         get() = serverFunctions.loading
 
     /**
-     * LiveData with the [SubscriptionStatus] information.
+     * LiveData with the [Subscription] information.
      */
     val subscriptions = serverFunctions.subscriptions
 
@@ -47,7 +47,7 @@ class WebDataSource private constructor(
     /**
      * GET request for subscription status.
      */
-    fun updateSubscriptionStatus() {
+    fun updateSubscription() {
         executor.execute {
             synchronized(WebDataSource::class.java) {
                 serverFunctions.updateSubscriptionStatus()

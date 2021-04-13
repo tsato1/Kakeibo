@@ -1,11 +1,10 @@
 package com.kakeibo.util
 
-import android.util.Log
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Item
 import com.kakeibo.ui.model.Query
 
 object UtilQuery {
-    fun query(all: List<ItemStatus>, q: Query): List<ItemStatus> {
+    fun query(all: List<Item>, q: Query): List<Item> {
         var out = all
 
         if (q.flagEventDate) {

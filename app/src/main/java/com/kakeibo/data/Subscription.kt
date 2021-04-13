@@ -7,7 +7,7 @@ import com.google.gson.JsonSyntaxException
 import java.util.*
 
 @Entity(tableName = "subscriptions")
-class SubscriptionStatus (
+class Subscription (
         // Local fields
         @PrimaryKey(autoGenerate = true)
         var primaryKey: Int = 0,
@@ -27,7 +27,7 @@ class SubscriptionStatus (
 ) {
 
     data class SubscriptionStatusList (
-            var subscriptions: List<SubscriptionStatus>?
+            var subscriptions: List<Subscription>?
     )
 
     override fun toString(): String {
@@ -62,12 +62,12 @@ class SubscriptionStatus (
         /**
          * Parse subscription data from Map and return null if data is not valid.
          */
-        fun listFromMap(map: Map<String, Any>): List<SubscriptionStatus>? {
-            val subscriptions = ArrayList<SubscriptionStatus>()
+        fun listFromMap(map: Map<String, Any>): List<Subscription>? {
+            val subscriptions = ArrayList<Subscription>()
             val subList = map[SUBSCRIPTIONS_KEY] as? ArrayList<Map<String, Any>> ?: return null
 
             for (subStatus in subList) {
-                subscriptions.add(SubscriptionStatus().apply {
+                subscriptions.add(Subscription().apply {
                     (subStatus[SKU_KEY] as? String?)?.let {
                         sku = it
                     }
@@ -100,7 +100,7 @@ class SubscriptionStatus (
         /**
          * Parse subscription data from String and return null if data is not valid.
          */
-        fun listFromJsonString(dataString: String?): List<SubscriptionStatus>? {
+        fun listFromJsonString(dataString: String?): List<Subscription>? {
             val gson = Gson()
             return try {
                 gson.fromJson(dataString, SubscriptionStatusList::class.java)?.subscriptions
@@ -118,8 +118,8 @@ class SubscriptionStatus (
         fun alreadyOwnedSubscription(
                 sku: String?,
                 purchaseToken: String?
-        ): SubscriptionStatus {
-            return SubscriptionStatus().apply {
+        ): Subscription {
+            return Subscription().apply {
                 this.sku = sku
                 this.purchaseToken = purchaseToken
                 isEntitlementActive = false

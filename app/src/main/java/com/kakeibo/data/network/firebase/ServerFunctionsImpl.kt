@@ -3,11 +3,10 @@ package com.kakeibo.data.network.firebase
 import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.kakeibo.data.ContentResource
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,7 +27,7 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
      * Use this class by observing the subscriptions LiveData.
      * Any server updates will be communicated through this LiveData.
      */
-    override val subscriptions = MutableLiveData<List<SubscriptionStatus>>()
+    override val subscriptions = MutableLiveData<List<Subscription>>()
 
     /**
      * The basic content URL.
@@ -181,7 +180,7 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
                     if (task.isSuccessful) {
                         Log.i(TAG, "Subscription status update successful")
                         val result = (task.result?.data as? Map<String, Any>)?.let {
-                            SubscriptionStatus.listFromMap(it)
+                            Subscription.listFromMap(it)
                         }
                         if (result == null) {
                             Log.e(TAG, "Invalid subscription data")
@@ -220,7 +219,7 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
                     if (task.isSuccessful) {
                         Log.i(TAG, "Subscription registration successful")
                         val result = (task.result?.data as? Map<String, Any>)?.let {
-                            SubscriptionStatus.listFromMap(it)
+                            Subscription.listFromMap(it)
                         }
                         if (result == null) {
                             Log.e(TAG, "Invalid subscription registration data")
@@ -235,7 +234,7 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
                             ServerError.ALREADY_OWNED -> {
                                 Log.i(TAG, "Subscription already owned by another user")
                                 val oldSubscriptions = subscriptions.value
-                                val newSubscription = SubscriptionStatus.alreadyOwnedSubscription(
+                                val newSubscription = Subscription.alreadyOwnedSubscription(
                                         sku = sku,
                                         purchaseToken = purchaseToken
                                 )
@@ -263,26 +262,26 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
      * subscription instead of the old subscription.
      */
     private fun insertOrUpdateSubscription(
-            oldSubscriptions: List<SubscriptionStatus>?,
-            newSubscription: SubscriptionStatus): List<SubscriptionStatus> {
-        val subscriptionStatuses: MutableList<SubscriptionStatus> = ArrayList()
+            oldSubscriptions: List<Subscription>?,
+            newSubscription: Subscription): List<Subscription> {
+        val subscriptions: MutableList<Subscription> = ArrayList()
         if (oldSubscriptions == null || oldSubscriptions.isEmpty()) {
-            subscriptionStatuses.add(newSubscription)
-            return subscriptionStatuses
+            subscriptions.add(newSubscription)
+            return subscriptions
         }
         var subscriptionAdded = false
         for (subscription in oldSubscriptions) {
             if (TextUtils.equals(subscription.sku, newSubscription.sku)) {
-                subscriptionStatuses.add(newSubscription)
+                subscriptions.add(newSubscription)
                 subscriptionAdded = true
             } else {
-                subscriptionStatuses.add(subscription)
+                subscriptions.add(subscription)
             }
         }
         if (!subscriptionAdded) {
-            subscriptionStatuses.add(newSubscription)
+            subscriptions.add(newSubscription)
         }
-        return subscriptionStatuses
+        return subscriptions
     }
 
     /**
@@ -303,7 +302,7 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
                     if (task.isSuccessful) {
                         Log.i(TAG, "Subscription transfer successful")
                         val result = (task.result?.data as? Map<String, Any>)?.let {
-                            SubscriptionStatus.listFromMap(it)
+                            Subscription.listFromMap(it)
                         }
                         if (result == null) {
                             Log.e(TAG, "Invalid subscription transfer data")

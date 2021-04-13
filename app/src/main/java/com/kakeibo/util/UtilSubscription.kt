@@ -7,7 +7,7 @@ import com.kakeibo.billing.BillingUtilities.isBasicContent
 import com.kakeibo.billing.BillingUtilities.isGracePeriod
 import com.kakeibo.billing.BillingUtilities.isPremiumContent
 import com.kakeibo.billing.BillingUtilities.isSubscriptionRestore
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 
 object UtilSubscription {
     /**
@@ -15,7 +15,7 @@ object UtilSubscription {
      *
      * Add an asterisk if the subscription is not local and might not be modifiable on this device.
      */
-    fun basicTextForSubscription(res: Resources, subscription: SubscriptionStatus): String {
+    fun basicTextForSubscription(res: Resources, subscription: Subscription): String {
         val text: String = if (isAccountHold(subscription)) {
             res.getString(R.string.subscription_option_basic_message_account_hold)
         } else if (isGracePeriod(subscription)) {
@@ -41,7 +41,7 @@ object UtilSubscription {
      * Add an asterisk if the subscription is not local and might not be modifiable on this device.
      */
     fun premiumTextForSubscription(res: Resources,
-                                   subscription: SubscriptionStatus): String {
+                                   subscription: Subscription): String {
         val text: String = if (isAccountHold(subscription)) {
             res.getString(R.string.subscription_option_premium_message_account_hold)
         } else if (isGracePeriod(subscription)) {

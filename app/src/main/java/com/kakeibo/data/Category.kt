@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.kakeibo.db.CategoryDBAdapter
 
 @Entity(tableName = "categories")
-class CategoryStatus(
+class Category(
         id: Long,
         @ColumnInfo(name = CategoryDBAdapter.COL_CODE, defaultValue = "0") var code: Int,
         @ColumnInfo(name = CategoryDBAdapter.COL_NAME, defaultValue = "") var name: String,

@@ -1,8 +1,8 @@
 package com.kakeibo.ui.listener
 
 import android.view.View
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 
 interface CategoryClickListener {
-    fun onCategoryClicked(view: View, category: CategoryStatus)
+    fun onCategoryClicked(view: View, category: Category)
 }

@@ -3,7 +3,7 @@ package com.kakeibo.ui.settings.category.replace
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 
 class Medium : ViewModel() {
 
@@ -18,7 +18,7 @@ class Medium : ViewModel() {
         currentlyShown.value = value
     }
 
-    val removedCategoryList = ObservableArrayList<CategoryStatus>()
-    val addedCategoryList = ObservableArrayList<CategoryStatus>()
-    val newCategoryList = ObservableArrayList<CategoryStatus>()
+    val removedCategoryList = ObservableArrayList<Category>()
+    val addedCategoryList = ObservableArrayList<Category>()
+    val newCategoryList = ObservableArrayList<Category>()
 }

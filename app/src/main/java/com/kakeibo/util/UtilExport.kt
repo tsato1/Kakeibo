@@ -2,13 +2,13 @@ package com.kakeibo.util
 
 import android.content.Context
 import com.kakeibo.R
-import com.kakeibo.data.CategoryStatus
-import com.kakeibo.data.ItemStatus
+import com.kakeibo.data.Category
+import com.kakeibo.data.Item
 
 object UtilExport {
     fun build(context: Context,
-              itemList: List<ItemStatus>,
-              categoryMap: Map<Int, CategoryStatus>, fileName: String) {
+              itemList: List<Item>,
+              categoryMap: Map<Int, Category>, fileName: String) {
         val runnable = Runnable {
             val stringBuilder = StringBuilder()
             stringBuilder.setLength(0)

@@ -17,7 +17,7 @@ import com.kakeibo.BuildConfig
 import com.kakeibo.R
 import com.kakeibo.databinding.ActivitySettingsBinding
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
-import com.kakeibo.ui.viewmodel.SubscriptionStatusViewModel
+import com.kakeibo.ui.viewmodel.SubscriptionViewModel
 
 class SettingsActivity
     : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -30,14 +30,14 @@ class SettingsActivity
     private lateinit var _adView: AdView
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
-    private val _subscriptionStatusViewModel: SubscriptionStatusViewModel by viewModels()
+    private val _subscriptionViewModel: SubscriptionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = ActivitySettingsBinding.inflate(layoutInflater)
         binding.kkbAppViewModel = _kkbAppViewModel
-        binding.subscriptionViewModel = _subscriptionStatusViewModel
+        binding.subscriptionViewModel = _subscriptionViewModel
         setContentView(binding.root)
 
         supportFragmentManager

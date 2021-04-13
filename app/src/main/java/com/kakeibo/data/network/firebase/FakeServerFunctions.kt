@@ -6,7 +6,7 @@ import com.kakeibo.Constants
 import com.kakeibo.billing.BillingUtilities.isBasicContent
 import com.kakeibo.billing.BillingUtilities.isPremiumContent
 import com.kakeibo.data.ContentResource
-import com.kakeibo.data.SubscriptionStatus
+import com.kakeibo.data.Subscription
 import java.util.*
 
 /**
@@ -25,7 +25,7 @@ class FakeServerFunctions : ServerFunctions {
      * Use this class by observing the subscriptions [LiveData].
      * Fake data will be communicated through this LiveData.
      */
-    override val subscriptions = MutableLiveData<List<SubscriptionStatus>>()
+    override val subscriptions = MutableLiveData<List<Subscription>>()
 
     /**
      * The basic content URL.
@@ -79,7 +79,7 @@ class FakeServerFunctions : ServerFunctions {
      * Fetches fake subscription data and posts successful results to [.subscriptions].
      */
     override fun updateSubscriptionStatus() {
-        val nextSub: MutableList<SubscriptionStatus> = ArrayList()
+        val nextSub: MutableList<Subscription> = ArrayList()
         val subscriptionStatus = nextFakeSubscription()
         if (subscriptionStatus != null) {
             nextSub.add(subscriptionStatus)
@@ -130,8 +130,8 @@ class FakeServerFunctions : ServerFunctions {
      */
     private fun createAlreadyOwnedSubscription(
             sku: String,
-            purchaseToken: String): SubscriptionStatus {
-        val subscriptionStatus = SubscriptionStatus()
+            purchaseToken: String): Subscription {
+        val subscriptionStatus = Subscription()
         subscriptionStatus.sku = sku
         subscriptionStatus.purchaseToken = purchaseToken
         subscriptionStatus.isEntitlementActive = false
@@ -139,8 +139,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscriptionStatus
     }
 
-    private fun nextFakeSubscription(): SubscriptionStatus? {
-        val subscription: SubscriptionStatus?
+    private fun nextFakeSubscription(): Subscription? {
+        val subscription: Subscription?
         subscription = when (fakeDataIndex) {
             0 -> null
             1 -> createFakeBasicSubscription()
@@ -158,8 +158,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakeBasicSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakeBasicSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = true
         subscription.willRenew = true
         subscription.sku = Constants.BASIC_SKU
@@ -170,8 +170,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakePremiumSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakePremiumSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = true
         subscription.willRenew = true
         subscription.sku = Constants.PREMIUM_SKU
@@ -182,8 +182,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakeAccountHoldSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakeAccountHoldSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = false
         subscription.willRenew = true
         subscription.sku = Constants.PREMIUM_SKU
@@ -194,8 +194,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakeGracePeriodSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakeGracePeriodSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = true
         subscription.willRenew = true
         subscription.sku = Constants.BASIC_SKU
@@ -206,8 +206,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakeAlreadyOwnedSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakeAlreadyOwnedSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = false
         subscription.willRenew = true
         subscription.sku = Constants.BASIC_SKU
@@ -218,8 +218,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakeCanceledBasicSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakeCanceledBasicSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = true
         subscription.willRenew = false
         subscription.sku = Constants.BASIC_SKU
@@ -230,8 +230,8 @@ class FakeServerFunctions : ServerFunctions {
         return subscription
     }
 
-    private fun createFakeCanceledPremiumSubscription(): SubscriptionStatus {
-        val subscription = SubscriptionStatus()
+    private fun createFakeCanceledPremiumSubscription(): Subscription {
+        val subscription = Subscription()
         subscription.isEntitlementActive = true
         subscription.willRenew = false
         subscription.sku = Constants.PREMIUM_SKU

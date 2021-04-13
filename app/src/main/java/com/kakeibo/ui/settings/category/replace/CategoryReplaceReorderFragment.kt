@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
 import com.kakeibo.SubApp
-import com.kakeibo.data.CategoryStatus
+import com.kakeibo.data.Category
 import com.kakeibo.databinding.FragmentSettingsCategoryReplaceBinding
 import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
-import com.kakeibo.ui.viewmodel.CategoryStatusViewModel
+import com.kakeibo.ui.viewmodel.CategoryViewModel
 import kotlin.collections.ArrayList
 
 class CategoryReplaceReorderFragment : Fragment() {
@@ -38,7 +38,7 @@ class CategoryReplaceReorderFragment : Fragment() {
     private lateinit var _nextButton: Button
 
     private val _medium: Medium by activityViewModels()
-    private val _categoryStatusViewModel: CategoryStatusViewModel by activityViewModels()
+    private val _categoryViewModel: CategoryViewModel by activityViewModels()
 
     private val list = ArrayList<GridItem>()
     private lateinit var _recyclerViewAdapter: RecyclerViewAdapter
@@ -58,7 +58,7 @@ class CategoryReplaceReorderFragment : Fragment() {
 
         val numColumns = SubApp.getNumColumns(R.string.pref_key_num_columns)
         _recyclerView.layoutManager = GridLayoutManager(activity, numColumns)
-        _categoryStatusViewModel.dsp.observe(viewLifecycleOwner, {
+        _categoryViewModel.dsp.observe(viewLifecycleOwner, {
             list.clear()
             it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }
         })
@@ -113,9 +113,9 @@ class CategoryReplaceReorderFragment : Fragment() {
                 }
                 R.id.btn_next -> {
                     val list = _recyclerViewAdapter.getList()
-                    val out: MutableList<CategoryStatus> = ArrayList()
+                    val out: MutableList<Category> = ArrayList()
                     for (item in list) {
-                        val categoryStatus = item.category as CategoryStatus
+                        val categoryStatus = item.category as Category
                         out.add(categoryStatus)
                     }
 
