@@ -178,7 +178,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, p
         binding.lifecycleOwner = _lifecycleOwner
         binding.itemStatus = item
 
-        /*** event date ***/
+        /* event date */
         val eventDates = item.eventDate.split("-")
         val cal = GregorianCalendar(eventDates[0].toInt(), eventDates[1].toInt()-1, eventDates[2].toInt())
         val date = cal.time
@@ -200,7 +200,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, p
             }, year, month - 1, day)
             dialog.show()
         }
-        /*** category ***/
+        /* category */
         binding.btnCategory.text =
                 if (item.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
                     v.context.resources.getStringArray(R.array.default_category)[item.categoryCode]
@@ -210,8 +210,8 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, p
                 }
         binding.btnCategory.hint = "" + item.categoryCode
         binding.btnCategory.setOnClickListener {
-            /*** ordered by location  */
-            val adapter = CategoryListAdapter(v.context, 0, MainActivity.allDspCategoryList)
+            /* ordered by location */
+            val adapter = CategoryListAdapter(v.context, 0, _categoryViewModel.all.value!!)
             val builder = androidx.appcompat.app.AlertDialog.Builder(v.context)
             val dInflater = v.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val convertView: View = dInflater.inflate(R.layout.dialog_bas_search_category, null)
@@ -224,7 +224,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, p
             lv.adapter = adapter
             val dialog: Dialog = builder.show()
             lv.setOnItemClickListener { _, _, pos: Int, _ ->
-                val selectedCategoryCode: Int = MainActivity.allDspCategoryList[pos].code
+                val selectedCategoryCode: Int = _categoryViewModel.all.value!![pos].code
                 binding.btnCategory.text =
                         if (selectedCategoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
                             v.context.resources.getStringArray(R.array.default_category)[selectedCategoryCode]
@@ -236,10 +236,10 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, p
                 dialog.dismiss()
             }
         }
-        /*** amount***/
+        /* amount */
         binding.edtAmount.addTextChangedListener(AmountTextWatcher(binding.edtAmount))
         binding.edtAmount.setText(java.lang.String.valueOf(item.getAmount().abs()))
-        /*** memo ***/
+        /* memo */
         binding.edtMemo.setText(item.memo)
 
         AlertDialog.Builder(v.context)

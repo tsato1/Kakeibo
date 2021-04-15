@@ -59,7 +59,6 @@ class SettingsActivity
             val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
 
             if (showAds) {
-                Log.d("asdf","oioioife")
                 MobileAds.initialize(this) {}
                 val adView: AdView = findViewById(R.id.ad_container)
                 val adRequest = AdRequest.Builder().build()

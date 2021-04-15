@@ -1,1 +1,3 @@
+include ':HoloGraphLibrary'
 include ':app'
+project(':HoloGraphLibrary').projectDir = new File(rootDir, 'app/HoloGraphLibrary/')

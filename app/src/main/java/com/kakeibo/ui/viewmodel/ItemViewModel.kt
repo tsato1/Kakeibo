@@ -1,6 +1,7 @@
 package com.kakeibo.ui.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.kakeibo.SubApp
 import com.kakeibo.data.DataRepository
@@ -14,6 +15,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     val all: LiveData<List<Item>> = repository.items
 
     private val itemsThisYear: LiveData<List<Item>> = repository.itemsThisYear
+    //todo
 
     private val itemsThisMonth: LiveData<List<Item>> = repository.itemsThisMonth
     private val itemsMutable = MutableLiveData<List<Item>>()
@@ -78,5 +80,13 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
 
     fun delete(id: Long) {
         repository.deleteItem(id)
+    }
+
+    fun isCategoryAlreadyUsed(code: Int): Boolean {
+        all.value?.let { all ->
+            all.forEach { Log.d("asdf", "code=$code " + "all.code="+it.categoryCode)
+                if (it.categoryCode == code) return true }
+        }
+        return false
     }
 }

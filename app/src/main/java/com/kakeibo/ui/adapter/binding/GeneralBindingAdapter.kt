@@ -5,9 +5,11 @@ import android.content.Context
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.echo.holographlibrary.PieGraph
+import com.echo.holographlibrary.PieSlice
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -224,41 +226,71 @@ fun updateBarChart(horizontalBarChart: HorizontalBarChart, context: Context, inc
     }
 }
 
-@BindingAdapter("bind:incomeList", "bind:context", "bind:masterMap")
-fun updateIncomePieGraph(pieGraph: AAChartView, incomeList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, Category>?) {
-    incomeList?.let {
-        masterMap?.let {
-            val arr = incomeList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
-            val aaChartModel = AAChartModel()
-                    .chartType(AAChartType.Pie)
-//            .title("title")
-//            .subtitle("subtitle")
-//            .backgroundColor("")
-                    .colorsTheme(Constants.CATEGORY_INCOME_COLORS as Array<Any>)
-                    .dataLabelsEnabled(true)
-                    .series(arrayOf(AASeriesElement().name(context.getString(R.string.income)).data(arr as Array<Any>)))
+@BindingAdapter("bind:incomeList")
+fun updateIncomePieGraph(pieGraph: PieGraph, incomeList: List<Pair<Int, BigDecimal>>?) {
+    val size = Constants.CATEGORY_EXPENSE_COLORS.size
 
-            pieGraph.aa_drawChartWithChartModel(aaChartModel)
+    incomeList?.let {
+        pieGraph.removeSlices()
+        var inPieSlice: PieSlice
+
+        for ((i, item) in incomeList.withIndex()) {
+            inPieSlice = PieSlice()
+            inPieSlice.color =
+                    if (i < size) Constants.CATEGORY_INCOME_COLORS[i].toColorInt()
+                    else Constants.CATEGORY_INCOME_COLORS[size - 1].toColorInt()
+            inPieSlice.value = item.second.toFloat()
+            pieGraph.addSlice(inPieSlice)
         }
     }
+//    incomeList?.let {
+//        masterMap?.let {
+//            val arr = incomeList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
+//            val aaChartModel = AAChartModel()
+//                    .chartType(AAChartType.Pie)
+////            .title("title")
+////            .subtitle("subtitle")
+////            .backgroundColor("")
+//                    .colorsTheme(Constants.CATEGORY_INCOME_COLORS as Array<Any>)
+//                    .dataLabelsEnabled(true)
+//                    .series(arrayOf(AASeriesElement().name(context.getString(R.string.income)).data(arr as Array<Any>)))
+//
+//            pieGraph.aa_drawChartWithChartModel(aaChartModel)
+//        }
+//    }
 }
 
-@BindingAdapter("bind:expenseList", "bind:context", "bind:masterMap")
-fun updateExpensePieGraph(pieGraph: AAChartView, expenseList: List<Pair<Int, BigDecimal>>?, context: Context, masterMap: Map<Int, Category>?) {
+@BindingAdapter("bind:expenseList"/*, "bind:context", "bind:masterMap"*/)
+fun updateExpensePieGraph(pieGraph: PieGraph, expenseList: List<Pair<Int, BigDecimal>>?/*, context: Context, masterMap: Map<Int, Category>?*/) {
+    val size = Constants.CATEGORY_EXPENSE_COLORS.size
+
     expenseList?.let {
-        masterMap?.let {
-            val arr = expenseList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
+        pieGraph.removeSlices()
+        var exPieSlice: PieSlice
 
-            val aaChartModel = AAChartModel()
-                    .chartType(AAChartType.Pie)
-//            .title("title")
-//            .subtitle("subtitle")
-//            .backgroundColor("")
-                    .colorsTheme(Constants.CATEGORY_EXPENSE_COLORS as Array<Any>)
-                    .dataLabelsEnabled(true)
-                    .series(arrayOf(AASeriesElement().name(context.getString(R.string.expense)).data(arr as Array<Any>)))
-
-            pieGraph.aa_drawChartWithChartModel(aaChartModel)
+        for ((i, item) in expenseList.withIndex()) {
+            exPieSlice = PieSlice()
+            exPieSlice.color =
+                    if (i < size) Constants.CATEGORY_EXPENSE_COLORS[i].toColorInt()
+                    else Constants.CATEGORY_EXPENSE_COLORS[size - 1].toColorInt()
+            exPieSlice.value = item.second.toFloat()
+            pieGraph.addSlice(exPieSlice)
         }
     }
+//    expenseList?.let {
+//        masterMap?.let {
+//            val arr = expenseList.map { arrayOf(masterMap[it.first]!!.name, it.second.toInt()) }.toTypedArray()
+//
+//            val aaChartModel = AAChartModel()
+//                    .chartType(AAChartType.Pie)
+////            .title("title")
+////            .subtitle("subtitle")
+////            .backgroundColor("")
+//                    .colorsTheme(Constants.CATEGORY_EXPENSE_COLORS as Array<Any>)
+//                    .dataLabelsEnabled(true)
+//                    .series(arrayOf(AASeriesElement().name(context.getString(R.string.expense)).data(arr as Array<Any>)))
+//
+//            pieGraph.aa_drawChartWithChartModel(aaChartModel)
+//        }
+//    }
 }

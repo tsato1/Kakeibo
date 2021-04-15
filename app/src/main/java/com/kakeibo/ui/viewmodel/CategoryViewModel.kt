@@ -64,11 +64,4 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         }
         return -1 // failure because all.value == null
     }
-
-    fun isCategoryAlreadyUsed(code: Int): Boolean {
-        allMap.value?.let {
-            return it.contains(code)
-        }
-        return false
-    }
 }

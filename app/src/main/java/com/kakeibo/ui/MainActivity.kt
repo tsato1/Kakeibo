@@ -1,7 +1,6 @@
 package com.kakeibo.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -21,6 +20,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.android.billingclient.api.Purchase
+import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
@@ -32,18 +32,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.kakeibo.Constants
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.data.Category
+import com.kakeibo.db.CategoryDBAdapter
+import com.kakeibo.db.CategoryDspDBAdapter
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.settings.AboutActivity
 import com.kakeibo.ui.settings.InAppPurchasesActivity
 import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -62,6 +64,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private lateinit var fabStart: FloatingActionButton
         private lateinit var fabEnd: FloatingActionButton
     }
+
+    private val prefCollectionReference = Firebase.firestore.collection("pref")
+    private val itemCollectionReference = Firebase.firestore.collection(ItemDBAdapter.TABLE_NAME)
+    private val categoryCollectionReference = Firebase.firestore.collection(CategoryDBAdapter.TABLE_NAME)
+    private val categoryDspCollectionReference = Firebase.firestore.collection(CategoryDspDBAdapter.TABLE_NAME)
 
     private lateinit var _smartPagerAdapter: SmartPagerAdapter
     private lateinit var _viewPager: ViewPager2
@@ -154,69 +161,72 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        _billingClientLifecycle = (application as SubApp).billingClientLifecycle
-        lifecycle.addObserver(_billingClientLifecycle)
-
-        /* Register purchases when they change. */
-        _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
-            it?.let {
-                registerPurchases(it)
-            }
-        })
-
-        /* Launch billing flow when user clicks button to buy something. */
-        _billingViewModel.buyEvent.observe(this, {
-            it?.let {
-                _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
-            }
-        })
-
-        /* Open the Play Store when event is triggered. */
-        _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
-            Log.i(TAG, "Viewing subscriptions on the Google Play Store")
-            val sku = it
-            val url = if (sku == null) {
-                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
-                Constants.PLAY_STORE_SUBSCRIPTION_URL
-            } else {
-                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
-                String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
-            }
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-        })
+//        _billingClientLifecycle = (application as SubApp).billingClientLifecycle
+//        lifecycle.addObserver(_billingClientLifecycle)
+//
+//        /* Register purchases when they change. */
+//        _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
+//            it?.let {
+//                registerPurchases(it)
+//            }
+//        })
+//
+//        /* Launch billing flow when user clicks button to buy something. */
+//        _billingViewModel.buyEvent.observe(this, {
+//            it?.let {
+//                _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
+//            }
+//        })
+//
+//        /* Open the Play Store when event is triggered. */
+//        _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
+//            Log.i(TAG, "Viewing subscriptions on the Google Play Store")
+//            val sku = it
+//            val url = if (sku == null) {
+//                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
+//                Constants.PLAY_STORE_SUBSCRIPTION_URL
+//            } else {
+//                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
+//                String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
+//            }
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse(url)
+//        })
+//
+        val profileImageView = navHeaderView.findViewById<ImageView>(R.id.imv_user_profile)
+        val nameTextView = navHeaderView.findViewById<TextView>(R.id.txv_user_name)
+        val emailTextView = navHeaderView.findViewById<TextView>(R.id.txv_user_email)
 
         _authenticationViewModel.firebaseUser.observe(this, {
             invalidateOptionsMenu()
 
             if (it == null) {
-                navHeaderView.findViewById<ImageView>(R.id.imv_user_profile).setBackgroundResource(R.mipmap.ic_launcher_round)
-                navHeaderView.findViewById<TextView>(R.id.txv_user_name).text = getString(R.string.app_name)
-                navHeaderView.findViewById<TextView>(R.id.txv_user_email).text = getString(R.string.not_signed_in)
+                Glide.with(this)
+                        .load(R.mipmap.ic_launcher)
+                        .circleCrop()
+                        .into(profileImageView)
+                nameTextView.text = getString(R.string.app_name)
+                emailTextView.text = getString(R.string.not_signed_in)
                 Log.d(TAG, "currently NOT logged in to firebase")
             } else {
-                navHeaderView.findViewById<ImageView>(R.id.imv_user_profile).setImageURI(it.photoUrl)
-                navHeaderView.findViewById<TextView>(R.id.txv_user_name).text = it.displayName
-                navHeaderView.findViewById<TextView>(R.id.txv_user_email).text = it.email
+                Glide.with(this)
+                        .load(it.photoUrl)
+                        .circleCrop()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(profileImageView)
+                nameTextView.text = it.displayName
+                emailTextView.text = it.email
                 Log.d(TAG, "CURRENT user: " + it.email + " " + it.displayName)
             }
         })
-
-        /* Update subscription information when user changes. */
-        _authenticationViewModel.userChangeEvent.observe(this, {
-            _subscriptionViewModel.userChanged()
-            _billingClientLifecycle.purchaseUpdateEvent.value?.let {
-                registerPurchases(it)
-            }
-        })
-
-        val categoryViewModel: CategoryViewModel by viewModels()
-        categoryViewModel.all.observe(this, {
-            allCategoryList = it
-        })
-        categoryViewModel.dsp.observe(this, {
-            allDspCategoryList = it
-        })
+//
+//        /* Update subscription information when user changes. */
+//        _authenticationViewModel.userChangeEvent.observe(this, {
+//            _subscriptionViewModel.userChanged()
+//            _billingClientLifecycle.purchaseUpdateEvent.value?.let {
+//                registerPurchases(it)
+//            }
+//        })
 
         fabStart = findViewById(R.id.fab_start)
         fabEnd = findViewById(R.id.fab_end)
@@ -224,10 +234,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fabEnd.setOnClickListener(FabClickListener())
     }
 
-    override fun onStart() {
-        super.onStart()
-        refreshData()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        refreshData()
+//    }
 
 //    override fun onResume() {
 //        super.onResume()
@@ -259,10 +269,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun refreshData() {
-        _billingClientLifecycle.queryPurchases()
-        _subscriptionViewModel.manualRefresh()
-    }
+//    private fun refreshData() {
+//        _billingClientLifecycle.queryPurchases()
+//        _subscriptionViewModel.manualRefresh()
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -340,7 +350,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        refreshData()
+//        refreshData()
         when (requestCode) {
             RC_SIGN_IN -> {
                 if (resultCode == RESULT_OK) {
@@ -355,6 +365,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
+    //todo    if user has subscription.
+//    private fun saveOnFirestore() = CoroutineScope(Dispatchers.IO + NonCancellable).launch {
+//        try {
+//            prefCollectionReference.add(preference).await()
+//            itemCollectionReference.add(item).await()
+//            categoryCollectionReference.add(category).await()
+//            categoryDspCollectionReference.add(categoryDsp).await()
+//            withContext(Dispatchers.Main) {
+//                Toast.makeText(this@MainActivity, "Data successfully saved", Toast.LENGTH_LONG).show()
+//            }
+//        } catch (e: Exception) {
+//            withContext(Dispatchers.Main) {
+//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+//            }
+//        }
+//    }
 
     class SmartPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         val fragments: MutableList<Fragment> = mutableListOf()

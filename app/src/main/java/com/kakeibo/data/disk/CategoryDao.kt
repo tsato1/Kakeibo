@@ -62,7 +62,7 @@ interface CategoryDao {
             " FROM " + CategoryDspDBAdapter.TABLE_NAME +
             ")" +
             " ORDER BY " + CategoryDBAdapter.TABLE_NAME + "." + CategoryDBAdapter.COL_CODE)
-    fun getCategoriesNotDisplay(): LiveData<List<Category>>
+    fun getCategoriesNotDisplayed(): LiveData<List<Category>>
 
 
     //    @Query("SELECT "+

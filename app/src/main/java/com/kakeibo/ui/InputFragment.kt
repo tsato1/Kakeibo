@@ -1,10 +1,13 @@
 package com.kakeibo.ui
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -119,5 +122,15 @@ class InputFragment : Fragment(), CategoryClickListener {
 
         (activity as MainActivity).onItemSaved(eventDate)
         _btnDate.text = getTodaysDateWithDay(MainActivity.dateFormat, MainActivity.weekNames)
+        hideKeyboard()
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

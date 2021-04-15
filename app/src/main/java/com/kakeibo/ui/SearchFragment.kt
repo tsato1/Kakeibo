@@ -1,10 +1,13 @@
 package com.kakeibo.ui
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -75,12 +78,12 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
 
         _recyclerView = view.findViewById(R.id.rcv_search_criteria)
         _searchAdapter = SearchCardListAdapter(_lstSearchCriteriaCards)
+        categoryViewModel.all.observe(viewLifecycleOwner, { all ->
+            _searchAdapter.setAllCategoryList(all)
+        })
         _recyclerView.adapter = _searchAdapter
         _recyclerView.layoutManager = LinearLayoutManager(context)
         _recyclerView.itemAnimator = DefaultItemAnimator()
-        categoryViewModel.all.observe(viewLifecycleOwner, { all ->
-
-        })
         val ithCallback: ItemTouchHelper.SimpleCallback = RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this)
         ItemTouchHelper(ithCallback).attachToRecyclerView(_recyclerView)
 
@@ -290,5 +293,15 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
 
             (requireActivity() as MainActivity).onSearch(_query)
         }
+        hideKeyboard()
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

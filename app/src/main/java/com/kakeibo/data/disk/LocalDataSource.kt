@@ -18,7 +18,7 @@ class LocalDataSource private constructor(
     var itemsThisMonth = appDatabase.itemDao().getItemsByMonth(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
     val categories = appDatabase.categoryDao().getAll()
     val categoriesDisplayed = appDatabase.categoryDao().getCategoriesDisplayed()
-    val categoriesNotDisplayed = appDatabase.categoryDao().getCategoriesNotDisplay()
+    val categoriesNotDisplayed = appDatabase.categoryDao().getCategoriesNotDisplayed()
     val categoryDsps = appDatabase.categoryDspDao().getAll()
 
     /***

@@ -31,7 +31,7 @@
     <dimen name="smaller_imv_square_sides">7dp</dimen>
     <dimen name="imv_percent_margin_horizontal">3dp</dimen>
         <!-- graph -->
-        <dimen name="pie_graph_height">300dp</dimen>
+        <dimen name="pie_graph_height">160dp</dimen>
         <dimen name="pie_graph_margin_vertical">4dp</dimen>
         <!-- horizontal bar chart -->
         <dimen name="horizontal_bar_height">130dp</dimen>

@@ -15,7 +15,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
 
-        versionCode 43
+        versionCode 47
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
@@ -145,9 +145,12 @@ dependencies {
     }
 
     // Other Libraries
-    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+//    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+    implementation project(':HoloGraphLibrary')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // Testing Libraries
 //    testImplementation 'junit:junit:4.13.2'

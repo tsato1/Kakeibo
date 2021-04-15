@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.kakeibo.R
+import com.kakeibo.data.Category
 import com.kakeibo.ui.MainActivity
 import com.kakeibo.ui.view.AmountTextWatcher
 import com.kakeibo.ui.model.SearchCriteriaCard
@@ -18,10 +19,17 @@ import com.kakeibo.util.UtilDate
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayList<SearchCriteriaCard>)
+internal class SearchCardListAdapter(
+        private val _lstSearchCriteriaCards: ArrayList<SearchCriteriaCard>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    /*** date range card  */
+    private lateinit var _allCategoryList: List<Category>
+
+    fun setAllCategoryList(allCategoryList: List<Category>) {
+        _allCategoryList = allCategoryList
+    }
+
+    /* date range card  */
     internal inner class ViewHolderDateRange(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var layout: FrameLayout = itemView.findViewById(R.id.frl_card_date_range)
         var cardView: CardView = itemView.findViewById(R.id.cdv_date_range)
@@ -58,7 +66,7 @@ internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayL
         }
     }
 
-    /*** amount range card  */
+    /* amount range card  */
     internal inner class ViewHolderAmountRange(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var layout: FrameLayout = itemView.findViewById(R.id.frl_card_amount_range)
         var cardView: CardView = itemView.findViewById(R.id.cdv_amount_range)
@@ -71,7 +79,7 @@ internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayL
         }
     }
 
-    /*** category card  */
+    /* category card  */
     internal inner class ViewHolderCategory(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var layout: FrameLayout = itemView.findViewById(R.id.frl_card_category)
         var cardView: CardView = itemView.findViewById(R.id.cdv_category)
@@ -80,7 +88,7 @@ internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayL
 
         init {
             btnCategory.setOnClickListener {
-                val list = MainActivity.allCategoryList
+                val list = _allCategoryList
                 val adapter = CategoryListAdapter(itemView.context, 0, list)
                 val builder = AlertDialog.Builder(itemView.context)
                 val inflater = itemView.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -99,7 +107,7 @@ internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayL
                         convertView.resources.getStringArray(R.array.default_category)[selectedCategoryCode]
                     }
                     else {
-                        list[selectedCategoryCode].name
+                        list[pos].name
                     }
                     dialog.dismiss()
                 }
@@ -107,7 +115,7 @@ internal class SearchCardListAdapter(private val _lstSearchCriteriaCards: ArrayL
         }
     }
 
-    /*** memo card  */
+    /* memo card */
     inner class ViewHolderMemo internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var layout: FrameLayout = itemView.findViewById(R.id.frl_card_memo)
         var cardView: CardView = itemView.findViewById(R.id.cdv_memo)
