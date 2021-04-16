@@ -1,18 +1,23 @@
 package com.kakeibo.util
 
+import android.util.Log
 import com.kakeibo.data.Item
-import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.model.ExpandableListRowModel
 import java.util.*
 
 object UtilExpandableList {
+
+    private const val TAG = "UtilExpandableList"
+
     /*
      * expands specific date (default is today's date)
+     * input variable date must be in DB format
      */
     fun expandOnlySpecificDate(
             expandableMasterMap: SortedMap<ExpandableListRowModel.Header, List<Item>>,
             expandableList: MutableList<ExpandableListRowModel>,
             date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)) {
+        Log.d(TAG, "date=$date")
         expandableList.clear()
         expandableList.addAll(expandableMasterMap.flatMap { entry ->
             val parent = ExpandableListRowModel(ExpandableListRowModel.PARENT, entry.key)
@@ -26,11 +31,5 @@ object UtilExpandableList {
             }
             list
         })
-    }
-
-    fun expandOnlySpecificDate(
-            adapter: ExpandableListAdapter,
-            date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)) {
-        return expandOnlySpecificDate(adapter.getMasterMap(), adapter.getExpandableList(), date)
     }
 }

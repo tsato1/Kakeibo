@@ -85,6 +85,7 @@ object UtilDate {
     }
 
     fun getDBDate(date: String, fromFormat: Int): String {
+        Log.d(TAG, "date=$date")
         val ymd = date.split("/")
         val y: String
         val m: String

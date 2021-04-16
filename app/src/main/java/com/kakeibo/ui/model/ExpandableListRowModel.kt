@@ -13,7 +13,7 @@ class ExpandableListRowModel {
          const val EMPTYLAYOUT = 5*/
     }
 
-    class Header(val date: String, val income: BigDecimal, val expence: BigDecimal)
+    data class Header(val date: String, val income: BigDecimal, val expense: BigDecimal)
 
     lateinit var itemParent: Header
     lateinit var itemChild : Item

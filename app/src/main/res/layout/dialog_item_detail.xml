@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="itemStatus"
+            name="item"
             type="com.kakeibo.data.Item" />
         <variable
             name="categoryViewModel"
@@ -26,7 +26,7 @@
             android:textStyle="bold"
             android:textColor="@color/color_black"
             bind:context="@{context}"
-            bind:eventDate="@{itemStatus.eventDate}"
+            bind:eventDate="@{item.eventDate}"
             bind:colon="@{true}"/>
 
         <TextView
@@ -36,7 +36,7 @@
             android:textStyle="bold"
             android:textColor="@color/color_black"
             bind:context="@{context}"
-            bind:categoryCode="@{itemStatus.categoryCode}"
+            bind:categoryCode="@{item.categoryCode}"
             bind:colon="@{true}"
             bind:masterMap="@{categoryViewModel.allMap}"/>
 
@@ -47,7 +47,7 @@
             android:textStyle="bold"
             android:textColor="@color/color_black"
             bind:context="@{context}"
-            bind:amount="@{itemStatus.amount.toString()}"
+            bind:amount="@{item.amount.toString()}"
             bind:colon="@{true}"/>
 
         <TextView
@@ -57,7 +57,7 @@
             android:textStyle="bold"
             android:textColor="@color/color_black"
             bind:context="@{context}"
-            bind:memo="@{itemStatus.memo}"
+            bind:memo="@{item.memo}"
             bind:colon="@{true}"/>
 
         <TextView
@@ -67,7 +67,7 @@
             android:textStyle="bold"
             android:textColor="@color/color_black"
             bind:context="@{context}"
-            bind:updateDate="@{itemStatus.updateDate}"
+            bind:updateDate="@{item.updateDate}"
             bind:colon="@{true}"/>
 
     </LinearLayout>

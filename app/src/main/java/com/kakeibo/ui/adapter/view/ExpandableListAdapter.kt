@@ -24,27 +24,19 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, private val _lifecycleOwner: LifecycleOwner)
+class ExpandableListAdapter(
+        private val _itemViewModel: ItemViewModel,
+        private val _categoryViewModel: CategoryViewModel,
+        private val _lifecycleOwner: LifecycleOwner)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private lateinit var _itemViewModel: ItemViewModel
-    fun setItemStatusViewMode(itemViewModel: ItemViewModel) {
-        _itemViewModel = itemViewModel
-    }
-
     private var _expandableList: MutableList<ExpandableListRowModel> = mutableListOf()
-    fun getExpandableList(): MutableList<ExpandableListRowModel> {
-        return _expandableList
-    }
-
     private var _masterMap: SortedMap<ExpandableListRowModel.Header, List<Item>> = TreeMap()
-    fun setMasterMap(masterMap: SortedMap<ExpandableListRowModel.Header, List<Item>>) {
+
+    fun setData(masterMap: SortedMap<ExpandableListRowModel.Header, List<Item>>, date: String) {
         _masterMap = masterMap
-        UtilExpandableList.expandOnlySpecificDate(_masterMap, _expandableList)
+        UtilExpandableList.expandOnlySpecificDate(_masterMap, _expandableList, date)
         notifyDataSetChanged()
-    }
-    fun getMasterMap(): SortedMap<ExpandableListRowModel.Header, List<Item>> {
-        return _masterMap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -94,7 +86,7 @@ class ExpandableListAdapter(private val _categoryViewModel: CategoryViewModel, p
                 (holder as ItemChildViewHolder).bind(_lifecycleOwner, row.itemChild, _categoryViewModel)
                 holder.childBinding.rllExpListChild.setOnClickListener {
                     val binding = DialogItemDetailBinding.inflate(LayoutInflater.from(it.context))
-                    binding.itemStatus = row.itemChild
+                    binding.item = row.itemChild
                     binding.categoryViewModel = _categoryViewModel
 
                     AlertDialog.Builder(it.context)

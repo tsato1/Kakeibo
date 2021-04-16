@@ -68,7 +68,7 @@
             android:textColor="@color/color_black"
             android:textStyle="bold"
             bind:context="@{context}"
-            bind:amount="@{header.itemParent.expence.toString()}"
+            bind:amount="@{header.itemParent.expense.toString()}"
             bind:colon="@{false}"/>
 
     </LinearLayout>

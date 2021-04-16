@@ -44,6 +44,8 @@ class ReportFragment : Fragment(), SimpleClickListener {
             tabFragment2.arguments = args
             return tabFragment2
         }
+
+        private var dateToFocus: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)
     }
 
     private val _itemViewModel: ItemViewModel by activityViewModels()
@@ -90,8 +92,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
         bannerDatePickerBinding.itemViewModel = _itemViewModel
 
         val expandableListView: RecyclerView = view.findViewById(R.id.lsv_expandable)
-        _expandableListAdapter = ExpandableListAdapter(_categoryViewModel, this)
-        _expandableListAdapter.setItemStatusViewMode(_itemViewModel)
+        _expandableListAdapter = ExpandableListAdapter(_itemViewModel, _categoryViewModel, this)
         expandableListView.adapter = _expandableListAdapter
         expandableListView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
@@ -117,9 +118,10 @@ class ReportFragment : Fragment(), SimpleClickListener {
                         ExpandableListRowModel.Header(
                                 entry.key,
                                 entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
-                                entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
+                                entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }
+                        ) }
                     .toSortedMap(compareBy { it.date })
-            _expandableListAdapter.setMasterMap(masterMap)
+            _expandableListAdapter.setData(masterMap, dateToFocus)
 
             val allThisMonthByCategory = allThisMonth
                     .groupBy { it.categoryCode }
@@ -245,9 +247,10 @@ class ReportFragment : Fragment(), SimpleClickListener {
     /* Called by MainActivity */
     fun focusOnSavedItem(date: String) {
         _reportCategoryYearly.visibility = GONE
+        _reportDateYearly.visibility = GONE
         _reportCategoryMonthly.visibility = GONE
         _reportDateMonthly.visibility = VISIBLE
-        UtilExpandableList.expandOnlySpecificDate(_expandableListAdapter, date)
+        dateToFocus = date
         _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_DATE_MONTHLY)
     }
 
@@ -267,7 +270,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
                             entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
                             entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
                 .toSortedMap(compareBy { it.date })
-        _expandableListAdapter.setMasterMap(masterMap)
+        _expandableListAdapter.setData(masterMap, dateToFocus)
 
         val allItemsByCategory = _result
                 .groupBy { it.categoryCode }
@@ -298,7 +301,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
                                 entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
                                 entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
                     .toSortedMap(compareBy { it.date })
-            _expandableListAdapter.setMasterMap(masterMap)
+            _expandableListAdapter.setData(masterMap, dateToFocus)
 
             val allItemsThisMonthByCategory = _itemsThisMonth
                     .groupBy { it.categoryCode }
@@ -309,6 +312,7 @@ class ReportFragment : Fragment(), SimpleClickListener {
             _medium.setInSearchResult(false)
             _medium.setCurrentlyShown(Medium.FRAGMENT_REPORT_DATE_MONTHLY)
             _reportCategoryYearly.visibility = GONE
+            _reportDateYearly.visibility = GONE
             _reportCategoryMonthly.visibility = GONE
             _reportDateMonthly.visibility = VISIBLE
         }
