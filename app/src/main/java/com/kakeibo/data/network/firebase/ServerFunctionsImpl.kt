@@ -79,6 +79,9 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
         }
     }
 
+    init {
+        firebaseFunctions.useEmulator("10.0.2.2.", 5001)
+    }
     /**
      * Expected errors.
      *

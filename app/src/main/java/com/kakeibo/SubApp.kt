@@ -14,7 +14,7 @@ import com.kakeibo.data.network.firebase.ServerFunctionsImpl
 import com.kakeibo.util.UtilDate
 import java.util.*
 
-/**
+/*
  * Android Application class. Used for accessing singletons.
  */
 class SubApp : Application() {
@@ -43,34 +43,33 @@ class SubApp : Application() {
     val repository: DataRepository
         get() = DataRepository.getInstance(localDataSource, webDataSource, billingClientLifecycle)
 
-    /** */
     override fun onCreate() {
         super.onCreate()
-        _instance = this
-        PreferenceManager.setDefaultValues(_instance, R.xml.preferences, false)
-        _preferences = PreferenceManager.getDefaultSharedPreferences(_instance)
+        instance = this
+        PreferenceManager.setDefaultValues(instance, R.xml.preferences, false)
+        preferences = PreferenceManager.getDefaultSharedPreferences(instance)
     }
 
     companion object {
-        private lateinit var _preferences: SharedPreferences
-        private lateinit var _instance: SubApp
+        private lateinit var preferences: SharedPreferences
+        private lateinit var instance: SubApp
         private val sharedPreferences: SharedPreferences
             get() {
-                PreferenceManager.setDefaultValues(_instance, R.xml.preferences, false)
-                _preferences = PreferenceManager.getDefaultSharedPreferences(_instance)
-                return _preferences
+                PreferenceManager.setDefaultValues(instance, R.xml.preferences, false)
+                preferences = PreferenceManager.getDefaultSharedPreferences(instance)
+                return preferences
             }
 
-        /*** dateFormat  */
+        /* dateFormat  */
         fun getDateFormat(key: Int): Int {
-            val strKey = _instance.getString(key)
+            val strKey = instance.getString(key)
             val dateFormatIndex = sharedPreferences.getString(strKey, UtilDate.DATE_FORMAT_YMD)
             return dateFormatIndex!!.toInt()
         }
 
-        /*** fraction digits  */
+        /* fraction digits  */
         fun getFractionDigits(key: Int): Int {
-            val strKey = _instance.getString(key)
+            val strKey = instance.getString(key)
             val locale = Locale.getDefault()
             var defValue = 0
             try {
@@ -80,15 +79,15 @@ class SubApp : Application() {
                 e.printStackTrace()
             }
             val digitsIndex = sharedPreferences.getString(strKey, "" + defValue)
-            val fractionDigits = _instance.resources.getStringArray(R.array.pref_list_fraction_digits)
+            val fractionDigits = instance.resources.getStringArray(R.array.pref_list_fraction_digits)
             return fractionDigits[digitsIndex!!.toInt()].toInt()
         }
 
-        /*** num category icons per row  */
+        /* num category icons per row  */
         fun getNumColumns(key: Int): Int {
-            val strKey = _instance.getString(key)
+            val strKey = instance.getString(key)
             val numColumnsIndex = sharedPreferences.getString(strKey, "1")
-            val numColumns = _instance.resources.getStringArray(R.array.pref_list_num_columns)
+            val numColumns = instance.resources.getStringArray(R.array.pref_list_num_columns)
             return numColumns[numColumnsIndex!!.toInt()].toInt()
         }
     }

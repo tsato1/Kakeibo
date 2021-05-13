@@ -113,7 +113,7 @@ object UtilDate {
     /*** date1 < date2 returns -1
      * date1 = date2 return 0
      * date1 > date2 return 1  */
-    fun compareDate(in1: String, in2: String, format: Int): Int {
+    fun compareDates(in1: String, in2: String, format: Int = 3): Int { // format=3 is FORMAT_DB
         try {
             val formatter = SimpleDateFormat(DATE_FORMATS[format], Locale.getDefault())
             val date1 = formatter.parse(in1)

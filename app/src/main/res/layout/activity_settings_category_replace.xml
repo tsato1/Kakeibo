@@ -12,31 +12,32 @@
             type="com.kakeibo.ui.viewmodel.SubscriptionViewModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ad_container"/>
+
+        <LinearLayout
+            android:id="@+id/dots"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/ad_container">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            <LinearLayout
-                android:id="@+id/dots"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:paddingBottom="@dimen/pager_dots"/>
-
-        </RelativeLayout>
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="@dimen/pager_dots"
+            app:layout_constraintTop_toBottomOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/ad_container"/>
 
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -47,8 +48,12 @@
             android:layout_alignParentBottom="true"
             android:background="@color/color_background"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/category_placement_banner_ad" />
+            ads:adUnitId="@string/category_placement_banner_ad"
+            app:layout_constraintTop_toBottomOf="@+id/dots"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakeibo.SubApp
 import com.kakeibo.data.Subscription
 
@@ -43,8 +43,10 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
 
     fun userChanged() {
         repository.deleteLocalUserData()
-        FirebaseInstanceId.getInstance().token?.let {
-            registerInstanceId(it)
+        FirebaseMessaging.getInstance().token.let {
+            if(it.isComplete) {
+                registerInstanceId(it.result.toString())
+            }
         }
         repository.fetchSubscriptions()
     }

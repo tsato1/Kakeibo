@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.BuildConfig
@@ -21,8 +22,9 @@ import com.kakeibo.db.PrepDB7
             Category::class,
             CategoryDsp::class,
             Subscription::class],
-        version = BuildConfig.versionDB
-) abstract class AppDatabase : RoomDatabase() {
+        version = BuildConfig.versionDB)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun kkbAppDao(): KkbAppDao
     abstract fun itemDao(): ItemDao
@@ -32,7 +34,9 @@ import com.kakeibo.db.PrepDB7
 
     companion object {
         private val TAG = AppDatabase::class.java.simpleName
-        private const val DATABASE_NAME = "kakeibo.db"
+
+        const val DATABASE_NAME = "kakeibo.db"
+
         private var INSTANCE: AppDatabase? = null
 
         @VisibleForTesting

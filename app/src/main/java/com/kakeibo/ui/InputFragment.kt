@@ -1,25 +1,30 @@
 package com.kakeibo.ui
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.data.Category
 import com.kakeibo.data.Item
 import com.kakeibo.databinding.FragmentInputBinding
+import com.kakeibo.ui.MainActivity.Companion.dateFormat
+import com.kakeibo.ui.MainActivity.Companion.weekNames
 import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.listener.CategoryClickListener
 import com.kakeibo.ui.settings.category.replace.GridItem
@@ -30,6 +35,10 @@ import com.kakeibo.util.*
 import com.kakeibo.util.UtilDate.getTodaysDate
 import com.kakeibo.util.UtilDate.getTodaysDateWithDay
 import java.math.BigDecimal
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by T on 2015/09/14.
@@ -42,8 +51,11 @@ class InputFragment : Fragment(), CategoryClickListener {
     private val _itemViewModel: ItemViewModel by activityViewModels()
     private val _categoryViewModel: CategoryViewModel by activityViewModels()
 
+    private lateinit var _cal: Calendar
+
     companion object {
         private val TAG = InputFragment::class.java.simpleName
+        private const val SWIPE_REFRESH_MILLI_SECOND = 200
 
         fun newInstance(): InputFragment {
             val tabFragment1 = InputFragment()
@@ -55,7 +67,6 @@ class InputFragment : Fragment(), CategoryClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentInputBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
         val view = binding.root
 
         val list = ArrayList<GridItem>()
@@ -75,18 +86,59 @@ class InputFragment : Fragment(), CategoryClickListener {
         _edtMemo = view.findViewById(R.id.edt_memo)
         _edtAmount.addTextChangedListener(AmountTextWatcher(_edtAmount))
 
+        val srlReload = view.findViewById<SwipeRefreshLayout>(R.id.srl_reload)
+        srlReload.setOnRefreshListener {
+            Handler().postDelayed({
+                _btnDate.text = getTodaysDateWithDay(
+                        SubApp.getDateFormat(R.string.pref_key_date_format),
+                        resources.getStringArray(R.array.week_name))
+                _edtAmount.setText("")
+                _edtMemo.setText("")
+                srlReload.isRefreshing = false
+                _cal = Calendar.getInstance()
+            }, SWIPE_REFRESH_MILLI_SECOND.toLong())
+        }
+
+
+
+        _cal = Calendar.getInstance()
+
+        _btnDate = view.findViewById(R.id.btn_date)
+        val btnNext: ImageButton = view.findViewById(R.id.btn_next)
+        val btnPrev: ImageButton = view.findViewById(R.id.btn_prev)
+        btnNext.setOnClickListener(ButtonClickListener())
+        btnPrev.setOnClickListener(ButtonClickListener())
+
+        _btnDate.text = getTodaysDateWithDay(dateFormat, weekNames)
+        _btnDate.setOnClickListener {
+            val year = _cal[Calendar.YEAR]
+            val month = _cal[Calendar.MONTH] + 1
+            val day = _cal[Calendar.DAY_OF_MONTH]
+            val dialog = DatePickerDialog(requireContext(), { _, y, m, d ->
+                val gCal = GregorianCalendar(y, m, d)
+                val str = SimpleDateFormat(
+                    UtilDate.DATE_FORMATS[dateFormat],
+                    Locale.getDefault()
+                ).format(gCal.time) + " [" + weekNames[_cal[Calendar.DAY_OF_WEEK] - 1] + "]"
+                _btnDate.text = str
+            }, year, month - 1, day)
+            dialog.show()
+        }
+        btnNext.visibility = View.VISIBLE
+        btnPrev.visibility = View.VISIBLE
+
+
+
+
+
+
         return view
     }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume() called")
-        _btnDate.text = getTodaysDateWithDay(
-                SubApp.getDateFormat(R.string.pref_key_date_format),
-                resources.getStringArray(R.array.week_name))
-        _edtAmount.setText("")
-        _edtMemo.setText("")
-    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        Log.d(TAG, "onResume() called")
+//    }
 
     override fun onCategoryClicked(view: View, category: Category) {
         val result = UtilText.checkBeforeSave(_edtAmount.text.toString())
@@ -121,7 +173,6 @@ class InputFragment : Fragment(), CategoryClickListener {
         Toast.makeText(activity, resources.getString(R.string.msg_item_successfully_saved), Toast.LENGTH_SHORT).show()
 
         (activity as MainActivity).onItemSaved(eventDate)
-        _btnDate.text = getTodaysDateWithDay(MainActivity.dateFormat, MainActivity.weekNames)
         hideKeyboard()
     }
 
@@ -132,5 +183,41 @@ class InputFragment : Fragment(), CategoryClickListener {
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+
+
+
+    internal inner class ButtonClickListener : View.OnClickListener {
+        override fun onClick(v: View) {
+            when (v.id) {
+                R.id.btn_next -> {
+                    try {
+                        _cal.add(Calendar.DATE, 1)
+                        val date = _cal.time
+                        val out = SimpleDateFormat(
+                            UtilDate.DATE_FORMATS[dateFormat],
+                            Locale.getDefault()
+                        ).format(date) + " [" + weekNames[_cal[Calendar.DAY_OF_WEEK] - 1] + "]"
+                        _btnDate.text = out
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
+                }
+                R.id.btn_prev -> {
+                    try {
+                        _cal.add(Calendar.DATE, -1)
+                        val date = _cal.time
+                        val out = SimpleDateFormat(
+                            UtilDate.DATE_FORMATS[dateFormat],
+                            Locale.getDefault()
+                        ).format(date) + " [" + weekNames[_cal[Calendar.DAY_OF_WEEK] - 1] + "]"
+                        _btnDate.text = out
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
     }
 }

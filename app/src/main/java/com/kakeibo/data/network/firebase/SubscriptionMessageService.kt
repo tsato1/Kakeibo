@@ -26,6 +26,11 @@ class SubscriptionMessageService : FirebaseMessagingService() {
         }
     }
 
+    override fun onNewToken(s: String) {
+        super.onNewToken(s)
+        Log.d("NEW_TOKEN", s)
+    }
+
     companion object {
         private const val TAG = "SubscriptionMsgService"
         private const val REMOTE_MESSAGE_SUBSCRIPTIONS_KEY = "currentStatus"

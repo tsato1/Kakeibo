@@ -12,7 +12,7 @@
             type="ObservableArrayList&lt;Category&gt;" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,26 +23,35 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="@{list.size()==0? View.VISIBLE: View.GONE}"
-            android:text="@string/no_custom_category"/>
+            android:text="@string/no_custom_category"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ListView
             android:id="@+id/lsv_custom_categories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
             android:layout_above="@id/btn_back"
-            android:visibility="@{list.size()!=0? View.VISIBLE: View.GONE}"/>
+            android:visibility="@{list.size()!=0? View.VISIBLE: View.GONE}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ad_container"/>
 
         <Button
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/ad_container"
             android:text="@string/back"
             android:textColor="@color/color_black"
             android:background="@color/color_background"
-            android:contentDescription="@string/back"/>
+            android:contentDescription="@string/back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ad_container"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add"
@@ -53,7 +62,9 @@
             android:layout_margin="@dimen/fab_default_padding"
             android:src="@drawable/ic_add_white"
             android:contentDescription="@string/add"
-            app:layout_behavior="com.kakeibo.ui.view.ScrollingFABBehavior"/>
+            app:layout_behavior="com.kakeibo.ui.view.ScrollingFABBehavior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ad_container"/>
 
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -64,8 +75,11 @@
             android:layout_alignParentBottom="true"
             android:background="@color/color_background"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/category_creation_banner_ad"/>
+            ads:adUnitId="@string/category_creation_banner_ad"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

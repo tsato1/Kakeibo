@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -8,7 +9,7 @@
             type="com.kakeibo.ui.settings.category.edit.CustomCategoryViewModel" />
     </data>
     
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     
@@ -19,55 +20,61 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:paddingTop="@dimen/fragment_padding"
-            android:text="@string/choose_category_color"/>
+            android:text="@string/choose_category_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     
         <TextView
             android:id="@+id/txv_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_below="@id/txv_title"/>
+            android:layout_below="@id/txv_title"
+            app:layout_constraintTop_toBottomOf="@+id/txv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <Button
+            android:id="@+id/btn_income"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:text="@string/income"
+            android:textColor="@android:color/black"
+            android:background="@drawable/gradient_income"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_expense"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/btn_expense"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:text="@string/expense"
+            android:textColor="@android:color/black"
+            android:background="@drawable/gradient_expense"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_income"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/buttonBarButtonStyle" />
     
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/fragment_padding"
-            android:paddingEnd="@dimen/fragment_padding"
-            android:paddingTop="@dimen/fragment_padding"
-            android:paddingBottom="@dimen/fragment_padding">
-    
-            <Button
-                android:id="@+id/btn_income"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:text="@string/income"
-                android:textColor="@android:color/black"
-                android:background="@drawable/gradient_income"
-                style="?android:attr/buttonBarButtonStyle" />
-    
-            <Button
-                android:id="@+id/btn_expense"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:text="@string/expense"
-                android:textColor="@android:color/black"
-                android:background="@drawable/gradient_expense"
-                style="?android:attr/buttonBarButtonStyle" />
-    
-        </LinearLayout>
-    
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_centerInParent="true"
-            bind:customCategory="@{customCategory}">
+            bind:customCategory="@{customCategory}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
     
             <ImageView
                 android:id="@+id/imv_category_add_in"
@@ -98,38 +105,33 @@
                 style="?android:attr/buttonBarButtonStyle"/>
 
         </LinearLayout>
-    
-        <RelativeLayout
-            android:id="@+id/rll_footer"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height"
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/color_background">
+            android:text="@string/back"
+            android:textColor="@color/color_black"
+            android:background="@color/color_background"
+            android:contentDescription="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="@string/next"
+            android:textColor="@color/color_black"
+            android:background="@color/color_background"
+            android:contentDescription="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     
-            <Button
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:text="@string/back"
-                android:textColor="@color/color_black"
-                android:background="@color/color_background"
-                android:contentDescription="@string/back"/>
-    
-            <Button
-                android:id="@+id/btn_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:text="@string/next"
-                android:textColor="@color/color_black"
-                android:background="@color/color_background"
-                android:contentDescription="@string/next"/>
-    
-        </RelativeLayout>
-    
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     
 </layout>

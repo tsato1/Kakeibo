@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <import type="android.view.View"/>
@@ -21,10 +20,6 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        bind:context="@{context}"
-        bind:currentlyShown="@{medium.currentlyShown}"
-        bind:inSearch="@{medium.inSearchResult}"
-        bind:itemViewModel="@{itemViewModel}"
         style="?android:attr/buttonBarStyle">
 
         <ImageButton
@@ -40,9 +35,9 @@
 
         <ImageButton
             android:id="@+id/btn_prev"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_left_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_left_24"
             android:contentDescription="@string/previous"
             style="?android:attr/buttonBarButtonStyle"/>
 
@@ -57,9 +52,9 @@
 
         <ImageButton
             android:id="@+id/btn_next"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_right_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_right_24"
             android:contentDescription="@string/next"
             style="?android:attr/buttonBarButtonStyle"/>
 

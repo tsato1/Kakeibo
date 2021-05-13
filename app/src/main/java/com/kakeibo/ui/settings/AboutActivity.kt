@@ -14,18 +14,13 @@ class AboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings_about)
     }
 
-    /*** call set up in layout xml  */
+    /* call set up in layout xml */
     fun onClick(v: View) {
         if (v.id == R.id.txv_how_to_use_app) {
             val url = "https://sites.google.com/view/kakeibo/home/how-to-use-the-app"
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
             startActivity(i)
-            //        } else if (v.getId()==R.id.txv_read_documentation) {
-//            String url = "https://sites.google.com/view/kakeibo/home";
-//            Intent i = new Intent(Intent.ACTION_VIEW);
-//            i.setData(Uri.parse(url));
-//            startActivity(i);
         }
     }
 }

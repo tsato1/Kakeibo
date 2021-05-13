@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.kakeibo.SubApp
 import com.kakeibo.data.DataRepository
 import com.kakeibo.data.Item
+import com.kakeibo.util.UtilDate
 import java.math.BigDecimal
 
 class ItemViewModel(application: Application) : AndroidViewModel(application) {
@@ -15,7 +16,6 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     val all: LiveData<List<Item>> = repository.items
 
     private val itemsThisYear: LiveData<List<Item>> = repository.itemsThisYear
-    //todo
 
     private val itemsThisMonth: LiveData<List<Item>> = repository.itemsThisMonth
     private val itemsMutable = MutableLiveData<List<Item>>()
@@ -41,7 +41,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     private val itemsByCategory: LiveData<Map<Pair<Int, BigDecimal>, List<Item>>> =
             Transformations.map(items) { all ->
                 all.groupBy { it.categoryCode }
-                        .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
+                        .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.amount} ) }
     }
     /* used in PieGraph in ReportC */
     val itemsIncome: LiveData<List<Pair<Int, BigDecimal>>> = Transformations.map(itemsByCategory) { map ->
@@ -61,13 +61,13 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     val income: LiveData<BigDecimal> = Transformations.map(items) { items ->
-        items.filter { it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() }
+        items.filter { it.amount > BigDecimal(0) }.sumOf { it.amount }
     }
     val expense: LiveData<BigDecimal> = Transformations.map(items) { items ->
-        items.filter { it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }
+        items.filter { it.amount < BigDecimal(0) }.sumOf { it.amount }
     }
     val balance: LiveData<BigDecimal> = Transformations.map(items) { items ->
-        items.sumOf { it.getAmount() }
+        items.sumOf { it.amount }
     }
 
     fun insert(item: Item) {
@@ -84,7 +84,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isCategoryAlreadyUsed(code: Int): Boolean {
         all.value?.let { all ->
-            all.forEach { Log.d("asdf", "code=$code " + "all.code="+it.categoryCode)
+            all.forEach {
                 if (it.categoryCode == code) return true }
         }
         return false

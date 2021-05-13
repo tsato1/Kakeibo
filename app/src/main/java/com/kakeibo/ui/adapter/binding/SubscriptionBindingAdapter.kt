@@ -1,4 +1,4 @@
-package com.kakeibo.ui
+package com.kakeibo.ui.adapter.binding
 
 import android.content.Context
 import android.util.Log
@@ -7,7 +7,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-//import com.bumptech.glide.Glide
+import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -24,6 +25,7 @@ import com.kakeibo.billing.BillingUtilities.isTransferRequired
 import com.kakeibo.data.ContentResource
 import com.kakeibo.data.KkbApp
 import com.kakeibo.data.Subscription
+import com.kakeibo.databinding.ActivityInAppPurchaseBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,7 +43,7 @@ fun loadingProgressBar(view: ProgressBar, loading: Boolean) {
     view.visibility = if (loading) View.VISIBLE else View.GONE
 }
 
-/**
+/*
  * Update basic content when the URL changes.
  *
  *
@@ -50,16 +52,16 @@ fun loadingProgressBar(view: ProgressBar, loading: Boolean) {
  */
 @BindingAdapter("updateBasicContent")
 fun updateBasicContent(view: View, basicContent: ContentResource?) {
-    val image = view.findViewById<ImageView>(R.id.home_basic_image)
-    val textView = view.findViewById<TextView>(R.id.home_basic_text)
+    val image = view.findViewById<ImageView>(R.id.basic_image)
+    val textView = view.findViewById<TextView>(R.id.basic_text)
     val url = basicContent?.url
     if (url != null) {
         image.run {
             Log.d(TAG, "Loading image for basic content: $url")
             visibility = View.VISIBLE
-//            Glide.with(view.context)
-//                    .load(url)
-//                    .into(this)
+            Glide.with(view.context)
+                    .load(url)
+                    .into(this)
         }
         textView.run {
             text = view.resources.getString(R.string.basic_content_text)
@@ -74,7 +76,7 @@ fun updateBasicContent(view: View, basicContent: ContentResource?) {
     }
 }
 
-/**
+/*
  * Update premium content on the Premium fragment when the URL changes.
  *
  *
@@ -83,31 +85,31 @@ fun updateBasicContent(view: View, basicContent: ContentResource?) {
  */
 @BindingAdapter("updatePremiumContent")
 fun updatePremiumContent(view: View, premiumContent: ContentResource?) {
-//    val image = view.findViewById<ImageView>(R.id.premium_premium_image)
-//    val textView = view.findViewById<TextView>(R.id.premium_premium_text)
-//    val url = premiumContent?.url
-//    if (url != null) {
-//        image.run {
-//            Log.d(TAG, "Loading image for premium content: $url")
-//            visibility = View.VISIBLE
-//            Glide.with(context)
-//                    .load(url)
-//                    .into(this)
-//        }
-//        textView.run {
-//            text = view.resources.getString(R.string.premium_content_text)
-//        }
-//    } else {
-//        image.run {
-//            visibility = View.GONE
-//        }
-//        textView.run {
-//            text = resources.getString(R.string.no_premium_content)
-//        }
-//    }
+    val image = view.findViewById<ImageView>(R.id.premium_premium_image)
+    val textView = view.findViewById<TextView>(R.id.premium_premium_text)
+    val url = premiumContent?.url
+    if (url != null) {
+        image.run {
+            Log.d(TAG, "Loading image for premium content: $url")
+            visibility = View.VISIBLE
+            Glide.with(context)
+                    .load(url)
+                    .into(this)
+        }
+        textView.run {
+            text = view.resources.getString(R.string.premium_content_text)
+        }
+    } else {
+        image.run {
+            visibility = View.GONE
+        }
+        textView.run {
+            text = resources.getString(R.string.no_premium_content)
+        }
+    }
 }
 
-/**
+/*
  * Update subscription views on the Home fragment when the subscription changes.
  *
  *
@@ -116,57 +118,57 @@ fun updatePremiumContent(view: View, premiumContent: ContentResource?) {
  */
 @BindingAdapter("updateHomeViews")
 fun updateHomeViews(view: View, subscriptions: List<Subscription>?) {
-//    // Set visibility assuming no subscription is available.
-//    // If a subscription is found that meets certain criteria, then the visibility of the paywall
-//    // will be changed to View.GONE.
-//    val binding = DataBindingUtil.getBinding<ActivityInAppPurchaseBinding>(view)
-//
-//    binding?.homePaywallMessage?.visibility = View.VISIBLE
-//
-//    // The remaining views start hidden. If a subscription is found that meets each criteria,
-//    // then the visibility will be changed to View.VISIBLE.
-//    binding?.homeRestoreMessage?.visibility = View.GONE
-//    binding?.homeGracePeriodMessage?.visibility = View.GONE
-//    binding?.homeTransferMessage?.visibility = View.GONE
-//    binding?.homeAccountHoldMessage?.visibility = View.GONE
-//    binding?.homeBasicMessage?.visibility = View.GONE
-//    // Update based on subscription information.
-//    subscriptions?.let {
-//        for (subscription in subscriptions) {
-//            if (isSubscriptionRestore(subscription)) {
-//                Log.d(TAG, "restore VISIBLE")
-//                binding?.homeRestoreMessage?.run {
-//                    visibility = View.VISIBLE
-//                    val expiryDate = getHumanReadableExpiryDate(subscription)
-//                    text = view.resources.getString(R.string.restore_message_with_date, expiryDate)
-//                }
-//                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
-//            }
-//            if (isGracePeriod(subscription)) {
-//                Log.d(TAG, "grace period VISIBLE")
-//                binding?.homeGracePeriodMessage?.visibility = View.VISIBLE
-//                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
-//            }
-//            if (isTransferRequired(subscription) && subscription.sku == Constants.BASIC_SKU) {
-//                Log.d(TAG, "transfer VISIBLE")
-//                binding?.homeTransferMessage?.visibility = View.VISIBLE
-//                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
-//            }
-//            if (isAccountHold(subscription)) {
-//                Log.d(TAG, "account hold VISIBLE")
-//                binding?.homeAccountHoldMessage?.visibility = View.VISIBLE
-//                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
-//            }
-//            if (isBasicContent(subscription) || isPremiumContent(subscription)) {
-//                Log.d(TAG, "basic VISIBLE")
-//                binding?.homeBasicMessage?.visibility = View.VISIBLE
-//                binding?.homePaywallMessage?.visibility = View.GONE // Paywall gone.
-//            }
-//        }
-//    }
+    // Set visibility assuming no subscription is available.
+    // If a subscription is found that meets certain criteria, then the visibility of the paywall
+    // will be changed to View.GONE.
+    val binding = DataBindingUtil.getBinding<ActivityInAppPurchaseBinding>(view)
+
+    binding?.basicPaywallMessage?.visibility = View.VISIBLE
+
+    // The remaining views start hidden. If a subscription is found that meets each criteria,
+    // then the visibility will be changed to View.VISIBLE.
+    binding?.restoreMessage?.visibility = View.GONE
+    binding?.gracePeriodMessage?.visibility = View.GONE
+    binding?.basicTransferMessage?.visibility = View.GONE
+    binding?.basicAccountHoldMessage?.visibility = View.GONE
+    binding?.basicMessage?.visibility = View.GONE
+    // Update based on subscription information.
+    subscriptions?.let {
+        for (subscription in subscriptions) {
+            if (isSubscriptionRestore(subscription)) {
+                Log.d(TAG, "restore VISIBLE")
+                binding?.restoreMessage?.run {
+                    visibility = View.VISIBLE
+                    val expiryDate = getHumanReadableExpiryDate(subscription)
+                    text = view.resources.getString(R.string.restore_message_with_date, expiryDate)
+                }
+                binding?.basicPaywallMessage?.visibility = View.GONE // Paywall gone.
+            }
+            if (isGracePeriod(subscription)) {
+                Log.d(TAG, "grace period VISIBLE")
+                binding?.gracePeriodMessage?.visibility = View.VISIBLE
+                binding?.basicPaywallMessage?.visibility = View.GONE // Paywall gone.
+            }
+            if (isTransferRequired(subscription) && subscription.sku == Constants.BASIC_SKU) {
+                Log.d(TAG, "transfer VISIBLE")
+                binding?.basicTransferMessage?.visibility = View.VISIBLE
+                binding?.basicPaywallMessage?.visibility = View.GONE // Paywall gone.
+            }
+            if (isAccountHold(subscription)) {
+                Log.d(TAG, "account hold VISIBLE")
+                binding?.basicAccountHoldMessage?.visibility = View.VISIBLE
+                binding?.basicPaywallMessage?.visibility = View.GONE // Paywall gone.
+            }
+            if (isBasicContent(subscription) || isPremiumContent(subscription)) {
+                Log.d(TAG, "basic VISIBLE")
+                binding?.basicMessage?.visibility = View.VISIBLE
+                binding?.basicPaywallMessage?.visibility = View.GONE // Paywall gone.
+            }
+        }
+    }
 }
 
-/**
+/*
  * Update subscription views on the Premium fragment when the subscription changes.
  *
  *
@@ -175,18 +177,20 @@ fun updateHomeViews(view: View, subscriptions: List<Subscription>?) {
  */
 @BindingAdapter("updatePremiumViews")
 fun updatePremiumViews(view: View, subscriptions: List<Subscription>?) {
+    val binding = DataBindingUtil.getBinding<ActivityInAppPurchaseBinding>(view)
+
     // Set visibility assuming no subscription is available.
     // If a subscription is found that meets certain criteria, then the visibility of the paywall
     // will be changed to View.GONE.
-//    view.premium_paywall_message.visibility = View.VISIBLE
-    // The remaining views start hidden. If a subscription is found that meets each criteria,
-    // then the visibility will be changed to View.VISIBLE.
-//    view.premium_restore_message.visibility = View.GONE
-//    view.premium_grace_period_message.visibility = View.GONE
-//    view.premium_transfer_message.visibility = View.GONE
-//    view.premium_account_hold_message.visibility = View.GONE
-//    view.premium_premium_content.visibility = View.GONE
-//    view.premium_upgrade_message.visibility = View.GONE
+    binding?.let {
+        it.premiumPaywallMessage.visibility = View.VISIBLE
+        it.restoreMessage.visibility = View.GONE
+        it.gracePeriodMessage.visibility = View.GONE
+        it.premiumTransferMessage.visibility = View.GONE
+        it.premiumAccountHoldMessage.visibility = View.GONE
+        it.premiumPremiumContent.visibility = View.GONE
+        it.premiumUpgradeMessage.visibility = View.GONE
+    }
 
     // The Upgrade button should appear if the user has a basic subscription, but does not
     // have a premium subscription. This variable keeps track of whether a premium subscription
@@ -197,27 +201,27 @@ fun updatePremiumViews(view: View, subscriptions: List<Subscription>?) {
         for (subscription in subscriptions) {
             if (isSubscriptionRestore(subscription)) {
                 Log.d(TAG, "restore VISIBLE")
-//                view.premium_restore_message.run {
-//                    visibility = View.VISIBLE
-//                    val expiryDate = getHumanReadableExpiryDate(subscription)
-//                    text = view.resources.getString(R.string.restore_message_with_date, expiryDate)
-//                }
-//                view.premium_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.restoreMessage?.run {
+                    visibility = View.VISIBLE
+                    val expiryDate = getHumanReadableExpiryDate(subscription)
+                    text = view.resources.getString(R.string.restore_message_with_date, expiryDate)
+                }
+                binding?.premiumPaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isGracePeriod(subscription)) {
                 Log.d(TAG, "grace period VISIBLE")
-//                view.premium_grace_period_message.visibility = View.VISIBLE
-//                view.premium_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.gracePeriodMessage?.visibility = View.VISIBLE
+                binding?.premiumPaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isTransferRequired(subscription) && subscription.sku == Constants.PREMIUM_SKU) {
                 Log.d(TAG, "transfer VISIBLE")
-//                view.premium_transfer_message.visibility = View.VISIBLE
-//                view.premium_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.premiumTransferMessage?.visibility = View.VISIBLE
+                binding?.premiumPaywallMessage?.visibility = View.GONE // Paywall gone.
             }
             if (isAccountHold(subscription)) {
                 Log.d(TAG, "account hold VISIBLE")
-//                view.premium_account_hold_message.visibility = View.VISIBLE
-//                view.premium_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.premiumAccountHoldMessage?.visibility = View.VISIBLE
+                binding?.premiumPaywallMessage?.visibility = View.GONE // Paywall gone.
             }
 
             // The upgrade message must be shown if there is a basic subscription
@@ -225,86 +229,20 @@ fun updatePremiumViews(view: View, subscriptions: List<Subscription>?) {
             // subscriptions and hide the upgrade message if we find any.
             if (isPremiumContent(subscription)) {
                 Log.d(TAG, "premium VISIBLE")
-//                view.premium_premium_content.visibility = View.VISIBLE
-//                view.premium_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.premiumPremiumContent?.visibility = View.VISIBLE
+                binding?.premiumPaywallMessage?.visibility = View.GONE // Paywall gone.
                 // Make sure we do not ask for an upgrade when user has premium subscription.
                 hasPremium = true
-//                view.premium_upgrade_message.visibility = View.GONE
+                binding?.premiumUpgradeMessage?.visibility = View.GONE
             }
             if (isBasicContent(subscription) && !isPremiumContent(subscription) && !hasPremium) {
                 Log.d(TAG, "basic VISIBLE")
                 // Upgrade message will be hidden if a premium subscription is found later.
-//                view.premium_upgrade_message.visibility = View.VISIBLE
-//                view.premium_paywall_message.visibility = View.GONE // Paywall gone.
+                binding?.premiumUpgradeMessage?.visibility = View.VISIBLE
+                binding?.premiumPaywallMessage?.visibility = View.GONE // Paywall gone.
             }
 
         }
-    }
-}
-
-/**
- * Update views on the Settings fragment when the subscription changes.
- *
- *
- * When the subscription changes, the binding adapter triggers this view in the layout XML.
- * See the layout XML files for the app:updateSettingsViews attribute.
- */
-@BindingAdapter("updateSettingsViews")
-fun updateSettingsViews(view: View, subscriptions: List<Subscription>?) {
-    // Set default button text: it might be overridden based on the subscription state.
-//    view.subscription_option_premium_button.text =
-//            view.resources.getString(R.string.subscription_option_premium_message)
-//    view.subscription_option_basic_button.text =
-//            view.resources.getString(R.string.subscription_option_basic_message)
-//    view.settings_transfer_message.visibility = View.GONE
-//     Update based on subscription information.
-    var basicRequiresTransfer = false
-    var premiumRequiresTransfer = false
-    subscriptions?.let {
-        for (subscription in it) {
-            val sku = subscription.sku
-            when (sku) {
-                Constants.BASIC_SKU -> {
-//                    view.subscription_option_basic_button.text =
-//                            basicTextForSubscription(view.resources, subscription)
-//                    if (isTransferRequired(subscription)) {
-//                        basicRequiresTransfer = true
-//                    }
-                }
-                Constants.PREMIUM_SKU -> {
-//                    view.subscription_option_premium_button.text =
-//                            premiumTextForSubscription(view.resources, subscription)
-//                    if (isTransferRequired(subscription)) {
-//                        premiumRequiresTransfer = true
-//                    }
-                }
-            }
-        }
-    }
-    val message = when {
-        basicRequiresTransfer && premiumRequiresTransfer -> {
-            val basicName = view.resources.getString(R.string.basic_button_text)
-            val premiumName = view.resources.getString(R.string.premium_button_text)
-            view.resources.getString(
-                    R.string.transfer_message_with_two_skus, basicName, premiumName)
-        }
-        basicRequiresTransfer -> {
-            val basicName = view.resources.getString(R.string.basic_button_text)
-            view.resources.getString(R.string.transfer_message_with_sku, basicName)
-        }
-        premiumRequiresTransfer -> {
-            val premiumName = view.resources.getString(R.string.premium_button_text)
-            view.resources.getString(R.string.transfer_message_with_sku, premiumName)
-        }
-        else -> null
-    }
-    if (message != null) {
-        Log.d(TAG, "transfer VISIBLE")
-//        view.settings_transfer_message.visibility = View.VISIBLE
-//        view.settings_transfer_message_text.text = message
-    } else {
-//        view.settings_transfer_message_text.text =
-//                view.resources.getString(R.string.transfer_message)
     }
 }
 
@@ -321,7 +259,7 @@ fun updateAdViews(view: AdView, context: Context, kkbApp: KkbApp?, subscriptions
             val _adView = AdView(context)
             if (BuildConfig.DEBUG) {
                 _adView.adUnitId = "ca-app-pub-3940256099942544/6300978111"
-                /*** in debug mode  */
+                /* in debug mode */
             } else {
                 /* view already has Id */
             }
@@ -355,7 +293,7 @@ fun updateAdViews(view: AdView, context: Context, kkbApp: KkbApp?, subscriptions
     }
 }
 
-/**
+/*
  * Get a readable expiry date from a subscription.
  */
 private fun getHumanReadableExpiryDate(subscription: Subscription): String {

@@ -160,7 +160,9 @@ class ExportActivity : AppCompatActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val googleAccount = completedTask.getResult(ApiException::class.java)
-            a(googleAccount)
+            googleAccount?.let {
+                a(googleAccount)
+            }
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

@@ -1,6 +1,7 @@
 package com.kakeibo.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -28,34 +29,32 @@ import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.ktx.storage
+import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
-import com.kakeibo.data.Category
-import com.kakeibo.db.CategoryDBAdapter
-import com.kakeibo.db.CategoryDspDBAdapter
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.settings.AboutActivity
 import com.kakeibo.ui.settings.InAppPurchasesActivity
 import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.*
-import kotlin.collections.ArrayList
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         private const val TAG = "MainActivity"
         private const val RC_SIGN_IN = 0
-
-        lateinit var allCategoryList: List<Category>
-        lateinit var allDspCategoryList: List<Category>
+        private const val RC_IN_APP_PURCHASE = 1
 
         lateinit var weekNames: Array<String>
         var dateFormat: Int = 0
@@ -65,10 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private lateinit var fabEnd: FloatingActionButton
     }
 
-    private val prefCollectionReference = Firebase.firestore.collection("pref")
-    private val itemCollectionReference = Firebase.firestore.collection(ItemDBAdapter.TABLE_NAME)
-    private val categoryCollectionReference = Firebase.firestore.collection(CategoryDBAdapter.TABLE_NAME)
-    private val categoryDspCollectionReference = Firebase.firestore.collection(CategoryDspDBAdapter.TABLE_NAME)
+    private val firebaseStorageRef = Firebase.storage.reference
 
     private lateinit var _smartPagerAdapter: SmartPagerAdapter
     private lateinit var _viewPager: ViewPager2
@@ -76,6 +72,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var _navView: NavigationView
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
+    private val _itemViewModel: ItemViewModel by viewModels()
+    private val _categoryViewModel: CategoryViewModel by viewModels()
+    private val _categoryDspViewModel: CategoryDspViewModel by viewModels()
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
     private val _authenticationViewModel: FirebaseUserViewModel by viewModels()
     private val _billingViewModel: BillingViewModel by viewModels()
@@ -99,7 +98,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         _navView.setNavigationItemSelectedListener(this)
         val navHeaderView = _navView.getHeaderView(0)
 
-        val toggle = ActionBarDrawerToggle(this, _drawerLayout, toolbar, R.string.open, R.string.close)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            _drawerLayout,
+            toolbar,
+            R.string.open,
+            R.string.close
+        )
         _drawerLayout.addDrawerListener(toggle)
         toggle.isDrawerIndicatorEnabled = true
         toggle.syncState()
@@ -161,38 +166,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-//        _billingClientLifecycle = (application as SubApp).billingClientLifecycle
-//        lifecycle.addObserver(_billingClientLifecycle)
-//
-//        /* Register purchases when they change. */
-//        _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
-//            it?.let {
-//                registerPurchases(it)
-//            }
-//        })
-//
-//        /* Launch billing flow when user clicks button to buy something. */
-//        _billingViewModel.buyEvent.observe(this, {
-//            it?.let {
-//                _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
-//            }
-//        })
-//
-//        /* Open the Play Store when event is triggered. */
-//        _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
-//            Log.i(TAG, "Viewing subscriptions on the Google Play Store")
-//            val sku = it
-//            val url = if (sku == null) {
-//                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
-//                Constants.PLAY_STORE_SUBSCRIPTION_URL
-//            } else {
-//                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
-//                String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
-//            }
-//            val intent = Intent(Intent.ACTION_VIEW)
-//            intent.data = Uri.parse(url)
-//        })
-//
+        _billingClientLifecycle = (application as SubApp).billingClientLifecycle
+        lifecycle.addObserver(_billingClientLifecycle)
+
+        /* Register purchases when they change. */
+        _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
+            it?.let {
+                registerPurchases(it)
+            }
+        })
+
+        /* Launch billing flow when user clicks button to buy something. */
+        _billingViewModel.buyEvent.observe(this, {
+            it?.let {
+                _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
+            }
+        })
+
+        /* Open the Play Store when event is triggered. */
+        _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
+            Log.i(TAG, "Viewing subscriptions on the Google Play Store")
+            val sku = it
+            val url = if (sku == null) {
+                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
+                Constants.PLAY_STORE_SUBSCRIPTION_URL
+            } else {
+                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
+                String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
+            }
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+        })
+
         val profileImageView = navHeaderView.findViewById<ImageView>(R.id.imv_user_profile)
         val nameTextView = navHeaderView.findViewById<TextView>(R.id.txv_user_name)
         val emailTextView = navHeaderView.findViewById<TextView>(R.id.txv_user_email)
@@ -202,30 +207,45 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             if (it == null) {
                 Glide.with(this)
-                        .load(R.mipmap.ic_launcher)
-                        .circleCrop()
-                        .into(profileImageView)
+                    .load(R.mipmap.ic_launcher)
+                    .circleCrop()
+                    .into(profileImageView)
                 nameTextView.text = getString(R.string.app_name)
                 emailTextView.text = getString(R.string.not_signed_in)
                 Log.d(TAG, "currently NOT logged in to firebase")
             } else {
                 Glide.with(this)
-                        .load(it.photoUrl)
-                        .circleCrop()
-                        .placeholder(R.mipmap.ic_launcher)
-                        .into(profileImageView)
+                    .load(it.photoUrl)
+                    .circleCrop()
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(profileImageView)
                 nameTextView.text = it.displayName
                 emailTextView.text = it.email
                 Log.d(TAG, "CURRENT user: " + it.email + " " + it.displayName)
             }
         })
-//
-//        /* Update subscription information when user changes. */
-//        _authenticationViewModel.userChangeEvent.observe(this, {
-//            _subscriptionViewModel.userChanged()
-//            _billingClientLifecycle.purchaseUpdateEvent.value?.let {
-//                registerPurchases(it)
+
+        /* Update subscription information when user changes. */
+        _authenticationViewModel.userChangeEvent.observe(this, {
+            _subscriptionViewModel.userChanged()
+            _billingClientLifecycle.purchaseUpdateEvent.value?.let {
+                registerPurchases(it)
+            }
+        })
+
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+//                return@OnCompleteListener
 //            }
+//
+//            // Get new FCM registration token
+//            val token = task.result
+//
+//            // Log and toast
+//            val msg = getString(R.string.msg_token_fmt, token)
+//            Log.d(TAG, msg)
+//            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 //        })
 
         fabStart = findViewById(R.id.fab_start)
@@ -234,17 +254,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fabEnd.setOnClickListener(FabClickListener())
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        refreshData()
-//    }
-
-//    override fun onResume() {
-//        super.onResume()
-//        _smartPagerAdapter?.let {
-//
-//        }
-//    } // todo _smartPagerAdapter == null ????
+    override fun onStart() {
+        super.onStart()
+        refreshData()
+    }
 
     override fun onBackPressed() {
         if (_viewPager.currentItem <= 3) {
@@ -261,25 +274,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * Register SKUs and purchase tokens with the server.
      */
     private fun registerPurchases(purchaseList: List<Purchase>) {
+        val navHeaderView = _navView.getHeaderView(0)
+        val subsTextView = navHeaderView.findViewById<TextView>(R.id.txv_subscription)
+        if (purchaseList.isEmpty()) {
+            subsTextView.visibility = View.GONE
+        }
+
         for (purchase in purchaseList) {
             val sku = purchase.sku
             val purchaseToken = purchase.purchaseToken
             Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
+
             _subscriptionViewModel.registerSubscription(sku, purchaseToken)
+
+            subsTextView.visibility = View.VISIBLE
+            if (sku == Constants.BASIC_SKU) subsTextView.text = "Subscribed: Basic Plan" //todo translation
+            if (sku == Constants.PREMIUM_SKU) subsTextView.text = "Subscribed: Premium Plan"
         }
     }
 
-//    private fun refreshData() {
-//        _billingClientLifecycle.queryPurchases()
-//        _subscriptionViewModel.manualRefresh()
-//    }
+    private fun refreshData() {
+        _billingClientLifecycle.queryPurchases()
+        _subscriptionViewModel.manualRefresh()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
 
         val isSignedIn = _authenticationViewModel.isSignedIn()
-        _navView.menu.get(0).isVisible = !isSignedIn
-        _navView.menu.get(1).isVisible = isSignedIn
+        _navView.menu[0].isVisible = !isSignedIn
+        _navView.menu[1].isVisible = isSignedIn
 
         return true
     }
@@ -305,10 +329,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 triggerSignOut()
                 true
             }
-            R.id.in_app_purchases -> {
-                startActivity(Intent(this, InAppPurchasesActivity::class.java))
-                true
-            }
+//            R.id.backup -> {
+//                if (!_authenticationViewModel.isSignedIn()) {
+//                    Toast.makeText(this@MainActivity, "Please sign-in first.", Toast.LENGTH_LONG).show()
+//                    return true
+//                }
+//                uploadOnFirebaseStorage()
+//                true
+//            }
+//            R.id.download -> {
+//                if (!_authenticationViewModel.isSignedIn()) {
+//                    Toast.makeText(this@MainActivity, "Please sign-in first.", Toast.LENGTH_LONG).show()
+//                    return true
+//                }
+//                downloadFromFirebaseStorage()
+//                true
+//            }
+//            R.id.in_app_purchases -> {
+//                startActivityForResult(Intent(this, InAppPurchasesActivity::class.java), RC_IN_APP_PURCHASE)
+//                true
+//            }
             R.id.about -> {
                 startActivity(Intent(this, AboutActivity::class.java))
                 true
@@ -326,11 +366,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         providers.add(EmailBuilder().build())
         providers.add(GoogleBuilder().build())
         startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN)
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            RC_SIGN_IN
+        )
     }
 
     /*
@@ -345,12 +386,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+//    private fun uploadOnFirebaseStorage() = CoroutineScope(Dispatchers.IO).launch {
+//        try {
+//            val filename = _authenticationViewModel.firebaseUser.value!!.uid
+//            val file = getDatabasePath(AppDatabase.DATABASE_NAME)
+//            firebaseStorageRef.child("databases/$filename").putFile(file.toUri()).await()
+//
+//            withContext(Dispatchers.Main) {
+//                Toast.makeText(this@MainActivity, "Backup successful.", Toast.LENGTH_LONG).show()
+//            }
+//        } catch (e: Exception) {
+//            withContext(Dispatchers.Main) {
+//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+//            }
+//        }
+//    }
+
+//    private fun downloadFromFirebaseStorage() = CoroutineScope(Dispatchers.IO).launch {
+//        try {
+//            val filename = _authenticationViewModel.firebaseUser.value!!.uid
+//            val file = getDatabasePath(AppDatabase.DATABASE_NAME)
+//            firebaseStorageRef.child("databases/$filename").getFile(file.toUri()).await()
+//
+//            withContext(Dispatchers.Main) {
+//                Toast.makeText(this@MainActivity, "Backup successful.", Toast.LENGTH_LONG).show()
+//            }
+//        } catch (e: Exception) {
+//            withContext(Dispatchers.Main) {
+//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+//            }
+//        }
+//    }
+//
     /*
      * Receive Activity result, including sign-in result.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        refreshData()
+
         when (requestCode) {
             RC_SIGN_IN -> {
                 if (resultCode == RESULT_OK) {
@@ -360,28 +433,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
                 }
             }
+            RC_IN_APP_PURCHASE -> {
+                _authenticationViewModel.updateFirebaseUser()
+            }
             else -> {
                 Log.e(TAG, "Unrecognized request code: $requestCode")
             }
         }
     }
-
-    //todo    if user has subscription.
-//    private fun saveOnFirestore() = CoroutineScope(Dispatchers.IO + NonCancellable).launch {
-//        try {
-//            prefCollectionReference.add(preference).await()
-//            itemCollectionReference.add(item).await()
-//            categoryCollectionReference.add(category).await()
-//            categoryDspCollectionReference.add(categoryDsp).await()
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(this@MainActivity, "Data successfully saved", Toast.LENGTH_LONG).show()
-//            }
-//        } catch (e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
-//            }
-//        }
-//    }
 
     class SmartPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         val fragments: MutableList<Fragment> = mutableListOf()

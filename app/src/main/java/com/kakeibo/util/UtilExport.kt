@@ -26,7 +26,7 @@ object UtilExport {
             for (item in itemList) {
                 stringBuilder.append(categoryMap[item.categoryCode]!!.name)
                 stringBuilder.append(",")
-                stringBuilder.append(item.getAmount())
+                stringBuilder.append(item.amount)
                 stringBuilder.append(",")
                 stringBuilder.append(item.memo)
                 stringBuilder.append(",")

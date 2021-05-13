@@ -31,7 +31,7 @@ import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.compareDate
+import com.kakeibo.util.UtilDate.compareDates
 import com.kakeibo.util.UtilQuery
 import java.math.BigDecimal
 import java.util.*
@@ -129,7 +129,7 @@ class SearchFragment : Fragment(), RecyclerItemTouchHelperListener {
                     Toast.makeText(activity, resources.getString(R.string.err_please_choose_to_date), Toast.LENGTH_SHORT).show()
                     return false
                 }
-                if (compareDate(fDate, tDate, MainActivity.dateFormat) == -1) {
+                if (compareDates(fDate, tDate, MainActivity.dateFormat) == -1) {
                     Toast.makeText(activity, resources.getString(R.string.err_from_date_older), Toast.LENGTH_SHORT).show()
                     return false
                 }

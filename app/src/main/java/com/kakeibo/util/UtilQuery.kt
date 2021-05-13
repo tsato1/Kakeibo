@@ -11,7 +11,7 @@ object UtilQuery {
             out = all.filter { it.eventDate in q.fromEventDate..q.toEventDate }
         }
         if (q.flagAmount) {
-            out = out.filter { it.getAmount().abs() in q.fromAmount..q.toAmount }
+            out = out.filter { it.amount.abs() in q.fromAmount..q.toAmount }
         }
         if (q.flagCategory) {
             out = out.filter { it.categoryCode == q.categoryCode }

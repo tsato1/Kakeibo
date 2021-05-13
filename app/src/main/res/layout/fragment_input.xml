@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/srl_reload"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_input"
@@ -12,54 +15,45 @@
         android:fillViewport="true"
         android:background="@color/color_background">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <include
                 layout="@layout/banner_date_picker"
-                android:id="@+id/banner_date_picker"/>
+                android:id="@+id/banner_date_picker"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/edt_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
+                android:maxLength="10"
+                android:textIsSelectable="false"
+                android:autofillHints="@string/hint_memo_max_20_characters"
+                android:hint="@string/hint_amount_spent_or_earned"
+                app:layout_constraintTop_toBottomOf="@+id/banner_date_picker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-                <TableRow
-                    android:paddingTop="@dimen/table_row_padding_vertical"
-                    android:paddingBottom="@dimen/table_row_padding_vertical">
-
-                    <EditText
-                        android:id="@+id/edt_amount"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:inputType="numberDecimal"
-                        android:digits="0123456789."
-                        android:maxLength="10"
-                        android:textIsSelectable="false"
-                        android:autofillHints="@string/hint_memo_max_20_characters"
-                        android:hint="@string/hint_amount_spent_or_earned"/>
-
-                </TableRow>
-
-                <TableRow
-                    android:paddingTop="@dimen/table_row_padding_vertical"
-                    android:paddingBottom="@dimen/table_row_padding_vertical">
-
-                    <EditText
-                        android:id="@+id/edt_memo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLength="20"
-                        android:inputType="text"
-                        android:autofillHints="@string/hint_memo_max_20_characters"
-                        android:hint="@string/hint_memo_max_20_characters"/>
-
-                </TableRow>
-
-            </TableLayout>
+            <EditText
+                android:id="@+id/edt_memo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="20"
+                android:inputType="text"
+                android:autofillHints="@string/hint_memo_max_20_characters"
+                android:hint="@string/hint_memo_max_20_characters"
+                app:layout_constraintTop_toBottomOf="@+id/edt_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_grid"
@@ -67,10 +61,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:layout_margin="16dp"
-                android:gravity="center"/>
+                app:layout_constraintTop_toBottomOf="@+id/edt_memo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</layout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

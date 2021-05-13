@@ -19,6 +19,7 @@ import com.kakeibo.R
 import com.kakeibo.data.Category
 import com.kakeibo.data.Item
 import com.kakeibo.databinding.FragmentReportBinding
+import com.kakeibo.ui.MainActivity.Companion.dateFormat
 import com.kakeibo.ui.adapter.view.ExpandableListAdapter
 import com.kakeibo.ui.adapter.view.ReportCListAdapter
 import com.kakeibo.ui.listener.SimpleClickListener
@@ -29,6 +30,9 @@ import com.kakeibo.ui.viewmodel.CategoryViewModel
 import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.util.*
 import java.math.BigDecimal
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by T on 2015/09/14.
@@ -36,7 +40,7 @@ import java.math.BigDecimal
 class ReportFragment : Fragment(), SimpleClickListener {
 
     companion object {
-        private const val SWIPE_REFRESH_MILLI_SECOND = 400
+        private const val SWIPE_REFRESH_MILLI_SECOND = 200
 
         fun newInstance(): ReportFragment {
             val tabFragment2 = ReportFragment()
@@ -58,6 +62,10 @@ class ReportFragment : Fragment(), SimpleClickListener {
     private lateinit var _reportDateYearly: LinearLayout
     private lateinit var _reportCategoryMonthly: LinearLayout
     private lateinit var _reportDateMonthly: LinearLayout
+    private lateinit var _btnDate: Button
+    private lateinit var _btnNext: ImageButton
+    private lateinit var _btnPrev: ImageButton
+    private lateinit var _cal: Calendar // todo use kotlin calendar
 
     private lateinit var _allItems: List<Item>
     private lateinit var _itemsThisMonth: List<Item>
@@ -117,18 +125,38 @@ class ReportFragment : Fragment(), SimpleClickListener {
                     .mapKeys { entry ->
                         ExpandableListRowModel.Header(
                                 entry.key,
-                                entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
-                                entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }
+                                entry.value.asSequence().filter{ it.amount > BigDecimal(0) }.sumOf { it.amount },
+                                entry.value.asSequence().filter{ it.amount < BigDecimal(0) }.sumOf { it.amount }
                         ) }
                     .toSortedMap(compareBy { it.date })
             _expandableListAdapter.setData(masterMap, dateToFocus)
 
             val allThisMonthByCategory = allThisMonth
                     .groupBy { it.categoryCode }
-                    .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
+                    .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.amount} ) }
             _incomeListAdapter.setAllByCategory(allThisMonthByCategory.filter { it.key.second > BigDecimal(0) })
             _expenseListAdapter.setAllByCategory(allThisMonthByCategory.filter { it.key.second < BigDecimal(0) })
         })
+
+
+
+
+
+
+
+        _cal = Calendar.getInstance()
+        _btnDate = view.findViewById(R.id.btn_date)
+        _btnNext = view.findViewById(R.id.btn_next)
+        _btnPrev = view.findViewById(R.id.btn_prev)
+        _btnNext.setOnClickListener(ButtonClickListener())
+        _btnPrev.setOnClickListener(ButtonClickListener())
+        _btnDate.setOnClickListener {}
+
+        _btnDate.text = UtilDate.getTodaysYM(dateFormat)
+        _btnDate.setOnClickListener {}
+        _btnNext.visibility = View.VISIBLE
+        _btnPrev.visibility = View.VISIBLE
+
 
         val btnA: Button = view.findViewById(R.id.btn_category_yearly)
         val btnB: Button = view.findViewById(R.id.btn_date_yearly)
@@ -267,18 +295,25 @@ class ReportFragment : Fragment(), SimpleClickListener {
                 .mapKeys { entry ->
                     ExpandableListRowModel.Header(
                             entry.key,
-                            entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
-                            entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
+                            entry.value.asSequence().filter{ it.amount > BigDecimal(0) }.sumOf { it.amount },
+                            entry.value.asSequence().filter{ it.amount < BigDecimal(0) }.sumOf { it.amount }) }
                 .toSortedMap(compareBy { it.date })
         _expandableListAdapter.setData(masterMap, dateToFocus)
 
         val allItemsByCategory = _result
                 .groupBy { it.categoryCode }
-                .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
+                .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.amount} ) }
         _incomeListAdapter.setAllByCategory(allItemsByCategory.filter { it.key.second > BigDecimal(0) })
         _expenseListAdapter.setAllByCategory(allItemsByCategory.filter { it.key.second < BigDecimal(0) })
 
         _medium.setInSearchResult(true)
+
+
+
+
+        _btnDate.text = getString(R.string.search_result)
+        _btnNext.visibility = View.GONE
+        _btnPrev.visibility = View.GONE
     }
 
     /* exiting search */
@@ -298,14 +333,14 @@ class ReportFragment : Fragment(), SimpleClickListener {
                     .mapKeys { entry ->
                         ExpandableListRowModel.Header(
                                 entry.key,
-                                entry.value.asSequence().filter{ it.getAmount() > BigDecimal(0) }.sumOf { it.getAmount() },
-                                entry.value.asSequence().filter{ it.getAmount() < BigDecimal(0) }.sumOf { it.getAmount() }) }
+                                entry.value.asSequence().filter{ it.amount > BigDecimal(0) }.sumOf { it.amount },
+                                entry.value.asSequence().filter{ it.amount < BigDecimal(0) }.sumOf { it.amount }) }
                     .toSortedMap(compareBy { it.date })
             _expandableListAdapter.setData(masterMap, dateToFocus)
 
             val allItemsThisMonthByCategory = _itemsThisMonth
                     .groupBy { it.categoryCode }
-                    .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.getAmount()} ) }
+                    .mapKeys { entry -> Pair(entry.key, entry.value.sumOf {it.amount} ) }
             _incomeListAdapter.setAllByCategory(allItemsThisMonthByCategory.filter { it.key.second > BigDecimal(0) })
             _expenseListAdapter.setAllByCategory(allItemsThisMonthByCategory.filter { it.key.second < BigDecimal(0) })
 
@@ -317,5 +352,53 @@ class ReportFragment : Fragment(), SimpleClickListener {
             _reportDateMonthly.visibility = VISIBLE
         }
         dialog.show()
+
+
+
+
+        _btnDate.text = UtilDate.getTodaysYM(dateFormat)
+        _btnNext.visibility = View.VISIBLE
+        _btnPrev.visibility = View.VISIBLE
+    }
+
+
+
+
+
+
+
+
+
+    internal inner class ButtonClickListener : View.OnClickListener {
+        override fun onClick(v: View) {
+            when (v.id) {
+                R.id.btn_next -> {
+                    try {
+                        _cal.add(Calendar.MONTH, 1)
+                        val date: Date = _cal.time
+                        val format = if (UtilDate.DATE_FORMATS[dateFormat] == UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
+                        val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
+                        val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
+                        _itemViewModel.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
+                        _btnDate.text = out
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
+                }
+                R.id.btn_prev -> {
+                    try {
+                        _cal.add(Calendar.MONTH, -1)
+                        val date: Date = _cal.time
+                        val format = if (UtilDate.DATE_FORMATS[dateFormat] == UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
+                        val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
+                        val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
+                        _itemViewModel.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
+                        _btnDate.text = out
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
     }
 }

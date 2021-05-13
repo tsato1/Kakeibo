@@ -15,61 +15,125 @@
             type="com.kakeibo.ui.viewmodel.SubscriptionViewModel" />
     </data>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:updateHomeViews="@{subscriptionViewModel.subscriptions}">
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            app:updateHomeViews="@{subscriptionViewModel.subscriptions}"
+            app:updatePremiumViews="@{subscriptionViewModel.subscriptions}"
+            app:updateBasicContent="@{subscriptionViewModel.basicContent}"
+            app:updatePremiumContent="@{subscriptionViewModel.premiumContent}">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/small_card"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> billingViewModel.openPlayStoreSubscriptions()}"
+                android:backgroundTint="@color/color_red"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/home_small_card"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/color_blue"
-                    android:onClick="@{() -> billingViewModel.openPlayStoreSubscriptions()}"
-                    app:cardCornerRadius="@dimen/cardview_default_radius">
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/restore_message"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:textColor="@color/color_black" />
 
-                        <TextView
-                            android:id="@+id/home_restore_message"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/activity_vertical_margin"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                            android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            android:textColor="@color/color_black" />
+                    <TextView
+                        android:id="@+id/grace_period_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/grace_period_message"
+                        android:textColor="@color/color_black"/>
 
-                        <TextView
-                            android:id="@+id/home_grace_period_message"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/activity_vertical_margin"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                            android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            android:text="Grace period"
-                            android:textColor="@color/color_black" />
+                </LinearLayout>
 
-                    </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@id/small_card">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/nav_header_desc"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <ImageView
+                        android:id="@+id/imv_user_profile"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:srcCompat="@mipmap/ic_launcher_round"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
+
+                    <TextView
+                        android:id="@+id/txv_signed_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_black"
+                        android:text="Signed-in info:"
+                        android:layout_toEndOf="@id/imv_user_profile"/>
+
+                    <TextView
+                        android:id="@+id/txv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_toEndOf="@id/imv_user_profile"
+                        android:layout_below="@id/txv_signed_info"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"/>
+
+                    <TextView
+                        android:id="@+id/txv_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_signed_in"
+                        android:layout_toEndOf="@id/imv_user_profile"
+                        android:layout_below="@id/txv_user_name"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"/>
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/basic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/profile_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/premium">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/home_main_card"
+                    android:id="@+id/basic_main_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -83,7 +147,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/home_transfer_message"
+                            android:id="@+id/basic_transfer_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -93,6 +157,7 @@
                             android:orientation="vertical">
 
                             <Button
+                                android:id="@+id/btn_transfer_basic"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:onClick="@{() -> subscriptionViewModel.transferSubscriptions()}"
@@ -106,7 +171,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/home_account_hold_message"
+                            android:id="@+id/basic_account_hold_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -116,18 +181,11 @@
                             android:orientation="vertical">
 
                             <Button
-                                android:id="@+id/account_hold_button"
+                                android:id="@+id/btn_basic_account_hold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:onClick="@{() -> billingViewModel.openAccountHoldSubscription()}"
                                 android:text="Manage payment methods" />
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/ic_mikan" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -139,19 +197,19 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/home_basic_message"
+                            android:id="@+id/basic_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:updateBasicContent="@{subscriptionViewModel.basicContent}">
+                            android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/home_basic_image"
+                                android:id="@+id/basic_image"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_launcher"/>
 
                             <TextView
-                                android:id="@+id/home_basic_text"
+                                android:id="@+id/basic_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -163,7 +221,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/home_paywall_message"
+                            android:id="@+id/basic_paywall_message"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -179,16 +237,206 @@
                                 android:onClick="@{() -> billingViewModel.buyBasic()}"
                                 android:text="@string/basic_button_text" />
 
-                            <Button
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:onClick="@{() -> billingViewModel.buyPremium()}"
-                                android:text="@string/premium_button_text" />
+<!--                            <Button-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:onClick="@{() -> billingViewModel.buyPremium()}"-->
+<!--                                android:text="@string/premium_button_text" />-->
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Subscribe to a basic or premium plan" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/profile_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/basic">
+
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/premium_small_card"-->
+<!--                    android:onClick="@{() -> billingViewModel.openPlayStoreSubscriptions()}"-->
+<!--                    android:backgroundTint="@color/color_background_search"-->
+<!--                    app:cardCornerRadius="@dimen/cardview_default_radius"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+<!--                    android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+<!--                    android:layout_marginTop="@dimen/activity_vertical_margin">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/premium_restore_message"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="@dimen/activity_vertical_margin"-->
+<!--                        android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+<!--                        android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+<!--                        android:layout_marginTop="@dimen/activity_vertical_margin" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/premium_grace_period_message"-->
+<!--                        android:text="@string/grace_period_message"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+<!--                        android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+<!--                        android:layout_marginBottom="@dimen/activity_vertical_margin"/>-->
+
+<!--                    </LinearLayout>-->
+
+<!--                </androidx.cardview.widget.CardView>-->
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/premium_main_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/premium_transfer_message"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:text="@string/transfer_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <Button
+                                android:id="@+id/btn_transfer_premium"
+                                android:onClick="@{() -> subscriptionViewModel.transferSubscriptions()}"
+                                android:text="@string/transfer_button_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/premium_account_hold_message"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:text="@string/account_hold_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+                            <Button
+                                android:id="@+id/btn_premium_account_hold"
+                                android:onClick="@{() -> billingViewModel.openAccountHoldSubscription()}"
+                                android:text="@string/fix_button_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/premium_premium_content"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/premium_premium_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_launcher"/>
+
+                            <TextView
+                                android:id="@+id/premium_premium_text"
+                                android:text="@string/premium_message"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/premium_paywall_message"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:text="@string/premium_paywall_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <Button
+                                android:id="@+id/btn_buy_premium"
+                                android:onClick="@{() -> billingViewModel.buyPremium()}"
+                                android:text="@string/premium_button_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/premium_upgrade_message"
+                            android:visibility="gone"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:text="@string/premium_upgrade_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <Button
+                                android:onClick="@{() -> billingViewModel.buyUpgrade()}"
+                                android:text="@string/upgrade_button_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
 
                         </LinearLayout>
 
@@ -204,10 +452,14 @@
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
                 android:visibility="gone"
-                app:loadingProgressBar="@{subscriptionViewModel.loading}" />
+                app:loadingProgressBar="@{subscriptionViewModel.loading}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>

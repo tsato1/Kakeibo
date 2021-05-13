@@ -1,6 +1,5 @@
 package com.kakeibo.ui.adapter.binding
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.util.TypedValue
 import android.view.View
@@ -18,127 +17,10 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.kakeibo.Constants
 import com.kakeibo.R
-import com.kakeibo.SubApp
-import com.kakeibo.data.Category
-import com.kakeibo.databinding.BannerDatePickerBinding
 import com.kakeibo.databinding.FragmentReportCategoryMonthlyBinding
-import com.kakeibo.ui.model.Medium
-import com.kakeibo.ui.viewmodel.ItemViewModel
-import com.kakeibo.util.UtilDate
 import java.math.BigDecimal
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
-
-@BindingAdapter("bind:context", "bind:currentlyShown", "bind:inSearch", "bind:itemViewModel")
-fun updateDateBannerYMD(view: View,
-                        context: Context,
-                        currentlyShown: Int,
-                        inSearch: Boolean,
-                        itemViewModel: ItemViewModel?) {
-    val binding = DataBindingUtil.getBinding<BannerDatePickerBinding>(view)
-
-    binding?.let {
-        if (inSearch) {
-            it.btnDate.setOnClickListener{}
-            it.btnDate.text = context.getString(R.string.search_result)
-            it.btnNext.visibility = View.GONE
-            it.btnPrev.visibility = View.GONE
-            return
-        }
-
-        val dateFormat = SubApp.getDateFormat(R.string.pref_key_date_format)
-        val weekNames = context.resources.getStringArray(R.array.week_name)
-        val cal = Calendar.getInstance()
-
-        when (currentlyShown) {
-            Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY, Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
-                it.btnDate.text = UtilDate.getTodaysYM(dateFormat)
-                it.btnDate.setOnClickListener {}
-                it.btnNext.visibility = View.VISIBLE
-                it.btnPrev.visibility = View.VISIBLE
-            }
-            Medium.FRAGMENT_INPUT -> {
-                it.btnDate.text = UtilDate.getTodaysDateWithDay(dateFormat, weekNames)
-                it.btnDate.setOnClickListener { _ ->
-                    val year = cal[Calendar.YEAR]
-                    val month = cal[Calendar.MONTH] + 1
-                    val day = cal[Calendar.DAY_OF_MONTH]
-                    val dialog = DatePickerDialog(context, { _, y, m, d ->
-                        val gCal = GregorianCalendar(y, m, d)
-                        val str = SimpleDateFormat(UtilDate.DATE_FORMATS[dateFormat],
-                                Locale.getDefault()).format(gCal.time) +
-                                " [" + weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
-                        it.btnDate.text = str
-                    }, year, month - 1, day)
-                    dialog.show()
-                }
-                it.btnNext.visibility = View.VISIBLE
-                it.btnPrev.visibility = View.VISIBLE
-            }
-        }
-
-        /* Next Button */
-        it.btnNext.setOnClickListener { _ ->
-            try {
-                val date: Date
-                val str = when (currentlyShown) {
-                    Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY, Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
-                        cal.add(Calendar.MONTH, 1)
-                        date = cal.time
-                        val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
-                        val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
-                        val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
-                        itemViewModel?.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
-                        out
-                    }
-                    Medium.FRAGMENT_INPUT -> {
-                        cal.add(Calendar.DATE, 1)
-                        date = cal.time
-                        SimpleDateFormat(UtilDate.DATE_FORMATS[dateFormat],
-                                Locale.getDefault()).format(date) +
-                                " [" + weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
-                    }
-                    else -> ""
-                }
-                it.btnDate.text = str
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-        }
-
-        /* Prev Button */
-        it.btnPrev.setOnClickListener { _ ->
-            try {
-                val date: Date
-                val str = when (currentlyShown) {
-                    Medium.FRAGMENT_REPORT_CATEGORY_MONTHLY, Medium.FRAGMENT_REPORT_DATE_MONTHLY -> {
-                        cal.add(Calendar.MONTH, -1)
-                        date = cal.time
-                        val format = if (UtilDate.DATE_FORMATS[dateFormat]==UtilDate.DATE_FORMAT_YMD) "yyyy/MM" else "MM/yyyy"
-                        val out = SimpleDateFormat(format, Locale.getDefault()).format(date)
-                        val dbDate = SimpleDateFormat(UtilDate.DATE_FORMAT_DB, Locale.getDefault()).format(date)
-                        itemViewModel?.setItemsYM(dbDate.split("-")[0], dbDate.split("-")[1])
-                        out
-                    }
-                    Medium.FRAGMENT_INPUT -> {
-                        cal.add(Calendar.DATE, -1)
-                        date = cal.time
-                        SimpleDateFormat(UtilDate.DATE_FORMATS[dateFormat],
-                                Locale.getDefault()).format(date) +
-                                " [" + weekNames[cal[Calendar.DAY_OF_WEEK] - 1] + "]"
-                    }
-                    else -> ""
-                }
-                it.btnDate.text = str
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-        }
-    }
-}
 
 @BindingAdapter("bind:context")
 fun prepareReportCView(view:View, context: Context) {

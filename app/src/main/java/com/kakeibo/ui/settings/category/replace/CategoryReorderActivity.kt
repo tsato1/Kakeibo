@@ -46,7 +46,7 @@ class CategoryReorderActivity : AppCompatActivity(), EventClickListener {
         _fragmentReorder = CategoryReplaceReorderFragment.newInstance()
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.frl_settings_category_reorder_container, _fragmentReorder)
+                .replace(R.id.frl_container, _fragmentReorder)
                 .commit()
     }
 

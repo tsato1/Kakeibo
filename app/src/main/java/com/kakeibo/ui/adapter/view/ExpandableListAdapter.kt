@@ -230,7 +230,7 @@ class ExpandableListAdapter(
         }
         /* amount */
         binding.edtAmount.addTextChangedListener(AmountTextWatcher(binding.edtAmount))
-        binding.edtAmount.setText(java.lang.String.valueOf(item.getAmount().abs()))
+        binding.edtAmount.setText(java.lang.String.valueOf(item.amount.abs()))
         /* memo */
         binding.edtMemo.setText(item.memo)
 
