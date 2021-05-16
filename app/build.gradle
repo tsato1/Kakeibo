@@ -16,7 +16,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 30
 
-        versionCode 51
+        versionCode 53
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
@@ -128,16 +128,10 @@ dependencies {
     // If you encounter a build error "Cannot Access Hide", it means the Firebase libraries'
     // versions you are using are not compatible.
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
-    implementation "com.google.firebase:firebase-auth-ktx:20.0.4"
-    implementation "com.google.firebase:firebase-functions-ktx:19.2.0"
-//    implementation "com.google.firebase:firebase-messaging-ktx:21.0.1"
-    implementation 'com.google.firebase:firebase-storage-ktx:19.2.2'
-    implementation "com.firebaseui:firebase-ui-auth:3.3.0"
-//    implementation 'com.google.firebase:firebase-auth-ktx'
-//    implementation 'com.google.firebase:firebase-functions-ktx'
-//    implementation 'com.google.firebase:firebase-messaging-ktx'
-//    implementation 'com.google.firebase:firebase-storage-ktx'
-//    implementation 'com.firebaseui:firebase-ui-auth'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-functions-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'

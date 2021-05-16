@@ -3,28 +3,24 @@ apply plugin: 'kotlin-android'
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath 'com.android.tools.build:gradle:4.2.1'
     }
 }
 
 repositories {
-    jcenter()
     mavenCentral()
-
-//    maven { url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" }
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
 
     sourceSets {
@@ -37,13 +33,8 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
-
-        //instrumentTest.setRoot('tests')
     }
 }
 
 dependencies {
-//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-//    implementation "androidx.core:core-ktx:1.3.2"
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

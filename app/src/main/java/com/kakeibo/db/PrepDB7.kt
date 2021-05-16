@@ -8,6 +8,7 @@ import com.kakeibo.db.PrepDB.addMoreCategories
 import com.kakeibo.db.PrepDB.initCategoriesTableRevised
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilCurrency
+import java.math.BigDecimal
 
 object PrepDB7 {
     fun migrate_1_2(database: SupportSQLiteDatabase) {}
@@ -99,15 +100,15 @@ object PrepDB7 {
 
         /* items table */
         database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
                 ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ItemDBAdapter.COL_AMOUNT + " INTEGER NOT NULL," +
                 ItemDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_NONE + "', " +  // for new items, currency_code is none
                 ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
                 ItemDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                 ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);"))
-        database.execSQL(("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
+                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);")
+        database.execSQL("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
                 ItemDBAdapter.COL_ID + "," +
                 ItemDBAdapter.COL_AMOUNT + "," +
                 ItemDBAdapter.COL_CURRENCY_CODE + "," +  // for old items, take over the previous currency_code
@@ -122,7 +123,7 @@ object PrepDB7 {
                 ItemDBAdapter.COL_CATEGORY_CODE + "," +
                 ItemDBAdapter.COL_MEMO + "," +
                 ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
+                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;")
         database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
         val cursorItem = database.query("SELECT * FROM " + ItemDBAdapter.TABLE_NAME)
         if (cursorItem.moveToFirst()) {
@@ -321,15 +322,15 @@ object PrepDB7 {
 
         /* items table  */
         database.execSQL("ALTER TABLE " + ItemDBAdapter.TABLE_NAME + " RENAME TO " + ItemDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE " + ItemDBAdapter.TABLE_NAME + " (" +
                 ItemDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ItemDBAdapter.COL_AMOUNT + " INTEGER NOT NULL," +
                 ItemDBAdapter.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_NONE + "', " +  // for new items, currency_code is none
                 ItemDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
                 ItemDBAdapter.COL_MEMO + " TEXT NOT NULL," +
                 ItemDBAdapter.COL_EVENT_DATE + " TEXT NOT NULL," +
-                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);"))
-        database.execSQL(("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
+                ItemDBAdapter.COL_UPDATE_DATE + " TEXT NOT NULL);")
+        database.execSQL("INSERT INTO " + ItemDBAdapter.TABLE_NAME + " (" +
                 ItemDBAdapter.COL_ID + "," +
                 ItemDBAdapter.COL_AMOUNT + "," +
                 ItemDBAdapter.COL_CURRENCY_CODE + "," +  // for old items, take over the previous currency_code
@@ -344,7 +345,7 @@ object PrepDB7 {
                 ItemDBAdapter.COL_CATEGORY_CODE + "," +
                 ItemDBAdapter.COL_MEMO + "," +
                 ItemDBAdapter.COL_EVENT_DATE + "," +
-                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;"))
+                ItemDBAdapter.COL_UPDATE_DATE + " FROM " + ItemDBAdapter.TABLE_NAME + "_old;")
         database.execSQL("DROP TABLE " + ItemDBAdapter.TABLE_NAME + "_old;")
         val cursorItem = database.query(
                 ("SELECT " + ItemDBAdapter.TABLE_NAME + "." + ItemDBAdapter.COL_ID + ", " +
@@ -358,11 +359,10 @@ object PrepDB7 {
         if (cursorItem.moveToFirst()) {
             do {
                 val id = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_ID))
-                val amount = cursorItem.getInt(cursorItem.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
-                database.execSQL(
-                        ("UPDATE " + ItemDBAdapter.TABLE_NAME +
-                                " SET " + ItemDBAdapter.COL_AMOUNT + "=-" + amount + // set to negative
-                                " WHERE " + ItemDBAdapter.COL_ID + "=" + id))
+                val amount = cursorItem.getLong(cursorItem.getColumnIndex(ItemDBAdapter.COL_AMOUNT))
+                database.execSQL("UPDATE " + ItemDBAdapter.TABLE_NAME +
+                                " SET " + ItemDBAdapter.COL_AMOUNT + "=" + ((-1) * amount) + // set to negative
+                                " WHERE " + ItemDBAdapter.COL_ID + "=" + id)
             } while (cursorItem.moveToNext())
         }
 
@@ -371,7 +371,7 @@ object PrepDB7 {
          * For category-related: Just changing the schema. No new column
          */
         database.execSQL("ALTER TABLE " + CategoryDBAdapter.TABLE_NAME + " RENAME TO " + CategoryDBAdapter.TABLE_NAME + "_old;")
-        database.execSQL(("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE " + CategoryDBAdapter.TABLE_NAME + " (" +
                 CategoryDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 CategoryDBAdapter.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
                 CategoryDBAdapter.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
@@ -381,8 +381,8 @@ object PrepDB7 {
                 CategoryDBAdapter.COL_IMAGE + " BLOB DEFAULT NULL, " +
                 CategoryDBAdapter.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
                 CategoryDBAdapter.COL_DESC + " TEXT NOT NULL DEFAULT ''," +
-                CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');"))
-        database.execSQL(("INSERT INTO " + CategoryDBAdapter.TABLE_NAME + " (" +
+                CategoryDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');")
+        database.execSQL("INSERT INTO " + CategoryDBAdapter.TABLE_NAME + " (" +
                 CategoryDBAdapter.COL_ID + "," +
                 CategoryDBAdapter.COL_CODE + "," +
                 CategoryDBAdapter.COL_COLOR + "," +
@@ -401,7 +401,7 @@ object PrepDB7 {
                 CategoryDBAdapter.COL_IMAGE + "," +
                 CategoryDBAdapter.COL_PARENT + "," +
                 CategoryDBAdapter.COL_DESC + "," +
-                CategoryDBAdapter.COL_SAVED_DATE + " FROM " + CategoryDBAdapter.TABLE_NAME + "_old;"))
+                CategoryDBAdapter.COL_SAVED_DATE + " FROM " + CategoryDBAdapter.TABLE_NAME + "_old;")
         database.execSQL("DROP TABLE " + CategoryDBAdapter.TABLE_NAME + "_old;")
         val cursor = database.query(
                 ("SELECT * FROM " + CategoryDBAdapter.TABLE_NAME +
