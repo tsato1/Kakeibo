@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="numberDecimal"
-                android:digits="0123456789."
+                android:digits="0123456789.,"
                 android:maxLength="10"
                 android:textIsSelectable="false"
                 android:autofillHints="@string/hint_memo_max_20_characters"

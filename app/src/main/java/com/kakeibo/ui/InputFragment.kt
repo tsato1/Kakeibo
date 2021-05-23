@@ -87,15 +87,10 @@ class InputFragment : Fragment(), CategoryClickListener {
         _edtAmount.addTextChangedListener(AmountTextWatcher(_edtAmount))
 
         val srlReload = view.findViewById<SwipeRefreshLayout>(R.id.srl_reload)
-        srlReload.setOnRefreshListener {
+        srlReload.setOnRefreshListener { //todo
             Handler().postDelayed({
-                _btnDate.text = getTodaysDateWithDay(
-                        SubApp.getDateFormat(R.string.pref_key_date_format),
-                        resources.getStringArray(R.array.week_name))
-                _edtAmount.setText("")
-                _edtMemo.setText("")
+                reset()
                 srlReload.isRefreshing = false
-                _cal = Calendar.getInstance()
             }, SWIPE_REFRESH_MILLI_SECOND.toLong())
         }
 
@@ -140,21 +135,30 @@ class InputFragment : Fragment(), CategoryClickListener {
 //        Log.d(TAG, "onResume() called")
 //    }
 
+    private fun reset() {
+        _btnDate.text = getTodaysDateWithDay(
+            SubApp.getDateFormat(R.string.pref_key_date_format),
+            resources.getStringArray(R.array.week_name))
+        _edtAmount.setText("")
+        _edtMemo.setText("")
+        _cal = Calendar.getInstance()
+    }
+
     override fun onCategoryClicked(view: View, category: Category) {
         val result = UtilText.checkBeforeSave(_edtAmount.text.toString())
         if (!result.first) {
-            Toast.makeText(context, requireActivity().getString(result.second), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(result.second), Toast.LENGTH_SHORT).show()
             return
         }
 
-        val eventDate = UtilDate.getDBDate(_btnDate.text.toString().split(" ")[0], MainActivity.dateFormat)
+        val eventDate = UtilDate.getDBDate(_btnDate.text.toString().split(" ")[0], dateFormat)
         val updateDate = getTodaysDate(UtilDate.DATE_FORMAT_DB_KMS)
         val amount = when (category.color) {
             UtilCategory.CATEGORY_COLOR_INCOME -> {
-                BigDecimal(_edtAmount.text.toString())
+                BigDecimal(_edtAmount.text.toString().replace(',','.'))
             }
             UtilCategory.CATEGORY_COLOR_EXPENSE -> {
-                BigDecimal(_edtAmount.text.toString()).negate()
+                BigDecimal(_edtAmount.text.toString().replace(',','.')).negate()
             }
             else -> {
                 BigDecimal(0)
@@ -174,6 +178,7 @@ class InputFragment : Fragment(), CategoryClickListener {
 
         (activity as MainActivity).onItemSaved(eventDate)
         hideKeyboard()
+        reset()
     }
 
     private fun Fragment.hideKeyboard() {

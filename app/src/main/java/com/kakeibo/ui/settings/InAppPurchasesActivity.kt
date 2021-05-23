@@ -1,5 +1,6 @@
 package com.kakeibo.ui.settings
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -36,6 +40,7 @@ class InAppPurchasesActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityInAppPurchaseBinding
     private lateinit var _billingClientLifecycle: BillingClientLifecycle
+    private lateinit var _startForResult: ActivityResultLauncher<Intent>
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private val _authenticationViewModel: FirebaseUserViewModel by viewModels()
@@ -121,6 +126,17 @@ class InAppPurchasesActivity : AppCompatActivity() {
             }
         })
 
+        _startForResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
+                _authenticationViewModel.updateFirebaseUser()
+            } else {
+                Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
+            }
+        }
+
         _binding.btnBuyBasic.setOnClickListener(ButtonClickListener())
         _binding.btnBuyPremium.setOnClickListener(ButtonClickListener())
     }
@@ -130,52 +146,82 @@ class InAppPurchasesActivity : AppCompatActivity() {
      */
     private fun registerPurchases(purchaseList: List<Purchase>) {
         for (purchase in purchaseList) {
-            val sku = purchase.sku
+            val sku = purchase.skus[0]
             val purchaseToken = purchase.purchaseToken
             Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
-            _subscriptionViewModel.registerSubscription(sku, purchaseToken)
+            _subscriptionViewModel.registerSubscription(
+                sku = sku,
+                purchaseToken = purchaseToken
+            )
         }
     }
+//    private fun registerPurchases(purchaseList: List<Purchase>) {
+//        for (purchase in purchaseList) {
+//            val sku = purchase.sku
+//            val purchaseToken = purchase.purchaseToken
+//            Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
+//            _subscriptionViewModel.registerSubscription(sku, purchaseToken)
+//        }
+//    }
+
 
     /*
      * Sign in with FirebaseUI Auth.
      */
     private fun triggerSignIn() {
-        val providers: MutableList<AuthUI.IdpConfig> = ArrayList()
-        providers.add(AuthUI.IdpConfig.EmailBuilder().build())
-        providers.add(AuthUI.IdpConfig.GoogleBuilder().build())
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build(),
-            RC_SIGN_IN
+        Log.d(TAG, "Attempting SIGN-IN!")
+        val providers = listOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
         )
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setAvailableProviders(providers)
+//                .build(),
+//            RC_SIGN_IN)
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        _startForResult.launch(intent)
     }
+//    private fun triggerSignIn() {
+//        val providers: MutableList<AuthUI.IdpConfig> = ArrayList()
+//        providers.add(AuthUI.IdpConfig.EmailBuilder().build())
+//        providers.add(AuthUI.IdpConfig.GoogleBuilder().build())
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setAvailableProviders(providers)
+//                .build(),
+//            RC_SIGN_IN
+//        )
+//    }
 
     /*
      * Receive Activity result, including sign-in result.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            RC_SIGN_IN -> {
-                if (resultCode == RESULT_OK) {
-                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
-                    _authenticationViewModel.updateFirebaseUser()
-                    return
-                } else {
-                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
-                }
-            }
-            else -> {
-                Log.e(TAG, "Unrecognized request code: $requestCode")
-            }
-        }
-
-        if (!_authenticationViewModel.isSignedIn()) finish()
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        when (requestCode) {
+//            RC_SIGN_IN -> {
+//                if (resultCode == RESULT_OK) {
+//                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
+//                    _authenticationViewModel.updateFirebaseUser()
+//                    return
+//                } else {
+//                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
+//                }
+//            }
+//            else -> {
+//                Log.e(TAG, "Unrecognized request code: $requestCode")
+//            }
+//        }
+//
+//        if (!_authenticationViewModel.isSignedIn()) finish()
+//    }
 
     internal inner class ButtonClickListener : View.OnClickListener {
         override fun onClick(v: View) {

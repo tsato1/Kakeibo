@@ -36,8 +36,8 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
     fun unregisterInstanceId() {
         // Unregister current Instance ID before the user signs out.
         // This is an authenticated call, so you cannot do this after the sign-out has completed.
-        if (instanceIdToken != null) {
-            repository.unregisterInstanceId(instanceIdToken)
+        instanceIdToken?.let {
+            repository.unregisterInstanceId(it)
         }
     }
 

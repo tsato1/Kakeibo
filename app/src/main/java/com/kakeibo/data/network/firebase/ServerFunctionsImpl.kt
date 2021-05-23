@@ -333,7 +333,7 @@ class ServerFunctionsImpl private constructor() : ServerFunctions {
      */
     override fun registerInstanceId(instanceId: String) {
         incrementRequestCount()
-        Log.d(TAG, "Calling: " + REGISTER_INSTANCE_ID_CALLABLE)
+        Log.d(TAG, "Calling: $REGISTER_INSTANCE_ID_CALLABLE with $instanceId")
         firebaseFunctions
                 .getHttpsCallable(REGISTER_INSTANCE_ID_CALLABLE)
                 .call(null)

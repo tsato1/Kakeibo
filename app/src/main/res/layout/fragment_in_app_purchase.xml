@@ -119,7 +119,7 @@
                                 android:id="@+id/account_hold_button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> billingViewModel.openAccountHoldSubscription()}"
+                                android:onClick="@{() -> billingViewModel.openSubscriptionPageOnGooglePlay()}"
                                 android:text="Manage payment methods" />
 
                             <ImageView

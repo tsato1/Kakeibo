@@ -1,4 +1,4 @@
-package com.kakeibo.billing
+    package com.kakeibo.billing
 
 import android.app.Activity
 import android.app.Application
@@ -18,11 +18,14 @@ import kotlin.collections.emptyMap
 import kotlin.collections.set
 
 
-class BillingClientLifecycle private constructor(private val app: Application) :
+class BillingClientLifecycle private constructor(
+    private val app: Application
+    ) :
         LifecycleObserver,
         PurchasesUpdatedListener,
         BillingClientStateListener,
-        SkuDetailsResponseListener {
+        SkuDetailsResponseListener,
+        PurchasesResponseListener {
 
     /*
      * The purchase event is observable. Only one observer will be notified.
@@ -54,15 +57,30 @@ class BillingClientLifecycle private constructor(private val app: Application) :
         // Create a new BillingClient in onCreate().
         // Since the BillingClient can only be used once, we need to create a new instance
         // after ending the previous connection to the Google Play Store in onDestroy().
-        billingClient = BillingClient.newBuilder(app)
-                .setListener(this)
-                .enablePendingPurchases() // Not used for subscriptions.
-                .build()
+        billingClient = BillingClient.newBuilder(app.applicationContext)
+            .setListener(this)
+            .enablePendingPurchases() // Not used for subscriptions.
+            .build()
         if (!billingClient.isReady) {
             Log.d(TAG, "BillingClient: Start connection...")
             billingClient.startConnection(this)
         }
     }
+//    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+//    fun create() {
+//        Log.d(TAG, "ON_CREATE")
+//        // Create a new BillingClient in onCreate().
+//        // Since the BillingClient can only be used once, we need to create a new instance
+//        // after ending the previous connection to the Google Play Store in onDestroy().
+//        billingClient = BillingClient.newBuilder(app)
+//                .setListener(this)
+//                .enablePendingPurchases() // Not used for subscriptions.
+//                .build()
+//        if (!billingClient.isReady) {
+//            Log.d(TAG, "BillingClient: Start connection...")
+//            billingClient.startConnection(this)
+//        }
+//    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun destroy() {
@@ -74,6 +92,16 @@ class BillingClientLifecycle private constructor(private val app: Application) :
             billingClient.endConnection()
         }
     }
+//    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+//    fun destroy() {
+//        Log.d(TAG, "ON_DESTROY")
+//        if (billingClient.isReady) {
+//            Log.d(TAG, "BillingClient can only be used once -- closing connection")
+//            // BillingClient can only be used once.
+//            // After calling endConnection(), we must create a new BillingClient.
+//            billingClient.endConnection()
+//        }
+//    }
 
     /*
      * result of calling [.billingClient.startConnection()]
@@ -82,13 +110,23 @@ class BillingClientLifecycle private constructor(private val app: Application) :
     override fun onBillingSetupFinished(billingResult: BillingResult) {
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
-        Log.d(TAG, "onBillingSetupFinished: $responseCode, $debugMessage")
+        Log.d(TAG, "onBillingSetupFinished: $responseCode $debugMessage")
         if (responseCode == BillingClient.BillingResponseCode.OK) {
             // The billing client is ready. You can query purchases here.
             querySkuDetails()
             queryPurchases()
         }
     }
+//    override fun onBillingSetupFinished(billingResult: BillingResult) {
+//        val responseCode = billingResult.responseCode
+//        val debugMessage = billingResult.debugMessage
+//        Log.d(TAG, "onBillingSetupFinished: $responseCode, $debugMessage")
+//        if (responseCode == BillingClient.BillingResponseCode.OK) {
+//            // The billing client is ready. You can query purchases here.
+//            querySkuDetails()
+//            queryPurchases()
+//        }
+//    }
 
     /*
      * overriden from BillingClientStateListener
@@ -96,22 +134,38 @@ class BillingClientLifecycle private constructor(private val app: Application) :
     override fun onBillingServiceDisconnected() {
         Log.d(TAG, "onBillingServiceDisconnected")
         // TODO: Try connecting again with exponential backoff.
-        billingClient.startConnection(this)
+        // billingClient.startConnection(this)
     }
+//    override fun onBillingServiceDisconnected() {
+//        Log.d(TAG, "onBillingServiceDisconnected")
+//        // TODO: Try connecting again with exponential backoff.
+//        billingClient.startConnection(this)
+//    }
 
     /*
      * In order to make purchases, you need the [SkuDetails] for the item or subscription.
      * This is an asynchronous call that will receive a result in [.onSkuDetailsResponse].
      */
-    private fun querySkuDetails() {
+    fun querySkuDetails() {
         Log.d(TAG, "querySkuDetails")
         val params = SkuDetailsParams.newBuilder()
             .setType(BillingClient.SkuType.SUBS)
             .setSkusList(LIST_OF_SKUS)
             .build()
-        Log.i(TAG, "querySkuDetailsAsync")
-        billingClient.querySkuDetailsAsync(params, this)
+        params.let { skuDetailsParams ->
+            Log.i(TAG, "querySkuDetailsAsync")
+            billingClient.querySkuDetailsAsync(skuDetailsParams, this)
+        }
     }
+//    private fun querySkuDetails() {
+//        Log.d(TAG, "querySkuDetails")
+//        val params = SkuDetailsParams.newBuilder()
+//            .setType(BillingClient.SkuType.SUBS)
+//            .setSkusList(LIST_OF_SKUS)
+//            .build()
+//        Log.i(TAG, "querySkuDetailsAsync")
+//        billingClient.querySkuDetailsAsync(params, this)
+//    }
 
     /*
      * Receives the result from [.querySkuDetails]}.
@@ -122,24 +176,21 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      */
     override fun onSkuDetailsResponse(
         billingResult: BillingResult,
-        skuDetailsList: List<SkuDetails>?
-    ) {
+        skuDetailsList: MutableList<SkuDetails>?) {
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
-
         when (responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                Log.i(TAG, "onSkuDetailsResponse: responseCode=$responseCode $debugMessage")
+                Log.i(TAG, "onSkuDetailsResponse: $responseCode $debugMessage")
                 val expectedSkuDetailsCount = LIST_OF_SKUS.size
-
                 if (skuDetailsList == null) {
+                    skusWithSkuDetails.postValue(emptyMap())
                     Log.e(TAG, "onSkuDetailsResponse: " +
                             "Expected ${expectedSkuDetailsCount}, " +
                             "Found null SkuDetails. " +
                             "Check to see if the SKUs you requested are correctly published " +
                             "in the Google Play Console.")
-                    skusWithSkuDetails.postValue(emptyMap())
-                } else {
+                } else
                     skusWithSkuDetails.postValue(HashMap<String, SkuDetails>().apply {
                         for (details in skuDetailsList) {
                             put(details.sku, details)
@@ -156,7 +207,6 @@ class BillingClientLifecycle private constructor(private val app: Application) :
                                     "in the Google Play Console.")
                         }
                     })
-                }
             }
             BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
             BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
@@ -175,6 +225,61 @@ class BillingClientLifecycle private constructor(private val app: Application) :
             }
         }
     }
+//    override fun onSkuDetailsResponse(
+//        billingResult: BillingResult,
+//        skuDetailsList: List<SkuDetails>?
+//    ) {
+//        val responseCode = billingResult.responseCode
+//        val debugMessage = billingResult.debugMessage
+//
+//        when (responseCode) {
+//            BillingClient.BillingResponseCode.OK -> {
+//                Log.i(TAG, "onSkuDetailsResponse: responseCode=$responseCode $debugMessage")
+//                val expectedSkuDetailsCount = LIST_OF_SKUS.size
+//
+//                if (skuDetailsList == null) {
+//                    Log.e(TAG, "onSkuDetailsResponse: " +
+//                            "Expected ${expectedSkuDetailsCount}, " +
+//                            "Found null SkuDetails. " +
+//                            "Check to see if the SKUs you requested are correctly published " +
+//                            "in the Google Play Console.")
+//                    skusWithSkuDetails.postValue(emptyMap())
+//                } else {
+//                    skusWithSkuDetails.postValue(HashMap<String, SkuDetails>().apply {
+//                        for (details in skuDetailsList) {
+//                            put(details.sku, details)
+//                        }
+//                    }.also { postedValue ->
+//                        val skuDetailsCount = postedValue.size
+//                        if (skuDetailsCount == expectedSkuDetailsCount) {
+//                            Log.i(TAG, "onSkuDetailsResponse: Found ${skuDetailsCount} SkuDetails")
+//                        } else {
+//                            Log.e(TAG, "onSkuDetailsResponse: " +
+//                                    "Expected ${expectedSkuDetailsCount}, " +
+//                                    "Found ${skuDetailsCount} SkuDetails. " +
+//                                    "Check to see if the SKUs you requested are correctly published " +
+//                                    "in the Google Play Console.")
+//                        }
+//                    })
+//                }
+//            }
+//            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+//            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+//            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+//            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+//            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+//            BillingClient.BillingResponseCode.ERROR -> {
+//                Log.e(TAG, "onSkuDetailsResponse: $responseCode $debugMessage")
+//            }
+//            BillingClient.BillingResponseCode.USER_CANCELED,
+//            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+//            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+//            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+//                // These response codes are not expected.
+//                Log.wtf(TAG, "onSkuDetailsResponse: $responseCode $debugMessage")
+//            }
+//        }
+//    }
 
     /*
      * Query Google Play Billing for existing purchases.
@@ -186,16 +291,31 @@ class BillingClientLifecycle private constructor(private val app: Application) :
     fun queryPurchases() {
         if (!billingClient.isReady) {
             Log.e(TAG, "queryPurchases: BillingClient is not ready")
-            return
         }
         Log.d(TAG, "queryPurchases: SUBS")
-        val result = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
-        if (result.purchasesList != null && result.purchasesList!!.size > 0) {
-            processPurchases(result.purchasesList)
-        } else {
-            Log.i(TAG, "queryPurchases: null purchase list")
-            processPurchases(null)
-        }
+        billingClient.queryPurchasesAsync(BillingClient.SkuType.SUBS, this);
+    }
+//    fun queryPurchases() {
+//        if (!billingClient.isReady) {
+//            Log.e(TAG, "queryPurchases: BillingClient is not ready")
+//            return
+//        }
+//        Log.d(TAG, "queryPurchases: SUBS")
+//        val result = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+//        if (result.purchasesList != null && result.purchasesList!!.size > 0) {
+//            processPurchases(result.purchasesList)
+//        } else {
+//            Log.i(TAG, "queryPurchases: null purchase list")
+//            processPurchases(null)
+//        }
+//    }
+
+    /*
+     * Callback from the billing library when queryPurchasesAsync is called.
+     */
+    override fun onQueryPurchasesResponse(billingResult: BillingResult,
+                                          purchasesList: MutableList<Purchase>) {
+        processPurchases(purchasesList);
     }
 
     /*
@@ -203,12 +323,10 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      */
     override fun onPurchasesUpdated(
         billingResult: BillingResult,
-        purchases: List<Purchase>?
-    ) {
+        purchases: MutableList<Purchase>?) {
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
-        Log.d(TAG, "onPurchasesUpdated: \$responseCode \$debugMessage")
-
+        Log.d(TAG, "onPurchasesUpdated: $responseCode $debugMessage")
         when (responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 if (purchases == null) {
@@ -223,10 +341,6 @@ class BillingClientLifecycle private constructor(private val app: Application) :
             }
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 Log.i(TAG, "onPurchasesUpdated: The user already owns this item")
-//todo these three lines are not in classytaxi kotlin
-//                val queryAlreadyPurchasesResult = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
-//                val alreadyPurchases = queryAlreadyPurchasesResult.purchasesList
-//                alreadyPurchases?.let { handlePurchases(it) }
             }
             BillingClient.BillingResponseCode.DEVELOPER_ERROR -> {
                 Log.e(TAG, "onPurchasesUpdated: Developer error means that Google Play " +
@@ -238,6 +352,43 @@ class BillingClientLifecycle private constructor(private val app: Application) :
             }
         }
     }
+//    override fun onPurchasesUpdated(
+//        billingResult: BillingResult,
+//        purchases: List<Purchase>?
+//    ) {
+//        val responseCode = billingResult.responseCode
+//        val debugMessage = billingResult.debugMessage
+//        Log.d(TAG, "onPurchasesUpdated: \$responseCode \$debugMessage")
+//
+//        when (responseCode) {
+//            BillingClient.BillingResponseCode.OK -> {
+//                if (purchases == null) {
+//                    Log.d(TAG, "onPurchasesUpdated: null purchase list")
+//                    processPurchases(null)
+//                } else {
+//                    processPurchases(purchases)
+//                }
+//            }
+//            BillingClient.BillingResponseCode.USER_CANCELED -> {
+//                Log.i(TAG, "onPurchasesUpdated: User canceled the purchase")
+//            }
+//            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+//                Log.i(TAG, "onPurchasesUpdated: The user already owns this item")
+////todo these three lines are not in classytaxi kotlin
+////                val queryAlreadyPurchasesResult = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+////                val alreadyPurchases = queryAlreadyPurchasesResult.purchasesList
+////                alreadyPurchases?.let { handlePurchases(it) }
+//            }
+//            BillingClient.BillingResponseCode.DEVELOPER_ERROR -> {
+//                Log.e(TAG, "onPurchasesUpdated: Developer error means that Google Play " +
+//                        "does not recognize the configuration. If you are just getting started, " +
+//                        "make sure you have configured the application correctly in the " +
+//                        "Google Play Console. The SKU product ID must match and the APK you " +
+//                        "are using must be signed with release keys."
+//                )
+//            }
+//        }
+//    }
 
     /*
      * Send purchase SingleLiveEvent and update purchases LiveData.
@@ -247,25 +398,37 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      * The LiveData will allow Google Play settings UI to update based on the latest purchase data.
      */
     private fun processPurchases(purchasesList: List<Purchase>?) {
-        if (purchasesList != null) {
-            Log.d(TAG, "processPurchases: " + purchasesList.size + " purchase(s)")
-        } else {
-            Log.d(TAG, "processPurchases: with no purchases")
-        }
-
+        Log.d(TAG, "processPurchases: ${purchasesList?.size} purchase(s)")
         if (isUnchangedPurchaseList(purchasesList)) {
             Log.d(TAG, "processPurchases: Purchase list has not changed")
             return
         }
-
         purchaseUpdateEvent.postValue(purchasesList)
         purchases.postValue(purchasesList)
-
         purchasesList?.let {
-//            handlePurchases(it) //caution! this line is not in the classytaxi
-            logAcknowledgementStatus(it)
+            logAcknowledgementStatus(purchasesList)
         }
     }
+//    private fun processPurchases(purchasesList: List<Purchase>?) {
+//        if (purchasesList != null) {
+//            Log.d(TAG, "processPurchases: " + purchasesList.size + " purchase(s)")
+//        } else {
+//            Log.d(TAG, "processPurchases: with no purchases")
+//        }
+//
+//        if (isUnchangedPurchaseList(purchasesList)) {
+//            Log.d(TAG, "processPurchases: Purchase list has not changed")
+//            return
+//        }
+//
+//        purchaseUpdateEvent.postValue(purchasesList)
+//        purchases.postValue(purchasesList)
+//
+//        purchasesList?.let {
+////            handlePurchases(it) //caution! this line is not in the classytaxi
+//            logAcknowledgementStatus(it)
+//        }
+//    }
 
     //todo subscription table not filled, firebase notification
     /*
@@ -350,8 +513,20 @@ class BillingClientLifecycle private constructor(private val app: Application) :
                 ack_no++
             }
         }
-        Log.d(TAG, "logAcknowledgementStatus: acknowledged=" + ack_yes + " unacknowledged=" + ack_no)
+        Log.d(TAG, "logAcknowledgementStatus: acknowledged=$ack_yes unacknowledged=$ack_no")
     }
+//    private fun logAcknowledgementStatus(purchasesList: List<Purchase>) {
+//        var ack_yes = 0
+//        var ack_no = 0
+//        for (purchase in purchasesList) {
+//            if (purchase.isAcknowledged) {
+//                ack_yes++
+//            } else {
+//                ack_no++
+//            }
+//        }
+//        Log.d(TAG, "logAcknowledgementStatus: acknowledged=" + ack_yes + " unacknowledged=" + ack_no)
+//    }
 
     /*
      * Check whether the purchases have changed before posting changes.
@@ -367,19 +542,30 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      *
      * Launching the UI to make a purchase requires a reference to the Activity.
      */
-    fun launchBillingFlow(activity: Activity?, params: BillingFlowParams): Int {
-        val sku = params.sku
-        val oldSku = params.oldSku
-        Log.i(TAG, "launchBillingFlow: sku: $sku, oldSku: $oldSku")
+    fun launchBillingFlow(activity: Activity, params: BillingFlowParams): Int {
         if (!billingClient.isReady) {
             Log.e(TAG, "launchBillingFlow: BillingClient is not ready")
         }
-        val billingResult = billingClient.launchBillingFlow(activity!!, params)
+        val billingResult = billingClient.launchBillingFlow(activity, params)
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
         Log.d(TAG, "launchBillingFlow: BillingResponse $responseCode $debugMessage")
         return responseCode
     }
+    //old
+//    fun launchBillingFlow(activity: Activity?, params: BillingFlowParams): Int {
+//        val sku = params.sku
+//        val oldSku = params.oldSku
+//        Log.i(TAG, "launchBillingFlow: sku: $sku, oldSku: $oldSku")
+//        if (!billingClient.isReady) {
+//            Log.e(TAG, "launchBillingFlow: BillingClient is not ready")
+//        }
+//        val billingResult = billingClient.launchBillingFlow(activity!!, params)
+//        val responseCode = billingResult.responseCode
+//        val debugMessage = billingResult.debugMessage
+//        Log.d(TAG, "launchBillingFlow: BillingResponse $responseCode $debugMessage")
+//        return responseCode
+//    }
 
     /*
      * Acknowledge a purchase.
@@ -406,17 +592,29 @@ class BillingClientLifecycle private constructor(private val app: Application) :
      * This eliminates a category of issues where users complain to developers
      * that they paid for something that the app is not giving to them.
      */
-    fun acknowledgePurchase(purchaseToken: String?) {
+    fun acknowledgePurchase(purchaseToken: String) {
         Log.d(TAG, "acknowledgePurchase")
         val params = AcknowledgePurchaseParams.newBuilder()
-                .setPurchaseToken(purchaseToken!!)
-                .build()
+            .setPurchaseToken(purchaseToken)
+            .build()
         billingClient.acknowledgePurchase(params) { billingResult ->
             val responseCode = billingResult.responseCode
             val debugMessage = billingResult.debugMessage
             Log.d(TAG, "acknowledgePurchase: $responseCode $debugMessage")
         }
     }
+    //old
+//    fun acknowledgePurchase(purchaseToken: String?) {
+//        Log.d(TAG, "acknowledgePurchase")
+//        val params = AcknowledgePurchaseParams.newBuilder()
+//                .setPurchaseToken(purchaseToken!!)
+//                .build()
+//        billingClient.acknowledgePurchase(params) { billingResult ->
+//            val responseCode = billingResult.responseCode
+//            val debugMessage = billingResult.debugMessage
+//            Log.d(TAG, "acknowledgePurchase: $responseCode $debugMessage")
+//        }
+//    }
 
     companion object {
         private const val TAG = "BillingLifecycle"

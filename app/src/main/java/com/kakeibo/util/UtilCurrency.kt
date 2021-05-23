@@ -30,8 +30,4 @@ object UtilCurrency {
     fun getSignedAmountColon(span1: String, span2: String): CharSequence {
         return TextUtils.concat(SpannableString(span1), getSignedAmount(span2))
     }
-
-    fun checkAmount(str: String): Boolean {
-        return str.matches("\\d+(\\.\\d+)?".toRegex())
-    }
 }

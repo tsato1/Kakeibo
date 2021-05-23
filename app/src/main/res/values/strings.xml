@@ -196,11 +196,13 @@
     <string name="subscription_option_basic_message">Basic plan</string>
     <string name="subscription_option_basic_message_current">Basic plan (current)</string>
     <string name="subscription_option_basic_message_account_hold">Basic plan (on hold)</string>
+    <string name="subscription_option_basic_message_account_paused">Basic plan (on pause)</string>
     <string name="subscription_option_basic_message_grace_period">Basic plan (payment issue)</string>
     <string name="subscription_option_basic_message_restore">Basic plan (canceled)</string>
     <string name="subscription_option_premium_message">Premium plan</string>
     <string name="subscription_option_premium_message_current">Premium plan (current)</string>
     <string name="subscription_option_premium_message_account_hold">Premium plan (on hold)</string>
+    <string name="subscription_option_premium_message_account_paused">Premium plan (on pause)</string>
     <string name="subscription_option_premium_message_grace_period">Premium plan (payment issue)</string>
     <string name="subscription_option_premium_message_restore">Premium plan (canceled)</string>
     <string name="no_basic_content">Loading basic content</string>

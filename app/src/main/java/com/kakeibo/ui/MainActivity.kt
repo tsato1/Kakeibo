@@ -1,5 +1,6 @@
 package com.kakeibo.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +11,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +53,8 @@ import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.*
 import kotlinx.coroutines.*
 
+const val TOPIC: String = "/topics/myTopic"
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
@@ -70,6 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var _viewPager: ViewPager2
     private lateinit var _drawerLayout: DrawerLayout
     private lateinit var _navView: NavigationView
+    private lateinit var _startForResult: ActivityResultLauncher<Intent>
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private val _itemViewModel: ItemViewModel by viewModels()
@@ -233,6 +240,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
+//        FirebaseApp.initializeApp(this)
+//        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+
 //        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
 //            if (!task.isSuccessful) {
 //                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -248,14 +258,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 //        })
 
+        _startForResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
+                _authenticationViewModel.updateFirebaseUser()
+            } else {
+                Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
+            }
+        }
+
         fabStart = findViewById(R.id.fab_start)
         fabEnd = findViewById(R.id.fab_end)
         fabStart.setOnClickListener(FabClickListener())
         fabEnd.setOnClickListener(FabClickListener())
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         refreshData()
     }
 
@@ -273,6 +294,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     /*
      * Register SKUs and purchase tokens with the server.
      */
+//    private fun registerPurchases(purchaseList: List<Purchase>) {
+//        for (purchase in purchaseList) {
+//            val sku = purchase.skus[0]
+//            val purchaseToken = purchase.purchaseToken
+//            Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
+//            _subscriptionViewModel.registerSubscription(
+//                sku = sku,
+//                purchaseToken = purchaseToken
+//            )
+//        }
+//    }
     private fun registerPurchases(purchaseList: List<Purchase>) {
         val navHeaderView = _navView.getHeaderView(0)
         val subsTextView = navHeaderView.findViewById<TextView>(R.id.txv_subscription)
@@ -281,7 +313,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         for (purchase in purchaseList) {
-            val sku = purchase.sku
+            val sku = purchase.skus[0]
             val purchaseToken = purchase.purchaseToken
             Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
 
@@ -346,7 +378,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                true
 //            }
 //            R.id.in_app_purchases -> {
-//                startActivityForResult(Intent(this, InAppPurchasesActivity::class.java), RC_IN_APP_PURCHASE)
+////   deprecated             startActivityForResult(Intent(this, InAppPurchasesActivity::class.java), RC_IN_APP_PURCHASE)
+//                _startForResult.launch(Intent(this, InAppPurchasesActivity::class.java))
 //                true
 //            }
             R.id.about -> {
@@ -365,13 +398,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val providers: MutableList<IdpConfig> = ArrayList()
         providers.add(EmailBuilder().build())
         providers.add(GoogleBuilder().build())
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build(),
-            RC_SIGN_IN
-        )
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setAvailableProviders(providers)
+//                .build(),
+//            RC_SIGN_IN
+//        )
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        _startForResult.launch(intent)
     }
 
     /*
@@ -421,26 +459,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     /*
      * Receive Activity result, including sign-in result.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            RC_SIGN_IN -> {
-                if (resultCode == RESULT_OK) {
-                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
-                    _authenticationViewModel.updateFirebaseUser()
-                } else {
-                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
-                }
-            }
-            RC_IN_APP_PURCHASE -> {
-                _authenticationViewModel.updateFirebaseUser()
-            }
-            else -> {
-                Log.e(TAG, "Unrecognized request code: $requestCode")
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        when (requestCode) {
+//            RC_SIGN_IN -> {
+//                if (resultCode == RESULT_OK) {
+//                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
+//                    _authenticationViewModel.updateFirebaseUser()
+//                } else {
+//                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
+//                }
+//            }
+//            RC_IN_APP_PURCHASE -> {
+//                _authenticationViewModel.updateFirebaseUser()
+//            }
+//            else -> {
+//                Log.e(TAG, "Unrecognized request code: $requestCode")
+//            }
+//        }
+//    }
 
     class SmartPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         val fragments: MutableList<Fragment> = mutableListOf()
@@ -474,6 +512,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     fun onItemSaved(date: String) {
         _viewPager.currentItem = 1 // move to tabFragment2
+        if (_smartPagerAdapter.fragments.size == 0) {
+            _smartPagerAdapter.createFragment(0)
+            _smartPagerAdapter.createFragment(1)
+            _smartPagerAdapter.createFragment(2)
+        }
         (_smartPagerAdapter.fragments[1] as ReportFragment).focusOnSavedItem(date)
     }
 
@@ -482,6 +525,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     fun onSearch(query: Query) {
         _viewPager.currentItem = 1 // move to tabFragment2
+        if (_smartPagerAdapter.fragments.size == 0) {
+            _smartPagerAdapter.createFragment(0)
+            _smartPagerAdapter.createFragment(1)
+            _smartPagerAdapter.createFragment(2)
+        }
         (_smartPagerAdapter.fragments[1] as ReportFragment).onSearch(query)
     }
 

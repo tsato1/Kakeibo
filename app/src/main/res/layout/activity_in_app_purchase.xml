@@ -184,7 +184,7 @@
                                 android:id="@+id/btn_basic_account_hold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> billingViewModel.openAccountHoldSubscription()}"
+                                android:onClick="@{() -> billingViewModel.openSubscriptionPageOnGooglePlay()}"
                                 android:text="Manage payment methods" />
 
                             <TextView
@@ -361,7 +361,7 @@
 
                             <Button
                                 android:id="@+id/btn_premium_account_hold"
-                                android:onClick="@{() -> billingViewModel.openAccountHoldSubscription()}"
+                                android:onClick="@{() -> billingViewModel.openSubscriptionPageOnGooglePlay()}"
                                 android:text="@string/fix_button_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />

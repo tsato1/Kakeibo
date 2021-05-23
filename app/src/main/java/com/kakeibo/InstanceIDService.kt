@@ -15,6 +15,7 @@ class InstanceIDService : FirebaseMessagingService() {
      * Persist token to servers.
      */
     private fun sendRegistrationToServer(token: String?) {
+        Log.d("InstanceIDService", "sendRegistrationToServer token=$token")
         if (token != null) {
             (application as SubApp).repository.registerInstanceId(token)
             // No need to unregister the previous Instance ID token because the server

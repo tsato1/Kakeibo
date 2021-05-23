@@ -8,7 +8,14 @@ import com.kakeibo.data.Subscription
 
 class SubscriptionMessageService : FirebaseMessagingService() {
 
+    companion object {
+        private const val TAG = "SubscriptionMsgService"
+        private const val REMOTE_MESSAGE_SUBSCRIPTIONS_KEY = "currentStatus"
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d(TAG, "onMessageReceived called")
+
         val data = remoteMessage.data
         if (data.isNotEmpty()) {
             var result: List<Subscription>? = null
@@ -22,17 +29,15 @@ class SubscriptionMessageService : FirebaseMessagingService() {
             } else {
                 val app = application as SubApp
                 app.repository.updateSubscriptionsFromNetwork(result)
+                Log.d(TAG, "storing data to repo")
             }
+        } else {
+            Log.d(TAG, "data is empty")
         }
     }
 
     override fun onNewToken(s: String) {
         super.onNewToken(s)
         Log.d("NEW_TOKEN", s)
-    }
-
-    companion object {
-        private const val TAG = "SubscriptionMsgService"
-        private const val REMOTE_MESSAGE_SUBSCRIPTIONS_KEY = "currentStatus"
     }
 }
