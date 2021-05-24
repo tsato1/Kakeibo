@@ -6,8 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -35,7 +33,6 @@ class InAppPurchasesActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = InAppPurchasesActivity::class.simpleName
-        private const val RC_SIGN_IN = 0
     }
 
     private lateinit var _binding: ActivityInAppPurchaseBinding
@@ -155,15 +152,6 @@ class InAppPurchasesActivity : AppCompatActivity() {
             )
         }
     }
-//    private fun registerPurchases(purchaseList: List<Purchase>) {
-//        for (purchase in purchaseList) {
-//            val sku = purchase.sku
-//            val purchaseToken = purchase.purchaseToken
-//            Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
-//            _subscriptionViewModel.registerSubscription(sku, purchaseToken)
-//        }
-//    }
-
 
     /*
      * Sign in with FirebaseUI Auth.
@@ -174,54 +162,12 @@ class InAppPurchasesActivity : AppCompatActivity() {
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
-//        startActivityForResult(
-//            AuthUI.getInstance()
-//                .createSignInIntentBuilder()
-//                .setAvailableProviders(providers)
-//                .build(),
-//            RC_SIGN_IN)
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build()
         _startForResult.launch(intent)
     }
-//    private fun triggerSignIn() {
-//        val providers: MutableList<AuthUI.IdpConfig> = ArrayList()
-//        providers.add(AuthUI.IdpConfig.EmailBuilder().build())
-//        providers.add(AuthUI.IdpConfig.GoogleBuilder().build())
-//        startActivityForResult(
-//            AuthUI.getInstance()
-//                .createSignInIntentBuilder()
-//                .setAvailableProviders(providers)
-//                .build(),
-//            RC_SIGN_IN
-//        )
-//    }
-
-    /*
-     * Receive Activity result, including sign-in result.
-     */
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        when (requestCode) {
-//            RC_SIGN_IN -> {
-//                if (resultCode == RESULT_OK) {
-//                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
-//                    _authenticationViewModel.updateFirebaseUser()
-//                    return
-//                } else {
-//                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
-//                }
-//            }
-//            else -> {
-//                Log.e(TAG, "Unrecognized request code: $requestCode")
-//            }
-//        }
-//
-//        if (!_authenticationViewModel.isSignedIn()) finish()
-//    }
 
     internal inner class ButtonClickListener : View.OnClickListener {
         override fun onClick(v: View) {

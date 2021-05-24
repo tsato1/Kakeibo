@@ -11,16 +11,14 @@ android {
 
     val versionMajor = 5
     val versionMinor = 0
-    val versionDB = 7
+    val versionDB = 8
     val versionName = "${versionMajor}.${versionMinor}.${versionDB}"
 
     defaultConfig {
         applicationId = "com.kakeibo"
         minSdk = 22
         targetSdk = 30
-
-        versionCode = 55
-
+        versionCode = 57
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
         multiDexEnabled = true

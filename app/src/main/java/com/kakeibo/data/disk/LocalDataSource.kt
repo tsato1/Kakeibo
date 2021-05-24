@@ -12,6 +12,7 @@ class LocalDataSource private constructor(
      * Get the list of subscriptions from the localDataSource and get notified when the data changes.
      */
     val kkbApp = appDatabase.kkbAppDao().getFirst()
+//    val searchCriteria = appDatabase.searchCriteriaDao().getAll()
     val subscriptions = appDatabase.subscriptionDao().getAll()
     val items = appDatabase.itemDao().getAll()
     var itemsThisYear = appDatabase.itemDao().getItemsByYear(UtilDate.getTodaysY())
@@ -139,6 +140,12 @@ class LocalDataSource private constructor(
     }
 
     fun deleteAllCategoryDsps() = insertCategoryDsps(listOf())
+
+    /***
+     * SearchCriteria
+     */
+//    fun deleteAllSearchCriteria() = insert
+
 
     companion object {
         @Volatile

@@ -21,6 +21,7 @@ import com.kakeibo.db.PrepDB7
             Item::class,
             Category::class,
             CategoryDsp::class,
+//            SearchCriteria::class,
             Subscription::class],
         version = BuildConfig.versionDB)
 @TypeConverters(Converters::class)
@@ -30,6 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
     abstract fun categoryDao(): CategoryDao
     abstract fun categoryDspDao(): CategoryDspDao
+//    abstract fun searchCriteriaDao(): SearchCriteriaDao
     abstract fun subscriptionDao(): SubscriptionDao
 
     companion object {
@@ -87,6 +89,14 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        @VisibleForTesting
+        val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                Log.d(TAG, "migration_7_8")
+                PrepDB7.migrate_7_8(database)
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase {
             if (INSTANCE == null) {
                 synchronized(AppDatabase::class) {
@@ -95,12 +105,14 @@ abstract class AppDatabase : RoomDatabase() {
                                 AppDatabase::class.java, DATABASE_NAME)
                                 .addCallback(sAppDatabaseCallback)
                                 .addMigrations(
-                                        MIGRATION_1_2,
-                                        MIGRATION_2_3,
-                                        MIGRATION_3_4,
-                                        MIGRATION_4_5,
-                                        MIGRATION_5_7,
-                                        MIGRATION_6_7)
+                                    MIGRATION_1_2,
+                                    MIGRATION_2_3,
+                                    MIGRATION_3_4,
+                                    MIGRATION_4_5,
+                                    MIGRATION_5_7,
+                                    MIGRATION_6_7,
+                                    MIGRATION_7_8
+                                )
                                 .build()
                     }
                 }

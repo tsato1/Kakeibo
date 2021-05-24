@@ -574,4 +574,24 @@ object PrepDB7 {
                 CategoryDspDBAdapter.COL_LOCATION + " FROM " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
         database.execSQL("DROP TABLE " + CategoryDspDBAdapter.TABLE_NAME + "_old;")
     }
+
+    fun migrate_7_8(database: SupportSQLiteDatabase) {
+        /* subscription added isPaused column */
+        database.execSQL("DROP TABLE subscriptions")
+        database.execSQL("CREATE TABLE IF NOT EXISTS subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER NOT NULL, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL, isPaused INTEGER NOT NULL, autoResumeTimeMillis INTEGER NOT NULL)")
+    }
+
+    fun migrate_8_9(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE " + SearchDBAdapter.TABLE_NAME + " (" +
+                SearchDBAdapter.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                SearchDBAdapter.COL_FROM_DATE + " TEXT NOT NULL DEFAULT ''," +
+                SearchDBAdapter.COL_TO_DATE + " TEXT NOT NULL DEFAULT ''," +
+                SearchDBAdapter.COL_FROM_AMOUNT + " INTEGER NOT NULL DEFAULT 0," +
+                SearchDBAdapter.COL_TO_AMOUNT + " INTEGER NOT NULL DEFAULT 0," +
+                SearchDBAdapter.COL_CATEGORY_CODE + " INTEGER NOT NULL DEFAULT 0," +
+                SearchDBAdapter.COL_MEMO + " TEXT NOT NULL DEFAULT ''," +
+                SearchDBAdapter.COL_FROM_UPDATE_DATE + " TEXT NOT NULL DEFAULT ''," +
+                SearchDBAdapter.COL_TO_UPDATE_DATE + " TEXT NOT NULL DEFAULT ''," +
+                SearchDBAdapter.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');")
+    }
 }

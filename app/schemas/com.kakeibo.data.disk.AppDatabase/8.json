@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 7,
-    "identityHash": "7b9a841fe310141d1bdb9eb7d20a596d",
+    "version": 8,
+    "identityHash": "45859676f98ab473d46ae19f667fd88e",
     "entities": [
       {
         "tableName": "kkbapp",
@@ -147,14 +147,8 @@
       },
       {
         "tableName": "categories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` INTEGER NOT NULL DEFAULT 0, `name` TEXT NOT NULL DEFAULT '', `color` INTEGER NOT NULL DEFAULT 0, `sign` INTEGER NOT NULL DEFAULT 0, `drawable` TEXT NOT NULL DEFAULT '', `image` BLOB, `parent` INTEGER NOT NULL DEFAULT -1, `description` TEXT NOT NULL DEFAULT '', `saved_date` TEXT NOT NULL DEFAULT '')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` INTEGER NOT NULL DEFAULT 0, `name` TEXT NOT NULL DEFAULT '', `color` INTEGER NOT NULL DEFAULT 0, `sign` INTEGER NOT NULL DEFAULT 0, `drawable` TEXT NOT NULL DEFAULT '', `image` BLOB, `parent` INTEGER NOT NULL DEFAULT -1, `description` TEXT NOT NULL DEFAULT '', `saved_date` TEXT NOT NULL DEFAULT '', `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "code",
             "columnName": "code",
@@ -216,6 +210,12 @@
             "affinity": "TEXT",
             "notNull": true,
             "defaultValue": "''"
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -261,7 +261,7 @@
       },
       {
         "tableName": "subscriptions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`primaryKey` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `subscriptionStatusJson` TEXT, `subAlreadyOwned` INTEGER NOT NULL, `isLocalPurchase` INTEGER NOT NULL, `sku` TEXT, `purchaseToken` TEXT, `isEntitlementActive` INTEGER NOT NULL, `willRenew` INTEGER NOT NULL, `activeUntilMillisec` INTEGER NOT NULL, `isFreeTrial` INTEGER NOT NULL, `isGracePeriod` INTEGER NOT NULL, `isAccountHold` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`primaryKey` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `subscriptionStatusJson` TEXT, `subAlreadyOwned` INTEGER NOT NULL, `isLocalPurchase` INTEGER NOT NULL, `sku` TEXT, `purchaseToken` TEXT, `isEntitlementActive` INTEGER NOT NULL, `willRenew` INTEGER NOT NULL, `activeUntilMillisec` INTEGER NOT NULL, `isFreeTrial` INTEGER NOT NULL, `isGracePeriod` INTEGER NOT NULL, `isAccountHold` INTEGER NOT NULL, `isPaused` INTEGER NOT NULL, `autoResumeTimeMillis` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "primaryKey",
@@ -334,6 +334,18 @@
             "columnName": "isAccountHold",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isPaused",
+            "columnName": "isPaused",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "autoResumeTimeMillis",
+            "columnName": "autoResumeTimeMillis",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -349,7 +361,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7b9a841fe310141d1bdb9eb7d20a596d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '45859676f98ab473d46ae19f667fd88e')"
     ]
   }
 }
