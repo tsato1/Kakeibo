@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,8 +88,8 @@ class InputFragment : Fragment(), CategoryClickListener {
         _edtAmount.addTextChangedListener(AmountTextWatcher(_edtAmount))
 
         val srlReload = view.findViewById<SwipeRefreshLayout>(R.id.srl_reload)
-        srlReload.setOnRefreshListener { //todo
-            Handler().postDelayed({
+        srlReload.setOnRefreshListener {
+            Handler(Looper.getMainLooper()).postDelayed({
                 reset()
                 srlReload.isRefreshing = false
             }, SWIPE_REFRESH_MILLI_SECOND.toLong())

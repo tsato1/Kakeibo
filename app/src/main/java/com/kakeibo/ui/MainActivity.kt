@@ -53,8 +53,6 @@ import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.*
 import kotlinx.coroutines.*
 
-const val TOPIC: String = "/topics/myTopic"
-
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
@@ -173,37 +171,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        _billingClientLifecycle = (application as SubApp).billingClientLifecycle
-        lifecycle.addObserver(_billingClientLifecycle)
-
-        /* Register purchases when they change. */
-        _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
-            it?.let {
-                registerPurchases(it)
-            }
-        })
-
-        /* Launch billing flow when user clicks button to buy something. */
-        _billingViewModel.buyEvent.observe(this, {
-            it?.let {
-                _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
-            }
-        })
-
-        /* Open the Play Store when event is triggered. */
-        _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
-            Log.i(TAG, "Viewing subscriptions on the Google Play Store")
-            val sku = it
-            val url = if (sku == null) {
-                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
-                Constants.PLAY_STORE_SUBSCRIPTION_URL
-            } else {
-                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
-                String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
-            }
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-        })
+//        _billingClientLifecycle = (application as SubApp).billingClientLifecycle
+//        lifecycle.addObserver(_billingClientLifecycle)
+//
+//        /* Register purchases when they change. */
+//        _billingClientLifecycle.purchaseUpdateEvent.observe(this, {
+//            it?.let {
+//                registerPurchases(it)
+//            }
+//        })
+//
+//        /* Launch billing flow when user clicks button to buy something. */
+//        _billingViewModel.buyEvent.observe(this, {
+//            it?.let {
+//                _billingClientLifecycle.launchBillingFlow(this@MainActivity, it)
+//            }
+//        })
+//
+//        /* Open the Play Store when event is triggered. */
+//        _billingViewModel.openPlayStoreSubscriptionsEvent.observe(this, {
+//            Log.i(TAG, "Viewing subscriptions on the Google Play Store")
+//            val sku = it
+//            val url = if (sku == null) {
+//                /* If the SKU is not specified, just open the Google Play subscriptions URL. */
+//                Constants.PLAY_STORE_SUBSCRIPTION_URL
+//            } else {
+//                /* If the SKU is specified, open the deeplink for this SKU on Google Play. */
+//                String.format(Constants.PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL, sku, packageName)
+//            }
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse(url)
+//        })
 
         val profileImageView = navHeaderView.findViewById<ImageView>(R.id.imv_user_profile)
         val nameTextView = navHeaderView.findViewById<TextView>(R.id.txv_user_name)
@@ -233,12 +231,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
 
         /* Update subscription information when user changes. */
-        _authenticationViewModel.userChangeEvent.observe(this, {
-            _subscriptionViewModel.userChanged()
-            _billingClientLifecycle.purchaseUpdateEvent.value?.let {
-                registerPurchases(it)
-            }
-        })
+//        _authenticationViewModel.userChangeEvent.observe(this, {
+//            _subscriptionViewModel.userChanged()
+//            _billingClientLifecycle.purchaseUpdateEvent.value?.let {
+//                registerPurchases(it)
+//            }
+//        })
 
 //        FirebaseApp.initializeApp(this)
 //        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
@@ -295,35 +293,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * Register SKUs and purchase tokens with the server.
      */
 //    private fun registerPurchases(purchaseList: List<Purchase>) {
+//        val navHeaderView = _navView.getHeaderView(0)
+//        val subsTextView = navHeaderView.findViewById<TextView>(R.id.txv_subscription)
+//        if (purchaseList.isEmpty()) {
+//            subsTextView.visibility = View.GONE
+//        }
+//
 //        for (purchase in purchaseList) {
 //            val sku = purchase.skus[0]
 //            val purchaseToken = purchase.purchaseToken
 //            Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
-//            _subscriptionViewModel.registerSubscription(
-//                sku = sku,
-//                purchaseToken = purchaseToken
-//            )
+//
+//            _subscriptionViewModel.registerSubscription(sku, purchaseToken)
+//
+//            subsTextView.visibility = View.VISIBLE
+//            if (sku == Constants.BASIC_SKU) subsTextView.text = "Subscribed: Basic Plan" //todo translation
+//            if (sku == Constants.PREMIUM_SKU) subsTextView.text = "Subscribed: Premium Plan"
 //        }
 //    }
-    private fun registerPurchases(purchaseList: List<Purchase>) {
-        val navHeaderView = _navView.getHeaderView(0)
-        val subsTextView = navHeaderView.findViewById<TextView>(R.id.txv_subscription)
-        if (purchaseList.isEmpty()) {
-            subsTextView.visibility = View.GONE
-        }
-
-        for (purchase in purchaseList) {
-            val sku = purchase.skus[0]
-            val purchaseToken = purchase.purchaseToken
-            Log.d(TAG, "Register purchase with sku: $sku, token: $purchaseToken")
-
-            _subscriptionViewModel.registerSubscription(sku, purchaseToken)
-
-            subsTextView.visibility = View.VISIBLE
-            if (sku == Constants.BASIC_SKU) subsTextView.text = "Subscribed: Basic Plan" //todo translation
-            if (sku == Constants.PREMIUM_SKU) subsTextView.text = "Subscribed: Premium Plan"
-        }
-    }
 
     private fun refreshData() {
         _billingClientLifecycle.queryPurchases()
@@ -361,24 +348,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 triggerSignOut()
                 true
             }
-//            R.id.backup -> {
-//                if (!_authenticationViewModel.isSignedIn()) {
-//                    Toast.makeText(this@MainActivity, "Please sign-in first.", Toast.LENGTH_LONG).show()
-//                    return true
-//                }
-//                uploadOnFirebaseStorage()
-//                true
-//            }
-//            R.id.download -> {
-//                if (!_authenticationViewModel.isSignedIn()) {
-//                    Toast.makeText(this@MainActivity, "Please sign-in first.", Toast.LENGTH_LONG).show()
-//                    return true
-//                }
-//                downloadFromFirebaseStorage()
-//                true
-//            }
 //            R.id.in_app_purchases -> {
-////   deprecated             startActivityForResult(Intent(this, InAppPurchasesActivity::class.java), RC_IN_APP_PURCHASE)
 //                _startForResult.launch(Intent(this, InAppPurchasesActivity::class.java))
 //                true
 //            }
@@ -398,13 +368,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val providers: MutableList<IdpConfig> = ArrayList()
         providers.add(EmailBuilder().build())
         providers.add(GoogleBuilder().build())
-//        startActivityForResult(
-//            AuthUI.getInstance()
-//                .createSignInIntentBuilder()
-//                .setAvailableProviders(providers)
-//                .build(),
-//            RC_SIGN_IN
-//        )
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
@@ -423,62 +386,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Toast.makeText(this, R.string.sign_out_success, Toast.LENGTH_LONG).show()
         }
     }
-
-//    private fun uploadOnFirebaseStorage() = CoroutineScope(Dispatchers.IO).launch {
-//        try {
-//            val filename = _authenticationViewModel.firebaseUser.value!!.uid
-//            val file = getDatabasePath(AppDatabase.DATABASE_NAME)
-//            firebaseStorageRef.child("databases/$filename").putFile(file.toUri()).await()
-//
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(this@MainActivity, "Backup successful.", Toast.LENGTH_LONG).show()
-//            }
-//        } catch (e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
-//            }
-//        }
-//    }
-
-//    private fun downloadFromFirebaseStorage() = CoroutineScope(Dispatchers.IO).launch {
-//        try {
-//            val filename = _authenticationViewModel.firebaseUser.value!!.uid
-//            val file = getDatabasePath(AppDatabase.DATABASE_NAME)
-//            firebaseStorageRef.child("databases/$filename").getFile(file.toUri()).await()
-//
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(this@MainActivity, "Backup successful.", Toast.LENGTH_LONG).show()
-//            }
-//        } catch (e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
-//            }
-//        }
-//    }
-//
-    /*
-     * Receive Activity result, including sign-in result.
-     */
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        when (requestCode) {
-//            RC_SIGN_IN -> {
-//                if (resultCode == RESULT_OK) {
-//                    Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
-//                    _authenticationViewModel.updateFirebaseUser()
-//                } else {
-//                    Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
-//                }
-//            }
-//            RC_IN_APP_PURCHASE -> {
-//                _authenticationViewModel.updateFirebaseUser()
-//            }
-//            else -> {
-//                Log.e(TAG, "Unrecognized request code: $requestCode")
-//            }
-//        }
-//    }
 
     class SmartPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         val fragments: MutableList<Fragment> = mutableListOf()

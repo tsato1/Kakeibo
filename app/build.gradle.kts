@@ -18,7 +18,7 @@ android {
         applicationId = "com.kakeibo"
         minSdk = 22
         targetSdk = 30
-        versionCode = 57
+        versionCode = 58
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
         multiDexEnabled = true
@@ -106,18 +106,18 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     implementation("androidx.preference:preference-ktx:1.1.1")
-    implementation("androidx.recyclerview:recyclerview:1.2.0")
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
     implementation("com.google.android.material:material:1.3.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
     implementation("com.google.android.gms:play-services-drive:17.0.0")
-    implementation("com.google.android.gms:play-services-ads:20.1.0")
+    implementation("com.google.android.gms:play-services-ads:20.2.0")
     implementation("android.arch.lifecycle:extensions:1.1.1")
 
     // Kotlin Libraries
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")

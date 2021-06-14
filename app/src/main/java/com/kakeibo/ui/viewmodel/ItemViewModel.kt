@@ -18,6 +18,11 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     private val itemsThisYear: LiveData<List<Item>> = repository.itemsThisYear
 
     private val itemsThisMonth: LiveData<List<Item>> = repository.itemsThisMonth
+//    private val itemsThisMonth: LiveData<List<Item>> = Transformations.map(itemsThisYear) { items ->
+//        items.filter {
+//            it.eventDate.contains(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
+//        }
+//    }
     private val itemsMutable = MutableLiveData<List<Item>>()
     val items = MediatorLiveData<List<Item>>()
     init {

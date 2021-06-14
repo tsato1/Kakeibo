@@ -9,4 +9,11 @@
         android:icon="@drawable/ic_baseline_settings_24"
         app:showAsAction="always"/>
 
+<!--    <item android:id="@+id/action_search"-->
+<!--        android:title="@string/search"-->
+<!--        android:orderInCategory="0"-->
+<!--        android:icon="@drawable/ic_search_white"-->
+<!--        android:visible="false"-->
+<!--        app:showAsAction="ifRoom"/>-->
+
 </menu>
