@@ -196,4 +196,5 @@
     <string name="msg_delete_kkb_items_first">يرجى حذف جميع عناصر Kakeibo المصنفة على أنها هذه الفئة.</string>
     <string name="msg_category_updated">تم تحديث الفئة.</string>
     <string name="category_name_add_lang">"يرجى كتابة اسم الفئة. اضغط على زر الإضافة للغات مختلفة. "</string>
+    <string name="category_code">الفئة رمز</string>
 </resources>

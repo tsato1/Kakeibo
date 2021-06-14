@@ -77,7 +77,7 @@ class ExportActivity : AppCompatActivity() {
 
         /* ads */
         val adRequest = AdRequest.Builder().build()
-        var adUnitId = getString(R.string.main_banner_ad)
+        var adUnitId = getString(R.string.upload_ad)
         if (BuildConfig.DEBUG) { /* in debug mode */
             adUnitId = "ca-app-pub-3940256099942544/1033173712"
         }

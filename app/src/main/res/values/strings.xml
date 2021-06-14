@@ -46,6 +46,7 @@
     <string name="category">Category</string>
     <string name="event_date">Event Date</string>
     <string name="updated_date">Updated Date</string>
+    <string name="category_code">Category Code</string>
     <string name="item_detail">Item Detail</string>
 
     <string name="income_colon">Income:</string>

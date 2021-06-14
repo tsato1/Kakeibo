@@ -142,4 +142,5 @@
     <string name="msg_delete_kkb_items_first">Veuillez supprimer tous les articles Kakeibo classés dans cette catégorie.</string>
     <string name="msg_category_updated">La catégorie est mise à jour.</string>
     <string name="category_name_add_lang">Veuillez écrire le nom de la catégorie. Appuyez sur le bouton Ajouter pour différentes langues.</string>
+    <string name="category_code">"code de catégorie "</string>
 </resources>

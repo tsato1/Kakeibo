@@ -142,4 +142,5 @@
     <string name="msg_type_cannot_be_changed">名前とアイコンは変更できますが、タイプは変更できません。</string>
     <string name="msg_delete_kkb_items_first">このカテゴリーで保存されている全Kakeiboアイテムを削除してください。</string>
     <string name="msg_category_updated">カテゴリーが更新されました。</string>
+    <string name="category_code">カテゴリーコード</string>
 </resources>

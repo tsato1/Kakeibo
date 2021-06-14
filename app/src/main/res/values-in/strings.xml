@@ -196,4 +196,5 @@
     <string name="msg_delete_kkb_items_first">Hapus semua item Kakeibo yang dikategorikan sebagai Kategori ini.</string>
     <string name="msg_category_updated">Kategori ini diperbarui.</string>
     <string name="category_name_add_lang">Silakan tulis nama kategori. Ketuk tombol tambah untuk berbagai bahasa.</string>
+    <string name="category_code">Kode Kategori</string>
 </resources>

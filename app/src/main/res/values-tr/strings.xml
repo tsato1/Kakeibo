@@ -196,4 +196,5 @@
     <string name="msg_delete_kkb_items_first">Lütfen bu Kategori olarak sınıflandırılan tüm Kakeibo öğelerini silin.</string>
     <string name="msg_category_updated">Kategori güncellenir.</string>
     <string name="category_name_add_lang">Lütfen kategori adını yazın. Farklı diller için ekle düğmesine dokunun.</string>
+    <string name="category_code">Kategori Kodu</string>
 </resources>

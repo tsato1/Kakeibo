@@ -35,7 +35,6 @@
     <string name="action_settings">सेटिंग्स</string>
     <string name="next">आगामी</string>
     <string name="amount">रकम</string>
-    <string name="category">वर्ग</string>
     <string name="memo">मेमो</string>
     <string name="event_date">आयोजन दिनांक</string>
     <string name="updated_date">अद्यतन दिनांक</string>
@@ -142,4 +141,6 @@
     <string name="msg_delete_kkb_items_first">कृपया इस श्रेणी के रूप में वर्गीकृत किए गए सभी काकीबो आइटम हटा दें।</string>
     <string name="msg_category_updated">श्रेणी अद्यतन किया गया है।</string>
     <string name="category_name_add_lang">कृपया श्रेणी का नाम लिखें। विभिन्न भाषाओं के लिए ऐड बटन पर टैप करें।</string>
+    <string name="category_code">वर्ग कोड</string>
+    <string name="category">वर्ग</string>
 </resources>

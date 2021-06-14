@@ -24,7 +24,7 @@
     <string name="export_category">экспорт [категория]</string>
     <string name="item_detail">детали товара</string>
     <string name="currency">валюта</string>
-    <string name="category">категория</string>
+    <string name="category">категории</string>
     <string name="event_date">Дата события</string>
     <string name="updated_date">Дата обновления</string>
 
@@ -34,7 +34,7 @@
     <string name="currency_colon">валюта:</string>
     <string name="amount_colon">Количество:</string>
     <string name="memo_colon">меморандум:</string>
-    <string name="category_colon">категория:</string>
+    <string name="category_colon">категории:</string>
     <string name="event_date_colon">Дата события:</string>
     <string name="updated_on_colon">Сохранено в:</string>
 
@@ -196,4 +196,5 @@
     <string name="msg_delete_kkb_items_first">Пожалуйста, удалите все предметы Kakeibo, которые относятся к этой категории.</string>
     <string name="msg_category_updated">Категория обновлена.</string>
     <string name="category_name_add_lang">Пожалуйста, напишите название категории. Нажмите кнопку Добавить для разных языков.</string>
+    <string name="category_code">код категории</string>
 </resources>

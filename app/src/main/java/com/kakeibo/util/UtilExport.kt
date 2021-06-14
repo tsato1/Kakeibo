@@ -21,6 +21,8 @@ object UtilExport {
             stringBuilder.append(context.resources.getString(R.string.event_date))
             stringBuilder.append(",")
             stringBuilder.append(context.resources.getString(R.string.updated_date))
+            stringBuilder.append(",")
+            stringBuilder.append(context.resources.getString(R.string.category_code))
             stringBuilder.append("\n")
 
             for (item in itemList) {
@@ -33,6 +35,8 @@ object UtilExport {
                 stringBuilder.append(item.eventDate)
                 stringBuilder.append(",")
                 stringBuilder.append(item.updateDate)
+                stringBuilder.append(",")
+                stringBuilder.append(item.categoryCode)
                 stringBuilder.append("\n")
             }
 

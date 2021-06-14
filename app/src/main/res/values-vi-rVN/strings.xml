@@ -142,4 +142,5 @@
     <string name="msg_type_cannot_be_changed">Bạn có thể thay đổi tên và biểu tượng, nhưng không phải loại.</string>
     <string name="msg_delete_kkb_items_first">Vui lòng xóa tất cả các mục Kakeibo được phân loại là Danh mục này.</string>
     <string name="msg_category_updated">Danh mục được cập nhật.</string>
+    <string name="category_code">Mã Danh mục</string>
 </resources>
