@@ -1,8 +1,10 @@
 package com.kakeibo.ui.settings.category.replace
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +15,7 @@ import com.kakeibo.databinding.FragmentSettingsCategoryReplaceBinding
 import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
 import com.kakeibo.ui.listener.CategoryClickListener
 import com.kakeibo.ui.viewmodel.CategoryViewModel
+
 
 class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
 
@@ -33,10 +36,6 @@ class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
     private val _medium: Medium by activityViewModels()
     private val _categoryViewModel: CategoryViewModel by activityViewModels()
 
-    enum class ItemActionState {
-        IDLE, LONG_TOUCH_OR_SOMETHING_ELSE, DRAG, SWIPE, HANDLED_LONG_TOUCH
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentSettingsCategoryReplaceBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -52,8 +51,9 @@ class CategoryReplaceRemoveFragment : Fragment(), CategoryClickListener {
         val list = ArrayList<GridItem>()
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
+        val recyclerViewAdapter = RecyclerViewAdapter(list, this)
         recyclerView.layoutManager = GridLayoutManager(activity, CategoryReplaceActivity.numColumns)
-        recyclerView.adapter = RecyclerViewAdapter(list, this)
+        recyclerView.adapter = recyclerViewAdapter
         _categoryViewModel.dsp.observe(viewLifecycleOwner, {
             list.clear()
             it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }

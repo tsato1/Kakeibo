@@ -3,6 +3,7 @@ package com.kakeibo.ui.settings.category.replace
 import android.content.Context
 import android.graphics.Canvas
 import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.ViewConfiguration
 import android.view.animation.AnimationUtils
@@ -14,14 +15,18 @@ import java.util.*
 
 class ItemMoveCallback(context: Context, private val list: ArrayList<GridItem>) : ItemTouchHelper.Callback() {
 
+    enum class ItemActionState {
+        IDLE, LONG_TOUCH_OR_SOMETHING_ELSE, DRAG, SWIPE, HANDLED_LONG_TOUCH
+    }
+
     private val touchSlop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, context.resources.displayMetrics)
 //    val touchSlop = ViewConfiguration.get(this@MainActivity).scaledTouchSlop
     private val longTouchTimeout = ViewConfiguration.getLongPressTimeout() * 2
-    private var touchState: CategoryReplaceRemoveFragment.ItemActionState = CategoryReplaceRemoveFragment.ItemActionState.IDLE
+    private var touchState: ItemActionState = ItemActionState.IDLE
     private var lastViewHolderPosHandled: Int? = null
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private val longTouchRunnable = Runnable {
-        if (lastViewHolderPosHandled != null && touchState == CategoryReplaceRemoveFragment.ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE) {
+        if (lastViewHolderPosHandled != null && touchState == ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE) {
 //            Log.d("AppLog", "timer timed out to trigger long touch")
             onItemLongTouch(lastViewHolderPosHandled!!)
         }
@@ -33,7 +38,7 @@ class ItemMoveCallback(context: Context, private val list: ArrayList<GridItem>) 
 //        val item = list[pos] as GridItem.ChildItem
 //        Toast.makeText(this@MainActivity, "long touch on :$pos ", Toast.LENGTH_SHORT).show()
 //        AlertDialog.Builder(requireContext()).setTitle("long touch").setMessage("long touch on pos: $pos - item ${item.data.name}").show()
-        touchState = CategoryReplaceRemoveFragment.ItemActionState.HANDLED_LONG_TOUCH
+        touchState = ItemActionState.HANDLED_LONG_TOUCH
         lastViewHolderPosHandled = null
         handler.removeCallbacks(longTouchRunnable)
     }
@@ -48,12 +53,12 @@ class ItemMoveCallback(context: Context, private val list: ArrayList<GridItem>) 
             isCurrentlyActive: Boolean) {
         super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 //        Log.d("AppLog", "onChildDrawOver $dX $dY pos:${viewHolder?.adapterPosition} actionState:$actionState isCurrentlyActive:$isCurrentlyActive")
-        if (touchState == CategoryReplaceRemoveFragment.ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE && (dX >= touchSlop || dY >= touchSlop)) {
+        if (touchState == ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE && (dX >= touchSlop || dY >= touchSlop)) {
             lastViewHolderPosHandled = null
             handler.removeCallbacks(longTouchRunnable)
             touchState =
-                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) CategoryReplaceRemoveFragment.ItemActionState.DRAG
-                    else CategoryReplaceRemoveFragment.ItemActionState.SWIPE
+                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) ItemActionState.DRAG
+                    else ItemActionState.SWIPE
 //            Log.d("AppLog", "decided it's not a long touch, but $touchState instead")
         }
     }
@@ -64,20 +69,20 @@ class ItemMoveCallback(context: Context, private val list: ArrayList<GridItem>) 
         when (actionState) {
             ItemTouchHelper.ACTION_STATE_IDLE -> {
                 /* user finished drag or long touch */
-                if (touchState == CategoryReplaceRemoveFragment.ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE)
+                if (touchState == ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE)
                     onItemLongTouch(lastViewHolderPosHandled!!)
-                touchState = CategoryReplaceRemoveFragment.ItemActionState.IDLE
+                touchState = ItemActionState.IDLE
                 handler.removeCallbacks(longTouchRunnable)
                 lastViewHolderPosHandled = null
             }
             ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.ACTION_STATE_SWIPE -> {
-                if (touchState == CategoryReplaceRemoveFragment.ItemActionState.IDLE) {
+                if (touchState == ItemActionState.IDLE) {
 //                    Log.d("AppLog", "setting timer to trigger long touch")
 
-                    lastViewHolderPosHandled = viewHolder!!.adapterPosition
+                    lastViewHolderPosHandled = viewHolder!!.bindingAdapterPosition
                     handler.removeCallbacks(longTouchRunnable)
                     /* started as long touch, but could also be dragging or swiping ... */
-                    touchState = CategoryReplaceRemoveFragment.ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE
+                    touchState = ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE
                     handler.postDelayed(longTouchRunnable, longTouchTimeout.toLong())
                     viewHolder.itemView.startAnimation(animation)
                 }
@@ -88,15 +93,15 @@ class ItemMoveCallback(context: Context, private val list: ArrayList<GridItem>) 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
 //        Log.d("AppLog", "onMove")
 
-        if (touchState == CategoryReplaceRemoveFragment.ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE) {
+        if (touchState == ItemActionState.LONG_TOUCH_OR_SOMETHING_ELSE) {
             lastViewHolderPosHandled = null
             handler.removeCallbacks(longTouchRunnable)
-            touchState = CategoryReplaceRemoveFragment.ItemActionState.DRAG
+            touchState = ItemActionState.DRAG
         }
         if (viewHolder.itemViewType != target.itemViewType)
             return false
-        val fromPosition = viewHolder.adapterPosition
-        val toPosition = target.adapterPosition
+        val fromPosition = viewHolder.bindingAdapterPosition
+        val toPosition = target.bindingAdapterPosition
         //                if (fromPosition < toPosition)
         //                    for (i in fromPosition until toPosition)
         //                        Collections.swap(items, i, i + 1)
@@ -132,7 +137,7 @@ class ItemMoveCallback(context: Context, private val list: ArrayList<GridItem>) 
 //                    handler.removeCallbacks(longTouchRunnable)
 //                    touchState = ItemActionState.DRAG
 //                }
-//                val position = viewHolder.adapterPosition
+//                val position = viewHolder.bindingAdapterPosition
 //                items.removeAt(position)
 //                recyclerView.adapter!!.notifyItemRemoved(position)
     }

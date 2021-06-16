@@ -8,19 +8,19 @@ import com.kakeibo.ui.listener.CategoryClickListener
 import com.kakeibo.ui.settings.category.replace.GridItem
 
 class RecyclerViewAdapter(
-        private val _list: List<GridItem>,
-        private val _categoryClickListener : CategoryClickListener?)
+    private val gridItems: List<GridItem>,
+    private val _categoryClickListener : CategoryClickListener?)
     : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     init {
         setHasStableIds(true)
     }
 
-    override fun getItemViewType(position: Int): Int = _list[position].itemType
+    override fun getItemViewType(position: Int): Int = gridItems[position].itemType
 
-    override fun getItemId(position: Int): Long = _list[position].id
+    override fun getItemId(position: Int): Long = gridItems[position].id
 
-    fun getList(): List<GridItem> = _list
+    fun getList(): List<GridItem> = gridItems
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = when (viewType) {
@@ -38,24 +38,25 @@ class RecyclerViewAdapter(
         return ViewHolder(binding)
     }
 
-    override fun getItemCount() = _list.size
+    override fun getItemCount() = gridItems.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val categoryStatus = _list[position]
-
+        val gridItem = gridItems[position]
         when (getItemViewType(position)) {
-            GridItem.ITEM_TYPE_CHILD -> {
-                holder.bind(categoryStatus, _categoryClickListener)
+            GridItem.ITEM_TYPE_HEADER -> {
             }
             GridItem.ITEM_TYPE_PARENT -> {
+            }
+            GridItem.ITEM_TYPE_CHILD -> {
+                holder.bind(gridItem, _categoryClickListener)
             }
             else -> throw Exception("unknown item type")
         }
     }
 
     class ViewHolder(val binding: ItemGridBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: GridItem, categoryClickListener: CategoryClickListener?) {
-            binding.category = item.category
+        fun bind(gridItem: GridItem, categoryClickListener: CategoryClickListener?) {
+            binding.category = gridItem.category
             binding.categoryClickListener = categoryClickListener
             binding.executePendingBindings()
         }

@@ -1,6 +1,7 @@
 package com.kakeibo.ui.settings.category.replace
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -49,8 +50,9 @@ class CategoryReplaceAddFragment : Fragment(), CategoryClickListener {
         val list = ArrayList<GridItem>()
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rcv_grid)
+        val recyclerViewAdapter = RecyclerViewAdapter(list, this)
         recyclerView.layoutManager = GridLayoutManager(activity, CategoryReplaceActivity.numColumns)
-        recyclerView.adapter = RecyclerViewAdapter(list, this)
+        recyclerView.adapter = recyclerViewAdapter
         _categoryViewModel.nonDsp.observe(viewLifecycleOwner, {
             list.clear()
             it.forEach { p -> list.add(GridItem.ChildItem(p.id, p)) }
@@ -89,7 +91,10 @@ class CategoryReplaceAddFragment : Fragment(), CategoryClickListener {
                 }
                 R.id.btn_next -> {
                     if (_medium.newCategoryList.size + _medium.addedCategoryList.size > UtilCategory.NUM_MAX_DSP_CATEGORIES) {
-                        Toast.makeText(requireContext(), "You cannot exceed the MAX count: " + UtilCategory.NUM_MAX_DSP_CATEGORIES, Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "You cannot exceed the MAX count: " + UtilCategory.NUM_MAX_DSP_CATEGORIES,
+                            Toast.LENGTH_LONG).show()
                         return
                     }
                     _medium.newCategoryList.addAll(_medium.addedCategoryList)

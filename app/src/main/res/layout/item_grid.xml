@@ -22,9 +22,10 @@
         android:onClick="@{(v)->categoryClickListener.onCategoryClicked(v, category)}">
 
         <ImageView
-            android:id="@+id/item_img"
+            android:id="@+id/imv_item_img"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_above="@+id/txv_item_title"
             android:layout_centerHorizontal="true"
             android:clickable="false"
             android:focusable="false"
@@ -36,7 +37,8 @@
             android:id="@+id/imv_category_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_above="@+id/txv_item_title"
+            android:layout_centerHorizontal="true"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
@@ -49,7 +51,8 @@
             android:id="@+id/imv_category_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_above="@+id/txv_item_title"
+            android:layout_centerHorizontal="true"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
@@ -59,10 +62,9 @@
             style="?android:attr/buttonBarButtonStyle"/>
 
         <TextView
-            android:id="@+id/item_title"
+            android:id="@+id/txv_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/item_img"
             android:singleLine="true"
             android:ellipsize="end"
             android:gravity="center_horizontal"
@@ -70,7 +72,7 @@
             android:focusable="false"
             bind:context="@{context}"
             bind:category="@{category}"
-            bind:colon="@{false}"/>
+            bind:colon="@{false}" />
 
     </RelativeLayout>
 

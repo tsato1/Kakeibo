@@ -9,7 +9,7 @@ plugins {
 android {
     compileSdk = 30
 
-    val versionMajor = 5
+    val versionMajor = 6
     val versionMinor = 0
     val versionDB = 8
     val versionName = "${versionMajor}.${versionMinor}.${versionDB}"
@@ -18,7 +18,7 @@ android {
         applicationId = "com.kakeibo"
         minSdk = 22
         targetSdk = 30
-        versionCode = 58
+        versionCode = 59 // update versionMajor as well!
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
         multiDexEnabled = true

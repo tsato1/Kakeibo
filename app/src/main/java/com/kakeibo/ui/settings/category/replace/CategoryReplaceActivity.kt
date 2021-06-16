@@ -27,6 +27,7 @@ import java.util.*
 class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
 
     companion object {
+        private const val TAG = "CategoryReplaceActivity"
         private const val NUM_PAGES = 3
         var numColumns: Int = 0
     }
@@ -69,11 +70,11 @@ class CategoryReplaceActivity : AppCompatActivity(), EventClickListener {
                 adView.loadAd(adRequest)
                 adView.adListener = object : AdListener() {
                     override fun onAdLoaded() {
-                        Log.d("asdf", "Ad loaded successfully.")
+                        Log.d(TAG, "Ad loaded successfully.")
                     }
 
                     override fun onAdFailedToLoad(adError : LoadAdError) {
-                        Log.e("asdf", adError.toString())
+                        Log.e(TAG, adError.toString())
                     }
 
                     override fun onAdOpened() {
