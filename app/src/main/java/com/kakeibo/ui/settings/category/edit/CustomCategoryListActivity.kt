@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.OnCreateContextMenuListener
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
@@ -26,13 +27,11 @@ import com.kakeibo.ui.viewmodel.ItemViewModel
 import com.kakeibo.ui.viewmodel.KkbAppViewModel
 import com.kakeibo.util.UtilCategory
 
-
 class CustomCategoryListActivity : AppCompatActivity() {
 
     companion object {
         private const val MENU_ITEM_ID_DELETE = 0
         private const val MENU_ITEM_ID_EDIT = 1
-        private const val ACTIVITY_REQUEST_CODE = 10
         const val EXTRA_KEY_CATEGORY_ID = "CATEGORY_ID"
         const val EXTRA_KEY_CATEGORY_CODE = "CATEGORY_CODE"
     }
@@ -43,6 +42,11 @@ class CustomCategoryListActivity : AppCompatActivity() {
 
     private val _customCategoryList = ObservableArrayList<Category>()
     private lateinit var _categoryListAdapter: CategoryListAdapter
+    private val _startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        _categoryListAdapter.notifyDataSetChanged()
+    }
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private val _itemViewModel: ItemViewModel by viewModels()
@@ -90,7 +94,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
                 }
                 1 -> {
                     val intent = Intent(_context, CustomCategoryActivity::class.java)
-                    startActivityForResult(intent, ACTIVITY_REQUEST_CODE)
+                    _startForResult.launch(intent)
                 }
             }
         }
@@ -138,7 +142,7 @@ class CustomCategoryListActivity : AppCompatActivity() {
                     val intent = Intent(_context, CustomCategoryActivity::class.java)
                     intent.putExtra(EXTRA_KEY_CATEGORY_ID, categoryStatus.id)
                     intent.putExtra(EXTRA_KEY_CATEGORY_CODE, categoryStatus.code)
-                    startActivityForResult(intent, ACTIVITY_REQUEST_CODE)
+                    _startForResult.launch(intent)
                 }
             }
             MENU_ITEM_ID_DELETE -> {
@@ -165,10 +169,5 @@ class CustomCategoryListActivity : AppCompatActivity() {
             }
         }
         return super.onContextItemSelected(menuItem)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        _categoryListAdapter.notifyDataSetChanged()
     }
 }
