@@ -197,4 +197,5 @@
     <string name="msg_category_updated">카테고리가 업데이트되었습니다.</string>
     <string name="category_name_add_lang">카테고리 이름을 작성하십시오. 다른 언어의 추가 버튼을 누릅니다.</string>
     <string name="category_code">"범주 코드 "</string>
+    <string name="import_from_google_drive">Google 드라이브에서 가져 오기</string>
 </resources>

@@ -197,4 +197,5 @@
     <string name="msg_category_updated">Категория обновлена.</string>
     <string name="category_name_add_lang">Пожалуйста, напишите название категории. Нажмите кнопку Добавить для разных языков.</string>
     <string name="category_code">код категории</string>
+    <string name="import_from_google_drive">Импорт с Google Диска</string>
 </resources>

@@ -197,4 +197,5 @@
     <string name="msg_category_updated">Kategori ini diperbarui.</string>
     <string name="category_name_add_lang">Silakan tulis nama kategori. Ketuk tombol tambah untuk berbagai bahasa.</string>
     <string name="category_code">Kode Kategori</string>
+    <string name="import_from_google_drive">Impor dari Google Drive</string>
 </resources>

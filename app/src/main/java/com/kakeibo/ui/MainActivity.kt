@@ -1,6 +1,7 @@
 package com.kakeibo.ui
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,7 +25,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.android.billingclient.api.Purchase
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig
@@ -33,22 +33,18 @@ import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
-import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.SubApp
 import com.kakeibo.billing.BillingClientLifecycle
 import com.kakeibo.ui.model.Medium
 import com.kakeibo.ui.model.Query
 import com.kakeibo.ui.settings.AboutActivity
-import com.kakeibo.ui.settings.InAppPurchasesActivity
 import com.kakeibo.ui.settings.SettingsActivity
 import com.kakeibo.ui.viewmodel.*
 import kotlinx.coroutines.*
@@ -73,8 +69,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var _smartPagerAdapter: SmartPagerAdapter
     private lateinit var _viewPager: ViewPager2
     private lateinit var _drawerLayout: DrawerLayout
-    private lateinit var _navView: NavigationView
     private lateinit var _startForResult: ActivityResultLauncher<Intent>
+    private lateinit var _navView: NavigationView
 
     private val _kkbAppViewModel: KkbAppViewModel by viewModels()
     private val _itemViewModel: ItemViewModel by viewModels()
@@ -85,6 +81,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val _billingViewModel: BillingViewModel by viewModels()
     private val _subscriptionViewModel: SubscriptionViewModel by viewModels()
     private val _medium: Medium by viewModels()
+
+    private val _startForReulst = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
+            _authenticationViewModel.updateFirebaseUser()
+        } else {
+            Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -256,27 +263,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 //        })
 
-        _startForResult = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                Toast.makeText(this, R.string.sign_in_success, Toast.LENGTH_LONG).show()
-                _authenticationViewModel.updateFirebaseUser()
-            } else {
-                Toast.makeText(this, R.string.sign_in_failure, Toast.LENGTH_LONG).show()
-            }
-        }
-
         fabStart = findViewById(R.id.fab_start)
         fabEnd = findViewById(R.id.fab_end)
         fabStart.setOnClickListener(FabClickListener())
         fabEnd.setOnClickListener(FabClickListener())
+
+        _medium.currentlyShownLive.observe(this, {
+            Log.d(TAG, "medium.currentlyShown = $it")
+        })
     }
 
-    override fun onResume() {
-        super.onResume()
-        refreshData()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        refreshData()
+//    }
 
     override fun onBackPressed() {
         if (_viewPager.currentItem <= 3) {
@@ -312,10 +312,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        }
 //    }
 
-    private fun refreshData() {
-        _billingClientLifecycle.queryPurchases()
-        _subscriptionViewModel.manualRefresh()
-    }
+//    private fun refreshData() {
+//        _billingClientLifecycle.queryPurchases()
+//        _subscriptionViewModel.manualRefresh()
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -346,6 +346,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.sign_out -> {
                 triggerSignOut()
+                true
+            }
+            R.id.import_from_google_drive -> {
+                var importType = ImportExportActivity.ImportType.APPEND
+
+                val dialog = AlertDialog.Builder(this)
+                dialog.setIcon(R.mipmap.ic_mikan)
+                dialog.setTitle(R.string.choose_import_method)
+                dialog.setSingleChoiceItems(R.array.import_methods, 0) { _, which ->
+                    when (which) {
+                        0 -> importType = ImportExportActivity.ImportType.APPEND
+                        1 -> importType = ImportExportActivity.ImportType.SCRATCH
+                    }
+                }
+                dialog.setPositiveButton(R.string.proceed) { _, _ ->
+                    val intent = Intent(this, ImportExportActivity::class.java)
+                    intent.putExtra("ORDER_TYPE", ImportExportActivity.OrderType.IMPORT)
+                    intent.putExtra("IMPORT_TYPE", importType)
+                    startActivity(intent)
+                }
+                dialog.setNegativeButton(R.string.cancel) { _, _ -> }
+                dialog.setNeutralButton(R.string.explanation) { _, _ ->
+                    val url = "https://sites.google.com/view/kakeibo/home/import-export"
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(url)
+                    startActivity(intent)
+                }
+                dialog.show()
                 true
             }
 //            R.id.in_app_purchases -> {

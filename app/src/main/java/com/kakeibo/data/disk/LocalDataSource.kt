@@ -68,10 +68,18 @@ class LocalDataSource private constructor(
      * ItemStatus
      *
      */
-    private fun insertItems(items: List<Item>) {
+    fun deleteAllAndInsertItems(items: List<Item>) {
         executor.execute {
             appDatabase.runInTransaction {
                 appDatabase.itemDao().deleteAll()
+                appDatabase.itemDao().insertAll(items)
+            }
+        }
+    }
+
+    fun insertItems(items: List<Item>) {
+        executor.execute {
+            appDatabase.runInTransaction {
                 appDatabase.itemDao().insertAll(items)
             }
         }
@@ -89,7 +97,7 @@ class LocalDataSource private constructor(
         }
     }
 
-    fun deleteAllItems() = insertItems(listOf())
+    fun deleteAllItems() = deleteAllAndInsertItems(listOf())
 
     fun deleteItem(id: Long) {
         executor.execute {

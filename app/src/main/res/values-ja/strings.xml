@@ -143,4 +143,5 @@
     <string name="msg_delete_kkb_items_first">このカテゴリーで保存されている全Kakeiboアイテムを削除してください。</string>
     <string name="msg_category_updated">カテゴリーが更新されました。</string>
     <string name="category_code">カテゴリーコード</string>
+    <string name="import_from_google_drive">Googleドライブからインポート</string>
 </resources>

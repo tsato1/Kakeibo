@@ -1,12 +1,10 @@
 package com.kakeibo.ui.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.kakeibo.SubApp
 import com.kakeibo.data.DataRepository
 import com.kakeibo.data.Item
-import com.kakeibo.util.UtilDate
 import java.math.BigDecimal
 
 class ItemViewModel(application: Application) : AndroidViewModel(application) {
@@ -77,6 +75,14 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insert(item: Item) {
         repository.insertItem(item)
+    }
+
+    fun insertAll(items: List<Item>) {
+        repository.insertItems(items)
+    }
+
+    fun deleteAndInsertAll(items: List<Item>) {
+        repository.deleteAllAndInsertItems(items)
     }
 
     fun deleteAll() {

@@ -197,4 +197,5 @@
     <string name="msg_category_updated">تم تحديث الفئة.</string>
     <string name="category_name_add_lang">"يرجى كتابة اسم الفئة. اضغط على زر الإضافة للغات مختلفة. "</string>
     <string name="category_code">الفئة رمز</string>
+    <string name="import_from_google_drive">استيراد من Google Drive</string>
 </resources>

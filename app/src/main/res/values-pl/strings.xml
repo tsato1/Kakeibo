@@ -197,4 +197,5 @@
     <string name="msg_category_updated">Kategoria została zaktualizowana.</string>
     <string name="category_name_add_lang">Wpisz nazwę kategorii. Naciśnij przycisk dodawania dla różnych języków.</string>
     <string name="category_code">Kod kategoria</string>
+    <string name="import_from_google_drive">Importuj z Dysku Google</string>
 </resources>

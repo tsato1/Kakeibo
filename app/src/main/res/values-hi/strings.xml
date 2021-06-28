@@ -143,4 +143,5 @@
     <string name="category_name_add_lang">कृपया श्रेणी का नाम लिखें। विभिन्न भाषाओं के लिए ऐड बटन पर टैप करें।</string>
     <string name="category_code">वर्ग कोड</string>
     <string name="category">वर्ग</string>
+    <string name="import_from_google_drive">Google डिस्क से आयात करें</string>
 </resources>

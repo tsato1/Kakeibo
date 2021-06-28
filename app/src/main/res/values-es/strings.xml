@@ -143,4 +143,5 @@
     <string name="msg_category_updated">La categoría se actualiza.</string>
     <string name="category_name_add_lang">Por favor escriba el nombre de la categoría. Toque el botón Agregar para diferentes idiomas.</string>
     <string name="category_code">Código de Categoría</string>
+    <string name="import_from_google_drive">Importar desde Google Drive</string>
 </resources>

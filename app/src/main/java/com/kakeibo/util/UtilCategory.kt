@@ -1,5 +1,7 @@
 package com.kakeibo.util
 
+import com.kakeibo.data.Category
+
 object UtilCategory {
     const val NUM_MAX_DSP_CATEGORIES = 16
     const val CUSTOM_CATEGORY_CODE_START = 1000
@@ -12,4 +14,25 @@ object UtilCategory {
     const val CATEGORY_SIGN_LOW = 0
     const val CATEGORY_SIGN_MID = 1
     const val CATEGORY_SIGN_HIG = 2
+
+    fun isCategoryValid(
+        code: String,
+        name: String,
+        allCategoriesMap: Map<Int, Category>
+    ): Boolean {
+
+        if (code.toIntOrNull() == null)
+            return false
+
+        if (!allCategoriesMap.containsKey(code.toInt()))
+            return false
+
+        val category = allCategoriesMap[code.toInt()]
+        category?.let {
+            if (it.name != name)
+                return false
+        }
+
+        return true
+    }
 }

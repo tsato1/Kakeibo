@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kakeibo.ui.ExportActivity"
+            android:name="com.kakeibo.ui.ImportExportActivity"
             android:label="Export"
             android:parentActivityName=".ui.MainActivity"/>
         <activity

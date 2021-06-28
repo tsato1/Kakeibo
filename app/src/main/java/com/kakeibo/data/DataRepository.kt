@@ -325,6 +325,14 @@ class DataRepository private constructor(
         localDataSource.updateVal2(val2)
     }
 
+    fun deleteAllAndInsertItems(items: List<Item>) {
+        localDataSource.deleteAllAndInsertItems(items)
+    }
+
+    fun insertItems(items: List<Item>) {
+        localDataSource.insertItems(items)
+    }
+
     fun insertItem(item: Item) {
         localDataSource.insertItem(item)
     }

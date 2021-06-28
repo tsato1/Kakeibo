@@ -197,4 +197,5 @@
     <string name="msg_category_updated">Kategori güncellenir.</string>
     <string name="category_name_add_lang">Lütfen kategori adını yazın. Farklı diller için ekle düğmesine dokunun.</string>
     <string name="category_code">Kategori Kodu</string>
+    <string name="import_from_google_drive">Google Drive\'dan içe aktar</string>
 </resources>

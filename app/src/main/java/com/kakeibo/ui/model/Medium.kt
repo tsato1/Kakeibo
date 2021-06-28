@@ -1,8 +1,8 @@
 package com.kakeibo.ui.model
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class Medium : ViewModel() {
 
@@ -19,6 +19,8 @@ class Medium : ViewModel() {
 
     private var previouslyShown: Int = FRAGMENT_REPORT_DATE_MONTHLY
     private val currentlyShown = MutableLiveData(FRAGMENT_INPUT)
+    val currentlyShownLive: LiveData<Int> = currentlyShown
+
     fun setCurrentlyShown(value: Int) {
         if (value == FRAGMENT_REPORT) {
             currentlyShown.value = previouslyShown
@@ -29,14 +31,8 @@ class Medium : ViewModel() {
                     currentlyShown.value == FRAGMENT_REPORT_DATE_MONTHLY) {
                 previouslyShown = currentlyShown.value!!
             }
-            currentlyShown.value = value
+            currentlyShown.postValue(value)
         }
-    }
-    fun getCurrentlyShown(): Int {
-        currentlyShown.value?.let {
-            return it
-        }
-        return ERROR
     }
 
     private val inSearchResult = MutableLiveData(false)

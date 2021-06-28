@@ -1,10 +1,14 @@
 package com.kakeibo.util
 
 import android.content.Context
+import androidx.core.text.isDigitsOnly
+import com.kakeibo.data.Category
+import com.kakeibo.data.Item
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.math.BigDecimal
 import java.util.*
 
 object UtilFiles {
@@ -19,9 +23,9 @@ object UtilFiles {
             val stringBuilder = StringBuilder()
             var inputLine: String?
             /*
-                * We have to use the openFileInput()-method the ActivityContext
-                * provides. Again for security reasons with openFileInput(...)
-                */
+             * We have to use the openFileInput()-method the ActivityContext
+             * provides. Again for security reasons with openFileInput(...)
+             */
             val fIn = context.openFileInput(fileName)
             val isr = InputStreamReader(fIn)
             val inBuff = BufferedReader(isr)
@@ -95,5 +99,64 @@ object UtilFiles {
 
     fun deleteFile(fileName: String?, context: Context) {
         context.deleteFile(fileName)
+    }
+
+    /* Used in Import functionality */
+    fun readCsvToList(
+        list: MutableList<Item>,
+        reader: BufferedReader,
+        allCategoriesMap: Map<Int, Category>
+    ): String {
+        var counter = 0
+        val stringBuilder = StringBuilder()
+        /*
+         0: ordered by Date
+            Event Date,Amount,Category,Memo,Updated Date,Category Code
+         1: ordered by Category
+            Category,Amount,Memo,Event Date,Updated Date,Category Code
+         */
+        reader.lineSequence().forEach {
+            if (counter == 0) {
+                // skip the header. it's written in different languages
+            } else {
+                val line = it.split(",")
+
+                if (!UtilDate.isYMDDateValid(line[0])) {
+                    stringBuilder.append("EventDate is not valid at line $counter \n")
+                }
+                if (!isAmountValid(line[1])) {
+                    stringBuilder.append("Amount is not valid at line $counter \n")
+                }
+                if (!UtilCategory.isCategoryValid(line[5], line[2], allCategoriesMap)) {
+                    stringBuilder.append("Category is not valid at line $counter \n")
+                }
+                if (!UtilDate.isYMDHSDateValid(line[4])) {
+                    stringBuilder.append("UpdatedDate is not valid at line $counter \n")
+                }
+
+                list.add(Item(
+                    BigDecimal(line[1].trim()), //amount
+                    "",
+                    line[5].trim().toInt(), // category code
+                    line[3].trim(), // memo
+                    line[0].trim(), // event date
+                    line[4].trim()  // updated date
+                ))
+            }
+
+            counter++
+        }
+
+        return stringBuilder.toString()
+    }
+
+    private fun isAmountValid(amount: String): Boolean {
+        if (amount.toIntOrNull() == null)
+            return false
+
+        if (10 < amount.length)
+            return false
+
+        return true
     }
 }

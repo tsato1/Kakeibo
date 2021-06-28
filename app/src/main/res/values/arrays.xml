@@ -37,25 +37,6 @@
         <item>RENT</item>
     </string-array>
 
-<!--    <integer-array name="category_drawables">-->
-<!--        <item>@drawable/ic_category_income</item>-->
-<!--        <item>@drawable/ic_category_comm</item>-->
-<!--        <item>@drawable/ic_category_meal</item>-->
-<!--        <item>@drawable/ic_category_util</item>-->
-<!--        <item>@drawable/ic_category_health</item>-->
-<!--        <item>@drawable/ic_category_edu</item>-->
-<!--        <item>@drawable/ic_category_cloth</item>-->
-<!--        <item>@drawable/ic_category_trans</item>-->
-<!--        <item>@drawable/ic_category_ent</item>-->
-<!--        <item>@drawable/ic_category_ins</item>-->
-<!--        <item>@drawable/ic_category_tax</item>-->
-<!--        <item>@drawable/ic_category_other</item>-->
-<!--        <item>@drawable/ic_category_pet</item>-->
-<!--        <item>@drawable/ic_category_social</item>-->
-<!--        <item>@drawable/ic_category_cosme</item>-->
-<!--        <item>@drawable/ic_category_housing</item>-->
-<!--    </integer-array>-->
-
     <string-array name="search_criteria">
         <item>@string/date_range</item>
         <item>@string/amount_range</item>
@@ -101,5 +82,10 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="import_methods">
+        <item>@string/append</item>
+        <item>@string/scratch</item>
     </string-array>
 </resources>

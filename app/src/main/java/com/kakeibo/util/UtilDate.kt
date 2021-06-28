@@ -1,6 +1,8 @@
 package com.kakeibo.util
 
 import android.util.Log
+import com.kakeibo.R
+import com.kakeibo.SubApp
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -130,5 +132,67 @@ object UtilDate {
             e.printStackTrace()
         }
         return 0
+    }
+
+
+
+
+    /*
+     used in import
+     */
+    fun isYMDDateValid(date: String): Boolean {
+        if (date.length != 10) {
+            return false
+        }
+
+        for ((i, c) in date.withIndex()) { // yyyy/MM/dd
+            if (i == 4 || i == 7)
+                if (c != '-')
+                    return false
+                else
+                    if (!c.isDigit())
+                        return false
+        }
+
+        val ymd = date.split("-") // yyyy/MM/dd
+        if (ymd[0].toInt() < 1900 && 9999 < ymd[0].toInt())
+            return false
+        if (ymd[1].toInt() < 1 && 12 < ymd[1].toInt())
+            return false
+        if (ymd[2].toInt() < 1 && 31 < ymd[2].toInt())
+            return false
+
+        return true
+    }
+
+    fun isYMDHSDateValid(date: String): Boolean { //yyyy-MM-dd HH:mm:ss
+        if (!date.contains(" "))
+            return false
+
+        val line = date.split(" ")
+        if (!isYMDDateValid(line[0]))
+            return false
+
+        if (line[1].length != 7 && line[1].length != 8)
+            return false
+
+        for (i in 5 downTo 0) { // HH:mm:ss
+            if (i == line[1].length - 3 || i == line[1].length - 6)
+                if (line[1][i] != ':')
+                    return false
+                else
+                    if (!line[1][i].isDigit())
+                        return false
+        }
+
+        val hms = line[1].split(":")
+        if (hms[0].toInt() < 0 || 23 < hms[0].toInt())
+            return false
+        if (hms[1].toInt() < 0 || 59 < hms[1].toInt())
+            return false
+        if (hms[2].toInt() < 0 || 59 < hms[2].toInt())
+            return false
+
+        return true
     }
 }

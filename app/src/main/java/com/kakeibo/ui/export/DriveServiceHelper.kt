@@ -26,7 +26,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
 
     private val mExecutor: Executor = Executors.newSingleThreadExecutor()
 
-    /**
+    /*
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
     fun createFile(name: String, reportType: Int, context: Context?): Task<String> {
@@ -43,7 +43,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
         })
     }
 
-    /**
+    /*
      * Opens the file identified by `fileId` and returns a [Pair] of its name and
      * contents.
      */
@@ -67,12 +67,11 @@ class DriveServiceHelper(private val mDriveService: Drive) {
         })
     }
 
-    /**
+    /*
      * Updates the file identified by `fileId` with the given `name` and `content`.
      */
     fun saveFile(fileId: String?, name: String?, content: String?): Task<Void?> {
         return Tasks.call(mExecutor, {
-
             // Create a File containing any metadata changes.
             val metadata = File().setName(name)
 
@@ -85,36 +84,43 @@ class DriveServiceHelper(private val mDriveService: Drive) {
         })
     }
 
-    /**
+    /*
      * Returns a [FileList] containing all the visible files in the user's My Drive.
      *
      *
      * The returned list will only contain files visible to this app, i.e. those which were
      * created by this app. To perform operations on files not created by the app, the project must
-     * request Drive Full Scope in the [Google
- * Developer's Console](https://play.google.com/apps/publish) and be submitted to Google for verification.
+     * request Drive Full Scope in the [Google Developer's Console]
+     * (https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
     fun queryFiles(): Task<FileList> {
         return Tasks.call(mExecutor, { mDriveService.files().list().setSpaces("drive").execute() })
     }
 
-    /**
+    /*
      * Returns an [Intent] for opening the Storage Access Framework file picker.
      */
     fun createFilePickerIntent(): Intent {
-//        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = MIME_TYPE
         return intent
     }
 
-    /**
+    fun openFilePickerIntent(): Intent {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = MIME_TYPE
+        return intent
+    }
+
+    /*
      * Opens the file at the `uri` returned by a Storage Access Framework [Intent]
      * created by [.createFilePickerIntent] using the given `contentResolver`.
      */
     fun openFileUsingStorageAccessFramework(
-            contentResolver: ContentResolver, uri: Uri?): Task<Pair<String?, String?>> {
+        contentResolver: ContentResolver, uri: Uri?
+    ): Task<Pair<String?, String?>> {
         return Tasks.call(mExecutor, {
 
             // Retrieve the document's display name from its metadata.
