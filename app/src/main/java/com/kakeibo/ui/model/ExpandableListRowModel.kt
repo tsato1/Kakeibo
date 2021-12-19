@@ -1,6 +1,6 @@
 package com.kakeibo.ui.model
 
-import com.kakeibo.data.Item
+import com.kakeibo.core.data.local.entities.ItemEntity
 import java.math.BigDecimal
 
 class ExpandableListRowModel {
@@ -16,7 +16,7 @@ class ExpandableListRowModel {
     data class Header(val date: String, val income: BigDecimal, val expense: BigDecimal)
 
     lateinit var itemParent: Header
-    lateinit var itemChild : Item
+    lateinit var itemEntityChild : ItemEntity
     var type : Int
     var isExpanded : Boolean
     private var isCloseShown : Boolean
@@ -33,13 +33,13 @@ class ExpandableListRowModel {
     }
 
     constructor(
-            type : Int,
-            itemChild : Item,
-            isExpanded : Boolean = false,
-            isCloseShown : Boolean = false
+        type : Int,
+        itemEntityChild : ItemEntity,
+        isExpanded : Boolean = false,
+        isCloseShown : Boolean = false
     ){
         this.type = type
-        this.itemChild = itemChild
+        this.itemEntityChild = itemEntityChild
         this.isExpanded = isExpanded
         this.isCloseShown = isCloseShown
     }

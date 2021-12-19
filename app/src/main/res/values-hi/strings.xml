@@ -32,7 +32,7 @@
     <string name="msg_item_successfully_deleted">आइटम सफलतापूर्वक हटा दिया गया था।</string>
     <string name="report">रिपोर्ट</string>
     <string name="search">खोज</string>
-    <string name="action_settings">सेटिंग्स</string>
+    <string name="settings">सेटिंग्स</string>
     <string name="next">आगामी</string>
     <string name="amount">रकम</string>
     <string name="memo">मेमो</string>
@@ -97,7 +97,7 @@
     <string name="version_etc">स्थापित संस्करण, आदि।</string>
     <string name="reorder_categories">सीमाओं को पुन: व्यवस्थित करें</string>
     <string name="create_category">एक नई श्रेणी बनाएँ</string>
-    <string name="num_columns">प्रति पंक्ति श्रेणियों की संख्या</string>
+    <string name="num_categories_per_row">प्रति पंक्ति श्रेणियों की संख्या</string>
     <string name="the_app_version">एप्लिकेशन संस्करण</string>
     <string name="purchased_items">खरीदी गई वस्तु</string>
     <string name="in_app_purchases">इन - ऐप खरीदारी</string>
@@ -144,4 +144,15 @@
     <string name="category_code">वर्ग कोड</string>
     <string name="category">वर्ग</string>
     <string name="import_from_google_drive">Google डिस्क से आयात करें</string>
+    <string name="nav_header_desc">नेविगेशन हेडर</string>
+    <string name="sign_in">साइन इन करें</string>
+    <string name="sign_out">साइन आउट</string>
+    <string name="sign_out_success">साइन-आउट सफल</string>
+    <string name="sign_in_success">साइन-इन सफल</string>
+    <string name="sign_in_failure">साइन-इन असफल</string>
+    <string name="register">रजिस्टर करें</string>
+    <string name="open">खोलना</string>
+    <string name="import_and_export">आयात और निर्यात</string>
+    <string name="append">संलग्न</string>
+    <string name="scratch">शुरुवात से</string>
 </resources>

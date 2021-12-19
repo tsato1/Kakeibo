@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">настройки</string>
+    <string name="settings">настройки</string>
 
     <string name="input">ВХОД</string>
     <string name="report">ОТЧЕТ</string>
@@ -152,7 +152,7 @@
     <string name="version_etc">Установленная версия и др.</string>
     <string name="reorder_categories">Изменить порядок категорий</string>
     <string name="create_category">Создать новую категорию</string>
-    <string name="num_columns">Количество категорий в строке</string>
+    <string name="num_categories_per_row">Количество категорий в строке</string>
     <string name="the_app_version">Версия приложения</string>
     <string name="purchased_items">Купленные товары</string>
     <string name="in_app_purchases">Покупки в приложении</string>
@@ -198,4 +198,15 @@
     <string name="category_name_add_lang">Пожалуйста, напишите название категории. Нажмите кнопку Добавить для разных языков.</string>
     <string name="category_code">код категории</string>
     <string name="import_from_google_drive">Импорт с Google Диска</string>
+    <string name="nav_header_desc">заголовок навигации</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_out">Выход</string>
+    <string name="sign_out_success">Выход прошел успешно</string>
+    <string name="sign_in_success">Вход выполнен успешно</string>
+    <string name="sign_in_failure">Войти не удалось</string>
+    <string name="register">регистр</string>
+    <string name="open">Открытым</string>
+    <string name="import_and_export">Импорт и экспорт</string>
+    <string name="append">Добавить</string>
+    <string name="scratch">С нуля</string>
 </resources>

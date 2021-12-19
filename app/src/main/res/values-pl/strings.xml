@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Ustawienia</string>
+    <string name="settings">Ustawienia</string>
 
     <string name="input">WKŁAD</string>
     <string name="report">RAPORT</string>
@@ -152,7 +152,7 @@
     <string name="version_etc">Zainstalowana wersja itp.</string>
     <string name="reorder_categories">Zmień kolejność kategorii</string>
     <string name="create_category">Utwórz nową kategorię</string>
-    <string name="num_columns">Liczba kategorii w rzędzie</string>
+    <string name="num_categories_per_row">Liczba kategorii w rzędzie</string>
     <string name="the_app_version">Wersja aplikacji</string>
     <string name="purchased_items">Zakupione przedmioty</string>
     <string name="in_app_purchases">Zakupy w aplikacji</string>
@@ -198,4 +198,15 @@
     <string name="category_name_add_lang">Wpisz nazwę kategorii. Naciśnij przycisk dodawania dla różnych języków.</string>
     <string name="category_code">Kod kategoria</string>
     <string name="import_from_google_drive">Importuj z Dysku Google</string>
+    <string name="nav_header_desc">nagłówek nawigacji</string>
+    <string name="sign_in">Zaloguj się</string>
+    <string name="sign_out">Wyloguj się</string>
+    <string name="sign_out_success">Wylogowanie powiodło się</string>
+    <string name="sign_in_success">Logowanie powiodło się</string>
+    <string name="sign_in_failure">Logowanie nie powiodło się</string>
+    <string name="register">Zarejestruj się</string>
+    <string name="open">otwarty</string>
+    <string name="import_and_export">Importuj i Eksportuj</string>
+    <string name="append">Dodać</string>
+    <string name="scratch">Od zera</string>
 </resources>

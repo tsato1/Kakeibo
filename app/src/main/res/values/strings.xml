@@ -5,7 +5,7 @@
     <string name="kakeibo_plus_plus" translatable="false">Kakeibo Plus Plus</string>
     <string name="kakeibo_original" translatable="false">Kakeibo (Old)</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="settings">Settings</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
@@ -14,7 +14,6 @@
     <string name="sign_out_success">Sign-out successful</string>
     <string name="register">Register</string>
     <string name="not_signed_in">Not Signed In</string>
-    <string name="please_click_here_to_register">If you do not have an account, please click here to register.</string>
 
     <string name="input">INPUT</string>
     <string name="report">REPORT</string>
@@ -30,7 +29,6 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="save">Save</string>
-    <string name="proceed">Proceed</string>
     <string name="cancel">Cancel</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -40,7 +38,6 @@
     <string name="back">BACK</string>
     <string name="previous">Previous</string>
     <string name="loading">Loading</string>
-    <string name="explanation">Explanation</string>
 
     <string name="export">Export</string>
     <string name="export_date">Export [Date]</string>
@@ -82,8 +79,6 @@
     <string name="search_result">Search Result</string>
     <string name="how_to_use_app">How to use this app</string>
     <string name="jump_to_website">Jump to website</string>
-    <string name="backup">Backup data on Cloud</string>
-    <string name="backup_msg">This backups items and custom categories that you created on cloud.</string>
 
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
     <string name="err_please_choose_from_date">Please choose From Date.</string>
@@ -130,16 +125,23 @@
     <string name="nothing_to_export">There is nothing to export.</string>
     <string name="empty_report">The report is empty.</string>
     <string name="tap_anywhere_to_dismiss">Tap anywhere to dismiss.</string>
+<!--    <string name="export_period">Export Period</string>-->
+<!--    <string name="export_periodically">Export Periodically</string>-->
+<!--    <string name="first_day_of_month_3am">First Day of Month (3am)</string>-->
+<!--    <string name="every_monday_3am">Every Monday (3am)</string>-->
+<!--    <string name="every_day_3am">Every day (3am)</string>-->
 
     <!-- Import -->
-    <string name="export_periodically">Export Periodically</string>
     <string name="import_from_google_drive">Import from Google Drive</string>
-    <string name="choose_import_method">Choose Import Method</string>
+<!--    <string name="choose_import_method">Choose Import Method</string>-->
     <string name="scratch">Scratch</string>
     <string name="append">Append</string>
-    <string name="import_successful">Import Executed Successfully</string>
+<!--    <string name="import_successful">Import Executed Successfully</string>-->
 
     <!-- Settings -->
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="type">Type</string>
     <string name="general">General</string>
     <string name="warning">Warning</string>
     <string name="date_format">Date Format</string>
@@ -147,6 +149,7 @@
     <string name="in_app_data">In-App Data</string>
     <string name="fraction_digits">Fraction Digits</string>
     <string name="category_management">Category Management</string>
+    <string name="import_and_export">Import and Export</string>
     <string name="delete_all_items">Delete all items</string>
     <string name="about_this_app">About this App</string>
     <string name="in_app_purchases">In-App Purchases</string>
@@ -154,7 +157,7 @@
     <string name="hide_display_reorder_categories">Hide, Display and Reorder Categories</string>
     <string name="reorder_categories">Reorder Categories</string>
     <string name="reorder_categories_for_display">Reorder Categories to display on INPUT screen</string>
-    <string name="num_columns">Number of Categories per row</string>
+    <string name="num_categories_per_row">Number of Categories per row</string>
     <string name="hide_categories">Select Categories to hide</string>
     <string name="display_categories">Select Categories to display</string>
     <string name="the_app_version">The app version</string>
@@ -198,52 +201,54 @@
     <string name="pref_key_category_reorder" translatable="false">pref_key_category_reorder</string>
     <string name="pref_key_category_list" translatable="false">pref_key_category_edition</string>
     <string name="pref_key_num_columns" translatable="false">pref_key_num_columns</string>
+    <string name="pref_key_export_period" translatable="false">pref_key_export_period</string>
+    <string name="pref_key_export_periodically" translatable="false">pref_key_export_periodically</string>
     <string name="pref_key_about" translatable="false">pref_key_about</string>
 
     <!-- Subscription options -->
-    <string name="subscription_options_label">Subscription options</string>
-    <string name="basic_button_text">Basic</string>
-    <string name="premium_button_text">Premium</string>
-    <string name="subscription_option_basic_message">Basic plan</string>
-    <string name="subscription_option_basic_message_current">Basic plan (current)</string>
-    <string name="subscription_option_basic_message_account_hold">Basic plan (on hold)</string>
-    <string name="subscription_option_basic_message_account_paused">Basic plan (on pause)</string>
-    <string name="subscription_option_basic_message_grace_period">Basic plan (payment issue)</string>
-    <string name="subscription_option_basic_message_restore">Basic plan (canceled)</string>
-    <string name="subscription_option_premium_message">Premium plan</string>
-    <string name="subscription_option_premium_message_current">Premium plan (current)</string>
-    <string name="subscription_option_premium_message_account_hold">Premium plan (on hold)</string>
-    <string name="subscription_option_premium_message_account_paused">Premium plan (on pause)</string>
-    <string name="subscription_option_premium_message_grace_period">Premium plan (payment issue)</string>
-    <string name="subscription_option_premium_message_restore">Premium plan (canceled)</string>
-    <string name="no_basic_content">Loading basic content</string>
-    <string name="no_premium_content">Loading premium content</string>
-    <!-- Active subscriptions -->
-    <string name="premium_message">You have a Premium subscription</string>
-    <string name="basic_message">You have a Basic subscription</string>
-    <string name="basic_content_text">Welcome to the basic classy taxi, driving through the peaceful cool of the night.</string>
-    <string name="premium_content_text">Welcome to the premium space taxi, flying through the endless possibilities of space.</string>
-    <!-- Paywall -->
-    <string name="paywall_message">Subscribe to a Basic or Premium plan</string>
-    <string name="premium_paywall_message">You need to subscribe to a Premium plan</string>
-    <!-- Upgrade -->
-    <string name="premium_upgrade_message">You currently have a Basic plan. Upgrade to enjoy the benefits of the Premium plan.</string>
-    <string name="upgrade_button_text">Upgrade</string>
-    <!-- Manage subscriptions -->
-    <string name="manage_subscription_label">Manage subscriptions</string>
-    <string name="manage_subscription_message">Manage your subscription on Google Play.</string>
-    <string name="google_play_subscriptions">Google Play Subscriptions</string>
-    <!-- Minor subscription notices -->
-    <string name="grace_period_message">Something’s wrong with your subscription, but you’ve still got access during a temporary grace period. Tap to fix it.</string>
-    <string name="restore_message_with_date">Your subscription is canceled and will expire on %1$s. Tap to restore your subscription.</string>
-    <!-- Different account is using subscription -->
-    <string name="transfer_message">Wrong taxi? A different account is already using your subscription, but you can transfer your subscription to this account.</string>
-    <string name="transfer_message_with_sku">Wrong taxi? A different account is already using your %1$s subscription, but you can transfer your subscription to this account.</string>
-    <string name="transfer_message_with_two_skus">Wrong taxi? A different account is already using your %1$s and %2$s subscriptions, but you can transfer your subscriptions to this account.</string>
-    <string name="transfer_button_text">Transfer</string>
-    <!-- Account hold -->
-    <string name="account_hold_message">Classy Taxi is stuck! Your account is on hold because there’s a problem with your payment method. Update your payment method or add a new one to restore your subscription.</string>
-    <string name="fix_button_text">Manage payment methods</string>
+<!--    <string name="subscription_options_label">Subscription options</string>-->
+<!--    <string name="basic_button_text">Basic</string>-->
+<!--    <string name="premium_button_text">Premium</string>-->
+<!--    <string name="subscription_option_basic_message">Basic plan</string>-->
+<!--    <string name="subscription_option_basic_message_current">Basic plan (current)</string>-->
+<!--    <string name="subscription_option_basic_message_account_hold">Basic plan (on hold)</string>-->
+<!--    <string name="subscription_option_basic_message_account_paused">Basic plan (on pause)</string>-->
+<!--    <string name="subscription_option_basic_message_grace_period">Basic plan (payment issue)</string>-->
+<!--    <string name="subscription_option_basic_message_restore">Basic plan (canceled)</string>-->
+<!--    <string name="subscription_option_premium_message">Premium plan</string>-->
+<!--    <string name="subscription_option_premium_message_current">Premium plan (current)</string>-->
+<!--    <string name="subscription_option_premium_message_account_hold">Premium plan (on hold)</string>-->
+<!--    <string name="subscription_option_premium_message_account_paused">Premium plan (on pause)</string>-->
+<!--    <string name="subscription_option_premium_message_grace_period">Premium plan (payment issue)</string>-->
+<!--    <string name="subscription_option_premium_message_restore">Premium plan (canceled)</string>-->
+<!--    <string name="no_basic_content">Loading basic content</string>-->
+<!--    <string name="no_premium_content">Loading premium content</string>-->
+<!--    &lt;!&ndash; Active subscriptions &ndash;&gt;-->
+<!--    <string name="premium_message">You have a Premium subscription</string>-->
+<!--    <string name="basic_message">You have a Basic subscription</string>-->
+<!--    <string name="basic_content_text">Welcome to the basic classy taxi, driving through the peaceful cool of the night.</string>-->
+<!--    <string name="premium_content_text">Welcome to the premium space taxi, flying through the endless possibilities of space.</string>-->
+<!--    &lt;!&ndash; Paywall &ndash;&gt;-->
+<!--    <string name="paywall_message">Subscribe to a Basic or Premium plan</string>-->
+<!--    <string name="premium_paywall_message">You need to subscribe to a Premium plan</string>-->
+<!--    &lt;!&ndash; Upgrade &ndash;&gt;-->
+<!--    <string name="premium_upgrade_message">You currently have a Basic plan. Upgrade to enjoy the benefits of the Premium plan.</string>-->
+<!--    <string name="upgrade_button_text">Upgrade</string>-->
+<!--    &lt;!&ndash; Manage subscriptions &ndash;&gt;-->
+<!--    <string name="manage_subscription_label">Manage subscriptions</string>-->
+<!--    <string name="manage_subscription_message">Manage your subscription on Google Play.</string>-->
+<!--    <string name="google_play_subscriptions">Google Play Subscriptions</string>-->
+<!--    &lt;!&ndash; Minor subscription notices &ndash;&gt;-->
+<!--    <string name="grace_period_message">Something’s wrong with your subscription, but you’ve still got access during a temporary grace period. Tap to fix it.</string>-->
+<!--    <string name="restore_message_with_date">Your subscription is canceled and will expire on %1$s. Tap to restore your subscription.</string>-->
+<!--    &lt;!&ndash; Different account is using subscription &ndash;&gt;-->
+<!--    <string name="transfer_message">Wrong taxi? A different account is already using your subscription, but you can transfer your subscription to this account.</string>-->
+<!--    <string name="transfer_message_with_sku">Wrong taxi? A different account is already using your %1$s subscription, but you can transfer your subscription to this account.</string>-->
+<!--    <string name="transfer_message_with_two_skus">Wrong taxi? A different account is already using your %1$s and %2$s subscriptions, but you can transfer your subscriptions to this account.</string>-->
+<!--    <string name="transfer_button_text">Transfer</string>-->
+<!--    &lt;!&ndash; Account hold &ndash;&gt;-->
+<!--    <string name="account_hold_message">Classy Taxi is stuck! Your account is on hold because there’s a problem with your payment method. Update your payment method or add a new one to restore your subscription.</string>-->
+<!--    <string name="fix_button_text">Manage payment methods</string>-->
 
 
     <!-- other -->

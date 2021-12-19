@@ -7,14 +7,22 @@ import android.graphics.drawable.Drawable
 import java.io.ByteArrayOutputStream
 
 object UtilDrawing {
+
+    fun createDefaultBitmap(w: Int, h: Int): Bitmap {
+        val conf = Bitmap.Config.ARGB_8888
+        return Bitmap.createBitmap(w, h, conf)
+    }
+
     fun bitmapToBytes(bitmap: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream)
         return stream.toByteArray()
     }
 
-    fun bytesToBitmap(image: ByteArray): Bitmap {
-        return BitmapFactory.decodeByteArray(image, 0, image.size)
+    fun bytesToBitmap(image: ByteArray?): Bitmap? {
+        return image?.let {
+            BitmapFactory.decodeByteArray(it, 0, image.size)
+        }
     }
 
     fun bitmapToDrawalbe(context: Context, bitmap: Bitmap?): Drawable {

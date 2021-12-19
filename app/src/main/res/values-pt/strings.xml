@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Configurações</string>
+    <string name="settings">Configurações</string>
 
     <string name="input">ENTRADA</string>
     <string name="report">RELATÓRIO</string>
@@ -152,7 +152,7 @@
     <string name="version_etc">Versão instalada, etc.</string>
     <string name="reorder_categories">Reordenar categorias</string>
     <string name="create_category">Crie uma nova categoria</string>
-    <string name="num_columns">Número de categorias por linha</string>
+    <string name="num_categories_per_row">Número de categorias por linha</string>
     <string name="the_app_version">A versão do aplicativo</string>
     <string name="purchased_items">Itens comprados</string>
     <string name="in_app_purchases">Compras dentro do aplicativo</string>
@@ -198,4 +198,15 @@
     <string name="category_name_add_lang">Por favor, escreva o nome da categoria. Toque no botão Adicionar para diferentes idiomas.</string>
     <string name="category_code">Código de Categoria</string>
     <string name="import_from_google_drive">Importar do Google Drive</string>
+    <string name="nav_header_desc">cabeçalho de navegação</string>
+    <string name="sign_in">Entrar</string>
+    <string name="sign_out">Sair</string>
+    <string name="sign_out_success">Desconexão bem-sucedida</string>
+    <string name="sign_in_success">Login bem-sucedido</string>
+    <string name="sign_in_failure">Login sem sucesso</string>
+    <string name="register">Registro</string>
+    <string name="open">Abrir</string>
+    <string name="import_and_export">Importar e Exportar</string>
+    <string name="append">Acrescentar</string>
+    <string name="scratch">Do princípio</string>
 </resources>

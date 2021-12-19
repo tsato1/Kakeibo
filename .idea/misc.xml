@@ -8,10 +8,55 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_import_export.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/activity_in_app_purchase.xml" value="0.12331011880376895" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_settings_about.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_settings_category_reorder.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_settings_category_replace.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_settings_custom_category.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_settings_custom_category_list.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_signin.xml" value="0.21829710144927536" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/banner_date_picker.xml" value="0.14895833333333333" />
+        <entry key="app/src/main/res/layout/card_amount_range.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/card_category.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/card_currency.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/card_date_range.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/card_memo.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/dialog_bas_search_category.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/dialog_item_detail.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/dialog_item_edit.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/expandable_child.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/expandable_header.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/expandable_item.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/expandable_parent.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_in_app_purchase.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/fragment_input.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/fragment_report.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/fragment_report_category_yearly.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_report_date_monthly.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_report_date_yearly.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_report_old.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_settings_category_replace.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_settings_custom_category_color.xml" value="0.1640625" />
+        <entry key="app/src/main/res/layout/fragment_settings_custom_category_image.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_settings_custom_category_name.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/item_grid.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/nav_header.xml" value="0.1640625" />
+        <entry key="app/src/main/res/layout/row_explist_child.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/layout/row_explist_parent.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/row_list_category.xml" value="0.1640625" />
+        <entry key="app/src/main/res/layout/row_list_report_c.xml" value="0.1640625" />
+        <entry key="app/src/main/res/layout/row_list_report_c_detail.xml" value="0.1640625" />
+        <entry key="app/src/main/res/xml/preferences.xml" value="0.16354166666666667" />
       </map>
     </option>
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/kakeibo/feature_settings/presentation/custom_category_detail/presentation/components/DrawViewModel.kt" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

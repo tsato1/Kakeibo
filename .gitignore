@@ -38,4 +38,4 @@ obj/
 .externalNativeBuild
 
 #secrets
-./app/src/main/res/values/secrets.xml
+app/src/main/res/values/secrets.xml

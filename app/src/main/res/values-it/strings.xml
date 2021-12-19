@@ -21,7 +21,7 @@
     <string name="balance_colon">saldo:</string>
     <string name="expense_colon">spese:</string>
     <string name="income_colon">entrate:</string>
-    <string name="action_settings">IMPOSTAZIONI</string>
+    <string name="settings">IMPOSTAZIONI</string>
     <string name="search">ricerca</string>
     <string name="select_file">seleziona</string>
     <string name="file_create_error">errore di impostazione. Riprova.</string>
@@ -98,7 +98,7 @@
     <string name="version_etc">Versione installata, ecc.</string>
     <string name="reorder_categories">Riordina categorie</string>
     <string name="create_category">Crea una nuova categoria</string>
-    <string name="num_columns">Numero di categorie per riga</string>
+    <string name="num_categories_per_row">Numero di categorie per riga</string>
     <string name="the_app_version">La versione dell\'app</string>
     <string name="purchased_items">Articoli acquistati</string>
     <string name="in_app_purchases">Acquisti in-app</string>
@@ -144,4 +144,15 @@
     <string name="category_name_add_lang">Si prega di scrivere il nome della categoria. Tocca il pulsante Aggiungi per diverse lingue.</string>
     <string name="category_code">codice categoria</string>
     <string name="import_from_google_drive">Importa da Google Drive</string>
+    <string name="nav_header_desc">intestazione di navigazione</string>
+    <string name="sign_in">Registrazione</string>
+    <string name="sign_out">Disconnessione</string>
+    <string name="sign_out_success">Disconnessione riuscita</string>
+    <string name="sign_in_success">Accesso riuscito</string>
+    <string name="sign_in_failure">Accesso non riuscito</string>
+    <string name="register">Registrati</string>
+    <string name="open">Aprire</string>
+    <string name="import_and_export">Importazione e esportazione</string>
+    <string name="append">Aggiungere</string>
+    <string name="scratch">Da zero</string>
 </resources>

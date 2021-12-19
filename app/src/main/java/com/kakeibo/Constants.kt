@@ -17,4 +17,7 @@ object Constants {
     const val PREMIUM_SKU = "plus_1y"
     const val PLAY_STORE_SUBSCRIPTION_URL = "https://play.google.com/store/account/subscriptions"
     const val PLAY_STORE_SUBSCRIPTION_DEEPLINK_URL = "https://play.google.com/store/account/subscriptions?sku=%s&package=%s"
+
+    const val SHARED_PREF_NAME = "com.kakeibo_preferences"
+    const val ENCRYPTED_SHARED_PREF_NAME = "com.kakeibo_enc_preferences"
 }

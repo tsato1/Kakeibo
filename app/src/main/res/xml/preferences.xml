@@ -30,7 +30,7 @@
             android:summary="%s"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/num_columns" />
+            android:title="@string/num_categories_per_row" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/category"
@@ -45,6 +45,22 @@
             android:key="@string/pref_key_category_reorder"
             android:title="@string/reorder_categories"/>
     </PreferenceCategory>
+<!--    <PreferenceCategory-->
+<!--        android:title="@string/import_and_export"-->
+<!--        android:icon="@drawable/ic_baseline_timer_24">-->
+<!--        <SwitchPreference-->
+<!--            android:key="@string/pref_key_export_periodically"-->
+<!--            android:title="@string/export_periodically"/>-->
+<!--        <ListPreference-->
+<!--            android:defaultValue="0"-->
+<!--            android:entries="@array/pref_list_export_periods"-->
+<!--            android:entryValues="@array/pref_list_export_periods_values"-->
+<!--            android:key="@string/pref_key_export_period"-->
+<!--            android:summary="%s"-->
+<!--            android:negativeButtonText="@null"-->
+<!--            android:positiveButtonText="@null"-->
+<!--            android:title="@string/export_period"/>-->
+<!--    </PreferenceCategory>-->
     <PreferenceCategory
         android:title="@string/in_app_data"
         android:icon="@drawable/ic_perm_data_setting_black_24dp">

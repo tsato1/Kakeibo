@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">الإعدادات</string>
+    <string name="settings">الإعدادات</string>
 
     <string name="input">إدخال</string>
     <string name="report">أبلغ عن</string>
@@ -152,7 +152,7 @@
     <string name="version_etc">"الإصدار المثبت ، الخ "</string>
     <string name="reorder_categories">"إعادة ترتيب الفئات "</string>
     <string name="create_category">"إنشاء فئة جديدة "</string>
-    <string name="num_columns">"عدد الفئات في كل صف "</string>
+    <string name="num_categories_per_row">"عدد الفئات في كل صف "</string>
     <string name="the_app_version">"إصدار التطبيق "</string>
     <string name="purchased_items">"البنود التي تم شراؤها "</string>
     <string name="in_app_purchases">"عمليات الشراء داخل التطبيق "</string>
@@ -198,4 +198,15 @@
     <string name="category_name_add_lang">"يرجى كتابة اسم الفئة. اضغط على زر الإضافة للغات مختلفة. "</string>
     <string name="category_code">الفئة رمز</string>
     <string name="import_from_google_drive">استيراد من Google Drive</string>
+    <string name="nav_header_desc">رأس التنقل</string>
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="sign_out">خروج</string>
+    <string name="sign_out_success">تم تسجيل الخروج بنجاح</string>
+    <string name="sign_in_success">تم تسجيل الدخول بنجاح</string>
+    <string name="sign_in_failure">تسجيل الدخول غير ناجح</string>
+    <string name="register">تسجيل</string>
+    <string name="open">افتح</string>
+    <string name="import_and_export">استيراد وتصدير</string>
+    <string name="append">ألحق</string>
+    <string name="scratch">من سكراتش</string>
 </resources>

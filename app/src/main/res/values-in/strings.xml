@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Pengaturan</string>
+    <string name="settings">Pengaturan</string>
 
     <string name="input">MEMASUKKAN</string>
     <string name="report">MELAPORKAN</string>
@@ -152,7 +152,7 @@
     <string name="version_etc">Versi yang diinstal, dll.</string>
     <string name="reorder_categories">Susun Ulang Kategori</string>
     <string name="create_category">Buat Kategori baru</string>
-    <string name="num_columns">Jumlah Kategori per baris</string>
+    <string name="num_categories_per_row">Jumlah Kategori per baris</string>
     <string name="the_app_version">Versi aplikasi</string>
     <string name="purchased_items">Barang yang dibeli</string>
     <string name="in_app_purchases">Pembelian Dalam Aplikasi</string>
@@ -198,4 +198,15 @@
     <string name="category_name_add_lang">Silakan tulis nama kategori. Ketuk tombol tambah untuk berbagai bahasa.</string>
     <string name="category_code">Kode Kategori</string>
     <string name="import_from_google_drive">Impor dari Google Drive</string>
+    <string name="nav_header_desc">tajuk navigasi</string>
+    <string name="sign_in">Masuk</string>
+    <string name="sign_out">Keluar</string>
+    <string name="sign_out_success">Keluar berhasil</string>
+    <string name="sign_in_success">berhasil masuk</string>
+    <string name="sign_in_failure">Login gagal</string>
+    <string name="register">daftar</string>
+    <string name="open">Membuka</string>
+    <string name="import_and_export">Impor dan ekspor</string>
+    <string name="append">Menambahkan</string>
+    <string name="scratch">Dari Awal</string>
 </resources>

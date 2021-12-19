@@ -4,9 +4,9 @@
 //import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 //
 //import com.kakeibo.LiveDataTestUtil;
-//import com.kakeibo.data.Category;
-//import com.kakeibo.data.Item;
-//import com.kakeibo.data.KkbApp;
+//import com.kakeibo.feature_settings.settings_category.domain.model.Category;
+//import com.kakeibo.feature_item.data.sources.local.entities.Item;
+//import com.kakeibo.feature_settings.settings_category.domain.model.KkbApp;
 //
 //import androidx.room.Room;
 //import androidx.room.testing.MigrationTestHelper;
@@ -24,12 +24,12 @@
 //import java.math.BigDecimal;
 //import java.util.List;
 //
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_1_2;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_2_3;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_3_4;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_5;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_5_7;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_6_7;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_1_2;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_2_3;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_3_4;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_4_5;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_5_7;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_6_7;
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertNull;
 //

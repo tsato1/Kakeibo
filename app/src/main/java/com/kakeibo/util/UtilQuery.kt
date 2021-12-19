@@ -1,10 +1,10 @@
 package com.kakeibo.util
 
-import com.kakeibo.data.Item
+import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.ui.model.Query
 
 object UtilQuery {
-    fun query(all: List<Item>, q: Query): List<Item> {
+    fun query(all: List<ItemEntity>, q: Query): List<ItemEntity> {
         var out = all
 
         if (q.flagEventDate) {

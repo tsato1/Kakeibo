@@ -2,15 +2,15 @@ package com.kakeibo.util
 
 import android.content.Context
 import com.kakeibo.R
-import com.kakeibo.data.Category
-import com.kakeibo.data.Item
+import com.kakeibo.core.data.local.entities.CategoryEntity
+import com.kakeibo.core.data.local.entities.ItemEntity
 
 object UtilExport {
     fun buildOrderByDate(context: Context,
-              itemList: List<Item>,
-              categoryMap: Map<Int, Category>, fileName: String) {
+                         itemEntityList: List<ItemEntity>,
+                         categoryEntityMap: Map<Int, CategoryEntity>, fileName: String) {
         val runnable = Runnable {
-            itemList.sortedBy { it.eventDate }
+            itemEntityList.sortedBy { it.eventDate }
 
             val stringBuilder = StringBuilder()
             stringBuilder.setLength(0)
@@ -27,12 +27,12 @@ object UtilExport {
             stringBuilder.append(context.resources.getString(R.string.category_code))
             stringBuilder.append("\n")
 
-            for (item in itemList) {
+            for (item in itemEntityList) {
                 stringBuilder.append(item.eventDate)
                 stringBuilder.append(",")
                 stringBuilder.append(item.amount)
                 stringBuilder.append(",")
-                stringBuilder.append(categoryMap[item.categoryCode]!!.name)
+                stringBuilder.append(categoryEntityMap[item.categoryCode]!!.name)
                 stringBuilder.append(",")
                 stringBuilder.append(item.memo)
                 stringBuilder.append(",")
@@ -49,10 +49,10 @@ object UtilExport {
     }
 
     fun buildOrderByCategory(context: Context,
-              itemList: List<Item>,
-              categoryMap: Map<Int, Category>, fileName: String) {
+                             itemEntityList: List<ItemEntity>,
+                             categoryEntityMap: Map<Int, CategoryEntity>, fileName: String) {
         val runnable = Runnable {
-            itemList.sortedBy { it.categoryCode }
+            itemEntityList.sortedBy { it.categoryCode }
 
             val stringBuilder = StringBuilder()
             stringBuilder.setLength(0)
@@ -69,8 +69,8 @@ object UtilExport {
             stringBuilder.append(context.resources.getString(R.string.category_code))
             stringBuilder.append("\n")
 
-            for (item in itemList) {
-                stringBuilder.append(categoryMap[item.categoryCode]!!.name)
+            for (item in itemEntityList) {
+                stringBuilder.append(categoryEntityMap[item.categoryCode]!!.name)
                 stringBuilder.append(",")
                 stringBuilder.append(item.amount)
                 stringBuilder.append(",")

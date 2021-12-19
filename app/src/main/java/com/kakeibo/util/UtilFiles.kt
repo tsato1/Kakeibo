@@ -1,14 +1,12 @@
 package com.kakeibo.util
 
 import android.content.Context
-import androidx.core.text.isDigitsOnly
-import com.kakeibo.data.Category
-import com.kakeibo.data.Item
+import com.kakeibo.core.data.local.entities.CategoryEntity
+import com.kakeibo.core.data.local.entities.ItemEntity
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-import java.math.BigDecimal
 import java.util.*
 
 object UtilFiles {
@@ -103,9 +101,9 @@ object UtilFiles {
 
     /* Used in Import functionality */
     fun readCsvToList(
-        list: MutableList<Item>,
+        list: MutableList<ItemEntity>,
         reader: BufferedReader,
-        allCategoriesMap: Map<Int, Category>
+        allCategoriesMap: Map<Int, CategoryEntity>
     ): String {
         var counter = 0
         val stringBuilder = StringBuilder()
@@ -134,14 +132,16 @@ object UtilFiles {
                     stringBuilder.append("UpdatedDate is not valid at line $counter \n")
                 }
 
-                list.add(Item(
-                    BigDecimal(line[1].trim()), //amount
-                    "",
-                    line[5].trim().toInt(), // category code
-                    line[3].trim(), // memo
-                    line[0].trim(), // event date
-                    line[4].trim()  // updated date
-                ))
+//                list.add(
+//                    ItemEntity(
+//                        BigDecimal(line[1].trim()), //amount
+//                        "",
+//                        line[5].trim().toInt(), // category code
+//                        line[3].trim(), // memo
+//                        line[0].trim(), // event date
+//                        line[4].trim()  // updated date
+//                    )
+//                )
             }
 
             counter++

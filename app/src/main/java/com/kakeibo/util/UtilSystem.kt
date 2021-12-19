@@ -3,26 +3,26 @@ package com.kakeibo.util
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import com.kakeibo.db.CategoryLanDBAdapter
+import com.kakeibo.core.data.constants.ConstCategoryLanDB
 import java.util.*
 
 object UtilSystem {
     private val TAG = UtilSystem::class.java.simpleName
     private val langStrs = arrayOf(
-            CategoryLanDBAdapter.COL_ARA,
-            CategoryLanDBAdapter.COL_ENG,
-            CategoryLanDBAdapter.COL_SPA,
-            CategoryLanDBAdapter.COL_FRA,
-            CategoryLanDBAdapter.COL_HIN,
-            CategoryLanDBAdapter.COL_IND,
-            CategoryLanDBAdapter.COL_ITA,
-            CategoryLanDBAdapter.COL_JPN,
-            CategoryLanDBAdapter.COL_KOR,
-            CategoryLanDBAdapter.COL_POL,
-            CategoryLanDBAdapter.COL_POR,
-            CategoryLanDBAdapter.COL_RUS,
-            CategoryLanDBAdapter.COL_TUR,
-            CategoryLanDBAdapter.COL_VIE)
+            ConstCategoryLanDB.COL_ARA,
+            ConstCategoryLanDB.COL_ENG,
+            ConstCategoryLanDB.COL_SPA,
+            ConstCategoryLanDB.COL_FRA,
+            ConstCategoryLanDB.COL_HIN,
+            ConstCategoryLanDB.COL_IND,
+            ConstCategoryLanDB.COL_ITA,
+            ConstCategoryLanDB.COL_JPN,
+            ConstCategoryLanDB.COL_KOR,
+            ConstCategoryLanDB.COL_POL,
+            ConstCategoryLanDB.COL_POR,
+            ConstCategoryLanDB.COL_RUS,
+            ConstCategoryLanDB.COL_TUR,
+            ConstCategoryLanDB.COL_VIE)
 
     private var mPrevLang = "eng"
 
@@ -62,20 +62,20 @@ object UtilSystem {
         var langCode = langCode
         if ("" != langCode &&
                 // !langCode.equals(new Locale(CategoryLanDBAdapter.COL_ARA).getISO3Language()) &&
-                langCode != Locale(CategoryLanDBAdapter.COL_ENG).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_SPA).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_FRA).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_HIN).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_IND).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_JPN).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_KOR).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_ITA).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_POL).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_POR).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_RUS).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_TUR).isO3Language &&
-                langCode != Locale(CategoryLanDBAdapter.COL_VIE).isO3Language) {
-            langCode = CategoryLanDBAdapter.COL_ENG
+                langCode != Locale(ConstCategoryLanDB.COL_ENG).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_SPA).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_FRA).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_HIN).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_IND).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_JPN).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_KOR).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_ITA).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_POL).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_POR).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_RUS).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_TUR).isO3Language &&
+                langCode != Locale(ConstCategoryLanDB.COL_VIE).isO3Language) {
+            langCode = ConstCategoryLanDB.COL_ENG
         }
         return langCode
     }

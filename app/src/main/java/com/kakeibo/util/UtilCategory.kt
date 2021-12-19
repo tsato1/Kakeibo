@@ -1,6 +1,6 @@
 package com.kakeibo.util
 
-import com.kakeibo.data.Category
+import com.kakeibo.core.data.local.entities.CategoryEntity
 
 object UtilCategory {
     const val NUM_MAX_DSP_CATEGORIES = 16
@@ -11,14 +11,17 @@ object UtilCategory {
     const val CATEGORY_COLOR_EXPENSE = 0
     const val CATEGORY_COLOR_NONE = 2
 
-    const val CATEGORY_SIGN_LOW = 0
+    const val CATEGORY_SIGN_CUS = -1 // default value for custom categories is -1
+    const val CATEGORY_SIGN_LOW = 0 // default categories are 0
     const val CATEGORY_SIGN_MID = 1
     const val CATEGORY_SIGN_HIG = 2
+
+    const val CATEGORY_PARENT_NON = -1 // if category doesn't have parent categories, -1
 
     fun isCategoryValid(
         code: String,
         name: String,
-        allCategoriesMap: Map<Int, Category>
+        allCategoriesMap: Map<Int, CategoryEntity>
     ): Boolean {
 
         if (code.toIntOrNull() == null)

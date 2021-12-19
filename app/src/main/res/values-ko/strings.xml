@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Settings</string>
-
     <string name="input">입력</string>
     <string name="report">보고서</string>
     <string name="search">수색</string>
@@ -152,7 +150,7 @@
     <string name="version_etc">설치된 버전 등</string>
     <string name="reorder_categories">재정렬 카테고리</string>
     <string name="create_category">새로운 카테고리 만들기</string>
-    <string name="num_columns">행당 카테고리 수</string>
+    <string name="num_categories_per_row">행당 카테고리 수</string>
     <string name="the_app_version">앱 버전</string>
     <string name="purchased_items">구매 한 품목</string>
     <string name="in_app_purchases">인앱 구매</string>
@@ -198,4 +196,16 @@
     <string name="category_name_add_lang">카테고리 이름을 작성하십시오. 다른 언어의 추가 버튼을 누릅니다.</string>
     <string name="category_code">"범주 코드 "</string>
     <string name="import_from_google_drive">Google 드라이브에서 가져 오기</string>
+    <string name="settings">설정</string>
+    <string name="nav_header_desc">탐색 헤더</string>
+    <string name="sign_in">로그인</string>
+    <string name="sign_out">로그아웃</string>
+    <string name="sign_out_success">로그아웃 성공</string>
+    <string name="sign_in_success">로그인 성공</string>
+    <string name="sign_in_failure">로그인 실패</string>
+    <string name="register">등록하다</string>
+    <string name="open">열려있는</string>
+    <string name="import_and_export">가져오기 및 내보내기</string>
+    <string name="append">추가</string>
+    <string name="scratch">기스로부터</string>
 </resources>

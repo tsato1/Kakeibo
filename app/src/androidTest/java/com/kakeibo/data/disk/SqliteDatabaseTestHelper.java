@@ -4,18 +4,18 @@
 //import android.database.Cursor;
 //import android.database.sqlite.SQLiteDatabase;
 //
-//import com.kakeibo.data.CategoryDsp;
-//import com.kakeibo.db.CategoryDBAdapter;
-//import com.kakeibo.db.CategoryDspDBAdapter;
-//import com.kakeibo.db.CategoryLanDBAdapter;
-//import com.kakeibo.db.ItemDBAdapter;
-//import com.kakeibo.db.KkbAppDBAdapter;
-//import com.kakeibo.db.PrepDB;
+//import com.kakeibo.feature_settings.settings_category.domain.model.CategoryDsp;
+//import com.kakeibo.core.data.db.CategoryDBAdapter;
+//import com.kakeibo.core.data.db.CategoryDspDBAdapter;
+//import com.kakeibo.core.data.db.CategoryLanDBAdapter;
+//import com.kakeibo.core.data.db.ItemDBAdapter;
+//import com.kakeibo.core.data.db.KkbAppDBAdapter;
+//import com.kakeibo.core.data.db.PrepDB;
 //import com.kakeibo.util.UtilCurrency;
 //
 //import java.math.BigDecimal;
 //
-//import static com.kakeibo.db.KkbAppDBAdapter.TABLE_KKBAPP;
+//import static com.kakeibo.core.data.db.KkbAppDBAdapter.TABLE_KKBAPP;
 //
 ///**
 // * Helper class for working with the SQLiteDatabase.

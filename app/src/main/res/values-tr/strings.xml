@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kakeibo</string>
 
-    <string name="action_settings">Ayarlar</string>
+    <string name="settings">Ayarlar</string>
 
     <string name="input">GİRİŞ</string>
     <string name="report">RAPOR</string>
@@ -152,7 +152,7 @@
     <string name="version_etc">Yüklü sürüm vb.</string>
     <string name="reorder_categories">Kategorileri Yeniden Sırala</string>
     <string name="create_category">Yeni bir Kategori oluşturun</string>
-    <string name="num_columns">Satır başına Kategori sayısı</string>
+    <string name="num_categories_per_row">Satır başına Kategori sayısı</string>
     <string name="the_app_version">Uygulama sürümü</string>
     <string name="purchased_items">Satın alınan ürünler</string>
     <string name="in_app_purchases">Uygulama içi satın alma işlemleri</string>
@@ -198,4 +198,15 @@
     <string name="category_name_add_lang">Lütfen kategori adını yazın. Farklı diller için ekle düğmesine dokunun.</string>
     <string name="category_code">Kategori Kodu</string>
     <string name="import_from_google_drive">Google Drive\'dan içe aktar</string>
+    <string name="nav_header_desc">gezinme başlığı</string>
+    <string name="sign_in">Kayıt olmak</string>
+    <string name="sign_out">Oturumu Kapat</string>
+    <string name="sign_out_success">Çıkış başarılı</string>
+    <string name="sign_in_success">Oturum açma başarılı</string>
+    <string name="sign_in_failure">Oturum açma başarısız</string>
+    <string name="register">Kayıt ol</string>
+    <string name="open">Açık</string>
+    <string name="import_and_export">İthalat ve ihracat</string>
+    <string name="append">eklemek</string>
+    <string name="scratch">Sıfırdan</string>
 </resources>

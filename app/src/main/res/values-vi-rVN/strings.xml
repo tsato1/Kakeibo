@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kakeibo</string>
-    <string name="action_settings">Cài đặt</string>
+    <string name="settings">Cài đặt</string>
     <string name="input">ĐẦU VÀO</string>
     <string name="report">BÁO CÁO</string>
     <string name="search">TÌM KIẾM</string>
@@ -106,7 +106,7 @@
     <string name="no">Không</string>
     <string name="no_custom_category">Không tìm thấy danh mục tùy chỉnh</string>
     <string name="nothing_to_export">Không có gì để xuất khẩu.</string>
-    <string name="num_columns">Số lượng danh mục mỗi hàng</string>
+    <string name="num_categories_per_row">Số lượng danh mục mỗi hàng</string>
     <string name="ok">đồng ý</string>
     <string name="purchased_items">Hàng đã mua</string>
     <string name="quest_determine_category_order">Các biểu tượng sẽ được hiển thị theo thứ tự được chỉ định. Bạn có muốn tiếp tục?</string>
@@ -144,4 +144,15 @@
     <string name="msg_category_updated">Danh mục được cập nhật.</string>
     <string name="category_code">Mã Danh mục</string>
     <string name="import_from_google_drive">Nhập từ Google Drive</string>
+    <string name="nav_header_desc">tiêu đề điều hướng</string>
+    <string name="sign_in">Đăng nhập</string>
+    <string name="sign_out">Đăng xuất</string>
+    <string name="sign_out_success">Đăng xuất thành công</string>
+    <string name="sign_in_success">Đăng nhập thành công</string>
+    <string name="sign_in_failure">Đăng nhập không thành công</string>
+    <string name="register">Đăng ký</string>
+    <string name="open">Mở ra</string>
+    <string name="import_and_export">Nhập khẩu và xuất khẩu</string>
+    <string name="append">nối thêm</string>
+    <string name="scratch">Từ Scratch</string>
 </resources>

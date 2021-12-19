@@ -63,7 +63,7 @@
     <string name="search">RECHERCHE</string>
     <string name="hint_amount_spent_or_earned">MONTANT DÉPÉNSÉ OU GAGNÉ</string>
     <string name="hint_memo_max_20_characters">NOTE 20 CARACTÈRES MAX</string>
-    <string name="action_settings">PARAMÈTRES</string>
+    <string name="settings">PARAMÈTRES</string>
     <string name="general">CONFIGURATION GÉNÉRALE</string>
     <string name="in_app_data">DATA DANS L\'APPLI</string>
     <string name="date_format">FORMAT DE DATE</string>
@@ -98,7 +98,7 @@
     <string name="version_etc">"Yüklü sürüm vb. "</string>
     <string name="reorder_categories">Réorganiser les catégories</string>
     <string name="create_category">Créer une nouvelle catégorie</string>
-    <string name="num_columns">Nombre de catégories par ligne</string>
+    <string name="num_categories_per_row">Nombre de catégories par ligne</string>
     <string name="the_app_version">La version de l\'application</string>
     <string name="purchased_items">Articles achetés</string>
     <string name="in_app_purchases">Achats intégrés</string>
@@ -144,4 +144,15 @@
     <string name="category_name_add_lang">Veuillez écrire le nom de la catégorie. Appuyez sur le bouton Ajouter pour différentes langues.</string>
     <string name="category_code">"code de catégorie "</string>
     <string name="import_from_google_drive">Importer depuis Google Drive</string>
+    <string name="nav_header_desc">en-tête de navigation</string>
+    <string name="sign_in">S\'identifier</string>
+    <string name="sign_out">Déconnexion</string>
+    <string name="sign_out_success">Déconnexion réussie</string>
+    <string name="sign_in_success">Connexion réussie</string>
+    <string name="sign_in_failure">Échec de la connexion</string>
+    <string name="register">S\'inscrire</string>
+    <string name="open">Ouverte</string>
+    <string name="import_and_export">Importer et Exporter</string>
+    <string name="append">Ajouter</string>
+    <string name="scratch">De zéro</string>
 </resources>

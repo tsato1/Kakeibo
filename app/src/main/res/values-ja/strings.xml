@@ -31,7 +31,7 @@
     <string name="balance_colon">収支：</string>
     <string name="expense_colon">支出：</string>
     <string name="income_colon">収入：</string>
-    <string name="action_settings">設定</string>
+    <string name="settings">設定</string>
     <string name="search">検索</string>
     <string name="select_file">ファイルの選択</string>
     <string name="file_created">ファイルが作成されました．</string>
@@ -97,7 +97,7 @@
     <string name="version_etc">バージョン情報等</string>
     <string name="hide_display_reorder_categories">カテゴリー非表示、表示、並べ替え</string>
     <string name="create_category">カテゴリー作成</string>
-    <string name="num_columns">行ごとのカテゴリー数</string>
+    <string name="num_categories_per_row">行ごとのカテゴリー数</string>
     <string name="display_categories">表示するカテゴリーを選択してください</string>
     <string name="the_app_version">アプリのバージョン</string>
     <string name="purchased_items">購入済み商品</string>
@@ -144,4 +144,15 @@
     <string name="msg_category_updated">カテゴリーが更新されました。</string>
     <string name="category_code">カテゴリーコード</string>
     <string name="import_from_google_drive">Googleドライブからインポート</string>
+    <string name="nav_header_desc">ナビゲーションヘッダ</string>
+    <string name="sign_in">サインイン</string>
+    <string name="sign_out">サインアウト</string>
+    <string name="sign_out_success">サインアウトに成功しました</string>
+    <string name="sign_in_success">サインインに成功しました</string>
+    <string name="sign_in_failure">サインインに失敗しました</string>
+    <string name="register">登録</string>
+    <string name="open">開く</string>
+    <string name="import_and_export">インポートとエクスポート</string>
+    <string name="append">連結する</string>
+    <string name="scratch">最初から</string>
 </resources>

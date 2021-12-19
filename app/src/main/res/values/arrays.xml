@@ -84,6 +84,17 @@
         <item>2</item>
     </string-array>
 
+<!--    <string-array name="pref_list_export_periods">-->
+<!--        <item>@string/first_day_of_month_3am</item>-->
+<!--        <item>@string/every_monday_3am</item>-->
+<!--        <item>@string/every_day_3am</item>-->
+<!--    </string-array>-->
+<!--    <string-array name="pref_list_export_periods_values">-->
+<!--        <item>0</item>-->
+<!--        <item>1</item>-->
+<!--        <item>2</item>-->
+<!--    </string-array>-->
+
     <string-array name="import_methods">
         <item>@string/append</item>
         <item>@string/scratch</item>

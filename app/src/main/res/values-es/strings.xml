@@ -33,7 +33,7 @@
     <string name="msg_item_successfully_deleted">El artículo fue eliminado con éxito.</string>
     <string name="report">LISTADO</string>
     <string name="search">Buscar</string>
-    <string name="action_settings">Ajustes</string>
+    <string name="settings">Ajustes</string>
     <string name="next">Siguiente</string>
     <string name="amount">Cantidad</string>
     <string name="category">Categoría</string>
@@ -98,7 +98,7 @@
     <string name="version_etc">Versión instalada, etc.</string>
     <string name="reorder_categories">Reordenar categorías</string>
     <string name="create_category">Crea una nueva categoría</string>
-    <string name="num_columns">Número de categorías por fila</string>
+    <string name="num_categories_per_row">Número de categorías por fila</string>
     <string name="the_app_version">La versión de la aplicación</string>
     <string name="purchased_items">Elementos comprados</string>
     <string name="in_app_purchases">Compras en la aplicación</string>
@@ -144,4 +144,15 @@
     <string name="category_name_add_lang">Por favor escriba el nombre de la categoría. Toque el botón Agregar para diferentes idiomas.</string>
     <string name="category_code">Código de Categoría</string>
     <string name="import_from_google_drive">Importar desde Google Drive</string>
+    <string name="nav_header_desc">encabezado de navegación</string>
+    <string name="sign_in">Registrarse</string>
+    <string name="sign_out">Desconectar</string>
+    <string name="sign_out_success">Cierre de sesión exitoso</string>
+    <string name="sign_in_success">Inicio de sesión exitoso</string>
+    <string name="sign_in_failure">Inicio de sesión fallido</string>
+    <string name="register">Registrarse</string>
+    <string name="open">Abierta</string>
+    <string name="import_and_export">Importar y Exportar</string>
+    <string name="append">Adjuntar</string>
+    <string name="scratch">Desde cero</string>
 </resources>

@@ -1,7 +1,7 @@
 package com.kakeibo.util
 
 import android.util.Log
-import com.kakeibo.data.Item
+import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.ui.model.ExpandableListRowModel
 import java.util.*
 
@@ -14,9 +14,9 @@ object UtilExpandableList {
      * input variable date must be in DB format
      */
     fun expandOnlySpecificDate(
-            expandableMasterMap: SortedMap<ExpandableListRowModel.Header, List<Item>>,
-            expandableList: MutableList<ExpandableListRowModel>,
-            date: String = UtilDate.getTodaysDate(UtilDate.DATE_FORMAT_DB)) {
+        expandableMasterMap: SortedMap<ExpandableListRowModel.Header, List<ItemEntity>>,
+        expandableList: MutableList<ExpandableListRowModel>,
+        date: String = UtilDate.getTodaysYMD(UtilDate.DATE_FORMAT_DB)) {
         Log.d(TAG, "date=$date")
         expandableList.clear()
         expandableList.addAll(expandableMasterMap.flatMap { entry ->

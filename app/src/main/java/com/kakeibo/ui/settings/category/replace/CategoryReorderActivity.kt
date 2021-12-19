@@ -9,21 +9,22 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.kakeibo.R
-import com.kakeibo.data.CategoryDsp
-import com.kakeibo.ui.viewmodel.CategoryDspViewModel
-import com.kakeibo.ui.viewmodel.KkbAppViewModel
+import com.kakeibo.core.data.local.KkbAppViewModel
+//import com.kakeibo.feature_settings.settings_category.domain.model.CategoryDsp
+//import com.kakeibo.feature_settings.settings_category.presentation.CategoryDspViewModel
+//import com.kakeibo.ui.viewmodel.KkbAppViewModel
 
 class CategoryReorderActivity : AppCompatActivity(), EventClickListener {
 
-    private lateinit var _fragmentReorder: CategoryReplaceReorderFragment
+//    private lateinit var _fragmentReorder: CategoryReplaceReorderFragment
 
-    private val _kkbAppViewModel: KkbAppViewModel by viewModels()
-    private val _medium: Medium by viewModels()
-    private val _categoryDspViewModel: CategoryDspViewModel by viewModels()
+//    private val _kkbAppViewModel: KkbAppViewModel by viewModels()
+//    private val _medium: Medium by viewModels()
+//    private val _categoryDspViewModel: CategoryDspViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings_category_reorder)
+//        setContentView(R.layout.activity_settings_category_reorder)
 
         /*** hide home button on actionbar  */
         if (supportActionBar != null) {
@@ -32,40 +33,40 @@ class CategoryReorderActivity : AppCompatActivity(), EventClickListener {
         }
 
         /*** ads  */
-        _kkbAppViewModel.all.observe(this, {
-            val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
+//        _kkbAppViewModel.all.observe(this, {
+//            val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
+//
+//            if (showAds) {
+//                MobileAds.initialize(this) {}
+//                val adView: AdView = findViewById(R.id.ad_container)
+//                val adRequest = AdRequest.Builder().build()
+//                adView.loadAd(adRequest)
+//            }
+//        })
 
-            if (showAds) {
-                MobileAds.initialize(this) {}
-                val adView: AdView = findViewById(R.id.ad_container)
-                val adRequest = AdRequest.Builder().build()
-                adView.loadAd(adRequest)
-            }
-        })
-
-        _fragmentReorder = CategoryReplaceReorderFragment.newInstance()
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.frl_container, _fragmentReorder)
-                .commit()
+//        _fragmentReorder = CategoryReplaceReorderFragment.newInstance()
+//        supportFragmentManager
+//                .beginTransaction()
+//                .replace(R.id.frl_container, _fragmentReorder)
+//                .commit()
     }
 
     override
     fun onNextPressed(tag: Int) {
-        val dialog = AlertDialog.Builder(this)
-        dialog.setIcon(R.mipmap.ic_mikan)
-        dialog.setTitle(R.string.reorder_categories)
-        dialog.setMessage(R.string.quest_determine_category_order)
-        dialog.setPositiveButton(R.string.yes) { _, _ ->
-            Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show()
-
-            _categoryDspViewModel.insertAll(_medium.newCategoryList.mapIndexed {
-                index, category -> CategoryDsp(category.id, index, category.code)
-            })
-            finish()
-        }
-        dialog.setNegativeButton(R.string.no) { _, _ -> }
-        dialog.show()
+//        val dialog = AlertDialog.Builder(this)
+//        dialog.setIcon(R.mipmap.ic_mikan)
+//        dialog.setTitle(R.string.reorder_categories)
+//        dialog.setMessage(R.string.quest_determine_category_order)
+//        dialog.setPositiveButton(R.string.yes) { _, _ ->
+//            Toast.makeText(this, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show()
+//
+//            _categoryDspViewModel.insertAll(_medium.newCategoryList.mapIndexed {
+//                index, category -> CategoryDsp(category.id, index, category.code)
+//            })
+//            finish()
+//        }
+//        dialog.setNegativeButton(R.string.no) { _, _ -> }
+//        dialog.show()
     }
 
     override

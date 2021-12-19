@@ -12,15 +12,15 @@
 //import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 //import androidx.test.platform.app.InstrumentationRegistry;
 //
-//import com.kakeibo.data.CategoryDsp;
-//import com.kakeibo.data.Category;
-//import com.kakeibo.data.Item;
-//import com.kakeibo.db.CategoryDBAdapter;
-//import com.kakeibo.db.CategoryDspDBAdapter;
-//import com.kakeibo.db.CategoryLanDBAdapter;
-//import com.kakeibo.db.ItemDBAdapter;
+//import com.kakeibo.feature_settings.settings_category.domain.model.CategoryDsp;
+//import com.kakeibo.feature_settings.settings_category.domain.model.Category;
+//import com.kakeibo.feature_item.data.sources.local.entities.Item;
+//import com.kakeibo.core.data.db.CategoryDBAdapter;
+//import com.kakeibo.core.data.db.CategoryDspDBAdapter;
+//import com.kakeibo.core.data.db.CategoryLanDBAdapter;
+//import com.kakeibo.core.data.db.ItemDBAdapter;
 //import com.kakeibo.LiveDataTestUtil;
-//import com.kakeibo.db.KkbAppDBAdapter;
+//import com.kakeibo.core.data.db.KkbAppDBAdapter;
 //import com.kakeibo.util.UtilCurrency;
 //
 //import org.junit.After;
@@ -33,12 +33,12 @@
 //import java.math.BigDecimal;
 //import java.util.List;
 //
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_1_2;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_2_3;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_3_4;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_4_5;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_5_7;
-//import static com.kakeibo.data.disk.AppDatabase.MIGRATION_6_7;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_1_2;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_2_3;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_3_4;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_4_5;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_5_7;
+//import static com.kakeibo.feature_item.data.sources.local.AppDatabase.MIGRATION_6_7;
 //import static org.junit.Assert.assertEquals;
 //
 //@RunWith(AndroidJUnit4ClassRunner.class)
