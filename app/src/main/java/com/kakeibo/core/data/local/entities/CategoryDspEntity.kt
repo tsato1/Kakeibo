@@ -12,4 +12,8 @@ data class CategoryDspEntity(
     val location: Int,
     val code: Int
 
-)
+) {
+
+    class InvalidCategoryDspException(message: String) : Exception(message)
+
+}

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="category"
+            type="com.kakeibo.feature_settings.domain.models.CategoryModel" />
+<!--        <variable-->
+<!--            name="categoryClickListener"-->
+<!--            type="com.kakeibo.feature_settings.presentation.category_reorder.CategoryClickListener" />-->
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rll_item"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:minHeight="@dimen/grv_item_min_height"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true">
+<!--        android:onClick="@{(v)->categoryClickListener.onCategoryClicked(v, category)}">-->
+
+        <ImageView
+            android:id="@+id/imv_item_img"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/txv_item_title"
+            android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:focusable="false"
+            bind:context="@{context}"
+            bind:category="@{category}"
+            android:contentDescription="@string/category"/>
+
+        <ImageView
+            android:id="@+id/imv_category_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txv_item_title"
+            android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:contentDescription="@string/category"
+            android:src="@drawable/ic_overlay_remove"
+            android:visibility="gone"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <ImageView
+            android:id="@+id/imv_category_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txv_item_title"
+            android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:contentDescription="@string/category"
+            android:src="@drawable/ic_overlay_add"
+            android:visibility="gone"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <TextView
+            android:id="@+id/txv_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:clickable="false"
+            android:focusable="false"
+            bind:context="@{context}"
+            bind:category="@{category}"
+            bind:colon="@{false}" />
+
+    </RelativeLayout>
+
+</layout>

@@ -10,13 +10,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.BuildConfig
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
 import com.kakeibo.core.data.local.entities.KkbApp
-import com.kakeibo.data.Subscription
 import com.kakeibo.core.data.constants.PrepDB7
-import com.kakeibo.feature_main.data.sources.local.ItemDao
 import com.kakeibo.core.data.local.entities.CategoryEntity
 import com.kakeibo.core.data.local.entities.ItemEntity
-import com.kakeibo.feature_main.data.sources.local.entities.LocallyDeletedItemIdEntity
-import com.kakeibo.feature_settings.data.sources.local.CustomCategoryDao
+import com.kakeibo.feature_subscriptions.Subscription
 
 @Database(
     entities = [
@@ -36,7 +33,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val itemDao: ItemDao
     abstract val categoryDao: CategoryDao
     abstract val categoryDspDao: CategoryDspDao
-    abstract val customCategoryDao: CustomCategoryDao
 //    abstract fun searchCriteriaDao(): SearchCriteriaDao
 //    abstract val subscriptionDao: SubscriptionDao
 

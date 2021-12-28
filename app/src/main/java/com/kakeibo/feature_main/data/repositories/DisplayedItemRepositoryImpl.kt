@@ -1,97 +1,107 @@
 package com.kakeibo.feature_main.data.repositories
 
+import com.kakeibo.core.data.local.ItemDao
 import com.kakeibo.core.util.Resource
-import com.kakeibo.feature_main.data.sources.local.ItemDao
-import com.kakeibo.feature_main.domain.models.DisplayedItem
+import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import retrofit2.Response
+import kotlinx.coroutines.flow.*
+import retrofit2.HttpException
+import java.io.IOException
 
 class DisplayedItemRepositoryImpl(
-    private val itemDao: ItemDao
+    private val dao: ItemDao
 ) : DisplayedItemRepository {
 
-    private var currentItemsResponse: Response<List<DisplayedItem>>? = null
-
-//    suspend fun syncItems() {
-//        val locallyDeletedItemIds = itemDao.getAllLocallyDeletedItemIds()
-//        locallyDeletedItemIds.forEach { locallyDeletedItemId -> // sync with server
-//            deleteItemById(locallyDeletedItemId.deletedItemId)
-//        }
-//
-//        val unsyncedItems = itemDao.getAllUnsyncedItemEntities()
-//        unsyncedItems.forEach { unsyncedItem -> // sync with server
-//            insertItem(unsyncedItem)
-//        }
-//
-//        currentItemsResponse = noteApi.getItems() // get the current version of items from the server
-//        currentItemsResponse?.body()?.let { items ->
-//            // update the local database
-//            itemDao.deleteAllItems()
-//            insertItems(items.onEach { item ->
-//                item.isSynced = true
-//            })
-//        }
-//    }
-
-    /* should be fetching data only from api into db */
-//    override fun getItems(): Flow<Resource<List<DisplayedItem>>> {
-//        return networkBoundResource(
-//            query = itemDao.getAllItems(),
-//            fetch = {
-//                syncItems(),
-//                currentItemsResponse
-//            },
-//            saveFetchedResult = { response ->
-//                response?.body()?.let {
-//                    insertItems(it.onEach { item ->
-//                        item.isSynced = true
-//                    })
-//                }
-//            },
-//            shouldFetch = {
-//                checkForInternetConnection(context = context)
-//            }
-//        )
-//    }
-
-    override suspend fun getItemById(id: Long): DisplayedItem? {
-         return itemDao.getItemById(id)?.toDisplayedItem()
+    override fun getAllItems(): Flow<Resource<List<DisplayedItemModel>>> = flow {
+        dao.getAllItems() // todo
     }
 
-    override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItem>>> = flow {
+    override suspend fun getItemById(id: Long): DisplayedItemModel? {
+        return dao.getItemById(id)?.toItemModel()
+    }
+
+    override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
         emit(Resource.Loading())
-        val displayedItem = itemDao.getItemsByYear(y).map { it.toDisplayedItem() }
-        emit(Resource.Success(displayedItem))
+
+        val displayedItems = dao.getItemsInYear(y)
+            .map {
+                it.map {
+                    it.toItemModel()
+                }
+            }
+            .first()
+
+        emit(Resource.Loading(displayedItems))
+
+        try {
+
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
+        } catch (e: IOException) {
+            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
+        }
+
+        val flow = dao.getItemsInYear(y)
+            .map {
+                it.map {
+                    it.toItemModel()
+                }
+            }
+            .map {
+                Resource.Success(it)
+            }
+
+        emitAll(flow)
     }
 
-    override fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItem>>> = flow {
+    override fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
         emit(Resource.Loading())
-        val displayedItem = itemDao.getItemsByYearMonth(ym).map { it.toDisplayedItem() }
-        emit(Resource.Success(displayedItem))
+
+        val displayedItems = dao.getItemsInMonth(ym)
+            .map {
+                it.map {
+                    it.toItemModel()
+                }
+            }
+            .first()
+
+        try {
+
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
+        } catch (e: IOException) {
+            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
+        }
+
+        val flow = dao.getItemsInMonth(ym)
+            .map {
+                it.map {
+                    it.toItemModel()
+                }
+            }
+            .map {
+                Resource.Success(it)
+            }
+
+        emitAll(flow)
+
+
+        emit(Resource.Success(displayedItems))
     }
 
-
-
-
-    override suspend fun insertItem(displayedItem: DisplayedItem): Long {
-        return itemDao.insertItem(displayedItem.toItemEntity())
+    override suspend fun insertItem(displayedItemModel: DisplayedItemModel): Long {
+        return dao.insertItem(displayedItemModel.toItemEntity())
     }
 
-    override suspend fun insertItems(displayedItemList: List<DisplayedItem>) {
-        itemDao.insertItems(displayedItemList.map { it.toItemEntity() })
-    }
-
-
-
-
-    override suspend fun deleteItem(displayedItem: DisplayedItem) {
-        itemDao.deleteItem(displayedItem.toItemEntity())
+    override suspend fun insertItems(displayedItemModelList: List<DisplayedItemModel>) {
+        displayedItemModelList.forEach {
+            insertItem(it)
+        }
     }
 
     override suspend fun deleteItemById(id: Long) {
-        itemDao.deleteItemById(id)
+        dao.deleteItemById(id)
+//        itemDataSource.deleteItemById(id)
         // todo : work on this once api is implemented
 //        val response = try {
 //            itemApi.deleteItem(DeleteItemRequest(id))
@@ -114,8 +124,9 @@ class DisplayedItemRepositoryImpl(
 //        itemDao.deleteLocallyDeletedItemId(Id)
 //    }
 
-    override suspend fun deleteAll() {
-        itemDao.deleteAllItems()
+    override suspend fun deleteAllItems() {
+        dao.deleteAllItems()
+//        itemDataSource.deleteAllItems()
     }
 
 }

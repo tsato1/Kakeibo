@@ -14,8 +14,8 @@
 //import com.kakeibo.R
 //import com.kakeibo.feature_settings.settings_category.domain.model.Category
 //import com.kakeibo.databinding.FragmentSettingsCategoryReplaceBinding
-//import com.kakeibo.ui.adapter.view.RecyclerViewAdapter
-//import com.kakeibo.ui.listener.CategoryClickListener
+//import com.kakeibo.feature_settings.presentation.category_reorder.RecyclerViewAdapter
+//import com.kakeibo.feature_settings.presentation.category_reorder.CategoryClickListener
 //import com.kakeibo.feature_settings.settings_category.presentation.CategoryViewModel
 //import com.kakeibo.util.UtilCategory
 //

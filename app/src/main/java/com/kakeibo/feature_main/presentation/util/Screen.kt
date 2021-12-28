@@ -14,5 +14,6 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector?
     object ItemInputScreen: Screen("item_input_screen", "Input", Icons.Default.Input)
     object ItemDetailScreen: Screen("item_detail_screen", "Detail", Icons.Default.Details)
 
+    object AboutScreen: Screen("about", "About", null)
     object DammyScreen: Screen("", "", null)
 }

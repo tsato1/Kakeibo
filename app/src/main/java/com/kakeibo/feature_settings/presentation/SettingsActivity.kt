@@ -23,14 +23,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.kakeibo.feature_settings.presentation.category_reorder.presentation.components.RearrangeCategoriesScreen
-import com.kakeibo.feature_settings.presentation.custom_category_detail.presentation.components.CustomCategoryDetailScreen
-import com.kakeibo.feature_settings.presentation.custom_category_list.presentation.components.CustomCategoryListScreen
+import com.kakeibo.feature_settings.presentation.custom_category_detail.components.CustomCategoryDetailScreen
+import com.kakeibo.feature_settings.presentation.custom_category_list.components.CustomCategoryListScreen
 import com.kakeibo.feature_settings.presentation.settings_list.components.SettingsListScreen
 import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.ui.theme.KakeiboTheme
 import com.kakeibo.R
-import com.kakeibo.feature_settings.presentation.category_rearrange_subtract.presentation.components.RearrangeCategoriesSubtractScreen
+import com.kakeibo.feature_settings.presentation.category_rearrange.components.CategoryRearrangeScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalAnimationApi
@@ -130,13 +129,7 @@ fun ScreenController(
         ) {
             CustomCategoryDetailScreen(navController)
         }
-        composable(route = Screen.RearrangeCategoriesScreen.route) {
-            RearrangeCategoriesScreen(navController)
-        }
-        composable(route = Screen.RearrangeCategoriesSubtractScreen.route) {
-            RearrangeCategoriesSubtractScreen()
-        }
-        composable(route = Screen.RearrangeCategoriesAddScreen.route) {
+        composable(route = Screen.CategoryRearrangeScreen.route) {
             CategoryRearrangeScreen(navController)
         }
     }

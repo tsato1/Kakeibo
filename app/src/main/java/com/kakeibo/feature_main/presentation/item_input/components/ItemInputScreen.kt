@@ -15,11 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
-import com.kakeibo.core.util.UiEvent
+import com.kakeibo.core.presentation.components.GridCategoryItem
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
 import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
-import com.kakeibo.feature_main.presentation.item_input.GridCategoryItem
 import com.kakeibo.feature_main.presentation.item_input.ItemInputEvent
 import com.kakeibo.feature_main.presentation.item_input.ItemInputViewModel
 import com.kakeibo.feature_main.presentation.util.Screen
@@ -46,13 +45,13 @@ fun ItemInputScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is UiEvent.ShowSnackbar -> {
+                is ItemInputViewModel.UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
-                is UiEvent.ShowToast -> {
+                is ItemInputViewModel.UiEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
                 }
-                is UiEvent.Save -> {
+                is ItemInputViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
                     navController.navigate(
                         Screen.ItemListScreen.route + "?itemId=${viewModel.savedItemId.value}"
@@ -126,7 +125,7 @@ fun ItemInputScreen(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .fillMaxWidth(),
-                            displayedCategory = category,
+                            categoryModel = category,
                             onItemClick = {
                                 coroutineScope.launch {
                                     viewModel.onEvent(

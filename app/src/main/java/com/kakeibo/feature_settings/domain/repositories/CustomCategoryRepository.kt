@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CustomCategoryRepository {
 
-    suspend fun getCustomCategoryById(id: Long): CategoryModel
+    suspend fun getCustomCategoryById(id: Long): CategoryModel?
 
     fun getAllCustomCategories(): Flow<Resource<List<CategoryModel>>>
 

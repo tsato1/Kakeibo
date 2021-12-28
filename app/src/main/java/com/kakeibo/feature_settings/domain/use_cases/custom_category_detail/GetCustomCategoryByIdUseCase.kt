@@ -7,7 +7,7 @@ class GetCustomCategoryByIdUseCase(
     private val repository: CustomCategoryRepository
 ) {
 
-    suspend operator fun invoke(id: Long): CategoryModel {
+    suspend operator fun invoke(id: Long): CategoryModel? {
         return repository.getCustomCategoryById(id)
     }
 

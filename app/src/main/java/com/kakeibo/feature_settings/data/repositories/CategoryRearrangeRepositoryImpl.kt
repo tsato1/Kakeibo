@@ -1,8 +1,9 @@
 package com.kakeibo.feature_settings.data.repositories
 
+import com.kakeibo.core.data.local.CategoryDao
 import com.kakeibo.core.data.local.CategoryDspDao
+import com.kakeibo.core.data.local.entities.CategoryDspEntity
 import com.kakeibo.core.util.Resource
-import com.kakeibo.feature_main.domain.models.DisplayedCategory
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
 import kotlinx.coroutines.flow.*
@@ -10,17 +11,18 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class CategoryRearrangeRepositoryImpl(
-    private val dao: CategoryDspDao
+    private val categoryDao: CategoryDao,
+    private val categoryDspDao: CategoryDspDao
 ) : CategoryRearrangeRepository {
 
-    override fun getDisplayedCategories(): Flow<Resource<List<DisplayedCategory>>> = flow {
+    override fun getDisplayedCategories(): Flow<Resource<List<CategoryModel>>> = flow {
         emit(Resource.Loading())
 
-        val displayedCategories = dao
-            .getDisplayedCategoryList()
+        val displayedCategories = categoryDao
+            .getAllDisplayedCategories()
             .map {
                 it.map {
-                    it.toDisplayedCategory()
+                    it.toCategoryModel()
                 }
             }
             .first()
@@ -35,11 +37,11 @@ class CategoryRearrangeRepositoryImpl(
             emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedCategories))
         }
 
-        val flow = dao
-            .getDisplayedCategoryList()
+        val flow = categoryDao
+            .getAllDisplayedCategories()
             .map {
                 it.map {
-                    it.toDisplayedCategory()
+                    it.toCategoryModel()
                 }
             }
             .map {
@@ -49,14 +51,14 @@ class CategoryRearrangeRepositoryImpl(
         emitAll(flow)
     }
 
-    override fun getNonDisplayedCategories(): Flow<Resource<List<DisplayedCategory>>> = flow {
+    override fun getNonDisplayedCategories(): Flow<Resource<List<CategoryModel>>> = flow {
         emit(Resource.Loading())
 
-        val nonDisplayedCategories = dao
-            .getNonDisplayedCategoryList()
+        val nonDisplayedCategories = categoryDao
+            .getAllNotDisplayedCategories()
             .map {
                 it.map {
-                    it.toDisplayedCategory()
+                    it.toCategoryModel()
                 }
             }
             .first()
@@ -71,11 +73,11 @@ class CategoryRearrangeRepositoryImpl(
             emit(Resource.Error(e.message ?: "Couldn't reach server", data = nonDisplayedCategories))
         }
 
-        val flow = dao
-            .getNonDisplayedCategoryList()
+        val flow = categoryDao
+            .getAllNotDisplayedCategories()
             .map {
                 it.map {
-                    it.toDisplayedCategory()
+                    it.toCategoryModel()
                 }
             }
             .map {
@@ -85,13 +87,9 @@ class CategoryRearrangeRepositoryImpl(
         emitAll(flow)
     }
 
-    override suspend fun updateDisplayedCategories(list: List<DisplayedCategory>) {
-
+    override suspend fun updateDisplayedCategories(list: List<CategoryDspEntity>) {
+        categoryDspDao.deleteAllCategoryDsps()
+        categoryDspDao.insertCategoryDsps(list)
     }
-
-    override suspend fun updateNonDisplayedCategories(list: List<DisplayedCategory>) {
-
-    }
-
 
 }

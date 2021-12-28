@@ -3,18 +3,21 @@ package com.kakeibo.feature_main.presentation.item_input
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.kakeibo.core.util.UiEvent
-import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.presentation.TextFieldState
-import com.kakeibo.feature_main.domain.models.DisplayedItem
+import com.kakeibo.core.util.Resource
+import com.kakeibo.core.data.local.entities.ItemEntity
+import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
 import com.kakeibo.feature_main.presentation.common.DateHandleViewModel
 import com.kakeibo.util.UtilCurrency
 import com.kakeibo.util.UtilDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,14 +45,10 @@ class ItemInputViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    var loadDisplayedCategoryListJob: Job? = null
+
     init {
-        viewModelScope.launch {
-            displayedCategoryUseCases.observeDisplayedCategoriesUseCase().also { categories ->
-                _displayedCategoryState.value = displayedCategoryListState.value.copy(
-                    displayedCategoryList = categories
-                )
-            }
-        }
+        loadItems()
 
 //        savedStateHandle.get<Long>("itemId")?.let { itemId ->
 //            if (itemId != -1L) { // always 0
@@ -101,8 +100,9 @@ class ItemInputViewModel @Inject constructor(
             is ItemInputEvent.SaveItemWithCategory -> {
                 viewModelScope.launch {
                     try {
-                        _savedItemId.value = itemUseCases.insertItemUseCase(
-                            DisplayedItem(
+                        itemUseCases.insertItemUseCase(
+                            DisplayedItemModel(
+                                id = 0, // 0: id is automatically assigned by Room
                                 amount = itemAmount.value.text,
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
                                 categoryCode = event.displayedCategory.code,
@@ -112,8 +112,7 @@ class ItemInputViewModel @Inject constructor(
                                     date.value.split(" ")[0],
                                     appPreferences.getDateFormatIndex()
                                 ),
-                                updateDate = UtilDate.getTodaysYMD(UtilDate.DATE_FORMAT_DB_KMS)
-//                                isSynced = false
+                                updateDate = UtilDate.getTodaysYMD(UtilDate.DATE_FORMAT_DB_KMS),
                             )
                         )
                         _eventFlow.emit(UiEvent.Save)
@@ -128,5 +127,42 @@ class ItemInputViewModel @Inject constructor(
             is ItemInputEvent.DeleteItem -> { }
             else -> { }
         }
+    }
+
+    private fun loadItems() {
+        loadDisplayedCategoryListJob?.cancel()
+        loadDisplayedCategoryListJob = viewModelScope.launch {
+            displayedCategoryUseCases.getDisplayedCategoriesUseCase()
+                .onEach { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            _displayedCategoryState.value = displayedCategoryListState.value.copy(
+                                displayedCategoryList = result.data ?: emptyList(),
+                                isLoading = false
+                            )
+                        }
+                        is Resource.Error -> {
+                            _displayedCategoryState.value = displayedCategoryListState.value.copy(
+                                displayedCategoryList = result.data ?: emptyList(),
+                                isLoading = false
+                            )
+                            _eventFlow.emit(UiEvent.ShowToast(result.message ?: "Unknown Error"))
+                        }
+                        is Resource.Loading -> {
+                            _displayedCategoryState.value = displayedCategoryListState.value.copy(
+                                displayedCategoryList = result.data ?: emptyList(),
+                                isLoading = true
+                            )
+                        }
+                    }
+                }
+                .launchIn(this)
+        }
+    }
+
+    sealed class UiEvent {
+        data class ShowSnackbar(val message: String): UiEvent()
+        data class ShowToast(val message: String): UiEvent()
+        object Save: UiEvent()
     }
 }

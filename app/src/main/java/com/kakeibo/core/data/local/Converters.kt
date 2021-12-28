@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.TypeConverter
 import com.kakeibo.core.AppPreferencesImpl
 import com.kakeibo.KakeiboApp
-import com.kakeibo.R
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors

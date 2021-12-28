@@ -53,11 +53,11 @@
 <!--            android:parentActivityName=".ui.MainActivity"/>-->
 
         <activity
-            android:name="com.kakeibo.ui.settings.category.replace.CategoryReorderActivity"
-            android:label="@string/hide_display_reorder_categories"
+            android:name="com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity"
+            android:label="@string/reorder_categories"
             android:parentActivityName=".feature_settings.presentation.SettingsActivity"/>
 <!--        <activity-->
-<!--            android:name="com.kakeibo.ui.settings.category.replace.CategoryReorderActivity"-->
+<!--            android:name="com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity"-->
 <!--            android:label="@string/reorder_categories"-->
 <!--            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>-->
 <!--        <activity-->

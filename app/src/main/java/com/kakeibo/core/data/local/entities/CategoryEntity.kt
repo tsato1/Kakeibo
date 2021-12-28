@@ -2,10 +2,10 @@ package com.kakeibo.core.data.local.entities
 
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
-import androidx.room.ColumnInfo.BLOB
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.kakeibo.core.data.constants.ConstCategoryDB
+import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 
 @Entity(tableName = "categories")
@@ -25,6 +25,22 @@ class CategoryEntity(
     @ColumnInfo(name = ConstCategoryDB.COL_ID)
     var _id: Long = id
         private set
+
+    fun toDisplayedCategoryModel(): DisplayedCategoryModel {
+        return DisplayedCategoryModel(
+            _id = _id,
+            code = code,
+            name = name,
+            color = color,
+            sign = sign,
+            drawable = drawable,
+            image = image,
+            parent = parent,
+            description = description,
+            savedDate = savedDate,
+//            isSynced = isSynced
+        )
+    }
 
     fun toCategoryModel(): CategoryModel {
         return CategoryModel(

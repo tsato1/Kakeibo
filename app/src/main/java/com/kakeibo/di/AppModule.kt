@@ -5,18 +5,16 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.kakeibo.KakeiboApp.Companion.context
 import com.kakeibo.core.AppPreferencesImpl
-import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
-import com.kakeibo.core.data.local.AppDatabase
-import com.kakeibo.core.data.local.CategoryDspDao
 import com.kakeibo.core.data.constants.PrepDB
-import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
+import com.kakeibo.core.data.local.AppDatabase
 import com.kakeibo.core.data.local.CategoryDao
+import com.kakeibo.core.data.local.CategoryDspDao
+import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
+import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 import com.kakeibo.feature_main.domain.use_cases.*
-import com.kakeibo.feature_main.domain.use_cases.use_case_input.ObserveDisplayedCategoriesUseCase
 import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetItemByIdUseCase
 import com.kakeibo.feature_main.domain.use_cases.use_case_input.InsertItemUseCase
 import com.kakeibo.feature_main.domain.use_cases.use_case_list.DeleteItemUseCase
@@ -36,7 +34,6 @@ import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.GetAll
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetNonDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateDisplayedCategoriesUseCase
-import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateNonDisplayedCategoriesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -83,6 +80,18 @@ object AppModule {
             .build()
     }
 
+    @Singleton
+    @Provides
+    fun provideKkbAppDao(db: AppDatabase) = db.kkbAppDao
+
+    @Singleton
+    @Provides
+    fun provideCategoryDao(db: AppDatabase) = db.categoryDao
+
+    @Singleton
+    @Provides
+    fun provideCategoryDspDao(db: AppDatabase) = db.categoryDspDao
+
     @Provides
     @Singleton
     fun provideItemRepository(db: AppDatabase): DisplayedItemRepository {
@@ -91,25 +100,28 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCategoryRepository(db: AppDatabase): DisplayedCategoryRepository {
-        return DisplayedCategoryRepositoryImpl(db.categoryDspDao)
+    fun provideDisplayedCategoryRepository(db: AppDatabase): DisplayedCategoryRepository {
+        return DisplayedCategoryRepositoryImpl(db.categoryDao)
     }
 
     @Provides
     @Singleton
     fun provideCategoryRearrangeRepository(db: AppDatabase): CategoryRearrangeRepository {
-        return CategoryRearrangeRepositoryImpl(db.categoryDspDao)
+        return CategoryRearrangeRepositoryImpl(db.categoryDao, db.categoryDspDao)
     }
 
     @Provides
     @Singleton
-    fun provideCustomCategoryRepository(db: AppDatabase): CustomCategoryRepository {
-        return CustomCategoryRepositoryImpl(db.customCategoryDao)
+    fun provideCustomCategoryRepository(db:AppDatabase): CustomCategoryRepository {
+        return CustomCategoryRepositoryImpl(db.categoryDao)
     }
 
     @Provides
     @Singleton
-    fun provideItemUseCases(repository: DisplayedItemRepository): ItemUseCases {
+    fun provideItemUseCases(
+        @ApplicationContext context: Context,
+        repository: DisplayedItemRepository
+    ): ItemUseCases {
         return ItemUseCases(
             getItemByIdUseCase = GetItemByIdUseCase(repository),
             getAllItemsUseCase = GetAllItemsUseCase(repository),
@@ -124,7 +136,7 @@ object AppModule {
     @Singleton
     fun provideDisplayedCategoryUseCases(repostiroy: DisplayedCategoryRepository): DisplayedCategoryUseCases {
         return DisplayedCategoryUseCases(
-            observeDisplayedCategoriesUseCase = ObserveDisplayedCategoriesUseCase(repostiroy),
+            getDisplayedCategoriesUseCase = com.kakeibo.feature_main.domain.use_cases.use_case_input.GetDisplayedCategoriesUseCase(repostiroy),
         )
     }
 
@@ -134,14 +146,16 @@ object AppModule {
         return CategoryRearrangeUseCases(
             getDisplayedCategoriesUseCase = GetDisplayedCategoriesUseCase(repository),
             getNonDisplayedCategoriesUseCase = GetNonDisplayedCategoriesUseCase(repository),
-            updateDisplayedCategoriesUseCase = UpdateDisplayedCategoriesUseCase(repository),
-            updateNonDisplayedCategoriesUseCase = UpdateNonDisplayedCategoriesUseCase(repository)
+            updateDisplayedCategoriesUseCase = UpdateDisplayedCategoriesUseCase(repository)
         )
     }
 
     @Provides
     @Singleton
-    fun provideCustomCategoryUseCases(repository: CustomCategoryRepository): CustomCategoryUseCases {
+    fun provideCustomCategoryUseCases(
+        @ApplicationContext context: Context,
+        repository: CustomCategoryRepository
+    ): CustomCategoryUseCases {
         return CustomCategoryUseCases(
             getAllCustomCategoriesUseCase = GetAllCustomCategoriesUseCase(repository),
             getCustomCategoryByIdUseCase = GetCustomCategoryByIdUseCase(repository),
@@ -152,21 +166,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideKkbAppDao(db: AppDatabase) = db.kkbAppDao
-
-    @Singleton
-    @Provides
-    fun provideCategoryDao(db: AppDatabase) = db.categoryDao
-
-    @Singleton
-    @Provides
-    fun provideCategoryDspDao(db: AppDatabase) = db.categoryDspDao
-
-    @Singleton
-    @Provides
-    fun provideSharedPreferences(
-        @ApplicationContext context: Context
-    ): AppPreferencesImpl {
+    fun provideSharedPreferences(@ApplicationContext context: Context): AppPreferencesImpl {
         return AppPreferencesImpl(context)
     }
 

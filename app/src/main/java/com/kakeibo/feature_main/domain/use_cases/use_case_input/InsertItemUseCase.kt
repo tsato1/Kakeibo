@@ -3,9 +3,8 @@ package com.kakeibo.feature_main.domain.use_cases.use_case_input
 import android.content.Context
 import com.kakeibo.R
 import com.kakeibo.core.data.local.entities.ItemEntity
-import com.kakeibo.feature_main.domain.models.DisplayedItem
+import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
-import kotlin.jvm.Throws
 
 class InsertItemUseCase(
     private val repository: DisplayedItemRepository,
@@ -13,8 +12,8 @@ class InsertItemUseCase(
 ) {
 
     @Throws(ItemEntity.InvalidItemException::class)
-    suspend operator fun invoke(displayedItem: DisplayedItem): Long {
-        val amountString = displayedItem.amount
+    suspend operator fun invoke(displayedItemModel: DisplayedItemModel) { // todo return long to see if successful
+        val amountString = displayedItemModel.amount
 
         if ("" == amountString) {
             throw ItemEntity.InvalidItemException(
@@ -39,7 +38,7 @@ class InsertItemUseCase(
 //            throw ItemEntity.InvalidItemException("R.string.err_amount_invalid")
 //        }
 
-        return repository.insertItem(displayedItem)
+        repository.insertItem(displayedItemModel)
     }
 
 }

@@ -29,9 +29,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.kakeibo.feature_main.presentation.item_chart.components.ItemChartScreen
+import com.kakeibo.feature_main.presentation.item_main.item_chart.components.ItemChartScreen
 import com.kakeibo.feature_main.presentation.item_input.components.ItemInputScreen
-import com.kakeibo.feature_main.presentation.item_list.components.ItemListScreen
+import com.kakeibo.feature_main.presentation.item_main.item_calendar.components.ItemCalendarScreen
+import com.kakeibo.feature_main.presentation.item_main.item_list.components.ItemListScreen
 import com.kakeibo.feature_main.presentation.item_search.components.ItemSearchScreen
 import com.kakeibo.feature_main.presentation.nav_drawer.components.NavDrawerItem
 import com.kakeibo.feature_main.presentation.nav_drawer.NavDrawerItem
@@ -294,7 +295,7 @@ fun DrawerContent(
     scaffoldState: ScaffoldState,
     navController: NavController
 ) {
-    val items = listOf(
+    val navDrawerItems = listOf(
         NavDrawerItem.SignIn,
         NavDrawerItem.SignOut,
         NavDrawerItem.About
@@ -317,12 +318,12 @@ fun DrawerContent(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEach { item ->
+        navDrawerItems.forEach { navDrawerItem ->
             NavDrawerItem(
-                item = item,
-                selected = currentRoute == item.route,
+                item = navDrawerItem,
+                selected = currentRoute == navDrawerItem.route,
                 onItemClick = {
-                    navController.navigate(item.route) {
+                    navController.navigate(navDrawerItem.route) {
                         // Pop up to the start destination of the graph to
                         // avoid building up a large stack of destinations
                         // on the back stack as users select items
@@ -375,13 +376,16 @@ fun ScreenController(
         composable(route = Screen.ItemChartScreen.route) {
             ItemChartScreen(navController = navController)
         }
+        composable(route = Screen.ItemChartScreen.route) {
+            ItemCalendarScreen(navController = navController)
+        }
         composable(route = Screen.ItemInputScreen.route) {
             ItemInputScreen(navController = navController)
         }
         composable(route = Screen.ItemSearchScreen.route) {
-            ItemSearchScreen()
+            ItemSearchScreen(navController = navController)
         }
-        composable(route = com.kakeibo.feature_settings.presentation.util.Screen.AboutScreen.route) {
+        composable(route = Screen.AboutScreen.route) {
             AboutScreen()
         }
 //        composable(

@@ -3,11 +3,9 @@ package com.kakeibo.feature_settings.domain.use_cases
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetNonDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateDisplayedCategoriesUseCase
-import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateNonDisplayedCategoriesUseCase
 
 data class CategoryRearrangeUseCases(
     val getDisplayedCategoriesUseCase: GetDisplayedCategoriesUseCase,
     val getNonDisplayedCategoriesUseCase: GetNonDisplayedCategoriesUseCase,
     val updateDisplayedCategoriesUseCase: UpdateDisplayedCategoriesUseCase,
-    val updateNonDisplayedCategoriesUseCase: UpdateNonDisplayedCategoriesUseCase
 )

@@ -24,7 +24,7 @@ import com.kakeibo.R
 import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListEvent
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListViewModel
-import com.kakeibo.ui.settings.category.replace.CategoryReorderActivity
+import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
 
 @Composable
 fun SettingsListScreen(
@@ -120,7 +120,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate(Screen.RearrangeCategoriesAddScreen.route)
+                            navController.navigate(Screen.CategoryRearrangeScreen.route)
                         }
                 ) {
                     Text(
@@ -132,7 +132,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-//                            navController.navigate(Screen.RearrangeCategoriesScreen.route)
+//                            navController.navigate(Screen.RearrangeCategoriesScreen.route) // future todo
                             context.startActivity(Intent(context, CategoryReorderActivity::class.java))
                         }
                 ) {

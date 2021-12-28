@@ -67,14 +67,18 @@ object UtilDrawing {
         val outputBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val path = Path()
         path.addCircle(
-                (width / 2).toFloat(), (height / 2).toFloat(), Math.min(width, height / 2).toFloat(), Path.Direction.CCW)
+            (width / 2).toFloat(),
+            (height / 2).toFloat(),
+            Math.min(width, height / 2).toFloat(),
+            Path.Direction.CCW
+        )
         val canvas = Canvas(outputBitmap)
         canvas.clipPath(path)
         canvas.drawBitmap(bitmap, 0f, 0f, null)
         return outputBitmap
     }
 
-    fun replaceColor(src: Bitmap?, fromColor: Int, targetColor: Int): Bitmap? {
+    fun replaceColorExcept(src: Bitmap?, exceptColor: Int, targetColor: Int): Bitmap? {
         if (src == null) {
             return null
         }
@@ -85,7 +89,7 @@ object UtilDrawing {
         //get pixels
         src.getPixels(pixels, 0, width, 0, 0, width, height)
         for (x in pixels.indices) {
-            pixels[x] = if (pixels[x] == fromColor) targetColor else pixels[x]
+            pixels[x] = if (pixels[x] != exceptColor) targetColor else pixels[x]
         }
         // create result bitmap output
         val result = Bitmap.createBitmap(width, height, src.config)

@@ -11,7 +11,7 @@
 //import com.kakeibo.R
 //import com.kakeibo.ui.settings.category.edit.CustomCategoryListActivity
 ////import com.kakeibo.ui.settings.category.replace.CategoryReplaceActivity
-//import com.kakeibo.ui.settings.category.replace.CategoryReorderActivity
+//import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
 //import com.kakeibo.feature_item.presentation.item_list.ItemViewModel
 //import com.kakeibo.ui.viewmodel.KkbAppViewModel
 //

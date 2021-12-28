@@ -2,7 +2,6 @@ package com.kakeibo.core.data.local.entities
 
 import androidx.annotation.NonNull
 import androidx.room.*
-import com.google.gson.annotations.Expose
 import com.kakeibo.core.data.local.Converters
 import com.kakeibo.util.UtilCurrency
 import java.math.BigDecimal
@@ -71,7 +70,11 @@ class ItemEntity {
         this.eventDate = eventDate
         this.updateDate = updateDate
     }
+
     class InvalidItemException(message: String): Exception(message)
+
+    class ItemNotFoundException(message: String): Exception(message)
+
 }
 
 //@Entity(tableName = ConstItemDB.TABLE_NAME)
