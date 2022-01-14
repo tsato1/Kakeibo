@@ -5,11 +5,12 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.kakeibo.core.AppPreferencesImpl
+import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.AppDatabase
 import com.kakeibo.core.data.local.CategoryDao
 import com.kakeibo.core.data.local.CategoryDspDao
+import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
@@ -166,7 +167,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(@ApplicationContext context: Context): AppPreferencesImpl {
+    fun provideSharedPreferences(@ApplicationContext context: Context): AppPreferences {
         return AppPreferencesImpl(context)
     }
 

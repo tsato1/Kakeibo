@@ -2,10 +2,11 @@ package com.kakeibo.feature_settings.presentation.category_rearrange
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
+import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
-import com.kakeibo.core.presentation.BaseViewModel
 import com.kakeibo.feature_settings.domain.use_cases.CategoryRearrangeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -18,8 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryRearrangeViewModel @Inject constructor(
-    private val categoryRearrangeUseCases: CategoryRearrangeUseCases
-) : BaseViewModel() {
+    private val categoryRearrangeUseCases: CategoryRearrangeUseCases,
+    private val appPreferences: AppPreferences
+) : ViewModel() {
+
+    val numColumns = appPreferences.getNumColumns()
 
     private val _categoryRearrangeState = mutableStateOf(CategoryRearrangeState())
     val categoryRearrangeState: State<CategoryRearrangeState> = _categoryRearrangeState

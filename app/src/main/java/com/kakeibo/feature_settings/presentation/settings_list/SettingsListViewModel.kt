@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.kakeibo.R
-import com.kakeibo.core.AppPreferencesImpl
+import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

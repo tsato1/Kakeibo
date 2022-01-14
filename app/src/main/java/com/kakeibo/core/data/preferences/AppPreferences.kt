@@ -1,4 +1,4 @@
-package com.kakeibo.core
+package com.kakeibo.core.data.preferences
 
 interface AppPreferences {
 
@@ -19,5 +19,17 @@ interface AppPreferences {
     fun remove(key: String)
 
     fun clear()
+
+    fun getDateFormatIndex(): Int
+
+    fun getDateFormat(): String
+
+    fun getFractionDigitsIndex(): Int
+
+    fun getFractionDigits(): Int
+
+    fun getNumColumnsIndex(): Int
+
+    fun getNumColumns(): Int
 
 }

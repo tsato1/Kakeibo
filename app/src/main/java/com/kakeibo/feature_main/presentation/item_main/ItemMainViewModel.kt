@@ -3,14 +3,18 @@ package com.kakeibo.feature_main.presentation.item_main
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
+import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
-import com.kakeibo.feature_main.presentation.common.DateHandleViewModel
+import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ItemListEvent
 import com.kakeibo.feature_main.presentation.item_main.item_list.components.ExpandableItem
+import com.kakeibo.feature_main.presentation.item_search.*
+import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.getYMDateTextFromDBFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,16 +22,23 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class ItemMainViewModel @Inject constructor(
     private val itemUseCases: ItemUseCases,
+    appPreferences: AppPreferences,
     savedStateHandle: SavedStateHandle
-) : DateHandleViewModel() {
+) : ViewModel() {
+
+    val dateFormatIndex = appPreferences.getDateFormatIndex()
 
     private val _expandableItemListState = mutableStateOf(ExpandableItemListState())
     val expandableItemListState: State<ExpandableItemListState> = _expandableItemListState
+
+    private val _itemChartState = mutableStateOf(ItemChartState())
+    val itemChartState: State<ItemChartState> = _itemChartState
 
     private var recentlyDeletedDisplayedItemModel: DisplayedItemModel? = null
 
@@ -37,52 +48,85 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        savedStateHandle.get<Long>("itemId")?.let { itemId ->
-            getItemsYM(UtilDate.getTodaysYM(UtilDate.DATE_FORMAT_DB))
-        }
+        getItemsYM(UtilDate.getTodaysLocalDate().getYMDateTextFromDBFormat(UtilDate.DATE_FORMAT_DB))
     }
 
     private fun getItemsYM(ym: String) {
         getItemsJob?.cancel()
         getItemsJob = itemUseCases.getItemListByYearMonthUseCase(ym)
             .onEach { result ->
+                /*
+                Used in ItemListScreen
+                 */
                 val expandableItemList = result.data
-                    ?.groupBy {
-                        it.eventDate
-                    }
+                    ?.groupBy { it.eventDate }
                     ?.map { entry ->
                         ExpandableItem(
                             ExpandableItem.Parent(
                                 entry.key,
-                                entry.value
-                                    .map {
-                                        it.amount.toLong()
-                                    }
-                                    .filter {
-                                        it > 0
-                                    }
-                                    .sum()
-                                    .toString()
-                                ,
-                                entry.value
-                                    .map {
-                                        it.amount.toLong()
-                                    }
-                                    .filter {
-                                        it < 0
-                                    }
-                                    .sum()
-                                    .toString()
+                                entry.value.map { it.amount.toLong() }.filter { it > 0 }.sum().toString(),
+                                entry.value.map { it.amount.toLong() }.filter { it < 0 }.sum().toString()
                             ),
                             entry.value
                         )
+                    } ?: emptyList()
+
+                /*
+                Used in ItemChartScreen
+                 */
+                val incomeTotal = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                    ?.sumOf { it.amount.toLong() } ?: 0L
+
+                val expenseTotal = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                    ?.sumOf { it.amount.toLong() } ?: 0L
+
+                val incomeCategoryList = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                    ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
+                    ?.reduce { _, acc, ele ->
+                        val sum = acc.amount.toLong() + ele.amount.toLong()
+                        acc.copy(
+                            amount = sum.toString()
+                        )
                     }
-                    ?: emptyList()
+                    ?.values?.toList()
+                    ?.sortedByDescending { it.amount.toLong() } ?: emptyList()
+
+                val expenseCategoryList = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                    ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
+                    ?.reduce { _, acc, ele ->
+                        val sum = acc.amount.toLong() + ele.amount.toLong()
+                        acc.copy(
+                            amount = sum.toString()
+                        )
+                    }
+                    ?.values?.toList()
+                    ?.sortedBy { it.amount.toLong() } ?: emptyList()
+
+                val itemMapByCategoryIncome = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                    ?.groupBy { it.categoryCode } ?: emptyMap()
+
+                val itemMapByCategoryExpense = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                    ?.groupBy { it.categoryCode } ?: emptyMap()
 
                 when (result) {
                     is Resource.Success -> {
                         _expandableItemListState.value = expandableItemListState.value.copy(
                             expandableItemList = expandableItemList,
+                            isLoading = false
+                        )
+                        _itemChartState.value = itemChartState.value.copy(
+                            incomeTotal = incomeTotal,
+                            expenseTotal = expenseTotal,
+                            incomeList = incomeCategoryList,
+                            expenseList = expenseCategoryList,
+                            incomeMap = itemMapByCategoryIncome,
+                            expenseMap = itemMapByCategoryExpense,
                             isLoading = false
                         )
                     }
@@ -91,15 +135,33 @@ class ItemMainViewModel @Inject constructor(
                             expandableItemList = expandableItemList,
                             isLoading = false
                         )
+                        _itemChartState.value = itemChartState.value.copy(
+                            incomeTotal = incomeTotal,
+                            expenseTotal = expenseTotal,
+                            incomeList = incomeCategoryList,
+                            expenseList = expenseCategoryList,
+                            incomeMap = itemMapByCategoryIncome,
+                            expenseMap = itemMapByCategoryExpense,
+                            isLoading = false
+                        )
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                result.message ?: "At ItemListViewModel: Unknown error."
+                                result.message ?: "At ItemMainViewModel: Unknown error."
                             )
                         )
                     }
                     is Resource.Loading -> {
                         _expandableItemListState.value = expandableItemListState.value.copy(
                             expandableItemList = expandableItemList,
+                            isLoading = true
+                        )
+                        _itemChartState.value = itemChartState.value.copy(
+                            incomeTotal = incomeTotal,
+                            expenseTotal = expenseTotal,
+                            incomeList = incomeCategoryList,
+                            expenseList = expenseCategoryList,
+                            incomeMap = itemMapByCategoryIncome,
+                            expenseMap = itemMapByCategoryExpense,
                             isLoading = true
                         )
                     }
@@ -110,6 +172,10 @@ class ItemMainViewModel @Inject constructor(
 
     fun onEvent(event: ItemListEvent) {
         when (event) {
+            is ItemListEvent.DateChanged -> {
+                val year = event.value.year
+                val month = event.value.monthNumber
+            }
             is ItemListEvent.DeleteItem -> {
                 viewModelScope.launch {
                     itemUseCases.deleteItemUseCase(event.displayedItemModel)

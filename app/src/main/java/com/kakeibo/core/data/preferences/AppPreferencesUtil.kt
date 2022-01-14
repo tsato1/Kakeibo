@@ -1,4 +1,4 @@
-package com.kakeibo.core
+package com.kakeibo.core.data.preferences
 
 import android.content.SharedPreferences
 import android.util.Log

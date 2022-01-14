@@ -1,10 +1,7 @@
-package com.kakeibo.core
+package com.kakeibo.core.data.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.kakeibo.Constants
 import com.kakeibo.R
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -55,6 +52,7 @@ class AppPreferencesImpl @Inject constructor(
 //    }
 
     /* dateFormat */
+    override
     fun getDateFormatIndex(): Int {
         return getInt(
             context.resources.getString(R.string.pref_key_date_format), 0
@@ -63,12 +61,14 @@ class AppPreferencesImpl @Inject constructor(
 //            context.resources.getString(R.string.pref_key_date_format), "0"
 //        )?.toInt() ?: 0
     }
+    override
     fun getDateFormat(): String {
         val dateFormats = context.resources.getStringArray(R.array.pref_list_date_format)
         return dateFormats[getDateFormatIndex()]
     }
 
     /* fraction digits */
+    override
     fun getFractionDigitsIndex(): Int {
         val locale = Locale.getDefault()
         var defValue = 0
@@ -93,12 +93,14 @@ class AppPreferencesImpl @Inject constructor(
 //            context.resources.getString(R.string.pref_key_fraction_digits), "$defValue"
 //        )?.toInt() ?: defValue
     }
+    override
     fun getFractionDigits(): Int {
         val fractionDigits = context.resources.getStringArray(R.array.pref_list_fraction_digits)
         return fractionDigits[getFractionDigitsIndex()].toInt()
     }
 
     /* num category icons per row */
+    override
     fun getNumColumnsIndex(): Int {
         return getInt(
             context.resources.getString(R.string.pref_key_num_columns), 1
@@ -107,6 +109,7 @@ class AppPreferencesImpl @Inject constructor(
 //            context.resources.getString(R.string.pref_key_num_columns), "1"
 //        )?.toInt() ?: 1
     }
+    override
     fun getNumColumns(): Int {
         val numColumns = context.resources.getStringArray(R.array.pref_list_num_columns)
         return numColumns[getNumColumnsIndex()].toInt()

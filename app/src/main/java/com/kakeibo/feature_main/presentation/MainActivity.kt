@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -29,8 +31,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemDetailScreen
 import com.kakeibo.feature_main.presentation.item_main.item_chart.components.ItemChartScreen
-import com.kakeibo.feature_main.presentation.item_input.components.ItemInputScreen
+import com.kakeibo.feature_main.presentation.item_detail.item_input.components.ItemInputScreen
+import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_calendar.components.ItemCalendarScreen
 import com.kakeibo.feature_main.presentation.item_main.item_list.components.ItemListScreen
 import com.kakeibo.feature_main.presentation.item_search.components.ItemSearchScreen
@@ -253,7 +257,7 @@ fun TopNavigationBar(
             IconButton(
                 onClick = {
                     when (currentRoute) {
-                        Screen.ItemListScreen.route + "?itemId={itemId}",
+                        Screen.ItemListScreen.route,
                         Screen.ItemChartScreen.route,
                         Screen.ItemCalendarScreen.route ->
                             scope.launch {
@@ -265,7 +269,7 @@ fun TopNavigationBar(
                 }
             ) {
                 when (currentRoute) {
-                    Screen.ItemListScreen.route + "?itemId={itemId}",
+                    Screen.ItemListScreen.route,
                     Screen.ItemChartScreen.route,
                     Screen.ItemCalendarScreen.route ->
                         Icon(Icons.Default.Menu, "Menu")
@@ -275,6 +279,31 @@ fun TopNavigationBar(
             }
         },
         actions = {
+            IconButton(
+                onClick = {
+                    navController.navigate(Screen.ItemSearchScreen.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
+                        }
+
+                        // Avoid multiple copies of the same destination when re-selecting the same item
+                        launchSingleTop = true
+
+                        // Restore state when re-selecting a previously selected item
+                        restoreState = true
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search"
+                )
+            }
             IconButton(
                 onClick = {
                     context.startActivity(Intent(context, SettingsActivity::class.java))
@@ -353,14 +382,27 @@ fun DrawerContent(
 @ExperimentalFoundationApi
 @Composable
 fun ScreenController(
-    navController: NavHostController
+    navController: NavHostController,
+    itemMainViewModel: ItemMainViewModel = hiltViewModel()
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.ItemListScreen.route + "?itemId={itemId}"
+        startDestination = Screen.ItemListScreen.route
     ) {
+        composable(route = Screen.ItemListScreen.route) {
+            ItemListScreen(navController = navController, viewModel = itemMainViewModel)
+        }
+        composable(route = Screen.ItemChartScreen.route) {
+            ItemChartScreen(navController = navController, viewModel = itemMainViewModel)
+        }
+        composable(route = Screen.ItemCalendarScreen.route) {
+            ItemCalendarScreen(navController = navController, viewModel = itemMainViewModel)
+        }
+        composable(route = Screen.ItemInputScreen.route) {
+            ItemInputScreen(navController = navController)
+        }
         composable(
-            route = Screen.ItemListScreen.route + "?itemId={itemId}",
+            route = Screen.ItemDetailScreen.route + "?itemId={itemId}",
             arguments = listOf(
                 navArgument(
                     name = "itemId"
@@ -371,16 +413,7 @@ fun ScreenController(
             )
         ) {
             val itemId = it.arguments?.getLong("itemId") ?: -1L
-            ItemListScreen(navController = navController, itemId = itemId)
-        }
-        composable(route = Screen.ItemChartScreen.route) {
-            ItemChartScreen(navController = navController)
-        }
-        composable(route = Screen.ItemChartScreen.route) {
-            ItemCalendarScreen(navController = navController)
-        }
-        composable(route = Screen.ItemInputScreen.route) {
-            ItemInputScreen(navController = navController)
+            ItemDetailScreen(navController = navController, itemId = itemId)
         }
         composable(route = Screen.ItemSearchScreen.route) {
             ItemSearchScreen(navController = navController)
@@ -388,25 +421,5 @@ fun ScreenController(
         composable(route = Screen.AboutScreen.route) {
             AboutScreen()
         }
-//        composable(
-//            route = Screen.ItemDetailScreen.route + "?itemId={itemId}",
-//            arguments = listOf(
-//                navArgument(
-//                    name = "itemId"
-//                ) {
-//                    type = NavType.LongType
-//                    defaultValue = -1L
-//                }
-//                                navArgument(
-//                                    name = "noteColor"
-//                                ) {
-//                                    type = NavType.IntType
-//                                    defaultValue = -1
-//                                },
-//            )
-//        ) {
-//                            val color = it.arguments?.getInt("noteColor") ?: -1L
-//            ItemInputScreen(navController = navController)
-//        }
     }
 }

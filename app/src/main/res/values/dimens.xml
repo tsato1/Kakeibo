@@ -26,6 +26,7 @@
     <dimen name="grv_item_min_height">96dp</dimen>
 
     <!-- fragment2c -->
+    <dimen name="category_list_row_height">34dp</dimen>
     <dimen name="item_category_list_row_height">30dp</dimen>
     <dimen name="small_imv_square_sides">10dp</dimen>
     <dimen name="smaller_imv_square_sides">7dp</dimen>

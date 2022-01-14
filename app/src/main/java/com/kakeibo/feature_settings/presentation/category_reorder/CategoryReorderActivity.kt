@@ -50,8 +50,7 @@ class CategoryReorderActivity : AppCompatActivity() {
         _recyclerView = findViewById(R.id.rcv_grid)
         _nextBtn = findViewById(R.id.btn_next)
 
-        val numColumns = _categoryViewModel.appPreferences.getNumColumns()
-        _recyclerView.layoutManager = GridLayoutManager(this, numColumns)
+        _recyclerView.layoutManager = GridLayoutManager(this, _categoryViewModel.numColumns)
         _categoryViewModel.displayedCategories.observe(this, { list ->
             _list.clear()
             list.forEach { p ->

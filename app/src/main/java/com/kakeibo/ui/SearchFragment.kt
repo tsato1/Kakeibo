@@ -4,6 +4,7 @@
 //import android.view.View
 //import androidx.fragment.app.Fragment
 //import com.kakeibo.R
+//import com.kakeibo.ui.model.SearchCriteriaCard
 //import dagger.hilt.android.AndroidEntryPoint
 //
 //@AndroidEntryPoint

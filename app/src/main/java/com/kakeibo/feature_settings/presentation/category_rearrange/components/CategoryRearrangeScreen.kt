@@ -115,7 +115,7 @@ fun CategoryRearrangeScreen(
                         )
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(
-                                count = viewModel.appPreferences.getNumColumns()
+                                count = viewModel.numColumns
                             ),
                             contentPadding = PaddingValues(
                                 start = 6.dp,
@@ -196,7 +196,7 @@ fun CategoryRearrangeScreen(
                         )
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(
-                                count = viewModel.appPreferences.getNumColumns()
+                                count = viewModel.numColumns
                             ),
                             contentPadding = PaddingValues(
                                 start = 6.dp,
@@ -275,7 +275,7 @@ fun CategoryRearrangeScreen(
                         )
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(
-                                count = viewModel.appPreferences.getNumColumns()
+                                count = viewModel.numColumns
                             ),
                             contentPadding = PaddingValues(
                                 start = 6.dp,
@@ -345,7 +345,7 @@ fun CategoryRearrangeScreen(
                 OutlinedButton(
                     onClick = { openSaveDialog.value = false }
                 ) {
-                    Text(text = stringResource(R.string.cancel))
+                    Text(text = stringResource(id = R.string.cancel))
                 }
             },
             confirmButton = {
@@ -355,7 +355,7 @@ fun CategoryRearrangeScreen(
                         viewModel.onEvent(CategoryRearrangeEvent.SaveWithoutReorder)
                     }
                 ) {
-                    Text(text = stringResource(R.string.save))
+                    Text(text = stringResource(id = R.string.save))
                 }
                 OutlinedButton(
                     onClick = {
@@ -363,7 +363,7 @@ fun CategoryRearrangeScreen(
                         viewModel.onEvent(CategoryRearrangeEvent.SaveAndReorder)
                     }
                 ) {
-                    Text(text = stringResource(R.string.reorder_categories))
+                    Text(text = stringResource(id = R.string.reorder_categories))
                 }
             }
         )

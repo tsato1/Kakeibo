@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
@@ -19,8 +18,7 @@ import com.kakeibo.feature_main.presentation.util.Screen
 @Composable
 fun ItemListScreen(
     navController: NavController,
-    viewModel: ItemMainViewModel = hiltViewModel(),
-    itemId: Long
+    viewModel: ItemMainViewModel
 ) {
     val itemListState = viewModel.expandableItemListState.value
     val scaffoldState = rememberScaffoldState()
@@ -47,15 +45,17 @@ fun ItemListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
             DatePickerRow(
                 context = LocalContext.current,
-                viewModel = viewModel,
-                type = DateType.YM
+                type = DateType.YM,
+                dateFormatIndex = viewModel.dateFormatIndex,
+                onTextLayout = { }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             CollapsableLazyColumn(
+                navController = navController,
                 sections = itemListState.expandableItemList,
                 modifier = Modifier.fillMaxSize()
             )

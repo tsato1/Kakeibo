@@ -1,4 +1,4 @@
-package com.kakeibo.feature_main.presentation.item_input.components
+package com.kakeibo.feature_main.presentation.item_detail.item_input.components
 
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -19,9 +19,8 @@ import com.kakeibo.core.presentation.components.GridCategoryItem
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
 import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
-import com.kakeibo.feature_main.presentation.item_input.ItemInputEvent
-import com.kakeibo.feature_main.presentation.item_input.ItemInputViewModel
-import com.kakeibo.feature_main.presentation.util.Screen
+import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
+import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
 import com.kakeibo.util.UtilText
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ItemInputScreen(
     navController: NavController,
-    viewModel: ItemInputViewModel = hiltViewModel()
+    viewModel: ItemDetailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
@@ -45,17 +44,15 @@ fun ItemInputScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is ItemInputViewModel.UiEvent.ShowSnackbar -> {
+                is ItemDetailViewModel.UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
-                is ItemInputViewModel.UiEvent.ShowToast -> {
+                is ItemDetailViewModel.UiEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
                 }
-                is ItemInputViewModel.UiEvent.Save -> {
+                is ItemDetailViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
-                    navController.navigate(
-                        Screen.ItemListScreen.route + "?itemId=${viewModel.savedItemId.value}"
-                    )
+                    navController.navigateUp()
                 }
             }
         }
@@ -69,8 +66,11 @@ fun ItemInputScreen(
         ) {
             DatePickerRow(
                 context = LocalContext.current,
-                viewModel = viewModel,
-                type = DateType.YMDW
+                type = DateType.YMDW,
+                dateFormatIndex = viewModel.dateFormatIndex,
+                onTextLayout = {
+                    viewModel.onEvent(ItemDetailEvent.DateChanged(it))
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             TransparentHintTextField(
@@ -79,10 +79,10 @@ fun ItemInputScreen(
                 hint = amountState.hint,
                 onValueChange = {
                     if (it.length <= 10 && UtilText.isAmountValid(it))
-                        viewModel.onEvent(ItemInputEvent.EnterAmount(it))
+                        viewModel.onEvent(ItemDetailEvent.AmountEntered(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(ItemInputEvent.ChangeAmountFocus(it))
+                    viewModel.onEvent(ItemDetailEvent.AmountFocusChanged(it))
                 },
                 isHintVisible = amountState.isHintVisible,
                 singleLine = true,
@@ -95,10 +95,10 @@ fun ItemInputScreen(
                 hint = memoState.hint,
                 onValueChange = {
                     if (it.length <= 20)
-                        viewModel.onEvent(ItemInputEvent.EnterMemo(it))
+                        viewModel.onEvent(ItemDetailEvent.MemoEntered(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(ItemInputEvent.ChangeMemoFocus(it))
+                    viewModel.onEvent(ItemDetailEvent.MemoFocusChanged(it))
                 },
                 isHintVisible = memoState.isHintVisible,
                 singleLine = true,
@@ -129,7 +129,7 @@ fun ItemInputScreen(
                             onItemClick = {
                                 coroutineScope.launch {
                                     viewModel.onEvent(
-                                        ItemInputEvent.SaveItemWithCategory(category)
+                                        ItemDetailEvent.SaveItemWithCategory(category)
                                     )
                                 }
                             },

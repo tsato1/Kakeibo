@@ -2,7 +2,7 @@ package com.kakeibo.core.data.local
 
 import android.content.Context
 import androidx.room.TypeConverter
-import com.kakeibo.core.AppPreferencesImpl
+import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.KakeiboApp
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn

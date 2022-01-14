@@ -1,7 +1,5 @@
 package com.kakeibo.feature_main.presentation.item_main.item_list.components
 
-import android.graphics.Bitmap
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,19 +16,16 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.kakeibo.R
+import androidx.navigation.NavController
+import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
-import com.kakeibo.util.UtilCategory
-import com.kakeibo.util.UtilDrawing
+import com.kakeibo.feature_main.presentation.util.Screen
 
 @Composable
 fun CollapsableLazyColumn(
+    navController: NavController,
     sections: List<ExpandableItem>,
     modifier: Modifier
 ) {
@@ -81,36 +76,17 @@ fun CollapsableLazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(4.dp)
+                            .clickable {
+                                navController.navigate(
+                                    Screen.ItemDetailScreen.route + "?itemId=${child.id}"
+                                )
+                            }
                     ) {
-                        when {
-                            child.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START -> {
-                                Image(
-                                    painter = painterResource(
-                                        id = UtilDrawing.getDrawableIdFromIconName(
-                                            LocalContext.current,
-                                            child.categoryDrawable
-                                        )
-                                    ),
-                                    contentDescription = "Category Icon"
-                                )
-                            }
-                            child.categoryImage != null -> {
-                                val size = dimensionResource(id = R.dimen.new_category_drawable_size)
-                                Image(
-                                    modifier = Modifier.size(size),
-                                    bitmap = UtilDrawing.bytesToBitmap(child.categoryImage)?.let {
-                                        UtilDrawing.getBitmapClippedCircle(it).asImageBitmap()
-                                    } ?: Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888).asImageBitmap(),
-                                    contentDescription = "Category Icon"
-                                )
-                            }
-                            else -> {
-                                Icon(
-                                    painter = painterResource(id = R.mipmap.ic_launcher),
-                                    contentDescription = "Icon Not Found"
-                                )
-                            }
-                        }
+                        CategoryIcon(
+                            code = child.categoryCode,
+                            drawable = child.categoryDrawable,
+                            image = child.categoryImage
+                        )
                         Column(
                             modifier = Modifier
                                 .weight(1f),

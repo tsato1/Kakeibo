@@ -1,4 +1,4 @@
-package com.kakeibo.feature_main.presentation.item_input
+package com.kakeibo.feature_main.presentation.item_detail.item_input
 
 import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 

@@ -1,5 +1,7 @@
 package com.kakeibo.util
 
+import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -7,8 +9,6 @@ import java.util.*
  * Created by tsato on 9/24/16.
  */
 object UtilDate {
-
-    private val TAG = UtilDate::class.java.simpleName
 
     const val DATE_FORMAT_YMD = "yyyy/MM/dd"
     const val DATE_FORMAT_MDY = "MM/dd/yyyy"
@@ -19,23 +19,41 @@ object UtilDate {
 
     val DATE_FORMATS = arrayOf(DATE_FORMAT_YMD, DATE_FORMAT_MDY, DATE_FORMAT_DMY)
 
-    fun getTodaysYMD(format: String): String {
+    fun getTodaysLocalDate(): LocalDate {
+        return Clock.System.todayAt(TimeZone.currentSystemDefault())
+    }
+
+    fun getCurrentMoment(format: String): String {
         val cal = Calendar.getInstance()
         cal.time = Date()
         return SimpleDateFormat(format, Locale.getDefault()).format(cal.time)
+//        return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     }
 
-    fun getTodaysY(): String {
-        return getTodaysYMD(DATE_FORMAT_DB).substring(0, 4)
-    }
-
-    fun getTodaysYM(format: String): String {
-        return when (format) {
-            DATE_FORMAT_DB -> getTodaysYMD(DATE_FORMAT_DB).substring(0, 7) /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_YMD -> getTodaysYMD(DATE_FORMAT_YMD).substring(0, 7) /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> getTodaysYMD(DATE_FORMAT_DMY).substring(3) /* '11-02-2021' -> '02-2021' */
-            else -> getTodaysYMD(DATE_FORMAT_DB).substring(0, 7)
+    fun LocalDate.getYMDDateText(format: String): String = run {
+        when (format) {
+            DATE_FORMAT_YMD -> { this.toString() }
+            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year}}" }
+            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year}}" }
+            else -> { this.toString() }
         }
+    }
+
+    fun LocalDate.getYMDateTextFromDBFormat(format: String): String {
+        return when (format) {
+            /* '2021-02-11' -> '2021-02' */
+            DATE_FORMAT_DB -> this.toString().substring(0, 7)
+            /* '2021-02-11' -> '2021-02' */
+            DATE_FORMAT_YMD -> this.toString().substring(0, 7)
+            /* '11-02-2021' -> '02-2021' */
+            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> this.toString().substring(3)
+            /* else, use DB format */
+            else -> this.toString().substring(0, 7)
+        }
+    }
+
+    fun LocalDate.getYDateText(): String = run {
+        this.toString().substring(0, 4)
     }
 
     fun getDBDate(date: String, fromFormat: Int): String {
@@ -85,11 +103,8 @@ object UtilDate {
 //        return 0
 //    }
 
-
-
-
     /*
-     used in import
+    below code: used in import
      */
     fun isYMDDateValid(date: String): Boolean {
         if (date.length != 10) {
