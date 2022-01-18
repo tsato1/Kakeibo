@@ -1,7 +1,7 @@
 package com.kakeibo.core.data.constants
 
-object SearchDBAdapter {
-    const val TABLE_NAME = "search_criteria"
+object ConstSearchDB {
+    const val TABLE_NAME = "searches"
     const val COL_ID = "_id"
     const val COL_FROM_DATE = "from_date"
     const val COL_TO_DATE = "to_date"

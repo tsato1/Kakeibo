@@ -10,13 +10,15 @@ interface DisplayedItemRepository {
 
     suspend fun getItemById(id: Long): DisplayedItemModel?
 
-    fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> // todo group by month, create model for this
+    fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>>
 
     fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>>
 
-    suspend fun insertItem(itemModel: DisplayedItemModel): Long
+    suspend fun getSpecificItems(query: String, args: List<String>): List<DisplayedItemModel>
 
-    suspend fun insertItems(itemModelList: List<DisplayedItemModel>)
+    suspend fun insertItem(displayedItemModel: DisplayedItemModel): Long
+
+    suspend fun insertItems(displayedItemModelList: List<DisplayedItemModel>)
 
     suspend fun deleteItemById(id: Long)
 

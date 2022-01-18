@@ -13,15 +13,14 @@ import com.kakeibo.core.data.local.CategoryDspDao
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
+import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
 import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
+import com.kakeibo.feature_main.domain.repositories.SearchRepository
 import com.kakeibo.feature_main.domain.use_cases.*
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetItemByIdUseCase
 import com.kakeibo.feature_main.domain.use_cases.use_case_input.InsertItemUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.DeleteItemUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetItemListByYearMonthUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetItemListByYearUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetAllItemsUseCase
+import com.kakeibo.feature_main.domain.use_cases.use_case_list.*
+import com.kakeibo.feature_main.domain.use_cases.use_case_search.*
 import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
@@ -75,8 +74,8 @@ object AppModule {
                 AppDatabase.MIGRATION_4_5,
                 AppDatabase.MIGRATION_5_7,
                 AppDatabase.MIGRATION_6_7,
-                AppDatabase.MIGRATION_7_8
-//                AppDatabase.MIGRATION_8_9
+                AppDatabase.MIGRATION_7_8,
+                AppDatabase.MIGRATION_8_9
             )
             .build()
     }
@@ -92,6 +91,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideCategoryDspDao(db: AppDatabase) = db.categoryDspDao
+
+    @Singleton
+    @Provides
+    fun provideSearchDao(db: AppDatabase) = db.searchDao
 
     @Provides
     @Singleton
@@ -113,8 +116,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCustomCategoryRepository(db:AppDatabase): CustomCategoryRepository {
+    fun provideCustomCategoryRepository(db: AppDatabase): CustomCategoryRepository {
         return CustomCategoryRepositoryImpl(db.categoryDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(db: AppDatabase): SearchRepository {
+        return SearchRepositoryImpl(db.searchDao)
     }
 
     @Provides
@@ -126,6 +135,7 @@ object AppModule {
         return ItemUseCases(
             getItemByIdUseCase = GetItemByIdUseCase(repository),
             getAllItemsUseCase = GetAllItemsUseCase(repository),
+            getSpecificItemsUseCase = GetSpecificItemsUseCase(repository),
             getItemListByYearUseCase = GetItemListByYearUseCase(repository),
             getItemListByYearMonthUseCase = GetItemListByYearMonthUseCase(repository),
             deleteItemUseCase = DeleteItemUseCase(repository),
@@ -138,6 +148,18 @@ object AppModule {
     fun provideDisplayedCategoryUseCases(repostiroy: DisplayedCategoryRepository): DisplayedCategoryUseCases {
         return DisplayedCategoryUseCases(
             getDisplayedCategoriesUseCase = com.kakeibo.feature_main.domain.use_cases.use_case_input.GetDisplayedCategoriesUseCase(repostiroy),
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchUseCase(repository: SearchRepository): SearchUseCases {
+        return SearchUseCases(
+            getAllSearchesUseCase = GetAllSearchesUseCase(repository),
+            getSearchByIDUseCase = GetSearchByIdUseCase(repository),
+            insertSearchUseCase = InsertSearchUseCase(repository),
+            deleteAllSearchesUseCase = DeleteAllSearchesUseCase(repository),
+            deleteSearchByIdUseCase = DeleteSearchByIdUseCase(repository)
         )
     }
 

@@ -51,7 +51,9 @@ fun ItemSearchScreen(
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
                 is ItemSearchViewModel.UiEvent.Search -> {
-                    navController.navigate(Screen.ItemListScreen.route)
+                    navController.navigate(
+                        Screen.ItemListScreen.route + "?searchId=${event.searchId}"
+                    )
                 }
             }
         }

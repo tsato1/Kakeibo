@@ -576,11 +576,22 @@ object PrepDB7 {
     }
 
     fun migrate_8_9(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME +
-                " ADD COLUMN " + ConstItemDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
-        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME +
-                " ADD COLUMN " + ConstCategoryDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
-        database.execSQL("CREATE " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
-                " (" + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER PRIMARY KEY NOT NULL);")
+//        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME +
+//                " ADD COLUMN " + ConstItemDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
+//        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME +
+//                " ADD COLUMN " + ConstCategoryDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
+//        database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
+//                " (" + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER PRIMARY KEY NOT NULL);")
+        database.execSQL("CREATE TABLE " + ConstSearchDB.TABLE_NAME + " (" +
+                ConstSearchDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                ConstSearchDB.COL_FROM_DATE + " TEXT, " +
+                ConstSearchDB.COL_TO_DATE + " TEXT, " +
+                ConstSearchDB.COL_FROM_AMOUNT + " TEXT, " +
+                ConstSearchDB.COL_TO_AMOUNT + " TEXT, " +
+                ConstSearchDB.COL_CATEGORY_CODE + " INTEGER, " +
+                ConstSearchDB.COL_MEMO + " TEXT, " +
+                ConstSearchDB.COL_FROM_UPDATE_DATE + " TEXT, " +
+                ConstSearchDB.COL_TO_UPDATE_DATE + " TEXT)"
+        )
     }
 }

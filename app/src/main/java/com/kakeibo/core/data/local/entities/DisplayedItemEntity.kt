@@ -24,7 +24,7 @@ data class DisplayedItemEntity(
     @ColumnInfo(name = ConstCategoryDB.COL_SAVED_DATE) val categorySavedDate: String
 ) {
 
-    fun toItemModel(): DisplayedItemModel {
+    fun toDisplayedItemModel(): DisplayedItemModel {
         return DisplayedItemModel(
             id = _id,
             amount = amount.toString(),

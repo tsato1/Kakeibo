@@ -5,6 +5,7 @@ import kotlinx.datetime.LocalDate
 
 sealed class ItemListEvent {
     data class DateChanged(val value: LocalDate) : ItemListEvent()
-    data class DeleteItem(val displayedItemModel: DisplayedItemModel): ItemListEvent()
-    object RestoreItem: ItemListEvent()
+    data class DeleteItem(val displayedItemModel: DisplayedItemModel) : ItemListEvent()
+    object RestoreItem : ItemListEvent()
+    data class LoadItems(val searchId: Long) : ItemListEvent()
 }

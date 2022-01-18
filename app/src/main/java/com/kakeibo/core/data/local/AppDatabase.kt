@@ -8,11 +8,8 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.BuildConfig
-import com.kakeibo.core.data.local.entities.CategoryDspEntity
-import com.kakeibo.core.data.local.entities.KkbApp
 import com.kakeibo.core.data.constants.PrepDB7
-import com.kakeibo.core.data.local.entities.CategoryEntity
-import com.kakeibo.core.data.local.entities.ItemEntity
+import com.kakeibo.core.data.local.entities.*
 import com.kakeibo.feature_subscriptions.Subscription
 
 @Database(
@@ -21,7 +18,7 @@ import com.kakeibo.feature_subscriptions.Subscription
         ItemEntity::class,
         CategoryDspEntity::class,
         CategoryEntity::class,
-//            SearchCriteria::class,
+        SearchEntity::class,
         Subscription::class],
 //        LocallyDeletedItemIdEntity::class],
     version = BuildConfig.versionDB,
@@ -33,15 +30,13 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val itemDao: ItemDao
     abstract val categoryDao: CategoryDao
     abstract val categoryDspDao: CategoryDspDao
-//    abstract fun searchCriteriaDao(): SearchCriteriaDao
+    abstract val searchDao: SearchDao
 //    abstract val subscriptionDao: SubscriptionDao
 
     companion object {
         private val TAG = AppDatabase::class.java.simpleName
 
         const val DATABASE_NAME = "kakeibo.db"
-
-//        private var INSTANCE: AppDatabase? = null
 
         @VisibleForTesting
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
@@ -102,8 +97,8 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_8_9: Migration = object : Migration(8, 9) {
             override fun migrate(database: SupportSQLiteDatabase) {
-//                Log.d(TAG, "migration_8_9")
-//                PrepDB7.migrate_8_9(database)
+                Log.d(TAG, "migration_8_9")
+                PrepDB7.migrate_8_9(database)
             }
         }
 

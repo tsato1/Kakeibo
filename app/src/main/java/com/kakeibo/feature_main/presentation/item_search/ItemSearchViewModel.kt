@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
+import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
+import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemSearchViewModel @Inject constructor(
     private val displayedCategoryUseCases: DisplayedCategoryUseCases,
+    private val searchUseCases: SearchUseCases,
     appPreferences: AppPreferences
 ) : ViewModel() {
 
@@ -120,21 +123,37 @@ class ItemSearchViewModel @Inject constructor(
                                 query.toDate = _searchCardDateRangeState.value.to.toString()
                             }
                             is SearchCriterion.TypeAmount -> {
-                                query.fromDate = _searchCardAmountState.value.from
-                                query.toDate = _searchCardAmountState.value.to
+                                query.fromAmount = _searchCardAmountState.value.from
+                                query.toAmount = _searchCardAmountState.value.to
                             }
                             is SearchCriterion.TypeCategory -> {
                                 query.categoryCode =
-                                    _searchCardCategoryState.value.categoryModel?.code ?: -1
+                                    _searchCardCategoryState.value.categoryModel?.code
                             }
                             is SearchCriterion.TypeMemo -> {
                                 query.memo = _searchCardMemoState.value.memo
                             }
                         }
                     }
-                    _eventFlow.emit(UiEvent.Search(query))
+
+                    searchUseCases.insertSearchUseCase(
+                        searchModel = SearchModel(
+                            _id = 1, // todo: if paid, store multiple entries for search history
+                            fromDate = query.fromDate,
+                            toDate = query.toDate,
+                            fromAmount = query.fromAmount,
+                            toAmount = query.toAmount,
+                            categoryCode = query.categoryCode,
+                            memo = query.memo,
+                            fromUpdateDate = null,
+                            toUpdateDate = null
+                        )
+                    ).also { searchId ->
+                        _eventFlow.emit(UiEvent.Search(searchId))
+                    }
                 }
             }
+            else -> {}
         }
     }
 
@@ -171,6 +190,6 @@ class ItemSearchViewModel @Inject constructor(
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: String): UiEvent()
-        data class Search(val query: Query): UiEvent()
+        data class Search(val searchId: Long): UiEvent()
     }
 }

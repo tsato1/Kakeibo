@@ -1,12 +1,15 @@
 package com.kakeibo.feature_main.presentation.item_main
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
+import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
+import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ItemListEvent
@@ -28,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemMainViewModel @Inject constructor(
     private val itemUseCases: ItemUseCases,
+    private val searchUseCases: SearchUseCases,
     appPreferences: AppPreferences,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -48,10 +52,10 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        getItemsYM(UtilDate.getTodaysLocalDate().getYMDateTextFromDBFormat(UtilDate.DATE_FORMAT_DB))
+        getItems(UtilDate.getTodaysLocalDate().getYMDateTextFromDBFormat(UtilDate.DATE_FORMAT_DB))
     }
 
-    private fun getItemsYM(ym: String) {
+    private fun getItems(ym: String) {
         getItemsJob?.cancel()
         getItemsJob = itemUseCases.getItemListByYearMonthUseCase(ym)
             .onEach { result ->
@@ -189,6 +193,24 @@ class ItemMainViewModel @Inject constructor(
                     )
                     recentlyDeletedDisplayedItemModel = null
                 }
+            }
+            is ItemListEvent.LoadItems -> {
+                viewModelScope.launch {
+                    val searchModel = searchUseCases.getSearchByIDUseCase(event.searchId)
+                    getItems(searchModel)
+                }
+            }
+        }
+    }
+
+    private fun getItems(searchModel: SearchModel) {
+//        getItemsJob?.cancel()
+//        getItemsJob =
+        viewModelScope.launch {
+            Log.d("asdf", "toQuery= "+searchModel.toQuery()+" args=" + searchModel.toArgs())
+            val a = itemUseCases.getSpecificItemsUseCase(searchModel.toQuery(), searchModel.toArgs())
+            a.forEach {
+                Log.d("asdf", it.memo)
             }
         }
     }

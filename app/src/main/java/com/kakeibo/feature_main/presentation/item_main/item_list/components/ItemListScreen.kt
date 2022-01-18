@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -13,15 +14,23 @@ import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
+import com.kakeibo.feature_main.presentation.item_main.item_list.ItemListEvent
 import com.kakeibo.feature_main.presentation.util.Screen
 
 @Composable
 fun ItemListScreen(
     navController: NavController,
-    viewModel: ItemMainViewModel
+    viewModel: ItemMainViewModel,
+    searchId: Long = -1L
 ) {
     val itemListState = viewModel.expandableItemListState.value
     val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(Unit) {
+        if (searchId != -1L) {
+            viewModel.onEvent(ItemListEvent.LoadItems(searchId))
+        }
+    }
 
     Scaffold(
         floatingActionButton = {

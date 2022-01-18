@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.data.repositories
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kakeibo.core.data.local.ItemDao
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
@@ -17,7 +18,7 @@ class DisplayedItemRepositoryImpl(
     }
 
     override suspend fun getItemById(id: Long): DisplayedItemModel? {
-        return dao.getItemById(id)?.toItemModel()
+        return dao.getItemById(id)?.toDisplayedItemModel()
     }
 
     override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
@@ -26,7 +27,7 @@ class DisplayedItemRepositoryImpl(
         val displayedItems = dao.getItemsInYear(y)
             .map {
                 it.map {
-                    it.toItemModel()
+                    it.toDisplayedItemModel()
                 }
             }
             .first()
@@ -44,7 +45,7 @@ class DisplayedItemRepositoryImpl(
         val flow = dao.getItemsInYear(y)
             .map {
                 it.map {
-                    it.toItemModel()
+                    it.toDisplayedItemModel()
                 }
             }
             .map {
@@ -60,7 +61,7 @@ class DisplayedItemRepositoryImpl(
         val displayedItems = dao.getItemsInMonth(ym)
             .map {
                 it.map {
-                    it.toItemModel()
+                    it.toDisplayedItemModel()
                 }
             }
             .first()
@@ -76,7 +77,7 @@ class DisplayedItemRepositoryImpl(
         val flow = dao.getItemsInMonth(ym)
             .map {
                 it.map {
-                    it.toItemModel()
+                    it.toDisplayedItemModel()
                 }
             }
             .map {
@@ -87,6 +88,10 @@ class DisplayedItemRepositoryImpl(
 
 
         emit(Resource.Success(displayedItems))
+    }
+
+    override suspend fun getSpecificItems(query: String, args: List<String>): List<DisplayedItemModel> {
+        return dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray())).map { it.toDisplayedItemModel() }
     }
 
     override suspend fun insertItem(displayedItemModel: DisplayedItemModel): Long {

@@ -387,10 +387,21 @@ fun ScreenController(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.ItemListScreen.route
+        startDestination = Screen.ItemListScreen.route + "?searchId={searchId}"
     ) {
-        composable(route = Screen.ItemListScreen.route) {
-            ItemListScreen(navController = navController, viewModel = itemMainViewModel)
+        composable(
+            route = Screen.ItemListScreen.route + "?searchId={searchId}",
+            arguments = listOf(
+                navArgument(
+                    name = "searchId"
+                ) {
+                    type = NavType.LongType
+                    defaultValue = -1L
+                }
+            )
+        ) {
+            val searchId = it.arguments?.getLong("searchId") ?: -1L
+            ItemListScreen(navController = navController, viewModel = itemMainViewModel, searchId)
         }
         composable(route = Screen.ItemChartScreen.route) {
             ItemChartScreen(navController = navController, viewModel = itemMainViewModel)
