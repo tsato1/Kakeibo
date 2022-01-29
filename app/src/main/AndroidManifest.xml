@@ -48,7 +48,7 @@
 <!--            android:label="Custom Category"-->
 <!--            android:parentActivityName="com.kakeibo.feature_settings.presentation.SettingsActivity"/>-->
 <!--        <activity-->
-<!--            android:name="com.kakeibo.ui.ImportExportActivity"-->
+<!--            android:name="com.kakeibo.feature_export.presentation.ImportExportActivity"-->
 <!--            android:label="Export"-->
 <!--            android:parentActivityName=".ui.MainActivity"/>-->
 

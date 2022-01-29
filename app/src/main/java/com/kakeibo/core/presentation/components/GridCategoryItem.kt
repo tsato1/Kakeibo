@@ -66,7 +66,7 @@ fun GridCategoryItem(
                 }
                 else -> {
                     Icon(
-                        painter = painterResource(id = R.mipmap.ic_launcher),
+                        painter = painterResource(id = R.mipmap.ic_mikan),
                         contentDescription = "Icon Not Found"
                     )
                 }

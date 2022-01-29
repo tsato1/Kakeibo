@@ -14,7 +14,7 @@ interface DisplayedItemRepository {
 
     fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>>
 
-    suspend fun getSpecificItems(query: String, args: List<String>): List<DisplayedItemModel>
+    fun getSpecificItems(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>>
 
     suspend fun insertItem(displayedItemModel: DisplayedItemModel): Long
 

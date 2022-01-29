@@ -1,5 +1,5 @@
-package com.kakeibo.ui.listener
-
-interface SimpleClickListener {
-    fun onClick()
-}
+//package com.kakeibo.ui.listener
+//
+//interface SimpleClickListener {
+//    fun onClick()
+//}

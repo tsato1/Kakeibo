@@ -66,6 +66,7 @@
     <string name="large">Large</string>
 
     <string name="add_search_criterion">Add Search Criteria</string>
+    <string name="search_criteria">Search Criteria</string>
     <string name="edit_item">Edit item</string>
     <string name="returning_to_monthly_report">Returning to monthly report</string>
     <string name="date_range">Date Range</string>

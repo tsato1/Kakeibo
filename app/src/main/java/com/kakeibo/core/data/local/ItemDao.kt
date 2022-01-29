@@ -3,9 +3,9 @@ package com.kakeibo.core.data.local
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.core.data.constants.ConstCategoryDB
+import com.kakeibo.core.data.local.entities.CategoryEntity
 import com.kakeibo.core.data.local.entities.DisplayedItemEntity
 import com.kakeibo.core.data.local.entities.ItemEntity
-import com.kakeibo.feature_main.domain.models.SearchModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -101,8 +101,8 @@ interface ItemDao {
             " ORDER BY " + ConstItemDB.COL_EVENT_DATE)
     fun getItemsInMonth(ym: String): Flow<List<DisplayedItemEntity>>
 
-    @RawQuery
-    suspend fun getSpecificItems(query: SupportSQLiteQuery): List<DisplayedItemEntity>
+    @RawQuery(observedEntities = [ItemEntity::class, CategoryEntity::class])
+    fun getSpecificItems(query: SupportSQLiteQuery): Flow<List<DisplayedItemEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(itemEntity: ItemEntity): Long

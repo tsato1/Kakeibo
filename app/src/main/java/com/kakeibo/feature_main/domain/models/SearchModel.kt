@@ -1,10 +1,11 @@
 package com.kakeibo.feature_main.domain.models
 
+import android.util.Log
 import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.core.data.local.entities.SearchEntity
 
 data class SearchModel(
-    val _id: Long,
+    val _id: Long? = null,
     val fromDate: String? = null,
     val toDate: String? = null,
     val fromAmount: String? = null,
@@ -17,7 +18,7 @@ data class SearchModel(
 
     fun toSearchEntity(): SearchEntity {
         return SearchEntity(
-            _id = _id,
+            _id = _id ?: 0,
             fromDate = fromDate,
             toDate = toDate,
             fromAmount = fromAmount,

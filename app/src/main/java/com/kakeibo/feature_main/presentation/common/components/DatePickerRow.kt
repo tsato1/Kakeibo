@@ -192,7 +192,9 @@ fun DatePickerRow(
                         dateState.value.getYDateText()
                     }
                 },
-                onTextLayout = { onTextLayout(dateState.value) }
+                onTextLayout = {
+                    onTextLayout(dateState.value)
+                }
             )
         }
         IconButton(

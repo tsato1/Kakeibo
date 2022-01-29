@@ -25,7 +25,7 @@
 //import com.kakeibo.billing.BillingClientLifecycle
 //import com.kakeibo.databinding.ActivityInAppPurchaseBinding
 //import com.kakeibo.ui.viewmodel.BillingViewModel
-//import com.kakeibo.ui.viewmodel.FirebaseUserViewModel
+//import com.kakeibo.feature_main.presentation.common.FirebaseUserViewModel
 //import com.kakeibo.ui.viewmodel.KkbAppViewModel
 //import com.kakeibo.ui.viewmodel.SubscriptionViewModel
 //

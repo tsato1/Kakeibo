@@ -8,7 +8,7 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector?
     /* The following pages can be visited via bottom nav bar */
     object ItemListScreen: Screen("item_list_screen", "List", Icons.Default.List)
     object ItemChartScreen: Screen("item_chart", "Chart", Icons.Default.PieChart)
-    object ItemCalendarScreen: Screen("item_calendar", "", Icons.Default.CalendarViewMonth)
+    object ItemCalendarScreen: Screen("item_calendar", "Calendar", Icons.Default.CalendarViewMonth)
     object ItemSearchScreen: Screen("item_search", "Search", Icons.Default.Search)
 
     object ItemInputScreen: Screen("item_input_screen", "Input", Icons.Default.Input)

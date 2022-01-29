@@ -155,4 +155,5 @@
     <string name="import_and_export">Importer et Exporter</string>
     <string name="append">Ajouter</string>
     <string name="scratch">De zéro</string>
+    <string name="search_criteria">Critères de Recherche</string>
 </resources>
