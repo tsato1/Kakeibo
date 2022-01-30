@@ -30,17 +30,17 @@ class DriveServiceHelper(private val mDriveService: Drive) {
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
     fun createFile(name: String, reportType: Int, context: Context?): Task<String> {
-        return Tasks.call(mExecutor, {
+        return Tasks.call(mExecutor) {
             val content = ""
             val metadata = File()
-                    .setParents(listOf("root"))
-                    .setMimeType(MIME_TYPE)
-                    .setName(name)
+                .setParents(listOf("root"))
+                .setMimeType(MIME_TYPE)
+                .setName(name)
             val contentStream = ByteArrayContent.fromString(MIME_TYPE, content)
             val googleFile = mDriveService.files().create(metadata, contentStream).execute()
-                    ?: throw IOException("Null result when requesting file creation.")
+                ?: throw IOException("Null result when requesting file creation.")
             googleFile.id
-        })
+        }
     }
 
     /*
@@ -48,7 +48,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
      * contents.
      */
     fun readFile(fileId: String?): Task<Pair<String, String>> {
-        return Tasks.call(mExecutor, {
+        return Tasks.call(mExecutor) {
 
             // Retrieve the metadata as a File object.
             val metadata = mDriveService.files()[fileId].execute()
@@ -64,14 +64,14 @@ class DriveServiceHelper(private val mDriveService: Drive) {
                     return@call Pair.create(name, contents)
                 }
             }
-        })
+        }
     }
 
     /*
      * Updates the file identified by `fileId` with the given `name` and `content`.
      */
     fun saveFile(fileId: String?, name: String?, content: String?): Task<Void?> {
-        return Tasks.call(mExecutor, {
+        return Tasks.call(mExecutor) {
             // Create a File containing any metadata changes.
             val metadata = File().setName(name)
 
@@ -81,7 +81,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
             // Update the metadata and contents.
             mDriveService.files().update(fileId, metadata, contentStream).execute()
             null
-        })
+        }
     }
 
     /*
@@ -94,7 +94,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
      * (https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
     fun queryFiles(): Task<FileList> {
-        return Tasks.call(mExecutor, { mDriveService.files().list().setSpaces("drive").execute() })
+        return Tasks.call(mExecutor) { mDriveService.files().list().setSpaces("drive").execute() }
     }
 
     /*
@@ -121,7 +121,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
     fun openFileUsingStorageAccessFramework(
         contentResolver: ContentResolver, uri: Uri?
     ): Task<Pair<String?, String?>> {
-        return Tasks.call(mExecutor, {
+        return Tasks.call(mExecutor) {
 
             // Retrieve the document's display name from its metadata.
             var name: String
@@ -147,6 +147,6 @@ class DriveServiceHelper(private val mDriveService: Drive) {
                 }
             }
             Pair.create(name, content)
-        })
+        }
     }
 }

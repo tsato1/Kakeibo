@@ -10,13 +10,14 @@ import java.io.OutputStreamWriter
 import java.util.*
 
 object UtilFiles {
+    val FILE_NAME = "to_be_exported"
 
     fun fileExists(context: Context, filename: String?): Boolean {
         val file = context.getFileStreamPath(filename)
         return !(file == null || !file.exists())
     }
 
-    fun getFileValue(fileName: String?, context: Context): String? {
+    fun getFileValue(fileName: String, context: Context): String? {
         return try {
             val stringBuilder = StringBuilder()
             var inputLine: String?

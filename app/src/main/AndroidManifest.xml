@@ -28,7 +28,6 @@
             android:value="ca-app-pub-3282892636336089~3692682630"/>
         <activity
             android:name=".feature_main.presentation.MainActivity"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
@@ -44,39 +43,13 @@
             android:label="Settings"
             android:parentActivityName=".feature_main.presentation.MainActivity"/>
 <!--        <activity-->
-<!--            android:name=".ui.settings.category.edit.CustomCategoryActivity"-->
-<!--            android:label="Custom Category"-->
-<!--            android:parentActivityName="com.kakeibo.feature_settings.presentation.SettingsActivity"/>-->
-<!--        <activity-->
 <!--            android:name="com.kakeibo.feature_export.presentation.ImportExportActivity"-->
 <!--            android:label="Export"-->
-<!--            android:parentActivityName=".ui.MainActivity"/>-->
-
+<!--            android:parentActivityName=".feature_main.presentation.MainActivity"/>-->
         <activity
             android:name="com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity"
             android:label="@string/reorder_categories"
             android:parentActivityName=".feature_settings.presentation.SettingsActivity"/>
-<!--        <activity-->
-<!--            android:name="com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity"-->
-<!--            android:label="@string/reorder_categories"-->
-<!--            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>-->
-<!--        <activity-->
-<!--            android:name="com.kakeibo.ui.settings.category.edit.CustomCategoryActivity"-->
-<!--            android:label="@string/create_category"-->
-<!--            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>-->
-<!--        <activity-->
-<!--            android:name="com.kakeibo.ui.settings.category.edit.CustomCategoryListActivity"-->
-<!--            android:label="@string/custom_categories"-->
-<!--            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>-->
-<!--        <activity android:name="com.kakeibo.ui.settings.InAppPurchasesActivity"-->
-<!--            android:label="@string/in_app_purchases"-->
-<!--            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>-->
-<!--        <activity android:name=".ui.settings.AboutActivity"-->
-<!--            android:label="@string/about_this_app"-->
-<!--            android:parentActivityName="com.kakeibo.ui.settings.SettingsActivity"/>-->
-<!--        <activity android:name=".ui.SignInActivity"-->
-<!--            android:label="Sign In"-->
-<!--            android:parentActivityName=".ui.MainActivity"/>-->
 
 <!--        <service-->
 <!--            android:name=".InstanceIDService"-->

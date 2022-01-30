@@ -137,7 +137,7 @@
 <!--    <string name="choose_import_method">Choose Import Method</string>-->
     <string name="scratch">Scratch</string>
     <string name="append">Append</string>
-<!--    <string name="import_successful">Import Executed Successfully</string>-->
+    <string name="import_successful">Import Executed Successfully</string>
 
     <!-- Settings -->
     <string name="name">Name</string>
