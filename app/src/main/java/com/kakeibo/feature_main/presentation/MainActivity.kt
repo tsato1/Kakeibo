@@ -157,38 +157,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-
-//            R.id.import_from_google_drive -> {
-////                var importType = ImportExportActivity.ImportType.APPEND
-//
-//                val dialog = AlertDialog.Builder(this)
-//                dialog.setIcon(R.mipmap.ic_mikan)
-//                dialog.setTitle(R.string.choose_import_method)
-//                dialog.setSingleChoiceItems(R.array.import_methods, 0) { _, which ->
-//                    when (which) {
-////                        0 -> importType = ImportExportActivity.ImportType.APPEND
-////                        1 -> importType = ImportExportActivity.ImportType.SCRATCH
-//                    }
-//                }
-//                dialog.setPositiveButton(R.string.proceed) { _, _ ->
-////                    val intent = Intent(this, ImportExportActivity::class.java)
-////                    intent.putExtra("ORDER_TYPE", ImportExportActivity.OrderType.IMPORT)
-////                    intent.putExtra("IMPORT_TYPE", importType)
-////                    startActivity(intent)
-//                }
-//                dialog.setNegativeButton(R.string.cancel) { _, _ -> }
-//                dialog.setNeutralButton(R.string.explanation) { _, _ ->
-//                    val url = "https://sites.google.com/view/kakeibo/home/import-export"
-//                    val intent = Intent(Intent.ACTION_VIEW)
-//                    intent.data = Uri.parse(url)
-//                    startActivity(intent)
-//                }
-//                dialog.show()
-//                true
-//            }
-
     private val signInLauncherFirebase = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { result ->

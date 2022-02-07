@@ -1,5 +1,7 @@
 package com.kakeibo.feature_main.presentation.item_search.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,15 +12,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,7 +32,9 @@ import com.kakeibo.feature_main.presentation.item_search.SearchCriterion
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.ui.theme.LightCream
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @ExperimentalComposeUiApi
 @Composable
 fun ItemSearchScreen(
@@ -38,6 +42,7 @@ fun ItemSearchScreen(
     viewModel: ItemSearchViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
 
     val openDialog = remember { mutableStateOf(false) }
 
@@ -60,6 +65,7 @@ fun ItemSearchScreen(
     }
 
     Scaffold(
+        scaffoldState = scaffoldState,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -106,69 +112,100 @@ fun ItemSearchScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(chosenSearchCriteria) { item ->
-                        when (item) {
-                            is SearchCriterion.TypeDateRange -> {
-                                SearchCardDateRange(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.Center)
-                                        .padding(vertical = 4.dp, horizontal = 4.dp)
-                                        .clip(RoundedCornerShape(15.dp))
-                                        .background(LightCream)
-                                        .border(
-                                            width = 1.dp,
-                                            color = Color.Gray,
-                                            shape = RoundedCornerShape(15.dp)
-                                        ),
-                                    viewModel
-                                )
+                        var isDeleted by remember { mutableStateOf(false) }
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                if (it == DismissValue.DismissedToStart)
+                                    isDeleted = !isDeleted
+
+                                if (isDeleted) {
+                                    viewModel.onEvent(ItemSearchEvent.CriterionRemoved(item))
+                                    coroutineScope.launch {
+                                        val result = scaffoldState.snackbarHostState.showSnackbar(
+                                            "${item.name} discarded.",
+                                            "Undo"
+                                        )
+                                        when (result) {
+                                            SnackbarResult.Dismissed -> {
+                                            }
+                                            SnackbarResult.ActionPerformed -> {
+                                                viewModel.onEvent(ItemSearchEvent.CriterionAdded(item))
+                                                isDeleted = false
+                                            }
+                                        }
+                                    }
+                                }
+
+                                it != DismissValue.DismissedToStart
                             }
-                            is SearchCriterion.TypeAmount -> {
-                                SearchCardAmount(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 4.dp, horizontal = 4.dp)
-                                        .clip(RoundedCornerShape(15.dp))
-                                        .background(LightCream)
-                                        .border(
-                                            width = 1.dp,
-                                            color = Color.Gray,
-                                            shape = RoundedCornerShape(15.dp)
-                                        ),
-                                    viewModel
+                        )
+
+                        SwipeToDismiss(
+                            state = dismissState,
+                            modifier = Modifier.padding(vertical = 1.dp),
+                            directions = setOf(DismissDirection.EndToStart),
+                            dismissThresholds = { direction ->
+                                FractionalThreshold(
+                                    if (direction == DismissDirection.StartToEnd) 0.75f else 0.75f
                                 )
-                            }
-                            is SearchCriterion.TypeCategory -> {
-                                SearchCardCategory(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 4.dp, horizontal = 4.dp)
-                                        .clip(RoundedCornerShape(15.dp))
-                                        .background(LightCream)
-                                        .border(
-                                            width = 1.dp,
-                                            color = Color.Gray,
-                                            shape = RoundedCornerShape(15.dp)
-                                        ),
-                                    viewModel
+                            },
+                            background = {
+                                val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                                val color by animateColorAsState(
+                                    when (dismissState.targetValue) {
+                                        DismissValue.Default -> Color.LightGray
+                                        else -> Color.Red
+                                    }
                                 )
-                            }
-                            is SearchCriterion.TypeMemo -> {
-                                SearchCardMemo(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 4.dp, horizontal = 4.dp)
-                                        .clip(RoundedCornerShape(15.dp))
-                                        .background(LightCream)
-                                        .border(
-                                            width = 1.dp,
-                                            color = Color.Gray,
-                                            shape = RoundedCornerShape(15.dp)
-                                        ),
-                                    viewModel
+                                val alignment = when (direction) {
+                                    DismissDirection.StartToEnd -> Alignment.CenterStart
+                                    DismissDirection.EndToStart -> Alignment.CenterEnd
+                                }
+                                val icon = when (direction) {
+                                    DismissDirection.StartToEnd -> Icons.Default.Delete
+                                    DismissDirection.EndToStart -> Icons.Default.Delete
+                                }
+                                val scale by animateFloatAsState(
+                                    if (dismissState.targetValue == DismissValue.Default)
+                                        0.75f
+                                    else
+                                        1f
                                 )
+
+                                Box(
+                                    Modifier
+                                        .fillMaxSize()
+                                        .background(color)
+                                        .padding(vertical = 14.dp, horizontal = 14.dp)
+                                        .clip(RoundedCornerShape(15.dp)),
+                                    contentAlignment = alignment
+                                ) {
+                                    Icon(
+                                        icon,
+                                        contentDescription = "Icon",
+                                        modifier = Modifier.scale(scale)
+                                    )
+                                }
+                            },
+                            dismissContent = {
+                                if (!isDeleted) {
+                                    SearchCard(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 4.dp, horizontal = 4.dp)
+                                            .clip(RoundedCornerShape(15.dp))
+                                            .background(LightCream)
+                                            .border(
+                                                width = 1.dp,
+                                                color = Color.Gray,
+                                                shape = RoundedCornerShape(15.dp)
+                                            ),
+                                        viewModel,
+                                        item
+                                    )
+                                }
                             }
-                        }
+                        )
                     }
                 }
             }
@@ -179,13 +216,18 @@ fun ItemSearchScreen(
         AlertDialog(
             modifier = Modifier.fillMaxWidth(),
             title = {
-                Text(text = stringResource(id = R.string.add_search_criterion))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                    Text(text = stringResource(id = R.string.add_search_criterion))
+                }
             },
             onDismissRequest = { openDialog.value = false },
             text = {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     items(defaultSearchCriteria.size) { index ->
                         Row(
@@ -213,4 +255,39 @@ fun ItemSearchScreen(
         )
     }
 
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun SearchCard(
+    modifier: Modifier,
+    viewModel: ItemSearchViewModel,
+    criterion: SearchCriterion
+) {
+    when (criterion) {
+        is SearchCriterion.TypeDateRange -> {
+            SearchCardDateRange(
+                modifier = modifier,
+                viewModel
+            )
+        }
+        is SearchCriterion.TypeAmount -> {
+            SearchCardAmount(
+                modifier = modifier,
+                viewModel
+            )
+        }
+        is SearchCriterion.TypeCategory -> {
+            SearchCardCategory(
+                modifier = modifier,
+                viewModel
+            )
+        }
+        is SearchCriterion.TypeMemo -> {
+            SearchCardMemo(
+                modifier = modifier,
+                viewModel
+            )
+        }
+    }
 }
