@@ -589,6 +589,7 @@ object PrepDB7 {
                 ConstSearchDB.COL_FROM_AMOUNT + " TEXT, " +
                 ConstSearchDB.COL_TO_AMOUNT + " TEXT, " +
                 ConstSearchDB.COL_CATEGORY_CODE + " INTEGER, " +
+                ConstSearchDB.COL_CATEGORY_NAME + " TEXT, " +
                 ConstSearchDB.COL_MEMO + " TEXT, " +
                 ConstSearchDB.COL_FROM_UPDATE_DATE + " TEXT, " +
                 ConstSearchDB.COL_TO_UPDATE_DATE + " TEXT)"

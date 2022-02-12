@@ -4,16 +4,16 @@ import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.core.data.local.entities.SearchEntity
 
 data class SearchModel(
-    val _id: Long? = null,
-    val fromDate: String? = null,
-    val toDate: String? = null,
-    val fromAmount: String? = null,
-    val toAmount: String? = null,
-    val categoryCode: Int? = null,
-    val categoryName: String? = null,
-    val memo: String? = null,
-    val fromUpdateDate: String? = null,
-    val toUpdateDate: String? = null
+    var _id: Long? = null,
+    var fromDate: String? = null,
+    var toDate: String? = null,
+    var fromAmount: String? = null,
+    var toAmount: String? = null,
+    var categoryCode: Int? = null,
+    var categoryName: String? = null,
+    var memo: String? = null,
+    var fromUpdateDate: String? = null,
+    var toUpdateDate: String? = null
 ) {
 
     fun toSearchEntity(): SearchEntity {
@@ -24,6 +24,7 @@ data class SearchModel(
             fromAmount = fromAmount,
             toAmount = toAmount,
             categoryCode = categoryCode,
+            categoryName = categoryName,
             memo = memo,
             fromUpdateDate = fromUpdateDate,
             toUpdateDate = toUpdateDate

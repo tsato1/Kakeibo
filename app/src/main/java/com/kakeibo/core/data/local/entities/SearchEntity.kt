@@ -13,6 +13,7 @@ class SearchEntity(
     @ColumnInfo(name = "from_amount") val fromAmount: String? = null,
     @ColumnInfo(name = "to_amount") val toAmount: String? = null,
     @ColumnInfo(name = "category_code") val categoryCode: Int? = null,
+    @ColumnInfo(name = "category_name") val categoryName: String? = null,
     val memo: String? = null,
     @ColumnInfo(name = "from_update_date") val fromUpdateDate: String? = null,
     @ColumnInfo(name = "to_update_date") val toUpdateDate: String? = null
@@ -26,6 +27,7 @@ class SearchEntity(
             fromAmount = fromAmount,
             toAmount = toAmount,
             categoryCode = categoryCode,
+            categoryName = categoryName,
             memo = memo,
             fromUpdateDate = fromUpdateDate,
             toUpdateDate = toUpdateDate

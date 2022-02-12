@@ -115,39 +115,32 @@ class ItemSearchViewModel @Inject constructor(
             }
             is ItemSearchEvent.Search -> {
                 viewModelScope.launch {
-                    val query = Query()
+                    val searchModel = SearchModel()
+                        .also { it._id = 1 } // todo: if paid, store multiple entries for search history
                     for (chosenSearchCriterion in chosenSearchCriteria) {
                         when (chosenSearchCriterion) {
                             is SearchCriterion.TypeDateRange -> {
-                                query.fromDate = _searchCardDateRangeState.value.from.toString()
-                                query.toDate = _searchCardDateRangeState.value.to.toString()
+                                searchModel.fromDate = _searchCardDateRangeState.value.from.toString()
+                                searchModel.toDate = _searchCardDateRangeState.value.to.toString()
                             }
                             is SearchCriterion.TypeAmount -> {
-                                query.fromAmount = _searchCardAmountState.value.from
-                                query.toAmount = _searchCardAmountState.value.to
+                                searchModel.fromAmount = _searchCardAmountState.value.from
+                                searchModel.toAmount = _searchCardAmountState.value.to
                             }
                             is SearchCriterion.TypeCategory -> {
-                                query.categoryCode =
+                                searchModel.categoryCode =
                                     _searchCardCategoryState.value.categoryModel?.code
+                                searchModel.categoryName =
+                                    _searchCardCategoryState.value.categoryModel?.name
                             }
                             is SearchCriterion.TypeMemo -> {
-                                query.memo = _searchCardMemoState.value.memo
+                                searchModel.memo = _searchCardMemoState.value.memo
                             }
                         }
                     }
 
                     searchUseCases.insertSearchUseCase(
-                        searchModel = SearchModel(
-                            _id = 1, // todo: if paid, store multiple entries for search history
-                            fromDate = query.fromDate,
-                            toDate = query.toDate,
-                            fromAmount = query.fromAmount,
-                            toAmount = query.toAmount,
-                            categoryCode = query.categoryCode,
-                            memo = query.memo,
-                            fromUpdateDate = null,
-                            toUpdateDate = null
-                        )
+                        searchModel = searchModel
                     ).also { searchId ->
                         _eventFlow.emit(UiEvent.Search(searchId))
                     }
