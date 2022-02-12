@@ -32,11 +32,10 @@ fun ItemCalendarScreen(
     val scaffoldState = rememberScaffoldState()
 
     val openSearchDetailDialog = remember { mutableStateOf(false) }
-    val openExitSearchDialogState = viewModel.openExitSearchDialogState
+    val openExitSearchDialog = remember { mutableStateOf(false) }
 
     val searchIdState = viewModel.searchId
-
-
+    val searchModel = viewModel.searchModel.value
 
     LaunchedEffect(Unit) {
         Log.d("asdf", "launchedEffect CALENDAR searchId="+searchIdState.value)
@@ -47,16 +46,18 @@ fun ItemCalendarScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Screen.ItemInputScreen.route)
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Note"
-                )
+            if (searchIdState.value == -1L) {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(Screen.ItemInputScreen.route)
+                    },
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Note"
+                    )
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End,
@@ -72,7 +73,7 @@ fun ItemCalendarScreen(
             if (searchIdState.value != -1L) {
                 SearchModeTopRow(
                     onCloseButtonClick = {
-                        viewModel.onEvent(ItemMainEvent.OpenExitSearchDialog(true))
+                        openExitSearchDialog.value = true
                     },
                     onTextButtonClick = {
                         openSearchDetailDialog.value = true
@@ -94,15 +95,15 @@ fun ItemCalendarScreen(
         }
     }
 
-    if (openExitSearchDialogState.value) {
+    if (openExitSearchDialog.value) {
         ExitSearchAlertDialog(
-            onDismissRequest = { openSearchDetailDialog.value = false },
+            onDismissRequest = { openExitSearchDialog.value = false },
             onDismissButtonClick = {
-                viewModel.onEvent(ItemMainEvent.OpenExitSearchDialog(false))
+                openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
-                viewModel.onEvent(ItemMainEvent.OpenExitSearchDialog(false))
+                openExitSearchDialog.value = false
             }
         )
     }
@@ -110,7 +111,8 @@ fun ItemCalendarScreen(
     if (openSearchDetailDialog.value) {
         SearchDetailAlertDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
-            onConfirmButtonClick = { openSearchDetailDialog.value = false }
+            onConfirmButtonClick = { openSearchDetailDialog.value = false },
+            searchModel
         )
     }
 }

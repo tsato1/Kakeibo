@@ -42,10 +42,11 @@ fun ItemChartScreen(
     val scrollState = rememberScrollState()
 
     val openSearchDetailDialog = remember { mutableStateOf(false) }
-    val openExitSearchDialogState = viewModel.openExitSearchDialogState
+    val openExitSearchDialog = remember { mutableStateOf(false) }
 
     val itemChartState = viewModel.itemChartState
     val searchIdState = viewModel.searchId
+    val searchModel = viewModel.searchModel.value
 
     LaunchedEffect(Unit) {
         Log.d("asdf", "launchedEffect CHART searchId="+searchIdState.value)
@@ -56,16 +57,18 @@ fun ItemChartScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Screen.ItemInputScreen.route)
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Note"
-                )
+            if (searchIdState.value == -1L) {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(Screen.ItemInputScreen.route)
+                    },
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Note"
+                    )
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End,
@@ -81,7 +84,7 @@ fun ItemChartScreen(
             if (searchIdState.value != -1L) {
                 SearchModeTopRow(
                     onCloseButtonClick = {
-                        viewModel.onEvent(ItemMainEvent.OpenExitSearchDialog(true))
+                        openExitSearchDialog.value = true
                     },
                     onTextButtonClick = {
                         openSearchDetailDialog.value = true
@@ -215,9 +218,11 @@ fun ItemChartScreen(
                                         .height(dimensionResource(id = R.dimen.category_list_row_height))
                                         .clickable {
 
-                                        }
+                                        },
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     CategoryIcon(
+                                        modifier = Modifier.padding(2.dp),
                                         code = displayedItemModel.categoryCode,
                                         drawable = displayedItemModel.categoryDrawable,
                                         image = displayedItemModel.categoryImage
@@ -237,9 +242,11 @@ fun ItemChartScreen(
                                             .aspectRatio(1f)
                                     )
                                     Text(
-                                        text = "${displayedItemModel.amount.toLong()
-                                            .times(100)
-                                            .div(itemChartState.value.incomeTotal)}%"
+                                        text = "${
+                                            displayedItemModel.amount.toLong()
+                                                .times(100)
+                                                .div(itemChartState.value.incomeTotal)
+                                        }%"
                                     )
                                 }
                                 Divider()
@@ -295,9 +302,11 @@ fun ItemChartScreen(
                                         .height(dimensionResource(id = R.dimen.category_list_row_height))
                                         .clickable {
 
-                                        }
+                                        },
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     CategoryIcon(
+                                        modifier = Modifier.padding(2.dp),
                                         code = displayedItemModel.categoryCode,
                                         drawable = displayedItemModel.categoryDrawable,
                                         image = displayedItemModel.categoryImage
@@ -317,9 +326,11 @@ fun ItemChartScreen(
                                             .aspectRatio(1f)
                                     )
                                     Text(
-                                        text = "${displayedItemModel.amount.toLong()
-                                            .times(100)
-                                            .div(itemChartState.value.expenseTotal)}%"
+                                        text = "${
+                                            displayedItemModel.amount.toLong()
+                                                .times(100)
+                                                .div(itemChartState.value.expenseTotal)
+                                        }%"
                                     )
                                 }
                                 Divider()
@@ -331,15 +342,15 @@ fun ItemChartScreen(
         }
     }
 
-    if (openExitSearchDialogState.value) {
+    if (openExitSearchDialog.value) {
         ExitSearchAlertDialog(
-            onDismissRequest = { openSearchDetailDialog.value = false },
+            onDismissRequest = { openExitSearchDialog.value = false },
             onDismissButtonClick = {
-                viewModel.onEvent(ItemMainEvent.OpenExitSearchDialog(false))
+                openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
-                viewModel.onEvent(ItemMainEvent.OpenExitSearchDialog(false))
+                openExitSearchDialog.value = false
             }
         )
     }
@@ -347,7 +358,8 @@ fun ItemChartScreen(
     if (openSearchDetailDialog.value) {
         SearchDetailAlertDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
-            onConfirmButtonClick = { openSearchDetailDialog.value = false }
+            onConfirmButtonClick = { openSearchDetailDialog.value = false },
+            searchModel
         )
     }
 

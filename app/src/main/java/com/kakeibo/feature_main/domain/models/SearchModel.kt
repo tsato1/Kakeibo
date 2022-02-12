@@ -1,6 +1,5 @@
 package com.kakeibo.feature_main.domain.models
 
-import android.util.Log
 import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.core.data.local.entities.SearchEntity
 
@@ -11,6 +10,7 @@ data class SearchModel(
     val fromAmount: String? = null,
     val toAmount: String? = null,
     val categoryCode: Int? = null,
+    val categoryName: String? = null,
     val memo: String? = null,
     val fromUpdateDate: String? = null,
     val toUpdateDate: String? = null

@@ -16,12 +16,14 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.util.Screen
+import com.kakeibo.R
 
 @Composable
 fun CollapsableLazyColumn(
@@ -30,82 +32,96 @@ fun CollapsableLazyColumn(
     modifier: Modifier
 ) {
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
-    LazyColumn(modifier) {
-        sections.forEachIndexed { i, expandableItem ->
-            val collapsed = collapsedState[i]
-            item(key = "header_$i") {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            collapsedState[i] = !collapsed
-                        },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Default.run {
-                            if (collapsed)
-                                KeyboardArrowDown
-                            else
-                                KeyboardArrowUp
-                        },
-                        contentDescription = "",
-                        tint = Color.LightGray,
-                    )
-                    Text(
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        text = expandableItem.parent.date,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        text = expandableItem.parent.income
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        text = expandableItem.parent.expense
-                    )
-                }
-                Divider()
-            }
-            if (!collapsed) {
-                items(expandableItem.children) { child ->
+
+    if (sections.isEmpty()) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(id = R.string.no_item_found)
+            )
+        }
+    }
+    else {
+        LazyColumn(modifier) {
+            sections.forEachIndexed { i, expandableItem ->
+                val collapsed = collapsedState[i]
+                item(key = "header_$i") {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp)
                             .clickable {
-                                navController.navigate(
-                                    Screen.ItemDetailScreen.route + "?itemId=${child.id}"
-                                )
-                            }
+                                collapsedState[i] = !collapsed
+                            },
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        CategoryIcon(
-                            code = child.categoryCode,
-                            drawable = child.categoryDrawable,
-                            image = child.categoryImage
+                        Icon(
+                            Icons.Default.run {
+                                if (collapsed)
+                                    KeyboardArrowDown
+                                else
+                                    KeyboardArrowUp
+                            },
+                            contentDescription = "",
+                            tint = Color.LightGray,
                         )
-                        Column(
-                            modifier = Modifier
-                                .weight(1f),
-                            horizontalAlignment = Alignment.Start
-                        ) {
-                            Text(
-                                text = child.categoryName
-                            )
-                            Text(
-                                text = child.memo,
-                                modifier = Modifier
-                                    .padding(vertical = 10.dp)
-                            )
-                        }
                         Text(
-                            text = child.amount
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            text = expandableItem.parent.date,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            text = expandableItem.parent.income
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            text = expandableItem.parent.expense
                         )
                     }
                     Divider()
+                }
+                if (!collapsed) {
+                    items(expandableItem.children) { child ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp)
+                                .clickable {
+                                    navController.navigate(
+                                        Screen.ItemDetailScreen.route + "?itemId=${child.id}"
+                                    )
+                                }
+                        ) {
+                            CategoryIcon(
+                                code = child.categoryCode,
+                                drawable = child.categoryDrawable,
+                                image = child.categoryImage
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f),
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Text(
+                                    text = child.categoryName
+                                )
+                                Text(
+                                    text = child.memo,
+                                    modifier = Modifier
+                                        .padding(vertical = 10.dp)
+                                )
+                            }
+                            Text(
+                                text = child.amount
+                            )
+                        }
+                        Divider()
+                    }
                 }
             }
         }

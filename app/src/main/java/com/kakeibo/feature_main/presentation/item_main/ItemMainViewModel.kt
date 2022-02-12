@@ -13,7 +13,6 @@ import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
 import com.kakeibo.feature_main.presentation.item_main.item_list.components.ExpandableItem
-import com.kakeibo.feature_main.presentation.item_search.*
 import com.kakeibo.util.UtilCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -48,8 +47,8 @@ class ItemMainViewModel @Inject constructor(
     private val _searchId = mutableStateOf(savedStateHandle.get("searchId") ?: -1L)
     val searchId: State<Long> = _searchId
 
-    private val _openExitSearchDialogState = mutableStateOf(false)
-    val openExitSearchDialogState: State<Boolean> = _openExitSearchDialogState
+    private val _searchModel = mutableStateOf(SearchModel())
+    val searchModel: State<SearchModel?> = _searchModel
 
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -110,12 +109,11 @@ class ItemMainViewModel @Inject constructor(
                 savedStateHandle.set("searchId", event.searchId)
                 _searchId.value = event.searchId
                 viewModelScope.launch {
-                    val searchModel = searchUseCases.getSearchByIDUseCase(event.searchId)
-                    loadItems(searchModel)
+                    _searchModel.value = searchUseCases.getSearchByIDUseCase(event.searchId)
+                    searchModel.value?.let {
+                        loadItems(it)
+                    }
                 }
-            }
-            is ItemMainEvent.OpenExitSearchDialog -> {
-                _openExitSearchDialogState.value = event.flag
             }
             is ItemMainEvent.ExitSearchMode -> {
                 savedStateHandle.set("searchId", -1L)

@@ -21,6 +21,7 @@ import com.kakeibo.feature_main.presentation.common.components.DateType
 import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
+import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilText
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,7 +53,9 @@ fun ItemInputScreen(
                 }
                 is ItemDetailViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
-                    navController.navigateUp()
+                    navController.navigate(
+                        Screen.ItemListScreen.route + "?searchId=${-1L}"
+                    )
                 }
             }
         }
