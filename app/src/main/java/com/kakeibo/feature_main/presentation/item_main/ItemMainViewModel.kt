@@ -14,6 +14,7 @@ import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
 import com.kakeibo.feature_main.presentation.item_main.item_list.components.ExpandableItem
 import com.kakeibo.util.UtilCategory
+import com.kakeibo.util.UtilDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -83,7 +84,7 @@ class ItemMainViewModel @Inject constructor(
             is ItemMainEvent.DateChanged -> {
                 val year = String.format("%04d", event.value.year)
                 val month = String.format("%02d", event.value.monthNumber)
-                val lastDayOfMonth = event.value.dayOfMonth
+                val lastDayOfMonth = UtilDate.getLastDayOfMonth(event.value.toString())
                 loadItems(
                     SearchModel(
                         fromDate = "$year-$month-01",

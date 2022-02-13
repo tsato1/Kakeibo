@@ -1,8 +1,10 @@
 package com.kakeibo.util
 
+import android.os.Build
 import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -27,7 +29,6 @@ object UtilDate {
         val cal = Calendar.getInstance()
         cal.time = Date()
         return SimpleDateFormat(format, Locale.getDefault()).format(cal.time)
-//        return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     }
 
     fun LocalDate.getYMDDateText(format: String): String = run {
@@ -54,6 +55,28 @@ object UtilDate {
 
     fun LocalDate.getYDateText(): String = run {
         this.toString().substring(0, 4)
+    }
+
+    fun getLastDayOfMonth(dateString: String) : String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val dateFormat: DateTimeFormatter =
+                DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
+            val date = java.time.LocalDate.parse(dateString, dateFormat)
+            val newDate: java.time.LocalDate =
+                date.withDayOfMonth(date.month.length(date.isLeapYear))
+            return newDate.month.toString()
+        }
+        else {
+            val dateFormat = SimpleDateFormat(DATE_FORMAT_DB, Locale.getDefault())
+            val convertedDate: Date? = dateFormat.parse(dateString)
+            convertedDate?.let {
+                val c = Calendar.getInstance()
+                c.time = convertedDate
+                c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH))
+                return c.get(Calendar.DAY_OF_MONTH).toString()
+            }
+            return "28"
+        }
     }
 
     fun getDBDate(date: String, fromFormat: Int): String {
