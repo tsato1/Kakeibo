@@ -75,265 +75,267 @@ fun ItemChartScreen(
         isFloatingActionButtonDocked = true,
         bottomBar = { BottomBar(navController = navController) },
         scaffoldState = scaffoldState
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            if (searchIdState.value != -1L) {
-                SearchModeTopRow(
-                    onCloseButtonClick = {
-                        openExitSearchDialog.value = true
-                    },
-                    onTextButtonClick = {
-                        openSearchDetailDialog.value = true
-                    }
-                )
-            } else {
-                DatePickerRow(
-                    context = LocalContext.current,
-                    type = DateType.YM,
-                    dateFormatIndex = viewModel.dateFormatIndex,
-                    onTextLayout = {
-                        viewModel.onEvent(ItemMainEvent.DateChanged(it))
-                    }
-                )
-            }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(8.dp)
-                    .verticalScroll(scrollState)
             ) {
-                // Summary =========================================================================
-                // Income
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp, 0.dp, 8.dp, 0.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.income)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = itemChartState.value.incomeTotal.toString()
-                    )
-                }
-                // Expense
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp, 0.dp, 8.dp, 0.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.expense_colon)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = itemChartState.value.expenseTotal.toString()
-                    )
-                }
-                // Balance
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp, 0.dp, 8.dp, 0.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                            .background(Color.Transparent)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.balance_colon)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = (itemChartState.value.incomeTotal + itemChartState.value.expenseTotal).toString()
-                    )
-                }
-                // Bar chart ===========================================================================
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(4.dp)
-                        ),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        text = stringResource(id = R.string.balance_colon)
-                    )
-                }
-                // Pie chart Income ====================================================================
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(4.dp)
-                        ),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.income_colon)
-                        )
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .height(
-                                    (dimensionResource(id = R.dimen.category_list_row_height) + 2.dp) *
-                                            itemChartState.value.incomeList.size
-                                )
-                        ) {
-                            items(itemChartState.value.incomeList) { displayedItemModel ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(dimensionResource(id = R.dimen.category_list_row_height))
-                                        .clickable {
-
-                                        },
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    CategoryIcon(
-                                        modifier = Modifier.padding(2.dp),
-                                        code = displayedItemModel.categoryCode,
-                                        drawable = displayedItemModel.categoryDrawable,
-                                        image = displayedItemModel.categoryImage
-                                    )
-                                    Text(
-                                        text = displayedItemModel.categoryName
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Text(
-                                        text = displayedItemModel.amount
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .padding(2.dp)
-                                            .background(VividRed)
-                                            .aspectRatio(1f)
-                                    )
-                                    Text(
-                                        text = "${
-                                            displayedItemModel.amount.toLong()
-                                                .times(100)
-                                                .div(itemChartState.value.incomeTotal)
-                                        }%"
-                                    )
-                                }
-                                Divider()
-                            }
+                if (searchIdState.value != -1L) {
+                    SearchModeTopRow(
+                        onCloseButtonClick = {
+                            openExitSearchDialog.value = true
+                        },
+                        onTextButtonClick = {
+                            openSearchDetailDialog.value = true
                         }
-                    }
+                    )
+                } else {
+                    DatePickerRow(
+                        context = LocalContext.current,
+                        type = DateType.YM,
+                        dateFormatIndex = viewModel.dateFormatIndex,
+                        onTextLayout = {
+                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
+                        }
+                    )
                 }
-                // Pie chart Expense ===================================================================
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(6.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(4.dp)
-                        ),
-                    horizontalArrangement = Arrangement.Center
+                        .padding(8.dp)
+                        .verticalScroll(scrollState)
                 ) {
-                    Column(
+                    // Summary =========================================================================
+                    // Income
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .clip(CircleShape)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.income)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = itemChartState.value.incomeTotal.toString()
+                        )
+                    }
+                    // Expense
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .clip(CircleShape)
+                        )
                         Text(
                             text = stringResource(id = R.string.expense_colon)
                         )
-                        PieChart(
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = itemChartState.value.expenseTotal.toString()
+                        )
+                    }
+                    // Balance
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
+                    ) {
+                        Box(
                             modifier = Modifier
-                                .size(80.dp)
-                                .padding(6.dp),
-                            pieChartData = PieChartData(
-                                slices = listOf(
-                                    PieChartData.Slice(25f, Color.Red),
-                                    PieChartData.Slice(42f, Color.Blue),
-                                    PieChartData.Slice(23f, Color.Green)
+                                .size(10.dp)
+                                .clip(CircleShape)
+                                .background(Color.Transparent)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.balance_colon)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = (itemChartState.value.incomeTotal + itemChartState.value.expenseTotal).toString()
+                        )
+                    }
+                    // Bar chart ===========================================================================
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(4.dp)
+                            ),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(vertical = 4.dp),
+                            text = stringResource(id = R.string.balance_colon)
+                        )
+                    }
+                    // Pie chart Income ====================================================================
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(4.dp)
+                            ),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.income_colon)
+                            )
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .height(
+                                        (dimensionResource(id = R.dimen.category_list_row_height) + 2.dp) *
+                                                itemChartState.value.incomeList.size
+                                    )
+                            ) {
+                                items(itemChartState.value.incomeList) { displayedItemModel ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(dimensionResource(id = R.dimen.category_list_row_height))
+                                            .clickable {
+
+                                            },
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        CategoryIcon(
+                                            modifier = Modifier.padding(2.dp),
+                                            code = displayedItemModel.categoryCode,
+                                            drawable = displayedItemModel.categoryDrawable,
+                                            image = displayedItemModel.categoryImage
+                                        )
+                                        Text(
+                                            text = displayedItemModel.categoryName
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(
+                                            text = displayedItemModel.amount
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxHeight()
+                                                .padding(2.dp)
+                                                .background(VividRed)
+                                                .aspectRatio(1f)
+                                        )
+                                        Text(
+                                            text = "${
+                                                displayedItemModel.amount.toLong()
+                                                    .times(100)
+                                                    .div(itemChartState.value.incomeTotal)
+                                            }%"
+                                        )
+                                    }
+                                    Divider()
+                                }
+                            }
+                        }
+                    }
+                    // Pie chart Expense ===================================================================
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(4.dp)
+                            ),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.expense_colon)
+                            )
+                            PieChart(
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .padding(6.dp),
+                                pieChartData = PieChartData(
+                                    slices = listOf(
+                                        PieChartData.Slice(25f, Color.Red),
+                                        PieChartData.Slice(42f, Color.Blue),
+                                        PieChartData.Slice(23f, Color.Green)
+                                    )
                                 )
                             )
-                        )
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .height(
-                                    (dimensionResource(id = R.dimen.category_list_row_height) + 2.dp) *
-                                            itemChartState.value.expenseList.size
-                                )
-                        ) {
-                            items(itemChartState.value.expenseList) { displayedItemModel ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(dimensionResource(id = R.dimen.category_list_row_height))
-                                        .clickable {
-
-                                        },
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    CategoryIcon(
-                                        modifier = Modifier.padding(2.dp),
-                                        code = displayedItemModel.categoryCode,
-                                        drawable = displayedItemModel.categoryDrawable,
-                                        image = displayedItemModel.categoryImage
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .height(
+                                        (dimensionResource(id = R.dimen.category_list_row_height) + 2.dp) *
+                                                itemChartState.value.expenseList.size
                                     )
-                                    Text(
-                                        text = displayedItemModel.categoryName
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Text(
-                                        text = displayedItemModel.amount
-                                    )
-                                    Box(
+                            ) {
+                                items(itemChartState.value.expenseList) { displayedItemModel ->
+                                    Row(
                                         modifier = Modifier
-                                            .fillMaxHeight()
-                                            .padding(2.dp)
-                                            .background(MatchaGreen)
-                                            .aspectRatio(1f)
-                                    )
-                                    Text(
-                                        text = "${
-                                            displayedItemModel.amount.toLong()
-                                                .times(100)
-                                                .div(itemChartState.value.expenseTotal)
-                                        }%"
-                                    )
+                                            .fillMaxWidth()
+                                            .height(dimensionResource(id = R.dimen.category_list_row_height))
+                                            .clickable {
+
+                                            },
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        CategoryIcon(
+                                            modifier = Modifier.padding(2.dp),
+                                            code = displayedItemModel.categoryCode,
+                                            drawable = displayedItemModel.categoryDrawable,
+                                            image = displayedItemModel.categoryImage
+                                        )
+                                        Text(
+                                            text = displayedItemModel.categoryName
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(
+                                            text = displayedItemModel.amount
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxHeight()
+                                                .padding(2.dp)
+                                                .background(MatchaGreen)
+                                                .aspectRatio(1f)
+                                        )
+                                        Text(
+                                            text = "${
+                                                displayedItemModel.amount.toLong()
+                                                    .times(100)
+                                                    .div(itemChartState.value.expenseTotal)
+                                            }%"
+                                        )
+                                    }
+                                    Divider()
                                 }
-                                Divider()
                             }
                         }
                     }

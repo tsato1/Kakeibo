@@ -61,37 +61,39 @@ fun ItemListScreen(
         isFloatingActionButtonDocked = true,
         bottomBar = { BottomBar(navController = navController) },
         scaffoldState = scaffoldState
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            if (searchIdState.value != -1L) {
-                SearchModeTopRow(
-                    onCloseButtonClick = {
-                        openExitSearchDialog.value = true
-                    },
-                    onTextButtonClick = {
-                        openSearchDetailDialog.value = true
-                    }
-                )
-            } else {
-                DatePickerRow(
-                    context = LocalContext.current,
-                    type = DateType.YM,
-                    dateFormatIndex = viewModel.dateFormatIndex,
-                    onTextLayout = {
-                        viewModel.onEvent(ItemMainEvent.DateChanged(it))
-                    }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                if (searchIdState.value != -1L) {
+                    SearchModeTopRow(
+                        onCloseButtonClick = {
+                            openExitSearchDialog.value = true
+                        },
+                        onTextButtonClick = {
+                            openSearchDetailDialog.value = true
+                        }
+                    )
+                } else {
+                    DatePickerRow(
+                        context = LocalContext.current,
+                        type = DateType.YM,
+                        dateFormatIndex = viewModel.dateFormatIndex,
+                        onTextLayout = {
+                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
+                        }
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                CollapsableLazyColumn(
+                    navController = navController,
+                    sections = itemListState.expandableItemList,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            CollapsableLazyColumn(
-                navController = navController,
-                sections = itemListState.expandableItemList,
-                modifier = Modifier.fillMaxSize()
-            )
         }
     }
 

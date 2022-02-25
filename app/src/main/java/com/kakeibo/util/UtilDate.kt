@@ -57,25 +57,45 @@ object UtilDate {
         this.toString().substring(0, 4)
     }
 
-    fun getLastDayOfMonth(dateString: String) : String {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    fun getFirstDayOfMonth(dateString: String): Int { // 0: Sunday, 6: Saturday
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormat: DateTimeFormatter =
                 DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
             val date = java.time.LocalDate.parse(dateString, dateFormat)
-            val newDate: java.time.LocalDate =
-                date.withDayOfMonth(date.month.length(date.isLeapYear))
-            return newDate.month.toString()
+            date.withDayOfMonth(1).dayOfWeek.value % 7 // originally 1: Monday, 7: Sunday hence %7
         }
         else {
             val dateFormat = SimpleDateFormat(DATE_FORMAT_DB, Locale.getDefault())
             val convertedDate: Date? = dateFormat.parse(dateString)
             convertedDate?.let {
                 val c = Calendar.getInstance()
-                c.time = convertedDate
-                c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH))
-                return c.get(Calendar.DAY_OF_MONTH).toString()
+                c.time = it
+                c.set(Calendar.DAY_OF_MONTH, 1)
+                c.get(Calendar.DAY_OF_WEEK) - 1// originally 1: Sunday, 7: Saturday hence -1
             }
-            return "28"
+            return 1
+        }
+    }
+
+    fun getLastDayOfMonth(dateString: String) : Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val dateFormat: DateTimeFormatter =
+                DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
+            val date = java.time.LocalDate.parse(dateString, dateFormat)
+            val newDate: java.time.LocalDate =
+                date.withDayOfMonth(date.month.length(date.isLeapYear))
+            newDate.dayOfMonth
+        }
+        else {
+            val dateFormat = SimpleDateFormat(DATE_FORMAT_DB, Locale.getDefault())
+            val convertedDate: Date? = dateFormat.parse(dateString)
+            convertedDate?.let {
+                val c = Calendar.getInstance()
+                c.time = it
+                c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH))
+                c.get(Calendar.DAY_OF_MONTH)
+            }
+            28
         }
     }
 

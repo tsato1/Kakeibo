@@ -35,8 +35,14 @@ class ItemMainViewModel @Inject constructor(
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
 
+    private val _firstDayOfMonth = mutableStateOf(
+        UtilDate.getFirstDayOfMonth(UtilDate.getTodaysLocalDate().toString()) // 0: Sunday
+    )
+    val firstDayOfMonth: State<Int> = _firstDayOfMonth
+
     private val _expandableItemListState = mutableStateOf(ExpandableItemListState())
     val expandableItemListState: State<ExpandableItemListState> = _expandableItemListState
+
 
     private val _itemChartState = mutableStateOf(ItemChartState())
     val itemChartState: State<ItemChartState> = _itemChartState
@@ -91,6 +97,7 @@ class ItemMainViewModel @Inject constructor(
                         toDate = "$year-$month-$lastDayOfMonth"
                     )
                 )
+                _firstDayOfMonth.value = UtilDate.getFirstDayOfMonth("$year-$month-01")
             }
             is ItemMainEvent.DeleteItem -> {
                 viewModelScope.launch {
