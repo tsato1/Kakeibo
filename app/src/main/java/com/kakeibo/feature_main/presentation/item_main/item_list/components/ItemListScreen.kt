@@ -91,6 +91,7 @@ fun ItemListScreen(
                 CollapsableLazyColumn(
                     navController = navController,
                     sections = itemListState.expandableItemList,
+                    dateFormatIndex = viewModel.dateFormatIndex,
                     modifier = Modifier.fillMaxSize()
                 )
             }

@@ -2,7 +2,7 @@ package com.kakeibo.util
 
 import android.content.Context
 import com.kakeibo.R
-import com.kakeibo.feature_main.presentation.item_main.item_list.components.ExpandableItem
+import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 
 object UtilExport {
     fun buildOrderByDate(fileName: String, context: Context, itemList: List<ExpandableItem>) {

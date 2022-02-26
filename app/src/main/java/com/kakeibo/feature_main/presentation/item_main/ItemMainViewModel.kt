@@ -10,11 +10,15 @@ import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
 import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
+import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarItem
+import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarItemListState
 import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
+import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
-import com.kakeibo.feature_main.presentation.item_main.item_list.components.ExpandableItem
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.getYMDDateText
+import com.kakeibo.util.UtilDate.isWithinMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +26,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.datetime.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,14 +39,32 @@ class ItemMainViewModel @Inject constructor(
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
 
-    private val _firstDayOfMonth = mutableStateOf(
-        UtilDate.getFirstDayOfMonth(UtilDate.getTodaysLocalDate().toString()) // 0: Sunday
-    )
-    val firstDayOfMonth: State<Int> = _firstDayOfMonth
+    private val _searchId = mutableStateOf(savedStateHandle.get("searchId") ?: -1L)
+    val searchId: State<Long> = _searchId
+
+    private val _searchModel = mutableStateOf(SearchModel())
+    val searchModel: State<SearchModel?> = _searchModel
+
+    private val _thisDate = mutableStateOf(UtilDate.getTodaysLocalDate())
+    val thisDate: State<LocalDate> = _thisDate
+    private val _calendarFromDate = mutableStateOf(LocalDate(
+        UtilDate.getTodaysLocalDate().year,
+        UtilDate.getTodaysLocalDate().monthNumber,
+        1
+    ))
+    val calendarFromDate: State<LocalDate> = _calendarFromDate
+    private val _calendarToDate = mutableStateOf(LocalDate(
+        UtilDate.getTodaysLocalDate().year,
+        UtilDate.getTodaysLocalDate().monthNumber,
+        UtilDate.getLastDateOfMonth(UtilDate.getTodaysLocalDate())
+    ))
+    val calendarToDate: State<LocalDate> = _calendarToDate
 
     private val _expandableItemListState = mutableStateOf(ExpandableItemListState())
     val expandableItemListState: State<ExpandableItemListState> = _expandableItemListState
 
+    private val _calendarItemListState = mutableStateOf(CalendarItemListState())
+    val calendarItemListState: State<CalendarItemListState> = _calendarItemListState
 
     private val _itemChartState = mutableStateOf(ItemChartState())
     val itemChartState: State<ItemChartState> = _itemChartState
@@ -51,11 +73,6 @@ class ItemMainViewModel @Inject constructor(
 
     private var getItemsJob: Job? = null
 
-    private val _searchId = mutableStateOf(savedStateHandle.get("searchId") ?: -1L)
-    val searchId: State<Long> = _searchId
-
-    private val _searchModel = mutableStateOf(SearchModel())
-    val searchModel: State<SearchModel?> = _searchModel
 
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -72,15 +89,21 @@ class ItemMainViewModel @Inject constructor(
     }
 
     private fun loadThisMonthData() {
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH))
-        val year = String.format("%04d", cal.get(Calendar.YEAR))
-        val month = String.format("%02d", cal.get(Calendar.MONTH) + 1)
-        val lastDayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
+        val today = UtilDate.getTodaysLocalDate()
+        val remainingDays = UtilDate.getRemainingDays(today)
+
+        _thisDate.value = today
+        _calendarFromDate.value = LocalDate(
+            today.year, today.monthNumber, 1
+        ).minus(UtilDate.getFirstDayOfMonth(today), DateTimeUnit.DAY)
+        _calendarToDate.value = LocalDate(
+            today.year, today.monthNumber, 1
+        ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
+
         loadItems(
-            SearchModel(
-                fromDate = "$year-$month-01",
-                toDate = "$year-$month-$lastDayOfMonth"
+            searchModel = SearchModel(
+                fromDate = calendarFromDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                toDate = calendarToDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB)
             )
         )
     }
@@ -88,16 +111,23 @@ class ItemMainViewModel @Inject constructor(
     fun onEvent(event: ItemMainEvent) {
         when (event) {
             is ItemMainEvent.DateChanged -> {
-                val year = String.format("%04d", event.value.year)
-                val month = String.format("%02d", event.value.monthNumber)
-                val lastDayOfMonth = UtilDate.getLastDayOfMonth(event.value.toString())
+                val firstDayOfMonth = UtilDate.getFirstDayOfMonth(event.localDate)
+                val remainingDays = UtilDate.getRemainingDays(event.localDate)
+
+                _thisDate.value = event.localDate
+                _calendarFromDate.value = LocalDate(
+                    event.localDate.year, event.localDate.monthNumber, 1
+                ).minus(firstDayOfMonth, DateTimeUnit.DAY)
+                _calendarToDate.value = LocalDate(
+                    event.localDate.year, event.localDate.monthNumber, 1
+                ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
+
                 loadItems(
                     SearchModel(
-                        fromDate = "$year-$month-01",
-                        toDate = "$year-$month-$lastDayOfMonth"
+                        fromDate = calendarFromDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                        toDate = calendarToDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB)
                     )
                 )
-                _firstDayOfMonth.value = UtilDate.getFirstDayOfMonth("$year-$month-01")
             }
             is ItemMainEvent.DeleteItem -> {
                 viewModelScope.launch {
@@ -114,7 +144,7 @@ class ItemMainViewModel @Inject constructor(
                 }
             }
             is ItemMainEvent.LoadItems -> {
-                savedStateHandle.set("searchId", event.searchId)
+                savedStateHandle["searchId"] = event.searchId
                 _searchId.value = event.searchId
                 viewModelScope.launch {
                     _searchModel.value = searchUseCases.getSearchByIDUseCase(event.searchId)
@@ -134,6 +164,7 @@ class ItemMainViewModel @Inject constructor(
 
     private fun loadItems(searchModel: SearchModel) {
         Log.d("asdf","loadItems in MainViewModel : $searchId.value  "+searchModel.toQuery())
+        _searchModel.value = searchModel
         viewModelScope.launch {
             getItemsJob?.cancel()
             getItemsJob = itemUseCases.getSpecificItemsUseCase(searchModel.toQuery(), searchModel.toArgs())
@@ -143,6 +174,12 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val expandableItemList = result.data
                         ?.groupBy { it.eventDate }
+                        ?.filter {
+                            Log.d("asdf", "key="+it.key + "   asdf    "+searchModel.fromDate!!.toLocalDate())
+                            it.key
+                                .toLocalDate()
+                                .isWithinMonth(thisDate.value)
+                        }
                         ?.map { entry ->
                             ExpandableItem(
                                 ExpandableItem.Parent(
@@ -153,6 +190,55 @@ class ItemMainViewModel @Inject constructor(
                                 entry.value
                             )
                         } ?: emptyList()
+
+                    /*
+                    Used in ItemCalendarScreen
+                     */
+                    val calendarItemList = result.data
+                        ?.groupBy { it.eventDate }
+                        ?.map { entry ->
+                            CalendarItem(
+                                CalendarItem.Parent(
+                                    entry.key,
+                                    entry.value.map { it.amount.toLong() }.filter { it > 0 }.sum().toString(),
+                                    entry.value.map { it.amount.toLong() }.filter { it < 0 }.sum().toString()
+                                ),
+                                entry.value
+                            )
+                        }
+                        ?.toMutableList() ?: mutableListOf()
+
+                    var iDate = calendarFromDate.value
+                    var index = 0
+                    while (iDate <= calendarToDate.value) {
+                        if (calendarItemList.isEmpty() || index >= calendarItemList.size) {
+                            calendarItemList.add(
+                                CalendarItem(
+                                    CalendarItem.Parent(
+                                        iDate.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                                        "0",
+                                        "0"
+                                    ),
+                                    emptyList()
+                                )
+                            )
+                        }
+                        else if (iDate < calendarItemList[index].parent.date.toLocalDate()) {
+                            calendarItemList.add(
+                                index,
+                                CalendarItem(
+                                    CalendarItem.Parent(
+                                        iDate.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                                        "0",
+                                        "0"
+                                    ),
+                                    emptyList()
+                                )
+                            )
+                        }
+                        index += 1
+                        iDate += DatePeriod(days = 1)
+                    }
 
                     /*
                     Used in ItemChartScreen
@@ -212,6 +298,10 @@ class ItemMainViewModel @Inject constructor(
                                 expenseMap = itemMapByCategoryExpense,
                                 isLoading = false
                             )
+                            _calendarItemListState.value = calendarItemListState.value.copy(
+                                calendarItemList = calendarItemList,
+                                isLoading = false
+                            )
                         }
                         is Resource.Error -> {
                             _expandableItemListState.value = expandableItemListState.value.copy(
@@ -225,6 +315,10 @@ class ItemMainViewModel @Inject constructor(
                                 expenseList = expenseCategoryList,
                                 incomeMap = itemMapByCategoryIncome,
                                 expenseMap = itemMapByCategoryExpense,
+                                isLoading = false
+                            )
+                            _calendarItemListState.value = calendarItemListState.value.copy(
+                                calendarItemList = calendarItemList,
                                 isLoading = false
                             )
                             _eventFlow.emit(
@@ -245,6 +339,10 @@ class ItemMainViewModel @Inject constructor(
                                 expenseList = expenseCategoryList,
                                 incomeMap = itemMapByCategoryIncome,
                                 expenseMap = itemMapByCategoryExpense,
+                                isLoading = true
+                            )
+                            _calendarItemListState.value = calendarItemListState.value.copy(
+                                calendarItemList = calendarItemList,
                                 isLoading = true
                             )
                         }

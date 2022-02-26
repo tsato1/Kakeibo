@@ -39,7 +39,7 @@ class ItemDetailViewModel @Inject constructor(
     private val _currentItemId = mutableStateOf(-1L)
     val currentItemId: State<Long> = _currentItemId
 
-    private val _itemDate = mutableStateOf(UtilDate.getTodaysLocalDate()) // itemDate is in DB format
+    private val _itemDate = mutableStateOf(UtilDate.getTodaysLocalDate())
     val itemDate: State<LocalDate> = _itemDate
 
     private val _itemAmount = mutableStateOf(TextFieldState(hint = "Enter amount"))

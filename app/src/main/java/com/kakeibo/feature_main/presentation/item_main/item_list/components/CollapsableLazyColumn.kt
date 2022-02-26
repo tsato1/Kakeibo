@@ -21,14 +21,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
-import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.R
+import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
+import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.getYMDDateText
+import kotlinx.datetime.toLocalDate
 
 @Composable
 fun CollapsableLazyColumn(
     navController: NavController,
     sections: List<ExpandableItem>,
+    dateFormatIndex: Int,
     modifier: Modifier
 ) {
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
@@ -69,7 +73,9 @@ fun CollapsableLazyColumn(
                         )
                         Text(
                             modifier = Modifier.padding(vertical = 10.dp),
-                            text = expandableItem.parent.date,
+                            text = expandableItem.parent.date
+                                .toLocalDate()
+                                .getYMDDateText(UtilDate.DATE_FORMATS[dateFormatIndex]),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
@@ -126,13 +132,4 @@ fun CollapsableLazyColumn(
             }
         }
     }
-}
-
-data class ExpandableItem(
-    val parent: Parent,
-    val children: List<DisplayedItemModel>
-) {
-
-    data class Parent(val date: String, val income: String, val expense: String)
-
 }
