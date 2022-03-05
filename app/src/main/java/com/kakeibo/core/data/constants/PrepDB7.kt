@@ -1,9 +1,12 @@
 package com.kakeibo.core.data.constants
 
+import android.annotation.SuppressLint
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilCurrency
+import kotlin.math.absoluteValue
 
+@SuppressLint("Range")
 object PrepDB7 {
     fun migrate_1_2(database: SupportSQLiteDatabase) {}
 
@@ -582,6 +585,27 @@ object PrepDB7 {
 //                " ADD COLUMN " + ConstCategoryDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
 //        database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
 //                " (" + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER PRIMARY KEY NOT NULL);")
+
+        /*
+        set the negative amount to positive
+         */
+        val cursorItem = database.query(
+            ("SELECT " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + ", " +
+                    ConstItemDB.COL_AMOUNT + ", " +
+                    ConstItemDB.COL_CATEGORY_CODE + ", " +
+                    ConstCategoryDB.COL_COLOR +
+                    " FROM " + ConstItemDB.TABLE_NAME)
+        )
+        if (cursorItem.moveToFirst()) {
+            do {
+                val id = cursorItem.getInt(cursorItem.getColumnIndex(ConstItemDB.COL_ID))
+                val amount = cursorItem.getLong(cursorItem.getColumnIndex(ConstItemDB.COL_AMOUNT))
+                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME +
+                        " SET " + ConstItemDB.COL_AMOUNT + "=" + (amount.absoluteValue) + // set to positive
+                        " WHERE " + ConstItemDB.COL_ID + "=" + id)
+            } while (cursorItem.moveToNext())
+        }
+
         database.execSQL("CREATE TABLE " + ConstSearchDB.TABLE_NAME + " (" +
                 ConstSearchDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstSearchDB.COL_FROM_DATE + " TEXT, " +

@@ -1,6 +1,5 @@
 package com.kakeibo.feature_main.presentation.item_main
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
@@ -79,7 +78,6 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        Log.d("asdf","init in MainViewModel "+searchId.value.toString())
         if (_searchId.value == -1L) {
             loadThisMonthData()
         }
@@ -163,7 +161,6 @@ class ItemMainViewModel @Inject constructor(
     }
 
     private fun loadItems(searchModel: SearchModel) {
-        Log.d("asdf","loadItems in MainViewModel : $searchId.value  "+searchModel.toQuery())
         _searchModel.value = searchModel
         viewModelScope.launch {
             getItemsJob?.cancel()
@@ -174,18 +171,17 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val expandableItemList = result.data
                         ?.groupBy { it.eventDate }
-                        ?.filter {
-                            Log.d("asdf", "key="+it.key + "   asdf    "+searchModel.fromDate!!.toLocalDate())
-                            it.key
-                                .toLocalDate()
-                                .isWithinMonth(thisDate.value)
-                        }
+                        ?.filter { it.key.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.map { entry ->
                             ExpandableItem(
                                 ExpandableItem.Parent(
                                     entry.key,
-                                    entry.value.map { it.amount.toLong() }.filter { it > 0 }.sum().toString(),
-                                    entry.value.map { it.amount.toLong() }.filter { it < 0 }.sum().toString()
+                                    entry.value
+                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                                        .sumOf { it.amount.toLong() }.toString(),
+                                    entry.value
+                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                                        .sumOf { it.amount.toLong() }.toString()
                                 ),
                                 entry.value
                             )
@@ -200,8 +196,12 @@ class ItemMainViewModel @Inject constructor(
                             CalendarItem(
                                 CalendarItem.Parent(
                                     entry.key,
-                                    entry.value.map { it.amount.toLong() }.filter { it > 0 }.sum().toString(),
-                                    entry.value.map { it.amount.toLong() }.filter { it < 0 }.sum().toString()
+                                    entry.value
+                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                                        .sumOf { it.amount.toLong() }.toString(),
+                                    entry.value
+                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                                        .sumOf { it.amount.toLong() }.toString()
                                 ),
                                 entry.value
                             )
@@ -245,14 +245,17 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val incomeTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.sumOf { it.amount.toLong() } ?: 0L
 
                     val expenseTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.sumOf { it.amount.toLong() } ?: 0L
 
                     val incomeCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toLong() + ele.amount.toLong()
@@ -265,6 +268,7 @@ class ItemMainViewModel @Inject constructor(
 
                     val expenseCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toLong() + ele.amount.toLong()
@@ -277,10 +281,12 @@ class ItemMainViewModel @Inject constructor(
 
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     val itemMapByCategoryExpense = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     when (result) {

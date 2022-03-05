@@ -70,8 +70,8 @@ object UtilDate {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormat: DateTimeFormatter =
                 DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
-            val date = java.time.LocalDate.parse(dateString, dateFormat)
-            date.withDayOfMonth(1).dayOfWeek.value % 7 // originally 1: Monday, 7: Sunday hence %7
+            val parsedDate = java.time.LocalDate.parse(dateString, dateFormat)
+            parsedDate.withDayOfMonth(1).dayOfWeek.value % 7 // originally 1: Monday, 7: Sunday hence %7
         }
         else {
             val dateFormat = SimpleDateFormat(DATE_FORMAT_DB, Locale.getDefault())
@@ -90,10 +90,8 @@ object UtilDate {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormat: DateTimeFormatter =
                 DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
-            val oldDate = java.time.LocalDate.parse(dateString, dateFormat)
-            val newDate: java.time.LocalDate =
-                oldDate.withDayOfMonth(date.month.length(oldDate.isLeapYear))
-            newDate.dayOfMonth
+            val parsedDate = java.time.LocalDate.parse(dateString, dateFormat)
+            parsedDate.withDayOfMonth(date.month.length(parsedDate.isLeapYear)).dayOfMonth
         }
         else {
             val dateFormat = SimpleDateFormat(DATE_FORMAT_DB, Locale.getDefault())

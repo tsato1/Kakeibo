@@ -27,7 +27,7 @@ data class DisplayedItemEntity(
     fun toDisplayedItemModel(): DisplayedItemModel {
         return DisplayedItemModel(
             id = _id,
-            amount = amount.toString(),
+            amount = amount.abs().toString(),
             currencyCode = currencyCode,
             categoryCode = categoryCode,
             memo = memo,

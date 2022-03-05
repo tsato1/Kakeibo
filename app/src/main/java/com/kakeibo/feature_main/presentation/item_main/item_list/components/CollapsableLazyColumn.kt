@@ -23,7 +23,9 @@ import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.R
+import com.kakeibo.feature_main.presentation.common.components.IncomeExpenseIndicator
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
+import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.getYMDDateText
 import kotlinx.datetime.toLocalDate
@@ -56,6 +58,7 @@ fun CollapsableLazyColumn(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(4.dp, 4.dp)
                             .clickable {
                                 collapsedState[i] = !collapsed
                             },
@@ -72,20 +75,19 @@ fun CollapsableLazyColumn(
                             tint = Color.LightGray,
                         )
                         Text(
-                            modifier = Modifier.padding(vertical = 10.dp),
                             text = expandableItem.parent.date
                                 .toLocalDate()
                                 .getYMDDateText(UtilDate.DATE_FORMATS[dateFormatIndex]),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
+                        IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_INCOME)
                         Text(
-                            modifier = Modifier.padding(vertical = 10.dp),
                             text = expandableItem.parent.income
                         )
                         Spacer(modifier = Modifier.width(10.dp))
+                        IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_EXPENSE)
                         Text(
-                            modifier = Modifier.padding(vertical = 10.dp),
                             text = expandableItem.parent.expense
                         )
                     }
@@ -96,12 +98,13 @@ fun CollapsableLazyColumn(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(4.dp)
+                                .padding(16.dp, 2.dp, 12.dp, 2.dp)
                                 .clickable {
                                     navController.navigate(
                                         Screen.ItemDetailScreen.route + "?itemId=${child.id}"
                                     )
-                                }
+                                },
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             CategoryIcon(
                                 code = child.categoryCode,
@@ -110,21 +113,18 @@ fun CollapsableLazyColumn(
                             )
                             Column(
                                 modifier = Modifier
-                                    .weight(1f),
+                                    .weight(1f)
+                                    .padding(4.dp, 2.dp),
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(
                                     text = child.categoryName
                                 )
                                 Text(
-                                    text = child.memo,
-                                    modifier = Modifier
-                                        .padding(vertical = 10.dp)
+                                    text = child.memo
                                 )
                             }
-                            Text(
-                                text = child.amount
-                            )
+                            Text(text = child.amount)
                         }
                         Divider()
                     }

@@ -25,21 +25,9 @@ data class DisplayedItemModel(
 
     fun toItemEntity(): ItemEntity {
 
-        val amountBigDecimal = when (categoryColor) {
-            UtilCategory.CATEGORY_COLOR_INCOME -> {
-                BigDecimal(amount.replace(',', '.')) // todo: accommodate comma
-            }
-            UtilCategory.CATEGORY_COLOR_EXPENSE -> {
-                BigDecimal(amount.replace(',', '.')).negate()
-            }
-            else -> {
-                BigDecimal(0)
-            }
-        }
-
         return ItemEntity(
             id = id ?: 0,
-            amount = amountBigDecimal, // converters will do .multiply(BigDecimal(1000)).toLong()
+            amount = BigDecimal(amount.replace(',', '.')), // converter will do .multiply(BigDecimal(1000)).toLong()
             currencyCode = currencyCode,
             categoryCode = categoryCode,
             memo = memo,
