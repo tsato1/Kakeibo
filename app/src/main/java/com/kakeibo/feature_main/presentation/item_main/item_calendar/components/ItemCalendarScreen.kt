@@ -3,6 +3,7 @@ package com.kakeibo.feature_main.presentation.item_main.item_calendar.components
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,9 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -32,10 +36,10 @@ import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getTodaysLocalDate
 import com.kakeibo.util.UtilDate.getYMDDateText
 import com.kakeibo.util.UtilDate.isWithinMonth
 import kotlinx.datetime.*
+import kotlin.math.roundToInt
 
 @Composable
 fun ItemCalendarScreen(
@@ -49,7 +53,6 @@ fun ItemCalendarScreen(
 
     val searchIdState = viewModel.searchId
     val searchModel = viewModel.searchModel.value
-    val dateState = viewModel.thisDate
 
     LaunchedEffect(Unit) {
         Log.d("asdf", "launchedEffect CALENDAR searchId="+searchIdState.value)
@@ -79,7 +82,31 @@ fun ItemCalendarScreen(
         bottomBar = { BottomBar(navController = navController) },
         scaffoldState = scaffoldState
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
+        var offsetX by remember { mutableStateOf(0f) }
+
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .offset { IntOffset(offsetX.roundToInt(), 0) }
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragEnd = {
+                            when {
+                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
+                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                            }
+                            offsetX = 0f
+                        }
+                    ) { change, dragAmount ->
+                        change.consumeAllChanges()
+                        offsetX += dragAmount.x
+                        when {
+                            offsetX > 400f -> { offsetX = 400f }
+                            offsetX < -400f -> { offsetX = -400f }
+                        }
+                    }
+                }
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -99,10 +126,7 @@ fun ItemCalendarScreen(
                         context = LocalContext.current,
                         type = DateType.YM,
                         dateFormatIndex = viewModel.dateFormatIndex,
-                        onTextLayout = {
-                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
-                        },
-                        localDateState = dateState
+                        viewModel = viewModel
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -164,38 +188,31 @@ fun CalendarRows(
                             .fillMaxSize()
                             .clickable {
                                 when (calendarItem.parent.date.toLocalDate().monthNumber) {
-                                    viewModel.thisDate.value.minus(
+                                    viewModel.localEventDate.value.toLocalDate().minus(
                                         1,
                                         DateTimeUnit.MONTH
                                     ).monthNumber -> {
-                                        viewModel.onEvent(
-                                            ItemMainEvent.DateChanged(
-                                                viewModel.thisDate.value.minus(
-                                                    1,
-                                                    DateTimeUnit.MONTH
-                                                )
-                                            )
-                                        )
+                                        viewModel.plus(-1, DateTimeUnit.MONTH)
                                     }
-                                    viewModel.thisDate.value.monthNumber -> {
+                                    viewModel.localEventDate.value.toLocalDate().monthNumber -> {
                                         showDateDetailDialog.value = true
                                         clickedDateIndex.value = index
                                     }
-                                    viewModel.thisDate.value.plus(
+                                    viewModel.localEventDate.value.toLocalDate().plus(
                                         1,
                                         DateTimeUnit.MONTH
                                     ).monthNumber -> {
-                                        viewModel.onEvent(
-                                            ItemMainEvent.DateChanged(
-                                                viewModel.thisDate.value.plus(1, DateTimeUnit.MONTH)
-                                            )
-                                        )
+                                        viewModel.plus(1, DateTimeUnit.MONTH)
                                     }
                                 }
                             }
-                            .alpha(if (iDate.isWithinMonth(viewModel.thisDate.value)) 1f else 0.5f)
+                            .alpha(
+                                if (iDate.isWithinMonth(viewModel.localEventDate.value.toLocalDate()))
+                                    1f
+                                else 0.5f
+                            )
                     ) {
-                        if (iDate == getTodaysLocalDate())
+                        if (iDate == UtilDate.getTodaysLocalDate())
                             Text(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))

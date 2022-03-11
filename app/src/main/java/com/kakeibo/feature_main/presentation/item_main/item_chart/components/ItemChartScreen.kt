@@ -2,6 +2,7 @@ package com.kakeibo.feature_main.presentation.item_main.item_chart.components
 
 import android.util.Log
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,19 +11,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
@@ -36,6 +37,8 @@ import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.ui.theme.MatchaGreen
 import com.kakeibo.ui.theme.VividRed
 import com.kakeibo.util.UtilCategory
+import kotlinx.datetime.DateTimeUnit
+import kotlin.math.roundToInt
 
 @Composable
 fun ItemChartScreen(
@@ -43,7 +46,6 @@ fun ItemChartScreen(
     viewModel: ItemMainViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
-    val scrollState = rememberScrollState()
 
     val openSearchDetailDialog = remember { mutableStateOf(false) }
     val openExitSearchDialog = remember { mutableStateOf(false) }
@@ -84,11 +86,40 @@ fun ItemChartScreen(
         bottomBar = { BottomBar(navController = navController) },
         scaffoldState = scaffoldState
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
+        var offsetX by remember { mutableStateOf(0f) }
+
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .offset { IntOffset(offsetX.roundToInt(), 0) }
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragEnd = {
+                            when {
+                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
+                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                            }
+                            offsetX = 0f
+                        }
+                    ) { change, dragAmount ->
+                        change.consumeAllChanges()
+                        offsetX += dragAmount.x
+                        when {
+                            offsetX > 400f -> {
+                                offsetX = 400f
+                            }
+                            offsetX < -400f -> {
+                                offsetX = -400f
+                            }
+                        }
+                    }
+                }
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(8.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 if (searchIdState.value != -1L) {
                     SearchModeTopRow(
@@ -104,16 +135,13 @@ fun ItemChartScreen(
                         context = LocalContext.current,
                         type = DateType.YM,
                         dateFormatIndex = viewModel.dateFormatIndex,
-                        onTextLayout = {
-                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
-                        }
+                        viewModel = viewModel
                     )
                 }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .verticalScroll(scrollState)
                 ) {
                     // Summary =========================================================================
                     // Income

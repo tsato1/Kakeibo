@@ -71,9 +71,7 @@ fun ItemInputScreen(
                 context = LocalContext.current,
                 type = DateType.YMDW,
                 dateFormatIndex = viewModel.dateFormatIndex,
-                onTextLayout = {
-                    viewModel.onEvent(ItemDetailEvent.DateChanged(it))
-                }
+                viewModel = viewModel
             )
             Spacer(modifier = Modifier.height(16.dp))
             TransparentHintTextField(

@@ -33,7 +33,6 @@ fun ItemDetailScreen(
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
 
-    val itemDateState = viewModel.itemDate
     val itemAmountState = viewModel.itemAmount
     val itemCategoryCode = viewModel.itemCategoryCode
     val itemCategoryName = viewModel.itemCategoryName
@@ -78,10 +77,7 @@ fun ItemDetailScreen(
                 context = LocalContext.current,
                 type = DateType.YMDW,
                 dateFormatIndex = viewModel.dateFormatIndex,
-                localDateState = itemDateState,
-                onTextLayout = {
-                    viewModel.onEvent(ItemDetailEvent.DateChanged(it))
-                }
+                viewModel = viewModel
             )
             Spacer(modifier = Modifier.height(16.dp))
             // Amount ==============================================================================

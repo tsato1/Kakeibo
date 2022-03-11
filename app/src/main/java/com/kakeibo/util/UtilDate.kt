@@ -45,28 +45,27 @@ object UtilDate {
         }
     }
 
-    fun LocalDate.getYMDateTextFromDBFormat(format: String): String {
+    fun String.getYMDateTextFromDBFormat(format: String): String {
         return when (format) {
             /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_DB -> this.toString().substring(0, 7)
+            DATE_FORMAT_DB -> this.substring(0, 7)
             /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_YMD -> this.toString().substring(0, 7)
+            DATE_FORMAT_YMD -> this.substring(0, 7)
             /* '11-02-2021' -> '02-2021' */
-            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> this.toString().substring(3)
+            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> this.substring(3)
             /* else, use DB format */
-            else -> this.toString().substring(0, 7)
+            else -> this.substring(0, 7)
         }
     }
 
-    fun LocalDate.getYDateText(): String = run {
-        this.toString().substring(0, 4)
+    fun String.getYDateText(): String = run {
+        this.substring(0, 4)
     }
 
     /*
      returns 0: Sunday, 6: Saturday
      */
-    fun getFirstDayOfMonth(date: LocalDate): Int {
-        val dateString = date.getYMDDateText(DATE_FORMAT_DB)
+    fun getFirstDayOfMonth(dateString: String): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormat: DateTimeFormatter =
                 DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
@@ -85,8 +84,8 @@ object UtilDate {
         }
     }
 
-    fun getLastDateOfMonth(date: LocalDate) : Int {
-        val dateString = date.getYMDDateText(DATE_FORMAT_DB)
+    fun getLastDateOfMonth(dateString: String) : Int {
+        val date = dateString.toLocalDate()
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormat: DateTimeFormatter =
                 DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
@@ -109,10 +108,11 @@ object UtilDate {
     returns the number of days from the last date of the searching month
     to fill in the calendar result
      */
-    fun getRemainingDays(date: LocalDate): Int {
+    fun getRemainingDays(dateString: String): Int {
+        val date = dateString.toLocalDate()
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val firstDayOfMonth = getFirstDayOfMonth(date)
-            val lastDateOfMotnh = getLastDateOfMonth(date)
+            val firstDayOfMonth = getFirstDayOfMonth(dateString)
+            val lastDateOfMotnh = getLastDateOfMonth(dateString)
             if(lastDateOfMotnh / 4 - firstDayOfMonth >= 0) {
                 14 - LocalDate(date.year, date.monthNumber, lastDateOfMotnh).dayOfWeek.value
             }
@@ -123,6 +123,10 @@ object UtilDate {
         else {
             13 //todo
         }
+    }
+
+    fun String.isWithinMonth(localDate: String): Boolean {
+        return this.toLocalDate().monthNumber == localDate.toLocalDate().monthNumber
     }
 
     fun LocalDate.isWithinMonth(localDate: LocalDate): Boolean {

@@ -9,6 +9,7 @@ import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
 import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
+import com.kakeibo.feature_main.presentation.common.BaseViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarItem
 import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarItemListState
 import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
@@ -34,7 +35,7 @@ class ItemMainViewModel @Inject constructor(
     private val searchUseCases: SearchUseCases,
     appPreferences: AppPreferences,
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : BaseViewModel() {
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
 
@@ -44,8 +45,6 @@ class ItemMainViewModel @Inject constructor(
     private val _searchModel = mutableStateOf(SearchModel())
     val searchModel: State<SearchModel?> = _searchModel
 
-    private val _thisDate = mutableStateOf(UtilDate.getTodaysLocalDate())
-    val thisDate: State<LocalDate> = _thisDate
     private val _calendarFromDate = mutableStateOf(LocalDate(
         UtilDate.getTodaysLocalDate().year,
         UtilDate.getTodaysLocalDate().monthNumber,
@@ -55,7 +54,7 @@ class ItemMainViewModel @Inject constructor(
     private val _calendarToDate = mutableStateOf(LocalDate(
         UtilDate.getTodaysLocalDate().year,
         UtilDate.getTodaysLocalDate().monthNumber,
-        UtilDate.getLastDateOfMonth(UtilDate.getTodaysLocalDate())
+        UtilDate.getLastDateOfMonth(UtilDate.getTodaysLocalDate().getYMDDateText(UtilDate.DATE_FORMAT_DB))
     ))
     val calendarToDate: State<LocalDate> = _calendarToDate
 
@@ -88,12 +87,14 @@ class ItemMainViewModel @Inject constructor(
 
     private fun loadThisMonthData() {
         val today = UtilDate.getTodaysLocalDate()
-        val remainingDays = UtilDate.getRemainingDays(today)
+        val remainingDays = UtilDate.getRemainingDays(today.getYMDDateText(UtilDate.DATE_FORMAT_DB))
 
-        _thisDate.value = today
+//        _localDate.value = today
+        updateLocalEventDate(today.getYMDDateText(UtilDate.DATE_FORMAT_DB))
+
         _calendarFromDate.value = LocalDate(
             today.year, today.monthNumber, 1
-        ).minus(UtilDate.getFirstDayOfMonth(today), DateTimeUnit.DAY)
+        ).minus(UtilDate.getFirstDayOfMonth(today.getYMDDateText(UtilDate.DATE_FORMAT_DB)), DateTimeUnit.DAY)
         _calendarToDate.value = LocalDate(
             today.year, today.monthNumber, 1
         ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
@@ -106,27 +107,30 @@ class ItemMainViewModel @Inject constructor(
         )
     }
 
+    override fun onDateChanged() {
+        val date = localEventDate.value
+
+        val firstDayOfMonth = UtilDate.getFirstDayOfMonth(date)
+        val remainingDays = UtilDate.getRemainingDays(date)
+
+        val localDate = date.toLocalDate()
+        _calendarFromDate.value = LocalDate(
+            localDate.year, localDate.monthNumber, 1
+        ).minus(firstDayOfMonth, DateTimeUnit.DAY)
+        _calendarToDate.value = LocalDate(
+            localDate.year, localDate.monthNumber, 1
+        ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
+
+        loadItems(
+            SearchModel(
+                fromDate = calendarFromDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                toDate = calendarToDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB)
+            )
+        )
+    }
+
     fun onEvent(event: ItemMainEvent) {
         when (event) {
-            is ItemMainEvent.DateChanged -> {
-                val firstDayOfMonth = UtilDate.getFirstDayOfMonth(event.localDate)
-                val remainingDays = UtilDate.getRemainingDays(event.localDate)
-
-                _thisDate.value = event.localDate
-                _calendarFromDate.value = LocalDate(
-                    event.localDate.year, event.localDate.monthNumber, 1
-                ).minus(firstDayOfMonth, DateTimeUnit.DAY)
-                _calendarToDate.value = LocalDate(
-                    event.localDate.year, event.localDate.monthNumber, 1
-                ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
-
-                loadItems(
-                    SearchModel(
-                        fromDate = calendarFromDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB),
-                        toDate = calendarToDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB)
-                    )
-                )
-            }
             is ItemMainEvent.DeleteItem -> {
                 viewModelScope.launch {
                     itemUseCases.deleteItemUseCase(event.displayedItemModel)
@@ -171,7 +175,7 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val expandableItemList = result.data
                         ?.groupBy { it.eventDate }
-                        ?.filter { it.key.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.key.isWithinMonth(localEventDate.value) }
                         ?.map { entry ->
                             ExpandableItem(
                                 ExpandableItem.Parent(
@@ -245,17 +249,17 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val incomeTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.sumOf { it.amount.toLong() } ?: 0L
 
                     val expenseTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.sumOf { it.amount.toLong() } ?: 0L
 
                     val incomeCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toLong() + ele.amount.toLong()
@@ -268,7 +272,7 @@ class ItemMainViewModel @Inject constructor(
 
                     val expenseCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toLong() + ele.amount.toLong()
@@ -281,12 +285,12 @@ class ItemMainViewModel @Inject constructor(
 
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     val itemMapByCategoryExpense = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter { it.eventDate.toLocalDate().isWithinMonth(thisDate.value) }
+                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     when (result) {

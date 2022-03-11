@@ -1,16 +1,17 @@
 package com.kakeibo.feature_main.presentation.item_main.item_list.components
 
 import android.util.Log
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kakeibo.feature_main.presentation.common.components.*
@@ -18,6 +19,8 @@ import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.util.Screen
+import kotlinx.datetime.DateTimeUnit
+import kotlin.math.roundToInt
 
 @Composable
 fun ItemListScreen(
@@ -62,7 +65,31 @@ fun ItemListScreen(
         bottomBar = { BottomBar(navController = navController) },
         scaffoldState = scaffoldState
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
+        var offsetX by remember { mutableStateOf(0f) }
+
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .offset { IntOffset(offsetX.roundToInt(), 0) }
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragEnd = {
+                            when {
+                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
+                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                            }
+                            offsetX = 0f
+                        }
+                    ) { change, dragAmount ->
+                        change.consumeAllChanges()
+                        offsetX += dragAmount.x
+                        when {
+                            offsetX > 400f -> { offsetX = 400f }
+                            offsetX < -400f -> { offsetX = -400f }
+                        }
+                    }
+                }
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -82,9 +109,14 @@ fun ItemListScreen(
                         context = LocalContext.current,
                         type = DateType.YM,
                         dateFormatIndex = viewModel.dateFormatIndex,
-                        onTextLayout = {
-                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
-                        }
+                        viewModel = viewModel,
+//                        onTextLayout = {
+//                            viewModel.onDateChanged()
+////                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
+//                        },
+//                        onRefresh = {
+//                            viewModel.resetToToday()
+//                        }
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))

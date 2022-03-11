@@ -3,7 +3,6 @@ package com.kakeibo.feature_main.presentation.item_detail
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.presentation.TextFieldState
 import com.kakeibo.core.util.Resource
@@ -12,6 +11,7 @@ import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
+import com.kakeibo.feature_main.presentation.common.BaseViewModel
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
 import com.kakeibo.util.UtilCurrency
 import com.kakeibo.util.UtilDate
@@ -22,8 +22,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,15 +30,15 @@ class ItemDetailViewModel @Inject constructor(
     private val displayedCategoryUseCases: DisplayedCategoryUseCases,
     val appPreferences: AppPreferences,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : BaseViewModel() {
     
     val dateFormatIndex = appPreferences.getDateFormatIndex()
 
     private val _currentItemId = mutableStateOf(-1L)
     val currentItemId: State<Long> = _currentItemId
 
-    private val _itemDate = mutableStateOf(UtilDate.getTodaysLocalDate())
-    val itemDate: State<LocalDate> = _itemDate
+//    private val _itemDate = mutableStateOf(UtilDate.getTodaysLocalDate())
+//    val itemDate: State<LocalDate> = _itemDate
 
     private val _itemAmount = mutableStateOf(TextFieldState(hint = "Enter amount"))
     val itemAmount: State<TextFieldState> = _itemAmount
@@ -79,7 +77,8 @@ class ItemDetailViewModel @Inject constructor(
                     itemUseCases.getItemByIdUseCase(itemId)?.also { item ->
                         _currentItemId.value = item.id ?: -1L
 
-                        _itemDate.value = item.eventDate.toLocalDate()
+//                        _itemDate.value = item.eventDate.toLocalDate()
+                        updateLocalEventDate(item.eventDate)
 
                         _itemAmount.value = itemAmount.value.copy(
                             text = item.amount,
@@ -102,11 +101,11 @@ class ItemDetailViewModel @Inject constructor(
         }
     }
 
+    override fun onDateChanged() {
+    }
+
     fun onEvent(event: ItemDetailEvent) {
         when (event) {
-            is ItemDetailEvent.DateChanged -> {
-                _itemDate.value = event.value
-            }
             is ItemDetailEvent.AmountEntered -> {
                 _itemAmount.value = itemAmount.value.copy(
                     text = event.value
@@ -144,7 +143,7 @@ class ItemDetailViewModel @Inject constructor(
                                 categoryCode = event.displayedCategory.code,
                                 categoryColor = event.displayedCategory.color,
                                 memo = itemMemo.value.text,
-                                eventDate = itemDate.value.toString(), // itemDate is in DB format
+                                eventDate = localEventDate.value, // itemDate is in DB format
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
                             )
                         )
@@ -167,7 +166,7 @@ class ItemDetailViewModel @Inject constructor(
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
                                 categoryCode = itemCategoryCode.value,
                                 memo = itemMemo.value.text,
-                                eventDate = itemDate.value.toString(),
+                                eventDate = localEventDate.value,
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
                             )
                         )
