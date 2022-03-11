@@ -2,6 +2,7 @@ package com.kakeibo.feature_main.presentation.common.components
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -15,9 +16,9 @@ import androidx.compose.ui.res.painterResource
 import com.kakeibo.R
 import com.kakeibo.feature_main.presentation.common.BaseViewModel
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getYDateText
-import com.kakeibo.util.UtilDate.getYMDDateText
-import com.kakeibo.util.UtilDate.getYMDateTextFromDBFormat
+import com.kakeibo.util.UtilDate.toYMDString
+import com.kakeibo.util.UtilDate.toYMDWString
+import com.kakeibo.util.UtilDate.toYMString
 import kotlinx.datetime.*
 
 @Composable
@@ -28,11 +29,12 @@ fun DatePickerRow(
     dateFormatIndex: Int, // date format that's stored in shared pref
     viewModel: BaseViewModel
 ) {
+    Log.d("asdf", "dateformatindex = "+dateFormatIndex)
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, y: Int, m: Int, d: Int ->
             viewModel.updateLocalEventDate(
-                LocalDate(y, m + 1, d).getYMDDateText(UtilDate.DATE_FORMAT_DB)
+                LocalDate(y, m + 1, d).toYMDString(UtilDate.DATE_FORMAT_DB)
             )
         },
         viewModel.localEventDate.value.toLocalDate().year,
@@ -68,13 +70,13 @@ fun DatePickerRow(
             Text(
                 text =  when (type) {
                     is DateType.YMDW -> {
-                        viewModel.localEventDate.value.getYMDateTextFromDBFormat(UtilDate.DATE_FORMATS[dateFormatIndex])
+                        viewModel.localEventDate.value.toLocalDate().toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex])
                     }
                     is DateType.YM -> {
-                        viewModel.localEventDate.value.getYMDateTextFromDBFormat(UtilDate.DATE_FORMATS[dateFormatIndex])
+                        viewModel.localEventDate.value.toLocalDate().toYMString(UtilDate.DATE_FORMATS[dateFormatIndex])
                     }
                     is DateType.Y -> {
-                        viewModel.localEventDate.value.getYDateText()
+                        viewModel.localEventDate.value.toLocalDate().year.toString()
                     }
                 }
             )

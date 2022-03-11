@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.tooling.preview.Preview
 import com.kakeibo.feature_main.presentation.item_main.item_chart.components.PieChartUtils.calculateAngle
 
 @Composable

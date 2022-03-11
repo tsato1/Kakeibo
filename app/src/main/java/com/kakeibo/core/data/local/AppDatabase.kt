@@ -14,7 +14,7 @@ import com.kakeibo.feature_subscriptions.Subscription
 
 @Database(
     entities = [
-        KkbApp::class,
+        KkbAppEntity::class,
         ItemEntity::class,
         CategoryDspEntity::class,
         CategoryEntity::class,
@@ -101,59 +101,5 @@ abstract class AppDatabase : RoomDatabase() {
                 PrepDB7.migrate_8_9(database)
             }
         }
-
-//        fun getInstance(context: Context): AppDatabase {
-//            if (INSTANCE == null) {
-//                synchronized(AppDatabase::class) {
-//                    if (INSTANCE == null) {
-//                        INSTANCE = Room.databaseBuilder(
-//                            context.applicationContext, AppDatabase::class.java, DATABASE_NAME
-//                        )
-//                            .addCallback(sAppDatabaseCallback)
-//                            .addMigrations(
-//                                MIGRATION_1_2,
-//                                MIGRATION_2_3,
-//                                MIGRATION_3_4,
-//                                MIGRATION_4_5,
-//                                MIGRATION_5_7,
-//                                MIGRATION_6_7,
-//                                MIGRATION_7_8
-//                            )
-//                            .build()
-//                    }
-//                }
-//            }
-
-//            return INSTANCE as AppDatabase
-//        }
-
-//        val sAppDatabaseCallback = object : RoomDatabase.Callback() {
-//            override fun onCreate(db: SupportSQLiteDatabase) {
-//                super.onCreate(db)
-//                val mKkbAppStatusDao = (INSTANCE as AppDatabase).kkbAppDao
-//                val mCategoryStatusDao = (INSTANCE as AppDatabase).categoryDao
-//                val mCategoryDspStatusDao = (INSTANCE as AppDatabase).categoryDspDao
-//
-//                GlobalScope.launch {
-//                    mKkbAppStatusDao.insert(PrepDB.initKkbAppTable())
-//                    mCategoryStatusDao.insertCategories(PrepDB.prepCategoryStatuses())
-//                    mCategoryDspStatusDao.insertCategoryDsps(PrepDB.prepDspCategoryStatuses())
-//                }
-
-//                PopulateDbAsync(INSTANCE as AppDatabase).execute()
-//            }
-//        }
-
-//        private class PopulateDbAsync (db: AppDatabase) : AsyncTask<Unit, Unit, Unit>() {
-//            private val mKkbAppStatusDao = db.kkbAppDao
-//            private val mCategoryStatusDao = db.categoryDao
-//            private val mCategoryDspStatusDao = db.categoryDspDao
-//
-//            override fun doInBackground(vararg params: Unit) {
-//                mKkbAppStatusDao.insert(PrepDB.initKkbAppTable())
-//                mCategoryStatusDao.insertCategories(PrepDB.prepCategoryStatuses())
-//                mCategoryDspStatusDao.insertCategoryDsps(PrepDB.prepDspCategoryStatuses())
-//            }
-//        }
     }
 }

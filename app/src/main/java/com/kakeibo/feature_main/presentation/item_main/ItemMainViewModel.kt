@@ -17,7 +17,7 @@ import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getYMDDateText
+import com.kakeibo.util.UtilDate.toYMDString
 import com.kakeibo.util.UtilDate.isWithinMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -54,7 +54,7 @@ class ItemMainViewModel @Inject constructor(
     private val _calendarToDate = mutableStateOf(LocalDate(
         UtilDate.getTodaysLocalDate().year,
         UtilDate.getTodaysLocalDate().monthNumber,
-        UtilDate.getLastDateOfMonth(UtilDate.getTodaysLocalDate().getYMDDateText(UtilDate.DATE_FORMAT_DB))
+        UtilDate.getLastDateOfMonth(UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB))
     ))
     val calendarToDate: State<LocalDate> = _calendarToDate
 
@@ -87,22 +87,22 @@ class ItemMainViewModel @Inject constructor(
 
     private fun loadThisMonthData() {
         val today = UtilDate.getTodaysLocalDate()
-        val remainingDays = UtilDate.getRemainingDays(today.getYMDDateText(UtilDate.DATE_FORMAT_DB))
+        val remainingDays = UtilDate.getRemainingDays(today.toYMDString(UtilDate.DATE_FORMAT_DB))
 
 //        _localDate.value = today
-        updateLocalEventDate(today.getYMDDateText(UtilDate.DATE_FORMAT_DB))
+        updateLocalEventDate(today.toYMDString(UtilDate.DATE_FORMAT_DB))
 
         _calendarFromDate.value = LocalDate(
             today.year, today.monthNumber, 1
-        ).minus(UtilDate.getFirstDayOfMonth(today.getYMDDateText(UtilDate.DATE_FORMAT_DB)), DateTimeUnit.DAY)
+        ).minus(UtilDate.getFirstDayOfMonth(today.toYMDString(UtilDate.DATE_FORMAT_DB)), DateTimeUnit.DAY)
         _calendarToDate.value = LocalDate(
             today.year, today.monthNumber, 1
         ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
 
         loadItems(
             searchModel = SearchModel(
-                fromDate = calendarFromDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB),
-                toDate = calendarToDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB)
+                fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
+                toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
             )
         )
     }
@@ -123,8 +123,8 @@ class ItemMainViewModel @Inject constructor(
 
         loadItems(
             SearchModel(
-                fromDate = calendarFromDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB),
-                toDate = calendarToDate.value.getYMDDateText(UtilDate.DATE_FORMAT_DB)
+                fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
+                toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
             )
         )
     }
@@ -219,7 +219,7 @@ class ItemMainViewModel @Inject constructor(
                             calendarItemList.add(
                                 CalendarItem(
                                     CalendarItem.Parent(
-                                        iDate.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                                        iDate.toYMDString(UtilDate.DATE_FORMAT_DB),
                                         "0",
                                         "0"
                                     ),
@@ -232,7 +232,7 @@ class ItemMainViewModel @Inject constructor(
                                 index,
                                 CalendarItem(
                                     CalendarItem.Parent(
-                                        iDate.getYMDDateText(UtilDate.DATE_FORMAT_DB),
+                                        iDate.toYMDString(UtilDate.DATE_FORMAT_DB),
                                         "0",
                                         "0"
                                     ),
@@ -281,7 +281,7 @@ class ItemMainViewModel @Inject constructor(
                             )
                         }
                         ?.values?.toList()
-                        ?.sortedBy { it.amount.toLong() } ?: emptyList()
+                        ?.sortedByDescending { it.amount.toLong() } ?: emptyList()
 
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }

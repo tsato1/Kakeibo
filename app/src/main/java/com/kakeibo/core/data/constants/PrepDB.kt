@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.R
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
 import com.kakeibo.core.data.local.entities.CategoryEntity
+import com.kakeibo.core.data.local.entities.KkbAppEntity
 import com.kakeibo.util.UtilCategory
 import java.util.*
 
@@ -1684,5 +1685,9 @@ object PrepDB {
         values.put(ConstKkbAppDB.COL_VAL_STR_2, "")
         values.put(ConstKkbAppDB.COL_VAL_STR_3, "")
         db.insert(ConstKkbAppDB.TABLE_KKBAPP, OnConflictStrategy.REPLACE, values)
+    }
+
+    fun initKkbAppTable() : KkbAppEntity {
+        return KkbAppEntity(1, "", "", "", 0, 0, 0, "", "", "")
     }
 }

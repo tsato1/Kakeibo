@@ -27,7 +27,8 @@ import com.kakeibo.feature_main.presentation.common.components.IncomeExpenseIndi
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getYMDDateText
+import com.kakeibo.util.UtilDate.toYMDString
+import com.kakeibo.util.UtilDate.toYMDWString
 import kotlinx.datetime.toLocalDate
 
 @Composable
@@ -77,7 +78,7 @@ fun CollapsableLazyColumn(
                         Text(
                             text = expandableItem.parent.date
                                 .toLocalDate()
-                                .getYMDDateText(UtilDate.DATE_FORMATS[dateFormatIndex]),
+                                .toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex]),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))

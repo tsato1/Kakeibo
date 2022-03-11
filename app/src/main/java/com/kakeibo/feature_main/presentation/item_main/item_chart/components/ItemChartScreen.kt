@@ -202,33 +202,29 @@ fun ItemChartScreen(
                             text = (itemChartState.value.incomeTotal + itemChartState.value.expenseTotal).toString()
                         )
                     }
-                    // Bar chart ===========================================================================
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(4.dp)
-                            ),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(vertical = 4.dp),
-                            text = stringResource(id = R.string.balance_colon)
-                        )
-                    }
+                    Divider()
+                    // Bar chart Balance ===================================================================
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(6.dp)
+//                            .border(
+//                                width = 1.dp,
+//                                color = Color.Black,
+//                                shape = RoundedCornerShape(4.dp)
+//                            ),
+//                        horizontalArrangement = Arrangement.Center
+//                    ) {
+//                        Text(
+//                            modifier = Modifier.padding(vertical = 4.dp),
+//                            text = stringResource(id = R.string.balance_colon)
+//                        )
+//                    }
                     // Pie chart Income ====================================================================
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(6.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(4.dp)
-                            ),
+                            .padding(6.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Column(
@@ -237,8 +233,20 @@ fun ItemChartScreen(
                                 .padding(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.income_colon)
+                            if (itemChartState.value.incomeList.isNotEmpty()) {
+                                Text(
+                                    text = stringResource(id = R.string.income_colon)
+                                )
+                            }
+                            PieChart(
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .padding(6.dp),
+                                pieChartData = PieChartData(
+                                    slices = itemChartState.value.incomeList.map {
+                                        PieChartData.Slice(it.amount.toFloat(), VividRed)
+                                    }
+                                )
                             )
                             LazyColumn(
                                 modifier = Modifier
@@ -306,12 +314,7 @@ fun ItemChartScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(6.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(4.dp)
-                            ),
+                            .padding(6.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Column(
@@ -320,19 +323,19 @@ fun ItemChartScreen(
                                 .padding(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.expense_colon)
-                            )
+                            if (itemChartState.value.expenseList.isNotEmpty()) {
+                                Text(
+                                    text = stringResource(id = R.string.expense_colon)
+                                )
+                            }
                             PieChart(
                                 modifier = Modifier
-                                    .size(80.dp)
+                                    .size(150.dp)
                                     .padding(6.dp),
                                 pieChartData = PieChartData(
-                                    slices = listOf(
-                                        PieChartData.Slice(25f, Color.Red),
-                                        PieChartData.Slice(42f, Color.Blue),
-                                        PieChartData.Slice(23f, Color.Green)
-                                    )
+                                    slices = itemChartState.value.expenseList.map {
+                                        PieChartData.Slice(it.amount.toFloat(), MatchaGreen)
+                                    }
                                 )
                             )
                             LazyColumn(

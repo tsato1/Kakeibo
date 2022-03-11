@@ -36,7 +36,7 @@ import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getYMDDateText
+import com.kakeibo.util.UtilDate.toYMDString
 import com.kakeibo.util.UtilDate.isWithinMonth
 import kotlinx.datetime.*
 import kotlin.math.roundToInt
@@ -281,7 +281,7 @@ fun CalendarRows(
                         modifier = Modifier.padding(4.dp, 14.dp),
                         text = listState.calendarItemList[clickedDateIndex.value].parent.date
                             .toLocalDate()
-                            .getYMDDateText(UtilDate.DATE_FORMATS[viewModel.dateFormatIndex])
+                            .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndex])
                     )
                 }
                 Divider()

@@ -86,40 +86,27 @@ fun ItemSearchScreen(
         isFloatingActionButtonDocked = true
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    if (chosenSearchCriteria.isEmpty()) {
-                        Toast.makeText(
-                            context, R.string.err_no_search_criteria_found, Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    else {
-                        viewModel.onEvent(ItemSearchEvent.Search)
-                    }
-                }
-            ) {
-                Text(text = stringResource(id = R.string.search))
-            }
-            Box(modifier = Modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(4.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(2.dp)
             ) {
                 if (chosenSearchCriteria.isEmpty()) {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                            .align(Alignment.Center),
+                            .padding(16.dp),
                         text = stringResource(id = R.string.inst_tap_plus_to_add_criteria),
                     )
                 }
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    verticalArrangement = Arrangement.Center
                 ) {
                     items(chosenSearchCriteria) { item ->
                         var isDeleted by remember { mutableStateOf(false) }
@@ -218,6 +205,20 @@ fun ItemSearchScreen(
                         )
                     }
                 }
+            }
+            Button(
+                onClick = {
+                    if (chosenSearchCriteria.isEmpty()) {
+                        Toast.makeText(
+                            context, R.string.err_no_search_criteria_found, Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    else {
+                        viewModel.onEvent(ItemSearchEvent.Search)
+                    }
+                }
+            ) {
+                Text(text = stringResource(id = R.string.search))
             }
         }
     }

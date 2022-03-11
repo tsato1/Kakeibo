@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getYMDDateText
+import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
@@ -13,14 +13,14 @@ import kotlinx.datetime.toLocalDate
 abstract class BaseViewModel : ViewModel() {
 
     private val _localEventDate = mutableStateOf(
-        UtilDate.getTodaysLocalDate().getYMDDateText(UtilDate.DATE_FORMAT_DB)
+        UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
     )
     val localEventDate: State<String> = _localEventDate
 
     abstract fun onDateChanged()
 
     fun resetToToday() {
-        _localEventDate.value = UtilDate.getTodaysLocalDate().getYMDDateText(UtilDate.DATE_FORMAT_DB)
+        _localEventDate.value = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
         onDateChanged()
     }
 
@@ -34,7 +34,7 @@ abstract class BaseViewModel : ViewModel() {
 
         _localEventDate.value = LocalDate(
             localDate.year, localDate.monthNumber, localDate.dayOfMonth
-        ).getYMDDateText(UtilDate.DATE_FORMAT_DB)
+        ).toYMDString(UtilDate.DATE_FORMAT_DB)
 
         onDateChanged()
     }

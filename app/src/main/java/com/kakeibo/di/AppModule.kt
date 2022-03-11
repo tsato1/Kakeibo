@@ -10,6 +10,7 @@ import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.AppDatabase
 import com.kakeibo.core.data.local.CategoryDao
 import com.kakeibo.core.data.local.CategoryDspDao
+import com.kakeibo.core.data.local.KkbAppDao
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
@@ -39,7 +40,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -52,6 +53,7 @@ object AppModule {
     @Singleton
     fun provideAppDatabase(
         app: Application,
+        providerKkbAppDao: Provider<KkbAppDao>,
         providerCategoryDao: Provider<CategoryDao>,
         providerCategoryDspDao: Provider<CategoryDspDao>
     ): AppDatabase {
@@ -60,7 +62,8 @@ object AppModule {
                 object: RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-                        GlobalScope.launch {
+                        MainScope().launch {
+                            providerKkbAppDao.get().insert(PrepDB.initKkbAppTable())
                             providerCategoryDao.get().insertCategories(PrepDB.prepCategoryStatuses())
                             providerCategoryDspDao.get().insertCategoryDsps(PrepDB.prepDspCategoryStatuses())
                         }

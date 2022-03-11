@@ -18,7 +18,7 @@ import com.kakeibo.R
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.getYMDDateText
+import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -56,7 +56,7 @@ fun SearchCardDateRange(
                     ).show()
                 }
             ) {
-                Text(text = dateState.from.getYMDDateText(UtilDate.DATE_FORMATS[dateFormatIndex]))
+                Text(text = dateState.from.toYMDString(UtilDate.DATE_FORMATS[dateFormatIndex]))
             }
             Text(
                 modifier = Modifier.align(Alignment.CenterVertically),
@@ -79,7 +79,7 @@ fun SearchCardDateRange(
                     ).show()
                 }
             ) {
-                Text(text = dateState.to.getYMDDateText(UtilDate.DATE_FORMATS[dateFormatIndex]))
+                Text(text = dateState.to.toYMDString(UtilDate.DATE_FORMATS[dateFormatIndex]))
             }
         }
     }

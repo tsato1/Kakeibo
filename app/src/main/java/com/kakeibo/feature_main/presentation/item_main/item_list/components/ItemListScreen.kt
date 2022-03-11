@@ -109,14 +109,7 @@ fun ItemListScreen(
                         context = LocalContext.current,
                         type = DateType.YM,
                         dateFormatIndex = viewModel.dateFormatIndex,
-                        viewModel = viewModel,
-//                        onTextLayout = {
-//                            viewModel.onDateChanged()
-////                            viewModel.onEvent(ItemMainEvent.DateChanged(it))
-//                        },
-//                        onRefresh = {
-//                            viewModel.resetToToday()
-//                        }
+                        viewModel = viewModel
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))

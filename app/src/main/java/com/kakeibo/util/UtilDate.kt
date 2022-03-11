@@ -31,11 +31,11 @@ object UtilDate {
         return SimpleDateFormat(format, Locale.getDefault()).format(cal.time)
     }
 
-    fun LocalDate.getYMDDateText(format: String): String = run {
+    fun LocalDate.toYMDWString(format: String): String = run {
         when (format) {
-            DATE_FORMAT_YMD -> { this.toString() }
-            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year}}" }
-            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year}}" }
+            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth} [${this.dayOfWeek}]" }
+            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year} [${this.dayOfWeek}]" }
+            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year} [${this.dayOfWeek}]" }
             DATE_FORMAT_DB -> {
                 val m = if (this.monthNumber < 10) "0${this.monthNumber}" else this.monthNumber
                 val d = if (this.dayOfMonth < 10) "0${this.dayOfMonth}" else this.dayOfMonth
@@ -45,22 +45,30 @@ object UtilDate {
         }
     }
 
-    fun String.getYMDateTextFromDBFormat(format: String): String {
-        return when (format) {
-            /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_DB -> this.substring(0, 7)
-            /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_YMD -> this.substring(0, 7)
-            /* '11-02-2021' -> '02-2021' */
-            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> this.substring(3)
-            /* else, use DB format */
-            else -> this.substring(0, 7)
+    fun LocalDate.toYMDString(format: String): String = run {
+        when (format) {
+            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth}" }
+            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year}" }
+            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year}" }
+            DATE_FORMAT_DB -> {
+                val m = if (this.monthNumber < 10) "0${this.monthNumber}" else this.monthNumber
+                val d = if (this.dayOfMonth < 10) "0${this.dayOfMonth}" else this.dayOfMonth
+                "${this.year}-$m-$d"
+            }
+            else -> { this.toString() }
         }
     }
 
-    fun String.getYDateText(): String = run {
-        this.substring(0, 4)
+    fun LocalDate.toYMString(format: String): String = run {
+        when (format) {
+            DATE_FORMAT_DB -> { "${this.year}-${this.monthNumber}" } /* '2021-02-11' -> '2021-02' */
+            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}" } /* '2021-02-11' -> '2021/02' */
+            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.year}" } /* '11-02-2021' -> '02/2021' */
+            else -> { this.toString() }
+        }
     }
+
+
 
     /*
      returns 0: Sunday, 6: Saturday
