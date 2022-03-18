@@ -38,13 +38,16 @@ fun BottomBar(navController: NavController) {
                 selected = currentRoute == screen.route,
                 label = { Text(text = screen.label) },
                 onClick = {
-                    navController.popBackStack(
-                        navController.graph.startDestinationId,
-                        true
-                    )
+                    if (screen.route != Screen.DammyScreen.route) {
+                        navController.popBackStack(
+                            navController.graph.startDestinationId,
+                            true
+                        )
 
-                    if (screen.route != Screen.DammyScreen.route && currentRoute != screen.route)
-                        navController.navigate(screen.route)
+                        val searchId = navBackStackEntry?.arguments?.get("searchId")
+                        if (currentRoute != screen.route)
+                            navController.navigate(screen.route + "?searchId=$searchId")
+                    }
                 }
             )
         }

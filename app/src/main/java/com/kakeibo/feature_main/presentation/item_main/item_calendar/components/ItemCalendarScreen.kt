@@ -20,15 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.presentation.components.CategoryIcon
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
@@ -56,14 +56,14 @@ fun ItemCalendarScreen(
 
     LaunchedEffect(Unit) {
         Log.d("asdf", "launchedEffect CALENDAR searchId="+searchIdState.value)
-        if (searchIdState.value != -1L) {
+        if (searchIdState.value != 0L) {
             viewModel.onEvent(ItemMainEvent.LoadItems(searchIdState.value))
         }
     }
 
     Scaffold(
         floatingActionButton = {
-            if (searchIdState.value == -1L) {
+            if (searchIdState.value == 0L) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(Screen.ItemInputScreen.route)
@@ -92,8 +92,12 @@ fun ItemCalendarScreen(
                     detectDragGestures(
                         onDragEnd = {
                             when {
-                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
-                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                offsetX > 200 -> {
+                                    viewModel.plus(-1, DateTimeUnit.MONTH)
+                                }
+                                offsetX < -200 -> {
+                                    viewModel.plus(1, DateTimeUnit.MONTH)
+                                }
                             }
                             offsetX = 0f
                         }
@@ -101,8 +105,12 @@ fun ItemCalendarScreen(
                         change.consumeAllChanges()
                         offsetX += dragAmount.x
                         when {
-                            offsetX > 400f -> { offsetX = 400f }
-                            offsetX < -400f -> { offsetX = -400f }
+                            offsetX > 400f -> {
+                                offsetX = 400f
+                            }
+                            offsetX < -400f -> {
+                                offsetX = -400f
+                            }
                         }
                     }
                 }
@@ -112,7 +120,7 @@ fun ItemCalendarScreen(
                     .fillMaxSize()
                     .padding(8.dp)
             ) {
-                if (searchIdState.value != -1L) {
+                if (searchIdState.value != 0L) {
                     SearchModeTopRow(
                         onCloseButtonClick = {
                             openExitSearchDialog.value = true
@@ -139,12 +147,13 @@ fun ItemCalendarScreen(
     }
 
     if (openExitSearchDialog.value) {
-        ExitSearchAlertDialog(
+        ExitSearchDialog(
             onDismissRequest = { openExitSearchDialog.value = false },
             onDismissButtonClick = {
                 openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
+                navController.navigate(Screen.ItemCalendarScreen.route + "?searchId=${0L}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }
@@ -152,7 +161,7 @@ fun ItemCalendarScreen(
     }
 
     if (openSearchDetailDialog.value) {
-        SearchDetailAlertDialog(
+        SearchDetailDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
             onConfirmButtonClick = { openSearchDetailDialog.value = false },
             searchModel
@@ -188,20 +197,24 @@ fun CalendarRows(
                             .fillMaxSize()
                             .clickable {
                                 when (calendarItem.parent.date.toLocalDate().monthNumber) {
-                                    viewModel.localEventDate.value.toLocalDate().minus(
-                                        1,
-                                        DateTimeUnit.MONTH
-                                    ).monthNumber -> {
+                                    viewModel.localEventDate.value
+                                        .toLocalDate()
+                                        .minus(
+                                            1,
+                                            DateTimeUnit.MONTH
+                                        ).monthNumber -> {
                                         viewModel.plus(-1, DateTimeUnit.MONTH)
                                     }
                                     viewModel.localEventDate.value.toLocalDate().monthNumber -> {
                                         showDateDetailDialog.value = true
                                         clickedDateIndex.value = index
                                     }
-                                    viewModel.localEventDate.value.toLocalDate().plus(
-                                        1,
-                                        DateTimeUnit.MONTH
-                                    ).monthNumber -> {
+                                    viewModel.localEventDate.value
+                                        .toLocalDate()
+                                        .plus(
+                                            1,
+                                            DateTimeUnit.MONTH
+                                        ).monthNumber -> {
                                         viewModel.plus(1, DateTimeUnit.MONTH)
                                     }
                                 }
@@ -259,66 +272,59 @@ fun CalendarRows(
     }
 
     if (showDateDetailDialog.value) {
-        Dialog(
-            onDismissRequest = { showDateDetailDialog.value = false }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp, 14.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
-                    Text(
-                        modifier = Modifier.padding(4.dp, 14.dp),
-                        text = listState.calendarItemList[clickedDateIndex.value].parent.date
-                            .toLocalDate()
-                            .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndex])
-                    )
+        DialogCard(
+            onDismissRequest = { showDateDetailDialog.value = false },
+            title = listState.calendarItemList[clickedDateIndex.value].parent.date
+                .toLocalDate()
+                .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndex]),
+            content = {
+                if (listState.calendarItemList[clickedDateIndex.value].children.isEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = stringResource(id = R.string.no_item_found))
+                    }
                 }
-                Divider()
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(listState.calendarItemList[clickedDateIndex.value].children.size) { index ->
-                        val item = listState.calendarItemList[clickedDateIndex.value].children[index]
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(6.dp, 2.dp)
-                                .clickable {
-                                    navController.navigate(
-                                        Screen.ItemDetailScreen.route + "?itemId=${item.id}"
-                                    )
-                                },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CategoryIcon(
-                                code = item.categoryCode,
-                                drawable = item.categoryDrawable,
-                                image = item.categoryImage
-                            )
-                            Column(
+                else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(listState.calendarItemList[clickedDateIndex.value].children.size) { index ->
+                            val item =
+                                listState.calendarItemList[clickedDateIndex.value].children[index]
+                            Row(
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .padding(4.dp, 2.dp)
+                                    .fillMaxWidth()
+                                    .padding(6.dp, 2.dp)
+                                    .clickable {
+                                        navController.navigate(
+                                            Screen.ItemDetailScreen.route + "?itemId=${item.id}"
+                                        )
+                                    },
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = item.categoryName)
-                                Text(text = item.memo)
+                                CategoryIcon(
+                                    code = item.categoryCode,
+                                    drawable = item.categoryDrawable,
+                                    image = item.categoryImage
+                                )
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(4.dp, 2.dp)
+                                ) {
+                                    Text(text = item.categoryName)
+                                    Text(text = item.memo)
+                                }
+                                Text(text = item.amount)
                             }
-                            Text(text = item.amount)
                         }
                     }
                 }
             }
-        }
+        )
     }
 }

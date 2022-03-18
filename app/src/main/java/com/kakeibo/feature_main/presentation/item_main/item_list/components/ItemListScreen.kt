@@ -26,7 +26,7 @@ import kotlin.math.roundToInt
 fun ItemListScreen(
     navController: NavController,
     viewModel: ItemMainViewModel,
-    searchId: Long = -1L
+    searchId: Long = 0L
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -39,14 +39,14 @@ fun ItemListScreen(
 
     LaunchedEffect(Unit) {
         Log.d("asdf", "launchedEffect in list searchId="+searchId)
-        if (searchId != -1L) {
+        if (searchId != 0L) {
             viewModel.onEvent(ItemMainEvent.LoadItems(searchId))
         }
     }
 
     Scaffold(
         floatingActionButton = {
-            if (searchIdState.value == -1L) {
+            if (searchIdState.value == 0L) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(Screen.ItemInputScreen.route)
@@ -95,7 +95,7 @@ fun ItemListScreen(
                     .fillMaxSize()
                     .padding(8.dp)
             ) {
-                if (searchIdState.value != -1L) {
+                if (searchIdState.value != 0L) {
                     SearchModeTopRow(
                         onCloseButtonClick = {
                             openExitSearchDialog.value = true
@@ -124,12 +124,13 @@ fun ItemListScreen(
     }
 
     if (openExitSearchDialog.value) {
-       ExitSearchAlertDialog(
+       ExitSearchDialog(
            onDismissRequest = { openExitSearchDialog.value = false },
            onDismissButtonClick = {
                openExitSearchDialog.value = false
            },
            onConfirmButtonClick = {
+               navController.navigate(Screen.ItemListScreen.route + "?searchId=${0L}")
                viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                openExitSearchDialog.value = false
            }
@@ -137,7 +138,7 @@ fun ItemListScreen(
     }
 
     if (openSearchDetailDialog.value) {
-        SearchDetailAlertDialog(
+        SearchDetailDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
             onConfirmButtonClick = { openSearchDetailDialog.value = false },
             searchModel

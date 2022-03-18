@@ -31,9 +31,8 @@ import kotlin.math.roundToInt
 
 @ExperimentalComposeUiApi
 @Composable
-fun ItemDetailScreen(
+fun ItemEditScreen(
     navController: NavController,
-    itemId: Long,
     viewModel: ItemDetailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current

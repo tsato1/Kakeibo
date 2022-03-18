@@ -1,9 +1,11 @@
 package com.kakeibo.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = lightColors(
@@ -19,11 +21,22 @@ private val DarkColorPalette = darkColors(
 )
 
 @Composable
-fun KakeiboTheme(darkTheme: Boolean = true, content: @Composable() () -> Unit) {
-    MaterialTheme(
-        colors = LightColorPalette,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+fun KakeiboTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+    if (darkTheme) {
+        DarkColorPalette
+    }
+    else {
+        LightColorPalette
+    }
+
+    CompositionLocalProvider(
+        LocalDimen provides Dimen()
+    ) {
+        MaterialTheme(
+            colors = LightColorPalette,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
 }

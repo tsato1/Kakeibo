@@ -1,4 +1,4 @@
-package com.kakeibo.core.data.local.entities//package com.kakeibo.feature_main.data.sources.local.entities
+package com.kakeibo.core.data.local.entities
 //
 //import androidx.room.ColumnInfo
 //import androidx.room.Entity

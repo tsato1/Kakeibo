@@ -11,20 +11,26 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListEvent
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListViewModel
 import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
+import com.kakeibo.ui.theme.dimens
 
 @Composable
 fun SettingsListScreen(
@@ -40,6 +46,8 @@ fun SettingsListScreen(
     val keyDateFormatIndexState = viewModel.keyDateFormatIndexState
     val keyFractionDigitsIndexState = viewModel.keyFractionDigitsIndexState
     val keyNumColumnsIndexState = viewModel.keyNumColumnsIndexState
+
+    val openDeleteAllItemsDialog = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -132,8 +140,12 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-//                            navController.navigate(Screen.RearrangeCategoriesScreen.route) // future todo
-                            context.startActivity(Intent(context, CategoryReorderActivity::class.java))
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    CategoryReorderActivity::class.java
+                                )
+                            )
                         }
                 ) {
                     Text(
@@ -162,15 +174,105 @@ fun SettingsListScreen(
                     fontWeight = FontWeight.Bold
                 )
                 Row(
-                    modifier = Modifier
-                        .clickable {
-
-                        }
+                    modifier = Modifier.clickable { openDeleteAllItemsDialog.value = true }
                 ) {
                     Text(
                         text = stringResource(id = R.string.delete_all_items),
                         modifier = Modifier.padding(16.dp)
                     )
+                }
+            }
+        }
+    }
+
+    if (openDeleteAllItemsDialog.value) {
+        Dialog(
+            onDismissRequest = { openDeleteAllItemsDialog.value = false }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(MaterialTheme.dimens.dialogDefaultHeight)
+                    .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
+                    .background(MaterialTheme.colors.background)
+            ) {
+                val openConfirmDialog = remember { mutableStateOf(false) }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            MaterialTheme.dimens.dialogTitlePaddingHorizontal,
+                            MaterialTheme.dimens.dialogTitlePaddingVertical
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                    Text(text = stringResource(id = R.string.delete_all_items))
+                }
+                Divider()
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                    text = stringResource(id = R.string.desc_delete_all_items)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    modifier = Modifier
+                        .padding(MaterialTheme.dimens.dialogPadding)
+                        .align(Alignment.End),
+                    onClick = { openConfirmDialog.value = true }
+                ) {
+                    Text(text = stringResource(id = R.string.yes))
+                }
+
+                if (openConfirmDialog.value) {
+                    Dialog(
+                        onDismissRequest = {
+                            openConfirmDialog.value = false
+                            openDeleteAllItemsDialog.value = false
+                        }
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(MaterialTheme.dimens.dialogDefaultHeight)
+                                .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
+                                .background(MaterialTheme.colors.background)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        MaterialTheme.dimens.dialogTitlePaddingHorizontal,
+                                        MaterialTheme.dimens.dialogTitlePaddingVertical
+                                    ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                                Text(text = stringResource(id = R.string.delete_all_items))
+                            }
+                            Divider()
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                                text = stringResource(id = R.string.warn_delete_all_items)
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Button(
+                                modifier = Modifier
+                                    .padding(MaterialTheme.dimens.dialogPadding)
+                                    .align(Alignment.End),
+                                onClick = {
+                                    viewModel.onEvent(SettingsListEvent.DeleteAllItems, -1)
+                                    openConfirmDialog.value = false
+                                    openDeleteAllItemsDialog.value = false
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.yes))
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -187,75 +289,70 @@ fun SettingsListItem(
 ) {
     val openDialog = remember { mutableStateOf(false) }
     if (openDialog.value) {
-        AlertDialog(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background)
-                .clip(RoundedCornerShape(15.dp)),
-            title = {
-                Text(
-                    text = stringResource(id = titleResourceId),
-                    style = MaterialTheme.typography.h4
-                )
-            },
+        DialogCard(
             onDismissRequest = { openDialog.value = false },
-            buttons = {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background),
-                    onClick = {
-                        viewModel.onEvent(event, 0)
-                        openDialog.value = false
-                    }
+            title = stringResource(id = titleResourceId),
+            content = {
+                Column(modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    if (indexState.value == 0)
-                        Icon(imageVector = Icons.Default.RadioButtonChecked, contentDescription = null)
-                    else
-                        Icon(imageVector = Icons.Default.RadioButtonUnchecked, contentDescription = null)
-                    Text(
-                        text = stringArrayResource(id = arrayResourceId)[0],
-                        modifier = Modifier.padding(8.dp, 0.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background),
-                    onClick = {
-                        viewModel.onEvent(event, 1)
-                        openDialog.value = false
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            viewModel.onEvent(event, 0)
+                            openDialog.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onSurface)
+                    ) {
+                        if (indexState.value == 0)
+                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = White, contentDescription = null)
+                        else
+                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = White, contentDescription = null)
+                        Text(
+                            text = stringArrayResource(id = arrayResourceId)[0],
+                            modifier = Modifier.padding(8.dp, 0.dp),
+                            color = White
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
                     }
-                ) {
-                    if (indexState.value == 1)
-                        Icon(imageVector = Icons.Default.RadioButtonChecked, contentDescription = null)
-                    else
-                        Icon(imageVector = Icons.Default.RadioButtonUnchecked, contentDescription = null)
-                    Text(
-                        text = stringArrayResource(id = arrayResourceId)[1],
-                        modifier = Modifier.padding(8.dp, 0.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background),
-                    onClick = {
-                        viewModel.onEvent(event, 2)
-                        openDialog.value = false
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            viewModel.onEvent(event, 1)
+                            openDialog.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onSurface)
+                    ) {
+                        if (indexState.value == 1)
+                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = White, contentDescription = null)
+                        else
+                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = White, contentDescription = null)
+                        Text(
+                            text = stringArrayResource(id = arrayResourceId)[1],
+                            modifier = Modifier.padding(8.dp, 0.dp),
+                            color = White
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
                     }
-                ) {
-                    if (indexState.value == 2)
-                        Icon(imageVector = Icons.Default.RadioButtonChecked, contentDescription = null)
-                    else
-                        Icon(imageVector = Icons.Default.RadioButtonUnchecked, contentDescription = null)
-                    Text(
-                        text = stringArrayResource(id = arrayResourceId)[2],
-                        modifier = Modifier.padding(8.dp, 0.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            viewModel.onEvent(event, 2)
+                            openDialog.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onSurface)
+                    ) {
+                        if (indexState.value == 2)
+                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = White, contentDescription = null)
+                        else
+                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = White, contentDescription = null)
+                        Text(
+                            text = stringArrayResource(id = arrayResourceId)[2],
+                            modifier = Modifier.padding(8.dp, 0.dp),
+                            color = White
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                 }
             }
         )

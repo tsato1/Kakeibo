@@ -1,4 +1,4 @@
-//package com.kakeibo.data.disk
+//package com.kakeibo.core.data.local
 //
 //import androidx.lifecycle.LiveData
 //import androidx.room.Dao

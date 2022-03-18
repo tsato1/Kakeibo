@@ -42,6 +42,9 @@ class SettingsListViewModel @Inject constructor(
                 appPreferences.set(R.string.pref_key_num_columns, index)
                 _keyNumColumnsState.value = appPreferences.getNumColumnsIndex()
             }
+            is SettingsListEvent.DeleteAllItems -> {
+//asdf
+            }
         }
     }
 

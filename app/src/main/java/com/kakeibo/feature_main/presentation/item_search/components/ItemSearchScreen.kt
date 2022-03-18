@@ -22,13 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 import com.kakeibo.R
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.feature_main.presentation.item_search.SearchCriterion
 import com.kakeibo.feature_main.presentation.util.Screen
@@ -224,27 +224,16 @@ fun ItemSearchScreen(
     }
 
     if (openDialog.value) {
-        AlertDialog(
-            modifier = Modifier.fillMaxWidth(),
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
-                    Text(text = stringResource(id = R.string.add_search_criterion))
-                }
-            },
+        DialogCard(
             onDismissRequest = { openDialog.value = false },
-            text = {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+            title = stringResource(id = R.string.add_search_criterion),
+            content = {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(defaultSearchCriteria.size) { index ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 2.dp, horizontal = 4.dp)
+                                .padding(vertical = 8.dp, horizontal = 8.dp)
                                 .clickable {
                                     val selectedType = defaultSearchCriteria[index]
                                     viewModel.onEvent(ItemSearchEvent.CriterionAdded(selectedType))
@@ -257,12 +246,13 @@ fun ItemSearchScreen(
                     }
                 }
             },
-            dismissButton = {
-                OutlinedButton(onClick = { openDialog.value = false }) {
+            negativeButton = {
+                OutlinedButton(
+                    onClick = { openDialog.value = false }
+                ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
-            },
-            confirmButton = {}
+            }
         )
     }
 

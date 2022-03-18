@@ -4,4 +4,5 @@ sealed class SettingsListEvent {
     object DateFormatChanged : SettingsListEvent()
     object FractionDigitsChanged : SettingsListEvent()
     object NumColumnsChanged : SettingsListEvent()
+    object DeleteAllItems : SettingsListEvent()
 }

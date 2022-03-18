@@ -39,7 +39,7 @@ class ItemMainViewModel @Inject constructor(
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
 
-    private val _searchId = mutableStateOf(savedStateHandle.get("searchId") ?: -1L)
+    private val _searchId = mutableStateOf(savedStateHandle["searchId"] ?: 0L)
     val searchId: State<Long> = _searchId
 
     private val _searchModel = mutableStateOf(SearchModel())
@@ -77,7 +77,7 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        if (_searchId.value == -1L) {
+        if (_searchId.value == 0L) {
             loadThisMonthData()
         }
         else {
@@ -89,7 +89,6 @@ class ItemMainViewModel @Inject constructor(
         val today = UtilDate.getTodaysLocalDate()
         val remainingDays = UtilDate.getRemainingDays(today.toYMDString(UtilDate.DATE_FORMAT_DB))
 
-//        _localDate.value = today
         updateLocalEventDate(today.toYMDString(UtilDate.DATE_FORMAT_DB))
 
         _calendarFromDate.value = LocalDate(
@@ -156,8 +155,8 @@ class ItemMainViewModel @Inject constructor(
                 }
             }
             is ItemMainEvent.ExitSearchMode -> {
-                savedStateHandle.set("searchId", -1L)
-                _searchId.value = -1L
+                savedStateHandle["searchId"] = 0L
+                _searchId.value = 0L
                 loadThisMonthData()
             }
             else -> {}

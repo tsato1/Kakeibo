@@ -1672,22 +1672,7 @@ object PrepDB {
         return out
     }
 
-    fun initKkbAppTable(db: SupportSQLiteDatabase) {
-        val values = ContentValues()
-        values.put(ConstKkbAppDB.COL_ID, 1)
-        values.put(ConstKkbAppDB.COL_NAME, "")
-        values.put(ConstKkbAppDB.COL_TYPE, "")
-        values.put(ConstKkbAppDB.COL_UPDATE_DATE, "")
-        values.put(ConstKkbAppDB.COL_VAL_INT_1, 0)
-        values.put(ConstKkbAppDB.COL_VAL_INT_2, 0)
-        values.put(ConstKkbAppDB.COL_VAL_INT_3, 0)
-        values.put(ConstKkbAppDB.COL_VAL_STR_1, "")
-        values.put(ConstKkbAppDB.COL_VAL_STR_2, "")
-        values.put(ConstKkbAppDB.COL_VAL_STR_3, "")
-        db.insert(ConstKkbAppDB.TABLE_KKBAPP, OnConflictStrategy.REPLACE, values)
-    }
-
     fun initKkbAppTable() : KkbAppEntity {
-        return KkbAppEntity(1, "", "", "", 0, 0, 0, "", "", "")
+        return KkbAppEntity(1, "", "", "", 0, -1, 0, "", "", "")
     }
 }

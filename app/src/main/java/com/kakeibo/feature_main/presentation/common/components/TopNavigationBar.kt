@@ -1,6 +1,7 @@
 package com.kakeibo.feature_main.presentation.common.components
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
@@ -43,8 +44,8 @@ fun TopNavigationBar(
                 onClick = {
                     when (currentRoute) {
                         Screen.ItemListScreen.route + "?searchId={searchId}",
-                        Screen.ItemChartScreen.route,
-                        Screen.ItemCalendarScreen.route ->
+                        Screen.ItemChartScreen.route + "?searchId={searchId}",
+                        Screen.ItemCalendarScreen.route + "?searchId={searchId}" ->
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
@@ -55,8 +56,8 @@ fun TopNavigationBar(
             ) {
                 when (currentRoute) {
                     Screen.ItemListScreen.route + "?searchId={searchId}",
-                    Screen.ItemChartScreen.route,
-                    Screen.ItemCalendarScreen.route ->
+                    Screen.ItemChartScreen.route + "?searchId={searchId}",
+                    Screen.ItemCalendarScreen.route + "?searchId={searchId}" ->
                         Icon(Icons.Default.Menu, "Menu")
                     else ->
                         Icon(Icons.Default.ArrowBack, "Back")
@@ -73,21 +74,34 @@ fun TopNavigationBar(
             }
             IconButton(
                 onClick = {
-                    navController.navigate(Screen.ItemSearchScreen.route) {
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
+                    val searchId = navBackStackEntry?.arguments?.getLong("searchId")
+
+                    if (currentRoute == Screen.ItemSearchScreen.route) {
+                        // do nothing
+                    }
+                    else if (searchId == null || searchId == 0L) {
+                        navController.navigate(Screen.ItemSearchScreen.route) {
+                            // Pop up to the start destination of the graph to
+                            // avoid building up a large stack of destinations
+                            // on the back stack as users select items
+                            navController.graph.startDestinationRoute?.let { route ->
+                                popUpTo(route) {
+                                    saveState = true
+                                }
                             }
+
+                            // Avoid multiple copies of the same destination when re-selecting the same item
+                            launchSingleTop = true
+
+                            // Restore state when re-selecting a previously selected item
+                            restoreState = true
                         }
-
-                        // Avoid multiple copies of the same destination when re-selecting the same item
-                        launchSingleTop = true
-
-                        // Restore state when re-selecting a previously selected item
-                        restoreState = true
+                    }
+                    else if (searchId != 0L) {
+                        Toast.makeText(context, "You have to exit search first", Toast.LENGTH_LONG).show()
+                    }
+                    else {
+                        // something went wrong
                     }
                 }
             ) {

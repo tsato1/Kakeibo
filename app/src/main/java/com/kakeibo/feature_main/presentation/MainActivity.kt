@@ -50,9 +50,9 @@ import com.kakeibo.R
 import com.kakeibo.feature_export.DriveServiceHelper
 import com.kakeibo.feature_main.presentation.common.FirebaseViewModel
 import com.kakeibo.feature_main.presentation.common.components.DrawerContent
-import com.kakeibo.feature_main.presentation.common.components.ImportExportAlertDialog
+import com.kakeibo.feature_main.presentation.common.components.ImportExportDialog
 import com.kakeibo.feature_main.presentation.common.components.TopNavigationBar
-import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemDetailScreen
+import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemEditScreen
 import com.kakeibo.feature_main.presentation.item_main.item_chart.components.ItemChartScreen
 import com.kakeibo.feature_main.presentation.item_detail.item_input.components.ItemInputScreen
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
@@ -65,6 +65,13 @@ import com.kakeibo.ui.theme.KakeiboTheme
 import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+
+
+//todo typography
+//todo search with amount fix
+//
+
+
 
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
@@ -109,7 +116,7 @@ class MainActivity : ComponentActivity() {
 
                 val openImportExportDialog = remember { mutableStateOf(false) }
                 if (openImportExportDialog.value) {
-                    ImportExportAlertDialog(
+                    ImportExportDialog(
                         onDismissRequest = { openImportExportDialog.value = false },
                         onConfirmButtonClick = {
                             if (!firebaseViewModel.isSignedIn()) {
@@ -312,17 +319,37 @@ fun ScreenController(
                     name = "searchId"
                 ) {
                     type = NavType.LongType
-                    defaultValue = -1L
+                    defaultValue = 0L
                 }
             )
         ) {
-            val searchId = it.arguments?.getLong("searchId") ?: -1L
+            val searchId = it.arguments?.getLong("searchId") ?: 0L
             ItemListScreen(navController = navController, viewModel = itemMainViewModel, searchId)
         }
-        composable(route = Screen.ItemChartScreen.route) {
+        composable(
+            route = Screen.ItemChartScreen.route + "?searchId={searchId}",
+            arguments = listOf(
+                navArgument(
+                    name = "searchId"
+                ) {
+                    type = NavType.LongType
+                    defaultValue = 0L
+                }
+            )
+        ) {
             ItemChartScreen(navController = navController, viewModel = itemMainViewModel)
         }
-        composable(route = Screen.ItemCalendarScreen.route) {
+        composable(
+            route = Screen.ItemCalendarScreen.route + "?searchId={searchId}",
+            arguments = listOf(
+                navArgument(
+                    name = "searchId"
+                ) {
+                    type = NavType.LongType
+                    defaultValue = 0L
+                }
+            )
+        ) {
             ItemCalendarScreen(navController = navController, viewModel = itemMainViewModel)
         }
         composable(route = Screen.ItemInputScreen.route) {
@@ -335,12 +362,11 @@ fun ScreenController(
                     name = "itemId"
                 ) {
                     type = NavType.LongType
-                    defaultValue = -1L
+                    defaultValue = 0L
                 }
             )
         ) {
-            val itemId = it.arguments?.getLong("itemId") ?: -1L
-            ItemDetailScreen(navController = navController, itemId = itemId)
+            ItemEditScreen(navController = navController)
         }
         composable(route = Screen.ItemSearchScreen.route) {
             ItemSearchScreen(navController = navController)

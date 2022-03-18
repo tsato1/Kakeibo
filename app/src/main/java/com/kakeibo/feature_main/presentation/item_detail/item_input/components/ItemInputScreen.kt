@@ -60,7 +60,7 @@ fun ItemInputScreen(
                 is ItemDetailViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
                     navController.navigate(
-                        Screen.ItemListScreen.route + "?searchId=${-1L}"
+                        Screen.ItemListScreen.route + "?searchId=${0L}"
                     )
                 }
             }

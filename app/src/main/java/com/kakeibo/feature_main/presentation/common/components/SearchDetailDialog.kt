@@ -1,67 +1,66 @@
 package com.kakeibo.feature_main.presentation.common.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kakeibo.R
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.domain.models.SearchModel
 
 @Composable
-fun SearchDetailAlertDialog(
+fun SearchDetailDialog(
     onDismissRequest: () -> Unit,
     onConfirmButtonClick: () -> Unit,
     searchModel: SearchModel?
 ) {
-    AlertDialog(
-        modifier = Modifier.fillMaxWidth(),
-        title = {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
-                Text(text = stringResource(id = R.string.search_criteria))
-            }
-        },
-        onDismissRequest = { onDismissRequest() },
-        text = {
+    DialogCard(
+        onDismissRequest = onDismissRequest,
+        title = stringResource(id = R.string.search_criteria),
+        content = {
             searchModel?.let {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = stringResource(id = R.string.date_range))
                     Text(
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         text = if (searchModel.fromDate == null)
                             "Not specified"
                         else
-                            searchModel.fromDate + " - " + searchModel.toDate
+                            searchModel.fromDate + " - " + searchModel.toDate,
+                        textAlign = TextAlign.End
                     )
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(text = stringResource(id = R.string.amount_range))
                     Text(
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         text = if (searchModel.fromAmount == null)
                             "Not specified"
                         else
-                            searchModel.fromAmount + " - " + searchModel.toAmount
+                            searchModel.fromAmount + " - " + searchModel.toAmount,
+                        textAlign = TextAlign.End
                     )
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(text = stringResource(id = R.string.category))
                     Text(
-                        modifier = Modifier.padding(start = 5.dp),
-                        text = searchModel.categoryName ?: "Not specified"
+                        modifier = Modifier.fillMaxWidth(),
+                        text = searchModel.categoryName ?: "Not specified",
+                        textAlign = TextAlign.End
                     )
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(text = stringResource(id = R.string.memo))
                     Text(
-                        modifier = Modifier.padding(start = 5.dp),
-                        text = searchModel.memo ?: "Not specified"
+                        modifier = Modifier.fillMaxWidth(),
+                        text = searchModel.memo ?: "Not specified",
+                        textAlign = TextAlign.End
                     )
                 }
-            } ?: Text(text = "searchModel is null")
+            }?: Text(text = "search is null")
         },
-        dismissButton = {},
-        confirmButton = {
+        positiveButton = {
             OutlinedButton(
                 onClick = { onConfirmButtonClick() }
             ) {

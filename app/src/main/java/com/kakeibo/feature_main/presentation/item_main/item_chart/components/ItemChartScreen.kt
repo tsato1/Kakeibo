@@ -60,14 +60,14 @@ fun ItemChartScreen(
 
     LaunchedEffect(Unit) {
         Log.d("asdf", "launchedEffect CHART searchId="+searchIdState.value)
-        if (searchIdState.value != -1L) {
+        if (searchIdState.value != 0L) {
             viewModel.onEvent(ItemMainEvent.LoadItems(searchIdState.value))
         }
     }
 
     Scaffold(
         floatingActionButton = {
-            if (searchIdState.value == -1L) {
+            if (searchIdState.value == 0L) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(Screen.ItemInputScreen.route)
@@ -121,7 +121,7 @@ fun ItemChartScreen(
                     .padding(8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                if (searchIdState.value != -1L) {
+                if (searchIdState.value != 0L) {
                     SearchModeTopRow(
                         onCloseButtonClick = {
                             openExitSearchDialog.value = true
@@ -406,12 +406,13 @@ fun ItemChartScreen(
     }
 
     if (openExitSearchDialog.value) {
-        ExitSearchAlertDialog(
+        ExitSearchDialog(
             onDismissRequest = { openExitSearchDialog.value = false },
             onDismissButtonClick = {
                 openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
+                navController.navigate(Screen.ItemChartScreen.route + "?searchId=${0L}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }
@@ -419,7 +420,7 @@ fun ItemChartScreen(
     }
 
     if (openSearchDetailDialog.value) {
-        SearchDetailAlertDialog(
+        SearchDetailDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
             onConfirmButtonClick = { openSearchDetailDialog.value = false },
             searchModel

@@ -2,6 +2,7 @@ package com.kakeibo.feature_main.domain.models
 
 import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.core.data.local.entities.SearchEntity
+import java.math.BigDecimal
 
 data class SearchModel(
     var _id: Long? = null,
@@ -83,8 +84,8 @@ data class SearchModel(
         val out = mutableListOf<String>()
         fromDate?.let { out.add(it) }
         toDate?.let { out.add(it) }
-        fromAmount?.let { out.add(it) }
-        toAmount?.let { out.add(it) }
+        fromAmount?.let { out.add(it.toBigDecimal().multiply(BigDecimal(1000)).toString()) }
+        toAmount?.let { out.add(it.toBigDecimal().multiply(BigDecimal(1000)).toString()) }
         categoryCode?.let { out.add(it.toString()) }
         memo?.let { out.add(it) }
         return out.toList()
