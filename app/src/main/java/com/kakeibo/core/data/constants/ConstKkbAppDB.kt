@@ -12,4 +12,6 @@ object ConstKkbAppDB {
      const val COL_VAL_STR_1 = "value_str_1"
      const val COL_VAL_STR_2 = "value_str_2"
      const val COL_VAL_STR_3 = "value_str_3"
+
+     const val AD_SHOW = 0 // COL_VAL_INT_2 = 0 -> agreed to display ads
  }

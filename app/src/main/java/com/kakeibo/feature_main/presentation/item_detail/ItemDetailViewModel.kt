@@ -10,7 +10,7 @@ import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
-import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
+import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
 import com.kakeibo.feature_main.presentation.common.BaseViewModel
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
 import com.kakeibo.util.UtilCurrency
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemDetailViewModel @Inject constructor(
-    private val itemUseCases: ItemUseCases,
+    private val displayedItemUseCases: DisplayedItemUseCases,
     private val displayedCategoryUseCases: DisplayedCategoryUseCases,
     val appPreferences: AppPreferences,
     savedStateHandle: SavedStateHandle
@@ -74,7 +74,7 @@ class ItemDetailViewModel @Inject constructor(
         savedStateHandle.get<Long>("itemId")?.let { itemId ->
             if (itemId != -1L) {
                 viewModelScope.launch {
-                    itemUseCases.getItemByIdUseCase(itemId)?.also { item ->
+                    displayedItemUseCases.getItemByIdUseCase(itemId)?.also { item ->
                         _currentItemId.value = item.id ?: -1L
 
 //                        _itemDate.value = item.eventDate.toLocalDate()
@@ -135,7 +135,7 @@ class ItemDetailViewModel @Inject constructor(
             is ItemDetailEvent.SaveItemWithCategory -> {
                 viewModelScope.launch {
                     try {
-                        itemUseCases.insertItemUseCase(
+                        displayedItemUseCases.insertItemUseCase(
                             DisplayedItemModel(
                                 id = 0, // 0: id will be automatically assigned by Room
                                 amount = itemAmount.value.text,
@@ -159,7 +159,7 @@ class ItemDetailViewModel @Inject constructor(
             is ItemDetailEvent.SaveItem -> {
                 viewModelScope.launch {
                     try {
-                        itemUseCases.insertItemUseCase(
+                        displayedItemUseCases.insertItemUseCase(
                             DisplayedItemModel(
                                 id = currentItemId.value,
                                 amount = itemAmount.value.text,

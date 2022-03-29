@@ -21,71 +21,71 @@ class DisplayedItemRepositoryImpl(
         return dao.getItemById(id)?.toDisplayedItemModel()
     }
 
-    override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
-        emit(Resource.Loading())
-
-        val displayedItems = dao.getItemsInYear(y)
-            .map {
-                it.map {
-                    it.toDisplayedItemModel()
-                }
-            }
-            .first()
-
-        emit(Resource.Loading(displayedItems))
-
-        try {
-
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
-        } catch (e: IOException) {
-            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
-        }
-
-        val flow = dao.getItemsInYear(y)
-            .map {
-                it.map {
-                    it.toDisplayedItemModel()
-                }
-            }
-            .map {
-                Resource.Success(it)
-            }
-
-        emitAll(flow)
-    }
-
-    override fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
-        emit(Resource.Loading())
-
-        val displayedItems = dao.getItemsInMonth(ym)
-            .map {
-                it.map {
-                    it.toDisplayedItemModel()
-                }
-            }
-            .first()
-
-        try {
-
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
-        } catch (e: IOException) {
-            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
-        }
-
-        val flow = dao.getItemsInMonth(ym)
-            .map {
-                it.map {
-                    it.toDisplayedItemModel()
-                }
-            }
-            .map {
-                Resource.Success(it)
-            }
-
-        emitAll(flow)
-    }
+//    override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
+//        emit(Resource.Loading())
+//
+//        val displayedItems = dao.getItemsInYear(y)
+//            .map {
+//                it.map {
+//                    it.toDisplayedItemModel()
+//                }
+//            }
+//            .first()
+//
+//        emit(Resource.Loading(displayedItems))
+//
+//        try {
+//
+//        } catch (e: HttpException) {
+//            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
+//        } catch (e: IOException) {
+//            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
+//        }
+//
+//        val flow = dao.getItemsInYear(y)
+//            .map {
+//                it.map {
+//                    it.toDisplayedItemModel()
+//                }
+//            }
+//            .map {
+//                Resource.Success(it)
+//            }
+//
+//        emitAll(flow)
+//    }
+//
+//    override fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
+//        emit(Resource.Loading())
+//
+//        val displayedItems = dao.getItemsInMonth(ym)
+//            .map {
+//                it.map {
+//                    it.toDisplayedItemModel()
+//                }
+//            }
+//            .first()
+//
+//        try {
+//
+//        } catch (e: HttpException) {
+//            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
+//        } catch (e: IOException) {
+//            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
+//        }
+//
+//        val flow = dao.getItemsInMonth(ym)
+//            .map {
+//                it.map {
+//                    it.toDisplayedItemModel()
+//                }
+//            }
+//            .map {
+//                Resource.Success(it)
+//            }
+//
+//        emitAll(flow)
+//    }
 
     override fun getSpecificItems(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>> = flow {
         emit(Resource.Loading())

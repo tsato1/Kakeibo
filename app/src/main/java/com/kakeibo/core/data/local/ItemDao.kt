@@ -55,51 +55,51 @@ interface ItemDao {
             " WHERE " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + " = :id")
     suspend fun getItemById(id: Long): DisplayedItemEntity?
 
-    @Query("SELECT " +
-            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
-            ConstItemDB.COL_AMOUNT + "," +
-            ConstItemDB.COL_CURRENCY_CODE + "," +
-            ConstItemDB.COL_CATEGORY_CODE + "," +
-            ConstItemDB.COL_MEMO + "," +
-            ConstItemDB.COL_EVENT_DATE + "," +
-            ConstItemDB.COL_UPDATE_DATE + "," +
-            ConstCategoryDB.COL_NAME + "," +
-            ConstCategoryDB.COL_COLOR + "," +
-            ConstCategoryDB.COL_SIGN + "," +
-            ConstCategoryDB.COL_DRAWABLE + "," +
-            ConstCategoryDB.COL_IMAGE + "," +
-            ConstCategoryDB.COL_PARENT + "," +
-            ConstCategoryDB.COL_DESCRIPTION + "," +
-            ConstCategoryDB.COL_SAVED_DATE +
-            " FROM " + ConstItemDB.TABLE_NAME +
-            " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
-            " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
-            " WHERE strftime('%Y', " + ConstItemDB.COL_EVENT_DATE + ") = :y " +
-            " ORDER BY " + ConstItemDB.COL_EVENT_DATE)
-    fun getItemsInYear(y: String): Flow<List<DisplayedItemEntity>>
+//    @Query("SELECT " +
+//            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
+//            ConstItemDB.COL_AMOUNT + "," +
+//            ConstItemDB.COL_CURRENCY_CODE + "," +
+//            ConstItemDB.COL_CATEGORY_CODE + "," +
+//            ConstItemDB.COL_MEMO + "," +
+//            ConstItemDB.COL_EVENT_DATE + "," +
+//            ConstItemDB.COL_UPDATE_DATE + "," +
+//            ConstCategoryDB.COL_NAME + "," +
+//            ConstCategoryDB.COL_COLOR + "," +
+//            ConstCategoryDB.COL_SIGN + "," +
+//            ConstCategoryDB.COL_DRAWABLE + "," +
+//            ConstCategoryDB.COL_IMAGE + "," +
+//            ConstCategoryDB.COL_PARENT + "," +
+//            ConstCategoryDB.COL_DESCRIPTION + "," +
+//            ConstCategoryDB.COL_SAVED_DATE +
+//            " FROM " + ConstItemDB.TABLE_NAME +
+//            " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
+//            " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
+//            " WHERE strftime('%Y', " + ConstItemDB.COL_EVENT_DATE + ") = :y " +
+//            " ORDER BY " + ConstItemDB.COL_EVENT_DATE)
+//    fun getItemsInYear(y: String): Flow<List<DisplayedItemEntity>>
 
-    @Query("SELECT " +
-            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
-            ConstItemDB.COL_AMOUNT + "," +
-            ConstItemDB.COL_CURRENCY_CODE + "," +
-            ConstItemDB.COL_CATEGORY_CODE + "," +
-            ConstItemDB.COL_MEMO + "," +
-            ConstItemDB.COL_EVENT_DATE + "," +
-            ConstItemDB.COL_UPDATE_DATE + "," +
-            ConstCategoryDB.COL_NAME + "," +
-            ConstCategoryDB.COL_COLOR + "," +
-            ConstCategoryDB.COL_SIGN + "," +
-            ConstCategoryDB.COL_DRAWABLE + "," +
-            ConstCategoryDB.COL_IMAGE + "," +
-            ConstCategoryDB.COL_PARENT + "," +
-            ConstCategoryDB.COL_DESCRIPTION + "," +
-            ConstCategoryDB.COL_SAVED_DATE +
-            " FROM " + ConstItemDB.TABLE_NAME +
-            " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
-            " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
-            " WHERE strftime('%Y-%m', " + ConstItemDB.COL_EVENT_DATE + ") = :ym " +
-            " ORDER BY " + ConstItemDB.COL_EVENT_DATE)
-    fun getItemsInMonth(ym: String): Flow<List<DisplayedItemEntity>>
+//    @Query("SELECT " +
+//            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
+//            ConstItemDB.COL_AMOUNT + "," +
+//            ConstItemDB.COL_CURRENCY_CODE + "," +
+//            ConstItemDB.COL_CATEGORY_CODE + "," +
+//            ConstItemDB.COL_MEMO + "," +
+//            ConstItemDB.COL_EVENT_DATE + "," +
+//            ConstItemDB.COL_UPDATE_DATE + "," +
+//            ConstCategoryDB.COL_NAME + "," +
+//            ConstCategoryDB.COL_COLOR + "," +
+//            ConstCategoryDB.COL_SIGN + "," +
+//            ConstCategoryDB.COL_DRAWABLE + "," +
+//            ConstCategoryDB.COL_IMAGE + "," +
+//            ConstCategoryDB.COL_PARENT + "," +
+//            ConstCategoryDB.COL_DESCRIPTION + "," +
+//            ConstCategoryDB.COL_SAVED_DATE +
+//            " FROM " + ConstItemDB.TABLE_NAME +
+//            " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
+//            " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
+//            " WHERE strftime('%Y-%m', " + ConstItemDB.COL_EVENT_DATE + ") = :ym " +
+//            " ORDER BY " + ConstItemDB.COL_EVENT_DATE)
+//    fun getItemsInMonth(ym: String): Flow<List<DisplayedItemEntity>>
 
     @RawQuery(observedEntities = [ItemEntity::class, CategoryEntity::class])
     fun getSpecificItems(query: SupportSQLiteQuery): Flow<List<DisplayedItemEntity>>
@@ -107,12 +107,11 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(itemEntity: ItemEntity): Long
 
-    @Query("DELETE FROM " + ConstItemDB.TABLE_NAME +
-            " WHERE " + ConstItemDB.COL_ID + " = :id")
+    @Query("DELETE FROM " + ConstItemDB.TABLE_NAME + " WHERE " + ConstItemDB.COL_ID + " = :id")
     suspend fun deleteItemById(id: Long): Int // returns the number of rows affected by the query
 
     @Query("DELETE FROM items")
-    suspend fun deleteAllItems()
+    suspend fun deleteAllItems(): Int
 
 
 

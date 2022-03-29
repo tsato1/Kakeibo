@@ -5,4 +5,5 @@ sealed class SettingsListEvent {
     object FractionDigitsChanged : SettingsListEvent()
     object NumColumnsChanged : SettingsListEvent()
     object DeleteAllItems : SettingsListEvent()
+    object ShowAds : SettingsListEvent()
 }

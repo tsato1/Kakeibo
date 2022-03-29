@@ -7,7 +7,7 @@ import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.models.SearchModel
-import com.kakeibo.feature_main.domain.use_cases.ItemUseCases
+import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
 import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.presentation.common.BaseViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarItem
@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemMainViewModel @Inject constructor(
-    private val itemUseCases: ItemUseCases,
+    private val displayedItemUseCases: DisplayedItemUseCases,
     private val searchUseCases: SearchUseCases,
     appPreferences: AppPreferences,
     private val savedStateHandle: SavedStateHandle
@@ -132,13 +132,13 @@ class ItemMainViewModel @Inject constructor(
         when (event) {
             is ItemMainEvent.DeleteItem -> {
                 viewModelScope.launch {
-                    itemUseCases.deleteItemUseCase(event.displayedItemModel)
+                    displayedItemUseCases.deleteItemUseCase(event.displayedItemModel)
                     recentlyDeletedDisplayedItemModel = event.displayedItemModel
                 }
             }
             is ItemMainEvent.RestoreItem -> {
                 viewModelScope.launch {
-                    itemUseCases.insertItemUseCase( // todo catch exception
+                    displayedItemUseCases.insertItemUseCase( // todo catch exception
                         recentlyDeletedDisplayedItemModel ?: return@launch
                     )
                     recentlyDeletedDisplayedItemModel = null
@@ -167,7 +167,7 @@ class ItemMainViewModel @Inject constructor(
         _searchModel.value = searchModel
         viewModelScope.launch {
             getItemsJob?.cancel()
-            getItemsJob = itemUseCases.getSpecificItemsUseCase(searchModel.toQuery(), searchModel.toArgs())
+            getItemsJob = displayedItemUseCases.getSpecificItemsUseCase(searchModel.toQuery(), searchModel.toArgs())
                 .onEach { result ->
                     /*
                     Used in ItemListScreen

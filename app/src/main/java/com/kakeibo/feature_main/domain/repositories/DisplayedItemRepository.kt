@@ -10,10 +10,6 @@ interface DisplayedItemRepository {
 
     suspend fun getItemById(id: Long): DisplayedItemModel?
 
-    fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>>
-
-    fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>>
-
     fun getSpecificItems(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>>
 
     suspend fun insertItem(displayedItemModel: DisplayedItemModel): Long

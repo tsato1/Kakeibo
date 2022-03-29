@@ -10,7 +10,8 @@ import androidx.compose.ui.unit.dp
 data class Dimen(
     val default: Dp = 0.dp,
 
-    val dialogDefaultHeight: Dp = 300.dp,
+    val dialogHeightShort: Dp = 200.dp,
+    val dialogHeightDefault: Dp = 300.dp,
     val dialogWithListHeight: Dp = 500.dp,
     val dialogRoundedCorner: Dp = 12.dp,
     val dialogPadding: Dp = 8.dp,

@@ -7,10 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.constants.PrepDB
-import com.kakeibo.core.data.local.AppDatabase
-import com.kakeibo.core.data.local.CategoryDao
-import com.kakeibo.core.data.local.CategoryDspDao
-import com.kakeibo.core.data.local.KkbAppDao
+import com.kakeibo.core.data.local.*
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
@@ -24,14 +21,23 @@ import com.kakeibo.feature_main.domain.use_cases.use_case_list.*
 import com.kakeibo.feature_main.domain.use_cases.use_case_search.*
 import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
+import com.kakeibo.feature_settings.data.repositories.ItemRepositoryImpl
+import com.kakeibo.feature_settings.data.repositories.KkbAppRepositoryImpl
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
 import com.kakeibo.feature_settings.domain.repositories.CustomCategoryRepository
+import com.kakeibo.feature_settings.domain.repositories.ItemRepository
+import com.kakeibo.feature_settings.domain.repositories.KkbAppRepository
 import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
 import com.kakeibo.feature_settings.domain.use_cases.CategoryRearrangeUseCases
+import com.kakeibo.feature_settings.domain.use_cases.ItemUseCases
+import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_detail.GetCustomCategoryByIdUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_detail.InsertCustomCategoryUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.DeleteCustomCategoryUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.GetAllCustomCategoriesUseCase
+import com.kakeibo.feature_settings.domain.use_cases.items.DeleteAllItemsUseCase
+import com.kakeibo.feature_settings.domain.use_cases.kkbapp.GetKkbAppUseCase
+import com.kakeibo.feature_settings.domain.use_cases.kkbapp.InsertKkbAppUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetNonDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateDisplayedCategoriesUseCase
@@ -83,6 +89,9 @@ object AppModule {
             .build()
     }
 
+    /*
+    kkbAppDao, categoryDao, and categoryDspDao are used in the providing db function above
+     */
     @Singleton
     @Provides
     fun provideKkbAppDao(db: AppDatabase) = db.kkbAppDao
@@ -95,14 +104,25 @@ object AppModule {
     @Provides
     fun provideCategoryDspDao(db: AppDatabase) = db.categoryDspDao
 
+    /*
+
+     */
     @Singleton
     @Provides
-    fun provideSearchDao(db: AppDatabase) = db.searchDao
+    fun provideKkbAppRepository(db: AppDatabase): KkbAppRepository {
+        return KkbAppRepositoryImpl(db.kkbAppDao)
+    }
 
     @Provides
     @Singleton
-    fun provideItemRepository(db: AppDatabase): DisplayedItemRepository {
+    fun provideDisplayedItemRepository(db: AppDatabase): DisplayedItemRepository {
         return DisplayedItemRepositoryImpl(db.itemDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideItemRepository(db: AppDatabase): ItemRepository {
+        return ItemRepositoryImpl(db.itemDao)
     }
 
     @Provides
@@ -131,18 +151,36 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideItemUseCases(
+    fun provideKkbAppUseCases(repository: KkbAppRepository): KkbAppUseCases {
+        return KkbAppUseCases(
+            getKkbAppUseCase = GetKkbAppUseCase(repository),
+            insertKkbAppUseCase = InsertKkbAppUseCase(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideDisplayedItemUseCases(
         @ApplicationContext context: Context,
         repository: DisplayedItemRepository
-    ): ItemUseCases {
-        return ItemUseCases(
+    ): DisplayedItemUseCases {
+        return DisplayedItemUseCases(
             getItemByIdUseCase = GetItemByIdUseCase(repository),
             getAllItemsUseCase = GetAllItemsUseCase(repository),
             getSpecificItemsUseCase = GetSpecificItemsUseCase(repository),
-            getItemListByYearUseCase = GetItemListByYearUseCase(repository),
-            getItemListByYearMonthUseCase = GetItemListByYearMonthUseCase(repository),
-            deleteItemUseCase = DeleteItemUseCase(repository),
-            insertItemUseCase = InsertItemUseCase(repository, context)
+            insertItemUseCase = InsertItemUseCase(repository, context),
+            deleteItemUseCase = DeleteItemUseCase(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideItemUseCases(
+        @ApplicationContext context: Context,
+        repository: ItemRepository
+    ): ItemUseCases {
+        return ItemUseCases(
+            deleteAllItemsUseCase = DeleteAllItemsUseCase(repository)
         )
     }
 

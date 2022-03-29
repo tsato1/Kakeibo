@@ -1,6 +1,7 @@
 package com.kakeibo.feature_settings.presentation.settings_list.components
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,12 +26,14 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListEvent
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListViewModel
 import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
 import com.kakeibo.ui.theme.dimens
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SettingsListScreen(
@@ -39,6 +42,7 @@ fun SettingsListScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
 
@@ -47,7 +51,23 @@ fun SettingsListScreen(
     val keyFractionDigitsIndexState = viewModel.keyFractionDigitsIndexState
     val keyNumColumnsIndexState = viewModel.keyNumColumnsIndexState
 
+    val kkbAppValues = viewModel.kkbAppState.value
+
     val openDeleteAllItemsDialog = remember { mutableStateOf(false) }
+    val openConfirmAdsDialog = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is SettingsListViewModel.UiEvent.ShowSnackBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(context.getString(event.stringId))
+                }
+                is SettingsListViewModel.UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.stringId, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -116,7 +136,11 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate(Screen.CustomCategoryListScreen.route)
+                            if (kkbAppValues.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                                navController.navigate(Screen.CustomCategoryListScreen.route)
+                            } else {
+                                openConfirmAdsDialog.value = true
+                            }
                         }
                 ) {
                     Text(
@@ -128,7 +152,11 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate(Screen.CategoryRearrangeScreen.route)
+                            if (kkbAppValues.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                                navController.navigate(Screen.CategoryRearrangeScreen.route)
+                            } else {
+                                openConfirmAdsDialog.value = true
+                            }
                         }
                 ) {
                     Text(
@@ -140,12 +168,16 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            context.startActivity(
-                                Intent(
-                                    context,
-                                    CategoryReorderActivity::class.java
+                            if (kkbAppValues.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                                context.startActivity(
+                                    Intent(
+                                        context,
+                                        CategoryReorderActivity::class.java
+                                    )
                                 )
-                            )
+                            } else {
+                                openConfirmAdsDialog.value = true
+                            }
                         }
                 ) {
                     Text(
@@ -185,6 +217,99 @@ fun SettingsListScreen(
         }
     }
 
+    if (openConfirmAdsDialog.value) {
+        Dialog(
+            onDismissRequest = { openConfirmAdsDialog.value = false }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(MaterialTheme.dimens.dialogHeightDefault)
+                    .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
+                    .background(MaterialTheme.colors.background)
+            ) {
+                val openConfirmAdsDialog2 = remember { mutableStateOf(false) }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            MaterialTheme.dimens.dialogTitlePaddingHorizontal,
+                            MaterialTheme.dimens.dialogTitlePaddingVertical
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                    Text(text = stringResource(id = R.string.category_management))
+                }
+                Divider()
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                    text = stringResource(id = R.string.quest_do_you_want_to_manage_categories)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    modifier = Modifier
+                        .padding(MaterialTheme.dimens.dialogPadding)
+                        .align(Alignment.End),
+                    onClick = { openConfirmAdsDialog2.value = true }
+                ) {
+                    Text(text = stringResource(id = R.string.yes))
+                }
+
+                if (openConfirmAdsDialog2.value) {
+                    Dialog(
+                        onDismissRequest = {
+                            openConfirmAdsDialog.value = false
+                            openConfirmAdsDialog2.value = false
+                        }
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(MaterialTheme.dimens.dialogHeightShort)
+                                .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
+                                .background(MaterialTheme.colors.background)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        MaterialTheme.dimens.dialogTitlePaddingHorizontal,
+                                        MaterialTheme.dimens.dialogTitlePaddingVertical
+                                    ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                                Text(text = stringResource(id = R.string.warning))
+                            }
+                            Divider()
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                                text = stringResource(id = R.string.quest_irreversible_operation_do_you_want_to_proceed)
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Button(
+                                modifier = Modifier
+                                    .padding(MaterialTheme.dimens.dialogPadding)
+                                    .align(Alignment.End),
+                                onClick = {
+                                    viewModel.onEvent(SettingsListEvent.ShowAds, -1)
+                                    openConfirmAdsDialog.value = false
+                                    openConfirmAdsDialog2.value = false
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.yes))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     if (openDeleteAllItemsDialog.value) {
         Dialog(
             onDismissRequest = { openDeleteAllItemsDialog.value = false }
@@ -192,7 +317,7 @@ fun SettingsListScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(MaterialTheme.dimens.dialogDefaultHeight)
+                    .height(MaterialTheme.dimens.dialogHeightDefault)
                     .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
                     .background(MaterialTheme.colors.background)
             ) {
@@ -236,7 +361,7 @@ fun SettingsListScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(MaterialTheme.dimens.dialogDefaultHeight)
+                                .height(MaterialTheme.dimens.dialogHeightShort)
                                 .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
                                 .background(MaterialTheme.colors.background)
                         ) {
