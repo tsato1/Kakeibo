@@ -2,10 +2,9 @@ package com.kakeibo.core.data.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.kakeibo.Constants
+import androidx.preference.PreferenceManager
 import com.kakeibo.R
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +17,8 @@ class AppPreferencesImpl @Inject constructor(
 
     init {
         val nonEncryptedPreferences: SharedPreferences =
-            context.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
+//            context.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
+            PreferenceManager.getDefaultSharedPreferences(context)
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            instance = initializeEncryptedSharedPreferencesManager()
@@ -31,10 +31,6 @@ class AppPreferencesImpl @Inject constructor(
 //        } else {
             instance = nonEncryptedPreferences
 //        }
-
-        instance.set(context.resources.getString(R.string.pref_key_date_format), 0) // todo: check migration
-        instance.set(context.resources.getString(R.string.pref_key_fraction_digits), 0)
-        instance.set(context.resources.getString(R.string.pref_key_num_columns), 1)
     }
 //
 //    private fun initializeEncryptedSharedPreferencesManager(): SharedPreferences {
@@ -57,9 +53,6 @@ class AppPreferencesImpl @Inject constructor(
         return getInt(
             context.resources.getString(R.string.pref_key_date_format), 0
         )
-//        return getString(
-//            context.resources.getString(R.string.pref_key_date_format), "0"
-//        )?.toInt() ?: 0
     }
     override
     fun getDateFormat(): String {
@@ -70,28 +63,9 @@ class AppPreferencesImpl @Inject constructor(
     /* fraction digits */
     override
     fun getFractionDigitsIndex(): Int {
-        val locale = Locale.getDefault()
-        var defValue = 0
-        try {
-            val currency = Currency.getInstance(locale)
-            defValue = currency.defaultFractionDigits
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-        }
         return getInt(
-            context.resources.getString(R.string.pref_key_fraction_digits), defValue
+            context.resources.getString(R.string.pref_key_fraction_digits), 0
         )
-//        val locale = Locale.getDefault()
-//        var defValue = 0
-//        try {
-//            val currency = Currency.getInstance(locale)
-//            defValue = currency.defaultFractionDigits
-//        } catch (e: IllegalArgumentException) {
-//            e.printStackTrace()
-//        }
-//        return getString(
-//            context.resources.getString(R.string.pref_key_fraction_digits), "$defValue"
-//        )?.toInt() ?: defValue
     }
     override
     fun getFractionDigits(): Int {
@@ -105,9 +79,6 @@ class AppPreferencesImpl @Inject constructor(
         return getInt(
             context.resources.getString(R.string.pref_key_num_columns), 1
         )
-//        return getString(
-//            context.resources.getString(R.string.pref_key_num_columns), "1"
-//        )?.toInt() ?: 1
     }
     override
     fun getNumColumns(): Int {
@@ -122,24 +93,24 @@ class AppPreferencesImpl @Inject constructor(
         instance.set(context.resources.getString(key), value)
     }
 
-    override fun getString(key: String, defaultValue: String?): String? {
+    override fun getString(key: String, defaultValue: String?): String {
         val value = getValue(key, defaultValue)
-        return value as String?
+        return value.toString()
     }
 
     override fun getInt(key: String, defaultValue: Int): Int {
         val value = getValue(key, defaultValue)
-        return value as Int
+        return value.toString().toInt()
     }
 
     override fun getBoolean(key: String, defaultValue: Boolean): Boolean {
         val value = getValue(key, defaultValue)
-        return value as Boolean
+        return value.toString().toBoolean()
     }
 
     override fun getLong(key: String, defaultValue: Long): Long {
         val value = getValue(key, defaultValue)
-        return value as Long
+        return value.toString().toLong()
     }
 
     override fun getFloat(key: String, defaultValue: Float): Float {

@@ -181,10 +181,10 @@ class ItemMainViewModel @Inject constructor(
                                     entry.key,
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                                        .sumOf { it.amount.toLong() }.toString(),
+                                        .sumOf { it.amount.toDouble() }.toString(),
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toLong() }.toString()
+                                        .sumOf { it.amount.toDouble() }.toString()
                                 ),
                                 entry.value
                             )
@@ -201,10 +201,10 @@ class ItemMainViewModel @Inject constructor(
                                     entry.key,
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                                        .sumOf { it.amount.toLong() }.toString(),
+                                        .sumOf { it.amount.toDouble() }.toString(),
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toLong() }.toString()
+                                        .sumOf { it.amount.toDouble() }.toString()
                                 ),
                                 entry.value
                             )
@@ -249,38 +249,38 @@ class ItemMainViewModel @Inject constructor(
                     val incomeTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
-                        ?.sumOf { it.amount.toLong() } ?: 0L
+                        ?.sumOf { it.amount.toDouble() }?.toString() ?: "0"
 
                     val expenseTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
-                        ?.sumOf { it.amount.toLong() } ?: 0L
+                        ?.sumOf { it.amount.toDouble() }?.toString() ?: "0"
 
                     val incomeCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
-                            val sum = acc.amount.toLong() + ele.amount.toLong()
+                            val sum = acc.amount.toDouble() + ele.amount.toDouble()
                             acc.copy(
                                 amount = sum.toString()
                             )
                         }
                         ?.values?.toList()
-                        ?.sortedByDescending { it.amount.toLong() } ?: emptyList()
+                        ?.sortedByDescending { it.amount.toDouble() } ?: emptyList()
 
                     val expenseCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
-                            val sum = acc.amount.toLong() + ele.amount.toLong()
+                            val sum = acc.amount.toDouble() + ele.amount.toDouble()
                             acc.copy(
                                 amount = sum.toString()
                             )
                         }
                         ?.values?.toList()
-                        ?.sortedByDescending { it.amount.toLong() } ?: emptyList()
+                        ?.sortedByDescending { it.amount.toDouble() } ?: emptyList()
 
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }

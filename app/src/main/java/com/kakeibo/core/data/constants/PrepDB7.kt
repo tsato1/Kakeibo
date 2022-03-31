@@ -592,8 +592,7 @@ object PrepDB7 {
         val cursorItem = database.query(
             ("SELECT " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + ", " +
                     ConstItemDB.COL_AMOUNT + ", " +
-                    ConstItemDB.COL_CATEGORY_CODE + ", " +
-                    ConstCategoryDB.COL_COLOR +
+                    ConstItemDB.COL_CATEGORY_CODE +
                     " FROM " + ConstItemDB.TABLE_NAME)
         )
         if (cursorItem.moveToFirst()) {

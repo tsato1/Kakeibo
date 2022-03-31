@@ -160,7 +160,7 @@ fun ItemChartScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = itemChartState.value.incomeTotal.toString()
+                            text = itemChartState.value.incomeTotal
                         )
                     }
                     // Expense
@@ -179,7 +179,7 @@ fun ItemChartScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = itemChartState.value.expenseTotal.toString()
+                            text = itemChartState.value.expenseTotal
                         )
                     }
                     // Balance
@@ -199,7 +199,7 @@ fun ItemChartScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = (itemChartState.value.incomeTotal + itemChartState.value.expenseTotal).toString()
+                            text = (itemChartState.value.incomeTotal.toDouble() - itemChartState.value.expenseTotal.toDouble()).toString()
                         )
                     }
                     Divider()
@@ -296,11 +296,11 @@ fun ItemChartScreen(
                                                 .aspectRatio(1f)
                                         )
                                         Text(
-                                            modifier = Modifier.width(40.dp),
+                                            modifier = Modifier.width(55.dp),
                                             text = "${
-                                                displayedItemModel.amount.toLong()
+                                                displayedItemModel.amount.toDouble()
                                                     .times(100)
-                                                    .div(itemChartState.value.incomeTotal)
+                                                    .div(itemChartState.value.incomeTotal.toDouble())
                                             }%",
                                             textAlign = TextAlign.End
                                         )
@@ -386,11 +386,11 @@ fun ItemChartScreen(
                                                 .aspectRatio(1f)
                                         )
                                         Text(
-                                            modifier = Modifier.width(40.dp),
+                                            modifier = Modifier.width(55.dp),
                                             text = "${
-                                                displayedItemModel.amount.toLong()
+                                                displayedItemModel.amount.toDouble()
                                                     .times(100)
-                                                    .div(itemChartState.value.expenseTotal)
+                                                    .div(itemChartState.value.expenseTotal.toDouble())
                                             }%",
                                             textAlign = TextAlign.End
                                         )
