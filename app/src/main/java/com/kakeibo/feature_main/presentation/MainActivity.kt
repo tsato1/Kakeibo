@@ -68,9 +68,7 @@ import java.io.IOException
 
 
 //todo typography
-//todo search with amount fix
 //todo input : accept comma and period
-//todo when prices are shown, change the format according to  fractiondigits
 
 
 @ExperimentalFoundationApi

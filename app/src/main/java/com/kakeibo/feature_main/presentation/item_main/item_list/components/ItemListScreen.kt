@@ -117,6 +117,7 @@ fun ItemListScreen(
                     navController = navController,
                     sections = itemListState.expandableItemList,
                     dateFormatIndex = viewModel.dateFormatIndex,
+                    fractionDigits = viewModel.fractionDigits,
                     modifier = Modifier.fillMaxSize()
                 )
             }

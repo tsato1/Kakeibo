@@ -27,6 +27,7 @@ class ItemSearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
+    val fractionDigits = appPreferences.getFractionDigits()
 
     /* default search criteria that show up in dialog when the user taps 'Add' fab */
     private var defaultSearchCriteria = mutableListOf(

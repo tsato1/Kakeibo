@@ -74,7 +74,7 @@ class SettingsListViewModel @Inject constructor(
             }
             is SettingsListEvent.FractionDigitsChanged -> {
                 appPreferences.set(R.string.pref_key_fraction_digits, index)
-                _keyFractionDigitsState.value = appPreferences.getDateFormatIndex()
+                _keyFractionDigitsState.value = appPreferences.getFractionDigitsIndex()
             }
             is SettingsListEvent.NumColumnsChanged -> {
                 appPreferences.set(R.string.pref_key_num_columns, index)

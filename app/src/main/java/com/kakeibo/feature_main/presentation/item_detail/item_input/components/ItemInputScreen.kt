@@ -107,7 +107,7 @@ fun ItemInputScreen(
                 text = amountState.text,
                 hint = amountState.hint,
                 onValueChange = {
-                    if (it.length <= 10 && UtilText.isAmountValid(it))
+                    if (it.length <= 10 && UtilText.isAmountValid(it, viewModel.fractionDigits))
                         viewModel.onEvent(ItemDetailEvent.AmountEntered(it))
                 },
                 onFocusChange = {

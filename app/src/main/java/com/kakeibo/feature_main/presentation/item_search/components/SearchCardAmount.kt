@@ -43,7 +43,7 @@ fun SearchCardAmount(
                 text = itemAmountState.value.from,
                 hint = itemAmountState.value.fromHint,
                 onValueChange = {
-                    if (it.length <= 10 && UtilText.isAmountValid(it))
+                    if (it.length <= 10 && UtilText.isAmountValid(it, viewModel.fractionDigits))
                         viewModel.onEvent(ItemSearchEvent.AmountFromEntered(it))
                 },
                 onFocusChange = {
@@ -64,7 +64,7 @@ fun SearchCardAmount(
                 text = itemAmountState.value.to,
                 hint = itemAmountState.value.toHint,
                 onValueChange = {
-                    if (it.length <= 10 && UtilText.isAmountValid(it))
+                    if (it.length <= 10 && UtilText.isAmountValid(it, viewModel.fractionDigits))
                         viewModel.onEvent(ItemSearchEvent.AmountToEntered(it))
                 },
                 onFocusChange = {

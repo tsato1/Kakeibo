@@ -38,6 +38,7 @@ class ItemMainViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
+    val fractionDigits = appPreferences.getFractionDigits()
 
     private val _searchId = mutableStateOf(savedStateHandle["searchId"] ?: 0L)
     val searchId: State<Long> = _searchId
@@ -181,10 +182,10 @@ class ItemMainViewModel @Inject constructor(
                                     entry.key,
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                                        .sumOf { it.amount.toDouble() }.toString(),
+                                        .sumOf { it.amount.toBigDecimal() }.toString(),
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toDouble() }.toString()
+                                        .sumOf { it.amount.toBigDecimal() }.toString()
                                 ),
                                 entry.value
                             )
@@ -201,10 +202,10 @@ class ItemMainViewModel @Inject constructor(
                                     entry.key,
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                                        .sumOf { it.amount.toDouble() }.toString(),
+                                        .sumOf { it.amount.toBigDecimal() }.toString(),
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toDouble() }.toString()
+                                        .sumOf { it.amount.toBigDecimal() }.toString()
                                 ),
                                 entry.value
                             )
@@ -249,38 +250,38 @@ class ItemMainViewModel @Inject constructor(
                     val incomeTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
-                        ?.sumOf { it.amount.toDouble() }?.toString() ?: "0"
+                        ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
 
                     val expenseTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
-                        ?.sumOf { it.amount.toDouble() }?.toString() ?: "0"
+                        ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
 
                     val incomeCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
-                            val sum = acc.amount.toDouble() + ele.amount.toDouble()
+                            val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
                             acc.copy(
                                 amount = sum.toString()
                             )
                         }
                         ?.values?.toList()
-                        ?.sortedByDescending { it.amount.toDouble() } ?: emptyList()
+                        ?.sortedByDescending { it.amount.toBigDecimal() } ?: emptyList()
 
                     val expenseCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
-                            val sum = acc.amount.toDouble() + ele.amount.toDouble()
+                            val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
                             acc.copy(
                                 amount = sum.toString()
                             )
                         }
                         ?.values?.toList()
-                        ?.sortedByDescending { it.amount.toDouble() } ?: emptyList()
+                        ?.sortedByDescending { it.amount.toBigDecimal() } ?: emptyList()
 
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }

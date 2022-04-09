@@ -33,6 +33,7 @@ class ItemDetailViewModel @Inject constructor(
 ) : BaseViewModel() {
     
     val dateFormatIndex = appPreferences.getDateFormatIndex()
+    val fractionDigits = appPreferences.getFractionDigits()
 
     private val _currentItemId = mutableStateOf(-1L)
     val currentItemId: State<Long> = _currentItemId

@@ -2,12 +2,9 @@ package com.kakeibo.feature_settings.presentation.settings_list.components
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -15,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -32,6 +29,7 @@ import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListEvent
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListViewModel
 import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
+import com.kakeibo.ui.theme.MatchaGreen
 import com.kakeibo.ui.theme.dimens
 import kotlinx.coroutines.flow.collectLatest
 
@@ -427,16 +425,18 @@ fun SettingsListItem(
                             viewModel.onEvent(event, 0)
                             openDialog.value = false
                         },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onSurface)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                        elevation = null,
+                        border = null
                     ) {
                         if (indexState.value == 0)
-                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = White, contentDescription = null)
+                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = MatchaGreen, contentDescription = null)
                         else
-                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = White, contentDescription = null)
+                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = MatchaGreen, contentDescription = null)
                         Text(
                             text = stringArrayResource(id = arrayResourceId)[0],
                             modifier = Modifier.padding(8.dp, 0.dp),
-                            color = White
+                            color = Black
                         )
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -446,16 +446,18 @@ fun SettingsListItem(
                             viewModel.onEvent(event, 1)
                             openDialog.value = false
                         },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onSurface)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                        elevation = null,
+                        border = null
                     ) {
                         if (indexState.value == 1)
-                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = White, contentDescription = null)
+                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = MatchaGreen, contentDescription = null)
                         else
-                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = White, contentDescription = null)
+                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = MatchaGreen, contentDescription = null)
                         Text(
                             text = stringArrayResource(id = arrayResourceId)[1],
                             modifier = Modifier.padding(8.dp, 0.dp),
-                            color = White
+                            color = Black
                         )
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -465,16 +467,18 @@ fun SettingsListItem(
                             viewModel.onEvent(event, 2)
                             openDialog.value = false
                         },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onSurface)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                        elevation = null,
+                        border = null
                     ) {
                         if (indexState.value == 2)
-                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = White, contentDescription = null)
+                            Icon(imageVector = Icons.Default.RadioButtonChecked, tint = MatchaGreen, contentDescription = null)
                         else
-                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = White, contentDescription = null)
+                            Icon(imageVector = Icons.Default.RadioButtonUnchecked, tint = MatchaGreen, contentDescription = null)
                         Text(
                             text = stringArrayResource(id = arrayResourceId)[2],
                             modifier = Modifier.padding(8.dp, 0.dp),
-                            color = White
+                            color = Black
                         )
                         Spacer(modifier = Modifier.weight(1f))
                     }

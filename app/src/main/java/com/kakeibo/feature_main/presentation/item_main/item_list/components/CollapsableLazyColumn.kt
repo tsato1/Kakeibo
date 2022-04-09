@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.presentation.item_main.item_list.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,7 +28,6 @@ import com.kakeibo.feature_main.presentation.common.components.IncomeExpenseIndi
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.toYMDString
 import com.kakeibo.util.UtilDate.toYMDWString
 import kotlinx.datetime.toLocalDate
 
@@ -36,9 +36,13 @@ fun CollapsableLazyColumn(
     navController: NavController,
     sections: List<ExpandableItem>,
     dateFormatIndex: Int,
+    fractionDigits: Int,
     modifier: Modifier
 ) {
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
+
+
+    Log.d("asdf", "fractionDigits="+fractionDigits)
 
     if (sections.isEmpty()) {
         Column(
@@ -84,7 +88,7 @@ fun CollapsableLazyColumn(
                         Spacer(modifier = Modifier.weight(1f))
                         IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_INCOME)
                         Text(
-                            text = expandableItem.parent.income
+                            text = expandableItem.parent.income.format(fractionDigits)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_EXPENSE)
