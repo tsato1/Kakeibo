@@ -162,7 +162,7 @@
     <string name="inst_keep_pressing_longer">Daha uzun süre basmaya devam edin</string>
     <string name="quest_determine_category_order">Simgeler belirtilen sırada görüntülenir. Devam etmek istiyor musunuz?</string>
     <string name="expense">Gider</string>
-    <string name="err_reached_max_count_colon">"Maksimum sayıya ulaştınız: "</string>
+    <string name="err_raeched_max_count">"Maksimum sayıya ulaştınız: "</string>
     <string name="err_please_enter_name">Kategori adı boş bırakılamaz.</string>
     <string name="err_nothing_selected_select_one">Hiçbir şey seçilmedi. Lütfen birini seçin.</string>
     <string name="err_category_not_created">Bazışeyler doğru değil. Yeni Kategori oluşturulmadı.</string>

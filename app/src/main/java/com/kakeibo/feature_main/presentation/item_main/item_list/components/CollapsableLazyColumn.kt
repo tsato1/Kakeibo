@@ -17,6 +17,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,8 +40,9 @@ fun CollapsableLazyColumn(
     fractionDigits: Int,
     modifier: Modifier
 ) {
-    val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
+    val context = LocalContext.current
 
+    val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
 
     Log.d("asdf", "fractionDigits="+fractionDigits)
 
@@ -82,7 +84,7 @@ fun CollapsableLazyColumn(
                         Text(
                             text = expandableItem.parent.date
                                 .toLocalDate()
-                                .toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex]),
+                                .toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex], context),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))

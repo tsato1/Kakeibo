@@ -56,7 +56,7 @@ fun ItemSearchScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemSearchViewModel.UiEvent.ShowSnackbar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                    scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
                 is ItemSearchViewModel.UiEvent.Search -> {
                     navController.navigate(

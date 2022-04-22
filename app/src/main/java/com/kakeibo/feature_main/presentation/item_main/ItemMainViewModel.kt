@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
@@ -333,7 +334,7 @@ class ItemMainViewModel @Inject constructor(
                             )
                             _eventFlow.emit(
                                 UiEvent.ShowSnackbar(
-                                    result.message ?: "At ItemMainViewModel: Unknown error."
+                                    UiText.DynamicString(result.message ?: "Unknown error.")
                                 )
                             )
                         }
@@ -363,7 +364,7 @@ class ItemMainViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String): UiEvent()
+        data class ShowSnackbar(val message: UiText): UiEvent()
     }
 
 }

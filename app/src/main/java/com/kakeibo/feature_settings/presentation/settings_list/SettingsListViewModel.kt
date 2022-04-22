@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.kakeibo.R
 import com.kakeibo.core.data.local.entities.KkbAppEntity
 import com.kakeibo.core.data.preferences.AppPreferencesImpl
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_settings.domain.use_cases.ItemUseCases
 import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
 import com.kakeibo.util.UtilDate
@@ -84,10 +85,14 @@ class SettingsListViewModel @Inject constructor(
                 viewModelScope.launch {
                     val result = itemUseCases.deleteAllItemsUseCase()
                     if (result == 0) {
-                        _eventFlow.emit(UiEvent.ShowToast(R.string.msg_nothing_tp_delete))
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(UiText.StringResource(R.string.msg_nothing_tp_delete))
+                        )
                     }
                     else {
-                        _eventFlow.emit(UiEvent.ShowToast(R.string.msg_all_delete_success))
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(UiText.StringResource(R.string.msg_all_delete_success))
+                        )
                     }
                 }
             }
@@ -109,10 +114,16 @@ class SettingsListViewModel @Inject constructor(
                     )
 
                     if (result == -1L) { /* error */
-                        _eventFlow.emit(UiEvent.ShowToast(R.string.error))
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(UiText.StringResource(R.string.error))
+                        )
                     }
                     else { /* success (result should be 1L because the first row id is 1) */
-                        _eventFlow.emit(UiEvent.ShowToast(R.string.msg_access_to_category_management))
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(
+                                UiText.StringResource(R.string.msg_access_to_category_management)
+                            )
+                        )
                     }
                 }
             }
@@ -120,8 +131,8 @@ class SettingsListViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackBar(val stringId: Int): UiEvent()
-        data class ShowToast(val stringId: Int): UiEvent()
+        data class ShowSnackBar(val stringId: UiText): UiEvent()
+        data class ShowToast(val stringId: UiText): UiEvent()
     }
 
 }

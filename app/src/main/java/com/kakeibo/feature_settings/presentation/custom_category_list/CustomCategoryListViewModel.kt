@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.util.Resource
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
 import com.kakeibo.feature_settings.domain.util.CustomCategoryListOrder
@@ -101,7 +102,11 @@ class CustomCategoryListViewModel @Inject constructor(
                                 listOrder = listOrder,
                                 isLoading = false
                             )
-                            _eventFlow.emit(UiEvent.ShowToast(result.message ?: "Unknown Error"))
+                            _eventFlow.emit(
+                                UiEvent.ShowToast(
+                                    UiText.DynamicString(result.message ?: "Unknown Error")
+                                )
+                            )
                         }
                         is Resource.Loading -> {
                             _customCategoryListState.value = customCategoryListState.value.copy(
@@ -135,7 +140,7 @@ class CustomCategoryListViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowToast(val message: String): UiEvent()
+        data class ShowToast(val message: UiText): UiEvent()
     }
 
 }

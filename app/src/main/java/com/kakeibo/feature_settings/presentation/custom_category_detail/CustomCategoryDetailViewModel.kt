@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.presentation.TextFieldState
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
 import com.kakeibo.util.UtilCategory
@@ -100,7 +101,11 @@ class CustomCategoryDetailViewModel @Inject constructor(
                         )
                         _eventFlow.emit(UiEvent.Save)
                     } catch (e: CategoryModel.InvalidCustomCategoryException) {
-                        _eventFlow.emit(UiEvent.ShowToast(e.message ?: "Unknown Error"))
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(
+                                UiText.DynamicString(e.message ?: "Unknown Error")
+                            )
+                        )
                     }
                 }
             }
@@ -108,8 +113,8 @@ class CustomCategoryDetailViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String): UiEvent()
-        data class ShowToast(val message: String): UiEvent()
+        data class ShowSnackbar(val message: UiText): UiEvent()
+        data class ShowToast(val message: UiText): UiEvent()
         object Save: UiEvent()
     }
 

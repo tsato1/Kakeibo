@@ -160,7 +160,7 @@
     <string name="inst_keep_pressing_longer">길게 누름합니다</string>
     <string name="quest_determine_category_order">아이콘은 지정된 순서대로 표시됩니다. 진행 하시겠습니까?</string>
     <string name="expense">비용</string>
-    <string name="err_reached_max_count_colon">"자작의 카테고리가 최대치에 도달했습니다 : "</string>
+    <string name="err_raeched_max_count">"자작의 카테고리가 최대치에 도달했습니다 : "</string>
     <string name="err_please_enter_name">카테고리 이름을 입력하십시오.</string>
     <string name="err_nothing_selected_select_one">"아무것도 선택되어 있지 않습니다. 하나 선택하십시오. "</string>
     <string name="err_category_not_created">"오류 : 새로운 카테고리가 생성되지 않았습니다. "</string>

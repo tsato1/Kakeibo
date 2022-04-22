@@ -8,6 +8,7 @@ import com.kakeibo.core.presentation.TextFieldState
 import com.kakeibo.core.util.Resource
 import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.data.preferences.AppPreferences
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
@@ -152,7 +153,9 @@ class ItemDetailViewModel @Inject constructor(
                     }
                     catch (e: ItemEntity.InvalidItemException) {
                         _eventFlow.emit(
-                            UiEvent.ShowSnackbar(e.message ?: "Error: Couldn't save the item.")
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(e.message ?: "Error: Couldn't save the item.")
+                            )
                         )
                     }
                 }
@@ -175,7 +178,9 @@ class ItemDetailViewModel @Inject constructor(
                     }
                     catch (e: ItemEntity.InvalidItemException) {
                         _eventFlow.emit(
-                            UiEvent.ShowSnackbar(e.message ?: "Error: Couldn't save the item.")
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(e.message ?: "Error: Couldn't save the item.")
+                            )
                         )
                     }
                 }
@@ -203,7 +208,11 @@ class ItemDetailViewModel @Inject constructor(
                                 displayedCategoryList = result.data ?: emptyList(),
                                 isLoading = false
                             )
-                            _eventFlow.emit(UiEvent.ShowToast(result.message ?: "Unknown Error"))
+                            _eventFlow.emit(
+                                UiEvent.ShowToast(
+                                    UiText.DynamicString(result.message ?: "Unknown Error")
+                                )
+                            )
                         }
                         is Resource.Loading -> {
                             _displayedCategoryListState.value = displayedCategoryListState.value.copy(
@@ -218,8 +227,8 @@ class ItemDetailViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String): UiEvent()
-        data class ShowToast(val message: String): UiEvent()
+        data class ShowSnackbar(val message: UiText): UiEvent()
+        data class ShowToast(val message: UiText): UiEvent()
         object Save: UiEvent()
     }
 }

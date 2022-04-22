@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -100,10 +101,10 @@ fun CustomCategoryDetailScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is CustomCategoryDetailViewModel.UiEvent.ShowSnackbar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                    scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
                 is CustomCategoryDetailViewModel.UiEvent.ShowToast -> {
-                    Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
                 }
                 is CustomCategoryDetailViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
@@ -439,7 +440,11 @@ fun CustomCategoryDetailScreen(
         AlertDialog(
             modifier = Modifier.fillMaxWidth(),
             title = {
-//                    Icon() //todo load from mipmap
+                Icon(
+                    painter = painterResource(id = R.mipmap.ic_mikan),
+                    contentDescription = "Icon Not Found",
+                    tint= Color.Unspecified
+                )
             },
             onDismissRequest = {
                 openSaveDialog.value = false

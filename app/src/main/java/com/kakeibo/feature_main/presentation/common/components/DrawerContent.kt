@@ -154,7 +154,8 @@ fun DrawerContent(
             Icon(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = R.mipmap.ic_mikan),
-                contentDescription = "About"
+                contentDescription = "About",
+                tint= Color.Unspecified
             )
             Spacer(modifier = Modifier.width(7.dp))
             Text(

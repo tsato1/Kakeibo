@@ -70,7 +70,7 @@ fun DatePickerRow(
             Text(
                 text =  when (type) {
                     is DateType.YMDW -> {
-                        viewModel.localEventDate.value.toLocalDate().toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex])
+                        viewModel.localEventDate.value.toLocalDate().toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex], context)
                     }
                     is DateType.YM -> {
                         viewModel.localEventDate.value.toLocalDate().toYMString(UtilDate.DATE_FORMATS[dateFormatIndex])
@@ -100,107 +100,6 @@ fun DatePickerRow(
         }
     }
 }
-
-
-//@Composable
-//fun DatePickerRow(
-//    modifier: Modifier = Modifier,
-//    context: Context,
-//    type: DateType, // depending on which screen, date text on the button differs
-//    dateFormatIndex: Int, // date format that's stored in shared pref
-//    localDateState: State<LocalDate> = mutableStateOf(UtilDate.getTodaysLocalDate()),
-//    onTextLayout: (LocalDate) -> Unit,
-//    onRefresh: () -> Unit
-//) {
-//    var dateState by remember { mutableStateOf(localDateState) }
-//
-//    val datePickerDialog = DatePickerDialog(
-//        context,
-//        { _: DatePicker, y: Int, m: Int, d: Int ->
-//            dateState = when (type) {
-//                is DateType.YMDW -> { mutableStateOf(LocalDate(y, m + 1, d)) }
-//                is DateType.YM -> { mutableStateOf(LocalDate(y, m + 1, d)) }
-//                is DateType.Y -> { mutableStateOf(LocalDate(y, m + 1, d)) }
-//            }
-//        },
-//        localDateState.value.year,
-//        localDateState.value.monthNumber - 1,
-//        localDateState.value.dayOfMonth
-//    )
-//
-//    Row(
-//        modifier = modifier,
-//        verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.Center
-//    ) {
-//        IconButton(
-//            onClick = {
-//                dateState = when (type) {
-//                    is DateType.YMDW -> {
-//                        mutableStateOf(dateState.value.plus(-1, DateTimeUnit.DAY))
-//                    }
-//                    is DateType.YM -> {
-//                        mutableStateOf(dateState.value.plus(-1, DateTimeUnit.MONTH))
-//                    }
-//                    is DateType.Y -> {
-//                        mutableStateOf(dateState.value.plus(-1, DateTimeUnit.YEAR))
-//                    }
-//                }
-//            }
-//        ) {
-//            Icon(
-//                painter = painterResource(id = R.drawable.ic_baseline_arrow_left_24),
-//                contentDescription = "Previous"
-//            )
-//        }
-//        TextButton(
-//            modifier = Modifier.weight(1f),
-//            onClick = {
-//                datePickerDialog.show()
-//            }
-//        ) {
-//            Text(
-//                text =  when (type) {
-//                    is DateType.YMDW -> {
-//                        dateState.value.getYMDDateText(UtilDate.DATE_FORMATS[dateFormatIndex])
-//                    }
-//                    is DateType.YM -> {
-//                        dateState.value.getYMDateTextFromDBFormat(UtilDate.DATE_FORMATS[dateFormatIndex])
-//                    }
-//                    is DateType.Y -> {
-//                        dateState.value.getYDateText()
-//                    }
-//                },
-//                onTextLayout = {
-//                    onTextLayout(dateState.value)
-//                }
-//            )
-//        }
-//        IconButton(onClick = { onRefresh() }) {
-//            Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
-//        }
-//        IconButton(
-//            onClick = {
-//                dateState = when (type) {
-//                    is DateType.YMDW -> {
-//                        mutableStateOf(dateState.value.plus(1, DateTimeUnit.DAY))
-//                    }
-//                    is DateType.YM -> {
-//                        mutableStateOf(dateState.value.plus(1, DateTimeUnit.MONTH))
-//                    }
-//                    is DateType.Y -> {
-//                        mutableStateOf(dateState.value.plus(1, DateTimeUnit.YEAR))
-//                    }
-//                }
-//            }
-//        ) {
-//            Icon(
-//                painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
-//                contentDescription = "Next"
-//            )
-//        }
-//    }
-//}
 
 sealed class DateType {
     object YMDW: DateType()

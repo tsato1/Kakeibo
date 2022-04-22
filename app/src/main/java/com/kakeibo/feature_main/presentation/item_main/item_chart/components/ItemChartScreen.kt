@@ -456,7 +456,11 @@ fun ItemChartScreen(
                         .padding(4.dp, 14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.mipmap.ic_mikan),
+                        contentDescription = "",
+                        tint= Color.Unspecified
+                    )
                     Text(text = clickedCategoryName.value)
                 }
                 Divider()

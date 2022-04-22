@@ -82,7 +82,7 @@
     <string name="jump_to_website">Jump to website</string>
     <string name="no_item_found">No Item Found</string>
 
-    <string name="error">Something wrong occurred. Please contact support.</string>
+    <string name="error">Something went wrong. Please contact support.</string>
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
     <string name="err_please_choose_from_date">Please choose From Date.</string>
     <string name="err_please_choose_to_date">Please choose To Date.</string>
@@ -178,8 +178,7 @@
     <string name="quest_category_creation_do_you_want_to_proceed">A Category is about to be created. Do you want to proceed?</string>
     <string name="msg_category_created">A Category is created.</string>
     <string name="msg_category_updated">The Category is updated.</string>
-    <string name="err_reached_max_count_colon">You have reached the maximum count: </string>
-    <string name="msg_delete_some_categories">Please delete from \'Custom Categories\'</string>
+    <string name="err_reached_max_count">The number of custom categories has reached the maximum number allowed. Delete some first.</string>
     <string name="err_category_not_created">Something is not right. The Category is not created.</string>
     <string name="err_nothing_selected_select_one">Nothing is selected. Please select one.</string>
     <string name="quest_do_you_want_to_manage_categories">You can manage Categories from now on; However, banner ads will be always shown on the screen. Do you want to proceed?</string>
@@ -192,6 +191,8 @@
     <string name="msg_custom_category_already_in_use">Some Kakeibo items have already been saved using this Category.</string>
     <string name="msg_type_cannot_be_changed">You can change the name and icon, but not the type.</string>
     <string name="msg_delete_kkb_items_first">Please delete all the Kakeibo items that are categorized as this Category.</string>
+    <string name="err_category_type_not_selected">Category Type is not selected. Select one.</string>
+    <string name="err_category_name_cannot_be_empty">err_category_name_cannot_be_empty</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>

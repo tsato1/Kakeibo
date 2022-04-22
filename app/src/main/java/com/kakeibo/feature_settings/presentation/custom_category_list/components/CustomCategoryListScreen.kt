@@ -42,7 +42,7 @@ fun CustomCategoryListScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is CustomCategoryListViewModel.UiEvent.ShowToast -> {
-                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                    scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
             }
         }
@@ -57,7 +57,7 @@ fun CustomCategoryListScreen(
                         code >= UtilCategory.CUSTOM_CATEGORY_CODE_START + UtilCategory.NUM_MAX_CUSTOM_CATEGORY -> {
                             Toast.makeText(
                                 context,
-                                "You have reached the max number of categories you can create", //todo: translate
+                                R.string.err_reached_max_count,
                                 Toast.LENGTH_LONG
                             ).show()
                         }

@@ -52,10 +52,10 @@ fun ItemEditScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemDetailViewModel.UiEvent.ShowSnackbar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                    scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
                 is ItemDetailViewModel.UiEvent.ShowToast -> {
-                    Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
                 }
                 is ItemDetailViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
@@ -78,8 +78,12 @@ fun ItemEditScreen(
                     detectDragGestures(
                         onDragEnd = {
                             when {
-                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.DAY) }
-                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.DAY) }
+                                offsetX > 200 -> {
+                                    viewModel.plus(-1, DateTimeUnit.DAY)
+                                }
+                                offsetX < -200 -> {
+                                    viewModel.plus(1, DateTimeUnit.DAY)
+                                }
                             }
                             offsetX = 0f
                         }
@@ -87,8 +91,12 @@ fun ItemEditScreen(
                         change.consumeAllChanges()
                         offsetX += dragAmount.x
                         when {
-                            offsetX > 400f -> { offsetX = 400f }
-                            offsetX < -400f -> { offsetX = -400f }
+                            offsetX > 400f -> {
+                                offsetX = 400f
+                            }
+                            offsetX < -400f -> {
+                                offsetX = -400f
+                            }
                         }
                     }
                 },

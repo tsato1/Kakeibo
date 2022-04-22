@@ -1,6 +1,8 @@
 package com.kakeibo.util
 
+import android.content.Context
 import android.os.Build
+import com.kakeibo.R
 import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
 import java.text.SimpleDateFormat
@@ -31,11 +33,18 @@ object UtilDate {
         return SimpleDateFormat(format, Locale.getDefault()).format(cal.time)
     }
 
-    fun LocalDate.toYMDWString(format: String): String = run {
-        when (format) {
-            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth} [${this.dayOfWeek}]" }
-            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year} [${this.dayOfWeek}]" }
-            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year} [${this.dayOfWeek}]" }
+    fun LocalDate.toYMDWString(format: String, context: Context): String = run {
+        val dayOfWeek = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val dayOfWeekIdx = this.dayOfWeek.value
+            context.resources.getStringArray(R.array.week_name)[dayOfWeekIdx]
+        } else {
+            this.dayOfWeek
+        }
+
+        return when (format) {
+                DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth} [${dayOfWeek}]" }
+            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year} [${dayOfWeek}]" }
+            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year} [${dayOfWeek}]" }
             DATE_FORMAT_DB -> {
                 val m = if (this.monthNumber < 10) "0${this.monthNumber}" else this.monthNumber
                 val d = if (this.dayOfMonth < 10) "0${this.dayOfMonth}" else this.dayOfMonth
@@ -129,7 +138,7 @@ object UtilDate {
             }
         }
         else {
-            13 //todo
+            13 //todo: decide whether to read one week or two weeks
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_settings.domain.use_cases.CategoryRearrangeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryRearrangeViewModel @Inject constructor(
     private val categoryRearrangeUseCases: CategoryRearrangeUseCases,
-    private val appPreferences: AppPreferences
+    appPreferences: AppPreferences
 ) : ViewModel() {
 
     val numColumns = appPreferences.getNumColumns()
@@ -63,7 +64,9 @@ class CategoryRearrangeViewModel @Inject constructor(
                     catch (e: CategoryDspEntity.InvalidCategoryDspException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                e.message ?: "Error: Couldn't save Category Rearrangement."
+                                UiText.DynamicString(
+                                    e.message ?: "Error: Couldn't save Category Rearrangement."
+                                )
                             )
                         )
                     }
@@ -80,7 +83,9 @@ class CategoryRearrangeViewModel @Inject constructor(
                     catch (e: CategoryDspEntity.InvalidCategoryDspException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                e.message ?: "Error: Couldn't save Category Rearrangement."
+                                UiText.DynamicString(
+                                    e.message ?: "Error: Couldn't save Category Rearrangement."
+                                )
                             )
                         )
                     }
@@ -110,7 +115,11 @@ class CategoryRearrangeViewModel @Inject constructor(
                                 isDisplayedCategoryListLoading = false,
                                 isNonDisplayedCategoryListLoading = false
                             )
-                            _eventFlow.emit(UiEvent.ShowToast(result.message ?: "Unknown Error"))
+                            _eventFlow.emit(
+                                UiEvent.ShowToast(
+                                    UiText.DynamicString(result.message ?: "Unknown Error")
+                                )
+                            )
                         }
                         is Resource.Loading -> {
                             _categoryRearrangeState.value = categoryRearrangeState.value.copy(
@@ -142,7 +151,11 @@ class CategoryRearrangeViewModel @Inject constructor(
                                 isDisplayedCategoryListLoading = false,
                                 isNonDisplayedCategoryListLoading = false
                             )
-                            _eventFlow.emit(UiEvent.ShowToast(result.message ?: "Unknown Error"))
+                            _eventFlow.emit(
+                                UiEvent.ShowToast(
+                                    UiText.DynamicString(result.message ?: "Unknown Error")
+                                )
+                            )
                         }
                         is Resource.Loading -> {
                             _categoryRearrangeState.value = categoryRearrangeState.value.copy(
@@ -158,8 +171,8 @@ class CategoryRearrangeViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String): UiEvent()
-        data class ShowToast(val message: String): UiEvent()
+        data class ShowSnackbar(val message: UiText): UiEvent()
+        data class ShowToast(val message: UiText): UiEvent()
         object SaveAndReorder: UiEvent()
         object SaveWithoutReorder: UiEvent()
     }

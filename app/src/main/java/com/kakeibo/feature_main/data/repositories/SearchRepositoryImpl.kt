@@ -10,7 +10,7 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
     override fun getAllSearches(): Flow<List<SearchModel>> {
-        TODO("Not yet implemented")
+        TODO("Not yet implemented") // implement for paid app
     }
 
     override suspend fun getSearchById(id: Long): SearchModel {

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
+import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
@@ -168,7 +169,11 @@ class ItemSearchViewModel @Inject constructor(
                                 displayedCategoryList = result.data ?: emptyList(),
                                 isLoading = false
                             )
-                            _eventFlow.emit(UiEvent.ShowSnackbar(result.message ?: "Unknown Error"))
+                            _eventFlow.emit(
+                                UiEvent.ShowSnackbar(
+                                    UiText.DynamicString(result.message ?: "Unknown Error")
+                                )
+                            )
                         }
                         is Resource.Loading -> {
                             _displayedCategoryListState.value = displayedCategoryListState.value.copy(
@@ -183,7 +188,7 @@ class ItemSearchViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String): UiEvent()
+        data class ShowSnackbar(val message: UiText): UiEvent()
         data class Search(val searchId: Long): UiEvent()
     }
 }

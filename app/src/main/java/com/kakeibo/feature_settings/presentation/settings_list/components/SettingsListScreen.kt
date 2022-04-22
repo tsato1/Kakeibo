@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -58,10 +59,10 @@ fun SettingsListScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is SettingsListViewModel.UiEvent.ShowSnackBar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(context.getString(event.stringId))
+                    scaffoldState.snackbarHostState.showSnackbar(event.stringId.asString(context))
                 }
                 is SettingsListViewModel.UiEvent.ShowToast -> {
-                    Toast.makeText(context, event.stringId, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.stringId.asString(context), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -237,7 +238,11 @@ fun SettingsListScreen(
                         ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.mipmap.ic_mikan),
+                        contentDescription = "",
+                        tint= Color.Unspecified
+                    )
                     Text(text = stringResource(id = R.string.category_management))
                 }
                 Divider()
@@ -279,7 +284,11 @@ fun SettingsListScreen(
                                     ),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                                Icon(
+                                    painter = painterResource(id = R.mipmap.ic_mikan),
+                                    contentDescription = "",
+                                    tint= Color.Unspecified
+                                )
                                 Text(text = stringResource(id = R.string.warning))
                             }
                             Divider()
@@ -330,7 +339,11 @@ fun SettingsListScreen(
                         ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.mipmap.ic_mikan),
+                        contentDescription = "",
+                        tint= Color.Unspecified
+                    )
                     Text(text = stringResource(id = R.string.delete_all_items))
                 }
                 Divider()
@@ -372,7 +385,11 @@ fun SettingsListScreen(
                                     ),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                                Icon(
+                                    painter = painterResource(id = R.mipmap.ic_mikan),
+                                    contentDescription = "",
+                                    tint= Color.Unspecified
+                                )
                                 Text(text = stringResource(id = R.string.delete_all_items))
                             }
                             Divider()

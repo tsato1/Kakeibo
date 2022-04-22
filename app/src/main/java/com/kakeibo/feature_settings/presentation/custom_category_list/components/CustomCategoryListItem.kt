@@ -36,9 +36,10 @@ fun CustomCategoryListItem(
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.background),
             title = {
-                Text(text = stringResource(id = R.string.category_colon) + " " + categoryModel.name)
-                    // todo: 1.string resource for category name:
-                    //  2. other info like saved date, image
+                Column {
+                    Text(text = stringResource(id = R.string.category_colon) + " " + categoryModel.name)
+                    Text(text = stringResource(id = R.string.updated_on_colon) + " " + categoryModel.savedDate)
+                }
             },
             onDismissRequest = { openDetailDialog.value = false },
             dismissButton = {

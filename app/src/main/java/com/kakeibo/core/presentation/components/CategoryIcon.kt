@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -54,7 +55,8 @@ fun CategoryIcon(
             Icon(
                 modifier = modifier,
                 painter = painterResource(id = R.mipmap.ic_mikan),
-                contentDescription = "Icon Not Found"
+                contentDescription = "Icon Not Found",
+                tint= Color.Unspecified
             )
         }
     }

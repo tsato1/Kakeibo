@@ -162,7 +162,7 @@
     <string name="inst_keep_pressing_longer">"Mendorong lebih lama "</string>
     <string name="quest_determine_category_order">Ikon akan ditampilkan dalam urutan yang ditentukan. Apakah Anda ingin melanjutkan?</string>
     <string name="expense">Biaya</string>
-    <string name="err_reached_max_count_colon">"Anda telah mencapai jumlah maksimum: "</string>
+    <string name="err_raeched_max_count">"Anda telah mencapai jumlah maksimum: "</string>
     <string name="err_please_enter_name">Nama kategori tidak boleh kosong.</string>
     <string name="err_nothing_selected_select_one">Tidak ada yang dipilih. Tolong pilih satu.</string>
     <string name="err_category_not_created">Ada yang tidak beres. Kategori baru tidak dibuat.</string>

@@ -34,10 +34,6 @@ class InsertItemUseCase(
             )
         }
 
-//        if (!UtilText.isAmountValid(text2)) {
-//            throw ItemEntity.InvalidItemException("R.string.err_amount_invalid")
-//        }
-
         repository.insertItem(displayedItemModel)
     }
 

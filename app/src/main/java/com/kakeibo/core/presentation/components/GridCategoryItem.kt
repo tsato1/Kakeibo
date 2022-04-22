@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -67,7 +68,8 @@ fun GridCategoryItem(
                 else -> {
                     Icon(
                         painter = painterResource(id = R.mipmap.ic_mikan),
-                        contentDescription = "Icon Not Found"
+                        contentDescription = "Icon Not Found",
+                        tint= Color.Unspecified
                     )
                 }
             }

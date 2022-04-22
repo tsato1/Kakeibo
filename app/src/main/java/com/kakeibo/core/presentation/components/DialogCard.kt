@@ -9,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.layout.positionInWindow
@@ -57,7 +58,11 @@ fun DialogCard(
                     ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(painter = painterResource(id = R.mipmap.ic_mikan), contentDescription = "")
+                Icon(
+                    painter = painterResource(id = R.mipmap.ic_mikan),
+                    contentDescription = "",
+                    tint= Color.Unspecified
+                )
                 Text(
                     text = title,
                     style = MaterialTheme.typography.button

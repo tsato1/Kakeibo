@@ -64,7 +64,9 @@ fun CategoryRearrangeScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is CategoryRearrangeViewModel.UiEvent.ShowSnackbar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        event.message.asString(context)
+                    )
                 }
                 is CategoryRearrangeViewModel.UiEvent.SaveAndReorder -> { // Save and Reorder
                     Toast.makeText(context, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show()
