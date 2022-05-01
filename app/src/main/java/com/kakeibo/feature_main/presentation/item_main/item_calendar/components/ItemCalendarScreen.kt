@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.IntOffset
@@ -174,6 +175,8 @@ fun CalendarRows(
     navController: NavController,
     viewModel: ItemMainViewModel
 ) {
+    val context = LocalContext.current
+
     val showDateDetailDialog = remember { mutableStateOf(false) }
     val clickedDateIndex = rememberSaveable { mutableStateOf(0) }
 
@@ -181,6 +184,34 @@ fun CalendarRows(
     var iDate = viewModel.calendarFromDate.value // dates that gets put on calendar
 
     Column {
+        /* Day of Week Header */
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            for (i in 1..7) {
+                Column(
+                    modifier = Modifier
+                        .height(28.dp)
+                        .padding(2.dp)
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = stringArrayResource(id = R.array.week_name)[i - 1],
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = if (i == 1) {
+                                Color.Red
+                            } else if (i == 7) {
+                                Color.Blue
+                            } else {
+                                Color.Black
+                            }
+                        )
+                    )
+                }
+            }
+        }
+        Divider()
         for (i in 1..6) {
             Row(
                 modifier = Modifier

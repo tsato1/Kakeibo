@@ -36,13 +36,13 @@ object UtilDate {
     fun LocalDate.toYMDWString(format: String, context: Context): String = run {
         val dayOfWeek = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dayOfWeekIdx = this.dayOfWeek.value
-            context.resources.getStringArray(R.array.week_name)[dayOfWeekIdx]
+            context.resources.getStringArray(R.array.week_name)[dayOfWeekIdx % 7]
         } else {
             this.dayOfWeek
         }
 
         return when (format) {
-                DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth} [${dayOfWeek}]" }
+            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth} [${dayOfWeek}]" }
             DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year} [${dayOfWeek}]" }
             DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year} [${dayOfWeek}]" }
             DATE_FORMAT_DB -> {
