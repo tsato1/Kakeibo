@@ -200,27 +200,11 @@ fun ItemChartScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = (itemChartState.value.incomeTotal.toDouble() - itemChartState.value.expenseTotal.toDouble()).toString()
+                            text = (itemChartState.value.incomeTotal.toBigDecimal() -
+                                    itemChartState.value.expenseTotal.toBigDecimal()).toString()
                         )
                     }
                     Divider()
-                    // Bar chart Balance ===================================================================
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(6.dp)
-//                            .border(
-//                                width = 1.dp,
-//                                color = Color.Black,
-//                                shape = RoundedCornerShape(4.dp)
-//                            ),
-//                        horizontalArrangement = Arrangement.Center
-//                    ) {
-//                        Text(
-//                            modifier = Modifier.padding(vertical = 4.dp),
-//                            text = stringResource(id = R.string.balance_colon)
-//                        )
-//                    }
                     // Pie chart Income ====================================================================
                     if (itemChartState.value.incomeList.isNotEmpty()) {
                         Row(

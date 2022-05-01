@@ -175,8 +175,6 @@ fun CalendarRows(
     navController: NavController,
     viewModel: ItemMainViewModel
 ) {
-    val context = LocalContext.current
-
     val showDateDetailDialog = remember { mutableStateOf(false) }
     val clickedDateIndex = rememberSaveable { mutableStateOf(0) }
 
