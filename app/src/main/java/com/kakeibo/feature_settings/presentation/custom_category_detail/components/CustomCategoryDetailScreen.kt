@@ -3,7 +3,6 @@ package com.kakeibo.feature_settings.presentation.custom_category_detail.compone
 import android.util.Xml
 import android.widget.Toast
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -42,6 +41,7 @@ import com.kakeibo.feature_main.presentation.common.components.TransparentHintTe
 import com.kakeibo.feature_settings.presentation.custom_category_detail.CustomCategoryDetailEvent
 import com.kakeibo.ui.theme.LightCream
 import com.kakeibo.ui.theme.ThickCream
+import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDrawing
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,6 +58,8 @@ fun CustomCategoryDetailScreen(
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+
+    val initialCategoryType = remember { mutableStateOf(UtilCategory.CATEGORY_COLOR_EXPENSE) }
 
     val categoryIdState = viewModel.categoryId.value
     val categoryNameState = viewModel.categoryName.value
@@ -79,27 +81,23 @@ fun CustomCategoryDetailScreen(
     val onRedoClick = remember { mutableStateOf(false) }
     val openSaveDialog = remember { mutableStateOf(false) }
 
-    val imageBackgroundAnimatable = remember {
-        Animatable(
-            CategoryModel.types[categoryTypeState.value].second
-        )
-    }
+    val imageBorderAnimatable = remember { Animatable(initialValue = Color.Black) }
 
     val cardBackgroundColor = LightCream
     val strokeColor = ThickCream.toArgb()
 
     LaunchedEffect(key1 = true) {
-        scope.launch { /* reflect initial change to image */
-            imageBackgroundAnimatable.animateTo(
-                targetValue = CategoryModel.types[categoryTypeState.value].second,
-                animationSpec = tween(
-                    durationMillis = 500
-                )
-            )
-        }
-
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
+                is CustomCategoryDetailViewModel.UiEvent.Init -> {
+                    imageBorderAnimatable.animateTo(
+                        targetValue = CategoryModel.types[categoryTypeState.value].second,
+                        animationSpec = tween(
+                            durationMillis = 500
+                        )
+                    )
+                    initialCategoryType.value = categoryTypeState.value
+                }
                 is CustomCategoryDetailViewModel.UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
@@ -127,6 +125,7 @@ fun CustomCategoryDetailScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
+            userScrollEnabled = false
         ) { page ->
             when (page) {
                 0 -> Box(
@@ -137,7 +136,7 @@ fun CustomCategoryDetailScreen(
                         .background(cardBackgroundColor)
                         .border(
                             width = 2.dp,
-                            color = imageBackgroundAnimatable.value,
+                            color = imageBorderAnimatable.value,
                             shape = RoundedCornerShape(15.dp)
                         )
                 ) {
@@ -164,6 +163,7 @@ fun CustomCategoryDetailScreen(
                             val colorInt = type.first // UtilCategory.EXPENSE or INCOME
                             val colorColor = type.second
                             val stringId = type.third
+
                             Box(
                                 modifier = Modifier
                                     .height(70.dp)
@@ -188,7 +188,7 @@ fun CustomCategoryDetailScreen(
                                         )
                                     }
                                     .clickable {
-                                        if (categoryIdState != -1L) {
+                                        if (categoryIdState != -1L && initialCategoryType.value != colorInt) {
                                             Toast.makeText(
                                                 context,
                                                 R.string.msg_type_cannot_be_changed,
@@ -197,12 +197,15 @@ fun CustomCategoryDetailScreen(
                                         }
                                         else {
                                             scope.launch {
-                                                imageBackgroundAnimatable.animateTo(
+                                                imageBorderAnimatable.animateTo(
                                                     targetValue = colorColor,
                                                     animationSpec = tween(
                                                         durationMillis = 500
                                                     )
                                                 )
+                                            }
+                                            scope.launch {
+                                                pagerState.animateScrollToPage(1, 0f)
                                             }
                                             viewModel.onEvent(
                                                 CustomCategoryDetailEvent.TypeChanged(
@@ -228,7 +231,7 @@ fun CustomCategoryDetailScreen(
                         .background(cardBackgroundColor)
                         .border(
                             width = 2.dp,
-                            color = imageBackgroundAnimatable.value,
+                            color = imageBorderAnimatable.value,
                             shape = RoundedCornerShape(15.dp)
                         )
                 ) {
@@ -242,7 +245,7 @@ fun CustomCategoryDetailScreen(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(0.dp, 60.dp, 0.dp, 0.dp),
-                        text = "Enter Category Name"
+                        text = stringResource(id = R.string.enter_category_name)
                     )
                     TransparentHintTextField(
                         modifier = Modifier
@@ -262,8 +265,41 @@ fun CustomCategoryDetailScreen(
                         singleLine = true,
                         textStyle = MaterialTheme.typography.body1
                     )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(0, 0f)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.previous))
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(2, 0f)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.next))
+                        }
+                    }
                 }
-                2 -> Column(
+                2 -> Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(8.dp)
@@ -271,100 +307,129 @@ fun CustomCategoryDetailScreen(
                         .background(cardBackgroundColor)
                         .border(
                             width = 2.dp,
-                            color = imageBackgroundAnimatable.value,
+                            color = imageBorderAnimatable.value,
                             shape = RoundedCornerShape(15.dp)
-                        ),
-                    verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        )
                 ) {
                     Text(
                         text = "Step 3",
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 30.dp, 0.dp, 0.dp),
                     )
                     Text(
                         text = stringResource(id = R.string.draw_icon),
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                    AndroidView(
                         modifier = Modifier
-                            .width(dimensionResource(id = R.dimen.draw_view_canvas_sides))
-                            .height(dimensionResource(id = R.dimen.draw_view_canvas_sides))
-                            .clip(CircleShape),
-                        factory = {
-                            val parser: XmlPullParser = context.resources.getXml(R.xml.draw_view)
-                            try {
-                                parser.next()
-                                parser.nextTag()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 60.dp, 0.dp, 0.dp),
+                    )
+                    Column(
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        AndroidView(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .width(dimensionResource(id = R.dimen.draw_view_canvas_sides))
+                                .height(dimensionResource(id = R.dimen.draw_view_canvas_sides))
+                                .clip(CircleShape),
+                            factory = {
+                                val parser: XmlPullParser =
+                                    context.resources.getXml(R.xml.draw_view)
+                                try {
+                                    parser.next()
+                                    parser.nextTag()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                                val attrs = Xml.asAttributeSet(parser)
+                                DrawView(it, attrs)
                             }
-                            val attrs = Xml.asAttributeSet(parser)
-                            DrawView(it, attrs)
-                        }
-                    ) { drawView ->
-                        if (categoryIdState != -1L) {
-                            drawView.background = UtilDrawing.bitmapToDrawalbe(
-                                context,
-                                UtilDrawing.replaceColorExcept(
-                                    categoryImageState.value,
-                                    strokeColor,
-                                    imageBackgroundAnimatable.value.toArgb()
+                        ) { drawView ->
+                            if (categoryIdState != -1L) {
+                                drawView.background = UtilDrawing.bitmapToDrawalbe(
+                                    context,
+                                    UtilDrawing.replaceColorExcept(
+                                        categoryImageState.value,
+                                        strokeColor,
+                                        imageBorderAnimatable.value.toArgb()
+                                    )
                                 )
-                            )
-                        }
-                        else {
-                            drawView.setBackgroundColor(imageBackgroundAnimatable.value.toArgb())
-                        }
+                            } else {
+                                drawView.setBackgroundColor(imageBorderAnimatable.value.toArgb())
+                            }
 
-                        drawView.setColor(strokeColor)
-                        drawView.setStrokeWidth(strokeWidth.value)
+                            drawView.setColor(strokeColor)
+                            drawView.setStrokeWidth(strokeWidth.value)
 
-                        if (onClearClick.value) {
-                            drawView.clearCanvas()
-                            onClearClick.value = false
+                            if (onClearClick.value) {
+                                drawView.clearCanvas()
+                                onClearClick.value = false
+                            }
+                            if (onUndoClick.value) {
+                                drawView.undo()
+                                onUndoClick.value = false
+                            }
+                            if (onRedoClick.value) {
+                                drawView.redo()
+                                onRedoClick.value = false
+                            }
+                            if (openSaveDialog.value) {
+                                bitmapToSave.value = drawView.getBitmap()
+                            }
                         }
-                        if (onUndoClick.value) {
-                            drawView.undo()
-                            onUndoClick.value = false
-                        }
-                        if (onRedoClick.value) {
-                            drawView.redo()
-                            onRedoClick.value = false
-                        }
-                        if (openSaveDialog.value) {
-                            bitmapToSave.value = drawView.getBitmap()
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .background(MaterialTheme.colors.onBackground),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            IconButton(
+                                onClick = { onClearClick.value = true }
+                            ) {
+                                Icon(imageVector = Icons.Default.Circle, contentDescription = "")
+                            }
+                            IconButton(
+                                onClick = { onUndoClick.value = true }
+                            ) {
+                                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
+                            }
+                            IconButton(
+                                onClick = { onRedoClick.value = true }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowForward,
+                                    contentDescription = ""
+                                )
+                            }
+                            IconButton(
+                                onClick = { openStrokeWidthDialog.value = true }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.SwapVerticalCircle,
+                                    contentDescription = ""
+                                )
+                            }
                         }
                     }
                     Row(
-                        modifier = Modifier.background(MaterialTheme.colors.onBackground),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
                     ) {
-                        IconButton(
-                            onClick = { onClearClick.value = true }
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(1, 0f)
+                                }
+                            }
                         ) {
-                            Icon(imageVector = Icons.Default.Circle, contentDescription = "")
+                            Text(text = stringResource(R.string.previous))
                         }
-                        IconButton(
-                            onClick = { onUndoClick.value = true }
-                        ) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
-                        }
-                        IconButton(
-                            onClick = { onRedoClick.value = true }
-                        ) {
-                            Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "")
-                        }
-                        IconButton(
-                            onClick = { openStrokeWidthDialog.value = true }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.SwapVerticalCircle,
-                                contentDescription = ""
-                            )
-                        }
-                    }
-                    AnimatedVisibility(visible = pagerState.currentPage == 2) {
+                        Spacer(modifier = Modifier.weight(1f))
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()

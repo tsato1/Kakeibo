@@ -2,14 +2,13 @@ package com.kakeibo.feature_settings.presentation.category_rearrange.components
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -36,6 +35,7 @@ import com.kakeibo.feature_settings.presentation.category_rearrange.CategoryRear
 import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
 import com.kakeibo.ui.theme.LightCream
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
@@ -46,8 +46,9 @@ fun CategoryRearrangeScreen(
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
 
-    val gridListState = rememberLazyListState()
+    val gridListState = rememberLazyGridState()
     val openSaveDialog = remember { mutableStateOf(false) }
 
     val categoryRearrangeState = viewModel.categoryRearrangeState.value
@@ -94,227 +95,316 @@ fun CategoryRearrangeScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
+            userScrollEnabled = false
         ) { page ->
             when (page) {
-                0 -> {
-                    /**************************************************************************/
-                    Column(
+                0 -> Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(LightCream)
+                        .border(
+                            width = 2.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                ) {
+                    Text(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(LightCream)
-                            .border(
-                                width = 2.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(15.dp)
-                            ),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(5.dp),
-                            text = stringResource(id = R.string.hide_categories)
-                        )
-                        LazyVerticalGrid(
-                            cells = GridCells.Fixed(
-                                count = viewModel.numColumns
-                            ),
-                            contentPadding = PaddingValues(
-                                start = 6.dp,
-                                top = 8.dp,
-                                end = 6.dp,
-                                bottom = 8.dp
-                            ),
-                            content = {
-                                items(categoryRearrangeState.displayedCategoryList.size) { index ->
-                                    val category =
-                                        categoryRearrangeState.displayedCategoryList[index]
-
-                                    Box(
-                                        modifier = Modifier.fillMaxSize(),
-                                    ) {
-                                        GridCategoryItem(
-                                            modifier = Modifier
-                                                .padding(4.dp)
-                                                .fillMaxWidth(),
-                                            categoryModel = category.toCategoryEntity()
-                                                .toDisplayedCategoryModel(),
-                                            onItemClick = {
-                                                showRemoveIconListState[index] =
-                                                    !showRemoveIconListState[index]
-
-                                                if (showRemoveIconListState[index]) {
-                                                    viewModel.onEvent(
-                                                        CategoryRearrangeEvent.Remove(
-                                                            category
-                                                        )
-                                                    )
-                                                } else {
-                                                    viewModel.onEvent(
-                                                        CategoryRearrangeEvent.Add(
-                                                            category
-                                                        )
-                                                    )
-                                                }
-                                            },
-                                            onItemLongClick = { }
-                                        )
-
-                                        if (showRemoveIconListState[index]) {
-                                            Icon(
-                                                imageVector = Icons.Default.Close,
-                                                tint = Color.Black,
-                                                contentDescription = ""
-                                            )
-                                        }
-                                    }
-                                }
-                            },
-                            state = gridListState
-                        )
-                    }
-                }
-                1 -> {
-                    /**************************************************************************/
-                    Column(
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 30.dp, 0.dp, 0.dp),
+                        text = "Step 1"
+                    )
+                    Text(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(LightCream)
-                            .border(
-                                width = 2.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(15.dp)
-                            ),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(5.dp),
-                            text = stringResource(id = R.string.display_categories)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.remaining_spots_colon)
-                        )
-                        LazyVerticalGrid(
-                            cells = GridCells.Fixed(
-                                count = viewModel.numColumns
-                            ),
-                            contentPadding = PaddingValues(
-                                start = 6.dp,
-                                top = 8.dp,
-                                end = 6.dp,
-                                bottom = 8.dp
-                            ),
-                            content = {
-                                items(categoryRearrangeState.nonDisplayedCategoryList.size) { index ->
-                                    val category =
-                                        categoryRearrangeState.nonDisplayedCategoryList[index]
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 60.dp, 0.dp, 0.dp),
+                        text = stringResource(id = R.string.hide_categories)
+                    )
+                    LazyVerticalGrid(
+                        modifier = Modifier.align(Alignment.Center),
+                        columns = GridCells.Fixed(
+                            count = viewModel.numColumns
+                        ),
+                        contentPadding = PaddingValues(
+                            start = 6.dp,
+                            top = 8.dp,
+                            end = 6.dp,
+                            bottom = 8.dp
+                        ),
+                        content = {
+                            items(categoryRearrangeState.displayedCategoryList.size) { index ->
+                                val category =
+                                    categoryRearrangeState.displayedCategoryList[index]
 
-                                    Box(
-                                        modifier = Modifier.fillMaxSize()
-                                    ) {
-                                        GridCategoryItem(
-                                            modifier = Modifier
-                                                .padding(4.dp)
-                                                .fillMaxWidth(),
-                                            categoryModel = category.toCategoryEntity()
-                                                .toDisplayedCategoryModel(),
-                                            onItemClick = {
-                                                showAddIconListState[index] =
-                                                    !showAddIconListState[index]
-
-                                                if (showAddIconListState[index]) {
-                                                    viewModel.onEvent(
-                                                        CategoryRearrangeEvent.Add(
-                                                            category
-                                                        )
-                                                    )
-                                                } else {
-                                                    viewModel.onEvent(
-                                                        CategoryRearrangeEvent.Remove(
-                                                            category
-                                                        )
-                                                    )
-                                                }
-                                            },
-                                            onItemLongClick = { }
-                                        )
-
-                                        if (showAddIconListState[index]) {
-                                            Icon(
-                                                imageVector = Icons.Default.Add,
-                                                tint = Color.Black,
-                                                contentDescription = ""
-                                            )
-                                        }
-                                    }
-                                }
-                            },
-                            state = gridListState
-                        )
-                    }
-                }
-                2 -> {
-                    /**************************************************************************/
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(LightCream)
-                            .border(
-                                width = 2.dp,
-                                color = Color.Black,
-                                shape = RoundedCornerShape(15.dp)
-                            ),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(5.dp),
-                            text = "Here are the Categories to be displayed on INPUT screen"
-                        )
-                        LazyVerticalGrid(
-                            cells = GridCells.Fixed(
-                                count = viewModel.numColumns
-                            ),
-                            contentPadding = PaddingValues(
-                                start = 6.dp,
-                                top = 8.dp,
-                                end = 6.dp,
-                                bottom = 8.dp
-                            ),
-                            content = {
-                                items(finalCategoryList.size) { index ->
-                                    val category = finalCategoryList[index]
-
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                ) {
                                     GridCategoryItem(
                                         modifier = Modifier
                                             .padding(4.dp)
                                             .fillMaxWidth(),
                                         categoryModel = category.toCategoryEntity()
                                             .toDisplayedCategoryModel(),
-                                        onItemClick = { },
+                                        onItemClick = {
+                                            showRemoveIconListState[index] =
+                                                !showRemoveIconListState[index]
+
+                                            if (showRemoveIconListState[index]) {
+                                                viewModel.onEvent(
+                                                    CategoryRearrangeEvent.Remove(
+                                                        category
+                                                    )
+                                                )
+                                            } else {
+                                                viewModel.onEvent(
+                                                    CategoryRearrangeEvent.Add(
+                                                        category
+                                                    )
+                                                )
+                                            }
+                                        },
                                         onItemLongClick = { }
                                     )
+
+                                    if (showRemoveIconListState[index]) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            tint = Color.Black,
+                                            contentDescription = ""
+                                        )
+                                    }
                                 }
-                            },
-                            state = gridListState
-                        )
-                        AnimatedVisibility(visible = pagerState.currentPage == 2) {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(40.dp)
-                                    .padding(20.dp, 0.dp)
-                                    .clip(RoundedCornerShape(15.dp)),
-                                onClick = { openSaveDialog.value = true }
-                            ) {
-                                Text(text = stringResource(R.string.next))
                             }
+                        },
+                        state = gridListState
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(1, 0f)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.next))
                         }
                     }
+                }
+                1 -> Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(LightCream)
+                        .border(
+                            width = 2.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 30.dp, 0.dp, 0.dp),
+                        text = "Step 2"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 60.dp, 0.dp, 0.dp),
+                        text = stringResource(id = R.string.display_categories)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 85.dp, 0.dp, 0.dp),
+                        text = stringResource(id = R.string.remaining_spots_colon)
+                    )
+                    LazyVerticalGrid(
+                        modifier = Modifier.align(Alignment.Center),
+                        columns = GridCells.Fixed(
+                            count = viewModel.numColumns
+                        ),
+                        contentPadding = PaddingValues(
+                            start = 6.dp,
+                            top = 8.dp,
+                            end = 6.dp,
+                            bottom = 8.dp
+                        ),
+                        content = {
+                            items(categoryRearrangeState.nonDisplayedCategoryList.size) { index ->
+                                val category =
+                                    categoryRearrangeState.nonDisplayedCategoryList[index]
+
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    GridCategoryItem(
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .fillMaxWidth(),
+                                        categoryModel = category.toCategoryEntity()
+                                            .toDisplayedCategoryModel(),
+                                        onItemClick = {
+                                            showAddIconListState[index] =
+                                                !showAddIconListState[index]
+
+                                            if (showAddIconListState[index]) {
+                                                viewModel.onEvent(
+                                                    CategoryRearrangeEvent.Add(
+                                                        category
+                                                    )
+                                                )
+                                            } else {
+                                                viewModel.onEvent(
+                                                    CategoryRearrangeEvent.Remove(
+                                                        category
+                                                    )
+                                                )
+                                            }
+                                        },
+                                        onItemLongClick = { }
+                                    )
+
+                                    if (showAddIconListState[index]) {
+                                        Icon(
+                                            imageVector = Icons.Default.Add,
+                                            tint = Color.Black,
+                                            contentDescription = ""
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        state = gridListState
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(0, 0f)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.previous))
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(2, 0f)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.next))
+                        }
+                    }
+                }
+                2 -> Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(LightCream)
+                        .border(
+                            width = 2.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 30.dp, 0.dp, 0.dp),
+                        text = "Step 3"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 60.dp, 0.dp, 0.dp),
+                        text = stringResource(id = R.string.here_are_the_categories_on_input_screen)
+                    )
+                    LazyVerticalGrid(
+                        modifier = Modifier.align(Alignment.Center),
+                        columns = GridCells.Fixed(
+                            count = viewModel.numColumns
+                        ),
+                        contentPadding = PaddingValues(
+                            start = 6.dp,
+                            top = 8.dp,
+                            end = 6.dp,
+                            bottom = 8.dp
+                        ),
+                        content = {
+                            items(finalCategoryList.size) { index ->
+                                val category = finalCategoryList[index]
+
+                                GridCategoryItem(
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .fillMaxWidth(),
+                                    categoryModel = category.toCategoryEntity()
+                                        .toDisplayedCategoryModel(),
+                                    onItemClick = { },
+                                    onItemLongClick = { }
+                                )
+                            }
+                        },
+                        state = gridListState
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(1, 0f)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.previous))
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(40.dp)
+                                .padding(20.dp, 0.dp)
+                                .clip(RoundedCornerShape(15.dp)),
+                            onClick = { openSaveDialog.value = true }
+                        ) {
+                            Text(text = stringResource(R.string.save))
+                        }
+                    }//todo crash : wait for google fixes
                 }
             }
         }

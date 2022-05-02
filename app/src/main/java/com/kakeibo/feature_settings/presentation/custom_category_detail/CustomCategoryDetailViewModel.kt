@@ -60,6 +60,7 @@ class CustomCategoryDetailViewModel @Inject constructor(
                             categoryModel?.image ?: ByteArray(0)
                         )
                     }
+                    _eventFlow.emit(UiEvent.Init)
                 }
             }
         }
@@ -113,6 +114,7 @@ class CustomCategoryDetailViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
+        object Init: UiEvent()
         data class ShowSnackbar(val message: UiText): UiEvent()
         data class ShowToast(val message: UiText): UiEvent()
         object Save: UiEvent()

@@ -113,7 +113,7 @@
     <string name="custom_categories">自作カテゴリー</string>
     <string name="err_category_not_created">エラー：カテゴリーは作成されませんでした．</string>
     <string name="err_nothing_selected_select_one">何も選択されていません．一つ選択してください．</string>
-    <string name="err_please_enter_name">カテゴリー名を入力してください．</string>
+    <string name="err_category_name_cannot_be_empty">カテゴリー名を入力してください．</string>
     <string name="err_raeched_max_count">自作カテゴリー数が上限に達しています：</string>
     <string name="hint_name_max_8_characters">名前：最大８字</string>
     <string name="hint_memo_max_20_characters">メモ：最大２０字</string>

@@ -163,7 +163,7 @@
     <string name="quest_determine_category_order">Иконки будут отображаться в указанном порядке. Вы хотите продолжить</string>
     <string name="expense">расходы</string>
     <string name="err_raeched_max_count">"Вы достигли максимального количества: "</string>
-    <string name="err_please_enter_name">Название категории не может быть пустым.</string>
+    <string name="err_category_name_cannot_be_empty">Название категории не может быть пустым.</string>
     <string name="err_nothing_selected_select_one">Ничего не выбрано. Пожалуйста, выберите один.</string>
     <string name="err_category_not_created">Что-то неправильно. Новая категория не создана.</string>
     <string name="category_management">Управление категориями</string>

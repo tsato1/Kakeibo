@@ -96,7 +96,7 @@
     <string name="err_max_amount_cannot_be_0">Max Amount cannot be 0.</string>
     <string name="err_memo_empty">Search word in Memo is empty.</string>
     <string name="err_from_date_older">From Date has to be younger than To Date.</string>
-    <string name="err_please_enter_name">The Category name cannot be empty.</string>
+    <string name="err_category_name_cannot_be_empty">Category name cannot be empty.</string>
 
     <string name="hint_amount_spent_or_earned">Amount spent or earned</string>
     <string name="hint_memo_max_20_characters">Memo: Max 20 characters</string>
@@ -164,6 +164,7 @@
     <string name="num_categories_per_row">Number of Categories per row</string>
     <string name="hide_categories">Select Categories to hide</string>
     <string name="display_categories">Select Categories to display</string>
+    <string name="here_are_the_categories_on_input_screen">Here are the Categories to be displayed on INPUT screen</string>
     <string name="the_app_version">The app version</string>
     <string name="inst_long_tap_to_move_icons">Long tap to move icons.</string>
     <string name="inst_keep_pressing_longer">Push longer</string>
@@ -186,13 +187,12 @@
     <string name="msg_access_to_category_management">Access to Category management is granted.</string>
     <string name="choose_category_color">Select the type of Category</string>
     <string name="max_number_of_categories_colon">Max number of categories: </string>
-    <string name="category_name_add_lang">Please write the category name. Tap the add button for different languages.</string>
+    <string name="enter_category_name">Fill in the name of your category.</string>
     <string name="draw_icon">Please draw and design icon</string>
     <string name="msg_custom_category_already_in_use">Some Kakeibo items have already been saved using this Category.</string>
     <string name="msg_type_cannot_be_changed">You can change the name and icon, but not the type.</string>
     <string name="msg_delete_kkb_items_first">Please delete all the Kakeibo items that are categorized as this Category.</string>
     <string name="err_category_type_not_selected">Category Type is not selected. Select one.</string>
-    <string name="err_category_name_cannot_be_empty">err_category_name_cannot_be_empty</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>

@@ -108,7 +108,7 @@
     <string name="quest_determine_category_order">आइकन निर्दिष्ट क्रम में प्रदर्शित किए जाएंगे। क्या आप आगे बढ़ना चाहते हैं?</string>
     <string name="expense">व्यय</string>
     <string name="err_raeched_max_count">"आप अधिकतम संख्या पर पहुंच गए हैं: "</string>
-    <string name="err_please_enter_name">श्रेणी का नाम रिक्त नहीं हो सकता।</string>
+    <string name="err_category_name_cannot_be_empty">श्रेणी का नाम रिक्त नहीं हो सकता।</string>
     <string name="err_nothing_selected_select_one">कुछ भी नहीं चुना गया है। कृपया एक का चयन करें।</string>
     <string name="err_category_not_created">कुछ सही नहीं है। नई श्रेणी नहीं बनाई गई है।</string>
     <string name="category_management">श्रेणी प्रबंधन</string>

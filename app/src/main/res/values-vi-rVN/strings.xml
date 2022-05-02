@@ -62,7 +62,7 @@
     <string name="err_please_enter_amount">Vui lòng nhập Số tiền.</string>
     <string name="err_please_enter_max_amount">Vui lòng nhập số tiền tối đa.</string>
     <string name="err_please_enter_min_amount">Vui lòng nhập số tiền tối thiểu.</string>
-    <string name="err_please_enter_name">Tên danh mục không thể để trống.</string>
+    <string name="err_category_name_cannot_be_empty">Tên danh mục không thể để trống.</string>
     <string name="err_please_select_category">Hãy chọn một danh mục.</string>
     <string name="err_raeched_max_count">"Bạn đã đạt đến số lượng tối đa: "</string>
     <string name="event_date_colon">Ngày sự kiện:</string>

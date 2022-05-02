@@ -163,7 +163,7 @@
     <string name="quest_determine_category_order">Ikony będą wyświetlane w określonej kolejności. Czy chcesz kontynuować?</string>
     <string name="expense">Koszt</string>
     <string name="err_raeched_max_count">"Osiągnąłeś maksymalną liczbę: "</string>
-    <string name="err_please_enter_name">Nazwa kategorii nie może być pusta.</string>
+    <string name="err_category_name_cannot_be_empty">Nazwa kategorii nie może być pusta.</string>
     <string name="err_nothing_selected_select_one">Nic nie jest wybrane. Proszę wybrać jeden.</string>
     <string name="err_category_not_created">Coś jest nie tak. Nowa kategoria nie została utworzona.</string>
     <string name="category_management">Zarządzanie Kategoriami</string>

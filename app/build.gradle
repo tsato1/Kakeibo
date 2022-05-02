@@ -84,9 +84,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
 
     // Accompanist
-    implementation "com.google.accompanist:accompanist-pager:0.21.4-beta"
-    implementation "com.google.accompanist:accompanist-pager-indicators:0.21.4-beta"
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.21.4-beta"
+    implementation "com.google.accompanist:accompanist-pager:0.24.6-alpha"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.24.6-alpha"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.24.6-alpha"
 
     // Material Design
     implementation 'com.google.android.material:material:1.7.0-alpha01'

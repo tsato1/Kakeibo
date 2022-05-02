@@ -163,7 +163,7 @@
     <string name="quest_determine_category_order">Os ícones serão exibidos na ordem especificada. Você quer prosseguir?</string>
     <string name="expense">Despesa</string>
     <string name="err_raeched_max_count">"Você atingiu a contagem máxima: "</string>
-    <string name="err_please_enter_name">O nome da categoria não pode estar vazio.</string>
+    <string name="err_category_name_cannot_be_empty">O nome da categoria não pode estar vazio.</string>
     <string name="err_nothing_selected_select_one">Nada está selecionado. Por favor escolha um.</string>
     <string name="err_category_not_created">Algo está errado. Nova categoria não criada.</string>
     <string name="category_management">Gerenciamento de Categoria</string>

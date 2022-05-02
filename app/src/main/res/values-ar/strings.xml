@@ -163,7 +163,7 @@
     <string name="quest_determine_category_order">سيتم عرض الرموز بالترتيب المحدد. هل تريد المتابعة؟</string>
     <string name="expense">مصروف</string>
     <string name="err_raeched_max_count">"لقد وصلت إلى الحد الأقصى للعدد: "</string>
-    <string name="err_please_enter_name">لا يمكن أن يكون اسم الفئة فارغًا.</string>
+    <string name="err_category_name_cannot_be_empty">لا يمكن أن يكون اسم الفئة فارغًا.</string>
     <string name="err_nothing_selected_select_one">لم يتم تحديد شيء. رجاءا اختر واحدة.</string>
     <string name="err_category_not_created">هناك شئ غير صحيح. لم يتم إنشاء الفئة الجديدة.</string>
     <string name="category_management">إدارة الفئة</string>

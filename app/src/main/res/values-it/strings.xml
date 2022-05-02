@@ -109,7 +109,7 @@
     <string name="quest_determine_category_order">Le icone verranno visualizzate nell\'ordine specificato. Vuoi procedere?</string>
     <string name="expense">spese</string>
     <string name="err_raeched_max_count">"Hai raggiunto il conteggio massimo: "</string>
-    <string name="err_please_enter_name">Il nome della categoria non può essere vuoto.</string>
+    <string name="err_category_name_cannot_be_empty">Il nome della categoria non può essere vuoto.</string>
     <string name="err_nothing_selected_select_one">Nessuno selezionato. Per favore scegline uno.</string>
     <string name="err_category_not_created">Qualcosa non quadra. La nuova categoria non è stata creata.</string>
     <string name="category_management">Gestione delle Categorie</string>

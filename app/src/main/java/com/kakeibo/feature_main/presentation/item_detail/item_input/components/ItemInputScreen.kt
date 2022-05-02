@@ -1,12 +1,13 @@
 package com.kakeibo.feature_main.presentation.item_detail.item_input.components
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlin.math.roundToInt
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
@@ -41,7 +43,7 @@ fun ItemInputScreen(
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
-    val gridListState = rememberLazyListState()
+    val gridListState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
     val amountState = viewModel.itemAmount.value
@@ -55,10 +57,12 @@ fun ItemInputScreen(
                     scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
                 is ItemDetailViewModel.UiEvent.ShowToast -> {
-                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG)
+                        .show()
                 }
                 is ItemDetailViewModel.UiEvent.Save -> {
-                    Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG)
+                        .show()
                     navController.navigate(
                         Screen.ItemListScreen.route + "?searchId=${0L}"
                     )
@@ -80,8 +84,12 @@ fun ItemInputScreen(
                     detectDragGestures(
                         onDragEnd = {
                             when {
-                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.DAY) }
-                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.DAY) }
+                                offsetX > 200 -> {
+                                    viewModel.plus(-1, DateTimeUnit.DAY)
+                                }
+                                offsetX < -200 -> {
+                                    viewModel.plus(1, DateTimeUnit.DAY)
+                                }
                             }
                             offsetX = 0f
                         }
@@ -89,8 +97,12 @@ fun ItemInputScreen(
                         change.consumeAllChanges()
                         offsetX += dragAmount.x
                         when {
-                            offsetX > 400f -> { offsetX = 400f }
-                            offsetX < -400f -> { offsetX = -400f }
+                            offsetX > 400f -> {
+                                offsetX = 400f
+                            }
+                            offsetX < -400f -> {
+                                offsetX = -400f
+                            }
                         }
                     }
                 }
@@ -136,7 +148,7 @@ fun ItemInputScreen(
             Spacer(modifier = Modifier.height(16.dp))
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxWidth(),
-                cells = GridCells.Fixed(
+                columns = GridCells.Fixed(
                     count = viewModel.appPreferences.getNumColumns()
                 ),
                 state = gridListState,
