@@ -14,6 +14,8 @@ import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
 import com.kakeibo.feature_main.presentation.common.BaseViewModel
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
+import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
+import com.kakeibo.feature_settings.presentation.settings_list.KkbAppState
 import com.kakeibo.util.UtilCurrency
 import com.kakeibo.util.UtilDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,10 +31,14 @@ import javax.inject.Inject
 class ItemDetailViewModel @Inject constructor(
     private val displayedItemUseCases: DisplayedItemUseCases,
     private val displayedCategoryUseCases: DisplayedCategoryUseCases,
+    private val kkbAppUseCases: KkbAppUseCases,
     val appPreferences: AppPreferences,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
-    
+
+    private val _kkbAppState = mutableStateOf(KkbAppState())
+    val kkbAppState: State<KkbAppState> = _kkbAppState
+
     val dateFormatIndex = appPreferences.getDateFormatIndex()
     val fractionDigits = appPreferences.getFractionDigits()
 
@@ -70,7 +76,26 @@ class ItemDetailViewModel @Inject constructor(
 
     var loadDisplayedCategoryListJob: Job? = null
 
+    private var getKkbAppEntityJob: Job? = null
+
     init {
+        getKkbAppEntityJob?.cancel()
+        getKkbAppEntityJob = kkbAppUseCases.getKkbAppUseCase()
+            .onEach { result ->
+                _kkbAppState.value = kkbAppState.value.copy(
+                    id = result.id,
+                    name = result.name,
+                    type = result.type,
+                    intVal1 = result.valInt1,
+                    intVal2 = result.valInt2,
+                    intVal3 = result.valInt3,
+                    strVal1 = result.valStr1,
+                    strVal2 = result.valStr2,
+                    strVal3 = result.valStr3
+                )
+            }
+            .launchIn(viewModelScope)
+
         loadCategories()
 
         savedStateHandle.get<Long>("itemId")?.let { itemId ->

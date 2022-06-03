@@ -16,26 +16,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.core.graphics.toColorInt
 import androidx.navigation.NavController
+import com.kakeibo.Constants
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.util.Screen
-import com.kakeibo.ui.theme.MatchaGreen
-import com.kakeibo.ui.theme.VividRed
 import com.kakeibo.util.UtilCategory
 import kotlinx.datetime.DateTimeUnit
 import java.math.BigDecimal
@@ -60,7 +60,7 @@ fun ItemChartScreen(
     val searchModel = viewModel.searchModel.value
 
     LaunchedEffect(Unit) {
-        Log.d("asdf", "launchedEffect CHART searchId="+searchIdState.value)
+        Log.d("asdf", "launchedEffect CHART searchId=" + searchIdState.value)
         if (searchIdState.value != 0L) {
             viewModel.onEvent(ItemMainEvent.LoadItems(searchIdState.value))
         }
@@ -77,7 +77,7 @@ fun ItemChartScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "Add Note"
+                        contentDescription = "Add"
                     )
                 }
             }
@@ -97,13 +97,17 @@ fun ItemChartScreen(
                     detectDragGestures(
                         onDragEnd = {
                             when {
-                                offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
-                                offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                offsetX > 200 -> {
+                                    viewModel.plus(-1, DateTimeUnit.MONTH)
+                                }
+                                offsetX < -200 -> {
+                                    viewModel.plus(1, DateTimeUnit.MONTH)
+                                }
                             }
                             offsetX = 0f
                         }
                     ) { change, dragAmount ->
-                        change.consumeAllChanges()
+                        change.consume()
                         offsetX += dragAmount.x
                         when {
                             offsetX > 400f -> {
@@ -227,9 +231,16 @@ fun ItemChartScreen(
                                         .size(150.dp)
                                         .padding(6.dp),
                                     pieChartData = PieChartData(
-                                        slices = itemChartState.value.incomeList.map {
-                                            PieChartData.Slice(it.amount.toFloat(), VividRed)
-                                        }
+                                        slices = itemChartState.value.incomeList
+                                            .mapIndexed { index, value ->
+                                                PieChartData.Slice(
+                                                    value.amount.toFloat(),
+                                                    if (index <= 10)
+                                                        Color(Constants.CATEGORY_INCOME_COLORS[index].toColorInt())
+                                                    else
+                                                        MaterialTheme.colors.background
+                                                )
+                                            }
                                     )
                                 )
                                 LazyColumn(
@@ -277,7 +288,12 @@ fun ItemChartScreen(
                                                     .fillMaxHeight()
                                                     .padding(3.dp)
                                                     .clip(RoundedCornerShape(2.dp))
-                                                    .background(VividRed)
+                                                    .background(
+                                                        if (index <= 10)
+                                                            Color(Constants.CATEGORY_INCOME_COLORS[index].toColorInt())
+                                                        else
+                                                            MaterialTheme.colors.background
+                                                    )
                                                     .aspectRatio(1f)
                                             )
                                             Text(
@@ -322,9 +338,16 @@ fun ItemChartScreen(
                                         .size(150.dp)
                                         .padding(6.dp),
                                     pieChartData = PieChartData(
-                                        slices = itemChartState.value.expenseList.map {
-                                            PieChartData.Slice(it.amount.toFloat(), MatchaGreen)
-                                        }
+                                        slices = itemChartState.value.expenseList
+                                            .mapIndexed { index, value ->
+                                                PieChartData.Slice(
+                                                    value.amount.toFloat(),
+                                                    if (index <= 10)
+                                                        Color(Constants.CATEGORY_EXPENSE_COLORS[index].toColorInt())
+                                                    else
+                                                        MaterialTheme.colors.background
+                                                )
+                                            }
                                     )
                                 )
                                 LazyColumn(
@@ -372,7 +395,12 @@ fun ItemChartScreen(
                                                     .fillMaxHeight()
                                                     .padding(3.dp)
                                                     .clip(RoundedCornerShape(2.dp))
-                                                    .background(MatchaGreen)
+                                                    .background(
+                                                        if (index <= 10)
+                                                            Color(Constants.CATEGORY_EXPENSE_COLORS[index].toColorInt())
+                                                        else
+                                                            MaterialTheme.colors.background
+                                                    )
                                                     .aspectRatio(1f)
                                             )
                                             Text(
@@ -396,6 +424,12 @@ fun ItemChartScreen(
                         }
                     }
                 }
+            }
+            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                BannerAds(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    adId = stringResource(id = R.string.main_banner_ad)
+                )
             }
         }
     }
@@ -423,31 +457,17 @@ fun ItemChartScreen(
     }
 
     if (openDetailListDialog.value) {
-        Dialog(
-            onDismissRequest = { openDetailListDialog.value = false }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp, 14.dp),
-                    verticalAlignment = Alignment.CenterVertically
+        DialogCard(
+            onDismissRequest = { openDetailListDialog.value = false },
+            title = clickedCategoryName.value,
+            positiveButton = {
+                OutlinedButton(
+                    onClick = { openDetailListDialog.value = false }
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.mipmap.ic_mikan),
-                        contentDescription = "",
-                        tint= Color.Unspecified
-                    )
-                    Text(text = clickedCategoryName.value)
+                    Text(text = stringResource(id = R.string.close))
                 }
-                Divider()
+            },
+            content = {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -499,7 +519,6 @@ fun ItemChartScreen(
                     }
                 }
             }
-        }
+        )
     }
-
 }

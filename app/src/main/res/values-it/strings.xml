@@ -108,7 +108,6 @@
     <string name="inst_keep_pressing_longer">Spingere più a lungo</string>
     <string name="quest_determine_category_order">Le icone verranno visualizzate nell\'ordine specificato. Vuoi procedere?</string>
     <string name="expense">spese</string>
-    <string name="err_raeched_max_count">"Hai raggiunto il conteggio massimo: "</string>
     <string name="err_category_name_cannot_be_empty">Il nome della categoria non può essere vuoto.</string>
     <string name="err_nothing_selected_select_one">Nessuno selezionato. Per favore scegline uno.</string>
     <string name="err_category_not_created">Qualcosa non quadra. La nuova categoria non è stata creata.</string>
@@ -126,7 +125,6 @@
     <string name="max_number_of_categories_colon">"Numero massimo di categorie: "</string>
     <string name="msg_access_to_category_management">È stato concesso l\'accesso alla gestione delle categorie.</string>
     <string name="msg_category_created">È stata creata una categoria.</string>
-    <string name="msg_delete_some_categories">Elimina da \"Categorie personalizzate\"</string>
     <string name="no_custom_category">Nessuna categoria personalizzata trovata</string>
     <string name="add">Inserisci</string>
     <string name="quest_category_creation_do_you_want_to_proceed">Sta per essere creata una categoria. Vuoi procedere?</string>
@@ -141,7 +139,6 @@
     <string name="msg_type_cannot_be_changed">È possibile modificare il nome e l\'icona, ma non il tipo.</string>
     <string name="msg_delete_kkb_items_first">Elimina tutti gli elementi di Kakeibo classificati in questa categoria.</string>
     <string name="msg_category_updated">La categoria è stata aggiornata.</string>
-    <string name="category_name_add_lang">Si prega di scrivere il nome della categoria. Tocca il pulsante Aggiungi per diverse lingue.</string>
     <string name="category_code">codice categoria</string>
     <string name="import_from_google_drive">Importa da Google Drive</string>
     <string name="nav_header_desc">intestazione di navigazione</string>
@@ -155,4 +152,18 @@
     <string name="import_and_export">Importazione e esportazione</string>
     <string name="append">Aggiungere</string>
     <string name="scratch">Da zero</string>
+    <string name="date">Data</string>
+    <string name="search_criteria">Criterio di ricerca</string>
+    <string name="not_signed_in">Non effettuato l\'accesso</string>
+    <string name="no_item_found">Nessun articolo trovato</string>
+    <string name="error">Qualcosa è andato storto. Si prega di contattare l\'assistenza.</string>
+    <string name="msg_category_successfully_deleted">La categoria è stata eliminata con successo.</string>
+    <string name="msg_nothing_tp_delete">Non ci sono elementi da eliminare.</string>
+    <string name="import_successful">Importazione eseguita con successo</string>
+    <string name="name">Nome</string>
+    <string name="type">Tipo</string>
+    <string name="err_reached_max_count">Il numero di categorie personalizzate ha raggiunto il numero massimo consentito. Eliminane prima alcuni.</string>
+    <string name="enter_category_name">Inserisci il nome della tua categoria.</string>
+    <string name="err_category_type_not_selected">Il tipo di categoria non è selezionato. Selezionane uno.</string>
+    <string name="here_are_the_categories_on_input_screen">Ecco le Categorie da visualizzare sullo schermo INPUT</string>
 </resources>

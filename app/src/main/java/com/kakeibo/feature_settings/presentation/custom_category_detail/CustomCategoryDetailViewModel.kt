@@ -10,20 +10,29 @@ import com.kakeibo.core.presentation.TextFieldState
 import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
+import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
+import com.kakeibo.feature_settings.presentation.settings_list.KkbAppState
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDrawing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CustomCategoryDetailViewModel @Inject constructor(
     private val customCategoryUseCases: CustomCategoryUseCases,
+    kkbAppUseCases: KkbAppUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val _kkbAppState = mutableStateOf(KkbAppState())
+    val kkbAppState: State<KkbAppState> = _kkbAppState
 
     private val _categoryType = mutableStateOf(UtilCategory.CATEGORY_COLOR_EXPENSE)
     val categoryType: State<Int> = _categoryType
@@ -44,7 +53,26 @@ class CustomCategoryDetailViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private var getKkbAppEntityJob: Job? = null
+
     init {
+        getKkbAppEntityJob?.cancel()
+        getKkbAppEntityJob = kkbAppUseCases.getKkbAppUseCase()
+            .onEach { result ->
+                _kkbAppState.value = kkbAppState.value.copy(
+                    id = result.id,
+                    name = result.name,
+                    type = result.type,
+                    intVal1 = result.valInt1,
+                    intVal2 = result.valInt2,
+                    intVal3 = result.valInt3,
+                    strVal1 = result.valStr1,
+                    strVal2 = result.valStr2,
+                    strVal3 = result.valStr3
+                )
+            }
+            .launchIn(viewModelScope)
+
         savedStateHandle.get<Long>("categoryId")?.let { id ->
             if (id != -1L) {
                 viewModelScope.launch {

@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -18,10 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
-import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
+import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
 import com.kakeibo.util.UtilText
@@ -69,7 +70,7 @@ fun ItemEditScreen(
         scaffoldState = scaffoldState
     ) {
         var offsetX by remember { mutableStateOf(0f) }
-
+        it
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -88,7 +89,7 @@ fun ItemEditScreen(
                             offsetX = 0f
                         }
                     ) { change, dragAmount ->
-                        change.consumeAllChanges()
+                        change.consume()
                         offsetX += dragAmount.x
                         when {
                             offsetX > 400f -> {
@@ -188,6 +189,11 @@ fun ItemEditScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.save)
+                )
+            }
+            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                BannerAds(
+                    adId = stringResource(id = R.string.main_banner_ad)
                 )
             }
         }

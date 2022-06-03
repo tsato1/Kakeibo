@@ -12,18 +12,20 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.GridCategoryItem
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
-import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
+import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
 import com.kakeibo.feature_main.presentation.util.Screen
@@ -94,7 +96,7 @@ fun ItemInputScreen(
                             offsetX = 0f
                         }
                     ) { change, dragAmount ->
-                        change.consumeAllChanges()
+                        change.consume()
                         offsetX += dragAmount.x
                         when {
                             offsetX > 400f -> {
@@ -179,6 +181,12 @@ fun ItemInputScreen(
                     }
                 }
             )
+            Spacer(modifier = Modifier.weight(1f))
+            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                BannerAds(
+                    adId = stringResource(id = R.string.main_banner_ad)
+                )
+            }
         }
     }
 }

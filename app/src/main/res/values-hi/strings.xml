@@ -107,7 +107,6 @@
     <string name="inst_keep_pressing_longer">अधिक समय तक धकेलें</string>
     <string name="quest_determine_category_order">आइकन निर्दिष्ट क्रम में प्रदर्शित किए जाएंगे। क्या आप आगे बढ़ना चाहते हैं?</string>
     <string name="expense">व्यय</string>
-    <string name="err_raeched_max_count">"आप अधिकतम संख्या पर पहुंच गए हैं: "</string>
     <string name="err_category_name_cannot_be_empty">श्रेणी का नाम रिक्त नहीं हो सकता।</string>
     <string name="err_nothing_selected_select_one">कुछ भी नहीं चुना गया है। कृपया एक का चयन करें।</string>
     <string name="err_category_not_created">कुछ सही नहीं है। नई श्रेणी नहीं बनाई गई है।</string>
@@ -125,7 +124,6 @@
     <string name="max_number_of_categories_colon">"श्रेणियों की अधिकतम संख्या: "</string>
     <string name="msg_access_to_category_management">श्रेणी प्रबंधन तक पहुंच प्रदान की गई है।</string>
     <string name="msg_category_created">एक श्रेणी बनाई गई है।</string>
-    <string name="msg_delete_some_categories">कृपया \'कस्टम श्रेणियाँ\' से हटाएं</string>
     <string name="no_custom_category">कोई कस्टम श्रेणी नहीं मिली</string>
     <string name="add">जोड़ना</string>
     <string name="quest_category_creation_do_you_want_to_proceed">एक श्रेणी बनाई जाने वाली है। क्या आप आगे बढ़ना चाहते हैं?</string>
@@ -140,7 +138,6 @@
     <string name="msg_type_cannot_be_changed">आप नाम और आइकन बदल सकते हैं, लेकिन प्रकार नहीं।</string>
     <string name="msg_delete_kkb_items_first">कृपया इस श्रेणी के रूप में वर्गीकृत किए गए सभी काकीबो आइटम हटा दें।</string>
     <string name="msg_category_updated">श्रेणी अद्यतन किया गया है।</string>
-    <string name="category_name_add_lang">कृपया श्रेणी का नाम लिखें। विभिन्न भाषाओं के लिए ऐड बटन पर टैप करें।</string>
     <string name="category_code">वर्ग कोड</string>
     <string name="category">वर्ग</string>
     <string name="import_from_google_drive">Google डिस्क से आयात करें</string>
@@ -155,4 +152,18 @@
     <string name="import_and_export">आयात और निर्यात</string>
     <string name="append">संलग्न</string>
     <string name="scratch">शुरुवात से</string>
+    <string name="date">दिनांक</string>
+    <string name="search_criteria">खोज मापदंड</string>
+    <string name="not_signed_in">प्रवेश नहीं किया</string>
+    <string name="no_item_found">कोई वस्तु नहीं मिली</string>
+    <string name="error">कुछ गलत हो गया। कृपया समर्थन से संपर्क करें।</string>
+    <string name="msg_category_successfully_deleted">श्रेणी सफलतापूर्वक हटा दी गई है।</string>
+    <string name="msg_nothing_tp_delete">हटाने के लिए कोई आइटम नहीं है।</string>
+    <string name="import_successful">आयात सफलतापूर्वक किया गया</string>
+    <string name="name">नाम</string>
+    <string name="type">प्रकार</string>
+    <string name="err_reached_max_count">कस्टम श्रेणियों की संख्या अनुमत अधिकतम संख्या तक पहुंच गई है। पहले कुछ मिटाओ।</string>
+    <string name="enter_category_name">अपनी कैटेगरी का नाम भरें।</string>
+    <string name="err_category_type_not_selected">श्रेणी प्रकार चयनित नहीं है। एक का चयन करें।</string>
+    <string name="here_are_the_categories_on_input_screen">INPUT स्क्रीन पर प्रदर्शित होने वाली श्रेणियां यहां दी गई हैं</string>
 </resources>

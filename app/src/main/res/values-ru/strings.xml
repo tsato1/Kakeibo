@@ -162,7 +162,6 @@
     <string name="inst_keep_pressing_longer">Продолжайте нажимать дольше</string>
     <string name="quest_determine_category_order">Иконки будут отображаться в указанном порядке. Вы хотите продолжить</string>
     <string name="expense">расходы</string>
-    <string name="err_raeched_max_count">"Вы достигли максимального количества: "</string>
     <string name="err_category_name_cannot_be_empty">Название категории не может быть пустым.</string>
     <string name="err_nothing_selected_select_one">Ничего не выбрано. Пожалуйста, выберите один.</string>
     <string name="err_category_not_created">Что-то неправильно. Новая категория не создана.</string>
@@ -180,7 +179,6 @@
     <string name="max_number_of_categories_colon">"Максимальное количество категорий: "</string>
     <string name="msg_access_to_category_management">Доступ к управлению категориями предоставляется.</string>
     <string name="msg_category_created">Категория была создана.</string>
-    <string name="msg_delete_some_categories">Пожалуйста, удалите из \"Пользовательские категории\"</string>
     <string name="no_custom_category">Пользовательская категория не найдена</string>
     <string name="add">Добавить</string>
     <string name="quest_category_creation_do_you_want_to_proceed">Категория собирается быть создана. Вы хотите продолжить?</string>
@@ -195,7 +193,6 @@
     <string name="msg_type_cannot_be_changed">Вы можете изменить имя и значок, но не тип.</string>
     <string name="msg_delete_kkb_items_first">Пожалуйста, удалите все предметы Kakeibo, которые относятся к этой категории.</string>
     <string name="msg_category_updated">Категория обновлена.</string>
-    <string name="category_name_add_lang">Пожалуйста, напишите название категории. Нажмите кнопку Добавить для разных языков.</string>
     <string name="category_code">код категории</string>
     <string name="import_from_google_drive">Импорт с Google Диска</string>
     <string name="nav_header_desc">заголовок навигации</string>
@@ -209,4 +206,18 @@
     <string name="import_and_export">Импорт и экспорт</string>
     <string name="append">Добавить</string>
     <string name="scratch">С нуля</string>
+    <string name="date">Дата</string>
+    <string name="search_criteria">Критерий поиска</string>
+    <string name="not_signed_in">Не авторизован</string>
+    <string name="no_item_found">Элемент не найден</string>
+    <string name="error">Что-то пошло не так. Пожалуйста, свяжитесь со службой поддержки.</string>
+    <string name="msg_category_successfully_deleted">Категория успешно удалена.</string>
+    <string name="msg_nothing_tp_delete">Нет элемента для удаления.</string>
+    <string name="import_successful">Импорт выполнен успешно</string>
+    <string name="name">Имя</string>
+    <string name="type">Тип</string>
+    <string name="err_reached_max_count">Количество настраиваемых категорий достигло максимально допустимого. Сначала удалите некоторые.</string>
+    <string name="enter_category_name">Введите название вашей категории.</string>
+    <string name="err_category_type_not_selected">Тип категории не выбран. Выберите один.</string>
+    <string name="here_are_the_categories_on_input_screen">Вот категории, которые будут отображаться на экране ввода.</string>
 </resources>

@@ -162,7 +162,6 @@
     <string name="inst_keep_pressing_longer">Naciskaj dłużej</string>
     <string name="quest_determine_category_order">Ikony będą wyświetlane w określonej kolejności. Czy chcesz kontynuować?</string>
     <string name="expense">Koszt</string>
-    <string name="err_raeched_max_count">"Osiągnąłeś maksymalną liczbę: "</string>
     <string name="err_category_name_cannot_be_empty">Nazwa kategorii nie może być pusta.</string>
     <string name="err_nothing_selected_select_one">Nic nie jest wybrane. Proszę wybrać jeden.</string>
     <string name="err_category_not_created">Coś jest nie tak. Nowa kategoria nie została utworzona.</string>
@@ -180,7 +179,6 @@
     <string name="max_number_of_categories_colon">"Maksymalna liczba kategorii: "</string>
     <string name="msg_access_to_category_management">Udzielono dostępu do zarządzania kategoriami.</string>
     <string name="msg_category_created">Kategoria została utworzona.</string>
-    <string name="msg_delete_some_categories">Usuń z „Niestandardowych kategorii”</string>
     <string name="no_custom_category">Nie znaleziono kategorii niestandardowej</string>
     <string name="add">Dodaj</string>
     <string name="quest_category_creation_do_you_want_to_proceed">Wkrótce zostanie utworzona Kategoria. Czy chcesz kontynuować?</string>
@@ -195,7 +193,6 @@
     <string name="msg_type_cannot_be_changed">Możesz zmienić nazwę i ikonę, ale nie typ.</string>
     <string name="msg_delete_kkb_items_first">Usuń wszystkie elementy Kakeibo, które są sklasyfikowane jako ta kategoria.</string>
     <string name="msg_category_updated">Kategoria została zaktualizowana.</string>
-    <string name="category_name_add_lang">Wpisz nazwę kategorii. Naciśnij przycisk dodawania dla różnych języków.</string>
     <string name="category_code">Kod kategoria</string>
     <string name="import_from_google_drive">Importuj z Dysku Google</string>
     <string name="nav_header_desc">nagłówek nawigacji</string>
@@ -209,4 +206,18 @@
     <string name="import_and_export">Importuj i Eksportuj</string>
     <string name="append">Dodać</string>
     <string name="scratch">Od zera</string>
+    <string name="date">Data</string>
+    <string name="search_criteria">Kryteria wyszukiwania</string>
+    <string name="not_signed_in">Nie zarejestrowany</string>
+    <string name="no_item_found">Nie znaleziono przedmiotu</string>
+    <string name="error">Coś poszło nie tak. Skontaktuj się z pomocą techniczną.</string>
+    <string name="msg_category_successfully_deleted">Kategoria została pomyślnie usunięta.</string>
+    <string name="msg_nothing_tp_delete">Nie ma elementu do usunięcia.</string>
+    <string name="import_successful">Import wykonany pomyślnie</string>
+    <string name="name">Nazwać</string>
+    <string name="type">Rodzaj</string>
+    <string name="err_reached_max_count">Liczba kategorii niestandardowych osiągnęła maksymalną dozwoloną liczbę. Najpierw usuń niektóre.</string>
+    <string name="enter_category_name">Wpisz nazwę swojej kategorii.</string>
+    <string name="err_category_type_not_selected">Nie wybrano typu kategorii. Wybierz jeden.</string>
+    <string name="here_are_the_categories_on_input_screen">Oto kategorie, które mają być wyświetlane na ekranie WEJŚCIA</string>
 </resources>

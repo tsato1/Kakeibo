@@ -9,7 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,29 +39,25 @@ class CategoryReorderActivity : AppCompatActivity() {
             supportActionBar!!.setHomeButtonEnabled(false)
         }
 
-        /*** ads  */
-//        _kkbAppViewModel.all.observe(this, {
-//            val showAds = it?.valInt2 == 0 // val2 = -1:original, 0:agreed to show ads
-//
-//            if (showAds) {
-//                MobileAds.initialize(this) {}
-//                val adView: AdView = findViewById(R.id.ad_container)
-//                val adRequest = AdRequest.Builder().build()
-//                adView.loadAd(adRequest)
-//            }
-//        })
+        /* ads  */
+        if (_categoryViewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            MobileAds.initialize(this) {}
+            val adView: AdView = findViewById(R.id.ad_view)
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
+        }
 
         _recyclerView = findViewById(R.id.rcv_grid)
         _nextBtn = findViewById(R.id.btn_next)
 
         _recyclerView.layoutManager = GridLayoutManager(this, _categoryViewModel.numColumns)
-        _categoryViewModel.displayedCategories.observe(this, { list ->
+        _categoryViewModel.displayedCategories.observe(this) { list ->
             _list.clear()
             list.forEach { p ->
                 _list.add(GridItem.ChildItem(p._id, p))
             }
             _recyclerViewAdapter.notifyDataSetChanged()
-        })
+        }
 
         val gridLayoutManager = _recyclerView.layoutManager as GridLayoutManager
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

@@ -1,4 +1,4 @@
-package com.kakeibo.feature_main.presentation.common.components
+package com.kakeibo.core.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,11 +7,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 
@@ -26,9 +25,9 @@ fun TransparentHintTextField(
     textStyle: TextStyle = TextStyle(),
     singleLine: Boolean = false,
     onFocusChange: (FocusState) -> Unit
-) {//todo: put away keyboard when out of focus
-//    val (focusRequester) = FocusRequester.createRefs()
-//    val keyboardController = LocalSoftwareKeyboardController.current
+) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
         modifier = modifier
@@ -40,18 +39,19 @@ fun TransparentHintTextField(
             textStyle = textStyle,
             modifier = Modifier
                 .fillMaxWidth()
-//                .focusRequester(focusRequester)
                 .onFocusChanged {
                     onFocusChange(it)
                 },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = MaterialTheme.colors.onSurface,
                 backgroundColor = Color.Transparent
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }
             )
-
-//            keyboardActions = KeyboardActions(
-//                onDone = { keyboardController?.hide() }
-//            )
         )
         if (isHintVisible) {
             Text(

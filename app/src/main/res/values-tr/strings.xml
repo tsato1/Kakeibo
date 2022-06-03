@@ -162,7 +162,6 @@
     <string name="inst_keep_pressing_longer">Daha uzun süre basmaya devam edin</string>
     <string name="quest_determine_category_order">Simgeler belirtilen sırada görüntülenir. Devam etmek istiyor musunuz?</string>
     <string name="expense">Gider</string>
-    <string name="err_raeched_max_count">"Maksimum sayıya ulaştınız: "</string>
     <string name="err_category_name_cannot_be_empty">Kategori adı boş bırakılamaz.</string>
     <string name="err_nothing_selected_select_one">Hiçbir şey seçilmedi. Lütfen birini seçin.</string>
     <string name="err_category_not_created">Bazışeyler doğru değil. Yeni Kategori oluşturulmadı.</string>
@@ -180,7 +179,6 @@
     <string name="max_number_of_categories_colon">"Maksimum kategori sayısı: "</string>
     <string name="msg_access_to_category_management">Kategori yönetimine erişim izni verilir.</string>
     <string name="msg_category_created">Bir Kategori oluşturuldu.</string>
-    <string name="msg_delete_some_categories">Lütfen \'Özel Kategoriler\'den silin</string>
     <string name="no_custom_category">Özel kategori bulunamadı</string>
     <string name="add">Ekle</string>
     <string name="quest_category_creation_do_you_want_to_proceed">"Bir Kategori oluşturmak üzeredir. Devam etmek istiyor musunuz? "</string>
@@ -195,7 +193,6 @@
     <string name="msg_type_cannot_be_changed">Adı ve simgeyi değiştirebilirsiniz, ancak türü değiştiremezsiniz.</string>
     <string name="msg_delete_kkb_items_first">Lütfen bu Kategori olarak sınıflandırılan tüm Kakeibo öğelerini silin.</string>
     <string name="msg_category_updated">Kategori güncellenir.</string>
-    <string name="category_name_add_lang">Lütfen kategori adını yazın. Farklı diller için ekle düğmesine dokunun.</string>
     <string name="category_code">Kategori Kodu</string>
     <string name="import_from_google_drive">Google Drive\'dan içe aktar</string>
     <string name="nav_header_desc">gezinme başlığı</string>
@@ -209,4 +206,18 @@
     <string name="import_and_export">İthalat ve ihracat</string>
     <string name="append">eklemek</string>
     <string name="scratch">Sıfırdan</string>
+    <string name="date">Tarih</string>
+    <string name="search_criteria">Arama kriteri</string>
+    <string name="not_signed_in">Oturum açılmamış</string>
+    <string name="no_item_found">Öğe bulunamadı</string>
+    <string name="error">Bir şeyler yanlış gitti. Lütfen destek ile iletişime geçin.</string>
+    <string name="msg_category_successfully_deleted">Kategori başarıyla silindi.</string>
+    <string name="msg_nothing_tp_delete">Silinecek öğe yok.</string>
+    <string name="import_successful">İçe Aktarma Başarıyla Gerçekleştirildi</string>
+    <string name="name">İsim</string>
+    <string name="type">Tip</string>
+    <string name="err_reached_max_count">Özel kategorilerin sayısı, izin verilen maksimum sayıya ulaştı. Önce bazılarını silin.</string>
+    <string name="enter_category_name">Kategorinizin adını girin.</string>
+    <string name="err_category_type_not_selected">Kategori Türü seçilmedi. Birini seç.</string>
+    <string name="here_are_the_categories_on_input_screen">İşte GİRİŞ ekranında görüntülenecek Kategoriler</string>
 </resources>

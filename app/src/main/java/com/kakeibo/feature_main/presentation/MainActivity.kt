@@ -27,6 +27,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -66,7 +67,8 @@ import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
-
+//todo ads
+//todo keyboard goes away
 //todo typography
 //todo input : accept comma and period
 
@@ -78,6 +80,7 @@ import java.io.IOException
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private lateinit var adView: AdView
     private lateinit var auth: FirebaseAuth
     private var interstitialAd: InterstitialAd? = null
 

@@ -16,6 +16,8 @@ import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarIte
 import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
+import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
+import com.kakeibo.feature_settings.presentation.settings_list.KkbAppState
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
@@ -34,9 +36,13 @@ import javax.inject.Inject
 class ItemMainViewModel @Inject constructor(
     private val displayedItemUseCases: DisplayedItemUseCases,
     private val searchUseCases: SearchUseCases,
+    kkbAppUseCases: KkbAppUseCases,
     appPreferences: AppPreferences,
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
+
+    private val _kkbAppState = mutableStateOf(KkbAppState())
+    val kkbAppState: State<KkbAppState> = _kkbAppState
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
     val fractionDigits = appPreferences.getFractionDigits()
@@ -78,7 +84,26 @@ class ItemMainViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private var getKkbAppEntityJob: Job? = null
+
     init {
+        getKkbAppEntityJob?.cancel()
+        getKkbAppEntityJob = kkbAppUseCases.getKkbAppUseCase()
+            .onEach { result ->
+                _kkbAppState.value = kkbAppState.value.copy(
+                    id = result.id,
+                    name = result.name,
+                    type = result.type,
+                    intVal1 = result.valInt1,
+                    intVal2 = result.valInt2,
+                    intVal3 = result.valInt3,
+                    strVal1 = result.valStr1,
+                    strVal2 = result.valStr2,
+                    strVal3 = result.valStr3
+                )
+            }
+            .launchIn(viewModelScope)
+
         if (_searchId.value == 0L) {
             loadThisMonthData()
         }

@@ -64,7 +64,6 @@
     <string name="err_please_enter_min_amount">Vui lòng nhập số tiền tối thiểu.</string>
     <string name="err_category_name_cannot_be_empty">Tên danh mục không thể để trống.</string>
     <string name="err_please_select_category">Hãy chọn một danh mục.</string>
-    <string name="err_raeched_max_count">"Bạn đã đạt đến số lượng tối đa: "</string>
     <string name="event_date_colon">Ngày sự kiện:</string>
     <string name="expense">Chi phí</string>
     <string name="file_create_error">Đã xảy ra lỗi trong khi cố gắng tạo tệp. Vui lòng thử lại sau.</string>
@@ -74,7 +73,6 @@
     <string name="from">Từ</string>
     <string name="general">Chung</string>
     <string name="hint_amount_spent_or_earned">Số tiền chi tiêu hoặc kiếm được</string>
-    <string name="category_name_add_lang">Vui lòng viết tên danh mục. Nhấn vào nút thêm cho các ngôn ngữ khác nhau.</string>
     <string name="hide_display_reorder_categories">Ẩn, hiển thị và sắp xếp lại danh mục</string>
     <string name="hide_categories">Chọn danh mục để ẩn</string>
     <string name="hint_memo_max_20_characters">Ghi chú: Tối đa 20 ký tự</string>
@@ -97,7 +95,6 @@
     <string name="msg_all_delete_success">Tất cả các mục đã được xóa thành công.</string>
     <string name="msg_card_is_removed">Thẻ được gỡ bỏ.</string>
     <string name="msg_change_successfully_saved">Thay đổi được lưu thành công.</string>
-    <string name="msg_delete_some_categories">Vui lòng xóa khỏi \'Danh mục tùy chỉnh\'</string>
     <string name="msg_exit_search">Bạn sẽ thoát khỏi trang kết quả tìm kiếm và trở về báo cáo hàng tháng của tháng này.</string>
     <string name="msg_item_successfully_deleted">Mục này đã được xóa thành công.</string>
     <string name="msg_item_successfully_saved">Các mục được lưu thành công.</string>
@@ -155,4 +152,18 @@
     <string name="import_and_export">Nhập khẩu và xuất khẩu</string>
     <string name="append">nối thêm</string>
     <string name="scratch">Từ Scratch</string>
+    <string name="date">Ngày tháng</string>
+    <string name="search_criteria">Tiêu chí tìm kiếm</string>
+    <string name="not_signed_in">Không đăng nhập</string>
+    <string name="no_item_found">Không tìm thấy mặt hàng</string>
+    <string name="error">Đã xảy ra lỗi. Vui lòng liên hệ với bộ phận hỗ trợ.</string>
+    <string name="msg_category_successfully_deleted">Danh mục đã được xóa thành công.</string>
+    <string name="msg_nothing_tp_delete">Không có mục nào để xóa.</string>
+    <string name="import_successful">Nhập được thực thi thành công</string>
+    <string name="name">Tên</string>
+    <string name="type">Gõ phím</string>
+    <string name="err_reached_max_count">Số lượng danh mục tùy chỉnh đã đạt đến số lượng tối đa cho phép. Xóa một số đầu tiên.</string>
+    <string name="enter_category_name">Điền vào tên của danh mục của bạn.</string>
+    <string name="err_category_type_not_selected">Loại danh mục không được chọn. Chọn một.</string>
+    <string name="here_are_the_categories_on_input_screen">Đây là các hạng mục sẽ được hiển thị trên màn hình INPUT</string>
 </resources>

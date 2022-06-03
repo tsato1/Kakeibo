@@ -162,7 +162,6 @@
     <string name="inst_keep_pressing_longer">اضغط لفترة أطول</string>
     <string name="quest_determine_category_order">سيتم عرض الرموز بالترتيب المحدد. هل تريد المتابعة؟</string>
     <string name="expense">مصروف</string>
-    <string name="err_raeched_max_count">"لقد وصلت إلى الحد الأقصى للعدد: "</string>
     <string name="err_category_name_cannot_be_empty">لا يمكن أن يكون اسم الفئة فارغًا.</string>
     <string name="err_nothing_selected_select_one">لم يتم تحديد شيء. رجاءا اختر واحدة.</string>
     <string name="err_category_not_created">هناك شئ غير صحيح. لم يتم إنشاء الفئة الجديدة.</string>
@@ -180,7 +179,6 @@
     <string name="max_number_of_categories_colon">"الحد الأقصى لعدد الفئات: "</string>
     <string name="msg_access_to_category_management">تم منح الوصول إلى إدارة الفئة.</string>
     <string name="msg_category_created">تم إنشاء فئة.</string>
-    <string name="msg_delete_some_categories">يرجى الحذف من \"الفئات المخصصة\"</string>
     <string name="no_custom_category">لم يتم العثور على فئة مخصصة</string>
     <string name="add">أضف</string>
     <string name="quest_category_creation_do_you_want_to_proceed">الفئة على وشك الإنشاء. هل تريد المتابعة؟</string>
@@ -195,7 +193,6 @@
     <string name="msg_type_cannot_be_changed">يمكنك تغيير الاسم والرمز ، ولكن ليس النوع.</string>
     <string name="msg_delete_kkb_items_first">يرجى حذف جميع عناصر Kakeibo المصنفة على أنها هذه الفئة.</string>
     <string name="msg_category_updated">تم تحديث الفئة.</string>
-    <string name="category_name_add_lang">"يرجى كتابة اسم الفئة. اضغط على زر الإضافة للغات مختلفة. "</string>
     <string name="category_code">الفئة رمز</string>
     <string name="import_from_google_drive">استيراد من Google Drive</string>
     <string name="nav_header_desc">رأس التنقل</string>
@@ -209,4 +206,18 @@
     <string name="import_and_export">استيراد وتصدير</string>
     <string name="append">ألحق</string>
     <string name="scratch">من سكراتش</string>
+    <string name="date">تاريخ</string>
+    <string name="search_criteria">معايير البحث</string>
+    <string name="not_signed_in">لم تقم بتسجيل الدخول</string>
+    <string name="no_item_found">لم يتم العثور على عنصر</string>
+    <string name="error">هناك خطأ ما. يرجى الاتصال بالدعم.</string>
+    <string name="msg_category_successfully_deleted">تم حذف الفئة بنجاح.</string>
+    <string name="msg_nothing_tp_delete">لا يوجد عنصر لحذفه.</string>
+    <string name="import_successful">تم تنفيذ الاستيراد بنجاح</string>
+    <string name="name">اسم</string>
+    <string name="type">يكتب</string>
+    <string name="err_reached_max_count">وصل عدد الفئات المخصصة إلى أقصى عدد مسموح به. احذف بعضها أولاً.</string>
+    <string name="enter_category_name">املأ اسم فئتك.</string>
+    <string name="err_category_type_not_selected">لم يتم تحديد نوع الفئة. اختر واحدة.</string>
+    <string name="here_are_the_categories_on_input_screen">فيما يلي الفئات التي سيتم عرضها على شاشة الإدخال</string>
 </resources>

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kakeibo.R
-import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
+import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.util.UtilText

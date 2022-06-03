@@ -162,7 +162,6 @@
     <string name="inst_keep_pressing_longer">"Mendorong lebih lama "</string>
     <string name="quest_determine_category_order">Ikon akan ditampilkan dalam urutan yang ditentukan. Apakah Anda ingin melanjutkan?</string>
     <string name="expense">Biaya</string>
-    <string name="err_raeched_max_count">"Anda telah mencapai jumlah maksimum: "</string>
     <string name="err_category_name_cannot_be_empty">Nama kategori tidak boleh kosong.</string>
     <string name="err_nothing_selected_select_one">Tidak ada yang dipilih. Tolong pilih satu.</string>
     <string name="err_category_not_created">Ada yang tidak beres. Kategori baru tidak dibuat.</string>
@@ -180,7 +179,6 @@
     <string name="max_number_of_categories_colon">"Jumlah kategori maksimum: "</string>
     <string name="msg_access_to_category_management">Akses ke manajemen kategori telah diberikan.</string>
     <string name="msg_category_created">Kategori telah dibuat.</string>
-    <string name="msg_delete_some_categories">Harap hapus dari \'Kategori Khusus\'</string>
     <string name="no_custom_category">Kategori Kustom tidak ditemukan</string>
     <string name="add">Menambahkan</string>
     <string name="quest_category_creation_do_you_want_to_proceed">Kategori akan segera dibuat. Apakah Anda ingin melanjutkan?</string>
@@ -195,7 +193,6 @@
     <string name="msg_type_cannot_be_changed">Anda dapat mengubah nama dan ikon, tetapi bukan jenisnya.</string>
     <string name="msg_delete_kkb_items_first">Hapus semua item Kakeibo yang dikategorikan sebagai Kategori ini.</string>
     <string name="msg_category_updated">Kategori ini diperbarui.</string>
-    <string name="category_name_add_lang">Silakan tulis nama kategori. Ketuk tombol tambah untuk berbagai bahasa.</string>
     <string name="category_code">Kode Kategori</string>
     <string name="import_from_google_drive">Impor dari Google Drive</string>
     <string name="nav_header_desc">tajuk navigasi</string>
@@ -209,4 +206,18 @@
     <string name="import_and_export">Impor dan ekspor</string>
     <string name="append">Menambahkan</string>
     <string name="scratch">Dari Awal</string>
+    <string name="date">Tanggal</string>
+    <string name="search_criteria">Kriteria pencarian</string>
+    <string name="not_signed_in">Tidak Masuk</string>
+    <string name="no_item_found">Tidak ada barang yang ditemukan</string>
+    <string name="error">Ada yang salah. Silakan hubungi dukungan.</string>
+    <string name="msg_category_successfully_deleted">Kategori berhasil dihapus.</string>
+    <string name="msg_nothing_tp_delete">Tidak ada item untuk dihapus.</string>
+    <string name="import_successful">Impor Berhasil Dijalankan</string>
+    <string name="name">Nama</string>
+    <string name="type">Jenis</string>
+    <string name="err_reached_max_count">Jumlah kategori khusus telah mencapai jumlah maksimum yang diizinkan. Hapus beberapa dulu.</string>
+    <string name="enter_category_name">Isi nama kategori Anda.</string>
+    <string name="err_category_type_not_selected">Jenis Kategori tidak dipilih. Pilih satu.</string>
+    <string name="here_are_the_categories_on_input_screen">Berikut adalah Kategori yang akan ditampilkan pada layar INPUT</string>
 </resources>

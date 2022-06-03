@@ -1,5 +1,6 @@
 package com.kakeibo.feature_settings.presentation.custom_category_list.components
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.feature_settings.domain.util.CustomCategoryListOrder
 import com.kakeibo.feature_settings.presentation.custom_category_list.CustomCategoryListEvent
 import com.kakeibo.feature_settings.presentation.custom_category_list.CustomCategoryListViewModel
@@ -26,6 +29,7 @@ import com.kakeibo.util.UtilCategory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalAnimationApi
 @Composable
 fun CustomCategoryListScreen(
@@ -109,7 +113,7 @@ fun CustomCategoryListScreen(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(customCategoryListState.customCategoryList) { categoryModel ->
 
                     val message = stringResource(id = R.string.msg_category_successfully_deleted)
@@ -139,6 +143,12 @@ fun CustomCategoryListScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                BannerAds(
+                    adId = stringResource(id = R.string.main_banner_ad)
+                )
             }
         }
     }

@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListEvent
@@ -213,6 +214,12 @@ fun SettingsListScreen(
                     )
                 }
             }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            BannerAds(
+                adId = stringResource(id = R.string.settings_banner_ad)
+            )
         }
     }
 

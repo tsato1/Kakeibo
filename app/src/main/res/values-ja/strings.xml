@@ -114,14 +114,12 @@
     <string name="err_category_not_created">エラー：カテゴリーは作成されませんでした．</string>
     <string name="err_nothing_selected_select_one">何も選択されていません．一つ選択してください．</string>
     <string name="err_category_name_cannot_be_empty">カテゴリー名を入力してください．</string>
-    <string name="err_raeched_max_count">自作カテゴリー数が上限に達しています：</string>
     <string name="hint_name_max_8_characters">名前：最大８字</string>
     <string name="hint_memo_max_20_characters">メモ：最大２０字</string>
     <string name="large">大</string>
     <string name="language">言語</string>
     <string name="medium">中</string>
     <string name="msg_access_to_category_management">カテゴリ管理が可能になりました．</string>
-    <string name="msg_delete_some_categories">「自作カテゴリー」より削除してください．</string>
     <string name="msg_category_created">カテゴリーが作成されました．</string>
     <string name="quest_category_creation_do_you_want_to_proceed">指定された条件下でカテゴリーが作成されます．よろしいですか？</string>
     <string name="quest_irreversible_operation_do_you_want_to_proceed">この操作を一度行うと元の状態に戻すことができません．続行しますか？</string>
@@ -135,7 +133,6 @@
     <string name="reorder_categories">カテゴリー並べ替え</string>
     <string name="reorder_categories_for_display">入力画面で表示したい順に並び替えてください</string>
     <string name="choose_category_color">カテゴリーの種類を選択してください</string>
-    <string name="category_name_add_lang">カテゴリー名を入力してください．追加ボタンから他の言語での登録も可能です．</string>
     <string name="max_number_of_categories_colon">最大カテゴリー数：</string>
     <string name="draw_icon">アイコンを描いてデザインしてください</string>
     <string name="msg_custom_category_already_in_use">既存のKakeiboアイテムがこのカテゴリーを使用しています。</string>
@@ -156,4 +153,17 @@
     <string name="append">連結する</string>
     <string name="scratch">最初から</string>
     <string name="search_criteria">検索条件</string>
+    <string name="date">日付</string>
+    <string name="not_signed_in">未サインイン</string>
+    <string name="no_item_found">アイテムがありません</string>
+    <string name="error">エラーが起きました．開発者に連絡してください．</string>
+    <string name="msg_category_successfully_deleted">カテゴリーが削除されました．</string>
+    <string name="msg_nothing_tp_delete">削除するアイテムがありません．</string>
+    <string name="import_successful">インポートが完了しました</string>
+    <string name="name">名前</string>
+    <string name="type">タイプ</string>
+    <string name="err_reached_max_count">カスタムカテゴリの数が許可されている最大数に達しました．先にいくつか削除してください．</string>
+    <string name="enter_category_name">カテゴリの名前を入力してください．</string>
+    <string name="err_category_type_not_selected">カテゴリタイプが選択されていません．選択してください．</string>
+    <string name="here_are_the_categories_on_input_screen">INPUT画面に表示されるカテゴリは次のとおりです．</string>
 </resources>

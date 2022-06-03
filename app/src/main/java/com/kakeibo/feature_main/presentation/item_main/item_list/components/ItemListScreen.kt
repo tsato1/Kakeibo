@@ -7,13 +7,17 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
@@ -55,7 +59,7 @@ fun ItemListScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "Add Note"
+                        contentDescription = "Add"
                     )
                 }
             }
@@ -81,7 +85,7 @@ fun ItemListScreen(
                             offsetX = 0f
                         }
                     ) { change, dragAmount ->
-                        change.consumeAllChanges()
+                        change.consume()
                         offsetX += dragAmount.x
                         when {
                             offsetX > 400f -> { offsetX = 400f }
@@ -119,6 +123,12 @@ fun ItemListScreen(
                     dateFormatIndex = viewModel.dateFormatIndex,
                     fractionDigits = viewModel.fractionDigits,
                     modifier = Modifier.fillMaxSize()
+                )
+            }
+            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                BannerAds(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    adId = stringResource(id = R.string.main_banner_ad)
                 )
             }
         }

@@ -108,7 +108,6 @@
     <string name="inst_keep_pressing_longer">Poussez plus longtemps</string>
     <string name="quest_determine_category_order">Les icônes seront affichées dans l\'ordre spécifié. Voulez-vous poursuivre?</string>
     <string name="expense">frais</string>
-    <string name="err_raeched_max_count">"Vous avez atteint le nombre maximum: "</string>
     <string name="err_category_name_cannot_be_empty">Le nom de la catégorie ne peut pas être vide.</string>
     <string name="err_nothing_selected_select_one">Rien n\'est sélectionné. S\'il vous plait sélectionner en un.</string>
     <string name="err_category_not_created">Quelque chose ne tourne pas rond. La nouvelle catégorie n\'est pas créée.</string>
@@ -126,7 +125,6 @@
     <string name="max_number_of_categories_colon">"Le nombre maximum de catégories: "</string>
     <string name="msg_access_to_category_management">L\'accès à la gestion des catégories a été accordé.</string>
     <string name="msg_category_created">Une catégorie a été créée.</string>
-    <string name="msg_delete_some_categories">Veuillez supprimer de «Catégories personnalisées»</string>
     <string name="no_custom_category">Aucune catégorie personnalisée trouvée</string>
     <string name="add">Ajouter</string>
     <string name="quest_category_creation_do_you_want_to_proceed">Une catégorie est sur le point d\'être créée. Voulez-vous poursuivre?</string>
@@ -141,7 +139,6 @@
     <string name="msg_type_cannot_be_changed">Vous pouvez modifier le nom et l\'icône, mais pas le type.</string>
     <string name="msg_delete_kkb_items_first">Veuillez supprimer tous les articles Kakeibo classés dans cette catégorie.</string>
     <string name="msg_category_updated">La catégorie est mise à jour.</string>
-    <string name="category_name_add_lang">Veuillez écrire le nom de la catégorie. Appuyez sur le bouton Ajouter pour différentes langues.</string>
     <string name="category_code">"code de catégorie "</string>
     <string name="import_from_google_drive">Importer depuis Google Drive</string>
     <string name="nav_header_desc">en-tête de navigation</string>
@@ -156,4 +153,17 @@
     <string name="append">Ajouter</string>
     <string name="scratch">De zéro</string>
     <string name="search_criteria">Critères de Recherche</string>
+    <string name="date">Date</string>
+    <string name="not_signed_in">Pas connecté</string>
+    <string name="no_item_found">Aucun article trouvé</string>
+    <string name="error">Quelque chose s\'est mal passé. Veuillez contacter l\'assistance.</string>
+    <string name="msg_category_successfully_deleted">La catégorie a été supprimée avec succès.</string>
+    <string name="msg_nothing_tp_delete">Il n\'y a aucun élément à supprimer.</string>
+    <string name="import_successful">Importation exécutée avec succès</string>
+    <string name="name">Nom</string>
+    <string name="type">Taper</string>
+    <string name="err_reached_max_count">Le nombre de catégories personnalisées a atteint le nombre maximal autorisé. Supprimez-en d\'abord.</string>
+    <string name="enter_category_name">Remplissez le nom de votre catégorie.</string>
+    <string name="err_category_type_not_selected">Le type de catégorie n\'est pas sélectionné. Sélectionnez-en un.</string>
+    <string name="here_are_the_categories_on_input_screen">Voici les catégories à afficher sur l\'écran INPUT</string>
 </resources>

@@ -33,6 +33,7 @@ fun DialogCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .requiredHeightIn(max = 500.dp)
                 .padding(MaterialTheme.dimens.dialogPadding)
                 .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
                 .background(MaterialTheme.colors.background)

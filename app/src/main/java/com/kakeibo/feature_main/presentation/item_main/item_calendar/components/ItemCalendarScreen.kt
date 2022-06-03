@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
@@ -28,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.kakeibo.R
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.presentation.common.components.*
@@ -73,7 +74,7 @@ fun ItemCalendarScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "Add Note"
+                        contentDescription = "Add"
                     )
                 }
             }
@@ -103,7 +104,7 @@ fun ItemCalendarScreen(
                             offsetX = 0f
                         }
                     ) { change, dragAmount ->
-                        change.consumeAllChanges()
+                        change.consume()
                         offsetX += dragAmount.x
                         when {
                             offsetX > 400f -> {
@@ -142,6 +143,12 @@ fun ItemCalendarScreen(
                 CalendarRows(
                     navController = navController,
                     viewModel = viewModel
+                )
+            }
+            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                BannerAds(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    adId = stringResource(id = R.string.main_banner_ad)
                 )
             }
         }
@@ -306,6 +313,13 @@ fun CalendarRows(
             title = listState.calendarItemList[clickedDateIndex.value].parent.date
                 .toLocalDate()
                 .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndex]),
+            positiveButton = {
+                OutlinedButton(
+                    onClick = { showDateDetailDialog.value = false }
+                ) {
+                    Text(text = stringResource(id = R.string.close))
+                }
+            },
             content = {
                 if (listState.calendarItemList[clickedDateIndex.value].children.isEmpty()) {
                     Row(
@@ -327,7 +341,7 @@ fun CalendarRows(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(6.dp, 2.dp)
+                                    .padding(2.dp, 2.dp)
                                     .clickable {
                                         navController.navigate(
                                             Screen.ItemDetailScreen.route + "?itemId=${item.id}"

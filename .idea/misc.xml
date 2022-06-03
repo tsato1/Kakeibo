@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22780797101449277" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.15677083333333333" />
         <entry key="app/src/main/res/layout/activity_settings_about.xml" value="0.15677083333333333" />
-        <entry key="app/src/main/res/layout/activity_settings_category_reorder.xml" value="0.15677083333333333" />
+        <entry key="app/src/main/res/layout/activity_settings_category_reorder.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_settings_category_replace.xml" value="0.15677083333333333" />
         <entry key="app/src/main/res/layout/activity_settings_custom_category.xml" value="0.15677083333333333" />
         <entry key="app/src/main/res/layout/activity_settings_custom_category_list.xml" value="0.15677083333333333" />

@@ -37,7 +37,9 @@ import com.google.accompanist.pager.rememberPagerState
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import com.kakeibo.feature_settings.presentation.custom_category_detail.CustomCategoryDetailViewModel
 import com.kakeibo.R
-import com.kakeibo.feature_main.presentation.common.components.TransparentHintTextField
+import com.kakeibo.core.data.constants.ConstKkbAppDB
+import com.kakeibo.core.presentation.components.BannerAds
+import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_settings.presentation.custom_category_detail.CustomCategoryDetailEvent
 import com.kakeibo.ui.theme.LightCream
 import com.kakeibo.ui.theme.ThickCream
@@ -450,6 +452,11 @@ fun CustomCategoryDetailScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(10.dp),
         )
+        if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            BannerAds(
+                adId = stringResource(id = R.string.main_banner_ad)
+            )
+        }
     }
 
     if (openStrokeWidthDialog.value) {
