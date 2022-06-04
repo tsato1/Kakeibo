@@ -220,4 +220,7 @@
     <string name="enter_category_name">Введите название вашей категории.</string>
     <string name="err_category_type_not_selected">Тип категории не выбран. Выберите один.</string>
     <string name="here_are_the_categories_on_input_screen">Вот категории, которые будут отображаться на экране ввода.</string>
+    <string name="remove_at_least_one_category">Удалите хотя бы одну категорию.</string>
+    <string name="remove_at_least_one_category">Удалите хотя бы одну категорию.</string>
+    <string name="category_count_cannot_exceed">Количество категорий не может превышать %d</string>
 </resources>

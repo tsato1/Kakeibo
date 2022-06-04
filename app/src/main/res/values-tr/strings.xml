@@ -220,4 +220,7 @@
     <string name="enter_category_name">Kategorinizin adını girin.</string>
     <string name="err_category_type_not_selected">Kategori Türü seçilmedi. Birini seç.</string>
     <string name="here_are_the_categories_on_input_screen">İşte GİRİŞ ekranında görüntülenecek Kategoriler</string>
+    <string name="remove_at_least_one_category">Lütfen en az bir kategoriyi kaldırın.</string>
+    <string name="remove_at_least_one_category">Lütfen en az bir kategoriyi kaldırın.</string>
+    <string name="category_count_cannot_exceed">Kategori sayısı %d \'yi aşamaz</string>
 </resources>

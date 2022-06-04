@@ -220,4 +220,6 @@
     <string name="enter_category_name">Isi nama kategori Anda.</string>
     <string name="err_category_type_not_selected">Jenis Kategori tidak dipilih. Pilih satu.</string>
     <string name="here_are_the_categories_on_input_screen">Berikut adalah Kategori yang akan ditampilkan pada layar INPUT</string>
+    <string name="remove_at_least_one_category">Harap hapus setidaknya satu kategori.</string>
+    <string name="category_count_cannot_exceed">Jumlah kategori tidak boleh melebihi %d</string>
 </resources>

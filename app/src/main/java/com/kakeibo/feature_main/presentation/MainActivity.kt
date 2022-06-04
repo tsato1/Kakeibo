@@ -27,7 +27,6 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -79,7 +78,6 @@ import java.io.IOException
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var adView: AdView
     private lateinit var auth: FirebaseAuth
     private var interstitialAd: InterstitialAd? = null
 

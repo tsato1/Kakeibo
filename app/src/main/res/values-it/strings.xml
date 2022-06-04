@@ -166,4 +166,7 @@
     <string name="enter_category_name">Inserisci il nome della tua categoria.</string>
     <string name="err_category_type_not_selected">Il tipo di categoria non è selezionato. Selezionane uno.</string>
     <string name="here_are_the_categories_on_input_screen">Ecco le Categorie da visualizzare sullo schermo INPUT</string>
+    <string name="remove_at_least_one_category">Si prega di rimuovere almeno una categoria.</string>
+    <string name="remove_at_least_one_category">Si prega di rimuovere almeno una categoria.</string>
+    <string name="category_count_cannot_exceed">Il numero di categorie non può superare %d</string>
 </resources>

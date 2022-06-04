@@ -166,4 +166,6 @@
     <string name="enter_category_name">カテゴリの名前を入力してください．</string>
     <string name="err_category_type_not_selected">カテゴリタイプが選択されていません．選択してください．</string>
     <string name="here_are_the_categories_on_input_screen">INPUT画面に表示されるカテゴリは次のとおりです．</string>
+    <string name="remove_at_least_one_category">少なくとも一つのカテゴリーを削除してください．</string>
+    <string name="category_count_cannot_exceed">カテゴリーの個数の上限は%dです．</string>
 </resources>

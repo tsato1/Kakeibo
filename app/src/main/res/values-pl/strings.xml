@@ -220,4 +220,7 @@
     <string name="enter_category_name">Wpisz nazwę swojej kategorii.</string>
     <string name="err_category_type_not_selected">Nie wybrano typu kategorii. Wybierz jeden.</string>
     <string name="here_are_the_categories_on_input_screen">Oto kategorie, które mają być wyświetlane na ekranie WEJŚCIA</string>
+    <string name="remove_at_least_one_category">Usuń co najmniej jedną kategorię.</string>
+    <string name="remove_at_least_one_category">Usuń co najmniej jedną kategorię.</string>
+    <string name="category_count_cannot_exceed">Liczba kategorii nie może przekraczać %d</string>
 </resources>
