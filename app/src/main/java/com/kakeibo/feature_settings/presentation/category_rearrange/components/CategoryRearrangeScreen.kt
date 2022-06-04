@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,12 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -36,6 +39,7 @@ import com.kakeibo.feature_settings.presentation.category_rearrange.CategoryRear
 import com.kakeibo.feature_settings.presentation.category_rearrange.CategoryRearrangeViewModel
 import com.kakeibo.feature_settings.presentation.category_reorder.CategoryReorderActivity
 import com.kakeibo.ui.theme.LightCream
+import com.kakeibo.util.UtilCategory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -50,18 +54,21 @@ fun CategoryRearrangeScreen(
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-    val gridListState = rememberLazyGridState()
     val openSaveDialog = remember { mutableStateOf(false) }
 
     val categoryRearrangeState = viewModel.categoryRearrangeState.value
-    val finalCategoryList = viewModel.categoryRearrangeState.value.finalCategoryList
 
     val showRemoveIconListState = remember { mutableStateListOf(false) }
-    for (index in 0..categoryRearrangeState.displayedCategoryList.size)
+    for (index in 0..categoryRearrangeState.displayedCategoryList.size) {
         showRemoveIconListState.add(false)
+    }
     val showAddIconListState = remember { mutableStateListOf(false) }
-    for (index in 0..categoryRearrangeState.nonDisplayedCategoryList.size)
+    for (index in 0..categoryRearrangeState.nonDisplayedCategoryList.size) {
         showAddIconListState.add(false)
+    }
+
+    val countRemove = rememberSaveable { mutableStateOf(0) }
+    val countAdd = rememberSaveable { mutableStateOf(0) }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -124,6 +131,18 @@ fun CategoryRearrangeScreen(
                             .padding(0.dp, 60.dp, 0.dp, 0.dp),
                         text = stringResource(id = R.string.hide_categories)
                     )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(0.dp, 85.dp, 0.dp, 0.dp),
+                        text = stringResource(
+                            id = R.string.remaining_spots_colon,
+                            UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                    - categoryRearrangeState.displayedCategoryList.size
+                                    + countRemove.value
+                                    - countAdd.value
+                        )
+                    )
                     LazyVerticalGrid(
                         modifier = Modifier.align(Alignment.Center),
                         columns = GridCells.Fixed(
@@ -150,21 +169,36 @@ fun CategoryRearrangeScreen(
                                         categoryModel = category.toCategoryEntity()
                                             .toDisplayedCategoryModel(),
                                         onItemClick = {
-                                            showRemoveIconListState[index] =
-                                                !showRemoveIconListState[index]
-
                                             if (showRemoveIconListState[index]) {
-                                                viewModel.onEvent(
-                                                    CategoryRearrangeEvent.Remove(
-                                                        category
+                                                if (
+                                                    categoryRearrangeState.displayedCategoryList.size
+                                                    - countRemove.value
+                                                    + countAdd.value
+                                                    >= UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                                ) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        context.getString(
+                                                            R.string.category_count_cannot_exceed,
+                                                            UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                                        ),
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                }
+                                                else {
+                                                    showRemoveIconListState[index] =
+                                                        !showRemoveIconListState[index]
+                                                    viewModel.onEvent(
+                                                        CategoryRearrangeEvent.Add(category)
                                                     )
-                                                )
+                                                    countRemove.value--
+                                                }
                                             } else {
+                                                showRemoveIconListState[index] = !showRemoveIconListState[index]
                                                 viewModel.onEvent(
-                                                    CategoryRearrangeEvent.Add(
-                                                        category
-                                                    )
+                                                    CategoryRearrangeEvent.Remove(category)
                                                 )
+                                                countRemove.value++
                                             }
                                         },
                                         onItemLongClick = { }
@@ -180,7 +214,7 @@ fun CategoryRearrangeScreen(
                                 }
                             }
                         },
-                        state = gridListState
+                        state = rememberLazyGridState()
                     )
                     Row(
                         modifier = Modifier
@@ -194,8 +228,16 @@ fun CategoryRearrangeScreen(
                                 .padding(20.dp, 0.dp)
                                 .clip(RoundedCornerShape(15.dp)),
                             onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(1, 0f)
+                                if (countRemove.value == 0) {
+                                    Toast.makeText(
+                                        context,
+                                        R.string.remove_at_least_one_category,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(1, 0f)
+                                    }
                                 }
                             }
                         ) {
@@ -231,7 +273,13 @@ fun CategoryRearrangeScreen(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(0.dp, 85.dp, 0.dp, 0.dp),
-                        text = stringResource(id = R.string.remaining_spots_colon)
+                        text = stringResource(
+                            id = R.string.remaining_spots_colon,
+                            UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                    - categoryRearrangeState.displayedCategoryList.size
+                                    + countRemove.value
+                                    - countAdd.value
+                        )
                     )
                     LazyVerticalGrid(
                         modifier = Modifier.align(Alignment.Center),
@@ -259,21 +307,35 @@ fun CategoryRearrangeScreen(
                                         categoryModel = category.toCategoryEntity()
                                             .toDisplayedCategoryModel(),
                                         onItemClick = {
-                                            showAddIconListState[index] =
-                                                !showAddIconListState[index]
-
                                             if (showAddIconListState[index]) {
+                                                showAddIconListState[index] = !showAddIconListState[index]
                                                 viewModel.onEvent(
-                                                    CategoryRearrangeEvent.Add(
-                                                        category
-                                                    )
+                                                    CategoryRearrangeEvent.Remove(category)
                                                 )
-                                            } else {
-                                                viewModel.onEvent(
-                                                    CategoryRearrangeEvent.Remove(
-                                                        category
+                                                countAdd.value--
+                                            }
+                                            else {
+                                                if (categoryRearrangeState.displayedCategoryList.size
+                                                    - countRemove.value
+                                                    + countAdd.value
+                                                    >= UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                                ) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        context.getString(
+                                                            R.string.category_count_cannot_exceed,
+                                                            UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                                        ),
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                }
+                                                else {
+                                                    showAddIconListState[index] = !showAddIconListState[index]
+                                                    viewModel.onEvent(
+                                                        CategoryRearrangeEvent.Add(category)
                                                     )
-                                                )
+                                                    countAdd.value++
+                                                }
                                             }
                                         },
                                         onItemLongClick = { }
@@ -289,7 +351,7 @@ fun CategoryRearrangeScreen(
                                 }
                             }
                         },
-                        state = gridListState
+                        state = rememberLazyGridState()
                     )
                     Row(
                         modifier = Modifier
@@ -316,8 +378,24 @@ fun CategoryRearrangeScreen(
                                 .padding(20.dp, 0.dp)
                                 .clip(RoundedCornerShape(15.dp)),
                             onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(2, 0f)
+                                if (
+                                    categoryRearrangeState.displayedCategoryList.size
+                                    - countRemove.value
+                                    + countAdd.value
+                                    > UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                ) {
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(
+                                            R.string.category_count_cannot_exceed,
+                                            UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                        ),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(2, 0f)
+                                    }
                                 }
                             }
                         ) {
@@ -346,8 +424,9 @@ fun CategoryRearrangeScreen(
                     Text(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
-                            .padding(0.dp, 60.dp, 0.dp, 0.dp),
-                        text = stringResource(id = R.string.here_are_the_categories_on_input_screen)
+                            .padding(10.dp, 60.dp),
+                        text = stringResource(id = R.string.here_are_the_categories_on_input_screen),
+                        textAlign = TextAlign.Center
                     )
                     LazyVerticalGrid(
                         modifier = Modifier.align(Alignment.Center),
@@ -361,9 +440,10 @@ fun CategoryRearrangeScreen(
                             bottom = 8.dp
                         ),
                         content = {
-                            items(finalCategoryList.size) { index ->
-                                val category = finalCategoryList[index]
-
+                            items(
+                                items = categoryRearrangeState.finalCategoryList,
+                                key = { it._id }
+                            ) { category ->
                                 GridCategoryItem(
                                     modifier = Modifier
                                         .padding(4.dp)
@@ -375,7 +455,7 @@ fun CategoryRearrangeScreen(
                                 )
                             }
                         },
-                        state = gridListState
+                        state = rememberLazyGridState()
                     )
                     Row(
                         modifier = Modifier

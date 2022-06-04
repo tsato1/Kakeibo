@@ -1,7 +1,9 @@
 package com.kakeibo.feature_settings.presentation.category_rearrange
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
@@ -67,7 +69,11 @@ class CategoryRearrangeViewModel @Inject constructor(
     fun onEvent(event: CategoryRearrangeEvent) {
         when (event) {
             is CategoryRearrangeEvent.Add -> {
-                _categoryRearrangeState.value.finalCategoryList.add(event.categoryModel)
+                val list = _categoryRearrangeState.value.finalCategoryList
+                list.add(event.categoryModel)
+                _categoryRearrangeState.value = categoryRearrangeState.value.copy(
+                    finalCategoryList = list
+                )
             }
             is CategoryRearrangeEvent.Remove -> {
                 val iterator = _categoryRearrangeState.value.finalCategoryList.iterator()
@@ -128,7 +134,7 @@ class CategoryRearrangeViewModel @Inject constructor(
                         is Resource.Success -> {
                             _categoryRearrangeState.value = categoryRearrangeState.value.copy(
                                 displayedCategoryList = result.data ?: emptyList(),
-                                finalCategoryList = result.data?.toMutableList() ?: mutableListOf(),
+                                finalCategoryList = result.data?.toMutableStateList() ?: mutableStateListOf(),
                                 isDisplayedCategoryListLoading = false,
                                 isNonDisplayedCategoryListLoading = false
                             )
@@ -136,7 +142,7 @@ class CategoryRearrangeViewModel @Inject constructor(
                         is Resource.Error -> {
                             _categoryRearrangeState.value = categoryRearrangeState.value.copy(
                                 displayedCategoryList = result.data ?: emptyList(),
-                                finalCategoryList = result.data?.toMutableList() ?: mutableListOf(),
+                                finalCategoryList = result.data?.toMutableStateList() ?: mutableStateListOf(),
                                 isDisplayedCategoryListLoading = false,
                                 isNonDisplayedCategoryListLoading = false
                             )
@@ -149,7 +155,7 @@ class CategoryRearrangeViewModel @Inject constructor(
                         is Resource.Loading -> {
                             _categoryRearrangeState.value = categoryRearrangeState.value.copy(
                                 displayedCategoryList = result.data ?: emptyList(),
-                                finalCategoryList = result.data?.toMutableList() ?: mutableListOf(),
+                                finalCategoryList = result.data?.toMutableStateList() ?: mutableStateListOf(),
                                 isDisplayedCategoryListLoading = true,
                                 isNonDisplayedCategoryListLoading = false
                             )

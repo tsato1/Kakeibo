@@ -168,7 +168,7 @@
     <string name="the_app_version">The app version</string>
     <string name="inst_long_tap_to_move_icons">Long tap to move icons.</string>
     <string name="inst_keep_pressing_longer">Push longer</string>
-    <string name="remaining_spots_colon">Remaining spots: </string>
+    <string name="remaining_spots_colon">Remaining spots: %d</string>
     <string name="version_etc">Installed version, etc</string>
     <string name="purchased_items">Purchased Items</string>
     <string name="create_category">Create a Category</string>
@@ -192,6 +192,9 @@
     <string name="msg_type_cannot_be_changed">You can change the name and icon, but not the type.</string>
     <string name="msg_delete_kkb_items_first">Please delete all the Kakeibo items that are categorized as this Category.</string>
     <string name="err_category_type_not_selected">Category Type is not selected. Select one.</string>
+    <string name="remove_at_least_one_category">Please remove at least one category.</string>
+    <string name="err_reached_max_count">The number of custom categories has reached the maximum number allowed. Delete some first.</string>
+    <string name="category_count_cannot_exceed">The number of categories cannot exceed %d</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>
@@ -260,5 +263,4 @@
     <string name="percent" translatable="false">%</string>
     <string name="toggle" translatable="false">toggle</string>
     <string name="msg_token_fmt" translatable="false">FCM registration Token: %s</string>
-    <string name="err_reached_max_count">The number of custom categories has reached the maximum number allowed. Delete some first.</string>
 </resources>
