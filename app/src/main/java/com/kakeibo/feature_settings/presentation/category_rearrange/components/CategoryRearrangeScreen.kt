@@ -382,8 +382,7 @@ fun CategoryRearrangeScreen(
                                 .padding(20.dp, 0.dp)
                                 .clip(RoundedCornerShape(15.dp)),
                             onClick = {
-                                if (
-                                    categoryRearrangeState.displayedCategoryList.size
+                                if (categoryRearrangeState.displayedCategoryList.size
                                     - countRemove.value
                                     + countAdd.value
                                     > UtilCategory.NUM_MAX_DSP_CATEGORIES
