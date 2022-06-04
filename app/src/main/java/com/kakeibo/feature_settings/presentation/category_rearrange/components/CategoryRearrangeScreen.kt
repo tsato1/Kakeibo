@@ -228,7 +228,11 @@ fun CategoryRearrangeScreen(
                                 .padding(20.dp, 0.dp)
                                 .clip(RoundedCornerShape(15.dp)),
                             onClick = {
-                                if (countRemove.value == 0) {
+                                if (UtilCategory.NUM_MAX_DSP_CATEGORIES
+                                    - categoryRearrangeState.displayedCategoryList.size
+                                    + countRemove.value
+                                    - countAdd.value == 0
+                                ) {
                                     Toast.makeText(
                                         context,
                                         R.string.remove_at_least_one_category,

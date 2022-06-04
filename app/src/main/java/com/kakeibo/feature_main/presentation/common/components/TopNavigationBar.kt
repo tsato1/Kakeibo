@@ -65,49 +65,55 @@ fun TopNavigationBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = { onExportClick() },
+            if (currentRoute == Screen.ItemListScreen.route + "?searchId={searchId}" ||
+                currentRoute == Screen.ItemChartScreen.route + "?searchId={searchId}" ||
+                currentRoute == Screen.ItemCalendarScreen.route + "?searchId={searchId}"
             ) {
-                Icon(
-                    imageVector = Icons.Default.Upload, contentDescription = "Export"
-                )
-            }
-            IconButton(
-                onClick = {
-                    val searchId = navBackStackEntry?.arguments?.getLong("searchId")
+                IconButton(
+                    onClick = { onExportClick() },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Upload, contentDescription = "Export"
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        val searchId = navBackStackEntry?.arguments?.getLong("searchId")
 
-                    if (currentRoute == Screen.ItemSearchScreen.route) {
-                        // do nothing
-                    }
-                    else if (searchId == null || searchId == 0L) {
-                        navController.navigate(Screen.ItemSearchScreen.route) {
-                            // Pop up to the start destination of the graph to
-                            // avoid building up a large stack of destinations
-                            // on the back stack as users select items
-                            navController.graph.startDestinationRoute?.let { route ->
-                                popUpTo(route) {
-                                    saveState = true
+                        if (currentRoute == Screen.ItemSearchScreen.route) {
+                            // do nothing
+                        } else if (searchId == null || searchId == 0L) {
+                            navController.navigate(Screen.ItemSearchScreen.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select items
+                                navController.graph.startDestinationRoute?.let { route ->
+                                    popUpTo(route) {
+                                        saveState = true
+                                    }
                                 }
+
+                                // Avoid multiple copies of the same destination when re-selecting the same item
+                                launchSingleTop = true
+
+                                // Restore state when re-selecting a previously selected item
+                                restoreState = true
                             }
-
-                            // Avoid multiple copies of the same destination when re-selecting the same item
-                            launchSingleTop = true
-
-                            // Restore state when re-selecting a previously selected item
-                            restoreState = true
+                        } else if (searchId != 0L) {
+                            Toast.makeText(
+                                context,
+                                "You have to exit search first",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            // something went wrong
                         }
                     }
-                    else if (searchId != 0L) {
-                        Toast.makeText(context, "You have to exit search first", Toast.LENGTH_LONG).show()
-                    }
-                    else {
-                        // something went wrong
-                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search, contentDescription = "Search"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search, contentDescription = "Search"
-                )
             }
             IconButton(
                 onClick = {

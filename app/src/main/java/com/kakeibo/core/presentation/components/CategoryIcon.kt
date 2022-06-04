@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import com.kakeibo.R
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDrawing
@@ -20,12 +21,13 @@ fun CategoryIcon(
     modifier: Modifier = Modifier,
     code: Int,
     drawable: String,
-    image: ByteArray?
+    image: ByteArray?,
+    size: Dp = dimensionResource(id = R.dimen.new_category_drawable_size)
 ) {
     when {
         code < UtilCategory.CUSTOM_CATEGORY_CODE_START -> {
             Image(
-                modifier = modifier,
+                modifier = modifier.size(size),
                 painter = painterResource(
                     id = UtilDrawing.getDrawableIdFromIconName(
                         LocalContext.current,
@@ -36,16 +38,14 @@ fun CategoryIcon(
             )
         }
         image != null -> {
-            val size =
-                dimensionResource(id = R.dimen.new_category_drawable_size)
             Image(
                 modifier = modifier.size(size),
                 bitmap = UtilDrawing.bytesToBitmap(image)
                     ?.let {
                         UtilDrawing.getBitmapClippedCircle(it).asImageBitmap()
                     } ?: Bitmap.createBitmap(
-                    10,
-                    10,
+                    0,
+                    0,
                     Bitmap.Config.ARGB_8888
                 ).asImageBitmap(),
                 contentDescription = "Category Icon"

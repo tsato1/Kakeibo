@@ -273,7 +273,8 @@ fun ItemChartScreen(
                                                 modifier = Modifier.padding(2.dp),
                                                 code = displayedItemModel.categoryCode,
                                                 drawable = displayedItemModel.categoryDrawable,
-                                                image = displayedItemModel.categoryImage
+                                                image = displayedItemModel.categoryImage,
+                                                size = dimensionResource(id = R.dimen.category_list_row_height)
                                             )
                                             Text(
                                                 text = displayedItemModel.categoryName
@@ -380,7 +381,8 @@ fun ItemChartScreen(
                                                 modifier = Modifier.padding(2.dp),
                                                 code = displayedItemModel.categoryCode,
                                                 drawable = displayedItemModel.categoryDrawable,
-                                                image = displayedItemModel.categoryImage
+                                                image = displayedItemModel.categoryImage,
+                                                size = dimensionResource(id = R.dimen.category_list_row_height)
                                             )
                                             Text(
                                                 text = displayedItemModel.categoryName
@@ -422,6 +424,12 @@ fun ItemChartScreen(
                                 }
                             }
                         }
+                    }
+                    if (itemChartState.value.incomeList.isEmpty() && itemChartState.value.expenseList.isEmpty()) {
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            text = stringResource(id = R.string.no_item_found),
+                        )
                     }
                 }
             }

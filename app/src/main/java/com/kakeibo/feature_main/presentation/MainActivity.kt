@@ -67,7 +67,6 @@ import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
-//todo don't display action buttons on the actionbar (settings, upload, search) when in edit screen
 //todo keyboard goes away
 //todo typography
 //todo input : accept comma and period
