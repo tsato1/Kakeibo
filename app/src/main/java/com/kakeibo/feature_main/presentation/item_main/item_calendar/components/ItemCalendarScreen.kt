@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,27 +92,21 @@ fun ItemCalendarScreen(
                 .padding(innerPadding)
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragEnd = {
+                    if (searchIdState.value == 0L) {
+                        detectDragGestures(
+                            onDragEnd = {
+                                when {
+                                    offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
+                                    offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                }
+                                offsetX = 0f
+                            }
+                        ) { change, dragAmount ->
+                            change.consume()
+                            offsetX += dragAmount.x
                             when {
-                                offsetX > 200 -> {
-                                    viewModel.plus(-1, DateTimeUnit.MONTH)
-                                }
-                                offsetX < -200 -> {
-                                    viewModel.plus(1, DateTimeUnit.MONTH)
-                                }
-                            }
-                            offsetX = 0f
-                        }
-                    ) { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount.x
-                        when {
-                            offsetX > 400f -> {
-                                offsetX = 400f
-                            }
-                            offsetX < -400f -> {
-                                offsetX = -400f
+                                offsetX > 400f -> { offsetX = 400f }
+                                offsetX < -400f -> { offsetX = -400f }
                             }
                         }
                     }
@@ -120,7 +115,8 @@ fun ItemCalendarScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (searchIdState.value != 0L) {
                     SearchModeTopRow(
@@ -140,10 +136,21 @@ fun ItemCalendarScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                CalendarRows(
-                    navController = navController,
-                    viewModel = viewModel
-                )
+                if (searchIdState.value == 0L) {
+                    CalendarRows(
+                        navController = navController,
+                        viewModel = viewModel
+                    )
+                }
+                else {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        text = stringResource(id = R.string.calendar_view_not_available_in_search_mode),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
             if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
                 BannerAds(

@@ -134,25 +134,28 @@ class ItemMainViewModel @Inject constructor(
     }
 
     override fun onDateChanged() {
-        val date = localEventDate.value
+        /* reloads only when not in search mode */
+        if (searchId.value == 0L) {
+            val date = localEventDate.value
 
-        val firstDayOfMonth = UtilDate.getFirstDayOfMonth(date)
-        val remainingDays = UtilDate.getRemainingDays(date)
+            val firstDayOfMonth = UtilDate.getFirstDayOfMonth(date)
+            val remainingDays = UtilDate.getRemainingDays(date)
 
-        val localDate = date.toLocalDate()
-        _calendarFromDate.value = LocalDate(
-            localDate.year, localDate.monthNumber, 1
-        ).minus(firstDayOfMonth, DateTimeUnit.DAY)
-        _calendarToDate.value = LocalDate(
-            localDate.year, localDate.monthNumber, 1
-        ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
+            val localDate = date.toLocalDate()
+            _calendarFromDate.value = LocalDate(
+                localDate.year, localDate.monthNumber, 1
+            ).minus(firstDayOfMonth, DateTimeUnit.DAY)
+            _calendarToDate.value = LocalDate(
+                localDate.year, localDate.monthNumber, 1
+            ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
 
-        loadItems(
-            SearchModel(
-                fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
-                toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
+            loadItems(
+                SearchModel(
+                    fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
+                    toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
+                )
             )
-        )
+        }
     }
 
     fun onEvent(event: ItemMainEvent) {
@@ -201,7 +204,10 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val expandableItemList = result.data
                         ?.groupBy { it.eventDate }
-                        ?.filter { it.key.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.key.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.map { entry ->
                             ExpandableItem(
                                 ExpandableItem.Parent(
@@ -275,17 +281,26 @@ class ItemMainViewModel @Inject constructor(
                      */
                     val incomeTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
 
                     val expenseTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
 
                     val incomeCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
@@ -298,7 +313,10 @@ class ItemMainViewModel @Inject constructor(
 
                     val expenseCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
@@ -311,12 +329,18 @@ class ItemMainViewModel @Inject constructor(
 
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     val itemMapByCategoryExpense = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter { it.eventDate.isWithinMonth(localEventDate.value) }
+                        ?.filter {
+                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
+                            else { true }
+                        }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     when (result) {

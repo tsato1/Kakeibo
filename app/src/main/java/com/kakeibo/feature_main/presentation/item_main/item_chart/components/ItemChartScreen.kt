@@ -94,27 +94,21 @@ fun ItemChartScreen(
                 .padding(innerPadding)
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragEnd = {
+                    if (searchIdState.value == 0L) {
+                        detectDragGestures(
+                            onDragEnd = {
+                                when {
+                                    offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
+                                    offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                }
+                                offsetX = 0f
+                            }
+                        ) { change, dragAmount ->
+                            change.consume()
+                            offsetX += dragAmount.x
                             when {
-                                offsetX > 200 -> {
-                                    viewModel.plus(-1, DateTimeUnit.MONTH)
-                                }
-                                offsetX < -200 -> {
-                                    viewModel.plus(1, DateTimeUnit.MONTH)
-                                }
-                            }
-                            offsetX = 0f
-                        }
-                    ) { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount.x
-                        when {
-                            offsetX > 400f -> {
-                                offsetX = 400f
-                            }
-                            offsetX < -400f -> {
-                                offsetX = -400f
+                                offsetX > 400f -> { offsetX = 400f }
+                                offsetX < -400f -> { offsetX = -400f }
                             }
                         }
                     }

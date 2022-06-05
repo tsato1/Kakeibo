@@ -2,7 +2,6 @@ package com.kakeibo.feature_main.presentation.common.components
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -29,7 +28,6 @@ fun DatePickerRow(
     dateFormatIndex: Int, // date format that's stored in shared pref
     viewModel: BaseViewModel
 ) {
-    Log.d("asdf", "dateformatindex = "+dateFormatIndex)
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, y: Int, m: Int, d: Int ->
