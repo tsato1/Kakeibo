@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">Kakeibo</string>
-
     <string name="input">입력</string>
     <string name="report">보고서</string>
     <string name="search">수색</string>
-
     <string name="income">수입</string>
     <string name="delete">지우다</string>
     <string name="edit">편집하다</string>
@@ -25,7 +23,6 @@
     <string name="category">범주</string>
     <string name="event_date">행사 날</string>
     <string name="updated_date">업데이트 날짜</string>
-
     <string name="income_colon">수입:</string>
     <string name="expense_colon">비용:</string>
     <string name="balance_colon">균형:</string>
@@ -35,7 +32,6 @@
     <string name="category_colon">범주:</string>
     <string name="event_date_colon">행사 날:</string>
     <string name="updated_on_colon">절약:</string>
-
     <string name="add_search_criterion">검색 기준 추가</string>
     <string name="date_range">날짜 범위</string>
     <string name="from">에서</string>
@@ -52,34 +48,26 @@
     <string name="err_please_enter_min_amount">최소 금액을 입력하십시오.</string>
     <string name="err_please_enter_max_amount">최대 금액을 입력하십시오.</string>
     <string name="err_min_amount_greater">최대 금액은 최소 금액보다 커야합니다.</string>
-
     <string name="hint_amount_spent_or_earned">지출 또는 얻은 금액</string>
     <string name="hint_memo_max_20_characters">메모 : 최대 20 자</string>
-
     <string name="msg_item_successfully_saved">항목이 성공적으로 저장되었습니다.</string>
     <string name="msg_item_successfully_deleted">항목이 성공적으로 삭제되었습니다.</string>
     <string name="msg_change_successfully_saved">변경 사항이 저장되었습니다.</string>
     <string name="msg_no_result_found">결과가 없습니다.</string>
     <string name="msg_exit_search">검색 결과 페이지를 종료하고이 달의 월별 보고서로 돌아갑니다.</string>
-
     <string name="inst_tap_plus_to_add_criteria">먼저 더하기 버튼을 눌러 기준을 추가합니다. 그런 다음 검색 버튼을 눌러 검색을 수행하십시오.</string>
-
     <string name="err_amount_invalid">금액이 유효하지 않습니다.</string>
     <string name="err_please_select_category">카테고리를 선택하십시오.</string>
     <string name="err_please_enter_amount">금액을 입력하십시오.</string>
     <string name="err_amount_cannot_be_0">금액은 0 일 수 없습니다.</string>
     <string name="err_max_amount_cannot_be_0">최대 금액은 0 일 수 없습니다.</string>
     <string name="err_memo_empty">메모의 검색어가 비어 있습니다.</string>
-
     <string name="quest_do_you_want_to_delete_item">이 항목을 정말로 삭제 하시겠습니까?</string>
     <string name="quest_export_this_report_C">이 보고서를 Google 드라이브로 내보내시겠습니까? 범주별로 정렬되어 있습니다.</string>
     <string name="quest_export_this_report_D">이 보고서를 Google 드라이브로 내보내시겠습니까? 날짜별로 정렬되어 있습니다.</string>
-
     <string name="edit_item">항목 편집</string>
     <string name="search_result">검색 결과</string>
     <string name="returning_to_monthly_report">월간 보고서로 돌아 가기</string>
-
-    <!-- Export -->
     <string name="select_file">파일 선택</string>
     <string name="file_created">클라우드에 파일이 저장되었습니다.</string>
     <string name="file_create_error">파일을 작성하는 중 오류가 발생했습니다. 나중에 다시 시도 해주십시오.</string>
@@ -88,57 +76,15 @@
     <string name="nothing_to_export">내보낼 것이 없습니다.</string>
     <string name="empty_report">보고서가 비어 있습니다.</string>
     <string name="tap_anywhere_to_dismiss">닫으려면 아무 곳이나 누르십시오.</string>
-
-    <!-- Settings -->
-    <!-- General settings -->
     <string name="general">일반</string>
-
     <string name="date_format">날짜 형식</string>
     <string name="remove_ads">광고를 제거하다</string>
     <string name="fraction_digits">분수 자리</string>
-
-    <!-- Setting for in-app data -->
     <string name="in_app_data">인앱 데이터</string>
     <string name="delete_all_items">모든 항목 삭제</string>
     <string name="desc_delete_all_items">이 장치에 저장 한 모든 Kakeibo 항목이 삭제됩니다. 삭제하기 전에 Google 드라이브로 내보내는 것이 좋습니다. 계속하려면 예를 누르십시오.</string>
     <string name="warn_delete_all_items">정말로 모든 항목을 삭제 하시겠습니까?</string>
     <string name="msg_all_delete_success">모든 항목이 성공적으로 삭제되었습니다.</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <!-- Example settings for Notifications -->
-
     <string name="memo">메모</string>
     <string name="amount">양</string>
     <string name="err_from_date_older">시작 날짜는 종료 날짜보다 작아야합니다.</string>
@@ -219,7 +165,6 @@
     <string name="enter_category_name">카테고리 이름을 입력하세요.</string>
     <string name="err_category_type_not_selected">카테고리 유형이 선택되지 않았습니다. 하나를 고르세요.</string>
     <string name="here_are_the_categories_on_input_screen">INPUT 화면에 표시되는 카테고리는 다음과 같습니다.</string>
-    <string name="remove_at_least_one_category">카테고리를 하나 이상 제거하세요.</string>
     <string name="remove_at_least_one_category">카테고리를 하나 이상 제거하세요.</string>
     <string name="category_count_cannot_exceed">범주 수는 %d 개를 초과할 수 없습니다.</string>
 </resources>

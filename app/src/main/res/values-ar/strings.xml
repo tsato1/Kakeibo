@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Kakeibo</string>
-
     <string name="settings">الإعدادات</string>
-
     <string name="input">إدخال</string>
     <string name="report">أبلغ عن</string>
     <string name="search">بحث</string>
-
     <string name="income">الإيرادات</string>
     <string name="delete">حذف</string>
     <string name="edit">تصحيح</string>
@@ -25,7 +22,6 @@
     <string name="category">الفئة</string>
     <string name="event_date">تاريخ الحدث</string>
     <string name="updated_date">تاريخ التحديث</string>
-
     <string name="income_colon">:الإيرادات</string>
     <string name="expense_colon">:مصروف</string>
     <string name="balance_colon">:توازن</string>
@@ -34,7 +30,6 @@
     <string name="memo_colon">:مذكرة</string>
     <string name="category_colon">:الفئة</string>
     <string name="updated_on_colon">تم الحفظ في:</string>
-
     <string name="add_search_criterion">إضافة معايير البحث</string>
     <string name="date_range">نطاق الموعد</string>
     <string name="from">من</string>
@@ -48,34 +43,26 @@
     <string name="err_please_enter_min_amount">الرجاء إدخال الحد الأدنى للمبلغ</string>
     <string name="err_please_enter_max_amount">الرجاء إدخال الحد الأقصى للمبلغ.</string>
     <string name="err_min_amount_greater">يجب أن يكون الحد الأقصى للمبلغ أكبر من الحد الأدنى للمبلغ.</string>
-
     <string name="hint_amount_spent_or_earned">المبلغ المنفق أو المكتسب</string>
     <string name="hint_memo_max_20_characters">المذكرة: 20 حرفًا كحد أقصى</string>
-
     <string name="msg_item_successfully_saved">تم حفظ العنصر بنجاح.</string>
     <string name="msg_item_successfully_deleted">تم حذف العنصر بنجاح.</string>
     <string name="msg_change_successfully_saved">تم حفظ التغيير بنجاح.</string>
     <string name="msg_no_result_found">لم يتم العثور على نتيجة.</string>
     <string name="msg_exit_search">ستخرج من صفحة نتائج البحث وتعود إلى التقرير الشهري لهذا الشهر.</string>
-
     <string name="inst_tap_plus_to_add_criteria">أولاً ، انقر فوق زر علامة الجمع لإضافة معايير. ثم اضغط على زر البحث لإجراء البحث.</string>
-
     <string name="err_amount_invalid">المبلغ غير صالح.</string>
     <string name="err_please_select_category">الرجاء تحديد الفئة</string>
     <string name="err_please_enter_amount">الرجاء إدخال المبلغ.</string>
     <string name="err_amount_cannot_be_0">لا يمكن أن يكون المبلغ 0.</string>
     <string name="err_max_amount_cannot_be_0">لا يمكن أن يكون الحد الأقصى للمبلغ 0.</string>
     <string name="err_memo_empty">كلمة البحث في الملاحظة فارغة.</string>
-
     <string name="quest_do_you_want_to_delete_item">هل تريد حقًا حذف هذا العنصر؟</string>
     <string name="quest_export_this_report_C">هل تريد تصدير هذا التقرير على Google Drive؟ يتم فرزها حسب الفئة.</string>
     <string name="quest_export_this_report_D">هل تريد تصدير هذا التقرير على Google Drive؟ يتم فرزها حسب التاريخ.</string>
-
     <string name="edit_item">تعديل عنصر</string>
     <string name="search_result">نتيجة البحث</string>
     <string name="returning_to_monthly_report">العودة إلى التقرير الشهري</string>
-
-    <!-- Export -->
     <string name="select_file">اختر الملف</string>
     <string name="file_created">تم حفظ الملف على السحابة.</string>
     <string name="file_create_error">حدث خطأ أثناء محاولة إنشاء الملف. الرجاء معاودة المحاولة في وقت لاحق.</string>
@@ -84,57 +71,15 @@
     <string name="nothing_to_export">لا يوجد شيء للتصدير.</string>
     <string name="empty_report">تقريرك فارغ.</string>
     <string name="tap_anywhere_to_dismiss">اضغط في أي مكان لإغلاق.</string>
-
-    <!-- Settings -->
-    <!-- General settings -->
     <string name="general">جنرال لواء</string>
-
     <string name="date_format">صيغة التاريخ</string>
     <string name="remove_ads">ازالة الاعلانات</string>
     <string name="fraction_digits">أرقام الكسر</string>
-
-    <!-- Setting for in-app data -->
     <string name="in_app_data">البيانات داخل التطبيق</string>
     <string name="delete_all_items">حذف جميع العناصر</string>
     <string name="desc_delete_all_items">سيؤدي هذا إلى حذف جميع عناصر Kakeibo التي قمت بحفظها على هذا الجهاز. يُنصح بالتصدير إلى Google Drive قبل الحذف. اضغط نعم للمتابعة.</string>
     <string name="warn_delete_all_items">هل تريد حقًا حذف جميع العناصر؟</string>
     <string name="msg_all_delete_success">تم حذف جميع العناصر بنجاح.</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <!-- Example settings for Notifications -->
-
     <string name="memo">مذكرة</string>
     <string name="err_from_date_older">يجب أن يكون \"من التاريخ\" أصغر من \"إلى تاريخ\"</string>
     <string name="amount">مبلغ</string>
@@ -221,7 +166,5 @@
     <string name="err_category_type_not_selected">لم يتم تحديد نوع الفئة. اختر واحدة.</string>
     <string name="here_are_the_categories_on_input_screen">فيما يلي الفئات التي سيتم عرضها على شاشة الإدخال</string>
     <string name="remove_at_least_one_category">الرجاء إزالة فئة واحدة على الأقل.</string>
-    <string name="remove_at_least_one_category">الرجاء إزالة فئة واحدة على الأقل.</string>
     <string name="category_count_cannot_exceed">لا يمكن أن يتجاوز عدد الفئات ٪d</string>
-    <string name="category_count_cannot_exceed">لا يمكن أن يتجاوز عدد الفئات٪ d</string>
 </resources>

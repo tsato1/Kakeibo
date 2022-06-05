@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Kakeibo</string>
-
     <string name="settings">Ayarlar</string>
-
     <string name="input">GİRİŞ</string>
     <string name="report">RAPOR</string>
     <string name="search">ARAMA</string>
-
     <string name="income">Gelir</string>
     <string name="delete">Sil</string>
     <string name="edit">Düzenle</string>
@@ -27,7 +24,6 @@
     <string name="category">Kategori</string>
     <string name="event_date">Etkinlik Tarihi</string>
     <string name="updated_date">Güncelleme Tarihi</string>
-
     <string name="income_colon">Gelir:</string>
     <string name="expense_colon">Gider:</string>
     <string name="balance_colon">Denge:</string>
@@ -37,7 +33,6 @@
     <string name="category_colon">Kategori:</string>
     <string name="event_date_colon">Etkinlik Tarihi:</string>
     <string name="updated_on_colon">Tarihinde kaydedildi:</string>
-
     <string name="add_search_criterion">Arama Kriteri Ekle</string>
     <string name="date_range">Tarih Aralığı</string>
     <string name="from">Itibaren</string>
@@ -54,34 +49,26 @@
     <string name="err_please_enter_min_amount">Lütfen Minimum Tutarı girin.</string>
     <string name="err_please_enter_max_amount">Lütfen Maksimum Tutarı girin.</string>
     <string name="err_min_amount_greater">Maksimum Tutar Min Tutardan büyük olmalıdır.</string>
-
     <string name="hint_amount_spent_or_earned">Harcanan veya kazanılan miktar</string>
     <string name="hint_memo_max_20_characters">Muhtıra: En fazla 20 karakter</string>
-
     <string name="msg_item_successfully_saved">Öğe başarıyla kaydedildi.</string>
     <string name="msg_item_successfully_deleted">Öğe başarıyla silindi.</string>
     <string name="msg_change_successfully_saved">Değişiklik başarıyla kaydedildi.</string>
     <string name="msg_no_result_found">Sonuç bulunamadı.</string>
     <string name="msg_exit_search">Arama sonucu sayfasından çıkacak ve bu ayın aylık raporuna döneceksiniz.</string>
-
     <string name="inst_tap_plus_to_add_criteria">Önce ölçüt eklemek için artı düğmesine dokunun. Ardından, arama yapmak için arama düğmesine dokunun.</string>
-
     <string name="err_amount_invalid">Tutar geçersiz.</string>
     <string name="err_please_select_category">Lütfen Kategori seçiniz.</string>
     <string name="err_please_enter_amount">Lütfen tutarı giriniz.</string>
     <string name="err_amount_cannot_be_0">Tutar 0 olamaz.</string>
     <string name="err_max_amount_cannot_be_0">Maksimum Tutar 0 olamaz.</string>
     <string name="err_memo_empty">Not’taki arama sözcüğü boş.</string>
-
     <string name="quest_do_you_want_to_delete_item">Bu öğeyi gerçekten silmek istiyor musunuz?</string>
     <string name="quest_export_this_report_C">Bu raporu Google Drive\'a vermek ister misiniz? Kategori\'ye göre sıralanır.</string>
     <string name="quest_export_this_report_D">Bu raporu Google Drive\'a vermek ister misiniz? Tarihe göre sıralanır.</string>
-
     <string name="edit_item">Ögeyi düzenle</string>
     <string name="search_result">Arama sonuçları</string>
     <string name="returning_to_monthly_report">Aylık rapora dönme</string>
-
-    <!-- Export -->
     <string name="select_file">Dosya Seç</string>
     <string name="file_created">Bulutta kaydedilen dosya.</string>
     <string name="file_create_error">Dosyayı oluşturmaya çalışırken hata. Lütfen daha sonra tekrar deneyiniz.</string>
@@ -90,57 +77,15 @@
     <string name="nothing_to_export">Verilecek hiçbir şey yok.</string>
     <string name="empty_report">Raporunuz boş.</string>
     <string name="tap_anywhere_to_dismiss">Kapatmak için herhangi bir yere dokunun.</string>
-
-    <!-- Settings -->
-    <!-- General settings -->
     <string name="general">Genel</string>
-
     <string name="date_format">Tarih Formatı</string>
     <string name="remove_ads">Reklamları kaldırmak</string>
     <string name="fraction_digits">Kesir Basamağı</string>
-
-    <!-- Setting for in-app data -->
     <string name="in_app_data">Uygulama İçi Veriler</string>
     <string name="delete_all_items">Tüm öğeleri sil</string>
     <string name="desc_delete_all_items">Bu, bu cihaza kaydettiğiniz tüm Kakeibo öğelerini siler. Silmeden önce Google Drive’ınıza dışa aktarmanız önerilir. Devam etmek için evet\'e dokunun.</string>
     <string name="warn_delete_all_items">Tüm öğeleri gerçekten silmek istiyor musunuz?</string>
     <string name="msg_all_delete_success">Tüm öğeler başarıyla silindi.</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <!-- Example settings for Notifications -->
-
     <string name="memo">Muhtıra</string>
     <string name="amount">Miktar</string>
     <string name="err_from_date_older">\"Kadar Itibaren\"\'nın \"Tarih Kadar\"\'den küçük olması gerekir.</string>
@@ -220,7 +165,6 @@
     <string name="enter_category_name">Kategorinizin adını girin.</string>
     <string name="err_category_type_not_selected">Kategori Türü seçilmedi. Birini seç.</string>
     <string name="here_are_the_categories_on_input_screen">İşte GİRİŞ ekranında görüntülenecek Kategoriler</string>
-    <string name="remove_at_least_one_category">Lütfen en az bir kategoriyi kaldırın.</string>
     <string name="remove_at_least_one_category">Lütfen en az bir kategoriyi kaldırın.</string>
     <string name="category_count_cannot_exceed">Kategori sayısı %d \'yi aşamaz</string>
 </resources>

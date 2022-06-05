@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Kakeibo</string>
-
     <string name="settings">Ustawienia</string>
-
     <string name="input">WKŁAD</string>
     <string name="report">RAPORT</string>
     <string name="search">SZUKAJ</string>
-
     <string name="income">Dochód</string>
     <string name="delete">Kasować</string>
     <string name="edit">Edytować</string>
@@ -26,7 +23,6 @@
     <string name="category">Kategoria</string>
     <string name="event_date">Data wydarzenia</string>
     <string name="updated_date">Zaktualizowana data</string>
-
     <string name="income_colon">Dochód:</string>
     <string name="expense_colon">Koszt:</string>
     <string name="balance_colon">Saldo:</string>
@@ -36,7 +32,6 @@
     <string name="category_colon">Kategoria:</string>
     <string name="event_date_colon">Data wydarzenia:</string>
     <string name="updated_on_colon">Zapisano w:</string>
-
     <string name="add_search_criterion">Dodaj kryteria wyszukiwania</string>
     <string name="date_range">Zakres dat</string>
     <string name="from">Od</string>
@@ -53,34 +48,26 @@
     <string name="err_please_enter_min_amount">Wprowadź Minimalną Kwotę.</string>
     <string name="err_please_enter_max_amount">Wprowadź Maksymalną Kwotę.</string>
     <string name="err_min_amount_greater">Maksymalna kwota musi być większa niż kwota minimalna.</string>
-
     <string name="hint_amount_spent_or_earned">Kwota wydana lub zarobiona</string>
     <string name="hint_memo_max_20_characters">Notatka: maks. 20 znaków</string>
-
     <string name="msg_item_successfully_saved">Element został pomyślnie zapisany.</string>
     <string name="msg_item_successfully_deleted">Element został pomyślnie usunięty.</string>
     <string name="msg_change_successfully_saved">Zmiana została pomyślnie zapisana.</string>
     <string name="msg_no_result_found">Nie znaleziono żadnych wyników.</string>
     <string name="msg_exit_search">Wyjdziesz ze strony wyników wyszukiwania i wrócisz do raportu miesięcznego za ten miesiąc.</string>
-
     <string name="inst_tap_plus_to_add_criteria">Najpierw dotknij przycisku plus, aby dodać kryteria. Następnie dotknij przycisku wyszukiwania, aby przeprowadzić wyszukiwanie.</string>
-
     <string name="err_amount_invalid">Kwota jest nieprawidłowa.</string>
     <string name="err_please_select_category">Proszę wybierz Kategorie.</string>
     <string name="err_please_enter_amount">Proszę podać Kwotę.</string>
     <string name="err_amount_cannot_be_0">Kwota nie może wynosić 0.</string>
     <string name="err_max_amount_cannot_be_0">Maksymalna kwota nie może wynosić 0.</string>
     <string name="err_memo_empty">Szukane słowo w notatce jest puste.</string>
-
     <string name="quest_do_you_want_to_delete_item">Czy na pewno chcesz usunąć ten element?</string>
     <string name="quest_export_this_report_C">Czy chcesz wyeksportować ten raport na Dysk Google? Jest posortowane według kategorii.</string>
     <string name="quest_export_this_report_D">Czy chcesz wyeksportować ten raport na Dysk Google? Jest sortowane według daty.</string>
-
     <string name="edit_item">Edytuj rzecz</string>
     <string name="search_result">Wynik wyszukiwania</string>
     <string name="returning_to_monthly_report">Wracając do raportu miesięcznego</string>
-
-    <!-- Export -->
     <string name="select_file">Wybierz plik</string>
     <string name="file_created">Plik zapisany w chmurze.</string>
     <string name="file_create_error">Wystąpił błąd podczas próby utworzenia pliku. Spróbuj ponownie później.</string>
@@ -89,57 +76,15 @@
     <string name="nothing_to_export">Nie ma nic do wyeksportowania.</string>
     <string name="empty_report">Twój raport jest pusty.</string>
     <string name="tap_anywhere_to_dismiss">Stuknij w dowolnym miejscu, aby zamknąć.</string>
-
-    <!-- Settings -->
-    <!-- General settings -->
     <string name="general">Generał</string>
-
     <string name="date_format">Format daty</string>
     <string name="remove_ads">Usuń reklamy</string>
     <string name="fraction_digits">Cyfry ułamkowe</string>
-
-    <!-- Setting for in-app data -->
     <string name="in_app_data">Dane w aplikacji</string>
     <string name="delete_all_items">Usuń wszystkie elementy</string>
     <string name="desc_delete_all_items">"Spowoduje to usunięcie wszystkich elementów Kakeibo zapisanych na tym urządzeniu. Przed usunięciem zalecamy eksport na dysk Google. Stuknij tak, aby kontynuować. "</string>
     <string name="warn_delete_all_items">Czy na pewno chcesz usunąć wszystkie elementy?</string>
     <string name="msg_all_delete_success">Wszystkie elementy zostały pomyślnie usunięte.</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <!-- Example settings for Notifications -->
-
     <string name="memo">Notatka</string>
     <string name="amount">Ilość</string>
     <string name="err_from_date_older">„Od daty” musi być młodsze niż „Do daty”.</string>
@@ -220,7 +165,6 @@
     <string name="enter_category_name">Wpisz nazwę swojej kategorii.</string>
     <string name="err_category_type_not_selected">Nie wybrano typu kategorii. Wybierz jeden.</string>
     <string name="here_are_the_categories_on_input_screen">Oto kategorie, które mają być wyświetlane na ekranie WEJŚCIA</string>
-    <string name="remove_at_least_one_category">Usuń co najmniej jedną kategorię.</string>
     <string name="remove_at_least_one_category">Usuń co najmniej jedną kategorię.</string>
     <string name="category_count_cannot_exceed">Liczba kategorii nie może przekraczać %d</string>
 </resources>

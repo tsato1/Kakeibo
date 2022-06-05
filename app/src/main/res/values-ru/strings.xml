@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Kakeibo</string>
-
     <string name="settings">настройки</string>
-
     <string name="input">ВХОД</string>
     <string name="report">ОТЧЕТ</string>
     <string name="search">ПОИСК</string>
-
     <string name="income">доход</string>
     <string name="delete">удалять</string>
     <string name="edit">редактировать</string>
@@ -27,7 +24,6 @@
     <string name="category">категории</string>
     <string name="event_date">Дата события</string>
     <string name="updated_date">Дата обновления</string>
-
     <string name="income_colon">доход:</string>
     <string name="expense_colon">расходы:</string>
     <string name="balance_colon">баланс:</string>
@@ -37,7 +33,6 @@
     <string name="category_colon">категории:</string>
     <string name="event_date_colon">Дата события:</string>
     <string name="updated_on_colon">Сохранено в:</string>
-
     <string name="add_search_criterion">Добавить критерии поиска</string>
     <string name="date_range">Диапазон дат</string>
     <string name="from">От</string>
@@ -53,34 +48,26 @@
     <string name="err_please_enter_min_amount">Пожалуйста, введите минимальную сумму.</string>
     <string name="err_please_enter_max_amount">Пожалуйста, введите максимальную сумму.</string>
     <string name="err_min_amount_greater">Максимальная сумма должна быть больше, чем минимальная сумма.</string>
-
     <string name="hint_amount_spent_or_earned">Сумма потрачена или заработана</string>
     <string name="hint_memo_max_20_characters">напоминание: максимум 20 символов</string>
-
     <string name="msg_item_successfully_saved">Элемент был успешно сохранен.</string>
     <string name="msg_item_successfully_deleted">Элемент был успешно удален.</string>
     <string name="msg_change_successfully_saved">Изменение было успешно сохранено.</string>
     <string name="msg_no_result_found">Результатов не найдено.</string>
     <string name="msg_exit_search">Вы выйдете из страницы результатов поиска и вернетесь к ежемесячному отчету.</string>
-
     <string name="inst_tap_plus_to_add_criteria">Сначала нажмите кнопку «плюс», чтобы добавить критерии. Затем нажмите кнопку поиска, чтобы выполнить поиск.</string>
-
     <string name="err_amount_invalid">Сумма недействительна.</string>
     <string name="err_please_select_category">Пожалуйста, выберите категорию.</string>
     <string name="err_please_enter_amount">Пожалуйста, введите сумму.</string>
     <string name="err_amount_cannot_be_0">Сумма не может быть 0.</string>
     <string name="err_max_amount_cannot_be_0">Максимальная сумма не может быть 0.</string>
     <string name="err_memo_empty">Поисковое слово в меморандум пусто.</string>
-
     <string name="quest_do_you_want_to_delete_item">Вы действительно хотите удалить этот элемент?</string>
     <string name="quest_export_this_report_C">Хотите экспортировать этот отчет на Google Drive? Сортируется по категории.</string>
     <string name="quest_export_this_report_D">Хотите экспортировать этот отчет на Google Drive? Отсортировано по дате.</string>
-
     <string name="edit_item">Изменить элемент</string>
     <string name="search_result">Результат поиска</string>
     <string name="returning_to_monthly_report">Возвращаясь к ежемесячному отчету</string>
-
-    <!-- Export -->
     <string name="select_file">Выбрать файл</string>
     <string name="file_created">Файл сохранен в облаке.</string>
     <string name="file_create_error">Произошла ошибка при попытке создать файл. Пожалуйста, попробуйте позже.</string>
@@ -89,57 +76,15 @@
     <string name="nothing_to_export">Нечего экспортировать.</string>
     <string name="empty_report">Ваш отчет пуст.</string>
     <string name="tap_anywhere_to_dismiss">Нажмите в любом месте, чтобы уволить.</string>
-
-    <!-- Settings -->
-    <!-- General settings -->
     <string name="general">генеральный</string>
-
     <string name="date_format">Формат даты</string>
     <string name="remove_ads">Удалить рекламу</string>
     <string name="fraction_digits">Цифры дроби</string>
-
-    <!-- Setting for in-app data -->
     <string name="in_app_data">Данные в приложении</string>
     <string name="delete_all_items">Удалить все элементы</string>
     <string name="desc_delete_all_items">Это удалит все элементы Kakeibo, которые вы сохранили на этом устройстве. Перед удалением рекомендуется выполнить экспорт на Google Диск. Нажмите Да, чтобы продолжить.</string>
     <string name="warn_delete_all_items">Вы действительно хотите удалить все элементы?</string>
     <string name="msg_all_delete_success">Все элементы были успешно удалены.</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <!-- Example settings for Notifications -->
-
     <string name="memo">меморандум</string>
     <string name="amount">Количество</string>
     <string name="err_from_date_older">От датa должен быть моложе к дата.</string>
@@ -220,7 +165,6 @@
     <string name="enter_category_name">Введите название вашей категории.</string>
     <string name="err_category_type_not_selected">Тип категории не выбран. Выберите один.</string>
     <string name="here_are_the_categories_on_input_screen">Вот категории, которые будут отображаться на экране ввода.</string>
-    <string name="remove_at_least_one_category">Удалите хотя бы одну категорию.</string>
     <string name="remove_at_least_one_category">Удалите хотя бы одну категорию.</string>
     <string name="category_count_cannot_exceed">Количество категорий не может превышать %d</string>
 </resources>

@@ -167,6 +167,5 @@
     <string name="err_category_type_not_selected">Le type de catégorie n\'est pas sélectionné. Sélectionnez-en un.</string>
     <string name="here_are_the_categories_on_input_screen">Voici les catégories à afficher sur l\'écran INPUT</string>
     <string name="remove_at_least_one_category">Veuillez supprimer au moins une catégorie.</string>
-    <string name="remove_at_least_one_category">Veuillez supprimer au moins une catégorie.</string>
     <string name="category_count_cannot_exceed">Le nombre de catégories ne peut pas dépasser %d</string>
 </resources>
