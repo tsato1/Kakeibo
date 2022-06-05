@@ -222,4 +222,5 @@
     <string name="here_are_the_categories_on_input_screen">Berikut adalah Kategori yang akan ditampilkan pada layar INPUT</string>
     <string name="remove_at_least_one_category">Harap hapus setidaknya satu kategori.</string>
     <string name="category_count_cannot_exceed">Jumlah kategori tidak boleh melebihi %d</string>
+    <string name="calendar_view_not_available_in_search_mode">Tampilan Kalender tidak tersedia dalam Mode Pencarian.</string>
 </resources>

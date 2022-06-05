@@ -168,4 +168,5 @@
     <string name="here_are_the_categories_on_input_screen">Voici les catégories à afficher sur l\'écran INPUT</string>
     <string name="remove_at_least_one_category">Veuillez supprimer au moins une catégorie.</string>
     <string name="category_count_cannot_exceed">Le nombre de catégories ne peut pas dépasser %d</string>
+    <string name="calendar_view_not_available_in_search_mode">La vue Calendrier n\'est pas disponible en mode Recherche.</string>
 </resources>

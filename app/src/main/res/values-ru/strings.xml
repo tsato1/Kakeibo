@@ -167,4 +167,5 @@
     <string name="here_are_the_categories_on_input_screen">Вот категории, которые будут отображаться на экране ввода.</string>
     <string name="remove_at_least_one_category">Удалите хотя бы одну категорию.</string>
     <string name="category_count_cannot_exceed">Количество категорий не может превышать %d</string>
+    <string name="calendar_view_not_available_in_search_mode">Просмотр календаря недоступен в режиме поиска.</string>
 </resources>

@@ -168,4 +168,5 @@
     <string name="here_are_the_categories_on_input_screen">INPUT画面に表示されるカテゴリは次のとおりです．</string>
     <string name="remove_at_least_one_category">少なくとも一つのカテゴリーを削除してください．</string>
     <string name="category_count_cannot_exceed">カテゴリーの個数の上限は%dです．</string>
+    <string name="calendar_view_not_available_in_search_mode">カレンダー表示は検索モードでは使用できません．</string>
 </resources>

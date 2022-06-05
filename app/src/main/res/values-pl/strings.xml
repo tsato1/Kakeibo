@@ -167,4 +167,5 @@
     <string name="here_are_the_categories_on_input_screen">Oto kategorie, które mają być wyświetlane na ekranie WEJŚCIA</string>
     <string name="remove_at_least_one_category">Usuń co najmniej jedną kategorię.</string>
     <string name="category_count_cannot_exceed">Liczba kategorii nie może przekraczać %d</string>
+    <string name="calendar_view_not_available_in_search_mode">Widok kalendarza nie jest dostępny w trybie wyszukiwania.</string>
 </resources>

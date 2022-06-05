@@ -167,4 +167,5 @@
     <string name="err_reached_max_count">O número de categorias personalizadas atingiu o número máximo permitido. Apague alguns primeiro.</string>
     <string name="remove_at_least_one_category">Remova pelo menos uma categoria.</string>
     <string name="category_count_cannot_exceed">O número de categorias não pode exceder %d</string>
+    <string name="calendar_view_not_available_in_search_mode">A visualização de calendário não está disponível no modo de pesquisa.</string>
 </resources>

@@ -167,4 +167,5 @@
     <string name="here_are_the_categories_on_input_screen">İşte GİRİŞ ekranında görüntülenecek Kategoriler</string>
     <string name="remove_at_least_one_category">Lütfen en az bir kategoriyi kaldırın.</string>
     <string name="category_count_cannot_exceed">Kategori sayısı %d \'yi aşamaz</string>
+    <string name="calendar_view_not_available_in_search_mode">Takvim Görünümü, Arama Modunda kullanılamaz.</string>
 </resources>

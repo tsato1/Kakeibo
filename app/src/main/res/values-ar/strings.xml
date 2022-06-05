@@ -167,4 +167,5 @@
     <string name="here_are_the_categories_on_input_screen">فيما يلي الفئات التي سيتم عرضها على شاشة الإدخال</string>
     <string name="remove_at_least_one_category">الرجاء إزالة فئة واحدة على الأقل.</string>
     <string name="category_count_cannot_exceed">لا يمكن أن يتجاوز عدد الفئات ٪d</string>
+    <string name="calendar_view_not_available_in_search_mode">طريقة عرض التقويم غير متاحة في وضع البحث.</string>
 </resources>
