@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.adcolony.sdk.*
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -53,10 +54,10 @@ import com.kakeibo.feature_main.presentation.common.components.DrawerContent
 import com.kakeibo.feature_main.presentation.common.components.ImportExportDialog
 import com.kakeibo.feature_main.presentation.common.components.TopNavigationBar
 import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemEditScreen
-import com.kakeibo.feature_main.presentation.item_main.item_chart.components.ItemChartScreen
 import com.kakeibo.feature_main.presentation.item_detail.item_input.components.ItemInputScreen
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_calendar.components.ItemCalendarScreen
+import com.kakeibo.feature_main.presentation.item_main.item_chart.components.ItemChartScreen
 import com.kakeibo.feature_main.presentation.item_main.item_list.components.ItemListScreen
 import com.kakeibo.feature_main.presentation.item_search.components.ItemSearchScreen
 import com.kakeibo.feature_main.presentation.nav_drawer.components.AboutScreen
@@ -65,6 +66,10 @@ import com.kakeibo.ui.theme.KakeiboTheme
 import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+
+//todo after saving an item, open the item
+
+//todo startactivityforresult for settings page
 
 //todo keyboard goes away
 //todo typography
@@ -105,6 +110,22 @@ class MainActivity : ComponentActivity() {
                 Log.e("MainActivity", "Failed to lead ad")
             }
         })
+
+        /* Ad Colony */
+        val adViewListener: AdColonyAdViewListener = object : AdColonyAdViewListener() {
+            override fun onRequestFilled(ad: AdColonyAdView) {
+                /** Add this ad object to whatever layout you have set up for this placement  */
+            }
+        }
+        AdColony.requestAdView(getString(R.string.main_banner_ad_zone_id), adViewListener, AdColonyAdSize.BANNER)
+
+        AdColony.configure(this, getString(R.string.admob_app_id))
+        val interstitialListener: AdColonyInterstitialListener = object : AdColonyInterstitialListener() {
+            override fun onRequestFilled(ad: AdColonyInterstitial) {
+                /** Store and use this ad object to show your ad when appropriate  */
+            }
+        }
+        AdColony.requestInterstitial(getString(R.string.upload_ad_zone_id), interstitialListener)
 
         setContent {
             KakeiboTheme {
@@ -175,7 +196,7 @@ class MainActivity : ComponentActivity() {
             // response.getError().getErrorCode() and handle the error.
             Toast.makeText(
                 this,
-                "Error Occurred. Please contact developer: ${response?.error?.errorCode}",
+                "Sign in canceled: ${response?.error?.errorCode}",
                 Toast.LENGTH_LONG
             ).show()
         }

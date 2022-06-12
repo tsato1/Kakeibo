@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -43,36 +42,44 @@ fun DrawerContent(
     Column(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colors.onSurface)
+                .background(color = MaterialTheme.colors.onSurface),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
+            Column(
+                modifier = Modifier.padding(15.dp)
             ) {
-                Image(
-                    painter = rememberImagePainter(
-                        data = viewModel.firebaseUser.value?.photoUrl ?: "",
-                        builder = {
-                            size(OriginalSize)
-                            scale(Scale.FIT)
-                            transformations(CircleCropTransformation())
-                        }
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(60.dp)
+                Box(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .clip(CircleShape)
+                ) {
+                    Image(
+                        painter = rememberImagePainter(
+                            data = viewModel.firebaseUser.value?.photoUrl
+                                ?: R.mipmap.ic_launcher_round,
+                            builder = {
+                                size(OriginalSize)
+                                scale(Scale.FIT)
+                                transformations(CircleCropTransformation())
+                            }
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
+                Text(
+                    text = viewModel.firebaseUser.value?.displayName ?: stringResource(id = R.string.not_signed_in),
+                    color = MaterialTheme.colors.background
+                )
+                Text(
+                    text = viewModel.firebaseUser.value?.email ?: "",
+                    color = MaterialTheme.colors.background
                 )
             }
-            Text(
-                text = viewModel.firebaseUser.value?.displayName ?: stringResource(id = R.string.not_signed_in)
-            )
-            Text(
-                text = viewModel.firebaseUser.value?.email ?: ""
-            )
         }
         Spacer(modifier = Modifier
             .height(6.dp)
@@ -85,7 +92,7 @@ fun DrawerContent(
                     .fillMaxWidth()
                     .clickable(onClick = { onSignoutClick() })
                     .height(45.dp)
-                    .padding(start = 10.dp)
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Logout,
@@ -95,7 +102,6 @@ fun DrawerContent(
                 Spacer(modifier = Modifier.width(7.dp))
                 Text(
                     text = stringResource(id = R.string.sign_out),
-                    fontSize = 18.sp,
                     color = Color.Black
                 )
             }
@@ -107,7 +113,7 @@ fun DrawerContent(
                     .fillMaxWidth()
                     .clickable(onClick = { onSigninClick() })
                     .height(45.dp)
-                    .padding(start = 10.dp)
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Login,
@@ -117,17 +123,15 @@ fun DrawerContent(
                 Spacer(modifier = Modifier.width(7.dp))
                 Text(
                     text = stringResource(id = R.string.sign_in),
-                    fontSize = 18.sp,
                     color = Color.Black
                 )
             }
         }
-        Divider()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(45.dp)
-                .padding(start = 10.dp)
+                .padding(horizontal = 10.dp, vertical = 4.dp)
                 .clickable {
                     navController.navigate(NavDrawerItem.About.route) {
                         // Pop up to the start destination of the graph to
@@ -149,18 +153,17 @@ fun DrawerContent(
                     scope.launch {
                         scaffoldState.drawerState.close()
                     }
-                }
+                },
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = R.mipmap.ic_mikan),
-                contentDescription = "About",
-                tint= Color.Unspecified
+                contentDescription = "About"
             )
             Spacer(modifier = Modifier.width(7.dp))
             Text(
                 text = stringResource(id = R.string.about_this_app),
-                fontSize = 18.sp,
                 color = Color.Black
             )
         }

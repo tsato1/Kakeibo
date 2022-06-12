@@ -18,7 +18,7 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 61
+        versionCode 62
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
@@ -143,6 +143,8 @@ dependencies {
 
     // Ads
     implementation "com.google.android.gms:play-services-ads:21.0.0"
+    implementation 'com.adcolony:sdk:4.7.1'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
