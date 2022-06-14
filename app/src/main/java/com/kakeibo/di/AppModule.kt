@@ -22,22 +22,22 @@ import com.kakeibo.feature_main.domain.use_cases.use_case_search.*
 import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.ItemRepositoryImpl
-import com.kakeibo.feature_settings.data.repositories.KkbAppRepositoryImpl
+import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
 import com.kakeibo.feature_settings.domain.repositories.CustomCategoryRepository
 import com.kakeibo.feature_settings.domain.repositories.ItemRepository
-import com.kakeibo.feature_settings.domain.repositories.KkbAppRepository
+import com.kakeibo.core.domain.repositories.KkbAppRepository
 import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
 import com.kakeibo.feature_settings.domain.use_cases.CategoryRearrangeUseCases
 import com.kakeibo.feature_settings.domain.use_cases.ItemUseCases
-import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
+import com.kakeibo.core.domain.use_cases.KkbAppUseCases
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_detail.GetCustomCategoryByIdUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_detail.InsertCustomCategoryUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.DeleteCustomCategoryUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.GetAllCustomCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.items.DeleteAllItemsUseCase
-import com.kakeibo.feature_settings.domain.use_cases.kkbapp.GetKkbAppUseCase
-import com.kakeibo.feature_settings.domain.use_cases.kkbapp.InsertKkbAppUseCase
+import com.kakeibo.core.domain.use_cases.kkbapp.GetKkbAppUseCase
+import com.kakeibo.core.domain.use_cases.kkbapp.InsertKkbAppUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetNonDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateDisplayedCategoriesUseCase
@@ -176,7 +176,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideItemUseCases(
-        @ApplicationContext context: Context,
         repository: ItemRepository
     ): ItemUseCases {
         return ItemUseCases(

@@ -1,16 +1,17 @@
 package com.kakeibo.feature_main.presentation.item_main.item_list.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -24,24 +25,35 @@ import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.R
+import com.kakeibo.core.presentation.components.DialogCard
+import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.common.components.IncomeExpenseIndicator
+import com.kakeibo.feature_main.presentation.common.components.ItemDetailDialog
+import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
+import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDWString
 import kotlinx.datetime.toLocalDate
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CollapsableLazyColumn(
     navController: NavController,
     sections: List<ExpandableItem>,
     dateFormatIndex: Int,
     fractionDigits: Int,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel: ItemMainViewModel
 ) {
     val context = LocalContext.current
 
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
+
+    val openItemDetailDialog = remember { mutableStateOf(false) }
+    val openItemDeleteDialog = remember { mutableStateOf(false) }
+    val clickedItem = remember { mutableStateOf(DisplayedItemModel(0L, "", "", 0, "", "", "")) }
 
     if (sections.isEmpty()) {
         Column(
@@ -99,15 +111,22 @@ fun CollapsableLazyColumn(
                 }
                 if (!collapsed) {
                     items(expandableItem.children) { child ->
+                        val dropdownMenuExpanded = remember { mutableStateOf(false) }
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp, 2.dp, 12.dp, 2.dp)
-                                .clickable {
-                                    navController.navigate(
-                                        Screen.ItemDetailScreen.route + "?itemId=${child.id}"
-                                    )
-                                },
+                                .combinedClickable(
+                                    onClick = {
+                                        openItemDetailDialog.value = true
+                                        clickedItem.value = child
+                                    },
+                                    onLongClick = {
+                                        dropdownMenuExpanded.value = true
+                                        clickedItem.value = child
+                                    }
+                                ),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             CategoryIcon(
@@ -129,11 +148,62 @@ fun CollapsableLazyColumn(
                                 )
                             }
                             Text(text = child.amount)
+                            /* dropdown menu will open when an item is long clicked */
+                            DropdownMenu(
+                                expanded = dropdownMenuExpanded.value,
+                                onDismissRequest = {
+                                    dropdownMenuExpanded.value = false
+                                }
+                            ) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        dropdownMenuExpanded.value = false
+                                        openItemDeleteDialog.value = true
+                                    }
+                                ) {
+                                    Text(text = stringResource(id = R.string.delete))
+                                }
+                            }
                         }
                         Divider()
                     }
                 }
             }
         }
+    }
+
+    if (openItemDetailDialog.value) {
+        ItemDetailDialog(
+            item = clickedItem.value,
+            onDismissRequest = { openItemDetailDialog.value = false },
+            onEditButtonClick = {
+                navController.navigate(
+                    Screen.ItemDetailScreen.route + "?itemId=${clickedItem.value.id}"
+                )
+            }
+        )
+    }
+
+    if (openItemDeleteDialog.value) {
+        DialogCard(
+            onDismissRequest = { openItemDeleteDialog.value = false },
+            title = stringResource(id = R.string.delete),
+            content = { Text(text = stringResource(id = R.string.quest_do_you_want_to_delete_item)) },
+            positiveButton = {
+                OutlinedButton(
+                    onClick = {
+                        openItemDeleteDialog.value = false
+                        viewModel.onEvent(ItemMainEvent.DeleteItem(clickedItem.value))
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.yes))
+                }
+            },
+            negativeButton = {
+                OutlinedButton(onClick = { openItemDeleteDialog.value = false }) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            }
+        )
     }
 }

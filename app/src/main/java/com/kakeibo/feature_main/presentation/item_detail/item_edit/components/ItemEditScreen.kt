@@ -191,7 +191,7 @@ fun ItemEditScreen(
                     text = stringResource(id = R.string.save)
                 )
             }
-            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                 BannerAds(
                     adId = stringResource(id = R.string.main_banner_ad)
                 )

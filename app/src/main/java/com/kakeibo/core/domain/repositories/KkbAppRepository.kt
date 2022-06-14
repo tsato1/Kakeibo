@@ -1,11 +1,11 @@
-package com.kakeibo.feature_settings.domain.repositories
+package com.kakeibo.core.domain.repositories
 
 import com.kakeibo.core.data.local.entities.KkbAppEntity
-import kotlinx.coroutines.flow.Flow
+import com.kakeibo.core.domain.models.KkbAppModel
 
 interface KkbAppRepository {
 
-    fun getFirstEntry(): Flow<KkbAppEntity>
+    suspend fun getFirstEntry(): KkbAppModel?
 
     suspend fun insertEntry(kkbAppEntity: KkbAppEntity): Long
 

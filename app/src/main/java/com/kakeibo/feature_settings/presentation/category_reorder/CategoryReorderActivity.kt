@@ -32,6 +32,7 @@ class CategoryReorderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_category_reorder)
+        _categoryViewModel.load()
 
         /* hide home button on actionbar  */
         if (supportActionBar != null) {
@@ -40,7 +41,7 @@ class CategoryReorderActivity : AppCompatActivity() {
         }
 
         /* ads  */
-        if (_categoryViewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+        if (_categoryViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
             MobileAds.initialize(this) {}
             val adView: AdView = findViewById(R.id.ad_view)
             val adRequest = AdRequest.Builder().build()

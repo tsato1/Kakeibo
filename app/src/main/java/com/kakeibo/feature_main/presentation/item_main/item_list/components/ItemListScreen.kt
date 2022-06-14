@@ -11,9 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
@@ -28,6 +32,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ItemListScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemMainViewModel,
     searchId: Long = 0L
@@ -45,6 +50,19 @@ fun ItemListScreen(
         Log.d("asdf", "launchedEffect in list searchId="+searchId)
         if (searchId != 0L) {
             viewModel.onEvent(ItemMainEvent.LoadItems(searchId))
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                viewModel.setSharedPreferencesStates()
+                viewModel.load()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -114,7 +132,7 @@ fun ItemListScreen(
                     DatePickerRow(
                         context = LocalContext.current,
                         type = DateType.YM,
-                        dateFormatIndex = viewModel.dateFormatIndex,
+                        dateFormatIndex = viewModel.dateFormatIndexState.value,
                         viewModel = viewModel
                     )
                 }
@@ -122,12 +140,13 @@ fun ItemListScreen(
                 CollapsableLazyColumn(
                     navController = navController,
                     sections = itemListState.expandableItemList,
-                    dateFormatIndex = viewModel.dateFormatIndex,
-                    fractionDigits = viewModel.fractionDigits,
-                    modifier = Modifier.fillMaxSize()
+                    dateFormatIndex = viewModel.dateFormatIndexState.value,
+                    fractionDigits = viewModel.fractionDigitsIndexState.value,
+                    modifier = Modifier.fillMaxSize(),
+                    viewModel = viewModel
                 )
             }
-            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                 BannerAds(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     adId = stringResource(id = R.string.main_banner_ad)

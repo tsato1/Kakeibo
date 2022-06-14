@@ -9,8 +9,8 @@ class DeleteItemUseCase(
 ) {
 
     @Throws(ItemEntity.ItemNotFoundException::class)
-    suspend operator fun invoke(displayedItemModel: DisplayedItemModel) {
-        displayedItemModel.id?.let {
+    suspend operator fun invoke(displayedItemModel: DisplayedItemModel): Int {
+        return displayedItemModel.id?.let {
             repository.deleteItemById(it)
         } ?: throw ItemEntity.ItemNotFoundException(
             "The item was not found in database. Deletion not executed."

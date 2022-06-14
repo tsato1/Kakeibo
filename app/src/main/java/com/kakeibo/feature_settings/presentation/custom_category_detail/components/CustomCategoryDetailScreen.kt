@@ -22,12 +22,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.divyanshu.draw.widget.DrawView
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -54,6 +58,7 @@ import java.lang.Exception
 @ExperimentalPagerApi
 @Composable
 fun CustomCategoryDetailScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: CustomCategoryDetailViewModel = hiltViewModel(),
 ) {
@@ -111,6 +116,18 @@ fun CustomCategoryDetailScreen(
                     navController.navigateUp()
                 }
             }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                viewModel.load()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -452,7 +469,7 @@ fun CustomCategoryDetailScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(10.dp),
         )
-        if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+        if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
             BannerAds(
                 adId = stringResource(id = R.string.main_banner_ad)
             )

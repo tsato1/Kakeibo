@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.kakeibo.R
-import com.kakeibo.feature_main.presentation.common.BaseViewModel
+import com.kakeibo.feature_main.presentation.common.DateViewModel
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
 import com.kakeibo.util.UtilDate.toYMDWString
@@ -26,7 +26,7 @@ fun DatePickerRow(
     context: Context,
     type: DateType, // depending on which screen, date text on the button differs
     dateFormatIndex: Int, // date format that's stored in shared pref
-    viewModel: BaseViewModel
+    viewModel: DateViewModel
 ) {
     val datePickerDialog = DatePickerDialog(
         context,

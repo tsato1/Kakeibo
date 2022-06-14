@@ -2,15 +2,13 @@ package com.kakeibo.feature_settings.presentation.custom_category_list
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kakeibo.core.presentation.KkbAppViewModel
 import com.kakeibo.core.util.Resource
 import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
-import com.kakeibo.feature_settings.domain.use_cases.KkbAppUseCases
 import com.kakeibo.feature_settings.domain.util.CustomCategoryListOrder
-import com.kakeibo.feature_settings.presentation.settings_list.KkbAppState
 import com.kakeibo.util.UtilCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -23,12 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CustomCategoryListViewModel @Inject constructor(
-    private val customCategoryUseCases: CustomCategoryUseCases,
-    kkbAppUseCases: KkbAppUseCases
-) : ViewModel() {
-
-    private val _kkbAppState = mutableStateOf(KkbAppState())
-    val kkbAppState: State<KkbAppState> = _kkbAppState
+    private val customCategoryUseCases: CustomCategoryUseCases
+) : KkbAppViewModel() {
 
     private val _customCategoryListState = mutableStateOf(CustomCategoryListState())
     val customCategoryListState: State<CustomCategoryListState> = _customCategoryListState
@@ -40,26 +34,7 @@ class CustomCategoryListViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private var getKkbAppEntityJob: Job? = null
-
     init {
-        getKkbAppEntityJob?.cancel()
-        getKkbAppEntityJob = kkbAppUseCases.getKkbAppUseCase()
-            .onEach { result ->
-                _kkbAppState.value = kkbAppState.value.copy(
-                    id = result.id,
-                    name = result.name,
-                    type = result.type,
-                    intVal1 = result.valInt1,
-                    intVal2 = result.valInt2,
-                    intVal3 = result.valInt3,
-                    strVal1 = result.valStr1,
-                    strVal2 = result.valStr2,
-                    strVal3 = result.valStr3
-                )
-            }
-            .launchIn(viewModelScope)
-
         loadCustomCategories(CustomCategoryListOrder.Name)
     }
 

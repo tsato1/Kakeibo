@@ -195,7 +195,7 @@
     <string name="err_category_type_not_selected">Category Type is not selected. Select one.</string>
     <string name="remove_at_least_one_category">Please remove at least one category.</string>
     <string name="err_reached_max_count">The number of custom categories has reached the maximum number allowed. Delete some first.</string>
-    <string name="category_count_cannot_exceed">The number of categories cannot exceed %d</string>
+    <string name="category_count_cannot_exceed" formatted="true">The number of categories cannot exceed %d</string>
 
     <!-- pref keys -->
     <string name="pref_key_date_format" translatable="false">pref_key_date_format</string>

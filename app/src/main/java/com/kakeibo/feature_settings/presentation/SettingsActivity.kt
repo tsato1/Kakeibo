@@ -123,7 +123,7 @@ fun ScreenController(
             SettingsListScreen(navController = navController)
         }
         composable(route = Screen.CustomCategoryListScreen.route) {
-            CustomCategoryListScreen(navController)
+            CustomCategoryListScreen(navController = navController)
         }
         composable(
             route = Screen.CustomCategoryDetailScreen.route +
@@ -143,10 +143,10 @@ fun ScreenController(
                 }
             )
         ) {
-            CustomCategoryDetailScreen(navController)
+            CustomCategoryDetailScreen(navController = navController)
         }
         composable(route = Screen.CategoryRearrangeScreen.route) {
-            CategoryRearrangeScreen(navController)
+            CategoryRearrangeScreen(navController = navController)
         }
     }
 }

@@ -14,9 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
@@ -33,6 +37,7 @@ import kotlinx.coroutines.launch
 @ExperimentalAnimationApi
 @Composable
 fun CustomCategoryListScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: CustomCategoryListViewModel = hiltViewModel()
 ) {
@@ -49,6 +54,18 @@ fun CustomCategoryListScreen(
                     scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
             }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                viewModel.load()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -145,7 +162,7 @@ fun CustomCategoryListScreen(
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                 BannerAds(
                     adId = stringResource(id = R.string.main_banner_ad)
                 )

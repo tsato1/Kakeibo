@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -26,6 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
@@ -46,6 +50,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ItemCalendarScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemMainViewModel
 ) {
@@ -61,6 +66,19 @@ fun ItemCalendarScreen(
         Log.d("asdf", "launchedEffect CALENDAR searchId="+searchIdState.value)
         if (searchIdState.value != 0L) {
             viewModel.onEvent(ItemMainEvent.LoadItems(searchIdState.value))
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                Log.d("asdf", "calendar onStart")
+                viewModel.setSharedPreferencesStates()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -131,7 +149,7 @@ fun ItemCalendarScreen(
                     DatePickerRow(
                         context = LocalContext.current,
                         type = DateType.YM,
-                        dateFormatIndex = viewModel.dateFormatIndex,
+                        dateFormatIndex = viewModel.dateFormatIndexState.value,
                         viewModel = viewModel
                     )
                 }
@@ -152,7 +170,7 @@ fun ItemCalendarScreen(
                     )
                 }
             }
-            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                 BannerAds(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     adId = stringResource(id = R.string.main_banner_ad)
@@ -319,7 +337,7 @@ fun CalendarRows(
             onDismissRequest = { showDateDetailDialog.value = false },
             title = listState.calendarItemList[clickedDateIndex.value].parent.date
                 .toLocalDate()
-                .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndex]),
+                .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndexState.value]),
             positiveButton = {
                 OutlinedButton(
                     onClick = { showDateDetailDialog.value = false }

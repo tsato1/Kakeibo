@@ -182,7 +182,7 @@ fun ItemInputScreen(
                 }
             )
             Spacer(modifier = Modifier.weight(1f))
-            if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                 BannerAds(
                     adId = stringResource(id = R.string.main_banner_ad)
                 )

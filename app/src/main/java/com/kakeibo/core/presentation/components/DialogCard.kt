@@ -64,6 +64,7 @@ fun DialogCard(
                     contentDescription = "",
                     tint= Color.Unspecified
                 )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = title,
                     style = MaterialTheme.typography.button

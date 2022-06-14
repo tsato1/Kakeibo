@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.OnConflictStrategy
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.kakeibo.BuildConfig
 import com.kakeibo.R
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
 import com.kakeibo.core.data.local.entities.CategoryEntity
@@ -1673,6 +1674,16 @@ object PrepDB {
     }
 
     fun initKkbAppTable() : KkbAppEntity {
-        return KkbAppEntity(1, "", "", "", 0, -1, 0, "", "", "")
+        return KkbAppEntity(
+            1,
+            "",
+            "",
+            "",
+            BuildConfig.versionDB,
+            -1,
+            0,
+            "",
+            "",
+            "")
     }
 }

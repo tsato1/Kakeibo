@@ -129,8 +129,8 @@ class DisplayedItemRepositoryImpl(
         }
     }
 
-    override suspend fun deleteItemById(id: Long) {
-        dao.deleteItemById(id)
+    override suspend fun deleteItemById(id: Long): Int {
+        return dao.deleteItemById(id)
 //        itemDataSource.deleteItemById(id)
         // todo : work on this once api is implemented
 //        val response = try {

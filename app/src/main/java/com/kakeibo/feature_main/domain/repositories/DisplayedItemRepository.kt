@@ -16,7 +16,7 @@ interface DisplayedItemRepository {
 
     suspend fun insertItems(displayedItemModelList: List<DisplayedItemModel>)
 
-    suspend fun deleteItemById(id: Long)
+    suspend fun deleteItemById(id: Long): Int
 
     suspend fun deleteAllItems()
 

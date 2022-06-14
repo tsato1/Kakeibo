@@ -34,8 +34,9 @@ class FakeRepository : DisplayedItemRepository {
         items.addAll(displayedItemModelList)
     }
 
-    override suspend fun deleteItemById(id: Long) {
+    override suspend fun deleteItemById(id: Long): Int {
         items.removeAt(id.toInt())
+        return 1
     }
 
     override suspend fun deleteAllItems() {

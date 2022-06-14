@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -22,6 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
@@ -37,6 +41,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SettingsListScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: SettingsListViewModel = hiltViewModel()
 ) {
@@ -44,19 +49,15 @@ fun SettingsListScreen(
     val scrollState = rememberScrollState()
     val scaffoldState = rememberScaffoldState()
 
-    LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
-
-    viewModel.setSharedPreferencesStates()
-    val keyDateFormatIndexState = viewModel.keyDateFormatIndexState
-    val keyFractionDigitsIndexState = viewModel.keyFractionDigitsIndexState
-    val keyNumColumnsIndexState = viewModel.keyNumColumnsIndexState
-
-    val kkbAppValues = viewModel.kkbAppState.value
+    val keyDateFormatIndexState = viewModel.dateFormatIndexState
+    val keyFractionDigitsIndexState = viewModel.fractionDigitsIndexState
+    val keyNumColumnsIndexState = viewModel.numColumnsIndexState
 
     val openDeleteAllItemsDialog = remember { mutableStateOf(false) }
     val openConfirmAdsDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        scrollState.animateScrollTo(0)
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is SettingsListViewModel.UiEvent.ShowSnackBar -> {
@@ -66,6 +67,19 @@ fun SettingsListScreen(
                     Toast.makeText(context, event.stringId.asString(context), Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                viewModel.setSharedPreferencesStates()
+                viewModel.load()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -136,7 +150,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (kkbAppValues.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 navController.navigate(Screen.CustomCategoryListScreen.route)
                             } else {
                                 openConfirmAdsDialog.value = true
@@ -152,7 +166,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (kkbAppValues.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 navController.navigate(Screen.CategoryRearrangeScreen.route)
                             } else {
                                 openConfirmAdsDialog.value = true
@@ -168,7 +182,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (kkbAppValues.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 context.startActivity(
                                     Intent(
                                         context,
@@ -216,7 +230,7 @@ fun SettingsListScreen(
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-        if (viewModel.kkbAppState.value.intVal2 == ConstKkbAppDB.AD_SHOW) {
+        if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
             BannerAds(
                 adId = stringResource(id = R.string.settings_banner_ad)
             )
@@ -224,103 +238,68 @@ fun SettingsListScreen(
     }
 
     if (openConfirmAdsDialog.value) {
-        Dialog(
-            onDismissRequest = { openConfirmAdsDialog.value = false }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(MaterialTheme.dimens.dialogHeightDefault)
-                    .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
-                    .background(MaterialTheme.colors.background)
-            ) {
-                val openConfirmAdsDialog2 = remember { mutableStateOf(false) }
+        val openConfirmAdsDialog2 = remember { mutableStateOf(false) }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            MaterialTheme.dimens.dialogTitlePaddingHorizontal,
-                            MaterialTheme.dimens.dialogTitlePaddingVertical
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.mipmap.ic_mikan),
-                        contentDescription = "",
-                        tint= Color.Unspecified
-                    )
-                    Text(text = stringResource(id = R.string.category_management))
-                }
-                Divider()
-                Spacer(modifier = Modifier.weight(1f))
+        DialogCard(
+            onDismissRequest = { openConfirmAdsDialog.value = false },
+            title = stringResource(id = R.string.category_management),
+            content = {
                 Text(
                     modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
                     text = stringResource(id = R.string.quest_do_you_want_to_manage_categories)
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    modifier = Modifier
-                        .padding(MaterialTheme.dimens.dialogPadding)
-                        .align(Alignment.End),
+            },
+            positiveButton = {
+                OutlinedButton(
                     onClick = { openConfirmAdsDialog2.value = true }
                 ) {
                     Text(text = stringResource(id = R.string.yes))
                 }
+            },
+            negativeButton = {
+                OutlinedButton(
+                    onClick = { openConfirmAdsDialog.value = false }
+                ) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            }
+        )
 
-                if (openConfirmAdsDialog2.value) {
-                    Dialog(
-                        onDismissRequest = {
+        if (openConfirmAdsDialog2.value) {
+            DialogCard(
+                onDismissRequest = {
+                    openConfirmAdsDialog.value = false
+                    openConfirmAdsDialog2.value = false
+                },
+                title = stringResource(id = R.string.warning),
+                content = {
+                    Text(
+                        modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                        text = stringResource(id = R.string.quest_irreversible_operation_do_you_want_to_proceed)
+                    )
+                },
+                positiveButton = {
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.onEvent(SettingsListEvent.ShowAds, -1)
                             openConfirmAdsDialog.value = false
                             openConfirmAdsDialog2.value = false
                         }
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(MaterialTheme.dimens.dialogHeightShort)
-                                .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
-                                .background(MaterialTheme.colors.background)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        MaterialTheme.dimens.dialogTitlePaddingHorizontal,
-                                        MaterialTheme.dimens.dialogTitlePaddingVertical
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.mipmap.ic_mikan),
-                                    contentDescription = "",
-                                    tint= Color.Unspecified
-                                )
-                                Text(text = stringResource(id = R.string.warning))
-                            }
-                            Divider()
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
-                                text = stringResource(id = R.string.quest_irreversible_operation_do_you_want_to_proceed)
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Button(
-                                modifier = Modifier
-                                    .padding(MaterialTheme.dimens.dialogPadding)
-                                    .align(Alignment.End),
-                                onClick = {
-                                    viewModel.onEvent(SettingsListEvent.ShowAds, -1)
-                                    openConfirmAdsDialog.value = false
-                                    openConfirmAdsDialog2.value = false
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.yes))
-                            }
+                        Text(text = stringResource(id = R.string.yes))
+                    }
+                },
+                negativeButton = {
+                    OutlinedButton(
+                        onClick = {
+                            openConfirmAdsDialog.value = false
+                            openConfirmAdsDialog2.value = false
                         }
+                    ) {
+                        Text(text = stringResource(id = R.string.cancel))
                     }
                 }
-            }
+            )
         }
     }
 

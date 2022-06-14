@@ -11,12 +11,13 @@ import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -67,9 +68,8 @@ import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
+//todo delete and edit functionality for chart and calendar
 //todo after saving an item, open the item
-
-//todo startactivityforresult for settings page
 
 //todo keyboard goes away
 //todo typography
@@ -148,6 +148,19 @@ class MainActivity : ComponentActivity() {
                         },
                         itemMainViewModel = itemMainViewModel
                     )
+                }
+
+                val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+                DisposableEffect(lifecycleOwner) {
+                    val observer = LifecycleEventObserver { _, event ->
+                        if (event == Lifecycle.Event.ON_START) {
+                            Log.d("asdf", "onStart")
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                    onDispose {
+                        lifecycleOwner.lifecycle.removeObserver(observer)
+                    }
                 }
 
                 Surface(
@@ -343,7 +356,7 @@ fun ScreenController(
             )
         ) {
             val searchId = it.arguments?.getLong("searchId") ?: 0L
-            ItemListScreen(navController = navController, viewModel = itemMainViewModel, searchId)
+            ItemListScreen(navController = navController, viewModel = itemMainViewModel, searchId = searchId)
         }
         composable(
             route = Screen.ItemChartScreen.route + "?searchId={searchId}",
