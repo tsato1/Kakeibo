@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +36,7 @@ import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
+import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
@@ -45,6 +47,7 @@ import kotlinx.datetime.DateTimeUnit
 import java.math.BigDecimal
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemChartScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
@@ -74,7 +77,6 @@ fun ItemChartScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
-                Log.d("asdf", "chart onStart")
                 viewModel.setSharedPreferencesStates()
             }
         }
@@ -476,6 +478,16 @@ fun ItemChartScreen(
         )
     }
 
+    val openItemDetailDialog = rememberSaveable { mutableStateOf(false) }
+    val openItemDeleteDialog = rememberSaveable { mutableStateOf(false) }
+    val clickedItem = remember {
+        mutableStateOf(
+            DisplayedItemModel(
+                0L, "", "", 0, "", "", ""
+            )
+        )
+    }
+
     if (openDetailListDialog.value) {
         DialogCard(
             onDismissRequest = { openDetailListDialog.value = false },
@@ -502,15 +514,22 @@ fun ItemChartScreen(
                     }
                     list?.let {
                         items(list) { item ->
+                            val dropdownMenuExpanded = rememberSaveable { mutableStateOf(false) }
+
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(6.dp, 6.dp)
-                                    .clickable {
-                                        navController.navigate(
-                                            Screen.ItemDetailScreen.route + "?itemId=${item.id}"
-                                        )
-                                    },
+                                    .combinedClickable(
+                                        onClick = {
+                                            openItemDetailDialog.value = true
+                                            clickedItem.value = item
+                                        },
+                                        onLongClick = {
+                                            dropdownMenuExpanded.value = true
+                                            clickedItem.value = item
+                                        }
+                                    ),
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Row {
@@ -535,9 +554,49 @@ fun ItemChartScreen(
                                 }
                             }
                             Divider()
+                            /* dropdown menu will open when an item is long clicked */
+                            DropdownMenu(
+                                expanded = dropdownMenuExpanded.value,
+                                onDismissRequest = {
+                                    dropdownMenuExpanded.value = false
+                                }
+                            ) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        dropdownMenuExpanded.value = false
+                                        openItemDeleteDialog.value = true
+                                    }
+                                ) {
+                                    Text(text = stringResource(id = R.string.delete))
+                                }
+                            }
                         }
                     }
                 }
+            }
+        )
+    }
+
+    if (openItemDetailDialog.value) {
+        ItemDetailDialog(
+            item = clickedItem.value,
+            onDismissRequest = { openItemDetailDialog.value = false },
+            onEditButtonClick = {
+                navController.navigate(
+                    Screen.ItemDetailScreen.route + "?itemId=${clickedItem.value.id}"
+                )
+            }
+        )
+    }
+
+    if (openItemDeleteDialog.value) {
+        ItemDeleteDialog(
+            item = clickedItem.value,
+            onDismissRequest = { openItemDeleteDialog.value = false },
+            onDeleteButtonClicked = {
+                openItemDeleteDialog.value = false
+                openDetailListDialog.value = false
+                viewModel.onEvent(ItemMainEvent.DeleteItem(clickedItem.value))
             }
         )
     }

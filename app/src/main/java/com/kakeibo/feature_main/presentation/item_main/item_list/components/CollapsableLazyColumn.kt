@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,9 +26,9 @@ import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.R
-import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.common.components.IncomeExpenseIndicator
+import com.kakeibo.feature_main.presentation.common.components.ItemDeleteDialog
 import com.kakeibo.feature_main.presentation.common.components.ItemDetailDialog
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
@@ -51,9 +52,15 @@ fun CollapsableLazyColumn(
 
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
 
-    val openItemDetailDialog = remember { mutableStateOf(false) }
-    val openItemDeleteDialog = remember { mutableStateOf(false) }
-    val clickedItem = remember { mutableStateOf(DisplayedItemModel(0L, "", "", 0, "", "", "")) }
+    val openItemDetailDialog = rememberSaveable { mutableStateOf(false) }
+    val openItemDeleteDialog = rememberSaveable { mutableStateOf(false) }
+    val clickedItem = remember {
+        mutableStateOf(
+            DisplayedItemModel(
+                0L, "", "", 0, "", "", ""
+            )
+        )
+    }
 
     if (sections.isEmpty()) {
         Column(
@@ -111,7 +118,7 @@ fun CollapsableLazyColumn(
                 }
                 if (!collapsed) {
                     items(expandableItem.children) { child ->
-                        val dropdownMenuExpanded = remember { mutableStateOf(false) }
+                        val dropdownMenuExpanded = rememberSaveable { mutableStateOf(false) }
 
                         Row(
                             modifier = Modifier
@@ -185,24 +192,12 @@ fun CollapsableLazyColumn(
     }
 
     if (openItemDeleteDialog.value) {
-        DialogCard(
+        ItemDeleteDialog(
+            item = clickedItem.value,
             onDismissRequest = { openItemDeleteDialog.value = false },
-            title = stringResource(id = R.string.delete),
-            content = { Text(text = stringResource(id = R.string.quest_do_you_want_to_delete_item)) },
-            positiveButton = {
-                OutlinedButton(
-                    onClick = {
-                        openItemDeleteDialog.value = false
-                        viewModel.onEvent(ItemMainEvent.DeleteItem(clickedItem.value))
-                    }
-                ) {
-                    Text(text = stringResource(id = R.string.yes))
-                }
-            },
-            negativeButton = {
-                OutlinedButton(onClick = { openItemDeleteDialog.value = false }) {
-                    Text(text = stringResource(id = R.string.cancel))
-                }
+            onDeleteButtonClicked = {
+                openItemDeleteDialog.value = false
+                viewModel.onEvent(ItemMainEvent.DeleteItem(clickedItem.value))
             }
         )
     }

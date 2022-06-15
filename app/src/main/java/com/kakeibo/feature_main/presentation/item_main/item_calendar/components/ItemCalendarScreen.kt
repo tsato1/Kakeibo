@@ -1,8 +1,10 @@
 package com.kakeibo.feature_main.presentation.item_main.item_calendar.components
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +38,7 @@ import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
+import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
@@ -72,7 +75,6 @@ fun ItemCalendarScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
-                Log.d("asdf", "calendar onStart")
                 viewModel.setSharedPreferencesStates()
             }
         }
@@ -202,6 +204,7 @@ fun ItemCalendarScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarRows(
     navController: NavController,
@@ -332,6 +335,16 @@ fun CalendarRows(
         }
     }
 
+    val openItemDetailDialog = rememberSaveable { mutableStateOf(false) }
+    val openItemDeleteDialog = rememberSaveable { mutableStateOf(false) }
+    val clickedItem = remember {
+        mutableStateOf(
+            DisplayedItemModel(
+                0L, "", "", 0, "", "", ""
+            )
+        )
+    }
+
     if (showDateDetailDialog.value) {
         DialogCard(
             onDismissRequest = { showDateDetailDialog.value = false },
@@ -361,17 +374,23 @@ fun CalendarRows(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         items(listState.calendarItemList[clickedDateIndex.value].children.size) { index ->
-                            val item =
-                                listState.calendarItemList[clickedDateIndex.value].children[index]
+                            val dropdownMenuExpanded = rememberSaveable { mutableStateOf(false) }
+                            val item = listState.calendarItemList[clickedDateIndex.value].children[index]
+
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(2.dp, 2.dp)
-                                    .clickable {
-                                        navController.navigate(
-                                            Screen.ItemDetailScreen.route + "?itemId=${item.id}"
-                                        )
-                                    },
+                                    .combinedClickable(
+                                        onClick = {
+                                            openItemDetailDialog.value = true
+                                            clickedItem.value = item
+                                        },
+                                        onLongClick = {
+                                            dropdownMenuExpanded.value = true
+                                            clickedItem.value = item
+                                        }
+                                    ),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 CategoryIcon(
@@ -388,10 +407,49 @@ fun CalendarRows(
                                     Text(text = item.memo)
                                 }
                                 Text(text = item.amount)
+                                /* dropdown menu will open when an item is long clicked */
+                                DropdownMenu(
+                                    expanded = dropdownMenuExpanded.value,
+                                    onDismissRequest = {
+                                        dropdownMenuExpanded.value = false
+                                    }
+                                ) {
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            dropdownMenuExpanded.value = false
+                                            openItemDeleteDialog.value = true
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.delete))
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            }
+        )
+    }
+
+    if (openItemDetailDialog.value) {
+        ItemDetailDialog(
+            item = clickedItem.value,
+            onDismissRequest = { openItemDetailDialog.value = false },
+            onEditButtonClick = {
+                navController.navigate(
+                    Screen.ItemDetailScreen.route + "?itemId=${clickedItem.value.id}"
+                )
+            }
+        )
+    }
+
+    if (openItemDeleteDialog.value) {
+        ItemDeleteDialog(
+            item = clickedItem.value,
+            onDismissRequest = { openItemDeleteDialog.value = false },
+            onDeleteButtonClicked = {
+                openItemDeleteDialog.value = false
+                viewModel.onEvent(ItemMainEvent.DeleteItem(clickedItem.value))
             }
         )
     }
