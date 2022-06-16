@@ -1,7 +1,7 @@
 package com.kakeibo.feature_main.presentation.item_search.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +31,10 @@ fun SearchCardCategory(
             .padding(16.dp)
     ) {
         Text(text = stringResource(id = R.string.category))
-        Button(
+        OutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
+                .requiredHeight(60.dp)
                 .align(Alignment.CenterHorizontally),
             onClick = {
                 openCategoryPickerDialog.value = true

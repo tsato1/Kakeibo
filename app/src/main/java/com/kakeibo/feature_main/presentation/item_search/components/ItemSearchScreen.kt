@@ -49,8 +49,10 @@ fun ItemSearchScreen(
 
     val openDialog = remember { mutableStateOf(false) }
 
-    val defaultSearchCriteria = viewModel.defaultSearchCriteriaState.value
-    val chosenSearchCriteria = viewModel.chosenSearchCriteriaState.value
+//    val defaultSearchCriteria = viewModel.defaultSearchCriteriaState.value
+//    val chosenSearchCriteria = viewModel.chosenSearchCriteriaState.value
+    val defaultSearchCriteria = viewModel.searchCriteriaListsState.value.defaultSearchCriteria
+    val chosenSearchCriteria = viewModel.searchCriteriaListsState.value.chosenSearchCriteria
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -85,6 +87,7 @@ fun ItemSearchScreen(
         floatingActionButtonPosition = FabPosition.End,
         isFloatingActionButtonDocked = true
     ) {
+        it
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,29 +114,29 @@ fun ItemSearchScreen(
                     items(chosenSearchCriteria) { item ->
                         var isDeleted by remember { mutableStateOf(false) }
                         val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToStart)
+                            confirmStateChange = { dismissValue ->
+                                if (dismissValue == DismissValue.DismissedToStart)
                                     isDeleted = !isDeleted
 
                                 if (isDeleted) {
-                                    viewModel.onEvent(ItemSearchEvent.CriterionRemoved(item))
                                     coroutineScope.launch {
                                         val result = scaffoldState.snackbarHostState.showSnackbar(
                                             "${item.name} discarded.",
                                             "Undo"
                                         )
-                                        when (result) {
+                                        isDeleted = when (result) {
                                             SnackbarResult.Dismissed -> {
+                                                viewModel.onEvent(ItemSearchEvent.DiscardSearchCriterion(item))
+                                                true
                                             }
                                             SnackbarResult.ActionPerformed -> {
-                                                viewModel.onEvent(ItemSearchEvent.CriterionAdded(item))
-                                                isDeleted = false
+                                                false
                                             }
                                         }
                                     }
                                 }
 
-                                it != DismissValue.DismissedToStart
+                                dismissValue != DismissValue.DismissedToStart
                             }
                         )
 
@@ -236,7 +239,7 @@ fun ItemSearchScreen(
                                 .padding(vertical = 8.dp, horizontal = 8.dp)
                                 .clickable {
                                     val selectedType = defaultSearchCriteria[index]
-                                    viewModel.onEvent(ItemSearchEvent.CriterionAdded(selectedType))
+                                    viewModel.onEvent(ItemSearchEvent.AddSearchCriterion(selectedType))
                                     openDialog.value = false
                                 }
                         ) {

@@ -5,8 +5,8 @@ import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import kotlinx.datetime.LocalDate
 
 sealed class ItemSearchEvent {
-    data class CriterionAdded(val criterion: SearchCriterion) : ItemSearchEvent()
-    data class CriterionRemoved(val criterion: SearchCriterion) : ItemSearchEvent()
+    data class AddSearchCriterion(val criterion: SearchCriterion) : ItemSearchEvent()
+    data class DiscardSearchCriterion(val criterion: SearchCriterion) : ItemSearchEvent()
     data class DateFromSelected(val from: LocalDate) : ItemSearchEvent()
     data class DateToSelected(val to: LocalDate) : ItemSearchEvent()
     data class AmountFromEntered(val from: String) : ItemSearchEvent()

@@ -30,19 +30,8 @@ class ItemSearchViewModel @Inject constructor(
     val dateFormatIndex = appPreferences.getDateFormatIndex()
     val fractionDigits = appPreferences.getFractionDigits()
 
-    /* default search criteria that show up in dialog when the user taps 'Add' fab */
-    private var defaultSearchCriteria = mutableListOf(
-        SearchCriterion.TypeDateRange(),
-        SearchCriterion.TypeAmount(),
-        SearchCriterion.TypeCategory(),
-        SearchCriterion.TypeMemo())
-    private val _defaultSearchCriteriaState = mutableStateOf(defaultSearchCriteria.toList())
-    val defaultSearchCriteriaState: State<List<SearchCriterion>> = _defaultSearchCriteriaState
-
-    /* search criteria chosen by the user */
-    private val chosenSearchCriteria = mutableListOf<SearchCriterion>()
-    private val _chosenSearchCriteriaState = mutableStateOf(chosenSearchCriteria.toList())
-    val chosenSearchCriteriaState: State<List<SearchCriterion>> = _chosenSearchCriteriaState
+    private val _searchCriteriaListsState = mutableStateOf(SearchCriteriaLists())
+    val searchCriteriaListsState: State<SearchCriteriaLists> = _searchCriteriaListsState
 
     /* search cards */
     private val _searchCardDateRangeState = mutableStateOf(SearchCardDateRangeState())
@@ -73,17 +62,29 @@ class ItemSearchViewModel @Inject constructor(
 
     fun onEvent(event: ItemSearchEvent) {
         when (event) {
-            is ItemSearchEvent.CriterionAdded -> {
-                defaultSearchCriteria.remove(event.criterion)
-                chosenSearchCriteria.add(event.criterion)
-                _defaultSearchCriteriaState.value = defaultSearchCriteria
-                _chosenSearchCriteriaState.value = chosenSearchCriteria
+            is ItemSearchEvent.AddSearchCriterion -> {
+                searchCriteriaListsState.value.defaultSearchCriteria.remove(event.criterion)
+                searchCriteriaListsState.value.chosenSearchCriteria.add(event.criterion)
+                _searchCriteriaListsState.value = searchCriteriaListsState.value.copy(
+                    defaultSearchCriteria = searchCriteriaListsState.value.defaultSearchCriteria,
+                    chosenSearchCriteria = searchCriteriaListsState.value.chosenSearchCriteria
+                )
             }
-            is ItemSearchEvent.CriterionRemoved -> {
-                defaultSearchCriteria.add(event.criterion)
-                chosenSearchCriteria.remove(event.criterion)
-                _defaultSearchCriteriaState.value = defaultSearchCriteria
-                _chosenSearchCriteriaState.value = chosenSearchCriteria
+            is ItemSearchEvent.DiscardSearchCriterion -> {
+                when (event.criterion) {
+                    is SearchCriterion.TypeDateRange ->
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(0, event.criterion)
+                    is SearchCriterion.TypeAmount ->
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(1, event.criterion)
+                    is SearchCriterion.TypeCategory ->
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(2, event.criterion)
+                    is SearchCriterion.TypeMemo ->
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(3, event.criterion)
+                }
+                _searchCriteriaListsState.value = searchCriteriaListsState.value.copy(
+                    defaultSearchCriteria = searchCriteriaListsState.value.defaultSearchCriteria,
+                    chosenSearchCriteria = searchCriteriaListsState.value.chosenSearchCriteria
+                )
             }
             is ItemSearchEvent.DateFromSelected -> {
                 _searchCardDateRangeState.value = searchCardDateRangeState.value.copy(
@@ -119,7 +120,7 @@ class ItemSearchViewModel @Inject constructor(
                 viewModelScope.launch {
                     val searchModel = SearchModel()
                         .also { it._id = 1 } // todo: if paid, store multiple entries for search history
-                    for (chosenSearchCriterion in chosenSearchCriteria) {
+                    for (chosenSearchCriterion in searchCriteriaListsState.value.chosenSearchCriteria) {//chosenSearchCriteria) {
                         when (chosenSearchCriterion) {
                             is SearchCriterion.TypeDateRange -> {
                                 searchModel.fromDate = _searchCardDateRangeState.value.from.toString()
