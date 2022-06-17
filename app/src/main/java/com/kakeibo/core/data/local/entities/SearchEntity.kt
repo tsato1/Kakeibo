@@ -34,4 +34,8 @@ class SearchEntity(
         )
     }
 
+    class InvalidSearchException(message: String): Exception(message)
+
+    class NoResultFoundException(message: String): Exception(message)
+
 }

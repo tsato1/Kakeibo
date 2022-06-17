@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kakeibo.core.data.local.entities.SearchEntity
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
 import com.kakeibo.core.util.UiText
@@ -13,10 +14,7 @@ import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,14 +71,15 @@ class ItemSearchViewModel @Inject constructor(
             is ItemSearchEvent.DiscardSearchCriterion -> {
                 when (event.criterion) {
                     is SearchCriterion.TypeDateRange ->
-                        searchCriteriaListsState.value.defaultSearchCriteria.add(0, event.criterion)
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(event.criterion)
                     is SearchCriterion.TypeAmount ->
-                        searchCriteriaListsState.value.defaultSearchCriteria.add(1, event.criterion)
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(event.criterion)
                     is SearchCriterion.TypeCategory ->
-                        searchCriteriaListsState.value.defaultSearchCriteria.add(2, event.criterion)
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(event.criterion)
                     is SearchCriterion.TypeMemo ->
-                        searchCriteriaListsState.value.defaultSearchCriteria.add(3, event.criterion)
+                        searchCriteriaListsState.value.defaultSearchCriteria.add(event.criterion)
                 }
+                searchCriteriaListsState.value.chosenSearchCriteria.remove(event.criterion)
                 _searchCriteriaListsState.value = searchCriteriaListsState.value.copy(
                     defaultSearchCriteria = searchCriteriaListsState.value.defaultSearchCriteria,
                     chosenSearchCriteria = searchCriteriaListsState.value.chosenSearchCriteria
@@ -116,11 +115,11 @@ class ItemSearchViewModel @Inject constructor(
                     memo = event.memo
                 )
             }
-            is ItemSearchEvent.Search -> {
+            is ItemSearchEvent.PerformSearch -> {
                 viewModelScope.launch {
-                    val searchModel = SearchModel()
-                        .also { it._id = 1 } // todo: if paid, store multiple entries for search history
-                    for (chosenSearchCriterion in searchCriteriaListsState.value.chosenSearchCriteria) {//chosenSearchCriteria) {
+                    val searchModel = SearchModel().also { it._id = 1 }
+
+                    for (chosenSearchCriterion in searchCriteriaListsState.value.chosenSearchCriteria) {
                         when (chosenSearchCriterion) {
                             is SearchCriterion.TypeDateRange -> {
                                 searchModel.fromDate = _searchCardDateRangeState.value.from.toString()
@@ -131,10 +130,8 @@ class ItemSearchViewModel @Inject constructor(
                                 searchModel.toAmount = _searchCardAmountState.value.to
                             }
                             is SearchCriterion.TypeCategory -> {
-                                searchModel.categoryCode =
-                                    _searchCardCategoryState.value.categoryModel?.code
-                                searchModel.categoryName =
-                                    _searchCardCategoryState.value.categoryModel?.name
+                                searchModel.categoryCode = _searchCardCategoryState.value.categoryModel.code
+                                searchModel.categoryName = _searchCardCategoryState.value.categoryModel.name
                             }
                             is SearchCriterion.TypeMemo -> {
                                 searchModel.memo = _searchCardMemoState.value.memo
@@ -142,10 +139,26 @@ class ItemSearchViewModel @Inject constructor(
                         }
                     }
 
-                    searchUseCases.insertSearchUseCase(
-                        searchModel = searchModel
-                    ).also { searchId ->
-                        _eventFlow.emit(UiEvent.Search(searchId))
+                    try {
+                        searchUseCases.insertSearchUseCase(
+                            searchModel = searchModel
+                        ).also { searchId ->
+                            _eventFlow.emit(UiEvent.Search(searchId))
+                        }
+                    }
+                    catch (e: SearchEntity.InvalidSearchException) {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(e.message ?: "Error: Invalid Search.")
+                            )
+                        )
+                    }
+                    catch (e: SearchEntity.NoResultFoundException) {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(e.message ?: "Error: No Result Found.")
+                            )
+                        )
                     }
                 }
             }

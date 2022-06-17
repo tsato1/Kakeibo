@@ -14,6 +14,7 @@ import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.R
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.CategoryListDialog
+import com.kakeibo.feature_main.presentation.item_search.CATEGORY_NOT_CHOSEN
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 
 @Composable
@@ -40,15 +41,18 @@ fun SearchCardCategory(
                 openCategoryPickerDialog.value = true
             }
         ) {
-            searchCardCategoryState.value.categoryModel?.let {
+            if (searchCardCategoryState.value.categoryModel.code == CATEGORY_NOT_CHOSEN) {
+                Text(text = stringResource(id = R.string.category))
+            }
+            else {
                 CategoryIcon(
-                    code = it.code,
-                    drawable = it.drawable,
-                    image = it.image
+                    code = searchCardCategoryState.value.categoryModel.code,
+                    drawable = searchCardCategoryState.value.categoryModel.drawable,
+                    image = searchCardCategoryState.value.categoryModel.image
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(text = it.name)
-            } ?: Text(text = stringResource(id = R.string.category))
+                Text(text = searchCardCategoryState.value.categoryModel.name)
+            }
         }
     }
 

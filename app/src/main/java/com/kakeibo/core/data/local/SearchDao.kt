@@ -1,10 +1,10 @@
 package com.kakeibo.core.data.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.core.data.constants.ConstSearchDB
+import com.kakeibo.core.data.local.entities.CategoryEntity
+import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.data.local.entities.SearchEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -25,5 +25,8 @@ interface SearchDao {
 
     @Query("DELETE FROM " + ConstSearchDB.TABLE_NAME + " WHERE _id = :id")
     suspend fun deleteSearchById(id: Long)
+
+    @RawQuery(observedEntities = [ItemEntity::class, CategoryEntity::class])
+    suspend fun getCountOfSearchResult(query: SupportSQLiteQuery): Int
 
 }

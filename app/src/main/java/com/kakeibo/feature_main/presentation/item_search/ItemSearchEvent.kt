@@ -16,5 +16,5 @@ sealed class ItemSearchEvent {
     data class CategorySelected(val categoryModel: DisplayedCategoryModel) : ItemSearchEvent()
     data class MemoEntered(val memo: String) : ItemSearchEvent()
     data class MemoFocusChanged(val focusState: FocusState) : ItemSearchEvent()
-    object Search : ItemSearchEvent()
+    object PerformSearch : ItemSearchEvent()
 }

@@ -25,6 +25,14 @@ fun CategoryIcon(
     size: Dp = dimensionResource(id = R.dimen.new_category_drawable_size)
 ) {
     when {
+        code < 0 -> {
+            Icon(
+                modifier = modifier,
+                painter = painterResource(id = R.mipmap.ic_mikan),
+                contentDescription = "Icon Not Found",
+                tint= Color.Unspecified
+            )
+        }
         code < UtilCategory.CUSTOM_CATEGORY_CODE_START -> {
             Image(
                 modifier = modifier.size(size),

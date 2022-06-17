@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.data.repositories
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.core.data.local.SearchDao
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.repositories.SearchRepository
@@ -28,4 +29,9 @@ class SearchRepositoryImpl(
     override suspend fun deleteSearchById(id: Long) {
         dao.deleteSearchById(id)
     }
+
+    override suspend fun getCountOfSearchResult(query: SupportSQLiteQuery): Int {
+        return dao.getCountOfSearchResult(query)
+    }
+
 }

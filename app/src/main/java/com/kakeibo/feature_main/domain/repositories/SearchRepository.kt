@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.domain.repositories
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.feature_main.domain.models.SearchModel
 import kotlinx.coroutines.flow.Flow
 
@@ -14,5 +15,7 @@ interface SearchRepository {
     suspend fun deleteAllSearches()
 
     suspend fun deleteSearchById(id: Long)
+
+    suspend fun getCountOfSearchResult(query: SupportSQLiteQuery): Int
 
 }

@@ -69,7 +69,7 @@ data class SearchModel(
         else ""
 
         out += if (memo != null) {
-            if (false) ConstItemDB.COL_MEMO + " LIKE '%' || ? || '%' AND " // todo: if paid
+            if (false) ConstItemDB.COL_MEMO + " LIKE '%' || ? || '%' AND "
             else ConstItemDB.COL_MEMO + " = ? AND "
         } else ""
 
@@ -89,6 +89,33 @@ data class SearchModel(
         categoryCode?.let { out.add(it.toString()) }
         memo?.let { out.add(it) }
         return out.toList()
+    }
+
+    fun toCountQuery(): String {
+        var out = "SELECT COUNT(*) FROM " + ConstItemDB.TABLE_NAME +
+                " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
+                " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
+                " WHERE "
+        out += if (fromDate != null && toDate != null)
+            ConstItemDB.COL_EVENT_DATE + " BETWEEN ? AND ? AND "
+        else ""
+
+        out += if (fromAmount != null && toAmount != null)
+            ConstItemDB.COL_AMOUNT + " BETWEEN ? AND ? AND "
+        else ""
+
+        out += if (categoryCode != null)
+            ConstItemDB.COL_CATEGORY_CODE + "= ? AND "
+        else ""
+
+        out += if (memo != null) {
+            if (false) ConstItemDB.COL_MEMO + " LIKE '%' || ? || '%' AND "
+            else ConstItemDB.COL_MEMO + " = ? AND "
+        } else ""
+
+        out = out.substring(0, out.length - 5) // removing the trailing "AND"
+
+        return out
     }
 
 }

@@ -49,8 +49,6 @@ fun ItemSearchScreen(
 
     val openDialog = remember { mutableStateOf(false) }
 
-//    val defaultSearchCriteria = viewModel.defaultSearchCriteriaState.value
-//    val chosenSearchCriteria = viewModel.chosenSearchCriteriaState.value
     val defaultSearchCriteria = viewModel.searchCriteriaListsState.value.defaultSearchCriteria
     val chosenSearchCriteria = viewModel.searchCriteriaListsState.value.chosenSearchCriteria
 
@@ -166,10 +164,8 @@ fun ItemSearchScreen(
                                     DismissDirection.EndToStart -> Icons.Default.Delete
                                 }
                                 val scale by animateFloatAsState(
-                                    if (dismissState.targetValue == DismissValue.Default)
-                                        0.75f
-                                    else
-                                        1f
+                                    if (dismissState.targetValue == DismissValue.Default) 0.75f
+                                    else 1f
                                 )
 
                                 Box(
@@ -217,7 +213,7 @@ fun ItemSearchScreen(
                         ).show()
                     }
                     else {
-                        viewModel.onEvent(ItemSearchEvent.Search)
+                        viewModel.onEvent(ItemSearchEvent.PerformSearch)
                     }
                 }
             ) {
