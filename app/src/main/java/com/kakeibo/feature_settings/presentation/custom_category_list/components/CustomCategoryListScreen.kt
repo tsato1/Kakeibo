@@ -102,7 +102,7 @@ fun CustomCategoryListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(2.dp)
         ) {
             IconButton(
                 onClick = {
@@ -122,14 +122,14 @@ fun CustomCategoryListScreen(
                 OrderSection(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp),
+                        .padding(4.dp),
                     order = customCategoryListState.listOrder,
                     onOrderChange = {
                         viewModel.onEvent(CustomCategoryListEvent.Reorder(it))
                     }
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(customCategoryListState.customCategoryList) { categoryModel ->
 

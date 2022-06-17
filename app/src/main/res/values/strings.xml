@@ -38,6 +38,7 @@
     <string name="back">BACK</string>
     <string name="previous">Previous</string>
     <string name="loading">Loading</string>
+    <string name="next_step">Next Step</string>
 
     <string name="export">Export</string>
     <string name="export_date">Export [Date]</string>
@@ -48,6 +49,8 @@
     <string name="updated_date">Updated Date</string>
     <string name="category_code">Category Code</string>
     <string name="item_detail">Item Detail</string>
+    <string name="category_detail">Category Detail</string>
+    <string name="category_name_colon">Category Name:</string>
     <string name="income_colon">Income:</string>
     <string name="expense_colon">Expense:</string>
     <string name="balance_colon">Balance:</string>
@@ -75,6 +78,7 @@
     <string name="amount_range">Amount Range</string>
     <string name="min">Min</string>
     <string name="max">Max</string>
+    <string name="choose_category">Choose Category</string>
     <string name="undo">UNDO</string>
     <string name="swipe_to_delete">Swipe to Delete</string>
     <string name="search_result">Search Result</string>

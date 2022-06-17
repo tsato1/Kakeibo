@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -527,9 +528,13 @@ fun CategoryRearrangeScreen(
         AlertDialog(
             modifier = Modifier.fillMaxWidth(),
             title = {
-                Text(
-                    text = "Next Step"
+                Icon(
+                    painter = painterResource(id = R.mipmap.ic_mikan),
+                    contentDescription = "",
+                    tint= Color.Unspecified
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = stringResource(R.string.next_step))
             },
             onDismissRequest = {
                 openSaveDialog.value = false

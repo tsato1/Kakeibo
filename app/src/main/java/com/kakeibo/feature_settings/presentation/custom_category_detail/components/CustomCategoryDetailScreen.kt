@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -43,6 +42,7 @@ import com.kakeibo.feature_settings.presentation.custom_category_detail.CustomCa
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_settings.presentation.custom_category_detail.CustomCategoryDetailEvent
 import com.kakeibo.ui.theme.LightCream
@@ -208,13 +208,14 @@ fun CustomCategoryDetailScreen(
                                     }
                                     .clickable {
                                         if (categoryIdState != -1L && initialCategoryType.value != colorInt) {
-                                            Toast.makeText(
-                                                context,
-                                                R.string.msg_type_cannot_be_changed,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        }
-                                        else {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    R.string.msg_type_cannot_be_changed,
+                                                    Toast.LENGTH_LONG
+                                                )
+                                                .show()
+                                        } else {
                                             scope.launch {
                                                 imageBorderAnimatable.animateTo(
                                                     targetValue = colorColor,
@@ -477,81 +478,65 @@ fun CustomCategoryDetailScreen(
     }
 
     if (openStrokeWidthDialog.value) {
-        AlertDialog(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background),
-            onDismissRequest = { openStrokeWidthDialog.value = false},
-            text = { stringResource(id = R.string.stroke_thickness) },
-            buttons = {
+        DialogCard(
+            onDismissRequest = { openStrokeWidthDialog.value = false },
+            title = stringResource(R.string.stroke_thickness),
+            content = {
                 val small = dimensionResource(id = R.dimen.draw_view_thickness_small)
                 val medium = dimensionResource(id = R.dimen.draw_view_thickness_medium)
                 val large = dimensionResource(id = R.dimen.draw_view_thickness_large)
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background),
-                    onClick = {
-                        strokeWidth.value = small.value
-                        openStrokeWidthDialog.value = false
-                    }
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = small.toString())
-                }
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background),
-                    onClick = {
-                        strokeWidth.value = medium.value
-                        openStrokeWidthDialog.value = false
+                    OutlinedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colors.background),
+                        onClick = {
+                            strokeWidth.value = small.value
+                            openStrokeWidthDialog.value = false
+                        }
+                    ) {
+                        Text(text = small.toString())
                     }
-                ) {
-                    Text(text = medium.toString())
-                }
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background),
-                    onClick = {
-                        strokeWidth.value = large.value
-                        openStrokeWidthDialog.value = false
+                    OutlinedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colors.background),
+                        onClick = {
+                            strokeWidth.value = medium.value
+                            openStrokeWidthDialog.value = false
+                        }
+                    ) {
+                        Text(text = medium.toString())
                     }
-                ) {
-                    Text(text = large.toString())
+                    OutlinedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colors.background),
+                        onClick = {
+                            strokeWidth.value = large.value
+                            openStrokeWidthDialog.value = false
+                        }
+                    ) {
+                        Text(text = large.toString())
+                    }
                 }
-            },
-            shape = RoundedCornerShape(15.dp)
+            }
         )
     }
     
     if (openSaveDialog.value) {
-        AlertDialog(
-            modifier = Modifier.fillMaxWidth(),
-            title = {
-                Icon(
-                    painter = painterResource(id = R.mipmap.ic_mikan),
-                    contentDescription = "Icon Not Found",
-                    tint= Color.Unspecified
-                )
-            },
-            onDismissRequest = {
-                openSaveDialog.value = false
-            },
-            text = {
+        DialogCard(
+            onDismissRequest = { openSaveDialog.value = false },
+            title = "",
+            content = {
                 Text(
                     text = stringResource(id = R.string.quest_category_creation_do_you_want_to_proceed),
-                    color = Color.Black
                 )
             },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = { openSaveDialog.value = false }
-                ) {
-                    Text(text = stringResource(R.string.cancel))
-                }
-            },
-            confirmButton = {
+            positiveButton = {
                 OutlinedButton(
                     onClick = {
                         openSaveDialog.value = false
@@ -559,6 +544,13 @@ fun CustomCategoryDetailScreen(
                     }
                 ) {
                     Text(text = stringResource(R.string.save))
+                }
+            },
+            negativeButton = {
+                OutlinedButton(
+                    onClick = { openSaveDialog.value = false }
+                ) {
+                    Text(text = stringResource(R.string.cancel))
                 }
             }
         )

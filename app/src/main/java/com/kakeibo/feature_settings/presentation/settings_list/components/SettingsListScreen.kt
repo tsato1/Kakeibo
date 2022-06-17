@@ -4,24 +4,18 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -304,103 +298,58 @@ fun SettingsListScreen(
     }
 
     if (openDeleteAllItemsDialog.value) {
-        Dialog(
-            onDismissRequest = { openDeleteAllItemsDialog.value = false }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(MaterialTheme.dimens.dialogHeightDefault)
-                    .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
-                    .background(MaterialTheme.colors.background)
-            ) {
-                val openConfirmDialog = remember { mutableStateOf(false) }
+        val openConfirmDialog = remember { mutableStateOf(false) }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            MaterialTheme.dimens.dialogTitlePaddingHorizontal,
-                            MaterialTheme.dimens.dialogTitlePaddingVertical
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.mipmap.ic_mikan),
-                        contentDescription = "",
-                        tint= Color.Unspecified
-                    )
-                    Text(text = stringResource(id = R.string.delete_all_items))
-                }
-                Divider()
-                Spacer(modifier = Modifier.weight(1f))
+        DialogCard(
+            onDismissRequest = { openDeleteAllItemsDialog.value = false },
+            title = stringResource(id = R.string.delete_all_items),
+            content = {
                 Text(
                     modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
                     text = stringResource(id = R.string.desc_delete_all_items)
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    modifier = Modifier
-                        .padding(MaterialTheme.dimens.dialogPadding)
-                        .align(Alignment.End),
+            },
+            positiveButton = {
+                OutlinedButton(
                     onClick = { openConfirmDialog.value = true }
                 ) {
                     Text(text = stringResource(id = R.string.yes))
                 }
+            },
+            negativeButton = {
+                OutlinedButton(
+                    onClick = { }
+                ) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            }
+        )
 
-                if (openConfirmDialog.value) {
-                    Dialog(
-                        onDismissRequest = {
+        if (openConfirmDialog.value) {
+            DialogCard(
+                onDismissRequest = {
+                    openConfirmDialog.value = false
+                    openDeleteAllItemsDialog.value = false
+                },
+                title = stringResource(id = R.string.delete_all_items),
+                content = {
+                    Text(
+                        modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                        text = stringResource(id = R.string.warn_delete_all_items)
+                    )
+                },
+                positiveButton = {
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.onEvent(SettingsListEvent.DeleteAllItems, -1)
                             openConfirmDialog.value = false
                             openDeleteAllItemsDialog.value = false
                         }
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(MaterialTheme.dimens.dialogHeightShort)
-                                .clip(RoundedCornerShape(MaterialTheme.dimens.dialogRoundedCorner))
-                                .background(MaterialTheme.colors.background)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        MaterialTheme.dimens.dialogTitlePaddingHorizontal,
-                                        MaterialTheme.dimens.dialogTitlePaddingVertical
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.mipmap.ic_mikan),
-                                    contentDescription = "",
-                                    tint= Color.Unspecified
-                                )
-                                Text(text = stringResource(id = R.string.delete_all_items))
-                            }
-                            Divider()
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
-                                text = stringResource(id = R.string.warn_delete_all_items)
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Button(
-                                modifier = Modifier
-                                    .padding(MaterialTheme.dimens.dialogPadding)
-                                    .align(Alignment.End),
-                                onClick = {
-                                    viewModel.onEvent(SettingsListEvent.DeleteAllItems, -1)
-                                    openConfirmDialog.value = false
-                                    openDeleteAllItemsDialog.value = false
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.yes))
-                            }
-                        }
+                        Text(text = stringResource(id = R.string.yes))
                     }
                 }
-            }
+            )
         }
     }
 }

@@ -4,6 +4,8 @@ import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +22,7 @@ import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
+import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
 import com.kakeibo.core.presentation.components.TransparentHintTextField
@@ -201,13 +204,39 @@ fun ItemEditScreen(
 
 
     if (openDialogState.value) {
-        CategoryListDialog(
-            modifier = Modifier.height(400.dp),
-            displayedCategoryListState = displayedCategoryListState.value,
-            onItemClick = {
-                viewModel.onEvent(ItemDetailEvent.CategorySelected(it))
+        DialogCard(
+            onDismissRequest = { openDialogState.value = false },
+            title = stringResource(id = R.string.choose_category),
+            content = {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    items(displayedCategoryListState.value.displayedCategoryList) { item ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 2.dp, horizontal = 4.dp)
+                                .clickable {
+                                    viewModel.onEvent(ItemDetailEvent.CategorySelected(item))
+                                    openDialogState.value = false
+                                }
+                        ) {
+                            CategoryIcon(code = item.code, drawable = item.drawable, image = item.image)
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(text = item.name)
+                        }
+                        Divider()
+                    }
+                }
             },
-            onDismiss = { openDialogState.value = false },
+            negativeButton = {
+                OutlinedButton(
+                    onClick = { openDialogState.value = false }
+                ) {
+                    Text(text = stringResource(id = R.string.close))
+                }
+            }
         )
     }
 
