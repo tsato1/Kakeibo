@@ -69,7 +69,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
 //todo after saving an item, open the item
-//settings page dialog esthetic
 
 //todo keyboard goes away
 //todo typography

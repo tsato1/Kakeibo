@@ -158,7 +158,7 @@ fun CustomCategoryListScreen(
                             }
                         }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Divider()
                 }
             }
             Spacer(modifier = Modifier.weight(1f))

@@ -99,10 +99,10 @@ fun CustomCategoryListItem(
                     dropdownMenuExpanded.value = true
                 }
             ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = categoryModel.name)
+        Spacer(modifier = Modifier.weight(1f))
         categoryModel.image?.let {
             Image(
                 modifier = Modifier
