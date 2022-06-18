@@ -18,7 +18,7 @@ import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.R
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
-import com.kakeibo.feature_main.presentation.item_search.CATEGORY_NOT_CHOSEN
+import com.kakeibo.feature_main.presentation.item_search.CATEGORY_INVALID
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 
 @Composable
@@ -45,7 +45,7 @@ fun SearchCardCategory(
                 openCategoryPickerDialog.value = true
             }
         ) {
-            if (searchCardCategoryState.value.categoryModel.code == CATEGORY_NOT_CHOSEN) {
+            if (searchCardCategoryState.value.categoryModel.code == CATEGORY_INVALID) {
                 Text(text = stringResource(id = R.string.category))
             }
             else {

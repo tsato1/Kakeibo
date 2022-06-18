@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.presentation.item_detail.item_edit.components
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -13,10 +14,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
@@ -33,21 +36,23 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.DateTimeUnit
 import kotlin.math.roundToInt
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalComposeUiApi
 @Composable
 fun ItemEditScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemDetailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
 
-    val itemAmountState = viewModel.itemAmount
-    val itemCategoryCode = viewModel.itemCategoryCode
-    val itemCategoryName = viewModel.itemCategoryName
-    val itemCategoryDrawable = viewModel.itemCategoryDrawable
-    val itemCategoryImage = viewModel.itemCategoryImage
-    val itemMemoState = viewModel.itemMemo
+    val itemAmountState = viewModel.itemAmountState
+    val itemCategoryCodeState = viewModel.itemCategoryCodeState
+    val itemCategoryNameState = viewModel.itemCategoryNameState
+    val itemCategoryDrawableState = viewModel.itemCategoryDrawableState
+    val itemCategoryImageState = viewModel.itemCategoryImageState
+    val itemMemoState = viewModel.itemMemoState
     val displayedCategoryListState = viewModel.displayedCategoryListState
 
     val openDialogState = remember { mutableStateOf(false) }
@@ -73,7 +78,7 @@ fun ItemEditScreen(
         scaffoldState = scaffoldState
     ) {
         var offsetX by remember { mutableStateOf(0f) }
-        it
+
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -177,12 +182,12 @@ fun ItemEditScreen(
             ) {
                 CategoryIcon(
                     modifier = Modifier.padding(10.dp),
-                    code = itemCategoryCode.value,
-                    drawable = itemCategoryDrawable.value,
-                    image = itemCategoryImage.value
+                    code = itemCategoryCodeState.value,
+                    drawable = itemCategoryDrawableState.value,
+                    image = itemCategoryImageState.value
                 )
                 Text(
-                    text = itemCategoryName.value
+                    text = itemCategoryNameState.value
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -222,7 +227,11 @@ fun ItemEditScreen(
                                     openDialogState.value = false
                                 }
                         ) {
-                            CategoryIcon(code = item.code, drawable = item.drawable, image = item.image)
+                            CategoryIcon(
+                                code = item.code,
+                                drawable = item.drawable,
+                                image = item.image
+                            )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(text = item.name)
                         }

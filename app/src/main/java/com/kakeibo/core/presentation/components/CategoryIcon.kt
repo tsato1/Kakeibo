@@ -45,7 +45,7 @@ fun CategoryIcon(
                 contentDescription = "Category Icon"
             )
         }
-        image != null -> {
+        UtilCategory.CUSTOM_CATEGORY_CODE_START <= code -> {
             Image(
                 modifier = modifier.size(size),
                 bitmap = UtilDrawing.bytesToBitmap(image)
@@ -57,14 +57,6 @@ fun CategoryIcon(
                     Bitmap.Config.ARGB_8888
                 ).asImageBitmap(),
                 contentDescription = "Category Icon"
-            )
-        }
-        else -> {
-            Icon(
-                modifier = modifier,
-                painter = painterResource(id = R.mipmap.ic_mikan),
-                contentDescription = "Icon Not Found",
-                tint= Color.Unspecified
             )
         }
     }

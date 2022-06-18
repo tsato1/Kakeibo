@@ -76,7 +76,7 @@ fun ItemChartScreen(
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
+            if (event == Lifecycle.Event.ON_RESUME) {
                 viewModel.setSharedPreferencesStates()
             }
         }
@@ -579,12 +579,14 @@ fun ItemChartScreen(
 
     if (openItemDetailDialog.value) {
         ItemDetailDialog(
-            item = clickedItem.value,
+            navController = navController,
+            item = clickedItem,
             onDismissRequest = { openItemDetailDialog.value = false },
             onEditButtonClick = {
                 navController.navigate(
                     Screen.ItemDetailScreen.route + "?itemId=${clickedItem.value.id}"
                 )
+                openItemDetailDialog.value = false
             }
         )
     }

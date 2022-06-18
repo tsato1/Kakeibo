@@ -5,16 +5,16 @@ import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 data class SearchCardCategoryState(
     val categoryModel: DisplayedCategoryModel = DisplayedCategoryModel(
         _id = -100L,
-        code = CATEGORY_NOT_CHOSEN,
+        code = CATEGORY_INVALID,
         name = "",
-        color = CATEGORY_NOT_CHOSEN,
-        sign = CATEGORY_NOT_CHOSEN,
+        color = CATEGORY_INVALID,
+        sign = CATEGORY_INVALID,
         drawable = "",
         image = null,
-        parent = CATEGORY_NOT_CHOSEN,
+        parent = CATEGORY_INVALID,
         description = "",
         savedDate = ""
     )
 )
 
-const val CATEGORY_NOT_CHOSEN = -100
+const val CATEGORY_INVALID = -100

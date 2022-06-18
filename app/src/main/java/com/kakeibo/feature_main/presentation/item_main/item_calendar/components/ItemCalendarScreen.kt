@@ -38,6 +38,7 @@ import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
+import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
@@ -74,7 +75,7 @@ fun ItemCalendarScreen(
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
+            if (event == Lifecycle.Event.ON_RESUME) {
                 viewModel.setSharedPreferencesStates()
             }
         }
@@ -188,6 +189,7 @@ fun ItemCalendarScreen(
                 openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
+                navController.currentBackStackEntry?.savedStateHandle?.remove<DisplayedCategoryModel>("categoryModel")
                 navController.navigate(Screen.ItemCalendarScreen.route + "?searchId=${0L}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
@@ -215,6 +217,14 @@ fun CalendarRows(
 
     val listState = viewModel.calendarItemListState.value
     var iDate = viewModel.calendarFromDate.value // dates that gets put on calendar
+
+    val clickedItem = remember {
+        mutableStateOf(
+            DisplayedItemModel(
+                0L, "", "", 0, "", "", ""
+            )
+        )
+    }
 
     Column {
         /* Day of Week Header */
@@ -337,13 +347,6 @@ fun CalendarRows(
 
     val openItemDetailDialog = rememberSaveable { mutableStateOf(false) }
     val openItemDeleteDialog = rememberSaveable { mutableStateOf(false) }
-    val clickedItem = remember {
-        mutableStateOf(
-            DisplayedItemModel(
-                0L, "", "", 0, "", "", ""
-            )
-        )
-    }
 
     if (showDateDetailDialog.value) {
         DialogCard(
@@ -433,12 +436,15 @@ fun CalendarRows(
 
     if (openItemDetailDialog.value) {
         ItemDetailDialog(
-            item = clickedItem.value,
+            navController = navController,
+            item = clickedItem,
             onDismissRequest = { openItemDetailDialog.value = false },
             onEditButtonClick = {
                 navController.navigate(
                     Screen.ItemDetailScreen.route + "?itemId=${clickedItem.value.id}"
                 )
+                openItemDetailDialog.value = false
+                showDateDetailDialog.value = false
             }
         )
     }

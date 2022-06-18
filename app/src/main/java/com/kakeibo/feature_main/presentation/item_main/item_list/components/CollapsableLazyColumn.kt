@@ -119,7 +119,7 @@ fun CollapsableLazyColumn(
                 if (!collapsed) {
                     items(expandableItem.children) { child ->
                         val dropdownMenuExpanded = rememberSaveable { mutableStateOf(false) }
-
+                        val rememberedItem = remember { mutableStateOf(child) }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -137,9 +137,9 @@ fun CollapsableLazyColumn(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             CategoryIcon(
-                                code = child.categoryCode,
-                                drawable = child.categoryDrawable,
-                                image = child.categoryImage
+                                code = rememberedItem.value.categoryCode,
+                                drawable = rememberedItem.value.categoryDrawable,
+                                image = rememberedItem.value.categoryImage
                             )
                             Column(
                                 modifier = Modifier
@@ -181,12 +181,14 @@ fun CollapsableLazyColumn(
 
     if (openItemDetailDialog.value) {
         ItemDetailDialog(
-            item = clickedItem.value,
+            navController = navController,
+            item = clickedItem,
             onDismissRequest = { openItemDetailDialog.value = false },
             onEditButtonClick = {
                 navController.navigate(
                     Screen.ItemDetailScreen.route + "?itemId=${clickedItem.value.id}"
                 )
+                openItemDetailDialog.value = false
             }
         )
     }

@@ -48,8 +48,8 @@ fun ItemInputScreen(
     val gridListState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-    val amountState = viewModel.itemAmount.value
-    val memoState = viewModel.itemMemo.value
+    val amountState = viewModel.itemAmountState.value
+    val memoState = viewModel.itemMemoState.value
     val displayedCategoriesState = viewModel.displayedCategoryListState.value
 
     LaunchedEffect(key1 = true) {

@@ -39,30 +39,25 @@ class ItemDetailViewModel @Inject constructor(
     private val _currentItemId = mutableStateOf(-1L)
     val currentItemId: State<Long> = _currentItemId
 
-//    private val _itemDate = mutableStateOf(UtilDate.getTodaysLocalDate())
-//    val itemDate: State<LocalDate> = _itemDate
-
     private val _itemAmount = mutableStateOf(TextFieldState(hint = "Enter amount"))
-    val itemAmount: State<TextFieldState> = _itemAmount
+    val itemAmountState: State<TextFieldState> = _itemAmount
 
-//    private val _itemCurrencyCode = mutableStateOf(UtilCurrency.CURRENCY_NONE)
-//    val itemCurrencyCode: State<String> = _itemCurrencyCode
-    private val _itemCategoryCode = mutableStateOf(0) /* Income by default */
-    val itemCategoryCode: State<Int> = _itemCategoryCode
-    private val _itemCategoryName = mutableStateOf("")
-    val itemCategoryName: State<String> = _itemCategoryName
-    private val _itemCategoryDrawable = mutableStateOf("ic_category_income")
-    val itemCategoryDrawable: State<String> = _itemCategoryDrawable
-    private val _itemCategoryImage = mutableStateOf(byteArrayOf())
-    val itemCategoryImage: State<ByteArray?> = _itemCategoryImage
-
-    private val _itemMemo = mutableStateOf(TextFieldState(hint = "Enter memo: max 20 characters"))
-    val itemMemo: State<TextFieldState> = _itemMemo
+    private val _itemCategoryCodeState = mutableStateOf(0) /* Income by default */
+    val itemCategoryCodeState: State<Int> = _itemCategoryCodeState
+    private val _itemCategoryNameState = mutableStateOf("")
+    val itemCategoryNameState: State<String> = _itemCategoryNameState
+    private val _itemCategoryDrawableState = mutableStateOf("ic_category_income")
+    val itemCategoryDrawableState: State<String> = _itemCategoryDrawableState
+    private val _itemCategoryImageState = mutableStateOf(byteArrayOf())
+    val itemCategoryImageState: State<ByteArray?> = _itemCategoryImageState
+    private val _itemMemoState = mutableStateOf(TextFieldState(hint = "Enter memo: max 20 characters"))
+    val itemMemoState: State<TextFieldState> = _itemMemoState
 
     private val _displayedCategoryListState = mutableStateOf(DisplayedCategoryListState())
     val displayedCategoryListState: State<DisplayedCategoryListState> = _displayedCategoryListState
 
-    private val _savedItemId = mutableStateOf(-1L) /* keep the itemId in case undo clicked */
+    /* keep the itemId in case undo clicked */
+    private val _savedItemId = mutableStateOf(-1L)
     val savedItemId: State<Long> = _savedItemId
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -79,21 +74,19 @@ class ItemDetailViewModel @Inject constructor(
                     displayedItemUseCases.getItemByIdUseCase(itemId)?.also { item ->
                         _currentItemId.value = item.id ?: -1L
 
-//                        _itemDate.value = item.eventDate.toLocalDate()
                         updateLocalEventDate(item.eventDate)
 
-                        _itemAmount.value = itemAmount.value.copy(
+                        _itemAmount.value = itemAmountState.value.copy(
                             text = item.amount,
                             isHintVisible = false
                         )
 
-//                        _itemCurrencyCode.value = item.currencyCode
-                        _itemCategoryCode.value = item.categoryCode
-                        _itemCategoryName.value = item.categoryName
-                        _itemCategoryDrawable.value = item.categoryDrawable
-                        _itemCategoryImage.value = item.categoryImage ?: byteArrayOf()
+                        _itemCategoryCodeState.value = item.categoryCode
+                        _itemCategoryNameState.value = item.categoryName
+                        _itemCategoryDrawableState.value = item.categoryDrawable
+                        _itemCategoryImageState.value = item.categoryImage ?: byteArrayOf()
 
-                        _itemMemo.value = itemMemo.value.copy(
+                        _itemMemoState.value = itemMemoState.value.copy(
                             text = item.memo,
                             isHintVisible = false
                         )
@@ -109,29 +102,29 @@ class ItemDetailViewModel @Inject constructor(
     fun onEvent(event: ItemDetailEvent) {
         when (event) {
             is ItemDetailEvent.AmountEntered -> {
-                _itemAmount.value = itemAmount.value.copy(
+                _itemAmount.value = itemAmountState.value.copy(
                     text = event.value
                 )
             }
             is ItemDetailEvent.AmountFocusChanged -> {
-                _itemAmount.value = itemAmount.value.copy(
-                    isHintVisible = !event.focusState.isFocused && itemAmount.value.text.isBlank()
+                _itemAmount.value = itemAmountState.value.copy(
+                    isHintVisible = !event.focusState.isFocused && itemAmountState.value.text.isBlank()
                 )
             }
             is ItemDetailEvent.CategorySelected -> {
-                _itemCategoryCode.value = event.displayedCategory.code
-                _itemCategoryName.value = event.displayedCategory.name
-                _itemCategoryDrawable.value = event.displayedCategory.drawable
-                _itemCategoryImage.value = event.displayedCategory.image ?: byteArrayOf()
+                _itemCategoryCodeState.value = event.displayedCategory.code
+                _itemCategoryNameState.value = event.displayedCategory.name
+                _itemCategoryDrawableState.value = event.displayedCategory.drawable
+                _itemCategoryImageState.value = event.displayedCategory.image ?: byteArrayOf()
             }
             is ItemDetailEvent.MemoEntered -> {
-                _itemMemo.value = itemMemo.value.copy(
+                _itemMemoState.value = itemMemoState.value.copy(
                     text = event.value
                 )
             }
             is ItemDetailEvent.MemoFocusChanged -> {
-                _itemMemo.value = itemMemo.value.copy(
-                    isHintVisible = !event.focusState.isFocused && itemMemo.value.text.isBlank()
+                _itemMemoState.value = itemMemoState.value.copy(
+                    isHintVisible = !event.focusState.isFocused && itemMemoState.value.text.isBlank()
                 )
             }
             is ItemDetailEvent.SaveItemWithCategory -> {
@@ -140,11 +133,11 @@ class ItemDetailViewModel @Inject constructor(
                         displayedItemUseCases.insertItemUseCase(
                             DisplayedItemModel(
                                 id = 0, // 0: id will be automatically assigned by Room
-                                amount = itemAmount.value.text,
+                                amount = itemAmountState.value.text,
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
                                 categoryCode = event.displayedCategory.code,
                                 categoryColor = event.displayedCategory.color,
-                                memo = itemMemo.value.text,
+                                memo = itemMemoState.value.text,
                                 eventDate = localEventDate.value, // itemDate is in DB format
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
                             )
@@ -166,10 +159,10 @@ class ItemDetailViewModel @Inject constructor(
                         displayedItemUseCases.insertItemUseCase(
                             DisplayedItemModel(
                                 id = currentItemId.value,
-                                amount = itemAmount.value.text,
+                                amount = itemAmountState.value.text,
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
-                                categoryCode = itemCategoryCode.value,
-                                memo = itemMemo.value.text,
+                                categoryCode = itemCategoryCodeState.value,
+                                memo = itemMemoState.value.text,
                                 eventDate = localEventDate.value,
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
                             )

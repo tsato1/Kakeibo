@@ -202,11 +202,14 @@ object AppModuleTest {
 
     @Provides
     @Singleton
-    fun provideSearchUseCase(repository: SearchRepository): SearchUseCases {
+    fun provideSearchUseCase(
+        @ApplicationContext context: Context,
+        repository: SearchRepository
+    ): SearchUseCases {
         return SearchUseCases(
             getAllSearchesUseCase = GetAllSearchesUseCase(repository),
             getSearchByIDUseCase = GetSearchByIdUseCase(repository),
-            insertSearchUseCase = InsertSearchUseCase(repository),
+            insertSearchUseCase = InsertSearchUseCase(repository, context),
             deleteAllSearchesUseCase = DeleteAllSearchesUseCase(repository),
             deleteSearchByIdUseCase = DeleteSearchByIdUseCase(repository)
         )

@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.presentation.item_main
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
@@ -79,6 +80,7 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
+        Log.d("asdf","itemMainVeiwModel init")
         if (_searchId.value == 0L) {
             loadThisMonthData()
         }

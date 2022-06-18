@@ -6,7 +6,7 @@ import com.kakeibo.R
 import com.kakeibo.core.data.local.entities.SearchEntity
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.repositories.SearchRepository
-import com.kakeibo.feature_main.presentation.item_search.CATEGORY_NOT_CHOSEN
+import com.kakeibo.feature_main.presentation.item_search.CATEGORY_INVALID
 import kotlinx.datetime.toLocalDate
 
 class InsertSearchUseCase(
@@ -53,7 +53,7 @@ class InsertSearchUseCase(
         }
 
         /* Category */
-        if (searchModel.categoryCode != null && searchModel.categoryCode == CATEGORY_NOT_CHOSEN) {
+        if (searchModel.categoryCode != null && searchModel.categoryCode == CATEGORY_INVALID) {
             throw SearchEntity.InvalidSearchException(
                 context.getString(R.string.err_please_select_category)
             )
