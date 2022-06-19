@@ -18,6 +18,7 @@ import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.SettingsActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.kakeibo.R
 
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
@@ -43,9 +44,9 @@ fun TopNavigationBar(
             IconButton(
                 onClick = {
                     when (currentRoute) {
-                        Screen.ItemListScreen.route + "?searchId={searchId}",
-                        Screen.ItemChartScreen.route + "?searchId={searchId}",
-                        Screen.ItemCalendarScreen.route + "?searchId={searchId}" ->
+                        Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                        Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                        Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ->
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
@@ -55,9 +56,9 @@ fun TopNavigationBar(
                 }
             ) {
                 when (currentRoute) {
-                    Screen.ItemListScreen.route + "?searchId={searchId}",
-                    Screen.ItemChartScreen.route + "?searchId={searchId}",
-                    Screen.ItemCalendarScreen.route + "?searchId={searchId}" ->
+                    Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                    Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                    Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ->
                         Icon(Icons.Default.Menu, "Menu")
                     else ->
                         Icon(Icons.Default.ArrowBack, "Back")
@@ -65,9 +66,9 @@ fun TopNavigationBar(
             }
         },
         actions = {
-            if (currentRoute == Screen.ItemListScreen.route + "?searchId={searchId}" ||
-                currentRoute == Screen.ItemChartScreen.route + "?searchId={searchId}" ||
-                currentRoute == Screen.ItemCalendarScreen.route + "?searchId={searchId}"
+            if (currentRoute == Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ||
+                currentRoute == Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ||
+                currentRoute == Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}"
             ) {
                 IconButton(
                     onClick = { onExportClick() },
@@ -82,7 +83,7 @@ fun TopNavigationBar(
 
                         if (currentRoute == Screen.ItemSearchScreen.route) {
                             // do nothing
-                        } else if (searchId == null || searchId == 0L) {
+                        } else if (searchId == null || searchId == 0L) { /* if NOT in search mode */
                             navController.navigate(Screen.ItemSearchScreen.route) {
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations
@@ -99,14 +100,14 @@ fun TopNavigationBar(
                                 // Restore state when re-selecting a previously selected item
                                 restoreState = true
                             }
-                        } else if (searchId != 0L) {
+                        } else if (searchId != 0L) { /* if in search mode */
                             Toast.makeText(
                                 context,
-                                "You have to exit search first",
+                                R.string.exit_search_first,
                                 Toast.LENGTH_LONG
                             ).show()
                         } else {
-                            // something went wrong
+                            /* something must be wrong */
                         }
                     }
                 ) {

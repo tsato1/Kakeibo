@@ -56,6 +56,7 @@ import com.kakeibo.feature_main.presentation.common.components.ImportExportDialo
 import com.kakeibo.feature_main.presentation.common.components.TopNavigationBar
 import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemEditScreen
 import com.kakeibo.feature_main.presentation.item_detail.item_input.components.ItemInputScreen
+import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_calendar.components.ItemCalendarScreen
 import com.kakeibo.feature_main.presentation.item_main.item_chart.components.ItemChartScreen
@@ -64,6 +65,8 @@ import com.kakeibo.feature_main.presentation.item_search.components.ItemSearchSc
 import com.kakeibo.feature_main.presentation.nav_drawer.components.AboutScreen
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.ui.theme.KakeiboTheme
+import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toYMDString
 import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
@@ -154,7 +157,15 @@ class MainActivity : ComponentActivity() {
                 DisposableEffect(lifecycleOwner) {
                     val observer = LifecycleEventObserver { _, event ->
                         if (event == Lifecycle.Event.ON_START) {
-                            Log.d("asdf", "onStart")
+                            itemMainViewModel.setSharedPreferencesStates()
+                            itemMainViewModel.loadKkbAppStates()
+                            itemMainViewModel.onEvent(
+                                ItemMainEvent.LoadItems(
+                                    0L,
+                                    UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB),
+                                    -1L
+                                )
+                            )
                         }
                     }
                     lifecycleOwner.lifecycle.addObserver(observer)
@@ -342,43 +353,91 @@ fun ScreenController(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.ItemListScreen.route + "?searchId={searchId}"
+        startDestination = Screen.ItemListScreen.route +
+                "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}"
     ) {
         composable(
-            route = Screen.ItemListScreen.route + "?searchId={searchId}",
+            route = Screen.ItemListScreen.route +
+                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
             arguments = listOf(
                 navArgument(
                     name = "searchId"
                 ) {
                     type = NavType.LongType
                     defaultValue = 0L
+                },
+                navArgument(
+                    name = "focusDate"
+                ) {
+                    type = NavType.StringType
+                    defaultValue = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                },
+                navArgument(
+                    name = "focusItemId"
+                ) {
+                    type = NavType.LongType
+                    defaultValue = -1L
                 }
             )
         ) {
             val searchId = it.arguments?.getLong("searchId") ?: 0L
-            ItemListScreen(navController = navController, viewModel = itemMainViewModel, searchId = searchId)
+            val focusDate = it.arguments?.getString("focusDate") ?: ""
+            val focusItemId = it.arguments?.getLong("focusItemId") ?: -1L
+            ItemListScreen(
+                navController = navController,
+                viewModel = itemMainViewModel,
+                searchId = searchId,
+                focusDate = focusDate,
+                focusItemId = focusItemId
+            )
         }
         composable(
-            route = Screen.ItemChartScreen.route + "?searchId={searchId}",
+            route = Screen.ItemChartScreen.route +
+                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
             arguments = listOf(
                 navArgument(
                     name = "searchId"
                 ) {
                     type = NavType.LongType
                     defaultValue = 0L
+                },
+                navArgument(
+                    name = "focusDate"
+                ) {
+                    type = NavType.StringType
+                    defaultValue = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                },
+                navArgument(
+                    name = "focusItemId"
+                ) {
+                    type = NavType.LongType
+                    defaultValue = -1L
                 }
             )
         ) {
             ItemChartScreen(navController = navController, viewModel = itemMainViewModel)
         }
         composable(
-            route = Screen.ItemCalendarScreen.route + "?searchId={searchId}",
+            route = Screen.ItemCalendarScreen.route +
+                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
             arguments = listOf(
                 navArgument(
                     name = "searchId"
                 ) {
                     type = NavType.LongType
                     defaultValue = 0L
+                },
+                navArgument(
+                    name = "focusDate"
+                ) {
+                    type = NavType.StringType
+                    defaultValue = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                },
+                navArgument(
+                    name = "focusItemId"
+                ) {
+                    type = NavType.LongType
+                    defaultValue = -1L
                 }
             )
         ) {

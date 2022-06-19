@@ -21,10 +21,10 @@ abstract class KkbAppViewModel: ViewModel() {
     val kkbAppModelState: State<KkbAppModelState> = _kkbAppModelState
 
     init {
-        load()
+        loadKkbAppStates()
     }
 
-    fun load() {
+    fun loadKkbAppStates() {
         if (this::kkbAppUseCases.isInitialized) {
             viewModelScope.launch {
                 kkbAppUseCases.getKkbAppUseCase()?.let { kkbAppModel ->
@@ -51,7 +51,7 @@ abstract class KkbAppViewModel: ViewModel() {
                 kkbAppModelState.value.kkbAppModel.strVal3
             )
         )
-        load()
+        loadKkbAppStates()
         return result
     }
 

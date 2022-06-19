@@ -9,7 +9,6 @@ sealed class ItemDetailEvent {
     data class CategorySelected(val displayedCategory: DisplayedCategoryModel) : ItemDetailEvent()
     data class MemoEntered(val value: String) : ItemDetailEvent()
     data class MemoFocusChanged(val focusState: FocusState) : ItemDetailEvent()
-    data class SaveItemWithCategory(val displayedCategory: DisplayedCategoryModel) : ItemDetailEvent()
     object SaveItem : ItemDetailEvent()
     object DeleteItem : ItemDetailEvent()
 }

@@ -86,6 +86,7 @@
     <string name="jump_to_website">Jump to website</string>
     <string name="no_item_found">No Item Found</string>
     <string name="calendar_view_not_available_in_search_mode">Calendar View is not available in Search Mode.</string>
+    <string name="exit_search_first">You have to exit search first</string>
 
     <string name="error">Something went wrong. Please contact support.</string>
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>

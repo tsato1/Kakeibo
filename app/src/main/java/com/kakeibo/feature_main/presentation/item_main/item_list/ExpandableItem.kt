@@ -7,6 +7,15 @@ data class ExpandableItem(
     val children: List<DisplayedItemModel>
 ) {
 
-    data class Parent(val date: String, val income: String, val expense: String)
+    data class Parent(val date: String, val income: String, val expense: String, val scrollTo: Int)
 
+}
+
+fun List<DisplayedItemModel>.containsAt(id: Long): Int = run {
+    var counter = 0
+    for (ele in this) {
+        if (ele.id == id) return counter
+        counter += 1
+    }
+    return -1
 }

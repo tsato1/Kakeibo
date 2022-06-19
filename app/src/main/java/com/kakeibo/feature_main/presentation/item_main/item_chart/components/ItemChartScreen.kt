@@ -1,6 +1,5 @@
 package com.kakeibo.feature_main.presentation.item_main.item_chart.components
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
@@ -19,16 +18,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.Constants
 import com.kakeibo.R
@@ -43,6 +38,8 @@ import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilCategory
+import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.datetime.DateTimeUnit
 import java.math.BigDecimal
 import kotlin.math.roundToInt
@@ -50,7 +47,6 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemChartScreen(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemMainViewModel
 ) {
@@ -64,31 +60,10 @@ fun ItemChartScreen(
     val clickedCategoryName = remember { mutableStateOf("") }
 
     val itemChartState = viewModel.itemChartState
-    val searchIdState = viewModel.searchId
-    val searchModel = viewModel.searchModel.value
-
-    LaunchedEffect(Unit) {
-        Log.d("asdf", "launchedEffect CHART searchId=" + searchIdState.value)
-        if (searchIdState.value != 0L) {
-            viewModel.onEvent(ItemMainEvent.LoadItems(searchIdState.value))
-        }
-    }
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.setSharedPreferencesStates()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
 
     Scaffold(
         floatingActionButton = {
-            if (searchIdState.value == 0L) {
+            if (viewModel.searchId.value == 0L) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(Screen.ItemInputScreen.route)
@@ -114,7 +89,7 @@ fun ItemChartScreen(
                 .padding(innerPadding)
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
-                    if (searchIdState.value == 0L) {
+                    if (viewModel.searchId.value == 0L) {
                         detectDragGestures(
                             onDragEnd = {
                                 when {
@@ -140,7 +115,7 @@ fun ItemChartScreen(
                     .padding(8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                if (searchIdState.value != 0L) {
+                if (viewModel.searchId.value != 0L) {
                     SearchModeTopRow(
                         onCloseButtonClick = {
                             openExitSearchDialog.value = true
@@ -463,7 +438,8 @@ fun ItemChartScreen(
                 openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
-                navController.navigate(Screen.ItemChartScreen.route + "?searchId=${0L}")
+                navController.navigate(Screen.ItemChartScreen.route +
+                        "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }
@@ -474,7 +450,7 @@ fun ItemChartScreen(
         SearchDetailDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
             onConfirmButtonClick = { openSearchDetailDialog.value = false },
-            searchModel
+            searchModel = viewModel.searchModel.value
         )
     }
 
@@ -579,7 +555,6 @@ fun ItemChartScreen(
 
     if (openItemDetailDialog.value) {
         ItemDetailDialog(
-            navController = navController,
             item = clickedItem,
             onDismissRequest = { openItemDetailDialog.value = false },
             onEditButtonClick = {

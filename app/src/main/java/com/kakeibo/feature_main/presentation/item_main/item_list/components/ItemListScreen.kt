@@ -1,6 +1,5 @@
 package com.kakeibo.feature_main.presentation.item_main.item_list.components
 
-import android.util.Log
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -27,6 +26,9 @@ import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.util.Screen
+import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toYMDString
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.DateTimeUnit
 import kotlin.math.roundToInt
 
@@ -35,29 +37,35 @@ fun ItemListScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemMainViewModel,
-    searchId: Long = 0L
+    searchId: Long,
+    focusDate: String,
+    focusItemId: Long
 ) {
     val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
 
     val openSearchDetailDialog = remember { mutableStateOf(false) }
     val openExitSearchDialog = remember { mutableStateOf(false) }
 
     val itemListState = viewModel.expandableItemListState.value
-    val searchIdState = viewModel.searchId
-    val searchModel = viewModel.searchModel.value
 
     LaunchedEffect(Unit) {
-        Log.d("asdf", "launchedEffect in list searchId="+searchId)
-        if (searchId != 0L) {
-            viewModel.onEvent(ItemMainEvent.LoadItems(searchId))
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is ItemMainViewModel.UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
+                }
+                /* UiEvent.LoadingCompleted is implemented in CollapsableLazyColumn */
+            }
         }
     }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                viewModel.setSharedPreferencesStates()
-                viewModel.load()
+            if (event == Lifecycle.Event.ON_RESUME) {
+                if (searchId != 0L || focusItemId != -1L) {
+                    viewModel.onEvent(ItemMainEvent.LoadItems(searchId, focusDate, focusItemId))
+                }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -68,7 +76,7 @@ fun ItemListScreen(
 
     Scaffold(
         floatingActionButton = {
-            if (searchIdState.value == 0L) {
+            if (viewModel.searchId.value == 0L) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(Screen.ItemInputScreen.route)
@@ -94,7 +102,7 @@ fun ItemListScreen(
                 .padding(innerPadding)
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
-                    if (searchId == 0L) {
+                    if (viewModel.searchId.value == 0L) {
                         detectDragGestures(
                             onDragEnd = {
                                 when {
@@ -119,7 +127,7 @@ fun ItemListScreen(
                     .fillMaxSize()
                     .padding(8.dp)
             ) {
-                if (searchIdState.value != 0L) {
+                if (viewModel.searchId.value != 0L) {
                     SearchModeTopRow(
                         onCloseButtonClick = {
                             openExitSearchDialog.value = true
@@ -162,7 +170,8 @@ fun ItemListScreen(
                openExitSearchDialog.value = false
            },
            onConfirmButtonClick = {
-               navController.navigate(Screen.ItemListScreen.route + "?searchId=${0L}")
+               navController.navigate(Screen.ItemListScreen.route +
+                       "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}")
                viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                openExitSearchDialog.value = false
            }
@@ -173,7 +182,7 @@ fun ItemListScreen(
         SearchDetailDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
             onConfirmButtonClick = { openSearchDetailDialog.value = false },
-            searchModel
+            searchModel = viewModel.searchModel.value
         )
     }
 

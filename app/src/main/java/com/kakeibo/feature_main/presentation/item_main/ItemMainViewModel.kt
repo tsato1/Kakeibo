@@ -1,6 +1,5 @@
 package com.kakeibo.feature_main.presentation.item_main
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
@@ -17,6 +16,7 @@ import com.kakeibo.feature_main.presentation.item_main.item_calendar.CalendarIte
 import com.kakeibo.feature_main.presentation.item_main.item_chart.ItemChartState
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemListState
+import com.kakeibo.feature_main.presentation.item_main.item_list.containsAt
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
@@ -46,9 +46,12 @@ class ItemMainViewModel @Inject constructor(
 
     private val _searchId = mutableStateOf(savedStateHandle["searchId"] ?: 0L)
     val searchId: State<Long> = _searchId
-
     private val _searchModel = mutableStateOf(SearchModel())
     val searchModel: State<SearchModel?> = _searchModel
+
+    /* used for expanding the expandableList and scrolling to this item*/
+    private val _focusItemIdState = mutableStateOf(savedStateHandle["focusItemId"] ?: -1L)
+    val focusItemIdState: State<Long> = _focusItemIdState
 
     private val _calendarFromDate = mutableStateOf(LocalDate(
         UtilDate.getTodaysLocalDate().year,
@@ -80,13 +83,7 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        Log.d("asdf","itemMainVeiwModel init")
-        if (_searchId.value == 0L) {
-            loadThisMonthData()
-        }
-        else {
-            onEvent(ItemMainEvent.LoadItems(_searchId.value))
-        }
+        onEvent(ItemMainEvent.LoadItems(_searchId.value, localEventDate.value, _focusItemIdState.value))
     }
 
     fun setSharedPreferencesStates() {
@@ -95,10 +92,8 @@ class ItemMainViewModel @Inject constructor(
     }
 
     private fun loadThisMonthData() {
-        val today = UtilDate.getTodaysLocalDate()
+        val today = localEventDate.value.toLocalDate()
         val remainingDays = UtilDate.getRemainingDays(today.toYMDString(UtilDate.DATE_FORMAT_DB))
-
-        updateLocalEventDate(today.toYMDString(UtilDate.DATE_FORMAT_DB))
 
         _calendarFromDate.value = LocalDate(
             today.year, today.monthNumber, 1
@@ -159,16 +154,33 @@ class ItemMainViewModel @Inject constructor(
             is ItemMainEvent.LoadItems -> {
                 savedStateHandle["searchId"] = event.searchId
                 _searchId.value = event.searchId
-                viewModelScope.launch {
-                    _searchModel.value = searchUseCases.getSearchByIDUseCase(event.searchId)
-                    searchModel.value?.let {
-                        loadItems(it)
+                savedStateHandle["focusItemId"] = event.focusItemId
+                _focusItemIdState.value = event.focusItemId
+
+                if (event.searchId == 0L) { /* NOT in search mode */
+                    if (!event.focusDate.isWithinMonth(
+                            UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                        )
+                    ) {
+                        updateLocalEventDate(event.focusDate)
+                    }
+                    loadThisMonthData()
+                }
+                else { /* in search mode */
+                    viewModelScope.launch {
+                        _searchModel.value = searchUseCases.getSearchByIDUseCase(event.searchId)
+                        searchModel.value?.let {
+                            loadItems(it)
+                        }
                     }
                 }
             }
             is ItemMainEvent.ExitSearchMode -> {
                 savedStateHandle["searchId"] = 0L
                 _searchId.value = 0L
+                resetToToday()
+                savedStateHandle["focusItemId"] = -1L
+                _focusItemIdState.value = -1L
                 loadThisMonthData()
             }
             else -> {}
@@ -187,8 +199,8 @@ class ItemMainViewModel @Inject constructor(
                     val expandableItemList = result.data
                         ?.groupBy { it.eventDate }
                         ?.filter {
-                            if (searchId.value == 0L) { it.key.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.key.isWithinMonth(localEventDate.value) }
                         }
                         ?.map { entry ->
                             ExpandableItem(
@@ -199,7 +211,8 @@ class ItemMainViewModel @Inject constructor(
                                         .sumOf { it.amount.toBigDecimal() }.toString(),
                                     entry.value
                                         .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toBigDecimal() }.toString()
+                                        .sumOf { it.amount.toBigDecimal() }.toString(),
+                                    entry.value.containsAt(focusItemIdState.value)
                                 ),
                                 entry.value
                             )
@@ -264,24 +277,24 @@ class ItemMainViewModel @Inject constructor(
                     val incomeTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter {
-                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
                         ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
 
                     val expenseTotal = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter {
-                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
                         ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
 
                     val incomeCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter {
-                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
@@ -296,8 +309,8 @@ class ItemMainViewModel @Inject constructor(
                     val expenseCategoryList = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter {
-                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
                         ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
                         ?.reduce { _, acc, ele ->
@@ -312,16 +325,16 @@ class ItemMainViewModel @Inject constructor(
                     val itemMapByCategoryIncome = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
                         ?.filter {
-                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
                     val itemMapByCategoryExpense = result.data
                         ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
                         ?.filter {
-                            if (searchId.value == 0L) { it.eventDate.isWithinMonth(localEventDate.value) }
-                            else { true }
+                            if (searchId.value != 0L) { true }
+                            else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
                         ?.groupBy { it.categoryCode } ?: emptyMap()
 
@@ -344,6 +357,7 @@ class ItemMainViewModel @Inject constructor(
                                 calendarItemList = calendarItemList,
                                 isLoading = false
                             )
+                            _eventFlow.emit(UiEvent.LoadingCompleted)
                         }
                         is Resource.Error -> {
                             _expandableItemListState.value = expandableItemListState.value.copy(
@@ -396,6 +410,7 @@ class ItemMainViewModel @Inject constructor(
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: UiText): UiEvent()
+        object LoadingCompleted: UiEvent()
     }
 
 }

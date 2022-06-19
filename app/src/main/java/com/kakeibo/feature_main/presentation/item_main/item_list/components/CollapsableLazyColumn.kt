@@ -6,15 +6,13 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +34,7 @@ import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDWString
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.toLocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -49,7 +48,7 @@ fun CollapsableLazyColumn(
     viewModel: ItemMainViewModel
 ) {
     val context = LocalContext.current
-
+    val listState = rememberLazyListState()
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
 
     val openItemDetailDialog = rememberSaveable { mutableStateOf(false) }
@@ -60,6 +59,19 @@ fun CollapsableLazyColumn(
                 0L, "", "", 0, "", "", ""
             )
         )
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is ItemMainViewModel.UiEvent.LoadingCompleted -> {
+                    if (viewModel.focusItemIdState.value != -1L) {
+                        listState.animateScrollToItem(viewModel.focusItemIdState.value.toInt())
+                    }
+                }
+                /* UiEvent.ShowSnackbar is implemented in CollapsableLazyColumn */
+            }
+        }
     }
 
     if (sections.isEmpty()) {
@@ -74,9 +86,12 @@ fun CollapsableLazyColumn(
         }
     }
     else {
-        LazyColumn(modifier) {
+        LazyColumn(modifier = modifier, listState) {
             sections.forEachIndexed { i, expandableItem ->
+                if (expandableItem.parent.scrollTo != -1) collapsedState[i] = false
+
                 val collapsed = collapsedState[i]
+
                 item(key = "header_$i") {
                     Row(
                         modifier = Modifier
@@ -181,7 +196,6 @@ fun CollapsableLazyColumn(
 
     if (openItemDetailDialog.value) {
         ItemDetailDialog(
-            navController = navController,
             item = clickedItem,
             onDismissRequest = { openItemDetailDialog.value = false },
             onEditButtonClick = {

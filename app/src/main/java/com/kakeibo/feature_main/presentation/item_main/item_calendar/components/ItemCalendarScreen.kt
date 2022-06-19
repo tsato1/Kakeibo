@@ -1,6 +1,5 @@
 package com.kakeibo.feature_main.presentation.item_main.item_calendar.components
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -29,16 +27,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
-import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.presentation.common.components.*
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
@@ -54,7 +48,6 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ItemCalendarScreen(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemMainViewModel
 ) {
@@ -63,31 +56,9 @@ fun ItemCalendarScreen(
     val openSearchDetailDialog = remember { mutableStateOf(false) }
     val openExitSearchDialog = remember { mutableStateOf(false) }
 
-    val searchIdState = viewModel.searchId
-    val searchModel = viewModel.searchModel.value
-
-    LaunchedEffect(Unit) {
-        Log.d("asdf", "launchedEffect CALENDAR searchId="+searchIdState.value)
-        if (searchIdState.value != 0L) {
-            viewModel.onEvent(ItemMainEvent.LoadItems(searchIdState.value))
-        }
-    }
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.setSharedPreferencesStates()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
     Scaffold(
         floatingActionButton = {
-            if (searchIdState.value == 0L) {
+            if (viewModel.searchId.value == 0L) {
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(Screen.ItemInputScreen.route)
@@ -113,7 +84,7 @@ fun ItemCalendarScreen(
                 .padding(innerPadding)
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
-                    if (searchIdState.value == 0L) {
+                    if (viewModel.searchId.value == 0L) {
                         detectDragGestures(
                             onDragEnd = {
                                 when {
@@ -139,7 +110,7 @@ fun ItemCalendarScreen(
                     .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (searchIdState.value != 0L) {
+                if (viewModel.searchId.value != 0L) {
                     SearchModeTopRow(
                         onCloseButtonClick = {
                             openExitSearchDialog.value = true
@@ -157,19 +128,19 @@ fun ItemCalendarScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                if (searchIdState.value == 0L) {
-                    CalendarRows(
-                        navController = navController,
-                        viewModel = viewModel
-                    )
-                }
-                else {
+                if (viewModel.searchId.value != 0L) {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.CenterHorizontally),
                         text = stringResource(id = R.string.calendar_view_not_available_in_search_mode),
                         textAlign = TextAlign.Center
+                    )
+                }
+                else {
+                    CalendarRows(
+                        navController = navController,
+                        viewModel = viewModel
                     )
                 }
             }
@@ -189,8 +160,8 @@ fun ItemCalendarScreen(
                 openExitSearchDialog.value = false
             },
             onConfirmButtonClick = {
-                navController.currentBackStackEntry?.savedStateHandle?.remove<DisplayedCategoryModel>("categoryModel")
-                navController.navigate(Screen.ItemCalendarScreen.route + "?searchId=${0L}")
+                navController.navigate(Screen.ItemCalendarScreen.route +
+                        "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }
@@ -201,7 +172,7 @@ fun ItemCalendarScreen(
         SearchDetailDialog(
             onDismissRequest = { openSearchDetailDialog.value = false },
             onConfirmButtonClick = { openSearchDetailDialog.value = false },
-            searchModel
+            searchModel = viewModel.searchModel.value
         )
     }
 }
@@ -436,7 +407,6 @@ fun CalendarRows(
 
     if (openItemDetailDialog.value) {
         ItemDetailDialog(
-            navController = navController,
             item = clickedItem,
             onDismissRequest = { openItemDetailDialog.value = false },
             onEditButtonClick = {

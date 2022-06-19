@@ -68,7 +68,7 @@ fun SettingsListScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
                 viewModel.setSharedPreferencesStates()
-                viewModel.load()
+                viewModel.loadKkbAppStates()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)

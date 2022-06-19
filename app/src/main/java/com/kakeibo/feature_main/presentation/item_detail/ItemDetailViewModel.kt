@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.presentation.TextFieldState
 import com.kakeibo.core.util.Resource
 import com.kakeibo.core.data.local.entities.ItemEntity
+import com.kakeibo.core.data.local.entities.SearchEntity
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.UiText
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
@@ -57,8 +58,8 @@ class ItemDetailViewModel @Inject constructor(
     val displayedCategoryListState: State<DisplayedCategoryListState> = _displayedCategoryListState
 
     /* keep the itemId in case undo clicked */
-    private val _savedItemId = mutableStateOf(-1L)
-    val savedItemId: State<Long> = _savedItemId
+//    private val _savedItemId = mutableStateOf(-1L)
+//    val savedItemId: State<Long> = _savedItemId
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -127,38 +128,12 @@ class ItemDetailViewModel @Inject constructor(
                     isHintVisible = !event.focusState.isFocused && itemMemoState.value.text.isBlank()
                 )
             }
-            is ItemDetailEvent.SaveItemWithCategory -> {
-                viewModelScope.launch {
-                    try {
-                        displayedItemUseCases.insertItemUseCase(
-                            DisplayedItemModel(
-                                id = 0, // 0: id will be automatically assigned by Room
-                                amount = itemAmountState.value.text,
-                                currencyCode = UtilCurrency.CURRENCY_NONE,
-                                categoryCode = event.displayedCategory.code,
-                                categoryColor = event.displayedCategory.color,
-                                memo = itemMemoState.value.text,
-                                eventDate = localEventDate.value, // itemDate is in DB format
-                                updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
-                            )
-                        )
-                        _eventFlow.emit(UiEvent.Save)
-                    }
-                    catch (e: ItemEntity.InvalidItemException) {
-                        _eventFlow.emit(
-                            UiEvent.ShowSnackbar(
-                                UiText.DynamicString(e.message ?: "Error: Couldn't save the item.")
-                            )
-                        )
-                    }
-                }
-            }
             is ItemDetailEvent.SaveItem -> {
                 viewModelScope.launch {
                     try {
-                        displayedItemUseCases.insertItemUseCase(
+                        val focusItemId = displayedItemUseCases.insertItemUseCase(
                             DisplayedItemModel(
-                                id = currentItemId.value,
+                                id = if (currentItemId.value == -1L) 0 else currentItemId.value,
                                 amount = itemAmountState.value.text,
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
                                 categoryCode = itemCategoryCodeState.value,
@@ -167,12 +142,19 @@ class ItemDetailViewModel @Inject constructor(
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
                             )
                         )
-                        _eventFlow.emit(UiEvent.Save)
+                        _eventFlow.emit(UiEvent.Save(localEventDate.value, focusItemId))
                     }
                     catch (e: ItemEntity.InvalidItemException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
                                 UiText.DynamicString(e.message ?: "Error: Couldn't save the item.")
+                            )
+                        )
+                    }
+                    catch (e: SearchEntity.InvalidSearchException) {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(e.message ?: "Error: Invalid Search.")
                             )
                         )
                     }
@@ -222,6 +204,6 @@ class ItemDetailViewModel @Inject constructor(
     sealed class UiEvent {
         data class ShowSnackbar(val message: UiText): UiEvent()
         data class ShowToast(val message: UiText): UiEvent()
-        object Save: UiEvent()
+        data class Save(val focusDate: String, val focusItemId: Long): UiEvent()
     }
 }

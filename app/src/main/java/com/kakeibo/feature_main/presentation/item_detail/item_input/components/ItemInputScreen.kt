@@ -66,7 +66,8 @@ fun ItemInputScreen(
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG)
                         .show()
                     navController.navigate(
-                        Screen.ItemListScreen.route + "?searchId=${0L}"
+                        Screen.ItemListScreen.route +
+                                "?searchId=${0L}/?focusDate=${event.focusDate}/?focusItemId=${event.focusItemId}"
                     )
                 }
             }
@@ -171,9 +172,8 @@ fun ItemInputScreen(
                             categoryModel = category,
                             onItemClick = {
                                 coroutineScope.launch {
-                                    viewModel.onEvent(
-                                        ItemDetailEvent.SaveItemWithCategory(category)
-                                    )
+                                    viewModel.onEvent(ItemDetailEvent.CategorySelected(category))
+                                    viewModel.onEvent(ItemDetailEvent.SaveItem)
                                 }
                             },
                             onItemLongClick = {}

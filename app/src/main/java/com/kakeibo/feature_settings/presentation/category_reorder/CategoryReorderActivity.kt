@@ -32,7 +32,7 @@ class CategoryReorderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_category_reorder)
-        _categoryViewModel.load()
+        _categoryViewModel.loadKkbAppStates()
 
         /* hide home button on actionbar  */
         if (supportActionBar != null) {

@@ -162,14 +162,16 @@ object AppModule {
     @Singleton
     fun provideDisplayedItemUseCases(
         @ApplicationContext context: Context,
-        repository: DisplayedItemRepository
+        itemRepository: DisplayedItemRepository,
+        searchRepository: SearchRepository
     ): DisplayedItemUseCases {
         return DisplayedItemUseCases(
-            getItemByIdUseCase = GetItemByIdUseCase(repository),
-            getAllItemsUseCase = GetAllItemsUseCase(repository),
-            getSpecificItemsUseCase = GetSpecificItemsUseCase(repository),
-            insertItemUseCase = InsertItemUseCase(repository, context),
-            deleteItemUseCase = DeleteItemUseCase(repository)
+            getItemByIdUseCase = GetItemByIdUseCase(itemRepository),
+            getAllItemsUseCase = GetAllItemsUseCase(itemRepository),
+            getSpecificItemsUseCase = GetSpecificItemsUseCase(itemRepository),
+            insertItemUseCase = InsertItemUseCase(itemRepository, context),
+            insertSearchUseCase = InsertSearchUseCase(searchRepository, context),
+            deleteItemUseCase = DeleteItemUseCase(itemRepository)
         )
     }
 

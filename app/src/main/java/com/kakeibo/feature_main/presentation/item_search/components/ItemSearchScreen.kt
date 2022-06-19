@@ -33,6 +33,8 @@ import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.feature_main.presentation.item_search.SearchCriterion
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.ui.theme.LightCream
+import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -60,7 +62,8 @@ fun ItemSearchScreen(
                 }
                 is ItemSearchViewModel.UiEvent.Search -> {
                     navController.navigate(
-                        Screen.ItemListScreen.route + "?searchId=${event.searchId}"
+                        Screen.ItemListScreen.route +
+                                "?searchId=${event.searchId}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}"
                     )
                 }
             }

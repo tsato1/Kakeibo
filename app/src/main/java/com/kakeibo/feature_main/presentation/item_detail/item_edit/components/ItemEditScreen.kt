@@ -14,12 +14,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
@@ -31,6 +29,7 @@ import com.kakeibo.feature_main.presentation.common.components.DateType
 import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
+import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilText
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.DateTimeUnit
@@ -40,7 +39,6 @@ import kotlin.math.roundToInt
 @ExperimentalComposeUiApi
 @Composable
 fun ItemEditScreen(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
     viewModel: ItemDetailViewModel = hiltViewModel()
 ) {
@@ -68,7 +66,10 @@ fun ItemEditScreen(
                 }
                 is ItemDetailViewModel.UiEvent.Save -> {
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG).show()
-                    navController.navigateUp()
+                    navController.navigate(
+                        Screen.ItemListScreen.route +
+                                "?searchId=${0L}/?focusDate=${event.focusDate}/?focusItemId=${event.focusItemId}"
+                    )
                 }
             }
         }
@@ -193,7 +194,9 @@ fun ItemEditScreen(
             Spacer(modifier = Modifier.weight(1f))
             // Save Button =========================================================================
             Button(
-                onClick = { viewModel.onEvent(ItemDetailEvent.SaveItem) }
+                onClick = {
+                    viewModel.onEvent(ItemDetailEvent.SaveItem)
+                }
             ) {
                 Text(
                     text = stringResource(id = R.string.save)
