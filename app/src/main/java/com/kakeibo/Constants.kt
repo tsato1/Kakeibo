@@ -2,12 +2,12 @@ package com.kakeibo
 
 object Constants {
     val CATEGORY_EXPENSE_COLORS = arrayOf(
-        "#2b381d", "#42572c", "#547036", "#738c57", "#89a36c",
-        "#9cba7b", "#b5d690", "#c7e3a8", "#e6facf", "#f8fff0"
+        "#827717", "#9E9D24", "#AFB42B", "#C0CA33", "#CDDC39",
+        "#D4E157", "#DCE775", "#E6EE9C", "#F0F4C3", "#F9FBE7"
     )
     val CATEGORY_INCOME_COLORS = arrayOf(
-        "#E64A19", "#FF5722", "#FD9149", "#FDA061", "#FDAE79",
-        "#FDBD91", "#feccaa", "#fedac2", "#fee9da", "#fef7f2"
+        "#E65100", "#EF6C00", "#F57C00", "#FB8C00", "#FF9800",
+        "#FFA726", "#FFB74D", "#FFCC80", "#FFE0B2", "#FFF3E0"
     )
 
     const val USE_FAKE_SERVER = false

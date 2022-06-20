@@ -104,31 +104,33 @@ fun CustomCategoryListScreen(
                 .fillMaxSize()
                 .padding(2.dp)
         ) {
-            IconButton(
-                onClick = {
-                    viewModel.onEvent(CustomCategoryListEvent.ToggleOrderSection)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Sort,
-                    contentDescription = "Sort"
-                )
-            }
-            AnimatedVisibility(
-                visible = customCategoryListState.isOrderSectionVisible,
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                OrderSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    order = customCategoryListState.listOrder,
-                    onOrderChange = {
-                        viewModel.onEvent(CustomCategoryListEvent.Reorder(it))
-                    }
-                )
-            }
+            /* todo: order by date, type, or name */
+//            IconButton(
+//                onClick = {
+//                    viewModel.onEvent(CustomCategoryListEvent.ToggleOrderSection)
+//                }
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Sort,
+//                    contentDescription = "Sort"
+//                )
+//            }
+//            AnimatedVisibility(
+//                visible = customCategoryListState.isOrderSectionVisible,
+//                enter = fadeIn() + slideInVertically(),
+//                exit = fadeOut() + slideOutVertically()
+//            ) {
+//                OrderSection(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(4.dp),
+//                    order = customCategoryListState.listOrder,
+//                    onOrderChange = {
+//                        viewModel.onEvent(CustomCategoryListEvent.Reorder(it))
+//                    }
+//                )
+//            }
+            /* todo */
             Spacer(modifier = Modifier.height(6.dp))
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(customCategoryListState.customCategoryList) { categoryModel ->

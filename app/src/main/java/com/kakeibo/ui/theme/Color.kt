@@ -8,7 +8,7 @@ val DarkOrange = Color(0xFFE64A19)
 val MatchaGreen = Color(0xFF808000)
 val LightGray = Color(0x11000010) // light gray
 val DarkGray = Color(0xFF202020)
-val ThickCream = Color(0xFFFFFFBB)
+val ThickCream = Color(0xFFFFFFF1)
 val LightCream = Color(0xFFfffbe8)
 
 

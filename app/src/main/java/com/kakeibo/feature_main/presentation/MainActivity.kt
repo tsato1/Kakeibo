@@ -72,7 +72,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
 //todo after saving an item, open the item -> it works but not perfect
-
 //todo keyboard goes away
 //todo typography
 //todo input : accept comma and period
@@ -124,7 +123,7 @@ class MainActivity : ComponentActivity() {
         AdColony.configure(this, getString(R.string.admob_app_id))
         val interstitialListener: AdColonyInterstitialListener = object : AdColonyInterstitialListener() {
             override fun onRequestFilled(ad: AdColonyInterstitial) {
-                /** Store and use this ad object to show your ad when appropriate  */
+                /* Store and use this ad object to show your ad when appropriate */
             }
         }
         AdColony.requestInterstitial(getString(R.string.upload_ad_zone_id), interstitialListener)
