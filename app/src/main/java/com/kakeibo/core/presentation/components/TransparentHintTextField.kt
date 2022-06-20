@@ -3,6 +3,7 @@ package com.kakeibo.core.presentation.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -24,7 +25,8 @@ fun TransparentHintTextField(
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(),
     singleLine: Boolean = false,
-    onFocusChange: (FocusState) -> Unit
+    onFocusChange: (FocusState) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -51,7 +53,8 @@ fun TransparentHintTextField(
                     focusManager.clearFocus()
                     keyboardController?.hide()
                 }
-            )
+            ),
+            keyboardOptions = keyboardOptions
         )
         if (isHintVisible) {
             Text(
