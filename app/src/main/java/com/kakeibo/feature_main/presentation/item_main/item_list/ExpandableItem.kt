@@ -7,7 +7,7 @@ data class ExpandableItem(
     val children: List<DisplayedItemModel>
 ) {
 
-    data class Parent(val date: String, val income: String, val expense: String, val scrollTo: Int)
+    data class Parent(val date: String, val income: String, val expense: String, var scrollTo: Int)
 
 }
 

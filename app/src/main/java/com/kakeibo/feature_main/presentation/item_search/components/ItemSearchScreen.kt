@@ -63,7 +63,7 @@ fun ItemSearchScreen(
                 is ItemSearchViewModel.UiEvent.Search -> {
                     navController.navigate(
                         Screen.ItemListScreen.route +
-                                "?searchId=${event.searchId}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}"
+                                "?searchId=${event.searchId}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${false}"
                     ) {
                         popUpTo(0) {
                             inclusive = true

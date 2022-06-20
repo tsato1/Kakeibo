@@ -130,7 +130,7 @@ fun CustomCategoryListScreen(
 //                    }
 //                )
 //            }
-            /* todo */
+            /*  */
             Spacer(modifier = Modifier.height(6.dp))
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(customCategoryListState.customCategoryList) { categoryModel ->

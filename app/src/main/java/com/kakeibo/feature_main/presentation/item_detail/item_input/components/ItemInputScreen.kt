@@ -68,9 +68,12 @@ fun ItemInputScreen(
                     Toast.makeText(context, R.string.msg_item_successfully_saved, Toast.LENGTH_LONG)
                         .show()
                     navController.navigate(
-                        Screen.ItemListScreen.route +
-                                "?searchId=${0L}/?focusDate=${event.focusDate}/?focusItemId=${event.focusItemId}"
-                    )
+                        Screen.ItemListScreen.route + "?searchId=${0L}/?focusDate=${event.focusDate}/?focusItemId=${event.focusItemId}/?reload=${true}"
+                    ) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }

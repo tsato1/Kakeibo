@@ -88,7 +88,10 @@ fun CollapsableLazyColumn(
     else {
         LazyColumn(modifier = modifier, listState) {
             sections.forEachIndexed { i, expandableItem ->
-                if (expandableItem.parent.scrollTo != -1) collapsedState[i] = false
+                if (expandableItem.parent.scrollTo != -1) {
+                    collapsedState[i] = false
+                    expandableItem.parent.scrollTo = -1
+                }
 
                 val collapsed = collapsedState[i]
 

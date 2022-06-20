@@ -48,8 +48,7 @@ fun BottomBar(navController: NavController) {
                         val focusDate = navBackStackEntry?.arguments?.get("focusDate")
                         val focusItemId = navBackStackEntry?.arguments?.get("focusItemId")
                         if (currentRoute != screen.route) {
-                            navController.navigate(screen.route +
-                                    "?searchId=${searchId}/?focusDate=${focusDate}/?focusItemId=${focusItemId}")
+                            navController.navigate(screen.route + "?searchId=${searchId}/?focusDate=${focusDate}/?focusItemId=${focusItemId}/?reload=${false}")
                         }
                     }
                 }

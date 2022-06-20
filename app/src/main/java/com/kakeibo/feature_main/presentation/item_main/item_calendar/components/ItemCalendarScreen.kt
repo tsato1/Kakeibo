@@ -161,7 +161,7 @@ fun ItemCalendarScreen(
             },
             onConfirmButtonClick = {
                 navController.navigate(Screen.ItemCalendarScreen.route +
-                        "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}")
+                        "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }

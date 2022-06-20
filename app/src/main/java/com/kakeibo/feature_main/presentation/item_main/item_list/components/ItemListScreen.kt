@@ -39,7 +39,8 @@ fun ItemListScreen(
     viewModel: ItemMainViewModel,
     searchId: Long,
     focusDate: String,
-    focusItemId: Long
+    focusItemId: Long,
+    reload: Boolean
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
@@ -62,8 +63,8 @@ fun ItemListScreen(
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                if (searchId != 0L || focusItemId != -1L) {
+            if (event == Lifecycle.Event.ON_START) {
+                if (searchId != 0L || reload) {
                     viewModel.onEvent(ItemMainEvent.LoadItems(searchId, focusDate, focusItemId))
                 }
             }
@@ -171,7 +172,7 @@ fun ItemListScreen(
            },
            onConfirmButtonClick = {
                navController.navigate(Screen.ItemListScreen.route +
-                       "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}")
+                       "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
                viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                openExitSearchDialog.value = false
            }

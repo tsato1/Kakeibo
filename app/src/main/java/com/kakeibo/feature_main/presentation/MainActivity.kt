@@ -71,7 +71,6 @@ import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
-//todo after saving an item, open the item -> it works but not perfect
 //todo keyboard goes away
 //todo typography
 //todo input : accept comma and period
@@ -352,11 +351,11 @@ fun ScreenController(
     NavHost(
         navController = navController,
         startDestination = Screen.ItemListScreen.route +
-                "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}"
+                "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}"
     ) {
         composable(
             route = Screen.ItemListScreen.route +
-                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
             arguments = listOf(
                 navArgument(
                     name = "searchId"
@@ -375,23 +374,31 @@ fun ScreenController(
                 ) {
                     type = NavType.LongType
                     defaultValue = -1L
+                },
+                navArgument(
+                    name = "reload"
+                ) {
+                    type = NavType.BoolType
+                    defaultValue = false
                 }
             )
         ) {
             val searchId = it.arguments?.getLong("searchId") ?: 0L
             val focusDate = it.arguments?.getString("focusDate") ?: ""
             val focusItemId = it.arguments?.getLong("focusItemId") ?: -1L
+            val reload = it.arguments?.getBoolean("reload") ?: false
             ItemListScreen(
                 navController = navController,
                 viewModel = itemMainViewModel,
                 searchId = searchId,
                 focusDate = focusDate,
-                focusItemId = focusItemId
+                focusItemId = focusItemId,
+                reload = reload
             )
         }
         composable(
             route = Screen.ItemChartScreen.route +
-                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
             arguments = listOf(
                 navArgument(
                     name = "searchId"
@@ -410,6 +417,12 @@ fun ScreenController(
                 ) {
                     type = NavType.LongType
                     defaultValue = -1L
+                },
+                navArgument(
+                    name = "reload"
+                ) {
+                    type = NavType.BoolType
+                    defaultValue = false
                 }
             )
         ) {
@@ -417,7 +430,7 @@ fun ScreenController(
         }
         composable(
             route = Screen.ItemCalendarScreen.route +
-                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
+                    "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
             arguments = listOf(
                 navArgument(
                     name = "searchId"
@@ -436,6 +449,12 @@ fun ScreenController(
                 ) {
                     type = NavType.LongType
                     defaultValue = -1L
+                },
+                navArgument(
+                    name = "reload"
+                ) {
+                    type = NavType.BoolType
+                    defaultValue = false
                 }
             )
         ) {

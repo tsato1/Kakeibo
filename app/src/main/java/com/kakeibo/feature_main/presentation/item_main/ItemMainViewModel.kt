@@ -3,6 +3,7 @@ package com.kakeibo.feature_main.presentation.item_main
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
+import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
 import com.kakeibo.core.util.UiText
@@ -145,10 +146,19 @@ class ItemMainViewModel @Inject constructor(
             }
             is ItemMainEvent.RestoreItem -> {
                 viewModelScope.launch {
-                    displayedItemUseCases.insertItemUseCase( // todo catch exception
-                        recentlyDeletedDisplayedItemModel ?: return@launch
-                    )
-                    recentlyDeletedDisplayedItemModel = null
+                    try {
+                        displayedItemUseCases.insertItemUseCase(
+                            recentlyDeletedDisplayedItemModel ?: return@launch
+                        )
+                        recentlyDeletedDisplayedItemModel = null
+                    }
+                    catch(e: ItemEntity.InvalidItemException) {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(e.message ?: "Error: Couldn't save the item..")
+                            )
+                        )
+                    }
                 }
             }
             is ItemMainEvent.LoadItems -> {
@@ -357,7 +367,6 @@ class ItemMainViewModel @Inject constructor(
                                 calendarItemList = calendarItemList,
                                 isLoading = false
                             )
-                            _eventFlow.emit(UiEvent.LoadingCompleted)
                         }
                         is Resource.Error -> {
                             _expandableItemListState.value = expandableItemListState.value.copy(
@@ -403,6 +412,7 @@ class ItemMainViewModel @Inject constructor(
                             )
                         }
                     }
+                    _eventFlow.emit(UiEvent.LoadingCompleted)
                 }
                 .launchIn(viewModelScope)
         }

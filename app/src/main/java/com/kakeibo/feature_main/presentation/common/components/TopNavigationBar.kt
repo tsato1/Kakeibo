@@ -44,9 +44,9 @@ fun TopNavigationBar(
             IconButton(
                 onClick = {
                     when (currentRoute) {
-                        Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
-                        Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
-                        Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ->
+                        Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
+                        Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
+                        Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}" ->
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
@@ -56,9 +56,9 @@ fun TopNavigationBar(
                 }
             ) {
                 when (currentRoute) {
-                    Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
-                    Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}",
-                    Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ->
+                    Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
+                    Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}",
+                    Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}" ->
                         Icon(Icons.Default.Menu, "Menu")
                     else ->
                         Icon(Icons.Default.ArrowBack, "Back")
@@ -66,9 +66,9 @@ fun TopNavigationBar(
             }
         },
         actions = {
-            if (currentRoute == Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ||
-                currentRoute == Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}" ||
-                currentRoute == Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}"
+            if (currentRoute == Screen.ItemListScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}" ||
+                currentRoute == Screen.ItemChartScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}" ||
+                currentRoute == Screen.ItemCalendarScreen.route + "?searchId={searchId}/?focusDate={focusDate}/?focusItemId={focusItemId}/?reload={reload}"
             ) {
                 IconButton(
                     onClick = { onExportClick() },
