@@ -64,7 +64,11 @@ fun ItemSearchScreen(
                     navController.navigate(
                         Screen.ItemListScreen.route +
                                 "?searchId=${event.searchId}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}"
-                    )
+                    ) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }

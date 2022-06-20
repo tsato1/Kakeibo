@@ -71,8 +71,7 @@ import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
-//todo after saving an item, open the item
-//todo after search, remove backstack
+//todo after saving an item, open the item -> it works but not perfect
 
 //todo keyboard goes away
 //todo typography
