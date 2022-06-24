@@ -170,7 +170,8 @@ object AppModuleTest {
     @Singleton
     fun provideDisplayedItemUseCases(
         @ApplicationContext context: Context,
-        repository: DisplayedItemRepository
+        itemRepository: DisplayedItemRepository,
+        searchRepository: SearchRepository
     ): DisplayedItemUseCases {
         TODO()
 //        return DisplayedItemUseCases(
