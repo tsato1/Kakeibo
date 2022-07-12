@@ -224,7 +224,7 @@ fun ItemChartScreen(
                                             .mapIndexed { index, value ->
                                                 PieChartData.Slice(
                                                     value.amount.toFloat(),
-                                                    if (index <= 10)
+                                                    if (index < 10)
                                                         Color(Constants.CATEGORY_INCOME_COLORS[index].toColorInt())
                                                     else
                                                         MaterialTheme.colors.background
@@ -279,7 +279,7 @@ fun ItemChartScreen(
                                                     .padding(3.dp)
                                                     .clip(RoundedCornerShape(2.dp))
                                                     .background(
-                                                        if (index <= 10)
+                                                        if (index < 10)
                                                             Color(Constants.CATEGORY_INCOME_COLORS[index].toColorInt())
                                                         else
                                                             MaterialTheme.colors.background
@@ -332,7 +332,7 @@ fun ItemChartScreen(
                                             .mapIndexed { index, value ->
                                                 PieChartData.Slice(
                                                     value.amount.toFloat(),
-                                                    if (index <= 10)
+                                                    if (index < 10)
                                                         Color(Constants.CATEGORY_EXPENSE_COLORS[index].toColorInt())
                                                     else
                                                         MaterialTheme.colors.background
@@ -387,7 +387,7 @@ fun ItemChartScreen(
                                                     .padding(3.dp)
                                                     .clip(RoundedCornerShape(2.dp))
                                                     .background(
-                                                        if (index <= 10)
+                                                        if (index < 10)
                                                             Color(Constants.CATEGORY_EXPENSE_COLORS[index].toColorInt())
                                                         else
                                                             MaterialTheme.colors.background
