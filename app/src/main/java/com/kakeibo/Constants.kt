@@ -1,6 +1,10 @@
 package com.kakeibo
 
 object Constants {
+    val IGNORE_AUTH_URLS = listOf("/login", "/register")
+
+    const val BASE_URL = "http://10.0.2.2:8080"
+
     val CATEGORY_EXPENSE_COLORS = arrayOf(
         "#827717", "#9E9D24", "#AFB42B", "#C0CA33", "#CDDC39",
         "#D4E157", "#DCE775", "#E6EE9C", "#F0F4C3", "#F9FBE7"

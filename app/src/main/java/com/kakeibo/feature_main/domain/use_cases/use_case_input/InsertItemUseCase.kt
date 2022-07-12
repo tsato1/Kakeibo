@@ -34,7 +34,7 @@ class InsertItemUseCase(
             )
         }
 
-        return repository.insertItem(displayedItemModel)
+        return repository.insertItem(displayedItemModel.toItemEntity())
     }
 
 }

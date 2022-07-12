@@ -67,6 +67,9 @@ import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
+//when saving an item, pass the month to list screen viewmodel to open that month's data
+//string: "export is initiated"
+
 //todo keyboard goes away
 //todo typography
 //todo input : accept comma and period

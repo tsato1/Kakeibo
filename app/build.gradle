@@ -13,7 +13,7 @@ android {
 
     def versionMajor = 6
     def versionMinor = 1
-    def versionDB = 9
+    def versionDB = 10
 
     defaultConfig {
         applicationId "com.kakeibo"

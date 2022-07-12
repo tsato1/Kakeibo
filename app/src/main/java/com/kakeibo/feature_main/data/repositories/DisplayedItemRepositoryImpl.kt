@@ -4,17 +4,23 @@ import android.content.Context
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kakeibo.R
 import com.kakeibo.core.data.local.ItemDao
+import com.kakeibo.core.data.local.entities.ItemEntity
+import com.kakeibo.core.data.local.entities.LocallyDeletedItemIdEntity
+import com.kakeibo.core.data.remote.ItemApi
+import com.kakeibo.core.data.remote.requests.DeleteItemRequest
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 import com.kakeibo.util.UtilCategory
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 
 class DisplayedItemRepositoryImpl(
-    context: Context,
-    private val dao: ItemDao
+    private val context: Context,
+    private val dao: ItemDao,
+    private val api: ItemApi
 ) : DisplayedItemRepository {
 
     private val defaultCategories = context.resources.getStringArray(R.array.default_category)
@@ -32,72 +38,6 @@ class DisplayedItemRepositoryImpl(
             }
         }
     }
-
-//    override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
-//        emit(Resource.Loading())
-//
-//        val displayedItems = dao.getItemsInYear(y)
-//            .map {
-//                it.map {
-//                    it.toDisplayedItemModel()
-//                }
-//            }
-//            .first()
-//
-//        emit(Resource.Loading(displayedItems))
-//
-//        try {
-//
-//        } catch (e: HttpException) {
-//            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
-//        } catch (e: IOException) {
-//            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
-//        }
-//
-//        val flow = dao.getItemsInYear(y)
-//            .map {
-//                it.map {
-//                    it.toDisplayedItemModel()
-//                }
-//            }
-//            .map {
-//                Resource.Success(it)
-//            }
-//
-//        emitAll(flow)
-//    }
-//
-//    override fun getItemsByYearMonth(ym: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
-//        emit(Resource.Loading())
-//
-//        val displayedItems = dao.getItemsInMonth(ym)
-//            .map {
-//                it.map {
-//                    it.toDisplayedItemModel()
-//                }
-//            }
-//            .first()
-//
-//        try {
-//
-//        } catch (e: HttpException) {
-//            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
-//        } catch (e: IOException) {
-//            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
-//        }
-//
-//        val flow = dao.getItemsInMonth(ym)
-//            .map {
-//                it.map {
-//                    it.toDisplayedItemModel()
-//                }
-//            }
-//            .map {
-//                Resource.Success(it)
-//            }
-//
-//        emitAll(flow)
-//    }
 
     override fun getSpecificItems(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>> = flow {
         emit(Resource.Loading())
@@ -141,44 +81,66 @@ class DisplayedItemRepositoryImpl(
         emitAll(flow)
     }
 
-    override suspend fun insertItem(displayedItemModel: DisplayedItemModel): Long {
-        return dao.insertItem(displayedItemModel.toItemEntity())
+    override suspend fun insertItem(itemEntity: ItemEntity): Long {
+        return dao.insertItem(itemEntity)
     }
 
-    override suspend fun insertItems(displayedItemModelList: List<DisplayedItemModel>) {
-        displayedItemModelList.forEach {
+    override suspend fun insertItems(itemEntityList: List<ItemEntity>) {
+        itemEntityList.forEach {
             insertItem(it)
         }
     }
 
     override suspend fun deleteItemById(id: Long): Int {
-        return dao.deleteItemById(id)
-//        itemDataSource.deleteItemById(id)
-        // todo : work on this once api is implemented
-//        val response = try {
-//            itemApi.deleteItem(DeleteItemRequest(id))
-//        }
-//        catch (e: Exception) {
-//            null
-//        }
-//
-//        itemDao.deleteItemById(id)
-//
-//        if (response == null || !response.isSuccessful) {
-//            itemDao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(id))
-//        }
-//        else {
-//            deleteLocallyDeletedItemId(id)
-//        }
-    }
+        itemDataSource.deleteItemById(id)
 
-//    suspend fun deleteLocallyDeletedItemId(Id: Long) {
-//        itemDao.deleteLocallyDeletedItemId(Id)
-//    }
+        val response = try {
+            api.deleteItem(DeleteItemRequest(id))
+        }
+        catch (e: Exception) {
+            null
+        }
+
+        val affectedRows = dao.deleteItemById(id)
+
+        if (response == null || !response.isSuccessful) {
+            dao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(id))
+        }
+        else {
+            deleteLocallyDeletedItemId(id)
+        }
+
+        return affectedRows
+    }
 
     override suspend fun deleteAllItems() {
         dao.deleteAllItems()
-//        itemDataSource.deleteAllItems()
+        itemDataSource.deleteAllItems()
+    }
+
+    private var currentItemsResponse: Response<List<ItemEntity>>? = null
+    override suspend fun syncItems() {
+        dao.getAllLocallyDeletedItemIds().onEach { locallyDeletedItemIdEntity -> // sync with server
+            deleteItemById(locallyDeletedItemIdEntity.deletedItemId)
+        }
+
+        dao.getAllUnsyncedItems().onEach { itemEntity ->
+            insertItem(itemEntity)
+        }
+
+        currentItemsResponse = api.getItems()
+        currentItemsResponse?.body()?.let { list ->
+            dao.deleteAllItems()
+            insertItems(
+                list.onEach {
+                    it.isSynced = true
+                }
+            )
+        }
+    }
+
+    suspend fun deleteLocallyDeletedItemId(Id: Long) {
+        dao.deleteLocallyDeletedItemId(Id)
     }
 
 }

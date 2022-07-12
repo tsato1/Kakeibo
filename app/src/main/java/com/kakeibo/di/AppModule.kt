@@ -5,10 +5,13 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.kakeibo.Constants.BASE_URL
 import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.*
 import com.kakeibo.core.data.preferences.AppPreferences
+import com.kakeibo.core.data.remote.BasicAuthInterceptor
+import com.kakeibo.core.data.remote.ItemApi
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
@@ -48,6 +51,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Provider
 import javax.inject.Singleton
 
@@ -105,7 +111,7 @@ object AppModule {
     fun provideCategoryDspDao(db: AppDatabase) = db.categoryDspDao
 
     /*
-
+    Repositories
      */
     @Singleton
     @Provides
@@ -155,6 +161,9 @@ object AppModule {
         return SearchRepositoryImpl(db.searchDao)
     }
 
+    /*
+    Usecases
+     */
     @Provides
     @Singleton
     fun provideKkbAppUseCases(repository: KkbAppRepository): KkbAppUseCases {
@@ -201,7 +210,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSearchUseCase(
+    fun provideSearchUseCases(
         @ApplicationContext context: Context,
         searchRepository: SearchRepository
     ): SearchUseCases {
@@ -236,6 +245,21 @@ object AppModule {
             insertCustomCategoryUseCase = InsertCustomCategoryUseCase(repository, context),
             deleteCategoryUseCase = DeleteCustomCategoryUseCase(repository)
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideNoteApi(basicAuthInterceptor: BasicAuthInterceptor): ItemApi {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(basicAuthInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(ItemApi::class.java)
     }
 
     @Singleton

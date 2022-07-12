@@ -3,9 +3,11 @@ package com.kakeibo.core.data.local
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.core.data.constants.ConstCategoryDB
+import com.kakeibo.core.data.constants.ConstLocallyDeletedItemIdDB
 import com.kakeibo.core.data.local.entities.CategoryEntity
 import com.kakeibo.core.data.local.entities.DisplayedItemEntity
 import com.kakeibo.core.data.local.entities.ItemEntity
+import com.kakeibo.core.data.local.entities.LocallyDeletedItemIdEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -26,7 +28,8 @@ interface ItemDao {
             ConstCategoryDB.COL_IMAGE + "," +
             ConstCategoryDB.COL_PARENT + "," +
             ConstCategoryDB.COL_DESCRIPTION + "," +
-            ConstCategoryDB.COL_SAVED_DATE +
+            ConstCategoryDB.COL_SAVED_DATE + "," +
+            ConstItemDB.COL_IS_SYNCED +
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
@@ -48,7 +51,8 @@ interface ItemDao {
             ConstCategoryDB.COL_IMAGE + "," +
             ConstCategoryDB.COL_PARENT + "," +
             ConstCategoryDB.COL_DESCRIPTION + "," +
-            ConstCategoryDB.COL_SAVED_DATE +
+            ConstCategoryDB.COL_SAVED_DATE + "," +
+            ConstItemDB.COL_IS_SYNCED +
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
@@ -67,22 +71,19 @@ interface ItemDao {
     @Query("DELETE FROM items")
     suspend fun deleteAllItems(): Int
 
+    /* For Locally-Deleted Items */
+    @Query("SELECT * FROM " + ConstItemDB.TABLE_NAME +
+            " WHERE " + ConstItemDB.COL_IS_SYNCED + " = 0")
+    suspend fun getAllUnsyncedItems(): List<ItemEntity>
 
+    @Query("SELECT * FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME)
+    suspend fun getAllLocallyDeletedItemIds(): List<LocallyDeletedItemIdEntity>
 
+    @Query("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
+            " WHERE " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " = :deletedItemId")
+    suspend fun deleteLocallyDeletedItemId(deletedItemId: Long)
 
-
-//    @Query("SELECT * FROM " + ConstItemDB.TABLE_NAME +
-//            " WHERE " + ConstItemDB.COL_IS_SYNCED + " = 0")
-//    suspend fun getAllUnsyncedItemEntities(): List<ItemEntity>
-//
-//    @Query("SELECT * FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME)
-//    suspend fun getAllLocallyDeletedItemIds(): List<LocallyDeletedItemIdEntity>
-//
-//    @Query("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
-//            " WHERE " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " = :deletedItemId")
-//    suspend fun deleteLocallyDeletedItemId(deletedItemId: Long)
-//
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertLocallyDeletedItemId(locallyDeletedItemId: LocallyDeletedItemIdEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLocallyDeletedItemId(locallyDeletedItemId: LocallyDeletedItemIdEntity)
 
 }

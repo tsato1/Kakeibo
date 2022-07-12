@@ -1,7 +1,6 @@
 package com.kakeibo.feature_main.domain.models
 
 import com.kakeibo.core.data.local.entities.ItemEntity
-import com.kakeibo.util.UtilCategory
 import java.math.BigDecimal
 
 data class DisplayedItemModel(
@@ -19,8 +18,8 @@ data class DisplayedItemModel(
     val categoryImage: ByteArray? = null,
     val categoryParent: Int = -1,
     val categoryDescription: String = "Category Description",
-    val categorySavedDate: String = "Category Saved Date"
-//    val isSynced: Boolean
+    val categorySavedDate: String = "Category Saved Date",
+    val isSynced: Boolean = false
 ) {
 
     fun toItemEntity(): ItemEntity {
@@ -32,8 +31,8 @@ data class DisplayedItemModel(
             categoryCode = categoryCode,
             memo = memo,
             eventDate = eventDate,
-            updateDate = updateDate
-//            isSynced = isSynced
+            updateDate = updateDate,
+            isSynced = isSynced
         )
 
     }

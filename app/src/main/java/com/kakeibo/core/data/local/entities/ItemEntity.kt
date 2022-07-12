@@ -2,6 +2,7 @@ package com.kakeibo.core.data.local.entities
 
 import androidx.annotation.NonNull
 import androidx.room.*
+import com.google.gson.annotations.Expose
 import com.kakeibo.core.data.local.Converters
 import com.kakeibo.util.UtilCurrency
 import java.math.BigDecimal
@@ -17,6 +18,7 @@ class ItemEntity {
     @TypeConverters(Converters::class)
     @NonNull
     var amount: BigDecimal
+        private set
 
     @ColumnInfo(name = ConstItemDB.COL_CURRENCY_CODE, defaultValue = UtilCurrency.CURRENCY_NONE)
     var currencyCode = UtilCurrency.CURRENCY_NONE
@@ -28,6 +30,7 @@ class ItemEntity {
 
     @ColumnInfo(name = ConstItemDB.COL_MEMO)
     var memo = ""
+        private set
 
     @ColumnInfo(name = ConstItemDB.COL_EVENT_DATE)
     var eventDate = ""
@@ -37,6 +40,10 @@ class ItemEntity {
     var updateDate = ""
         private set
 
+    @Expose(deserialize = false, serialize = false) // this val will be ignored in Retrofit communication
+    @ColumnInfo(name = ConstItemDB.COL_IS_SYNCED)
+    var isSynced = false
+
     constructor(
         id: Long,
         amount: BigDecimal,
@@ -44,7 +51,9 @@ class ItemEntity {
         categoryCode: Int,
         memo: String,
         eventDate: String,
-        updateDate: String) {
+        updateDate: String,
+        isSynced: Boolean
+    ) {
         this.id = id
         this.amount = amount
         this.currencyCode = currencyCode
@@ -52,6 +61,7 @@ class ItemEntity {
         this.memo = memo
         this.eventDate = eventDate
         this.updateDate = updateDate
+        this.isSynced = isSynced
     }
 
     /* called from TabFragment1 before getting saved  */
@@ -62,13 +72,16 @@ class ItemEntity {
         categoryCode: Int,
         memo: String,
         eventDate: String,
-        updateDate: String) {
+        updateDate: String,
+        isSyned: Boolean
+    ) {
         this.amount = amount
         this.currencyCode = currencyCode
         this.categoryCode = categoryCode
         this.memo = memo
         this.eventDate = eventDate
         this.updateDate = updateDate
+        this.isSynced = isSyned
     }
 
     class InvalidItemException(message: String): Exception(message)

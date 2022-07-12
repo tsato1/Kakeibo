@@ -59,7 +59,8 @@ class ItemDaoTest {
             categoryCode = 1,
             memo = "test memo",
             eventDate = "2022-06-15",
-            updateDate = "2022-06-15"
+            updateDate = "2022-06-15",
+            isSynced = false
         )
 
         itemDao.insertItem(itemToBeTested)
@@ -82,7 +83,8 @@ class ItemDaoTest {
             categoryCode = 1,
             memo = "test memo",
             eventDate = "2022-06-15",
-            updateDate = "2022-06-15"
+            updateDate = "2022-06-15",
+            isSynced = false
         )
 
         itemDao.insertItem(itemToBeTested)

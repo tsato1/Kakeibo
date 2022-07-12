@@ -1,6 +1,5 @@
 package com.kakeibo.core.data.local
 
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -19,8 +18,8 @@ import com.kakeibo.feature_subscriptions.Subscription
         CategoryDspEntity::class,
         CategoryEntity::class,
         SearchEntity::class,
-        Subscription::class],
-//        LocallyDeletedItemIdEntity::class],
+        Subscription::class,
+        LocallyDeletedItemIdEntity::class],
     version = BuildConfig.versionDB,
     exportSchema = true)
 @TypeConverters(Converters::class)
@@ -41,7 +40,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_1_2")
                 PrepDB7.migrate_1_2(database)
             }
         }
@@ -49,7 +47,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_2_3")
                 PrepDB7.migrate_2_3(database)
             }
         }
@@ -57,7 +54,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_3_4: Migration = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_3_4")
                 PrepDB7.migrate_3_4(database)
             }
         }
@@ -65,7 +61,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_4_5: Migration = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_4_5")
                 PrepDB7.migrate_4_5(database)
             }
         }
@@ -73,7 +68,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_5_7: Migration = object : Migration(5, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_5_7")
                 PrepDB7.migrate_5_7(database)
             }
         }
@@ -81,7 +75,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_6_7: Migration = object : Migration(6, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_6_7")
                 PrepDB7.migrate_6_7(database)
             }
         }
@@ -89,7 +82,6 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_7_8: Migration = object : Migration(7, 8) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_7_8")
                 PrepDB7.migrate_7_8(database)
             }
         }
@@ -97,8 +89,14 @@ abstract class AppDatabase : RoomDatabase() {
         @VisibleForTesting
         val MIGRATION_8_9: Migration = object : Migration(8, 9) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.d(TAG, "migration_8_9")
                 PrepDB7.migrate_8_9(database)
+            }
+        }
+
+        @VisibleForTesting
+        val MIGRATION_9_10: Migration = object : Migration(9, 10) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                PrepDB7.migrate_9_10(database)
             }
         }
     }
