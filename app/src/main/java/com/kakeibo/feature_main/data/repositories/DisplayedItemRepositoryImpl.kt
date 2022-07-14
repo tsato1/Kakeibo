@@ -9,13 +9,13 @@ import com.kakeibo.core.data.local.entities.LocallyDeletedItemIdEntity
 import com.kakeibo.core.data.remote.ItemApi
 import com.kakeibo.core.data.remote.requests.DeleteItemRequest
 import com.kakeibo.core.util.Resource
+import com.kakeibo.core.util.checkForInternetConnection
+import com.kakeibo.core.util.networkBoundResource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 import com.kakeibo.util.UtilCategory
 import kotlinx.coroutines.flow.*
-import retrofit2.HttpException
 import retrofit2.Response
-import java.io.IOException
 
 class DisplayedItemRepositoryImpl(
     private val context: Context,
@@ -39,65 +39,110 @@ class DisplayedItemRepositoryImpl(
         }
     }
 
-    override fun getSpecificItems(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>> = flow {
-        emit(Resource.Loading())
-
-        val displayedItems = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
-            .map { list ->
-                list.map { displayedItemEntity ->
-                    displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
-                        if (displayedItemModel.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
-                            displayedItemModel.categoryName =
-                                defaultCategories[displayedItemModel.categoryCode]
+    override fun getSpecificItems(
+        query: String, args: List<String>, syncWithRemote: Int
+    ): Flow<Resource<List<DisplayedItemModel>>> {
+        return networkBoundResource(
+            query = {
+                dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
+                    .map { list ->
+                        list.map { displayedItemEntity ->
+                            displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
+                                if (displayedItemModel.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                                    displayedItemModel.categoryName =
+                                        defaultCategories[displayedItemModel.categoryCode]
+                                }
+                            }
                         }
                     }
+            },
+            fetch = {
+                syncItems(syncWithRemote)
+                currentItemsResponse
+            },
+            saveFetchedResult = { response -> // inserts the notes in the response into database
+                response?.body()?.let {
+                    // insert items in database
+                    insertItems(
+                        it.onEach { item ->
+                            item.isSynced = true
+                        },
+                        syncWithRemote
+                    )
                 }
+            },
+            shouldFetch = {
+                checkForInternetConnection(context)
             }
-            .first()
+        )
+//        emit(Resource.Loading())
+//
+//        val displayedItems = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
+//            .map {
+//                it.map {
+//                    it.toDisplayedItemModel()
+//                }
+//            }
+//            .first()
+//
+//        try {
+//
+//        } catch (e: HttpException) {
+//            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
+//        } catch (e: IOException) {
+//            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
+//        }
+//
+//        val flow = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
+//            .map {
+//                it.map {
+//                    it.toDisplayedItemModel()
+//                }
+//            }
+//            .map {
+//                Resource.Success(it)
+//            }
+//
+//        emitAll(flow)
+    }
 
-        try {
-
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
-        } catch (e: IOException) {
-            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
+    override suspend fun insertItem(itemEntity: ItemEntity, syncWithRemote: Int): Long {
+        val response = if (syncWithRemote == 1) {
+            try {
+                api.addItem(itemEntity)
+            }
+            catch (e: Exception) {
+                null
+            }
+        }
+        else {
+            null
         }
 
-        val flow = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
-            .map { list ->
-                list.map { displayedItemEntity ->
-                    displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
-                        if (displayedItemModel.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
-                            displayedItemModel.categoryName =
-                                defaultCategories[displayedItemModel.categoryCode]
-                        }
-                    }
-                }
-            }
-            .map {
-                Resource.Success(it)
-            }
-
-        emitAll(flow)
+        return if (response != null && response.isSuccessful) {
+            dao.insertItem(itemEntity.apply { isSynced = true })
+        }
+        else {
+            dao.insertItem(itemEntity) // meaning isSynced is false
+        }
     }
 
-    override suspend fun insertItem(itemEntity: ItemEntity): Long {
-        return dao.insertItem(itemEntity)
-    }
-
-    override suspend fun insertItems(itemEntityList: List<ItemEntity>) {
+    override suspend fun insertItems(itemEntityList: List<ItemEntity>, syncWithRemote: Int) {
         itemEntityList.forEach {
-            insertItem(it)
+            insertItem(it, syncWithRemote)
         }
     }
 
-    override suspend fun deleteItemById(id: Long): Int {
-        itemDataSource.deleteItemById(id)
-
-        val response = try {
-            api.deleteItem(DeleteItemRequest(id))
+    override suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int {
+        val response = if (syncWithRemote == 1) {
+            try {
+                api.deleteItem(DeleteItemRequest(id))
+            }
+            catch (e: Exception) {
+                null
+            }
         }
-        catch (e: Exception) {
+        else {
             null
         }
 
@@ -113,19 +158,14 @@ class DisplayedItemRepositoryImpl(
         return affectedRows
     }
 
-    override suspend fun deleteAllItems() {
-        dao.deleteAllItems()
-        itemDataSource.deleteAllItems()
-    }
-
     private var currentItemsResponse: Response<List<ItemEntity>>? = null
-    override suspend fun syncItems() {
+    override suspend fun syncItems(syncWithRemote: Int) {
         dao.getAllLocallyDeletedItemIds().onEach { locallyDeletedItemIdEntity -> // sync with server
-            deleteItemById(locallyDeletedItemIdEntity.deletedItemId)
+            deleteItemById(locallyDeletedItemIdEntity.deletedItemId, syncWithRemote)
         }
 
         dao.getAllUnsyncedItems().onEach { itemEntity ->
-            insertItem(itemEntity)
+            insertItem(itemEntity, syncWithRemote)
         }
 
         currentItemsResponse = api.getItems()
@@ -134,13 +174,14 @@ class DisplayedItemRepositoryImpl(
             insertItems(
                 list.onEach {
                     it.isSynced = true
-                }
+                },
+                syncWithRemote
             )
         }
     }
 
-    suspend fun deleteLocallyDeletedItemId(Id: Long) {
-        dao.deleteLocallyDeletedItemId(Id)
+    override suspend fun deleteLocallyDeletedItemId(id: Long) {
+        dao.deleteLocallyDeletedItemId(id)
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.kakeibo.Constants
 import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.AppDatabase
 import com.kakeibo.core.data.local.CategoryDao
@@ -12,6 +13,8 @@ import com.kakeibo.core.data.local.CategoryDspDao
 import com.kakeibo.core.data.local.KkbAppDao
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.data.preferences.AppPreferencesImpl
+import com.kakeibo.core.data.remote.BasicAuthInterceptor
+import com.kakeibo.core.data.remote.ItemApi
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
@@ -56,12 +59,30 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModuleTest {
+
+    @Singleton
+    @Provides
+    fun provideItemApi(basicAuthInterceptor: BasicAuthInterceptor): ItemApi {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(basicAuthInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(ItemApi::class.java)
+    }
 
     @Provides
     @Singleton
@@ -123,8 +144,12 @@ object AppModuleTest {
 
     @Provides
     @Singleton
-    fun provideDisplayedItemRepository(db: AppDatabase): DisplayedItemRepository {
-        return DisplayedItemRepositoryImpl(db.itemDao)
+    fun provideDisplayedItemRepository(
+        @ApplicationContext context: Context,
+        db: AppDatabase,
+        itemApi: ItemApi
+    ): DisplayedItemRepository {
+        return DisplayedItemRepositoryImpl(dao = db.itemDao, api = itemApi, context = context)
     }
 
     @Provides

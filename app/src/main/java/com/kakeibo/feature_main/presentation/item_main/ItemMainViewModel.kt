@@ -140,7 +140,10 @@ class ItemMainViewModel @Inject constructor(
         when (event) {
             is ItemMainEvent.DeleteItem -> {
                 viewModelScope.launch {
-                    displayedItemUseCases.deleteItemUseCase(event.displayedItemModel)
+                    displayedItemUseCases.deleteItemUseCase(
+                        displayedItemModel = event.displayedItemModel,
+                        syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
+                    )
                     recentlyDeletedDisplayedItemModel = event.displayedItemModel
                 }
             }
@@ -148,7 +151,8 @@ class ItemMainViewModel @Inject constructor(
                 viewModelScope.launch {
                     try {
                         displayedItemUseCases.insertItemUseCase(
-                            recentlyDeletedDisplayedItemModel ?: return@launch
+                            displayedItemModel = recentlyDeletedDisplayedItemModel ?: return@launch,
+                            syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
                         )
                         recentlyDeletedDisplayedItemModel = null
                     }
@@ -201,8 +205,11 @@ class ItemMainViewModel @Inject constructor(
         _searchModel.value = searchModel
         viewModelScope.launch {
             getItemsJob?.cancel()
-            getItemsJob = displayedItemUseCases.getSpecificItemsUseCase(searchModel.toQuery(), searchModel.toArgs())
-                .onEach { result ->
+            getItemsJob = displayedItemUseCases.getSpecificItemsUseCase(
+                query = searchModel.toQuery(),
+                args = searchModel.toArgs(),
+                syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
+            ).onEach { result ->
                     /*
                     Used in ItemListScreen
                      */
@@ -413,8 +420,7 @@ class ItemMainViewModel @Inject constructor(
                         }
                     }
                     _eventFlow.emit(UiEvent.LoadingCompleted)
-                }
-                .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
         }
     }
 

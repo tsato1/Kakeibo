@@ -132,7 +132,7 @@ class ItemDetailViewModel @Inject constructor(
                 viewModelScope.launch {
                     try {
                         val focusItemId = displayedItemUseCases.insertItemUseCase(
-                            DisplayedItemModel(
+                            displayedItemModel = DisplayedItemModel(
                                 id = if (currentItemId.value == -1L) 0 else currentItemId.value,
                                 amount = itemAmountState.value.text,
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
@@ -140,7 +140,8 @@ class ItemDetailViewModel @Inject constructor(
                                 memo = itemMemoState.value.text,
                                 eventDate = localEventDate.value,
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
-                            )
+                            ),
+                            syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
                         )
                         _eventFlow.emit(UiEvent.Save(localEventDate.value, focusItemId))
                     }

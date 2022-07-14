@@ -12,7 +12,7 @@ class InsertItemUseCase(
 ) {
 
     @Throws(ItemEntity.InvalidItemException::class)
-    suspend operator fun invoke(displayedItemModel: DisplayedItemModel): Long {
+    suspend operator fun invoke(displayedItemModel: DisplayedItemModel, syncWithRemote: Int): Long {
         val amountString = displayedItemModel.amount
 
         if ("" == amountString) {
@@ -34,7 +34,7 @@ class InsertItemUseCase(
             )
         }
 
-        return repository.insertItem(displayedItemModel.toItemEntity())
+        return repository.insertItem(displayedItemModel.toItemEntity(), syncWithRemote)
     }
 
 }

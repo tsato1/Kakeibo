@@ -11,18 +11,16 @@ interface DisplayedItemRepository {
 
     suspend fun getItemById(id: Long): DisplayedItemModel?
 
-    fun getSpecificItems(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>>
+    fun getSpecificItems(query: String, args: List<String>, syncWithRemote: Int): Flow<Resource<List<DisplayedItemModel>>>
 
-    suspend fun insertItem(itemEntity: ItemEntity): Long
+    suspend fun insertItem(itemEntity: ItemEntity, syncWithRemote: Int): Long
 
-    suspend fun insertItems(itemEntityList: List<ItemEntity>)
+    suspend fun insertItems(itemEntityList: List<ItemEntity>, syncWithRemote: Int)
 
-    suspend fun deleteItemById(id: Long): Int
+    suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int
 
-    suspend fun deleteAllItems()
+    suspend fun syncItems(syncWithRemote: Int)
 
-    suspend fun syncItems()
-
-    suspend fun deleteLocallyDeletedItemId()
+    suspend fun deleteLocallyDeletedItemId(id: Long)
 
 }

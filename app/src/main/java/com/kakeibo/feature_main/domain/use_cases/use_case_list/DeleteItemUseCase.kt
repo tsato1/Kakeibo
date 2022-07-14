@@ -5,13 +5,14 @@ import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 
 class DeleteItemUseCase(
-    private val repository: DisplayedItemRepository
+    private val displayedItemRepository: DisplayedItemRepository
 ) {
 
     @Throws(ItemEntity.ItemNotFoundException::class)
-    suspend operator fun invoke(displayedItemModel: DisplayedItemModel): Int {
+    suspend operator fun invoke(displayedItemModel: DisplayedItemModel, syncWithRemote: Int): Int {
+
         return displayedItemModel.id?.let {
-            repository.deleteItemById(it)
+            displayedItemRepository.deleteItemById(it, syncWithRemote)
         } ?: throw ItemEntity.ItemNotFoundException(
             "The item was not found in database. Deletion not executed."
         )

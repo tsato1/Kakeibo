@@ -61,6 +61,25 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Singleton
+    @Provides
+    fun provideBasicAuthInterceptor() = BasicAuthInterceptor()
+
+    @Singleton
+    @Provides
+    fun provideItemApi(basicAuthInterceptor: BasicAuthInterceptor): ItemApi {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(basicAuthInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(ItemApi::class.java)
+    }
+
     @Provides
     @Singleton
     fun provideAppDatabase(
@@ -123,9 +142,10 @@ object AppModule {
     @Singleton
     fun provideDisplayedItemRepository(
         @ApplicationContext context: Context,
-        db: AppDatabase
+        db: AppDatabase,
+        itemApi: ItemApi
     ): DisplayedItemRepository {
-        return DisplayedItemRepositoryImpl(context, db.itemDao)
+        return DisplayedItemRepositoryImpl(context, db.itemDao, itemApi)
     }
 
     @Provides
@@ -245,21 +265,6 @@ object AppModule {
             insertCustomCategoryUseCase = InsertCustomCategoryUseCase(repository, context),
             deleteCategoryUseCase = DeleteCustomCategoryUseCase(repository)
         )
-    }
-
-    @Singleton
-    @Provides
-    fun provideNoteApi(basicAuthInterceptor: BasicAuthInterceptor): ItemApi {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(basicAuthInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(ItemApi::class.java)
     }
 
     @Singleton

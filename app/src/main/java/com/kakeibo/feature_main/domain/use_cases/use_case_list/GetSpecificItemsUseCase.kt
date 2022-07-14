@@ -6,11 +6,13 @@ import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetSpecificItemsUseCase(
-    private val repository: DisplayedItemRepository
+    private val displayedItemRepository: DisplayedItemRepository
 ) {
 
-    operator fun invoke(query: String, args: List<String>): Flow<Resource<List<DisplayedItemModel>>> {
-        return repository.getSpecificItems(query, args)
+    operator fun invoke(
+        query: String, args: List<String>, syncWithRemote: Int
+    ): Flow<Resource<List<DisplayedItemModel>>> {
+        return displayedItemRepository.getSpecificItems(query, args, syncWithRemote)
     }
 
 }
