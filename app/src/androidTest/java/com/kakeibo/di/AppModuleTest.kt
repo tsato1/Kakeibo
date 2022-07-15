@@ -172,13 +172,15 @@ object AppModuleTest {
         @ApplicationContext context: Context,
         repository: DisplayedItemRepository
     ): DisplayedItemUseCases {
-        return DisplayedItemUseCases(
-            getItemByIdUseCase = GetItemByIdUseCase(repository),
-            getAllItemsUseCase = GetAllItemsUseCase(repository),
-            getSpecificItemsUseCase = GetSpecificItemsUseCase(repository),
-            insertItemUseCase = InsertItemUseCase(repository, context),
-            deleteItemUseCase = DeleteItemUseCase(repository)
-        )
+        TODO()
+//        return DisplayedItemUseCases(
+//            getItemByIdUseCase = GetItemByIdUseCase(repository),
+//            getAllItemsUseCase = GetAllItemsUseCase(repository),
+//            getSpecificItemsUseCase = GetSpecificItemsUseCase(repository),
+//            insertItemUseCase = InsertItemUseCase(repository, context),
+//            deleteItemUseCase = DeleteItemUseCase(repository),
+//
+//        )
     }
 
     @Provides

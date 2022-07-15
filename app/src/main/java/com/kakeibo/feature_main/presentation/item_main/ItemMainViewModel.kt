@@ -306,7 +306,7 @@ class ItemMainViewModel @Inject constructor(
                             if (searchId.value != 0L) { true }
                             else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
-                        ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
+                        ?.groupingBy { it.categoryCode }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
                             acc.copy(
@@ -322,7 +322,7 @@ class ItemMainViewModel @Inject constructor(
                             if (searchId.value != 0L) { true }
                             else { it.eventDate.isWithinMonth(localEventDate.value) }
                         }
-                        ?.groupingBy { Triple(it.categoryCode, it.categoryDrawable, it.categoryImage) }
+                        ?.groupingBy { it.categoryCode }
                         ?.reduce { _, acc, ele ->
                             val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
                             acc.copy(
