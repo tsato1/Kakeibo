@@ -168,4 +168,13 @@
     <string name="remove_at_least_one_category">Usuń co najmniej jedną kategorię.</string>
     <string name="category_count_cannot_exceed">Liczba kategorii nie może przekraczać %d</string>
     <string name="calendar_view_not_available_in_search_mode">Widok kalendarza nie jest dostępny w trybie wyszukiwania.</string>
+    <string name="exit_search_first">Musisz najpierw zamknąć ekran wyników wyszukiwania</string>
+    <string name="choose_category">Wybierz kategorię</string>
+    <string name="category_name_colon">Nazwa Kategorii:</string>
+    <string name="category_detail">Szczegóły kategorii:</string>
+    <string name="next_step">Następny krok</string>
+    <string name="about">O</string>
+    <string name="calendar">Kalendarz</string>
+    <string name="chart">Wykres</string>
+    <string name="list">Lista</string>
 </resources>

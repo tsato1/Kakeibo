@@ -169,4 +169,12 @@
     <string name="remove_at_least_one_category">少なくとも一つのカテゴリーを削除してください．</string>
     <string name="category_count_cannot_exceed">カテゴリーの個数の上限は%dです．</string>
     <string name="calendar_view_not_available_in_search_mode">カレンダー表示は検索モードでは使用できません．</string>
+    <string name="exit_search_first">まず検索結果画面を閉じてください</string>
+    <string name="choose_category">カテゴリーを選択</string>
+    <string name="category_name_colon">カテゴリー名：</string>
+    <string name="category_detail">カテゴリー詳細</string>
+    <string name="next_step">次のステップ</string>
+    <string name="calendar">カレンダー</string>
+    <string name="chart">チャート</string>
+    <string name="list">リスト</string>
 </resources>

@@ -18,7 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
@@ -129,7 +132,7 @@ fun CollapsableLazyColumn(
                         Spacer(modifier = Modifier.width(10.dp))
                         IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_EXPENSE)
                         Text(
-                            text = expandableItem.parent.expense
+                            text = expandableItem.parent.expense.format(fractionDigits)
                         )
                     }
                     Divider()
@@ -172,7 +175,31 @@ fun CollapsableLazyColumn(
                                     text = child.memo
                                 )
                             }
-                            Text(text = child.amount)
+                            Text(
+                                when (child.categoryColor) {
+                                    UtilCategory.CATEGORY_COLOR_INCOME -> {
+                                        buildAnnotatedString {
+                                            withStyle(style = SpanStyle(color = Color.Blue)) {
+                                                append("+")
+                                            }
+                                            append(child.amount)
+                                        }
+                                    }
+                                    UtilCategory.CATEGORY_COLOR_EXPENSE -> {
+                                        buildAnnotatedString {
+                                            withStyle(style = SpanStyle(color = Color.Red)) {
+                                                append("-")
+                                            }
+                                            append(child.amount)
+                                        }
+                                    }
+                                    else -> {
+                                        buildAnnotatedString {
+                                            append(child.amount)
+                                        }
+                                    }
+                                }
+                            )
                             /* dropdown menu will open when an item is long clicked */
                             DropdownMenu(
                                 expanded = dropdownMenuExpanded.value,

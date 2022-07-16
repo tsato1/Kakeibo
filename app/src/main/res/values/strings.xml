@@ -18,6 +18,11 @@
     <string name="input">INPUT</string>
     <string name="report">REPORT</string>
     <string name="search">SEARCH</string>
+    <string name="list">LIST</string>
+    <string name="chart">CHART</string>
+    <string name="calendar">CALENDAR</string>
+    <string name="detail" translatable="false">DETAIL</string>
+    <string name="about" translatable="false">ABOUT</string>
 
     <string name="income">Income</string>
     <string name="expense">Expense</string>
@@ -86,7 +91,6 @@
     <string name="jump_to_website">Jump to website</string>
     <string name="no_item_found">No Item Found</string>
     <string name="calendar_view_not_available_in_search_mode">Calendar View is not available in Search Mode.</string>
-    <string name="exit_search_first">You have to exit search first</string>
 
     <string name="error">Something went wrong. Please contact support.</string>
     <string name="err_no_search_criteria_found">No Search Criteria found. Please add from the plus button.</string>
@@ -269,4 +273,5 @@
     <string name="percent" translatable="false">%</string>
     <string name="toggle" translatable="false">toggle</string>
     <string name="msg_token_fmt" translatable="false">FCM registration Token: %s</string>
+    <string name="exit_search_first">You have to close the search result screen first</string>
 </resources>

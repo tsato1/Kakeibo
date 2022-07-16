@@ -168,4 +168,12 @@
     <string name="remove_at_least_one_category">Lütfen en az bir kategoriyi kaldırın.</string>
     <string name="category_count_cannot_exceed">Kategori sayısı %d \'yi aşamaz</string>
     <string name="calendar_view_not_available_in_search_mode">Takvim Görünümü, Arama Modunda kullanılamaz.</string>
+    <string name="exit_search_first">Önce arama sonucu ekranını kapatmalısınız</string>
+    <string name="choose_category">Kategori Seçin</string>
+    <string name="category_name_colon">Kategori adı:</string>
+    <string name="category_detail">Chi tiết danh mục:</string>
+    <string name="next_step">Sonraki adım</string>
+    <string name="calendar">Takvim</string>
+    <string name="chart">Çizelge</string>
+    <string name="list">Liste</string>
 </resources>

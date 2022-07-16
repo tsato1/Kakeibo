@@ -3,6 +3,7 @@ package com.kakeibo.feature_main.presentation.item_main.components
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -24,7 +25,6 @@ fun BottomBar(navController: NavController) {
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-
         screens.forEach { screen ->
             BottomNavigationItem(
                 icon = {
@@ -36,7 +36,9 @@ fun BottomBar(navController: NavController) {
                     }
                 },
                 selected = currentRoute == screen.route,
-                label = { Text(text = screen.label) },
+                label = {
+                    Text(text = if (screen.label == -1) "" else stringResource(id = screen.label))
+                },
                 onClick = {
                     if (screen.route != Screen.DammyScreen.route) {
                         navController.popBackStack(

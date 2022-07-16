@@ -127,7 +127,9 @@ fun ItemCalendarScreen(
                         viewModel = viewModel
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                BalanceSummaryRow(itemChartState = viewModel.itemChartState)
+                Spacer(modifier = Modifier.height(2.dp))
+                Divider()
                 if (viewModel.searchId.value != 0L) {
                     Text(
                         modifier = Modifier

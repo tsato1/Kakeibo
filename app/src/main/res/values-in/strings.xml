@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Kakeibo</string>
-
     <string name="settings">Pengaturan</string>
-
     <string name="input">MEMASUKKAN</string>
     <string name="report">MELAPORKAN</string>
     <string name="search">PENCARIAN</string>
-
     <string name="income">Pendapatan</string>
     <string name="delete">Menghapus</string>
     <string name="edit">Edit</string>
@@ -25,7 +22,6 @@
     <string name="category">Kategori</string>
     <string name="event_date">Tanggal Acara</string>
     <string name="updated_date">Tanggal Diperbarui</string>
-
     <string name="income_colon">Pendapatan:</string>
     <string name="expense_colon">Biaya:</string>
     <string name="balance_colon">Keseimbangan:</string>
@@ -35,7 +31,6 @@
     <string name="category_colon">Kategori:</string>
     <string name="event_date_colon">Tanggal Acara:</string>
     <string name="updated_on_colon">Disimpan pada:</string>
-
     <string name="add_search_criterion">Tambahkan Kriteria Pencarian</string>
     <string name="date_range">Rentang Tanggal</string>
     <string name="from">Dari</string>
@@ -51,34 +46,26 @@
     <string name="err_please_enter_min_amount">Silakan masukkan Jumlah Min.</string>
     <string name="err_please_enter_max_amount">Silakan masukkan Jumlah Maks.</string>
     <string name="err_min_amount_greater">Jumlah Max harus lebih besar dari Jumlah Min.</string>
-
     <string name="hint_amount_spent_or_earned">Jumlah yang dihabiskan atau diperoleh</string>
     <string name="hint_memo_max_20_characters">Memo: Maks 20 karakter</string>
-
     <string name="msg_item_successfully_saved">Item berhasil disimpan.</string>
     <string name="msg_item_successfully_deleted">Item berhasil dihapus.</string>
     <string name="msg_change_successfully_saved">Perubahan berhasil disimpan.</string>
     <string name="msg_no_result_found">Tidak ditemukan hasil.</string>
     <string name="msg_exit_search">Anda akan keluar dari halaman hasil pencarian dan kembali ke laporan bulanan bulan ini.</string>
-
     <string name="inst_tap_plus_to_add_criteria">Pertama, ketuk tombol plus untuk menambahkan kriteria. Kemudian ketuk tombol pencarian untuk melakukan pencarian.</string>
-
     <string name="err_amount_invalid">Jumlahnya tidak valid.</string>
     <string name="err_please_select_category">Silakan pilih Kategori.</string>
     <string name="err_please_enter_amount">Silakan masukkan Jumlah.</string>
     <string name="err_amount_cannot_be_0">Jumlah tidak boleh 0.</string>
     <string name="err_max_amount_cannot_be_0">Jumlah Max tidak boleh 0.</string>
     <string name="err_memo_empty">Kata pencarian di Memo kosong.</string>
-
     <string name="quest_do_you_want_to_delete_item">Apakah Anda benar-benar ingin menghapus item ini?</string>
     <string name="quest_export_this_report_C">Apakah Anda ingin mengekspor laporan ini di Google Drive? Ini diurutkan berdasarkan Kategori.</string>
     <string name="quest_export_this_report_D">Apakah Anda ingin mengekspor laporan ini di Google Drive? Ini diurutkan berdasarkan Tanggal.</string>
-
     <string name="edit_item">Edit item</string>
     <string name="search_result">Hasil Pencarian</string>
     <string name="returning_to_monthly_report">Kembali ke laporan bulanan</string>
-
-    <!-- Export -->
     <string name="select_file">Pilih file</string>
     <string name="file_created">File disimpan di cloud.</string>
     <string name="file_create_error">Terjadi kesalahan saat mencoba membuat file. Silakan coba lagi nanti.</string>
@@ -87,57 +74,15 @@
     <string name="nothing_to_export">Tidak ada yang diekspor.</string>
     <string name="empty_report">Laporan Anda kosong.</string>
     <string name="tap_anywhere_to_dismiss">Ketuk di mana saja untuk mengabaikan.</string>
-
-    <!-- Settings -->
-    <!-- General settings -->
     <string name="general">Umum</string>
-
     <string name="date_format">Format Tanggal</string>
     <string name="remove_ads">Hilangkan iklan</string>
     <string name="fraction_digits">Digit Pecahan</string>
-
-    <!-- Setting for in-app data -->
     <string name="in_app_data">Data Dalam Aplikasi</string>
     <string name="delete_all_items">Hapus semua item</string>
     <string name="desc_delete_all_items">"Ini akan menghapus semua item Kakeibo yang Anda simpan di perangkat ini. Ekspor ke Google Drive Anda disarankan sebelum dihapus. Ketuk ya untuk melanjutkan. "</string>
     <string name="warn_delete_all_items">Apakah Anda benar-benar ingin menghapus semua item?</string>
     <string name="msg_all_delete_success">Semua item berhasil dihapus.</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <!-- Example settings for Notifications -->
-
     <string name="memo">Memo</string>
     <string name="amount">Jumlah</string>
     <string name="err_from_date_older">\'Dari Tanggal\' harus lebih muda dari \'Ke Tanggal\'.</string>
@@ -223,4 +168,12 @@
     <string name="remove_at_least_one_category">Harap hapus setidaknya satu kategori.</string>
     <string name="category_count_cannot_exceed">Jumlah kategori tidak boleh melebihi %d</string>
     <string name="calendar_view_not_available_in_search_mode">Tampilan Kalender tidak tersedia dalam Mode Pencarian.</string>
+    <string name="exit_search_first">Anda harus menutup layar hasil pencarian terlebih dahulu</string>
+    <string name="choose_category">Pilih Kategori</string>
+    <string name="category_name_colon">Nama Kategori:</string>
+    <string name="category_detail">Rincian Kategori:</string>
+    <string name="next_step">Langkah berikutnya</string>
+    <string name="calendar">Kalender</string>
+    <string name="chart">Bagan</string>
+    <string name="list">Daftar</string>
 </resources>

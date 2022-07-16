@@ -27,7 +27,7 @@ fun IncomeExpenseIndicator(
                         MatchaGreen
                     }
                     else -> {
-                        Color.Gray
+                        Color.Transparent
                     }
                 }
             )

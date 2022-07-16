@@ -107,8 +107,12 @@ fun ItemListScreen(
                         detectDragGestures(
                             onDragEnd = {
                                 when {
-                                    offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
-                                    offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                    offsetX > 200 -> {
+                                        viewModel.plus(-1, DateTimeUnit.MONTH)
+                                    }
+                                    offsetX < -200 -> {
+                                        viewModel.plus(1, DateTimeUnit.MONTH)
+                                    }
                                 }
                                 offsetX = 0f
                             }
@@ -116,8 +120,12 @@ fun ItemListScreen(
                             change.consume()
                             offsetX += dragAmount.x
                             when {
-                                offsetX > 400f -> { offsetX = 400f }
-                                offsetX < -400f -> { offsetX = -400f }
+                                offsetX > 400f -> {
+                                    offsetX = 400f
+                                }
+                                offsetX < -400f -> {
+                                    offsetX = -400f
+                                }
                             }
                         }
                     }
@@ -145,7 +153,9 @@ fun ItemListScreen(
                         viewModel = viewModel
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                BalanceSummaryRow(itemChartState = viewModel.itemChartState)
+                Spacer(modifier = Modifier.height(2.dp))
+                Divider()
                 CollapsableLazyColumn(
                     navController = navController,
                     sections = itemListState.expandableItemList,

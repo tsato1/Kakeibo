@@ -168,4 +168,12 @@
     <string name="remove_at_least_one_category">الرجاء إزالة فئة واحدة على الأقل.</string>
     <string name="category_count_cannot_exceed">لا يمكن أن يتجاوز عدد الفئات ٪d</string>
     <string name="calendar_view_not_available_in_search_mode">طريقة عرض التقويم غير متاحة في وضع البحث.</string>
+    <string name="exit_search_first">يجب عليك إغلاق شاشة نتائج البحث أولاً</string>
+    <string name="choose_category">اختر الفئة</string>
+    <string name="category_name_colon">اسم التصنيف:</string>
+    <string name="category_detail">تفاصيل الفئة:</string>
+    <string name="next_step">الخطوة التالية</string>
+    <string name="calendar">تقويم</string>
+    <string name="chart">جدول</string>
+    <string name="list">قائمة</string>
 </resources>

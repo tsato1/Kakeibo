@@ -169,4 +169,13 @@
     <string name="remove_at_least_one_category">Vui lòng xóa ít nhất một danh mục.</string>
     <string name="category_count_cannot_exceed">Số lượng danh mục không được vượt quá %d</string>
     <string name="calendar_view_not_available_in_search_mode">Chế độ xem Lịch không khả dụng trong Chế độ tìm kiếm.</string>
+    <string name="exit_search_first">Trước tiên, bạn phải đóng màn hình kết quả tìm kiếm</string>
+    <string name="choose_category">Chọn danh mục</string>
+    <string name="category_name_colon">Tên danh mục:</string>
+    <string name="category_detail">Chi tiết danh mục:</string>
+    <string name="next_step">Bước tiếp theo</string>
+    <string name="about">Về</string>
+    <string name="calendar">Lịch</string>
+    <string name="chart">Đồ thị</string>
+    <string name="list">Danh sách</string>
 </resources>

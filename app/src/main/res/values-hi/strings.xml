@@ -169,4 +169,12 @@
     <string name="remove_at_least_one_category">कृपया कम से कम एक श्रेणी निकालें.</string>
     <string name="category_count_cannot_exceed">श्रेणियों की संख्या %d. से अधिक नहीं हो सकती</string>
     <string name="calendar_view_not_available_in_search_mode">कैलेंडर दृश्य खोज मोड में उपलब्ध नहीं है।</string>
+    <string name="exit_search_first">आपको पहले खोज परिणाम स्क्रीन को बंद करना होगा</string>
+    <string name="choose_category">वर्ग चुने</string>
+    <string name="category_name_colon">श्रेणी नाम:</string>
+    <string name="category_detail">श्रेणी विवरण:</string>
+    <string name="next_step">अगला कदम</string>
+    <string name="calendar">पंचांग</string>
+    <string name="chart">चार्ट</string>
+    <string name="list">सूची</string>
 </resources>

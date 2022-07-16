@@ -5,7 +5,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -93,8 +92,12 @@ fun ItemChartScreen(
                         detectDragGestures(
                             onDragEnd = {
                                 when {
-                                    offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
-                                    offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                    offsetX > 200 -> {
+                                        viewModel.plus(-1, DateTimeUnit.MONTH)
+                                    }
+                                    offsetX < -200 -> {
+                                        viewModel.plus(1, DateTimeUnit.MONTH)
+                                    }
                                 }
                                 offsetX = 0f
                             }
@@ -102,8 +105,12 @@ fun ItemChartScreen(
                             change.consume()
                             offsetX += dragAmount.x
                             when {
-                                offsetX > 400f -> { offsetX = 400f }
-                                offsetX < -400f -> { offsetX = -400f }
+                                offsetX > 400f -> {
+                                    offsetX = 400f
+                                }
+                                offsetX < -400f -> {
+                                    offsetX = -400f
+                                }
                             }
                         }
                     }
@@ -132,72 +139,14 @@ fun ItemChartScreen(
                         viewModel = viewModel
                     )
                 }
+                BalanceSummaryRow(itemChartState)
+                Spacer(modifier = Modifier.height(2.dp))
+                Divider()
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    // Summary =========================================================================
-                    // Income
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(10.dp)
-                                .clip(CircleShape)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.income)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = itemChartState.value.incomeTotal
-                        )
-                    }
-                    // Expense
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(10.dp)
-                                .clip(CircleShape)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.expense_colon)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = itemChartState.value.expenseTotal
-                        )
-                    }
-                    // Balance
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(10.dp)
-                                .clip(CircleShape)
-                                .background(Color.Transparent)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.balance_colon)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = (itemChartState.value.incomeTotal.toBigDecimal() -
-                                    itemChartState.value.expenseTotal.toBigDecimal()).toString()
-                        )
-                    }
-                    Divider()
                     // Pie chart Income ====================================================================
                     if (itemChartState.value.incomeList.isNotEmpty()) {
                         Row(
