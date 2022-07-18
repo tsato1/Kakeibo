@@ -29,7 +29,8 @@ interface ItemDao {
             ConstCategoryDB.COL_PARENT + "," +
             ConstCategoryDB.COL_DESCRIPTION + "," +
             ConstCategoryDB.COL_SAVED_DATE + "," +
-            ConstItemDB.COL_IS_SYNCED +
+            ConstItemDB.COL_IS_SYNCED + "," +
+            ConstCategoryDB.COL_IS_SYNCED +
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
@@ -52,7 +53,8 @@ interface ItemDao {
             ConstCategoryDB.COL_PARENT + "," +
             ConstCategoryDB.COL_DESCRIPTION + "," +
             ConstCategoryDB.COL_SAVED_DATE + "," +
-            ConstItemDB.COL_IS_SYNCED +
+            ConstItemDB.COL_IS_SYNCED + "," +
+            ConstCategoryDB.COL_IS_SYNCED +
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +

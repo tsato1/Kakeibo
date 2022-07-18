@@ -19,7 +19,8 @@ data class DisplayedItemModel(
     val categoryParent: Int = -1,
     val categoryDescription: String = "Category Description",
     val categorySavedDate: String = "Category Saved Date",
-    val isSynced: Boolean = false
+    val itemIsSynced: Boolean = false,
+    val categoryIsSynced: Boolean = false
 ) {
 
     fun toItemEntity(): ItemEntity {
@@ -32,7 +33,7 @@ data class DisplayedItemModel(
             memo = memo,
             eventDate = eventDate,
             updateDate = updateDate,
-            isSynced = isSynced
+            isSynced = itemIsSynced
         )
 
     }

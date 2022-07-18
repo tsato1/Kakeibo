@@ -4,6 +4,7 @@ import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
 import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import com.kakeibo.feature_settings.domain.models.CategoryModel
@@ -19,7 +20,11 @@ class CategoryEntity(
     @Nullable @ColumnInfo(name = ConstCategoryDB.COL_IMAGE) var image: ByteArray?,
     @ColumnInfo(name = ConstCategoryDB.COL_PARENT, defaultValue = "-1") var parent: Int,
     @ColumnInfo(name = ConstCategoryDB.COL_DESCRIPTION, defaultValue = "") var description: String,
-    @ColumnInfo(name = ConstCategoryDB.COL_SAVED_DATE, defaultValue = "") var savedDate: String) {
+    @ColumnInfo(name = ConstCategoryDB.COL_SAVED_DATE, defaultValue = "") var savedDate: String,
+    @ColumnInfo(name = ConstCategoryDB.COL_IS_SYNCED, defaultValue = "0")
+    @Expose(deserialize = false, serialize = false) // this val will be ignored in Retrofit communication
+    var isSynced: Boolean = false
+) {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ConstCategoryDB.COL_ID)
@@ -38,7 +43,7 @@ class CategoryEntity(
             parent = parent,
             description = description,
             savedDate = savedDate,
-//            isSynced = isSynced
+            isSynced = isSynced
         )
     }
 
@@ -53,8 +58,8 @@ class CategoryEntity(
             image = image,
             parent = parent,
             description = description,
-            savedDate = savedDate
-//            isSynced = isSynced
+            savedDate = savedDate,
+            isSynced = isSynced
         )
     }
 }

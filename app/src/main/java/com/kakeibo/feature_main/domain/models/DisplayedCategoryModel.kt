@@ -12,6 +12,6 @@ class DisplayedCategoryModel(
     val image: ByteArray? = null,
     val parent: Int = CATEGORY_INVALID,
     val description: String = "",
-    val savedDate: String = ""
-//    var isSynced: Boolean
+    val savedDate: String = "",
+    var isSynced: Boolean = false
 )

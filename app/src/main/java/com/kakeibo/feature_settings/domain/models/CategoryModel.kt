@@ -16,8 +16,8 @@ class CategoryModel(
     val image: ByteArray? = null,
     val parent: Int,
     val description: String,
-    val savedDate: String
-//    var isSynced: Boolean
+    val savedDate: String,
+    var isSynced: Boolean = false
 ) {
 
     companion object {
@@ -38,8 +38,8 @@ class CategoryModel(
             image = image,
             parent = parent,
             description = description,
-            savedDate = savedDate
-//            isSynced = isSynced
+            savedDate = savedDate,
+            isSynced = isSynced
         )
     }
 

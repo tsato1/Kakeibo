@@ -73,7 +73,7 @@ class ItemEntity {
         memo: String,
         eventDate: String,
         updateDate: String,
-        isSyned: Boolean
+        isSynced: Boolean
     ) {
         this.amount = amount
         this.currencyCode = currencyCode
@@ -81,7 +81,7 @@ class ItemEntity {
         this.memo = memo
         this.eventDate = eventDate
         this.updateDate = updateDate
-        this.isSynced = isSyned
+        this.isSynced = isSynced
     }
 
     class InvalidItemException(message: String): Exception(message)

@@ -2,6 +2,7 @@ package com.kakeibo.core.data.local.entities
 
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
+import com.google.gson.annotations.Expose
 import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import java.math.BigDecimal
@@ -21,7 +22,13 @@ data class DisplayedItemEntity(
     @Nullable @ColumnInfo(name = ConstCategoryDB.COL_IMAGE) val categoryImage: ByteArray?,
     @ColumnInfo(name = ConstCategoryDB.COL_PARENT) val categoryParent: Int,
     @ColumnInfo(name = ConstCategoryDB.COL_DESCRIPTION) val categoryDescription: String,
-    @ColumnInfo(name = ConstCategoryDB.COL_SAVED_DATE) val categorySavedDate: String
+    @ColumnInfo(name = ConstCategoryDB.COL_SAVED_DATE) val categorySavedDate: String,
+    @ColumnInfo(name = ConstItemDB.COL_IS_SYNCED)
+    @Expose(deserialize = false, serialize = false) // this val will be ignored in Retrofit communication
+    val itemIsSynced: Boolean = false,
+    @ColumnInfo(name = ConstCategoryDB.COL_IS_SYNCED)
+    @Expose(deserialize = false, serialize = false) // this val will be ignored in Retrofit communication
+    val categoryIsSynced: Boolean = false
 ) {
 
     fun toDisplayedItemModel(): DisplayedItemModel {
@@ -40,7 +47,9 @@ data class DisplayedItemEntity(
             categoryImage = categoryImage,
             categoryParent = categoryParent,
             categoryDescription = categoryDescription,
-            categorySavedDate = categorySavedDate
+            categorySavedDate = categorySavedDate,
+            itemIsSynced = itemIsSynced,
+            categoryIsSynced = categoryIsSynced
         )
     }
 

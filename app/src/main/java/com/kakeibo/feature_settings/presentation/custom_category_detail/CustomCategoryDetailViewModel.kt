@@ -96,8 +96,8 @@ class CustomCategoryDetailViewModel @Inject constructor(
                                 image = UtilDrawing.bitmapToBytes(event.bitmap),
                                 parent = UtilCategory.CATEGORY_PARENT_NON,
                                 description = "",
-                                savedDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
-//                                isSynced = false
+                                savedDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS),
+                                isSynced = false
                             )
                         )
                         _eventFlow.emit(UiEvent.Save)

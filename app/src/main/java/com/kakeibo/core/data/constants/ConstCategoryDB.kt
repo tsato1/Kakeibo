@@ -17,5 +17,5 @@ object ConstCategoryDB {
     const val COL_VAL2 = "val2"
     const val COL_VAL3 = "val3"
     const val COL_SAVED_DATE = "saved_date" //default=""
-    const val COL_IS_SYNCED = "is_synced" // added on version 9
+    const val COL_IS_SYNCED = "category_is_synced" // added on version 10
 }
