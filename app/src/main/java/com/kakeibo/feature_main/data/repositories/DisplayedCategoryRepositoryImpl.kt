@@ -6,6 +6,7 @@ import com.kakeibo.core.data.local.CategoryDao
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
 import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
+import com.kakeibo.util.UtilCategory
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.io.IOException
@@ -25,7 +26,10 @@ class DisplayedCategoryRepositoryImpl(
             .map { list ->
                 list.map { categoryEntity ->
                     categoryEntity.toDisplayedCategoryModel().also { displayedCategoryModel ->
-                        displayedCategoryModel.name = defaultCategories[displayedCategoryModel.code]
+                        if (displayedCategoryModel.code < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                            displayedCategoryModel.name =
+                                defaultCategories[displayedCategoryModel.code]
+                        }
                     }
                 }
             }
@@ -46,7 +50,10 @@ class DisplayedCategoryRepositoryImpl(
             .map { list ->
                 list.map { categoryEntity ->
                     categoryEntity.toDisplayedCategoryModel().also { displayedCategoryModel ->
-                        displayedCategoryModel.name = defaultCategories[displayedCategoryModel.code]
+                        if (displayedCategoryModel.code < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                            displayedCategoryModel.name =
+                                defaultCategories[displayedCategoryModel.code]
+                        }
                     }
                 }
             }

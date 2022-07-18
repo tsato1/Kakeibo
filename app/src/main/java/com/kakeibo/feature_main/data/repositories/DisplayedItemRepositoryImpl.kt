@@ -7,6 +7,7 @@ import com.kakeibo.core.data.local.ItemDao
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
+import com.kakeibo.util.UtilCategory
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.io.IOException
@@ -24,8 +25,11 @@ class DisplayedItemRepositoryImpl(
 
     override suspend fun getItemById(id: Long): DisplayedItemModel? {
         return dao.getItemById(id)?.toDisplayedItemModel().also { displayedItemModel ->
-            displayedItemModel?.categoryName =
-                defaultCategories[displayedItemModel!!.categoryCode] ?: displayedItemModel.categoryName
+            displayedItemModel?.let {
+                if (it.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                    it.categoryName = defaultCategories[it.categoryCode]
+                }
+            }
         }
     }
 
@@ -102,7 +106,10 @@ class DisplayedItemRepositoryImpl(
             .map { list ->
                 list.map { displayedItemEntity ->
                     displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
-                        displayedItemModel.categoryName = defaultCategories[displayedItemModel.categoryCode]
+                        if (displayedItemModel.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                            displayedItemModel.categoryName =
+                                defaultCategories[displayedItemModel.categoryCode]
+                        }
                     }
                 }
             }
@@ -120,7 +127,10 @@ class DisplayedItemRepositoryImpl(
             .map { list ->
                 list.map { displayedItemEntity ->
                     displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
-                        displayedItemModel.categoryName = defaultCategories[displayedItemModel.categoryCode]
+                        if (displayedItemModel.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
+                            displayedItemModel.categoryName =
+                                defaultCategories[displayedItemModel.categoryCode]
+                        }
                     }
                 }
             }
