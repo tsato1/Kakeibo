@@ -19,7 +19,7 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 69
+        versionCode 70
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
