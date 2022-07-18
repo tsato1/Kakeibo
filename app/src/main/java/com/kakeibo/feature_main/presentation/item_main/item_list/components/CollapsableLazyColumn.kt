@@ -17,18 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.R
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
-import com.kakeibo.feature_main.presentation.common.components.IncomeExpenseIndicator
 import com.kakeibo.feature_main.presentation.common.components.ItemDeleteDialog
 import com.kakeibo.feature_main.presentation.common.components.ItemDetailDialog
 import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
@@ -125,15 +123,31 @@ fun CollapsableLazyColumn(
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_INCOME)
-                        Text(
-                            text = expandableItem.parent.income.format(fractionDigits)
-                        )
+                        Column(
+                            modifier = Modifier.width(dimensionResource(id = R.dimen.plus_minus_size)),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "+",
+                                style = TextStyle(
+                                    color = Color.Blue
+                                )
+                            )
+                        }
+                        Text(text = expandableItem.parent.income.format(fractionDigits))
                         Spacer(modifier = Modifier.width(10.dp))
-                        IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_EXPENSE)
-                        Text(
-                            text = expandableItem.parent.expense.format(fractionDigits)
-                        )
+                        Column(
+                            modifier = Modifier.width(dimensionResource(id = R.dimen.plus_minus_size)),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "-",
+                                style = TextStyle(
+                                    color = Color.Red
+                                )
+                            )
+                        }
+                        Text(text = expandableItem.parent.expense.format(fractionDigits))
                     }
                     Divider()
                 }
@@ -144,7 +158,7 @@ fun CollapsableLazyColumn(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp, 2.dp, 12.dp, 2.dp)
+                                .padding(4.dp, 2.dp, 4.dp, 2.dp)
                                 .combinedClickable(
                                     onClick = {
                                         openItemDetailDialog.value = true
@@ -175,31 +189,36 @@ fun CollapsableLazyColumn(
                                     text = child.memo
                                 )
                             }
-                            Text(
-                                when (child.categoryColor) {
-                                    UtilCategory.CATEGORY_COLOR_INCOME -> {
-                                        buildAnnotatedString {
-                                            withStyle(style = SpanStyle(color = Color.Blue)) {
-                                                append("+")
-                                            }
-                                            append(child.amount)
-                                        }
-                                    }
-                                    UtilCategory.CATEGORY_COLOR_EXPENSE -> {
-                                        buildAnnotatedString {
-                                            withStyle(style = SpanStyle(color = Color.Red)) {
-                                                append("-")
-                                            }
-                                            append(child.amount)
-                                        }
-                                    }
-                                    else -> {
-                                        buildAnnotatedString {
-                                            append(child.amount)
-                                        }
+                            when (child.categoryColor) {
+                                UtilCategory.CATEGORY_COLOR_INCOME -> {
+                                    Column(
+                                        modifier = Modifier.width(dimensionResource(id = R.dimen.plus_minus_size)),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "+",
+                                            style = TextStyle(
+                                                color = Color.Blue
+                                            )
+                                        )
                                     }
                                 }
-                            )
+                                UtilCategory.CATEGORY_COLOR_EXPENSE -> {
+                                    Column(
+                                        modifier = Modifier.width(dimensionResource(id = R.dimen.plus_minus_size)),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "-",
+                                            style = TextStyle(
+                                                color = Color.Red
+                                            )
+                                        )
+                                    }
+                                }
+                                else -> { }
+                            }
+                            Text(text = child.amount)
                             /* dropdown menu will open when an item is long clicked */
                             DropdownMenu(
                                 expanded = dropdownMenuExpanded.value,

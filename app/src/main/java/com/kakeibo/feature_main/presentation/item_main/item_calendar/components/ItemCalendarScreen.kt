@@ -22,8 +22,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -207,7 +211,6 @@ fun CalendarRows(
             for (i in 1..7) {
                 Column(
                     modifier = Modifier
-                        .height(28.dp)
                         .padding(2.dp)
                         .weight(1f)
                 ) {
@@ -290,7 +293,12 @@ fun CalendarRows(
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_INCOME)
+                                    Column(modifier = Modifier.width(4.dp)) {
+                                        Text(
+                                            text = "+",
+                                            style = TextStyle(color = Color.Blue, fontSize = 10.sp)
+                                        )
+                                    }
                                     Text(
                                         text = calendarItem.parent.income,
                                         style = TextStyle(fontSize = 10.sp)
@@ -302,7 +310,16 @@ fun CalendarRows(
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    IncomeExpenseIndicator(categoryColor = UtilCategory.CATEGORY_COLOR_EXPENSE)
+                                    Column(modifier = Modifier.width(4.dp)) {
+                                        Text(
+                                            text = "-",
+                                            style = TextStyle(
+                                                color = Color.Red,
+                                                fontSize = 10.sp,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        )
+                                    }
                                     Text(
                                         text = calendarItem.parent.expense,
                                         style = TextStyle(fontSize = 10.sp)
