@@ -115,8 +115,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDisplayedItemRepository(db: AppDatabase): DisplayedItemRepository {
-        return DisplayedItemRepositoryImpl(db.itemDao)
+    fun provideDisplayedItemRepository(
+        @ApplicationContext context: Context,
+        db: AppDatabase
+    ): DisplayedItemRepository {
+        return DisplayedItemRepositoryImpl(context, db.itemDao)
     }
 
     @Provides
@@ -127,8 +130,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDisplayedCategoryRepository(db: AppDatabase): DisplayedCategoryRepository {
-        return DisplayedCategoryRepositoryImpl(db.categoryDao)
+    fun provideDisplayedCategoryRepository(
+        @ApplicationContext context: Context,
+        db: AppDatabase
+    ): DisplayedCategoryRepository {
+        return DisplayedCategoryRepositoryImpl(context, db.categoryDao)
     }
 
     @Provides

@@ -5,7 +5,7 @@ import com.kakeibo.feature_main.presentation.item_search.CATEGORY_INVALID
 class DisplayedCategoryModel(
     val _id: Long = -1L,
     val code: Int = CATEGORY_INVALID,
-    val name: String = "",
+    var name: String = "",
     val color: Int = CATEGORY_INVALID,
     val sign: Int = CATEGORY_INVALID,
     val drawable: String = "",

@@ -12,7 +12,7 @@ data class DisplayedItemModel(
     val memo: String,
     val eventDate: String,
     val updateDate: String,
-    val categoryName: String = "Category Name",
+    var categoryName: String = "Category Name",
     val categoryColor: Int = 0,
     val categorySign: Int = 0,
     val categoryDrawable: String = "Category Drawable",

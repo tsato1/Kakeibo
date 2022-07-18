@@ -1,5 +1,7 @@
 package com.kakeibo.feature_main.data.repositories
 
+import android.content.Context
+import com.kakeibo.R
 import com.kakeibo.core.data.local.CategoryDao
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
@@ -9,17 +11,22 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class DisplayedCategoryRepositoryImpl(
+    context: Context,
     private val dao: CategoryDao
 ) : DisplayedCategoryRepository {
+
+    private val defaultCategories = context.resources.getStringArray(R.array.default_category)
 
     override fun getAllDisplayedCategories(): Flow<Resource<List<DisplayedCategoryModel>>> = flow {
         emit(Resource.Loading())
 
         val displayedCategories = dao
             .getAllDisplayedCategories()
-            .map {
-                it.map {
-                    it.toDisplayedCategoryModel()
+            .map { list ->
+                list.map { categoryEntity ->
+                    categoryEntity.toDisplayedCategoryModel().also { displayedCategoryModel ->
+                        displayedCategoryModel.name = defaultCategories[displayedCategoryModel.code]
+                    }
                 }
             }
             .first()
@@ -36,9 +43,11 @@ class DisplayedCategoryRepositoryImpl(
 
         val flow = dao
             .getAllDisplayedCategories()
-            .map {
-                it.map {
-                    it.toDisplayedCategoryModel()
+            .map { list ->
+                list.map { categoryEntity ->
+                    categoryEntity.toDisplayedCategoryModel().also { displayedCategoryModel ->
+                        displayedCategoryModel.name = defaultCategories[displayedCategoryModel.code]
+                    }
                 }
             }
             .map {

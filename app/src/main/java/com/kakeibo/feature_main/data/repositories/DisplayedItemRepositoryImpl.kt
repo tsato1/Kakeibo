@@ -1,6 +1,8 @@
 package com.kakeibo.feature_main.data.repositories
 
+import android.content.Context
 import androidx.sqlite.db.SimpleSQLiteQuery
+import com.kakeibo.R
 import com.kakeibo.core.data.local.ItemDao
 import com.kakeibo.core.util.Resource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
@@ -10,15 +12,21 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class DisplayedItemRepositoryImpl(
+    context: Context,
     private val dao: ItemDao
 ) : DisplayedItemRepository {
+
+    private val defaultCategories = context.resources.getStringArray(R.array.default_category)
 
     override fun getAllItems(): Flow<Resource<List<DisplayedItemModel>>> = flow {
         dao.getAllItems() // todo
     }
 
     override suspend fun getItemById(id: Long): DisplayedItemModel? {
-        return dao.getItemById(id)?.toDisplayedItemModel()
+        return dao.getItemById(id)?.toDisplayedItemModel().also { displayedItemModel ->
+            displayedItemModel?.categoryName =
+                defaultCategories[displayedItemModel!!.categoryCode] ?: displayedItemModel.categoryName
+        }
     }
 
 //    override fun getItemsByYear(y: String): Flow<Resource<List<DisplayedItemModel>>> = flow {
@@ -91,9 +99,11 @@ class DisplayedItemRepositoryImpl(
         emit(Resource.Loading())
 
         val displayedItems = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
-            .map {
-                it.map {
-                    it.toDisplayedItemModel()
+            .map { list ->
+                list.map { displayedItemEntity ->
+                    displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
+                        displayedItemModel.categoryName = defaultCategories[displayedItemModel.categoryCode]
+                    }
                 }
             }
             .first()
@@ -107,9 +117,11 @@ class DisplayedItemRepositoryImpl(
         }
 
         val flow = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
-            .map {
-                it.map {
-                    it.toDisplayedItemModel()
+            .map { list ->
+                list.map { displayedItemEntity ->
+                    displayedItemEntity.toDisplayedItemModel().also { displayedItemModel ->
+                        displayedItemModel.categoryName = defaultCategories[displayedItemModel.categoryCode]
+                    }
                 }
             }
             .map {
