@@ -45,7 +45,7 @@ class InsertSearchUseCase(
                 )
             }
 
-            if (searchModel.fromAmount!!.toLong() > searchModel.toAmount!!.toLong()) {
+            if (searchModel.fromAmount!!.toBigDecimal() > searchModel.toAmount!!.toBigDecimal()) {
                 throw SearchEntity.InvalidSearchException(
                     context.getString(R.string.err_min_amount_greater)
                 )
