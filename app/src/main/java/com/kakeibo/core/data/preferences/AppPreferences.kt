@@ -4,6 +4,8 @@ interface AppPreferences {
 
     fun <T : Any?> set(key: Int, value: T)
 
+    fun <T : Any?> set(key: String, value: T)
+
     fun getString(key: String, defaultValue: String?): String?
 
     fun getInt(key: String, defaultValue: Int): Int

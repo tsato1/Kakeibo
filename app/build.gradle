@@ -92,7 +92,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-swiperefresh:0.24.6-alpha"
 
     // Material Design
-    implementation 'com.google.android.material:material:1.7.0-alpha02'
+    implementation 'com.google.android.material:material:1.7.0-alpha03'
 
     // MotionLayout
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -146,7 +146,7 @@ dependencies {
     implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
 
     // Ads
-    implementation "com.google.android.gms:play-services-ads:21.0.0"
+    implementation "com.google.android.gms:play-services-ads:21.1.0"
     implementation 'com.adcolony:sdk:4.7.1'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 

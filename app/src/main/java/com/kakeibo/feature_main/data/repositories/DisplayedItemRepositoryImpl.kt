@@ -75,35 +75,6 @@ class DisplayedItemRepositoryImpl(
                 checkForInternetConnection(context)
             }
         )
-//        emit(Resource.Loading())
-//
-//        val displayedItems = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
-//            .map {
-//                it.map {
-//                    it.toDisplayedItemModel()
-//                }
-//            }
-//            .first()
-//
-//        try {
-//
-//        } catch (e: HttpException) {
-//            emit(Resource.Error(e.message ?: "HttpException", data = displayedItems))
-//        } catch (e: IOException) {
-//            emit(Resource.Error(e.message ?: "Couldn't reach server", data = displayedItems))
-//        }
-//
-//        val flow = dao.getSpecificItems(SimpleSQLiteQuery(query, args.toTypedArray()))
-//            .map {
-//                it.map {
-//                    it.toDisplayedItemModel()
-//                }
-//            }
-//            .map {
-//                Resource.Success(it)
-//            }
-//
-//        emitAll(flow)
     }
 
     override suspend fun insertItem(itemEntity: ItemEntity, syncWithRemote: Int): Long {

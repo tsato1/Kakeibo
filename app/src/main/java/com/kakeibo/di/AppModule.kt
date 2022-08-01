@@ -10,8 +10,10 @@ import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.*
 import com.kakeibo.core.data.preferences.AppPreferences
+import com.kakeibo.core.data.remote.AuthApi
 import com.kakeibo.core.data.remote.BasicAuthInterceptor
 import com.kakeibo.core.data.remote.ItemApi
+import com.kakeibo.core.data.repositories.AuthRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
@@ -26,6 +28,7 @@ import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositor
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.ItemRepositoryImpl
 import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
+import com.kakeibo.core.domain.repositories.AuthRepository
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
 import com.kakeibo.feature_settings.domain.repositories.CustomCategoryRepository
 import com.kakeibo.feature_settings.domain.repositories.ItemRepository
@@ -78,6 +81,21 @@ object AppModule {
             .client(client)
             .build()
             .create(ItemApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthApi(basicAuthInterceptor: BasicAuthInterceptor): AuthApi {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(basicAuthInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(AuthApi::class.java)
     }
 
     @Provides
@@ -133,6 +151,12 @@ object AppModule {
     /*
     Repositories
      */
+    @Singleton
+    @Provides
+    fun provideAuthRepository(authApi: AuthApi): AuthRepository {
+        return AuthRepositoryImpl(authApi)
+    }
+
     @Singleton
     @Provides
     fun provideKkbAppRepository(db: AppDatabase): KkbAppRepository {

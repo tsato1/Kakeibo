@@ -86,11 +86,12 @@ class AppPreferencesImpl @Inject constructor(
         return numColumns[getNumColumnsIndex()].toInt()
     }
 
-
-
-
     override fun <T : Any?> set(key: Int, value: T) {
         instance.set(context.resources.getString(key), value)
+    }
+
+    override fun <T : Any?> set(key: String, value: T) {
+        instance.set(key, value)
     }
 
     override fun getString(key: String, defaultValue: String?): String {

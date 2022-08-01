@@ -10,12 +10,6 @@ import retrofit2.http.POST
 
 interface ItemApi {
 
-//    @POST("/register")
-//    suspend fun register(@Body registerRequest: AccountRequest): Response<SimpleResponse>
-//
-//    @POST("/login")
-//    suspend fun login(@Body loginRequest: AccountRequest): Response<SimpleResponse>
-
     @POST("/addItem")
     suspend fun addItem(@Body itemEntity: ItemEntity): Response<ResponseBody>
 
