@@ -117,15 +117,15 @@ fun TopNavigationBar(
                         imageVector = Icons.Default.Search, contentDescription = "Search"
                     )
                 }
-            }
-            IconButton(
-                onClick = {
-                    context.startActivity(Intent(context, SettingsActivity::class.java))
+                IconButton(
+                    onClick = {
+                        context.startActivity(Intent(context, SettingsActivity::class.java))
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings, contentDescription = "Settings"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings, contentDescription = "Settings"
-                )
             }
         }
     )
