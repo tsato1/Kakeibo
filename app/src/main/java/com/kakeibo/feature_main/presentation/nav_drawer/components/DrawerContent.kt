@@ -1,4 +1,4 @@
-package com.kakeibo.feature_main.presentation.common.components
+package com.kakeibo.feature_main.presentation.nav_drawer.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -72,7 +72,9 @@ fun DrawerContent(
                     )
                 }
                 Text(
-                    text = viewModel.firebaseUser.value?.displayName ?: stringResource(id = R.string.not_signed_in),
+                    text = viewModel.firebaseUser.value?.let {
+                        it.displayName ?: ""
+                    } ?: stringResource(id = R.string.not_signed_in),
                     color = MaterialTheme.colors.background
                 )
                 Text(

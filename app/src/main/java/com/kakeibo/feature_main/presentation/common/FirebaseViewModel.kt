@@ -3,10 +3,16 @@ package com.kakeibo.feature_main.presentation.common
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.kakeibo.R
 import com.kakeibo.core.util.SingleLiveEvent
+import com.kakeibo.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +37,9 @@ class FirebaseViewModel @Inject constructor(
      */
     private val userChangeEvent = SingleLiveEvent<Void>()
 
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     init {
         updateFirebaseUser()
     }
@@ -43,5 +52,46 @@ class FirebaseViewModel @Inject constructor(
         _firebaseUser.value = newUser
     }
 
+    fun deleteUser() {
+        _firebaseUser.value?.delete()
+            ?.addOnSuccessListener {
+                viewModelScope.launch {
+                    withContext(Dispatchers.Default) {
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(
+                                UiText.StringResource(R.string.success_cleared_cache)
+                            )
+                        )
+                    }
+                }
+            }
+            ?.addOnCanceledListener {
+                viewModelScope.launch {
+                    withContext(Dispatchers.Default) {
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(
+                                UiText.StringResource(R.string.canceled_cleared_cache)
+                            )
+                        )
+                    }
+                }
+            }
+            ?.addOnFailureListener {
+                viewModelScope.launch {
+                    withContext(Dispatchers.Default) {
+                        _eventFlow.emit(
+                            UiEvent.ShowToast(
+                                UiText.StringResource(R.string.failure_cleared_cache)
+                            )
+                        )
+                    }
+                }
+            }
+    }
+
     fun isSignedIn() = firebaseUser.value != null
+
+    sealed class UiEvent {
+        data class ShowToast(val stringId: UiText): UiEvent()
+    }
 }

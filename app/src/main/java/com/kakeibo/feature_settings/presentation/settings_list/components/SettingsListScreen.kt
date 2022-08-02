@@ -21,10 +21,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.DialogCard
+import com.kakeibo.feature_main.presentation.common.FirebaseViewModel
 import com.kakeibo.feature_settings.presentation.util.Screen
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListEvent
 import com.kakeibo.feature_settings.presentation.settings_list.SettingsListViewModel
@@ -37,22 +40,24 @@ import kotlinx.coroutines.flow.collectLatest
 fun SettingsListScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navController: NavController,
-    viewModel: SettingsListViewModel = hiltViewModel()
+    settingsListViewModel: SettingsListViewModel = hiltViewModel(),
+    firebaseViewModel: FirebaseViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val scaffoldState = rememberScaffoldState()
 
-    val keyDateFormatIndexState = viewModel.dateFormatIndexState
-    val keyFractionDigitsIndexState = viewModel.fractionDigitsIndexState
-    val keyNumColumnsIndexState = viewModel.numColumnsIndexState
+    val keyDateFormatIndexState = settingsListViewModel.dateFormatIndexState
+    val keyFractionDigitsIndexState = settingsListViewModel.fractionDigitsIndexState
+    val keyNumColumnsIndexState = settingsListViewModel.numColumnsIndexState
 
     val openDeleteAllItemsDialog = remember { mutableStateOf(false) }
+    val openClearUserCacheDialog = remember { mutableStateOf(false) }
     val openConfirmAdsDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         scrollState.animateScrollTo(0)
-        viewModel.eventFlow.collectLatest { event ->
+        settingsListViewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is SettingsListViewModel.UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.stringId.asString(context))
@@ -67,8 +72,8 @@ fun SettingsListScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
-                viewModel.setSharedPreferencesStates()
-                viewModel.loadKkbAppStates()
+                settingsListViewModel.setSharedPreferencesStates()
+                settingsListViewModel.loadKkbAppStates()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -104,21 +109,21 @@ fun SettingsListScreen(
                     arrayResourceId = R.array.pref_list_date_format,
                     indexState = keyDateFormatIndexState,
                     event = SettingsListEvent.DateFormatChanged,
-                    viewModel
+                    settingsListViewModel
                 )
                 SettingsListItem(
                     titleResourceId = R.string.fraction_digits,
                     arrayResourceId = R.array.pref_list_fraction_digits,
                     indexState = keyFractionDigitsIndexState,
                     event = SettingsListEvent.FractionDigitsChanged,
-                    viewModel
+                    settingsListViewModel
                 )
                 SettingsListItem(
                     titleResourceId = R.string.num_categories_per_row,
                     arrayResourceId = R.array.pref_list_num_columns,
                     indexState = keyNumColumnsIndexState,
                     event = SettingsListEvent.NumColumnsChanged,
-                    viewModel
+                    settingsListViewModel
                 )
             }
         }
@@ -144,7 +149,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 navController.navigate(Screen.CustomCategoryListScreen.route)
                             } else {
                                 openConfirmAdsDialog.value = true
@@ -160,7 +165,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 navController.navigate(Screen.CategoryRearrangeScreen.route)
                             } else {
                                 openConfirmAdsDialog.value = true
@@ -176,7 +181,7 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 context.startActivity(
                                     Intent(
                                         context,
@@ -221,10 +226,18 @@ fun SettingsListScreen(
                         modifier = Modifier.padding(16.dp)
                     )
                 }
+                Row(
+                    modifier = Modifier.clickable { openClearUserCacheDialog.value = true }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.clear_user_cache),
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-        if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+        if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
             BannerAds(
                 adId = stringResource(id = R.string.settings_banner_ad)
             )
@@ -275,7 +288,7 @@ fun SettingsListScreen(
                 positiveButton = {
                     OutlinedButton(
                         onClick = {
-                            viewModel.onEvent(SettingsListEvent.ShowAds, -1)
+                            settingsListViewModel.onEvent(SettingsListEvent.ShowAds, -1)
                             openConfirmAdsDialog.value = false
                             openConfirmAdsDialog2.value = false
                         }
@@ -341,7 +354,7 @@ fun SettingsListScreen(
                 positiveButton = {
                     OutlinedButton(
                         onClick = {
-                            viewModel.onEvent(SettingsListEvent.DeleteAllItems, -1)
+                            settingsListViewModel.onEvent(SettingsListEvent.DeleteAllItems, -1)
                             openConfirmDialog.value = false
                             openDeleteAllItemsDialog.value = false
                         }
@@ -351,6 +364,46 @@ fun SettingsListScreen(
                 }
             )
         }
+    }
+
+    if (openClearUserCacheDialog.value) {
+        DialogCard(
+            onDismissRequest = { openClearUserCacheDialog.value = false },
+            title = stringResource(id = R.string.clear_user_cache),
+            content = {
+                Text(
+                    modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
+                    text = stringResource(id = R.string.app_stores_user_cache)
+                )
+            },
+            positiveButton = {
+                OutlinedButton(
+                    onClick = {
+                        if (!firebaseViewModel.isSignedIn()) {
+                            Toast.makeText(context, R.string.signin_first, Toast.LENGTH_LONG).show()
+                        }
+                        else {
+                            AuthUI.getInstance().signOut(context).addOnCompleteListener {
+                                firebaseViewModel.deleteUser()
+                                Toast.makeText(context, R.string.success_cleared_cache, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        openClearUserCacheDialog.value = false
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.yes))
+                }
+            },
+            negativeButton = {
+                OutlinedButton(
+                    onClick = {
+                        openClearUserCacheDialog.value = false
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            }
+        )
     }
 }
 

@@ -1,7 +1,6 @@
 package com.kakeibo.feature_main.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -44,14 +43,11 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.kakeibo.BuildConfig
 import com.kakeibo.R
 import com.kakeibo.feature_export.DriveServiceHelper
 import com.kakeibo.feature_main.presentation.common.FirebaseViewModel
-import com.kakeibo.feature_main.presentation.common.components.DrawerContent
+import com.kakeibo.feature_main.presentation.nav_drawer.components.DrawerContent
 import com.kakeibo.feature_main.presentation.common.components.ImportExportDialog
 import com.kakeibo.feature_main.presentation.common.components.TopNavigationBar
 import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemEditScreen
@@ -83,7 +79,6 @@ import java.io.IOException
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var auth: FirebaseAuth
     private var interstitialAd: InterstitialAd? = null
 
     private val firebaseViewModel: FirebaseViewModel by viewModels()
@@ -91,8 +86,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        auth = Firebase.auth
 
         /* ads */
         MobileAds.initialize(this) { }
@@ -107,7 +100,7 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                Log.e("MainActivity", "Failed to lead ad")
+
             }
         })
 
@@ -163,6 +156,7 @@ class MainActivity : ComponentActivity() {
                                     -1L
                                 )
                             )
+                            firebaseViewModel.updateFirebaseUser()
                         }
                     }
                     lifecycleOwner.lifecycle.addObserver(observer)
@@ -262,25 +256,20 @@ class MainActivity : ComponentActivity() {
     private val googleSignInLauncher = registerForActivityResult (
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        Log.d("MainActivity", "Google sign in luancher!")
         if (result.resultCode == RESULT_OK) {
-            Log.d("MainActivity", "Google sign in luancher!   111")
             try {
-                Log.d("MainActivity", "Google sign in luancher!   222")
                 val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 task.getResult(ApiException::class.java).also {
-                    triggerSignIn()
                     connectToGDrive(it)
                 }
             }
             catch (e: ApiException) {
-                Log.w("MainActivity", "Google sign in failed", e)
+
             }
         }
     }
 
     private fun connectToGDrive(googleAccount: GoogleSignInAccount) {
-        Log.w("MainActivity", "Connecting to GDrive")
         // Signed in successfully, show authenticated UI.
         // Use the authenticated account to sign in to the Drive service.
         val credential = GoogleAccountCredential
@@ -293,8 +282,8 @@ class MainActivity : ComponentActivity() {
             .setApplicationName("Drive API Migration")
             .build()
 
-        DriveServiceHelper(googleDriveService).also {
-            it.createFilePickerIntent().also {
+        DriveServiceHelper(googleDriveService).also { helper ->
+            helper.createFilePickerIntent().also {
                 requestCreateDocument.launch(it)
             }
 //            when (mOrderType) {
@@ -327,9 +316,6 @@ class MainActivity : ComponentActivity() {
                         /* ads */
                         if (interstitialAd != null) {
                             interstitialAd?.show(this)
-                        }
-                        else {
-                            Log.e("MainActivity", "Error. Ads not shown.")
                         }
                     }
                 } catch (e: IOException) {

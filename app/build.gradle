@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     def versionMajor = 6
@@ -18,8 +18,8 @@ android {
     defaultConfig {
         applicationId "com.kakeibo"
         minSdkVersion 21
-        targetSdkVersion 32
-        versionCode 71
+        targetSdkVersion 33
+        versionCode 72
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
