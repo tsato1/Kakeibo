@@ -71,6 +71,7 @@ fun CollapsableLazyColumn(
                     }
                 }
                 /* UiEvent.ShowSnackbar is implemented in CollapsableLazyColumn */
+                else -> Unit
             }
         }
     }

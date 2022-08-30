@@ -3,6 +3,7 @@ package com.kakeibo.core.data.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.kakeibo.Constants
 import com.kakeibo.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -48,42 +49,44 @@ class AppPreferencesImpl @Inject constructor(
 //    }
 
     /* dateFormat */
-    override
-    fun getDateFormatIndex(): Int {
+    override fun getDateFormatIndex(): Int {
         return getInt(
             context.resources.getString(R.string.pref_key_date_format), 0
         )
     }
-    override
-    fun getDateFormat(): String {
+    override fun getDateFormat(): String {
         val dateFormats = context.resources.getStringArray(R.array.pref_list_date_format)
         return dateFormats[getDateFormatIndex()]
     }
 
     /* fraction digits */
-    override
-    fun getFractionDigitsIndex(): Int {
+    override fun getFractionDigitsIndex(): Int {
         return getInt(
             context.resources.getString(R.string.pref_key_fraction_digits), 0
         )
     }
-    override
-    fun getFractionDigits(): Int {
+    override fun getFractionDigits(): Int {
         val fractionDigits = context.resources.getStringArray(R.array.pref_list_fraction_digits)
         return fractionDigits[getFractionDigitsIndex()].toInt()
     }
 
     /* num category icons per row */
-    override
-    fun getNumColumnsIndex(): Int {
+    override fun getNumColumnsIndex(): Int {
         return getInt(
             context.resources.getString(R.string.pref_key_num_columns), 1
         )
     }
-    override
-    fun getNumColumns(): Int {
+    override fun getNumColumns(): Int {
         val numColumns = context.resources.getStringArray(R.array.pref_list_num_columns)
         return numColumns[getNumColumnsIndex()].toInt()
+    }
+
+    /* AccessToken and RefreshToken */
+    override fun getAccessToken(): String {
+        return getString(Constants.PREFS_KEY_JWT_ACCESS_TOKEN, Constants.NO_JWT_TOKEN)
+    }
+    override fun getRefreshToken(): String {
+        return getString(Constants.PREFS_KEY_JWT_REFRESH_TOKEN, Constants.NO_JWT_TOKEN)
     }
 
     override fun <T : Any?> set(key: Int, value: T) {

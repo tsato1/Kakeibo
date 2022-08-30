@@ -1,17 +1,25 @@
 package com.kakeibo.core.data.remote
 
-import com.kakeibo.core.data.remote.requests.AccountRequest
-import com.kakeibo.core.data.remote.responses.SimpleResponse
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
+import com.kakeibo.Constants
+import com.kakeibo.core.data.remote.requests.AuthRequest
+import com.kakeibo.core.data.remote.requests.TokenRequest
+import com.kakeibo.core.data.remote.responses.AuthResponse
 
 interface AuthApi {
 
-    @POST("/register")
-    suspend fun register(@Body registerRequest: AccountRequest): Response<SimpleResponse>
+    suspend fun register(authRequest: AuthRequest)
 
-    @POST("/login")
-    suspend fun login(@Body loginRequest: AccountRequest): Response<SimpleResponse>
+    suspend fun login(authRequest: AuthRequest): AuthResponse
+
+    suspend fun refreshAccessToken(refreshToken: String, tokenRequest: TokenRequest): AuthResponse
+
+    suspend fun logout(refreshToken: String, tokenRequest: TokenRequest)
+
+    sealed class EndPoints(val url: String) {
+        object register: EndPoints(Constants.AUTH_BASE_URL+"/register")
+        object login: EndPoints(Constants.AUTH_BASE_URL+"/login")
+        object refreshAccessToken: EndPoints(Constants.AUTH_BASE_URL+"/token")
+        object logout: EndPoints(Constants.AUTH_BASE_URL+"/logout")
+    }
 
 }

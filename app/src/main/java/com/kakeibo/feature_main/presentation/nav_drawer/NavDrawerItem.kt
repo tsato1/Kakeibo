@@ -10,5 +10,7 @@ import com.kakeibo.R
 sealed class NavDrawerItem(val route: String, val label: Int, val icon: ImageVector) {
     object SignIn : NavDrawerItem("sign_in", R.string.sign_in, Icons.Default.Login)
     object SignOut : NavDrawerItem("sign_out", R.string.sign_out, Icons.Default.Logout)
+    object SignInKakeibo : NavDrawerItem("login", R.string.login, Icons.Default.Login)
+    object SignOutKakeibo : NavDrawerItem("logout", R.string.logout, Icons.Default.Logout)
     object About : NavDrawerItem("about", R.string.about_this_app, Icons.Default.Info)
 }

@@ -1,10 +1,6 @@
 package com.kakeibo
 
 object Constants {
-    val IGNORE_AUTH_URLS = listOf("/login", "/register")
-
-    const val BASE_URL = "http://10.0.2.2:8080"
-
     val CATEGORY_EXPENSE_COLORS = arrayOf(
         "#827717", "#9E9D24", "#AFB42B", "#C0CA33", "#CDDC39",
         "#D4E157", "#DCE775", "#E6EE9C", "#F0F4C3", "#F9FBE7"
@@ -14,6 +10,7 @@ object Constants {
         "#FFA726", "#FFB74D", "#FFCC80", "#FFE0B2", "#FFF3E0"
     )
 
+    /* Subscription */
     const val USE_FAKE_SERVER = false
     const val BASIC_SKU = "plus_1m"
     const val PREMIUM_SKU = "plus_1y"
@@ -23,8 +20,16 @@ object Constants {
     /* Shared Preferences */
     const val SHARED_PREF_NAME = "com.kakeibo_preferences"
     const val ENCRYPTED_SHARED_PREF_NAME = "com.kakeibo_enc_preferences"
-    const val KEY_LOGGED_IN_EMAIL = "KEY_LOGGED_IN_EMAIL"
-    const val KEY_PASSWORD = "KEY_PASSWORD"
-    const val NO_EMAIL = "NO_EMAIL"
-    const val NO_PASSWORD = "NO_PASSWORD"
+    const val PREFS_KEY_JWT_ACCESS_TOKEN = "jwt_access"
+    const val PREFS_KEY_JWT_REFRESH_TOKEN = "jwt_refresh"
+    const val NO_JWT_TOKEN = "NO_JWT_TOKEN"
+
+    /* Remote */
+    const val IGNORE_AUTH_URLS = ""
+    const val ITEM_BASE_URL = "http://10.0.2.2:8080"
+    const val AUTH_BASE_URL = "http://10.0.2.2:8081"
+    const val CODE_USER_ALREADY_EXISTS = 1001
+    const val CODE_USER_NOT_IN_DB = 1002
+    const val CODE_INVALID_EMAIL_OR_PASSWORD = 1003
+    const val CODE_OTHER = 1010
 }

@@ -9,6 +9,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="sign_in_success">Sign-in successful</string>
     <string name="sign_in_failure">Sign-in failed</string>
     <string name="sign_out_success">Sign-out successful</string>
@@ -22,6 +24,7 @@
     <string name="chart">CHART</string>
     <string name="calendar">CALENDAR</string>
     <string name="detail" translatable="false">DETAIL</string>
+    <string name="auth">AUTH</string>
     <string name="about" translatable="false">ABOUT</string>
 
     <string name="income">Income</string>

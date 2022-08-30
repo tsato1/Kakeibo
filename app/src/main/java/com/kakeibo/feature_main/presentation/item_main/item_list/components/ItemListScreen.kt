@@ -57,6 +57,7 @@ fun ItemListScreen(
                     scaffoldState.snackbarHostState.showSnackbar(event.message.asString(context))
                 }
                 /* UiEvent.LoadingCompleted is implemented in CollapsableLazyColumn */
+                else -> Unit
             }
         }
     }

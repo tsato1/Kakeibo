@@ -34,4 +34,8 @@ interface AppPreferences {
 
     fun getNumColumns(): Int
 
+    fun getAccessToken(): String
+
+    fun getRefreshToken(): String
+
 }

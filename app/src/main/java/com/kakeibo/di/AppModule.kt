@@ -5,15 +5,14 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.kakeibo.Constants.BASE_URL
+import com.kakeibo.Constants.ITEM_BASE_URL
+import com.kakeibo.core.data.remote.AuthApi
 import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.*
 import com.kakeibo.core.data.preferences.AppPreferences
-import com.kakeibo.core.data.remote.AuthApi
-import com.kakeibo.core.data.remote.BasicAuthInterceptor
-import com.kakeibo.core.data.remote.ItemApi
-import com.kakeibo.core.data.repositories.AuthRepositoryImpl
+import com.kakeibo.core.data.remote.*
+import com.kakeibo.auth.data.AuthRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
@@ -28,7 +27,7 @@ import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositor
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.ItemRepositoryImpl
 import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
-import com.kakeibo.core.domain.repositories.AuthRepository
+import com.kakeibo.auth.domain.repositories.AuthRepository
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
 import com.kakeibo.feature_settings.domain.repositories.CustomCategoryRepository
 import com.kakeibo.feature_settings.domain.repositories.ItemRepository
@@ -52,6 +51,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.statement.*
+import io.ktor.serialization.gson.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -63,6 +69,28 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideHttpClient(): HttpClient {
+        return HttpClient(CIO) {
+            install(Logging)
+            install(ContentNegotiation) {
+                gson()
+            }
+            HttpResponseValidator {
+                validateResponse { response: HttpResponse ->
+                    when (response.status.value) {
+                        491, 492, 493, 494 -> throw ServiceException(response.status.value)
+                    }
+                }
+            }
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthApi(client: HttpClient): AuthApi = AuthApiImpl(client)
 
     @Singleton
     @Provides
@@ -76,27 +104,27 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(ITEM_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
             .create(ItemApi::class.java)
     }
-
-    @Singleton
-    @Provides
-    fun provideAuthApi(basicAuthInterceptor: BasicAuthInterceptor): AuthApi {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(basicAuthInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(AuthApi::class.java)
-    }
+//
+//    @Singleton
+//    @Provides
+//    fun provideAuthApi(basicAuthInterceptor: BasicAuthInterceptor): AuthApi {
+//        val client = OkHttpClient.Builder()
+//            .addInterceptor(basicAuthInterceptor)
+//            .build()
+//
+//        return Retrofit.Builder()
+//            .baseUrl(AUTH_BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .client(client)
+//            .build()
+//            .create(AuthApi::class.java)
+//    }
 
     @Provides
     @Singleton
@@ -153,8 +181,12 @@ object AppModule {
      */
     @Singleton
     @Provides
-    fun provideAuthRepository(authApi: AuthApi): AuthRepository {
-        return AuthRepositoryImpl(authApi)
+    fun provideAuthRepository(
+        @ApplicationContext context: Context,
+        authApi: AuthApi,
+        prefs: AppPreferences
+    ): AuthRepository {
+        return AuthRepositoryImpl(context, authApi, prefs)
     }
 
     @Singleton

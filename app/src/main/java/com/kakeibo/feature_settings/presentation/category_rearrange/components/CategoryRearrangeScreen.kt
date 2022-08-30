@@ -93,6 +93,7 @@ fun CategoryRearrangeScreen(
                     Toast.makeText(context, R.string.msg_change_successfully_saved, Toast.LENGTH_LONG).show()
                     navController.navigateUp()
                 }
+                else -> Unit
             }
         }
     }

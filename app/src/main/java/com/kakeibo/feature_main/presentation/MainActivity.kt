@@ -13,7 +13,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -41,15 +45,12 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.kakeibo.BuildConfig
-import com.kakeibo.Constants.KEY_LOGGED_IN_EMAIL
-import com.kakeibo.Constants.KEY_PASSWORD
-import com.kakeibo.Constants.NO_EMAIL
-import com.kakeibo.Constants.NO_PASSWORD
+import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.data.remote.BasicAuthInterceptor
-import com.kakeibo.core.presentation.AuthViewModel
-import com.kakeibo.core.util.Resource
+import com.kakeibo.auth.presentation.AuthViewModel
+import com.kakeibo.core.presentation.components.AuthScreen
 import com.kakeibo.feature_export.DriveServiceHelper
 import com.kakeibo.feature_main.presentation.common.FirebaseViewModel
 import com.kakeibo.feature_main.presentation.nav_drawer.components.DrawerContent
@@ -103,27 +104,8 @@ class MainActivity : ComponentActivity() {
     private var currEmail: String? = null
     private var currPassword: String? = null
 
-    override fun onStart() {
-        super.onStart()
-        itemMainViewModel.setSharedPreferencesStates()
-        itemMainViewModel.loadKkbAppStates()
-        itemMainViewModel.onEvent(
-            ItemMainEvent.LoadItems(
-                0L,
-                UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB),
-                -1L
-            )
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /* login */
-        if (isLoggedIn()) {
-            authenticateApi(currEmail ?: "", currPassword ?: "")
-            redirectLogin()
-        }
 
         /* ads */
         MobileAds.initialize(this) { }
@@ -181,27 +163,32 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                //disposable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
-//                DisposableEffect(lifecycleOwner) {
-//                    val observer = LifecycleEventObserver { _, event ->
-//                        if (event == Lifecycle.Event.ON_START) {
-//                            itemMainViewModel.setSharedPreferencesStates()
-//                            itemMainViewModel.loadKkbAppStates()
-//                            itemMainViewModel.onEvent(
-//                                ItemMainEvent.LoadItems(
-//                                    0L,
-//                                    UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB),
-//                                    -1L
-//                                )
-//                            )
-//                        }
-//                    }
-//                    lifecycleOwner.lifecycle.addObserver(observer)
-//                    onDispose {
-//                        lifecycleOwner.lifecycle.removeObserver(observer)
-//                    }
-//                }
+                val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+                DisposableEffect(lifecycleOwner) {
+                    val observer = LifecycleEventObserver { _, event ->
+                        if (event == Lifecycle.Event.ON_START) {
+                            itemMainViewModel.setSharedPreferencesStates()
+                            itemMainViewModel.loadKkbAppStates()
+                            itemMainViewModel.onEvent(
+                                ItemMainEvent.LoadItems(
+                                    0L,
+                                    UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB),
+                                    -1L
+                                )
+                            )
+
+                            /* signin to Kakeibo */
+                            if (isSignedInToKakaibo()) {
+                                authenticateApi(currEmail ?: "", currPassword ?: "")
+                                redirectLogin()
+                            }
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                    onDispose {
+                        lifecycleOwner.lifecycle.removeObserver(observer)
+                    }
+                }
 
                 Surface(
                     color = MaterialTheme.colors.background
@@ -223,7 +210,9 @@ class MainActivity : ComponentActivity() {
                                 scaffoldState = scaffoldState,
                                 navController = navController,
                                 onSigninClick = { triggerSignIn() },
-                                onSignoutClick = { triggerSignOut() }
+                                onSignoutClick = { triggerSignOut() },
+                                firebaseViewModel = firebaseViewModel,
+                                authViewModel = authViewModel
                             )
                         }
                     ) {
@@ -236,10 +225,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun isLoggedIn(): Boolean {
-        currEmail = appPreferences.getString(KEY_LOGGED_IN_EMAIL, NO_EMAIL) ?: NO_EMAIL
-        currPassword = appPreferences.getString(KEY_PASSWORD, NO_PASSWORD) ?: NO_PASSWORD
-        return currEmail != NO_EMAIL && currPassword != NO_PASSWORD
+    private fun isSignedInToKakaibo(): Boolean {
+        val currToken = appPreferences.getString(Constants.PREFS_KEY_JWT_REFRESH_TOKEN, Constants.NO_JWT_TOKEN) ?: Constants.NO_JWT_TOKEN
+        return currToken != Constants.NO_JWT_TOKEN
     }
 
     private fun authenticateApi(email: String, password: String) {
@@ -259,51 +247,20 @@ class MainActivity : ComponentActivity() {
 //        )
     }
 
-    private fun subscribeToObservers() {
-        authViewModel.loginStatus.observe(this) { result ->
-            result?.let {
-                when (it) {
-                    is Resource.Success -> {
-//                        loginProgressBar.visibility = View.GONE
-//                        showSnackbar(it.data ?: "Login successful")
-
-                        appPreferences.set(KEY_LOGGED_IN_EMAIL, currEmail)
-                        appPreferences.set(KEY_PASSWORD, currPassword)
-
-                        authenticateApi(currEmail ?: "", currPassword ?: "")
-                        redirectLogin()
-                    }
-                    is Resource.Error -> {
-//                        loginProgressBar.visibility = View.GONE
-//                        showSnackbar(it.message ?: "An unknown error occurred")
-                    }
-                    is Resource.Loading -> {
-//                        loginProgressBar.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
-
-        authViewModel.registerStatus.observe(this) { result ->
-            result?.let {
-                when (it) {
-                    is Resource.Success -> {
-//                        registerProgressBar.visibility = View.GONE
-//                        showSnackbar(it.data ?: "Successfully registered an account")
-                    }
-                    is Resource.Error -> {
-//                        registerProgressBar.visibility = View.GONE
-//                        showSnackbar(it.message ?: "An unknown error occurred")
-                    }
-                    is Resource.Loading -> {
-//                        registerProgressBar.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
+    /*
+     * Sign in with FirebaseUI Auth.
+     */
+    private fun triggerSignIn() {
+        val providers: MutableList<AuthUI.IdpConfig> = ArrayList()
+        providers.add(AuthUI.IdpConfig.EmailBuilder().build())
+        providers.add(AuthUI.IdpConfig.GoogleBuilder().build())
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        signInLauncherFirebase.launch(intent)
     }
 
-    /* */
     private val signInLauncherFirebase = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { result ->
@@ -321,20 +278,6 @@ class MainActivity : ComponentActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
-    }
-
-    /*
-     * Sign in with FirebaseUI Auth.
-     */
-    private fun triggerSignIn() {
-        val providers: MutableList<AuthUI.IdpConfig> = ArrayList()
-        providers.add(AuthUI.IdpConfig.EmailBuilder().build())
-        providers.add(AuthUI.IdpConfig.GoogleBuilder().build())
-        val intent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-        signInLauncherFirebase.launch(intent)
     }
 
     /*
@@ -570,6 +513,9 @@ fun ScreenController(
         }
         composable(route = Screen.ItemSearchScreen.route) {
             ItemSearchScreen(navController = navController)
+        }
+        composable(route = Screen.AuthScreen.route) {
+            AuthScreen(navController = navController)
         }
         composable(route = Screen.AboutScreen.route) {
             AboutScreen()

@@ -18,7 +18,7 @@ import com.kakeibo.R
 import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
-import com.kakeibo.util.UtilText
+import com.kakeibo.util.isAmountValid
 
 @ExperimentalComposeUiApi
 @Composable
@@ -45,7 +45,7 @@ fun SearchCardAmount(
                 text = itemAmountState.value.from,
                 hint = itemAmountState.value.fromHint,
                 onValueChange = {
-                    if (it.length <= 10 && UtilText.isAmountValid(it, viewModel.fractionDigits))
+                    if (it.length <= 10 && isAmountValid(it, viewModel.fractionDigits))
                         viewModel.onEvent(ItemSearchEvent.AmountFromEntered(it))
                 },
                 onFocusChange = {
@@ -67,7 +67,7 @@ fun SearchCardAmount(
                 text = itemAmountState.value.to,
                 hint = itemAmountState.value.toHint,
                 onValueChange = {
-                    if (it.length <= 10 && UtilText.isAmountValid(it, viewModel.fractionDigits))
+                    if (it.length <= 10 && isAmountValid(it, viewModel.fractionDigits))
                         viewModel.onEvent(ItemSearchEvent.AmountToEntered(it))
                 },
                 onFocusChange = {

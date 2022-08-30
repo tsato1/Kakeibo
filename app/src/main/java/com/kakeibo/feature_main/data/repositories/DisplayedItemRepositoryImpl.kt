@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.data.repositories
 
+import android.app.Application
 import android.content.Context
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kakeibo.R
@@ -8,8 +9,8 @@ import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.data.local.entities.LocallyDeletedItemIdEntity
 import com.kakeibo.core.data.remote.ItemApi
 import com.kakeibo.core.data.remote.requests.DeleteItemRequest
+import com.kakeibo.core.util.NetworkWatcher
 import com.kakeibo.core.util.Resource
-import com.kakeibo.core.util.checkForInternetConnection
 import com.kakeibo.core.util.networkBoundResource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
@@ -72,7 +73,7 @@ class DisplayedItemRepositoryImpl(
                 }
             },
             shouldFetch = {
-                checkForInternetConnection(context)
+                NetworkWatcher.getInstance(context.applicationContext as Application).isOnline
             }
         )
     }

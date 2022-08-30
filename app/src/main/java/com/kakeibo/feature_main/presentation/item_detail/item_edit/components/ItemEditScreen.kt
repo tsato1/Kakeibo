@@ -32,7 +32,7 @@ import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
 import com.kakeibo.feature_main.presentation.util.Screen
-import com.kakeibo.util.UtilText
+import com.kakeibo.util.isAmountValid
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.DateTimeUnit
 import kotlin.math.roundToInt
@@ -140,7 +140,7 @@ fun ItemEditScreen(
                 text = itemAmountState.value.text,
                 hint = itemAmountState.value.hint,
                 onValueChange = {
-                    if (it.length <= 10 && UtilText.isAmountValid(it, viewModel.fractionDigits))
+                    if (it.length <= 10 && isAmountValid(it, viewModel.fractionDigits))
                         viewModel.onEvent(ItemDetailEvent.AmountEntered(it))
                 },
                 onFocusChange = {
