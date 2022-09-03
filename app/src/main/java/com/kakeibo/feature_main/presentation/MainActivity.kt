@@ -91,7 +91,6 @@ class MainActivity : ComponentActivity() {
 
     private var interstitialAd: InterstitialAd? = null
 
-    private val authViewModel: AuthViewModel by viewModels()
     private val firebaseViewModel: FirebaseViewModel by viewModels()
     private val itemMainViewModel: ItemMainViewModel by viewModels()
 
@@ -211,13 +210,13 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 onSigninClick = { triggerSignIn() },
                                 onSignoutClick = { triggerSignOut() },
-                                firebaseViewModel = firebaseViewModel,
-                                authViewModel = authViewModel
+                                firebaseViewModel = firebaseViewModel
                             )
                         }
                     ) {
                         ScreenController(
-                            navController = navController
+                            navController = navController,
+                            itemMainViewModel = itemMainViewModel
                         )
                     }
                 }
@@ -381,7 +380,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenController(
     navController: NavHostController,
-    itemMainViewModel: ItemMainViewModel = hiltViewModel()
+    itemMainViewModel: ItemMainViewModel
 ) {
     NavHost(
         navController = navController,

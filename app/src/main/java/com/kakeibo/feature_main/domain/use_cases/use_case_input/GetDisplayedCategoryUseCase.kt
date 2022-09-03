@@ -5,7 +5,7 @@ import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
 import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import kotlinx.coroutines.flow.Flow
 
-class GetDisplayedCategoriesUseCase(
+class GetDisplayedCategoryUseCase(
     private val displayedCategoryRepository: DisplayedCategoryRepository
 ) {
 

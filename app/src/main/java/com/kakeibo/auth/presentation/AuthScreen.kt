@@ -1,5 +1,6 @@
 package com.kakeibo.core.presentation.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -32,39 +33,52 @@ fun AuthScreen(
             when (result) {
                 is AuthResult.BadRequest -> {
                     Toast.makeText(context, "bad request", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "BadRequest")
                 }
                 is AuthResult.ConnectionError -> {
                     Toast.makeText(context, "Cannot connect to server. Try again later.", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "ConnectionError")
                 }
                 is AuthResult.Authorized -> {
+                    Toast.makeText(context, "Logged in to Kakeibo.", Toast.LENGTH_LONG).show()
                     navController.navigateUp()
+                    Log.d("asdf AuthScreen", "Authorized")
                 }
                 is AuthResult.Unauthorized -> {
                     Toast.makeText(context, "Not Authorized!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "Unauthorized")
                 }
                 is AuthResult.NoContent -> {
                     Toast.makeText(context, "Deleted an item Successfully", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "NoContent")
                 }
                 is AuthResult.UserAlreadyExists -> {
                     Toast.makeText(context, "User already exists", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "UserAlreadyExists")
                 }
                 is AuthResult.UserNotInDatabase -> {
                     Toast.makeText(context, "User not in db", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "UserNotInDatabase")
                 }
                 is AuthResult.InvalidEmailOrPassword -> {
                     Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "InvalidEmailOrPassword")
                 }
                 is AuthResult.NotOnline -> {
                     Toast.makeText(context, "You are not online!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "NotOnline")
                 }
                 is AuthResult.DifferentDevice -> {
                     Toast.makeText(context, "Logged in from Different Device!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "Different Device detected")
                 }
                 is AuthResult.Canceled -> {
                     Toast.makeText(context, "Canceled!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "Canceled")
                 }
                 is AuthResult.UnknownError -> {
                     Toast.makeText(context, "Unknown Error occurred!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf AuthScreen", "UnknownError")
                 }
             }
         }

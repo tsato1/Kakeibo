@@ -169,7 +169,7 @@ class ItemSearchViewModel @Inject constructor(
     private fun loadCategories() {
         loadDisplayedCategoryListJob?.cancel()
         loadDisplayedCategoryListJob = viewModelScope.launch {
-            displayedCategoryUseCases.getDisplayedCategoriesUseCase()
+            displayedCategoryUseCases.getDisplayedCategoryUseCase()
                 .onEach { result ->
                     when (result) {
                         is Resource.Success -> {

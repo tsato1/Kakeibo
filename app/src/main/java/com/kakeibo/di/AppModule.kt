@@ -54,6 +54,8 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.statement.*
@@ -72,9 +74,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): HttpClient {
+    fun provideHttpClient(
+        prefs: AppPreferences
+    ): HttpClient {
         return HttpClient(CIO) {
             install(Logging)
+            install(Auth) {
+                bearer{
+                    println("asdf coming here!!!  " + prefs.getAccessToken())
+                    BearerTokens(
+                        accessToken = prefs.getAccessToken(),
+                        refreshToken = prefs.getRefreshToken()
+                    )
+                }
+            }
             install(ContentNegotiation) {
                 gson()
             }
@@ -281,7 +294,7 @@ object AppModule {
     @Singleton
     fun provideDisplayedCategoryUseCases(repostiroy: DisplayedCategoryRepository): DisplayedCategoryUseCases {
         return DisplayedCategoryUseCases(
-            getDisplayedCategoriesUseCase = com.kakeibo.feature_main.domain.use_cases.use_case_input.GetDisplayedCategoriesUseCase(repostiroy),
+            getDisplayedCategoryUseCase = com.kakeibo.feature_main.domain.use_cases.use_case_input.GetDisplayedCategoryUseCase(repostiroy),
         )
     }
 

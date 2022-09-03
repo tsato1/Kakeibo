@@ -1,5 +1,6 @@
 package com.kakeibo.feature_main.presentation.nav_drawer.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
@@ -44,7 +46,7 @@ fun DrawerContent(
     onSigninClick: () -> Unit,
     onSignoutClick: () -> Unit,
     firebaseViewModel: FirebaseViewModel,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -55,33 +57,50 @@ fun DrawerContent(
             when (result) {
                 is AuthResult.BadRequest -> {
                     Toast.makeText(context, "bad request", Toast.LENGTH_LONG).show()
-                }
-                is AuthResult.Authorized -> {
-                    isAuthorized.value = true
-                }
-                is AuthResult.Unauthorized -> {
-                    isAuthorized.value = false
-                }
-                is AuthResult.InvalidEmailOrPassword -> {
-                    Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show()
-                }
-                is AuthResult.NoContent -> {
-                    Toast.makeText(context, "Successfully signed out", Toast.LENGTH_LONG).show()
-                }
-                is AuthResult.UserAlreadyExists -> {
-                    Toast.makeText(context, "User already exists", Toast.LENGTH_LONG).show()
-                }
-                is AuthResult.UserNotInDatabase -> {
-                    Toast.makeText(context, "User not in db", Toast.LENGTH_LONG).show()
-                }
-                is AuthResult.Other -> {
-                    Toast.makeText(context, "Other", Toast.LENGTH_LONG).show()
-                }
-                is AuthResult.UnknownError -> {
-                    Toast.makeText(context, "Unknown Error occurred!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "BadRequest")
                 }
                 is AuthResult.ConnectionError -> {
                     Toast.makeText(context, "Check internet connection", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "ConnectionError")
+                }
+                is AuthResult.Authorized -> {
+                    isAuthorized.value = true
+                    Log.d("asdf DrawerContent", "Authorized")
+                }
+                is AuthResult.Unauthorized -> {
+                    isAuthorized.value = false
+                    Log.d("asdf DrawerContent", "Unauthorized")
+                }
+                is AuthResult.NoContent -> {
+                    Toast.makeText(context, "Successfully signed out", Toast.LENGTH_LONG).show()
+                    isAuthorized.value = false
+                    Log.d("asdf DrawerContent", "NoContent")
+                }
+                is AuthResult.UserAlreadyExists -> {
+                    Toast.makeText(context, "User already exists", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "UserAlreadyExists")
+                }
+                is AuthResult.UserNotInDatabase -> {
+                    Toast.makeText(context, "User not in db", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "UserNotinDatabase")
+                }
+                is AuthResult.InvalidEmailOrPassword -> {
+                    Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "InvalidEmailOrPassword")
+                }
+                is AuthResult.NotOnline -> {
+                    Toast.makeText(context, "You are not online!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "NotOnline")
+                }
+                is AuthResult.DifferentDevice -> {
+                    Toast.makeText(context, "Logged in from Different Device!!", Toast.LENGTH_LONG).show()
+                }
+                is AuthResult.Canceled -> {
+                    Toast.makeText(context, "Canceled!!", Toast.LENGTH_LONG).show()
+                }
+                is AuthResult.UnknownError -> {
+                    Toast.makeText(context, "Unknown Error occurred!!", Toast.LENGTH_LONG).show()
+                    Log.d("asdf DrawerContent", "Unknown")
                 }
             }
         }
@@ -178,7 +197,30 @@ fun DrawerContent(
             }
         }
         if (isAuthorized.value) {
-            authViewModel.onEvent(AuthViewModel.AuthUiEvent.Logout)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        onClick = {
+                            authViewModel.onEvent(AuthViewModel.AuthUiEvent.Logout)
+                            scope.launch { scaffoldState.drawerState.close() }
+                        }
+                    )
+                    .height(45.dp)
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Logout,
+                    contentDescription = stringResource(id = R.string.sign_out),
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(7.dp))
+                Text(
+                    text = stringResource(id = R.string.sign_out),
+                    color = Color.Black
+                )
+            }
         }
         else {
             Row(

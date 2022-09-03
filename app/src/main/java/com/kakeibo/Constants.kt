@@ -28,8 +28,4 @@ object Constants {
     const val IGNORE_AUTH_URLS = ""
     const val ITEM_BASE_URL = "http://10.0.2.2:8080"
     const val AUTH_BASE_URL = "http://10.0.2.2:8081"
-    const val CODE_USER_ALREADY_EXISTS = 1001
-    const val CODE_USER_NOT_IN_DB = 1002
-    const val CODE_INVALID_EMAIL_OR_PASSWORD = 1003
-    const val CODE_OTHER = 1010
 }

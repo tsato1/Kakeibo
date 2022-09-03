@@ -1,6 +1,5 @@
 package com.kakeibo.auth.presentation
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,6 +23,10 @@ class AuthViewModel @Inject constructor(
 
     private val resultChannel = Channel<AuthResult<Unit>>()
     val authResults = resultChannel.receiveAsFlow()
+
+    init {
+        authenticate()
+    }
 
     fun onEvent(event: AuthUiEvent) {
         when(event) {
@@ -51,6 +54,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    private fun authenticate() {
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            val result = repository.authenticate()
+            resultChannel.send(result)
+            state = state.copy(isLoading = false)
+        }
+    }
+
     private fun register() {
         viewModelScope.launch {
             if (!isEmailValid(state.registerEmail) || !isPasswordValid(state.registerPassword)) {
@@ -71,7 +83,6 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             if (!isEmailValid(state.loginEmail) || !isPasswordValid(state.loginPassword)) {
                 resultChannel.send(AuthResult.InvalidEmailOrPassword())
-                Log.d("asdf", "login ${state.loginEmail} ${state.loginPassword}")
                 return@launch
             }
             state = state.copy(isLoading = true)

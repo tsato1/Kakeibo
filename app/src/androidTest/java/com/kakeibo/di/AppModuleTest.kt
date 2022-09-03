@@ -24,12 +24,7 @@ import com.kakeibo.feature_main.domain.repositories.SearchRepository
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
 import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
-import com.kakeibo.feature_main.domain.use_cases.use_case_input.GetDisplayedCategoriesUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_input.InsertItemUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.DeleteItemUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetAllItemsUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetItemByIdUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetSpecificItemsUseCase
+import com.kakeibo.feature_main.domain.use_cases.use_case_input.GetDisplayedCategoryUseCase
 import com.kakeibo.feature_main.domain.use_cases.use_case_search.*
 import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
@@ -224,7 +219,7 @@ object AppModuleTest {
     @Singleton
     fun provideDisplayedCategoryUseCases(repostiroy: DisplayedCategoryRepository): DisplayedCategoryUseCases {
         return DisplayedCategoryUseCases(
-            getDisplayedCategoriesUseCase = GetDisplayedCategoriesUseCase(repostiroy),
+            getDisplayedCategoryUseCase = GetDisplayedCategoryUseCase(repostiroy),
         )
     }
 

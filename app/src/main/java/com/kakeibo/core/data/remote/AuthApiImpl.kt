@@ -6,12 +6,17 @@ import com.kakeibo.core.data.remote.responses.AuthResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.utils.*
 import io.ktor.http.*
 
 class AuthApiImpl(
     private val client: HttpClient
 ) : AuthApi {
+
+    override suspend fun authenticate(accessToken: String) {
+        client.get(AuthApi.EndPoints.authenticate.url) {
+            header(HttpHeaders.Authorization, "Bearer $accessToken")
+        }
+    }
 
     override suspend fun register(authRequest: AuthRequest) {
         client.post(AuthApi.EndPoints.register.url) {
@@ -34,19 +39,13 @@ class AuthApiImpl(
         return client.post(AuthApi.EndPoints.refreshAccessToken.url) {
             contentType(ContentType.Application.Json)
             setBody(tokenRequest)
-            buildHeaders {
-                append(HttpHeaders.Authorization, "Bearer $refreshToken")
-            }
+            header(HttpHeaders.Authorization, "Bearer $refreshToken")
         }.body()
     }
 
-    override suspend fun logout(refreshToken: String, tokenRequest: TokenRequest) {
+    override suspend fun logout(refreshToken: String) {
         client.delete(AuthApi.EndPoints.logout.url) {
-            contentType(ContentType.Application.Json)
-            setBody(tokenRequest)
-            buildHeaders {
-                append(HttpHeaders.Authorization, "Bearer $refreshToken")
-            }
+            header(HttpHeaders.Authorization, "Bearer $refreshToken")
         }
     }
 }

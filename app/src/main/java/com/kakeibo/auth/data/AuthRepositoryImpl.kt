@@ -13,10 +13,10 @@ import com.kakeibo.auth.domain.repositories.AuthRepository
 import com.kakeibo.core.data.remote.requests.TokenRequest
 import com.kakeibo.core.util.NetworkWatcher
 import com.kakeibo.util.getIpAddress
+import io.ktor.client.plugins.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
@@ -25,6 +25,41 @@ class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
     private val prefs: AppPreferences
 ) : AuthRepository {
+
+    override suspend fun authenticate(): AuthResult<Unit> = withContext(Dispatchers.IO) {
+        if (!NetworkWatcher.getInstance(context.applicationContext as Application).isOnline) {
+            return@withContext AuthResult.NotOnline()
+        }
+
+        try {
+            val accessToken = prefs.getAccessToken()
+            if (accessToken == Constants.NO_JWT_TOKEN) {
+                return@withContext AuthResult.Unauthorized()
+            }
+
+            api.authenticate(accessToken)
+            AuthResult.Authorized()
+        }
+        catch(e: ClientRequestException) {
+            when (e.response.status.value) {
+                400 -> AuthResult.BadRequest()
+                401 -> AuthResult.Unauthorized()
+                else -> AuthResult.UnknownError()
+            }
+        }
+        catch (e: ServiceException) {
+            when (e.code()) {
+                491 -> AuthResult.UserAlreadyExists()
+                492 -> AuthResult.UserNotInDatabase()
+                493 -> AuthResult.InvalidEmailOrPassword()
+                494 -> AuthResult.DifferentDevice()
+                else -> AuthResult.UnknownError()
+            }
+        }
+        catch (e: IOException) { AuthResult.ConnectionError() }
+        catch (e: CancellationException) { AuthResult.Canceled() }
+        catch (e: Exception) { AuthResult.UnknownError() }
+    }
 
     override suspend fun register(
         email: String, password: String
@@ -48,8 +83,8 @@ class AuthRepositoryImpl @Inject constructor(
 
             login(email, password)
         }
-        catch (e: HttpException) {
-            when (e.code()) {
+        catch(e: ClientRequestException) {
+            when (e.response.status.value) {
                 400 -> AuthResult.BadRequest()
                 401 -> AuthResult.Unauthorized()
                 else -> AuthResult.UnknownError()
@@ -93,8 +128,8 @@ class AuthRepositoryImpl @Inject constructor(
             prefs.set(Constants.PREFS_KEY_JWT_REFRESH_TOKEN, response.refreshToken)
             AuthResult.Authorized()
         }
-        catch (e: HttpException) {
-            when (e.code()) {
+        catch(e: ClientRequestException) {
+            when (e.response.status.value) {
                 400 -> AuthResult.BadRequest()
                 401 -> AuthResult.Unauthorized()
                 else -> AuthResult.UnknownError()
@@ -140,8 +175,8 @@ class AuthRepositoryImpl @Inject constructor(
             prefs.set(Constants.PREFS_KEY_JWT_REFRESH_TOKEN, response.refreshToken)
             AuthResult.Authorized()
         }
-        catch (e: HttpException) {
-            when (e.code()) {
+        catch(e: ClientRequestException) {
+            when (e.response.status.value) {
                 400 -> AuthResult.BadRequest()
                 401 -> AuthResult.Unauthorized()
                 else -> AuthResult.UnknownError()
@@ -172,22 +207,13 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
         try {
-            api.logout(
-                refreshToken = refreshToken,
-                tokenRequest = TokenRequest(
-                    device = Device(
-                        ip = getIpAddress(),
-                        manufacturer = android.os.Build.MANUFACTURER,
-                        model = android.os.Build.MODEL
-                    )
-                )
-            )
+            api.logout(refreshToken = refreshToken)
             prefs.set(Constants.PREFS_KEY_JWT_ACCESS_TOKEN, Constants.NO_JWT_TOKEN)
             prefs.set(Constants.PREFS_KEY_JWT_REFRESH_TOKEN, Constants.NO_JWT_TOKEN)
             AuthResult.NoContent()
         }
-        catch (e: HttpException) {
-            when (e.code()) {
+        catch(e: ClientRequestException) {
+            when (e.response.status.value) {
                 400 -> AuthResult.BadRequest()
                 401 -> AuthResult.Unauthorized()
                 else -> AuthResult.UnknownError()
@@ -195,9 +221,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
         catch (e: ServiceException) {
             when (e.code()) {
-                491 -> AuthResult.UserAlreadyExists()
                 492 -> AuthResult.UserNotInDatabase()
-                493 -> AuthResult.InvalidEmailOrPassword()
                 494 -> AuthResult.DifferentDevice()
                 else -> AuthResult.UnknownError()
             }
