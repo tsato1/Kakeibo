@@ -39,8 +39,8 @@ import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
-import kotlinx.datetime.DateTimeUnit
 import java.math.BigDecimal
+import java.util.*
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -92,12 +92,8 @@ fun ItemChartScreen(
                         detectDragGestures(
                             onDragEnd = {
                                 when {
-                                    offsetX > 200 -> {
-                                        viewModel.plus(-1, DateTimeUnit.MONTH)
-                                    }
-                                    offsetX < -200 -> {
-                                        viewModel.plus(1, DateTimeUnit.MONTH)
-                                    }
+                                    offsetX > 200 -> { viewModel.plus(Calendar.MONTH, -1) }
+                                    offsetX < -200 -> { viewModel.plus(Calendar.MONTH, 1) }
                                 }
                                 offsetX = 0f
                             }
@@ -388,7 +384,7 @@ fun ItemChartScreen(
             },
             onConfirmButtonClick = {
                 navController.navigate(Screen.ItemChartScreen.route +
-                        "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
+                        "?searchId=${0L}/?focusDate=${Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }

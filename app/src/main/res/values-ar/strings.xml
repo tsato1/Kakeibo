@@ -176,4 +176,9 @@
     <string name="calendar">تقويم</string>
     <string name="chart">جدول</string>
     <string name="list">قائمة</string>
+    <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
+    <string name="app_stores_user_cache">يخزن Kakeibo بيانات المستخدم في ذاكرة التخزين المؤقت للاتصال بسهولة بـ Google من المرة التالية فصاعدًا. هل تريد مسح ذاكرة التخزين المؤقت؟</string>
+    <string name="canceled">ألغيت</string>
+    <string name="cleare_cache_success">تم مسح ذاكرة التخزين المؤقت بنجاح</string>
+    <string name="cleare_cache_failure">فشل مسح ذاكرة التخزين المؤقت</string>
 </resources>

@@ -59,7 +59,7 @@ class FirebaseViewModel @Inject constructor(
                     withContext(Dispatchers.Default) {
                         _eventFlow.emit(
                             UiEvent.ShowToast(
-                                UiText.StringResource(R.string.success_cleared_cache)
+                                UiText.StringResource(R.string.cleare_cache_success)
                             )
                         )
                     }
@@ -70,7 +70,7 @@ class FirebaseViewModel @Inject constructor(
                     withContext(Dispatchers.Default) {
                         _eventFlow.emit(
                             UiEvent.ShowToast(
-                                UiText.StringResource(R.string.canceled_cleared_cache)
+                                UiText.StringResource(R.string.canceled)
                             )
                         )
                     }
@@ -81,7 +81,7 @@ class FirebaseViewModel @Inject constructor(
                     withContext(Dispatchers.Default) {
                         _eventFlow.emit(
                             UiEvent.ShowToast(
-                                UiText.StringResource(R.string.failure_cleared_cache)
+                                UiText.StringResource(R.string.cleare_cache_failure)
                             )
                         )
                     }

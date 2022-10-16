@@ -173,8 +173,12 @@
     <string name="category_name_colon">Nazwa Kategorii:</string>
     <string name="category_detail">Szczegóły kategorii:</string>
     <string name="next_step">Następny krok</string>
-    <string name="about">O</string>
     <string name="calendar">Kalendarz</string>
     <string name="chart">Wykres</string>
     <string name="list">Lista</string>
+    <string name="clear_cache">Wyczyść pamięć podręczną</string>
+    <string name="app_stores_user_cache">Kakeibo przechowuje dane użytkownika w pamięci podręcznej, aby od następnego razu łatwo połączyć się z Google. Czy chcesz wyczyścić pamięć podręczną?</string>
+    <string name="canceled">Anulowany</string>
+    <string name="cleare_cache_success">Pomyślnie wyczyszczono pamięć podręczną</string>
+    <string name="cleare_cache_failure">Nie udało się wyczyścić pamięci podręcznej</string>
 </resources>

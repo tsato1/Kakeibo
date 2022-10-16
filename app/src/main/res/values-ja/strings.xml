@@ -177,4 +177,9 @@
     <string name="calendar">カレンダー</string>
     <string name="chart">チャート</string>
     <string name="list">リスト</string>
+    <string name="clear_cache">キャッシュの消去</string>
+    <string name="app_stores_user_cache">Kakeiboはユーザーデータをキャッシュに保存し、次回から簡単にGoogleに接続できるようにします。 キャッシュを消去しますか?</string>
+    <string name="canceled">キャンセルされました</string>
+    <string name="cleare_cache_success">キャッシュが消去されました</string>
+    <string name="cleare_cache_failure">キャッシュを消去できませんでした</string>
 </resources>

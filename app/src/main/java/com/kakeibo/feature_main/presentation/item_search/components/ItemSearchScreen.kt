@@ -37,6 +37,7 @@ import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalComposeUiApi
@@ -54,7 +55,7 @@ fun ItemSearchScreen(
     val defaultSearchCriteria = viewModel.searchCriteriaListsState.value.defaultSearchCriteria
     val chosenSearchCriteria = viewModel.searchCriteriaListsState.value.chosenSearchCriteria
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(viewModel.eventFlow, scaffoldState.snackbarHostState) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemSearchViewModel.UiEvent.ShowSnackbar -> {
@@ -63,7 +64,7 @@ fun ItemSearchScreen(
                 is ItemSearchViewModel.UiEvent.Search -> {
                     navController.navigate(
                         Screen.ItemListScreen.route +
-                                "?searchId=${event.searchId}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${false}"
+                                "?searchId=${event.searchId}/?focusDate=${Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${false}"
                     ) {
                         popUpTo(0) {
                             inclusive = true

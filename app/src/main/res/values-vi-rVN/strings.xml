@@ -174,8 +174,12 @@
     <string name="category_name_colon">Tên danh mục:</string>
     <string name="category_detail">Chi tiết danh mục:</string>
     <string name="next_step">Bước tiếp theo</string>
-    <string name="about">Về</string>
     <string name="calendar">Lịch</string>
     <string name="chart">Đồ thị</string>
     <string name="list">Danh sách</string>
+    <string name="clear_cache">Xóa bộ nhớ cache</string>
+    <string name="app_stores_user_cache">Kakeibo lưu trữ dữ liệu người dùng trong bộ nhớ đệm để dễ dàng kết nối với Google từ lần sau. Bạn có muốn xóa bộ nhớ cache không?</string>
+    <string name="canceled">Đã hủy</string>
+    <string name="cleare_cache_success">Đã xóa bộ nhớ cache thành công</string>
+    <string name="cleare_cache_failure">Không xóa được bộ nhớ cache</string>
 </resources>

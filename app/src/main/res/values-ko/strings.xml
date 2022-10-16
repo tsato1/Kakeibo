@@ -173,8 +173,12 @@
     <string name="category_name_colon">카테고리 이름:</string>
     <string name="category_detail">카테고리 세부정보:</string>
     <string name="next_step">다음 단계</string>
-    <string name="about">에 대한</string>
     <string name="calendar">달력</string>
     <string name="chart">차트</string>
     <string name="list">목록</string>
+    <string name="clear_cache">캐시 지우기</string>
+    <string name="app_stores_user_cache">Kakeibo는 다음부터 Google에 쉽게 연결할 수 있도록 사용자 데이터를 캐시에 저장합니다. 캐시를 지우시겠습니까?</string>
+    <string name="canceled">취소 된</string>
+    <string name="cleare_cache_success">캐시를 삭제했습니다.</string>
+    <string name="cleare_cache_failure">캐시를 지우지 못했습니다.</string>
 </resources>

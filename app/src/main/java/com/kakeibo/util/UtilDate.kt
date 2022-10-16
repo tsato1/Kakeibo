@@ -3,8 +3,7 @@ package com.kakeibo.util
 import android.content.Context
 import android.os.Build
 import com.kakeibo.R
-import kotlinx.datetime.*
-import kotlinx.datetime.TimeZone
+import java.time.LocalDate
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -23,74 +22,91 @@ object UtilDate {
 
     val DATE_FORMATS = arrayOf(DATE_FORMAT_YMD, DATE_FORMAT_MDY, DATE_FORMAT_DMY)
 
-    fun getTodaysLocalDate(): LocalDate {
-        return Clock.System.todayAt(TimeZone.currentSystemDefault())
-    }
-
     fun getCurrentMoment(format: String): String {
         val cal = Calendar.getInstance()
         cal.time = Date()
         return SimpleDateFormat(format, Locale.getDefault()).format(cal.time)
     }
 
-    fun LocalDate.toYMDWString(format: String, context: Context): String = run {
-        val dayOfWeek = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val dayOfWeekIdx = this.dayOfWeek.value
-            context.resources.getStringArray(R.array.week_name)[dayOfWeekIdx % 7]
-        } else {
-            this.dayOfWeek
-        }
+    fun Calendar.toYMDWString(format: String, context: Context): String = run {
+        val dayOfWeekIdx = this.get(Calendar.DAY_OF_WEEK) - 1
+        val dayOfWeek = context.resources.getStringArray(R.array.week_name)[dayOfWeekIdx % 7]
 
         return when (format) {
-            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth} [${dayOfWeek}]" }
-            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year} [${dayOfWeek}]" }
-            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year} [${dayOfWeek}]" }
+            DATE_FORMAT_YMD -> { "${this.get(Calendar.YEAR)}/${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.DAY_OF_MONTH)} [${dayOfWeek}]" }
+            DATE_FORMAT_MDY -> { "${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.DAY_OF_MONTH)}/${this.get(Calendar.YEAR)} [${dayOfWeek}]" }
+            DATE_FORMAT_DMY -> { "${this.get(Calendar.DAY_OF_MONTH)}/${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.YEAR)} [${dayOfWeek}]" }
             DATE_FORMAT_DB -> {
-                val m = if (this.monthNumber < 10) "0${this.monthNumber}" else this.monthNumber
-                val d = if (this.dayOfMonth < 10) "0${this.dayOfMonth}" else this.dayOfMonth
-                "${this.year}-$m-$d"
+                val m = if (this.get(Calendar.MONTH) + 1 < 10) "0${this.get(Calendar.MONTH) + 1}" else this.get(Calendar.MONTH) + 1
+                val d = if (this.get(Calendar.DAY_OF_MONTH) < 10) "0${this.get(Calendar.DAY_OF_MONTH)}" else this.get(Calendar.DAY_OF_MONTH)
+                "${this.get(Calendar.YEAR)}-$m-$d"
             }
             else -> { this.toString() }
         }
     }
 
-    fun LocalDate.toYMDString(format: String): String = run {
+    fun Calendar.toYMDString(format: String): String = run {
         when (format) {
-            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}/${this.dayOfMonth}" }
-            DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.dayOfMonth}/${this.year}" }
-            DATE_FORMAT_DMY -> { "${this.dayOfMonth}/${this.monthNumber}/${this.year}" }
+            DATE_FORMAT_YMD -> { "${this.get(Calendar.YEAR)}/${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.DAY_OF_MONTH)}" }
+            DATE_FORMAT_MDY -> { "${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.DAY_OF_MONTH)}/${this.get(Calendar.YEAR)}" }
+            DATE_FORMAT_DMY -> { "${this.get(Calendar.DAY_OF_MONTH)}/${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.YEAR)}" }
             DATE_FORMAT_DB -> {
-                val m = if (this.monthNumber < 10) "0${this.monthNumber}" else this.monthNumber
-                val d = if (this.dayOfMonth < 10) "0${this.dayOfMonth}" else this.dayOfMonth
-                "${this.year}-$m-$d"
+                val m = if (this.get(Calendar.MONTH) + 1 < 10) "0${this.get(Calendar.MONTH) + 1}" else this.get(Calendar.MONTH) + 1
+                val d = if (this.get(Calendar.DAY_OF_MONTH) < 10) "0${this.get(Calendar.DAY_OF_MONTH)}" else this.get(Calendar.DAY_OF_MONTH)
+                "${this.get(Calendar.YEAR)}-$m-$d"
             }
             else -> { this.toString() }
         }
     }
 
-    fun LocalDate.toYMString(format: String): String = run {
+    fun Calendar.toYMString(format: String): String = run {
         when (format) {
-            DATE_FORMAT_DB -> { "${this.year}-${this.monthNumber}" } /* '2021-02-11' -> '2021-02' */
-            DATE_FORMAT_YMD -> { "${this.year}/${this.monthNumber}" } /* '2021-02-11' -> '2021/02' */
-            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> { "${this.monthNumber}/${this.year}" } /* '11-02-2021' -> '02/2021' */
+            DATE_FORMAT_DB -> { "${this.get(Calendar.YEAR)}-${this.get(Calendar.MONTH) + 1}" } /* '2021-02-11' -> '2021-02' */
+            DATE_FORMAT_YMD -> { "${this.get(Calendar.YEAR)}/${this.get(Calendar.MONTH) + 1}" } /* '2021-02-11' -> '2021/02' */
+            DATE_FORMAT_DMY, DATE_FORMAT_MDY -> { "${this.get(Calendar.MONTH) + 1}/${this.get(Calendar.YEAR)}" } /* '11-02-2021' -> '02/2021' */
             else -> { this.toString() }
         }
     }
 
+    fun Calendar.of(year: Int, month: Int, day: Int): Calendar = run {
+        this.set(year, month, day)
+        return this
+    }
 
+    fun Calendar.plus(unit: Int, value: Int): Calendar = run {
+        this.add(unit, value)
+        return this
+    }
+
+    fun Calendar.isSameDateAs(calendar: Calendar) = run {
+        this.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                this.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) &&
+                this.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)
+    }
 
     /*
-     returns 0: Sunday, 6: Saturday
+     expects this string to be in UtilDate.DATE_FORMAT_DB
      */
-    fun getFirstDayOfMonth(dateString: String): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val dateFormat: DateTimeFormatter =
-                DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
-            val parsedDate = java.time.LocalDate.parse(dateString, dateFormat)
-            parsedDate.withDayOfMonth(1).dayOfWeek.value % 7 // originally 1: Monday, 7: Sunday hence %7
-        }
-        else {
-            val dateFormat = SimpleDateFormat(DATE_FORMAT_DB, Locale.getDefault())
+    fun String.toCalendar(): Calendar = run {
+        val cal = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat(DATE_FORMAT_DB)
+        dateFormat.parse(this)?.let { cal.time = it }
+        cal
+    }
+
+    /*
+     returns 0: Sunday, 6: Saturday, expects db format
+     */
+    fun getFirstDayOfMonth(dateString: String, format: String): Int {
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val dateFormat: DateTimeFormatter =
+//                DateTimeFormatter.ofPattern(format, Locale.getDefault())
+//            val parsedDate = LocalDate.parse(dateString, dateFormat)
+//            parsedDate.withDayOfMonth(1).dayOfWeek.value % 7 // originally 1: Monday, 7: Sunday hence %7
+//        }
+//        else {
+        return run {
+            val dateFormat = SimpleDateFormat(format, Locale.getDefault())
             val convertedDate: Date? = dateFormat.parse(dateString)
             convertedDate?.let {
                 val c = Calendar.getInstance()
@@ -102,11 +118,11 @@ object UtilDate {
     }
 
     fun getLastDateOfMonth(dateString: String) : Int {
-        val date = dateString.toLocalDate()
+        val date = LocalDate.parse(dateString)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormat: DateTimeFormatter =
                 DateTimeFormatter.ofPattern(DATE_FORMAT_DB, Locale.getDefault())
-            val parsedDate = java.time.LocalDate.parse(dateString, dateFormat)
+            val parsedDate = LocalDate.parse(dateString, dateFormat)
             parsedDate.withDayOfMonth(date.month.length(parsedDate.isLeapYear)).dayOfMonth
         }
         else {
@@ -126,28 +142,21 @@ object UtilDate {
     to fill in the calendar result
      */
     fun getRemainingDays(dateString: String): Int {
-        val date = dateString.toLocalDate()
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val firstDayOfMonth = getFirstDayOfMonth(dateString)
-            val lastDateOfMotnh = getLastDateOfMonth(dateString)
-            if(lastDateOfMotnh / 4 - firstDayOfMonth >= 0) {
-                14 - LocalDate(date.year, date.monthNumber, lastDateOfMotnh).dayOfWeek.value
-            }
-            else {
-                6
-            }
-        }
-        else {
-            13 //todo: decide whether to read one week or two weeks
-        }
-    }
-
-    fun String.isWithinMonth(localDate: String): Boolean {
-        return this.toLocalDate().monthNumber == localDate.toLocalDate().monthNumber
-    }
-
-    fun LocalDate.isWithinMonth(localDate: LocalDate): Boolean {
-        return this.monthNumber == localDate.monthNumber
+        return 13
+//        val date = LocalDate.parse(dateString)
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val firstDayOfMonth = getFirstDayOfMonth(dateString)
+//            val lastDateOfMotnh = getLastDateOfMonth(dateString)
+//            if(lastDateOfMotnh / 4 - firstDayOfMonth >= 0) {
+//                14 - LocalDate.of(date.year, date.monthValue, lastDateOfMotnh).dayOfWeek.value
+//            }
+//            else {
+//                6
+//            }
+//        }
+//        else {
+//            13 //todo: decide whether to read one week or two weeks
+//        }
     }
 
     fun getDBDate(date: String, fromFormat: Int): String {

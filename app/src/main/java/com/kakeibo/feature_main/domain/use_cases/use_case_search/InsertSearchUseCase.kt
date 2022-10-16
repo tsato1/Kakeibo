@@ -7,7 +7,6 @@ import com.kakeibo.core.data.local.entities.SearchEntity
 import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.repositories.SearchRepository
 import com.kakeibo.feature_main.presentation.item_search.CATEGORY_INVALID
-import kotlinx.datetime.toLocalDate
 
 class InsertSearchUseCase(
     private val searchRepository: SearchRepository,
@@ -18,7 +17,7 @@ class InsertSearchUseCase(
     suspend operator fun invoke(searchModel: SearchModel): Long {
         /* Date */
         if (searchModel.fromDate != null && searchModel.toDate != null) {
-            if (searchModel.fromDate!!.toLocalDate() > searchModel.toDate!!.toLocalDate()) {
+            if (searchModel.fromDate!! > searchModel.toDate!!) {
                 throw SearchEntity.InvalidSearchException(
                     context.getString(R.string.err_from_date_older)
                 )
@@ -27,12 +26,6 @@ class InsertSearchUseCase(
 
         /* Amount */
         if (searchModel.fromAmount != null && searchModel.toAmount != null) {
-            if (searchModel.fromAmount == "" || searchModel.toAmount == "") {
-                throw SearchEntity.InvalidSearchException(
-                    context.getString(R.string.err_please_enter_amount)
-                )
-            }
-
             if (searchModel.fromAmount == "") {
                 throw SearchEntity.InvalidSearchException(
                     context.getString(R.string.err_please_enter_min_amount)

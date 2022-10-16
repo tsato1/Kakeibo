@@ -10,6 +10,7 @@ import com.kakeibo.core.util.UiText
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 abstract class KkbAppViewModel: ViewModel() {
@@ -42,7 +43,7 @@ abstract class KkbAppViewModel: ViewModel() {
                 kkbAppModelState.value.kkbAppModel.id,
                 kkbAppModelState.value.kkbAppModel.name,
                 kkbAppModelState.value.kkbAppModel.type,
-                UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB_KMS),
+                Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB_KMS),
                 kkbAppModelState.value.kkbAppModel.intVal1,
                 0,
                 kkbAppModelState.value.kkbAppModel.intVal3,

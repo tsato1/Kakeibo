@@ -14,7 +14,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -49,11 +48,8 @@ import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.data.remote.BasicAuthInterceptor
-import com.kakeibo.auth.presentation.AuthViewModel
-import com.kakeibo.core.presentation.components.AuthScreen
 import com.kakeibo.feature_export.DriveServiceHelper
 import com.kakeibo.feature_main.presentation.common.FirebaseViewModel
-import com.kakeibo.feature_main.presentation.nav_drawer.components.DrawerContent
 import com.kakeibo.feature_main.presentation.common.components.ImportExportDialog
 import com.kakeibo.feature_main.presentation.common.components.TopNavigationBar
 import com.kakeibo.feature_main.presentation.item_detail.item_edit.components.ItemEditScreen
@@ -65,6 +61,7 @@ import com.kakeibo.feature_main.presentation.item_main.item_chart.components.Ite
 import com.kakeibo.feature_main.presentation.item_main.item_list.components.ItemListScreen
 import com.kakeibo.feature_main.presentation.item_search.components.ItemSearchScreen
 import com.kakeibo.feature_main.presentation.nav_drawer.components.AboutScreen
+import com.kakeibo.feature_main.presentation.nav_drawer.components.DrawerContent
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.ui.theme.KakeiboTheme
 import com.kakeibo.util.UtilDate
@@ -72,6 +69,7 @@ import com.kakeibo.util.UtilDate.toYMDString
 import com.kakeibo.util.UtilFiles
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import java.util.*
 import javax.inject.Inject
 
 //when saving an item, pass the month to list screen viewmodel to open that month's data
@@ -171,7 +169,7 @@ class MainActivity : ComponentActivity() {
                             itemMainViewModel.onEvent(
                                 ItemMainEvent.LoadItems(
                                     0L,
-                                    UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB),
+                                    Calendar.getInstance(),
                                     -1L
                                 )
                             )
@@ -401,7 +399,7 @@ fun ScreenController(
                     name = "focusDate"
                 ) {
                     type = NavType.StringType
-                    defaultValue = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                    defaultValue = Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)
                 },
                 navArgument(
                     name = "focusItemId"
@@ -444,7 +442,7 @@ fun ScreenController(
                     name = "focusDate"
                 ) {
                     type = NavType.StringType
-                    defaultValue = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                    defaultValue = Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)
                 },
                 navArgument(
                     name = "focusItemId"
@@ -476,7 +474,7 @@ fun ScreenController(
                     name = "focusDate"
                 ) {
                     type = NavType.StringType
-                    defaultValue = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+                    defaultValue = Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)
                 },
                 navArgument(
                     name = "focusItemId"
@@ -513,9 +511,8 @@ fun ScreenController(
         composable(route = Screen.ItemSearchScreen.route) {
             ItemSearchScreen(navController = navController)
         }
-        composable(route = Screen.AuthScreen.route) {
-            AuthScreen(navController = navController)
-        }
+//        composable(route = Screen.AuthScreen.route) {
+//        }
         composable(route = Screen.AboutScreen.route) {
             AboutScreen()
         }

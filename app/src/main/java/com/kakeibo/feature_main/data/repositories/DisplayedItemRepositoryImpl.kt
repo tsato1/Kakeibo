@@ -15,7 +15,9 @@ import com.kakeibo.core.util.networkBoundResource
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 import com.kakeibo.util.UtilCategory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class DisplayedItemRepositoryImpl(
@@ -30,8 +32,8 @@ class DisplayedItemRepositoryImpl(
         dao.getAllItems() // todo
     }
 
-    override suspend fun getItemById(id: Long): DisplayedItemModel? {
-        return dao.getItemById(id)?.toDisplayedItemModel().also { displayedItemModel ->
+    override suspend fun getItemById(id: Long): DisplayedItemModel? = withContext(Dispatchers.IO) {
+        dao.getItemById(id)?.toDisplayedItemModel().also { displayedItemModel ->
             displayedItemModel?.let {
                 if (it.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
                     it.categoryName = defaultCategories[it.categoryCode]
@@ -78,60 +80,57 @@ class DisplayedItemRepositoryImpl(
         )
     }
 
-    override suspend fun insertItem(itemEntity: ItemEntity, syncWithRemote: Int): Long {
-        val response = if (syncWithRemote == 1) {
-            try {
-                api.addItem(itemEntity)
-            }
-            catch (e: Exception) {
+    override suspend fun insertItem(itemEntity: ItemEntity, syncWithRemote: Int): Long =
+        withContext(Dispatchers.IO) {
+            val response = if (syncWithRemote == 1) {
+                try {
+                    api.addItem(itemEntity)
+                } catch (e: Exception) {
+                    null
+                }
+            } else {
                 null
             }
-        }
-        else {
-            null
-        }
 
-        return if (response != null && response.isSuccessful) {
-            dao.insertItem(itemEntity.apply { isSynced = true })
-        }
-        else {
-            dao.insertItem(itemEntity) // meaning isSynced is false
-        }
-    }
-
-    override suspend fun insertItems(itemEntityList: List<ItemEntity>, syncWithRemote: Int) {
-        itemEntityList.forEach {
-            insertItem(it, syncWithRemote)
-        }
-    }
-
-    override suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int {
-        val response = if (syncWithRemote == 1) {
-            try {
-                api.deleteItem(DeleteItemRequest(id))
+            if (response != null && response.isSuccessful) {
+                dao.insertItem(itemEntity.apply { isSynced = true })
+            } else {
+                dao.insertItem(itemEntity) // meaning isSynced is false
             }
-            catch (e: Exception) {
+        }
+
+    override suspend fun insertItems(itemEntityList: List<ItemEntity>, syncWithRemote: Int) =
+        withContext(Dispatchers.IO) {
+            itemEntityList.forEach {
+                insertItem(it, syncWithRemote)
+            }
+        }
+
+    override suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int =
+        withContext(Dispatchers.IO) {
+            val response = if (syncWithRemote == 1) {
+                try {
+                    api.deleteItem(DeleteItemRequest(id))
+                } catch (e: Exception) {
+                    null
+                }
+            } else {
                 null
             }
-        }
-        else {
-            null
-        }
 
-        val affectedRows = dao.deleteItemById(id)
+            val affectedRows = dao.deleteItemById(id)
 
-        if (response == null || !response.isSuccessful) {
-            dao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(id))
-        }
-        else {
-            deleteLocallyDeletedItemId(id)
-        }
+            if (response == null || !response.isSuccessful) {
+                dao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(id))
+            } else {
+                deleteLocallyDeletedItemId(id)
+            }
 
-        return affectedRows
-    }
+            affectedRows
+        }
 
     private var currentItemsResponse: Response<List<ItemEntity>>? = null
-    override suspend fun syncItems(syncWithRemote: Int) {
+    override suspend fun syncItems(syncWithRemote: Int): Unit = withContext(Dispatchers.IO) {
         dao.getAllLocallyDeletedItemIds().onEach { locallyDeletedItemIdEntity -> // sync with server
             deleteItemById(locallyDeletedItemIdEntity.deletedItemId, syncWithRemote)
         }
@@ -152,7 +151,7 @@ class DisplayedItemRepositoryImpl(
         }
     }
 
-    override suspend fun deleteLocallyDeletedItemId(id: Long) {
+    override suspend fun deleteLocallyDeletedItemId(id: Long) = withContext(Dispatchers.IO) {
         dao.deleteLocallyDeletedItemId(id)
     }
 

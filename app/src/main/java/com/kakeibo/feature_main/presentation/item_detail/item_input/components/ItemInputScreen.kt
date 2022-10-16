@@ -9,7 +9,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,16 +27,16 @@ import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.GridCategoryItem
+import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.common.components.DatePickerRow
 import com.kakeibo.feature_main.presentation.common.components.DateType
-import com.kakeibo.core.presentation.components.TransparentHintTextField
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailEvent
 import com.kakeibo.feature_main.presentation.item_detail.ItemDetailViewModel
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.isAmountValid
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
+import java.util.*
 import kotlin.math.roundToInt
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -54,7 +56,7 @@ fun ItemInputScreen(
     val memoState = viewModel.itemMemoState.value
     val displayedCategoriesState = viewModel.displayedCategoryListState.value
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(viewModel.eventFlow, scaffoldState.snackbarHostState) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemDetailViewModel.UiEvent.ShowSnackbar -> {
@@ -92,12 +94,8 @@ fun ItemInputScreen(
                     detectDragGestures(
                         onDragEnd = {
                             when {
-                                offsetX > 200 -> {
-                                    viewModel.plus(-1, DateTimeUnit.DAY)
-                                }
-                                offsetX < -200 -> {
-                                    viewModel.plus(1, DateTimeUnit.DAY)
-                                }
+                                offsetX > 200 -> { viewModel.plus(Calendar.DAY_OF_MONTH, -1) }
+                                offsetX < -200 -> { viewModel.plus(Calendar.DAY_OF_MONTH, 1) }
                             }
                             offsetX = 0f
                         }

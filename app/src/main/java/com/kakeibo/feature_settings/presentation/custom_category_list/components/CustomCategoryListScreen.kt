@@ -47,7 +47,7 @@ fun CustomCategoryListScreen(
 
     val customCategoryListState = viewModel.customCategoryListState.value
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(viewModel.eventFlow, scaffoldState.snackbarHostState) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is CustomCategoryListViewModel.UiEvent.ShowToast -> {

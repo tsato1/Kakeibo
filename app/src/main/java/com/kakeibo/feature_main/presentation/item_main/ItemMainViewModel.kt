@@ -2,7 +2,8 @@ package com.kakeibo.feature_main.presentation.item_main
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.kakeibo.core.data.local.entities.ItemEntity
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.util.Resource
@@ -20,16 +21,14 @@ import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItemL
 import com.kakeibo.feature_main.presentation.item_main.item_list.containsAt
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.of
+import com.kakeibo.util.UtilDate.plus
+import com.kakeibo.util.UtilDate.toCalendar
 import com.kakeibo.util.UtilDate.toYMDString
-import com.kakeibo.util.UtilDate.isWithinMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.datetime.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +37,7 @@ class ItemMainViewModel @Inject constructor(
     private val searchUseCases: SearchUseCases,
     private val appPreferences: AppPreferences,
     private val savedStateHandle: SavedStateHandle
-) : DateViewModel() {
+) : DateViewModel(savedStateHandle) {
 
     private val _dateFormatIndexState = mutableStateOf(0)
     val dateFormatIndexState: State<Int> = _dateFormatIndexState
@@ -54,21 +53,13 @@ class ItemMainViewModel @Inject constructor(
     private val _focusItemIdState = mutableStateOf(savedStateHandle["focusItemId"] ?: -1L)
     val focusItemIdState: State<Long> = _focusItemIdState
 
-    private val _calendarFromDate = mutableStateOf(LocalDate(
-        UtilDate.getTodaysLocalDate().year,
-        UtilDate.getTodaysLocalDate().monthNumber,
-        1
-    ))
-    val calendarFromDate: State<LocalDate> = _calendarFromDate
-    private val _calendarToDate = mutableStateOf(LocalDate(
-        UtilDate.getTodaysLocalDate().year,
-        UtilDate.getTodaysLocalDate().monthNumber,
-        UtilDate.getLastDateOfMonth(UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB))
-    ))
-    val calendarToDate: State<LocalDate> = _calendarToDate
+    private val _calendarFromDate = mutableStateOf(Calendar.getInstance())
+    val calendarFromDate: State<Calendar> = _calendarFromDate
+    private val _calendarToDate = mutableStateOf(Calendar.getInstance())
+    val calendarToDate: State<Calendar> = _calendarToDate
 
-    private val _expandableItemListState = mutableStateOf(ExpandableItemListState())
-    val expandableItemListState: State<ExpandableItemListState> = _expandableItemListState
+    private val _expandableItemListState = MutableStateFlow(ExpandableItemListState())
+    val expandableItemListState: StateFlow<ExpandableItemListState> = _expandableItemListState
 
     private val _calendarItemListState = mutableStateOf(CalendarItemListState())
     val calendarItemListState: State<CalendarItemListState> = _calendarItemListState
@@ -84,7 +75,7 @@ class ItemMainViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        onEvent(ItemMainEvent.LoadItems(_searchId.value, localEventDate.value, _focusItemIdState.value))
+        onEvent(ItemMainEvent.LoadItems(_searchId.value, cal.value, _focusItemIdState.value))
     }
 
     fun setSharedPreferencesStates() {
@@ -93,46 +84,62 @@ class ItemMainViewModel @Inject constructor(
     }
 
     private fun loadThisMonthData() {
-        val today = localEventDate.value.toLocalDate()
+        val today = cal.value
+        val firstDayOfMonth = UtilDate.getFirstDayOfMonth(
+            today.toYMDString(UtilDate.DATE_FORMAT_DB),
+            UtilDate.DATE_FORMAT_DB
+        )
         val remainingDays = UtilDate.getRemainingDays(today.toYMDString(UtilDate.DATE_FORMAT_DB))
 
-        _calendarFromDate.value = LocalDate(
-            today.year, today.monthNumber, 1
-        ).minus(UtilDate.getFirstDayOfMonth(today.toYMDString(UtilDate.DATE_FORMAT_DB)), DateTimeUnit.DAY)
-        _calendarToDate.value = LocalDate(
-            today.year, today.monthNumber, 1
-        ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
+        _calendarFromDate.value = Calendar.getInstance()
+            .of(today.get(Calendar.YEAR), today.get(Calendar.MONTH), 1)
+            .plus(Calendar.DAY_OF_MONTH, -firstDayOfMonth)
 
-        loadItems(
-            searchModel = SearchModel(
-                fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
-                toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
+        _calendarToDate.value = Calendar.getInstance()
+            .of(today.get(Calendar.YEAR), today.get(Calendar.MONTH), 1)
+            .plus(Calendar.MONTH, 1)
+            .plus(Calendar.DAY_OF_MONTH, -1)
+            .plus(Calendar.DAY_OF_MONTH, remainingDays)
+
+        viewModelScope.launch {
+            loadItems(
+                searchModel = SearchModel(
+                    fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
+                    toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
+                )
             )
-        )
+        }
     }
 
     override fun onDateChanged() {
         /* reloads only when not in search mode */
         if (searchId.value == 0L) {
-            val date = localEventDate.value
+            val date = cal.value
 
-            val firstDayOfMonth = UtilDate.getFirstDayOfMonth(date)
-            val remainingDays = UtilDate.getRemainingDays(date)
-
-            val localDate = date.toLocalDate()
-            _calendarFromDate.value = LocalDate(
-                localDate.year, localDate.monthNumber, 1
-            ).minus(firstDayOfMonth, DateTimeUnit.DAY)
-            _calendarToDate.value = LocalDate(
-                localDate.year, localDate.monthNumber, 1
-            ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
-
-            loadItems(
-                SearchModel(
-                    fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
-                    toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
-                )
+            val firstDayOfMonth = UtilDate.getFirstDayOfMonth(
+                date.toYMDString(UtilDate.DATE_FORMAT_DB),
+                UtilDate.DATE_FORMAT_DB
             )
+            val remainingDays = UtilDate.getRemainingDays(date.toYMDString(UtilDate.DATE_FORMAT_DB))
+
+            _calendarFromDate.value = Calendar.getInstance()
+                .of(date.get(Calendar.YEAR), date.get(Calendar.MONTH), 1)
+                .plus(Calendar.DAY_OF_MONTH, -firstDayOfMonth)
+
+            _calendarToDate.value = Calendar.getInstance()
+                .of(date.get(Calendar.YEAR), date.get(Calendar.MONTH), 1)
+                .plus(Calendar.MONTH, 1)
+                .plus(Calendar.DAY_OF_MONTH, -1)
+                .plus(Calendar.DAY_OF_MONTH, remainingDays)
+
+            viewModelScope.launch {
+                loadItems(
+                    SearchModel(
+                        fromDate = calendarFromDate.value.toYMDString(UtilDate.DATE_FORMAT_DB),
+                        toDate = calendarToDate.value.toYMDString(UtilDate.DATE_FORMAT_DB)
+                    )
+                )
+            }
         }
     }
 
@@ -155,8 +162,7 @@ class ItemMainViewModel @Inject constructor(
                             syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
                         )
                         recentlyDeletedDisplayedItemModel = null
-                    }
-                    catch(e: ItemEntity.InvalidItemException) {
+                    } catch (e: ItemEntity.InvalidItemException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
                                 UiText.DynamicString(e.message ?: "Error: Couldn't save the item..")
@@ -172,15 +178,9 @@ class ItemMainViewModel @Inject constructor(
                 _focusItemIdState.value = event.focusItemId
 
                 if (event.searchId == 0L) { /* NOT in search mode */
-                    if (!event.focusDate.isWithinMonth(
-                            UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
-                        )
-                    ) {
-                        updateLocalEventDate(event.focusDate)
-                    }
+                    updateLocalEventDate(event.focusDate.toYMDString(UtilDate.DATE_FORMAT_DB))
                     loadThisMonthData()
-                }
-                else { /* in search mode */
+                } else { /* in search mode */
                     viewModelScope.launch {
                         _searchModel.value = searchUseCases.getSearchByIDUseCase(event.searchId)
                         searchModel.value?.let {
@@ -197,236 +197,265 @@ class ItemMainViewModel @Inject constructor(
                 _focusItemIdState.value = -1L
                 loadThisMonthData()
             }
-            else -> {}
         }
     }
 
-    private fun loadItems(searchModel: SearchModel) {
+    private suspend fun loadItems(searchModel: SearchModel) {
         _searchModel.value = searchModel
-        viewModelScope.launch {
-            getItemsJob?.cancel()
-            getItemsJob = displayedItemUseCases.getSpecificItemsUseCase(
+        getItemsJob?.cancel()
+        getItemsJob = runBlocking {
+            displayedItemUseCases.getSpecificItemsUseCase(
                 query = searchModel.toQuery(),
                 args = searchModel.toArgs(),
                 syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
             ).onEach { result ->
-                    /*
-                    Used in ItemListScreen
-                     */
-                    val expandableItemList = result.data
-                        ?.groupBy { it.eventDate }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.key.isWithinMonth(localEventDate.value) }
+                /*
+                Used in ItemListScreen
+                 */
+                val expandableItemList = result.data
+                    ?.groupBy { it.eventDate }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.key.toCalendar().get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
                         }
-                        ?.map { entry ->
-                            ExpandableItem(
-                                ExpandableItem.Parent(
-                                    entry.key,
-                                    entry.value
-                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                                        .sumOf { it.amount.toBigDecimal() }.toString(),
-                                    entry.value
-                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toBigDecimal() }.toString(),
-                                    entry.value.containsAt(focusItemIdState.value)
-                                ),
+                    }
+                    ?.map { entry ->
+                        ExpandableItem(
+                            ExpandableItem.Parent(
+                                entry.key,
                                 entry.value
-                            )
-                        } ?: emptyList()
+                                    .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                                    .sumOf { it.amount.toBigDecimal() }.toString(),
+                                entry.value
+                                    .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                                    .sumOf { it.amount.toBigDecimal() }.toString(),
+                                entry.value.containsAt(focusItemIdState.value)
+                            ),
+                            entry.value
+                        )
+                    } ?: emptyList()
 
-                    /*
-                    Used in ItemCalendarScreen
-                     */
-                    val calendarItemList = result.data
-                        ?.groupBy { it.eventDate }
-                        ?.map { entry ->
+                /*
+                Used in ItemCalendarScreen
+                 */
+                val calendarItemList = result.data
+                    ?.groupBy { it.eventDate }
+                    ?.map { entry ->
+                        CalendarItem(
+                            CalendarItem.Parent(
+                                entry.key,
+                                entry.value
+                                    .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                                    .sumOf { it.amount.toBigDecimal() }.toString(),
+                                entry.value
+                                    .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                                    .sumOf { it.amount.toBigDecimal() }.toString()
+                            ),
+                            entry.value
+                        )
+                    }
+                    ?.toMutableList() ?: mutableListOf()
+
+                val iDate = Calendar.getInstance().of(
+                    year = calendarFromDate.value.get(Calendar.YEAR),
+                    month = calendarFromDate.value.get(Calendar.MONTH),
+                    day = calendarFromDate.value.get(Calendar.DAY_OF_MONTH)
+                )
+                var index = 0
+                while (iDate <= calendarToDate.value) {
+                    if (calendarItemList.isEmpty() || index >= calendarItemList.size) {
+                        calendarItemList.add(
                             CalendarItem(
                                 CalendarItem.Parent(
-                                    entry.key,
-                                    entry.value
-                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                                        .sumOf { it.amount.toBigDecimal() }.toString(),
-                                    entry.value
-                                        .filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                                        .sumOf { it.amount.toBigDecimal() }.toString()
+                                    iDate.toYMDString(UtilDate.DATE_FORMAT_DB),
+                                    "0",
+                                    "0"
                                 ),
-                                entry.value
+                                emptyList()
                             )
-                        }
-                        ?.toMutableList() ?: mutableListOf()
-
-                    var iDate = calendarFromDate.value
-                    var index = 0
-                    while (iDate <= calendarToDate.value) {
-                        if (calendarItemList.isEmpty() || index >= calendarItemList.size) {
-                            calendarItemList.add(
-                                CalendarItem(
-                                    CalendarItem.Parent(
-                                        iDate.toYMDString(UtilDate.DATE_FORMAT_DB),
-                                        "0",
-                                        "0"
-                                    ),
-                                    emptyList()
-                                )
+                        )
+                    } else if (iDate < calendarItemList[index].parent.date.toCalendar()) {
+                        calendarItemList.add(
+                            index,
+                            CalendarItem(
+                                CalendarItem.Parent(
+                                    iDate.toYMDString(UtilDate.DATE_FORMAT_DB),
+                                    "0",
+                                    "0"
+                                ),
+                                emptyList()
                             )
-                        }
-                        else if (iDate < calendarItemList[index].parent.date.toLocalDate()) {
-                            calendarItemList.add(
-                                index,
-                                CalendarItem(
-                                    CalendarItem.Parent(
-                                        iDate.toYMDString(UtilDate.DATE_FORMAT_DB),
-                                        "0",
-                                        "0"
-                                    ),
-                                    emptyList()
-                                )
-                            )
-                        }
-                        index += 1
-                        iDate += DatePeriod(days = 1)
+                        )
                     }
+                    index += 1
+                    iDate.add(Calendar.DAY_OF_MONTH, 1)
+                }
 
-                    /*
-                    Used in ItemChartScreen
-                     */
-                    val incomeTotal = result.data
-                        ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.eventDate.isWithinMonth(localEventDate.value) }
-                        }
-                        ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
-
-                    val expenseTotal = result.data
-                        ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.eventDate.isWithinMonth(localEventDate.value) }
-                        }
-                        ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
-
-                    val incomeCategoryList = result.data
-                        ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.eventDate.isWithinMonth(localEventDate.value) }
-                        }
-                        ?.groupingBy { it.categoryCode }
-                        ?.reduce { _, acc, ele ->
-                            val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
-                            acc.copy(
-                                amount = sum.toString()
-                            )
-                        }
-                        ?.values?.toList()
-                        ?.sortedByDescending { it.amount.toBigDecimal() } ?: emptyList()
-
-                    val expenseCategoryList = result.data
-                        ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.eventDate.isWithinMonth(localEventDate.value) }
-                        }
-                        ?.groupingBy { it.categoryCode }
-                        ?.reduce { _, acc, ele ->
-                            val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
-                            acc.copy(
-                                amount = sum.toString()
-                            )
-                        }
-                        ?.values?.toList()
-                        ?.sortedByDescending { it.amount.toBigDecimal() } ?: emptyList()
-
-                    val itemMapByCategoryIncome = result.data
-                        ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.eventDate.isWithinMonth(localEventDate.value) }
-                        }
-                        ?.groupBy { it.categoryCode } ?: emptyMap()
-
-                    val itemMapByCategoryExpense = result.data
-                        ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
-                        ?.filter {
-                            if (searchId.value != 0L) { true }
-                            else { it.eventDate.isWithinMonth(localEventDate.value) }
-                        }
-                        ?.groupBy { it.categoryCode } ?: emptyMap()
-
-                    when (result) {
-                        is Resource.Success -> {
-                            _expandableItemListState.value = expandableItemListState.value.copy(
-                                expandableItemList = expandableItemList,
-                                isLoading = false
-                            )
-                            _itemChartState.value = itemChartState.value.copy(
-                                incomeTotal = incomeTotal,
-                                expenseTotal = expenseTotal,
-                                incomeList = incomeCategoryList,
-                                expenseList = expenseCategoryList,
-                                incomeMap = itemMapByCategoryIncome,
-                                expenseMap = itemMapByCategoryExpense,
-                                isLoading = false
-                            )
-                            _calendarItemListState.value = calendarItemListState.value.copy(
-                                calendarItemList = calendarItemList,
-                                isLoading = false
-                            )
-                        }
-                        is Resource.Error -> {
-                            _expandableItemListState.value = expandableItemListState.value.copy(
-                                expandableItemList = expandableItemList,
-                                isLoading = false
-                            )
-                            _itemChartState.value = itemChartState.value.copy(
-                                incomeTotal = incomeTotal,
-                                expenseTotal = expenseTotal,
-                                incomeList = incomeCategoryList,
-                                expenseList = expenseCategoryList,
-                                incomeMap = itemMapByCategoryIncome,
-                                expenseMap = itemMapByCategoryExpense,
-                                isLoading = false
-                            )
-                            _calendarItemListState.value = calendarItemListState.value.copy(
-                                calendarItemList = calendarItemList,
-                                isLoading = false
-                            )
-                            _eventFlow.emit(
-                                UiEvent.ShowSnackbar(
-                                    UiText.DynamicString(result.message ?: "Unknown error.")
-                                )
-                            )
-                        }
-                        is Resource.Loading -> {
-                            _expandableItemListState.value = expandableItemListState.value.copy(
-                                expandableItemList = expandableItemList,
-                                isLoading = true
-                            )
-                            _itemChartState.value = itemChartState.value.copy(
-                                incomeTotal = incomeTotal,
-                                expenseTotal = expenseTotal,
-                                incomeList = incomeCategoryList,
-                                expenseList = expenseCategoryList,
-                                incomeMap = itemMapByCategoryIncome,
-                                expenseMap = itemMapByCategoryExpense,
-                                isLoading = true
-                            )
-                            _calendarItemListState.value = calendarItemListState.value.copy(
-                                calendarItemList = calendarItemList,
-                                isLoading = true
-                            )
+                /*
+                Used in ItemChartScreen
+                 */
+                val incomeTotal = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.eventDate.toCalendar()
+                                .get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
                         }
                     }
-                    _eventFlow.emit(UiEvent.LoadingCompleted)
+                    ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
+
+                val expenseTotal = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.eventDate.toCalendar()
+                                .get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
+                        }
+                    }
+                    ?.sumOf { it.amount.toBigDecimal() }?.toString() ?: "0"
+
+                val incomeCategoryList = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.eventDate.toCalendar()
+                                .get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
+                        }
+                    }
+                    ?.groupingBy { it.categoryCode }
+                    ?.reduce { _, acc, ele ->
+                        val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
+                        acc.copy(
+                            amount = sum.toString()
+                        )
+                    }
+                    ?.values?.toList()
+                    ?.sortedByDescending { it.amount.toBigDecimal() } ?: emptyList()
+
+                val expenseCategoryList = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.eventDate.toCalendar()
+                                .get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
+                        }
+                    }
+                    ?.groupingBy { it.categoryCode }
+                    ?.reduce { _, acc, ele ->
+                        val sum = acc.amount.toBigDecimal() + ele.amount.toBigDecimal()
+                        acc.copy(
+                            amount = sum.toString()
+                        )
+                    }
+                    ?.values?.toList()
+                    ?.sortedByDescending { it.amount.toBigDecimal() } ?: emptyList()
+
+                val itemMapByCategoryIncome = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_INCOME }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.eventDate.toCalendar()
+                                .get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
+                        }
+                    }
+                    ?.groupBy { it.categoryCode } ?: emptyMap()
+
+                val itemMapByCategoryExpense = result.data
+                    ?.filter { it.categoryColor == UtilCategory.CATEGORY_COLOR_EXPENSE }
+                    ?.filter {
+                        if (searchId.value != 0L) {
+                            true
+                        } else {
+                            it.eventDate.toCalendar()
+                                .get(Calendar.MONTH) == cal.value.get(Calendar.MONTH)
+                        }
+                    }
+                    ?.groupBy { it.categoryCode } ?: emptyMap()
+
+                when (result) {
+                    is Resource.Success -> {
+                        _expandableItemListState.value = expandableItemListState.value.copy(
+                            expandableItemList = expandableItemList,
+                            isLoading = false
+                        )
+                        _itemChartState.value = itemChartState.value.copy(
+                            incomeTotal = incomeTotal,
+                            expenseTotal = expenseTotal,
+                            incomeList = incomeCategoryList,
+                            expenseList = expenseCategoryList,
+                            incomeMap = itemMapByCategoryIncome,
+                            expenseMap = itemMapByCategoryExpense,
+                            isLoading = false
+                        )
+                        _calendarItemListState.value = calendarItemListState.value.copy(
+                            calendarItemList = calendarItemList,
+                            isLoading = false
+                        )
+                    }
+                    is Resource.Error -> {
+                        _expandableItemListState.value = expandableItemListState.value.copy(
+                            expandableItemList = expandableItemList,
+                            isLoading = false
+                        )
+                        _itemChartState.value = itemChartState.value.copy(
+                            incomeTotal = incomeTotal,
+                            expenseTotal = expenseTotal,
+                            incomeList = incomeCategoryList,
+                            expenseList = expenseCategoryList,
+                            incomeMap = itemMapByCategoryIncome,
+                            expenseMap = itemMapByCategoryExpense,
+                            isLoading = false
+                        )
+                        _calendarItemListState.value = calendarItemListState.value.copy(
+                            calendarItemList = calendarItemList,
+                            isLoading = false
+                        )
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(result.message ?: "Unknown error.")
+                            )
+                        )
+                    }
+                    is Resource.Loading -> {
+                        _expandableItemListState.value = expandableItemListState.value.copy(
+                            expandableItemList = expandableItemList,
+                            isLoading = true
+                        )
+                        _itemChartState.value = itemChartState.value.copy(
+                            incomeTotal = incomeTotal,
+                            expenseTotal = expenseTotal,
+                            incomeList = incomeCategoryList,
+                            expenseList = expenseCategoryList,
+                            incomeMap = itemMapByCategoryIncome,
+                            expenseMap = itemMapByCategoryExpense,
+                            isLoading = true
+                        )
+                        _calendarItemListState.value = calendarItemListState.value.copy(
+                            calendarItemList = calendarItemList,
+                            isLoading = true
+                        )
+                    }
+                }
+                _eventFlow.emit(UiEvent.LoadingCompleted)
             }.launchIn(viewModelScope)
         }
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: UiText): UiEvent()
-        object LoadingCompleted: UiEvent()
+        data class ShowSnackbar(val message: UiText) : UiEvent()
+        object LoadingCompleted : UiEvent()
     }
 
 }

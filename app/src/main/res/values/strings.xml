@@ -38,6 +38,7 @@
     <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="canceled">Canceled</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="add">Add</string>
@@ -168,15 +169,14 @@
     <string name="category_management">Category Management</string>
     <string name="import_and_export">Import and Export</string>
     <string name="delete_all_items">Delete all items</string>
-    <string name="clear_user_cache">Clear user cache</string>
     <string name="about_this_app">About this App</string>
     <string name="in_app_purchases">In-App Purchases</string>
     <string name="warn_delete_all_items">Do you really want to delete all items?</string>
     <string name="signin_first">Please Sign-in first"</string>
-    <string name="success_cleared_cache">Successfully cleared cache</string>
-    <string name="failure_cleared_cache">Failed cleared cache</string>
-    <string name="canceled_cleared_cache">Canceled cleared cache</string>
-    <string name="app_stores_user_cache">Kakeibo stores user data in cache to easily connect to Google from the next time on.\n\nDo you want to clear cache?</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="app_stores_user_cache">Kakeibo stores user data in cache to easily connect to Google from the next time on.  Do you want to clear cache?</string>
+    <string name="cleare_cache_success">Successfully cleared cache</string>
+    <string name="cleare_cache_failure">Failed to clear cache</string>
     <string name="hide_display_reorder_categories">Hide, Display and Reorder Categories</string>
     <string name="reorder_categories">Reorder Categories</string>
     <string name="reorder_categories_for_display">Reorder Categories to display on INPUT screen</string>

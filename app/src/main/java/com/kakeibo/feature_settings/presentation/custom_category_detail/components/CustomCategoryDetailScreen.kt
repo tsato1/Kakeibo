@@ -93,7 +93,7 @@ fun CustomCategoryDetailScreen(
     val cardBackgroundColor = LightCream
     val strokeColor = ThickCream.toArgb()
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(viewModel.eventFlow, scaffoldState.snackbarHostState) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is CustomCategoryDetailViewModel.UiEvent.Init -> {

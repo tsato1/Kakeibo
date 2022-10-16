@@ -177,4 +177,9 @@
     <string name="calendar">Calendrier</string>
     <string name="chart">Graphique</string>
     <string name="list">Liste</string>
+    <string name="clear_cache">Vider le cache</string>
+    <string name="app_stores_user_cache">Kakeibo stocke les données utilisateur dans le cache pour se connecter facilement à Google à partir de la prochaine fois. Voulez-vous vider le cache ?</string>
+    <string name="canceled">Annulé</string>
+    <string name="cleare_cache_success">Le cache a été vidé avec succès</string>
+    <string name="cleare_cache_failure">Impossible de vider le cache</string>
 </resources>

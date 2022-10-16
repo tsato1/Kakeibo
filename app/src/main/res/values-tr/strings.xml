@@ -176,4 +176,9 @@
     <string name="calendar">Takvim</string>
     <string name="chart">Çizelge</string>
     <string name="list">Liste</string>
+    <string name="clear_cache">Önbelleği temizle</string>
+    <string name="app_stores_user_cache">Kakeibo, bir dahaki sefere Google\'a kolayca bağlanmak için kullanıcı verilerini önbellekte saklar. Önbelleği temizlemek istiyor musunuz?</string>
+    <string name="canceled">İptal edildi</string>
+    <string name="cleare_cache_success">Önbellek başarıyla temizlendi</string>
+    <string name="cleare_cache_failure">Önbellek temizlenemedi</string>
 </resources>

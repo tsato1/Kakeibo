@@ -34,9 +34,9 @@ import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.item_list.ExpandableItem
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toCalendar
 import com.kakeibo.util.UtilDate.toYMDWString
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.datetime.toLocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -62,7 +62,7 @@ fun CollapsableLazyColumn(
         )
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemMainViewModel.UiEvent.LoadingCompleted -> {
@@ -118,8 +118,7 @@ fun CollapsableLazyColumn(
                             tint = Color.LightGray,
                         )
                         Text(
-                            text = expandableItem.parent.date
-                                .toLocalDate()
+                            text = expandableItem.parent.date.toCalendar()
                                 .toYMDWString(UtilDate.DATE_FORMATS[dateFormatIndex], context),
                             fontWeight = FontWeight.Bold
                         )

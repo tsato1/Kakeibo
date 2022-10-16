@@ -1,41 +1,42 @@
 package com.kakeibo.feature_main.presentation.common
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import com.kakeibo.core.presentation.KkbAppViewModel
-import com.kakeibo.util.UtilDate
-import com.kakeibo.util.UtilDate.toYMDString
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDate
+import com.kakeibo.util.UtilDate.of
+import com.kakeibo.util.UtilDate.toCalendar
+import java.util.*
 
-abstract class DateViewModel : KkbAppViewModel() {
+abstract class DateViewModel constructor(
+    private val savedStateHandle: SavedStateHandle
+) : KkbAppViewModel() {
 
-    private val _localEventDate = mutableStateOf(
-        UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
-    )
-    val localEventDate: State<String> = _localEventDate
+    val cal = savedStateHandle.getStateFlow("cal", Calendar.getInstance())
+
+    init {
+        savedStateHandle["cal"] = Calendar.getInstance()
+    }
 
     abstract fun onDateChanged()
 
     fun resetToToday() {
-        _localEventDate.value = UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)
+        savedStateHandle["cal"] = Calendar.getInstance()
         onDateChanged()
     }
 
-    fun updateLocalEventDate(localDate: String) {
-        _localEventDate.value = localDate
+    /*
+     expects db format
+     */
+    fun updateLocalEventDate(stringDate: String) {
+        savedStateHandle["cal"] = stringDate.toCalendar()
         onDateChanged()
     }
 
-    fun plus(value: Int, dateTimeUnit: DateTimeUnit.DateBased) {
-        val localDate = localEventDate.value.toLocalDate().plus(value, dateTimeUnit)
-
-        _localEventDate.value = LocalDate(
-            localDate.year, localDate.monthNumber, localDate.dayOfMonth
-        ).toYMDString(UtilDate.DATE_FORMAT_DB)
-
+    fun plus(unit: Int, value: Int) {
+        cal.value.add(unit, value)
+        val y = cal.value.get(Calendar.YEAR)
+        val m = cal.value.get(Calendar.MONTH)
+        val d = cal.value.get(Calendar.DAY_OF_MONTH)
+        savedStateHandle["cal"] = Calendar.getInstance().of(y, m, d)
         onDateChanged()
     }
 

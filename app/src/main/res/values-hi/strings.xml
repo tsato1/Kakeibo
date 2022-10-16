@@ -177,4 +177,9 @@
     <string name="calendar">पंचांग</string>
     <string name="chart">चार्ट</string>
     <string name="list">सूची</string>
+    <string name="clear_cache">कैश को साफ़ करें</string>
+    <string name="app_stores_user_cache">अगली बार से Google से आसानी से कनेक्ट होने के लिए Kakeibo उपयोगकर्ता डेटा को कैश में संग्रहीत करता है। क्या आप कैशे साफ़ करना चाहते हैं?</string>
+    <string name="canceled">रद्द</string>
+    <string name="cleare_cache_success">कैशे को सफलतापूर्वक साफ़ किया गया</string>
+    <string name="cleare_cache_failure">कैशे साफ़ करने में विफल</string>
 </resources>

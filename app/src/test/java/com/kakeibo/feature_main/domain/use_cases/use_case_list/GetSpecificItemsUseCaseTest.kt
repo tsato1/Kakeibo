@@ -86,20 +86,20 @@ class GetSpecificItemsUseCaseTest {
 
     @Test
     fun `Order items by eventDate ascending, correct order`() = runBlocking {
-        val today = LocalDate(2022, 5, 25)
-        val remainingDays = UtilDate.getRemainingDays(today.toYMDString(UtilDate.DATE_FORMAT_DB))
-
-        val calendarFromDate = LocalDate(
-            today.year, today.monthNumber, 1
-        ).minus(UtilDate.getFirstDayOfMonth(today.toYMDString(UtilDate.DATE_FORMAT_DB)), DateTimeUnit.DAY)
-        val calendarToDate = LocalDate(
-            today.year, today.monthNumber, 1
-        ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
-
-        val searchModel = SearchModel(
-            fromDate = calendarFromDate.toYMDString(UtilDate.DATE_FORMAT_DB),
-            toDate = calendarToDate.toYMDString(UtilDate.DATE_FORMAT_DB)
-        )
+//        val today = LocalDate(2022, 5, 25)
+//        val remainingDays = UtilDate.getRemainingDays(today.toYMDString(UtilDate.DATE_FORMAT_DB))
+//
+//        val calendarFromDate = LocalDate(
+//            today.year, today.monthNumber, 1
+//        ).minus(UtilDate.getFirstDayOfMonth(today.toYMDString(UtilDate.DATE_FORMAT_DB)), DateTimeUnit.DAY)
+//        val calendarToDate = LocalDate(
+//            today.year, today.monthNumber, 1
+//        ) + DatePeriod(months = 1) - DatePeriod(days = 1) + DatePeriod(days = remainingDays)
+//
+//        val searchModel = SearchModel(
+//            fromDate = calendarFromDate.toYMDString(UtilDate.DATE_FORMAT_DB),
+//            toDate = calendarToDate.toYMDString(UtilDate.DATE_FORMAT_DB)
+//        )
 //        val items = getSpecificItemsUseCase(searchModel.toQuery(), searchModel.toArgs()).first()
 
 //        for (i in 0 .. items.data!!.size - 2) {

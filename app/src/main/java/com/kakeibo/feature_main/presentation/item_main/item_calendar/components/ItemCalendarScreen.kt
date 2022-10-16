@@ -22,12 +22,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,11 +40,13 @@ import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
 import com.kakeibo.feature_main.presentation.util.Screen
-import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.isSameDateAs
+import com.kakeibo.util.UtilDate.of
+import com.kakeibo.util.UtilDate.toCalendar
 import com.kakeibo.util.UtilDate.toYMDString
-import com.kakeibo.util.UtilDate.isWithinMonth
-import kotlinx.datetime.*
+import com.kakeibo.util.UtilDate.toYMDWString
+import java.util.*
 import kotlin.math.roundToInt
 
 @Composable
@@ -92,8 +91,12 @@ fun ItemCalendarScreen(
                         detectDragGestures(
                             onDragEnd = {
                                 when {
-                                    offsetX > 200 -> { viewModel.plus(-1, DateTimeUnit.MONTH) }
-                                    offsetX < -200 -> { viewModel.plus(1, DateTimeUnit.MONTH) }
+                                    offsetX > 200 -> {
+                                        viewModel.plus(Calendar.MONTH, -1)
+                                    }
+                                    offsetX < -200 -> {
+                                        viewModel.plus(Calendar.MONTH, 1)
+                                    }
                                 }
                                 offsetX = 0f
                             }
@@ -101,8 +104,12 @@ fun ItemCalendarScreen(
                             change.consume()
                             offsetX += dragAmount.x
                             when {
-                                offsetX > 400f -> { offsetX = 400f }
-                                offsetX < -400f -> { offsetX = -400f }
+                                offsetX > 400f -> {
+                                    offsetX = 400f
+                                }
+                                offsetX < -400f -> {
+                                    offsetX = -400f
+                                }
                             }
                         }
                     }
@@ -167,7 +174,7 @@ fun ItemCalendarScreen(
             },
             onConfirmButtonClick = {
                 navController.navigate(Screen.ItemCalendarScreen.route +
-                        "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
+                        "?searchId=${0L}/?focusDate=${Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
                 viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                 openExitSearchDialog.value = false
             }
@@ -189,11 +196,21 @@ fun CalendarRows(
     navController: NavController,
     viewModel: ItemMainViewModel
 ) {
+    val context = LocalContext.current
     val showDateDetailDialog = remember { mutableStateOf(false) }
     val clickedDateIndex = rememberSaveable { mutableStateOf(0) }
 
     val listState = viewModel.calendarItemListState.value
-    var iDate = viewModel.calendarFromDate.value // dates that gets put on calendar
+    val iDate = Calendar.getInstance().of(
+        year = viewModel.calendarFromDate.value.get(Calendar.YEAR),
+        month = viewModel.calendarFromDate.value.get(Calendar.MONTH),
+        day = viewModel.calendarFromDate.value.get(Calendar.DAY_OF_MONTH)
+    )
+    val loadDate = Calendar.getInstance().of(
+        year = viewModel.cal.collectAsState().value.get(Calendar.YEAR),
+        month = viewModel.cal.collectAsState().value.get(Calendar.MONTH),
+        day = viewModel.cal.collectAsState().value.get(Calendar.DAY_OF_MONTH)
+    )
 
     val clickedItem = remember {
         mutableStateOf(
@@ -218,12 +235,10 @@ fun CalendarRows(
                         text = stringArrayResource(id = R.array.week_name)[i - 1],
                         style = TextStyle(
                             fontSize = 14.sp,
-                            color = if (i == 1) {
-                                Color.Red
-                            } else if (i == 7) {
-                                Color.Blue
-                            } else {
-                                Color.Black
+                            color = when (i) {
+                                1 -> Color.Red
+                                7 -> Color.Blue
+                                else -> Color.Black
                             }
                         )
                     )
@@ -246,44 +261,33 @@ fun CalendarRows(
                             .weight(1f)
                             .fillMaxSize()
                             .clickable {
-                                when (calendarItem.parent.date.toLocalDate().monthNumber) {
-                                    viewModel.localEventDate.value
-                                        .toLocalDate()
-                                        .minus(
-                                            1,
-                                            DateTimeUnit.MONTH
-                                        ).monthNumber -> {
-                                        viewModel.plus(-1, DateTimeUnit.MONTH)
+                                when (calendarItem.parent.date.toCalendar().get(Calendar.MONTH)) {
+                                    loadDate.get(Calendar.MONTH) - 1 -> {
+                                        viewModel.plus(Calendar.MONTH, -1)
                                     }
-                                    viewModel.localEventDate.value.toLocalDate().monthNumber -> {
+                                    loadDate.get(Calendar.MONTH) -> {
                                         showDateDetailDialog.value = true
                                         clickedDateIndex.value = index
                                     }
-                                    viewModel.localEventDate.value
-                                        .toLocalDate()
-                                        .plus(
-                                            1,
-                                            DateTimeUnit.MONTH
-                                        ).monthNumber -> {
-                                        viewModel.plus(1, DateTimeUnit.MONTH)
+                                    loadDate.get(Calendar.MONTH) + 1 -> {
+                                        viewModel.plus(Calendar.MONTH, 1)
                                     }
                                 }
                             }
                             .alpha(
-                                if (iDate.isWithinMonth(viewModel.localEventDate.value.toLocalDate()))
-                                    1f
+                                if (calendarItem.parent.date.toCalendar().get(Calendar.MONTH) == loadDate.get(Calendar.MONTH)) 1f
                                 else 0.5f
                             )
                     ) {
-                        if (iDate == UtilDate.getTodaysLocalDate())
+                        if (iDate.isSameDateAs(Calendar.getInstance()))
                             Text(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(Color.Red),
-                                text = "${iDate.dayOfMonth}"
+                                text = "${iDate.get(Calendar.DAY_OF_MONTH)}"
                             )
                         else
-                            Text(text = "${iDate.dayOfMonth}")
+                            Text(text = "${iDate.get(Calendar.DAY_OF_MONTH)}")
 
                         if (listState.isLoading) {
                             CircularProgressIndicator()
@@ -328,8 +332,7 @@ fun CalendarRows(
                             }
                         }
                     }
-
-                    iDate += DatePeriod(days = 1)
+                    iDate.add(Calendar.DAY_OF_MONTH, 1)
                 }
             }
         }
@@ -341,9 +344,8 @@ fun CalendarRows(
     if (showDateDetailDialog.value) {
         DialogCard(
             onDismissRequest = { showDateDetailDialog.value = false },
-            title = listState.calendarItemList[clickedDateIndex.value].parent.date
-                .toLocalDate()
-                .toYMDString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndexState.value]),
+            title = listState.calendarItemList[clickedDateIndex.value].parent.date.toCalendar()
+                .toYMDWString(UtilDate.DATE_FORMATS[viewModel.dateFormatIndexState.value], context),
             positiveButton = {
                 OutlinedButton(
                     onClick = { showDateDetailDialog.value = false }

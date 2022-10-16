@@ -176,4 +176,9 @@
     <string name="calendar">Calendário</string>
     <string name="chart">Gráfico</string>
     <string name="list">Lista</string>
+    <string name="clear_cache">Limpar cache</string>
+    <string name="app_stores_user_cache">O Kakeibo armazena os dados do usuário em cache para se conectar facilmente ao Google da próxima vez. Deseja limpar o cache?</string>
+    <string name="canceled">Cancelado</string>
+    <string name="cleare_cache_success">Cache limpo com sucesso</string>
+    <string name="cleare_cache_failure">Falha ao limpar o cache</string>
 </resources>

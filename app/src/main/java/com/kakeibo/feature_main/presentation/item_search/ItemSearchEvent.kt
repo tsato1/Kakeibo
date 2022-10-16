@@ -2,13 +2,13 @@ package com.kakeibo.feature_main.presentation.item_search
 
 import androidx.compose.ui.focus.FocusState
 import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
-import kotlinx.datetime.LocalDate
+import java.util.Calendar
 
 sealed class ItemSearchEvent {
     data class AddSearchCriterion(val criterion: SearchCriterion) : ItemSearchEvent()
     data class DiscardSearchCriterion(val criterion: SearchCriterion) : ItemSearchEvent()
-    data class DateFromSelected(val from: LocalDate) : ItemSearchEvent()
-    data class DateToSelected(val to: LocalDate) : ItemSearchEvent()
+    data class DateFromSelected(val from: Calendar) : ItemSearchEvent()
+    data class DateToSelected(val to: Calendar) : ItemSearchEvent()
     data class AmountFromEntered(val from: String) : ItemSearchEvent()
     data class AmountToEntered(val to: String) : ItemSearchEvent()
     data class AmountFromFocusChanged(val focusState: FocusState) : ItemSearchEvent()

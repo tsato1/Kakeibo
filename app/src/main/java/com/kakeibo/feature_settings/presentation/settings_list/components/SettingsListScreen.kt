@@ -22,7 +22,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
@@ -55,7 +54,7 @@ fun SettingsListScreen(
     val openClearUserCacheDialog = remember { mutableStateOf(false) }
     val openConfirmAdsDialog = remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(settingsListViewModel.eventFlow, scaffoldState.snackbarHostState) {
         scrollState.animateScrollTo(0)
         settingsListViewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -230,7 +229,7 @@ fun SettingsListScreen(
                     modifier = Modifier.clickable { openClearUserCacheDialog.value = true }
                 ) {
                     Text(
-                        text = stringResource(id = R.string.clear_user_cache),
+                        text = stringResource(id = R.string.clear_cache),
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -331,7 +330,7 @@ fun SettingsListScreen(
             },
             negativeButton = {
                 OutlinedButton(
-                    onClick = { }
+                    onClick = { openDeleteAllItemsDialog.value = false }
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
@@ -369,7 +368,7 @@ fun SettingsListScreen(
     if (openClearUserCacheDialog.value) {
         DialogCard(
             onDismissRequest = { openClearUserCacheDialog.value = false },
-            title = stringResource(id = R.string.clear_user_cache),
+            title = stringResource(id = R.string.clear_cache),
             content = {
                 Text(
                     modifier = Modifier.padding(MaterialTheme.dimens.dialogPadding),
@@ -385,7 +384,7 @@ fun SettingsListScreen(
                         else {
                             AuthUI.getInstance().signOut(context).addOnCompleteListener {
                                 firebaseViewModel.deleteUser()
-                                Toast.makeText(context, R.string.success_cleared_cache, Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, R.string.cleare_cache_success, Toast.LENGTH_LONG).show()
                             }
                         }
                         openClearUserCacheDialog.value = false

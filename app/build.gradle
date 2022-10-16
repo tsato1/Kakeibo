@@ -19,11 +19,17 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 72
+        versionCode 75
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments += ["dagger.hilt.disableCrossCompilationRootValidation": "true"]
+            }
+        }
     }
 
     buildTypes {
@@ -32,28 +38,31 @@ android {
             it.buildConfigField('int', 'versionDB', "${versionDB}")
         }
         release {
-            minifyEnabled true  // shrink
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-//        useIR = true
     }
     buildFeatures {
         compose true
         dataBinding true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_compiler
     }
     packagingOptions {
         resources {
-            excludes += ['/META-INF/{AL2.0,LGPL2.1}', 'META-INF/DEPENDENCIES']
+            excludes += ['/META-INF/{AL2.0,LGPL2.1}', 'META-INF/DEPENDENCIES', 'META-INF/INDEX.LIST']
         }
     }
     lint {
@@ -64,26 +73,27 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.3.1"
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+//    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin"
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
 
     // Compose
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation 'androidx.activity:activity-compose:1.5.1'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+    implementation "androidx.compose.ui:ui:$compose"
+    implementation "androidx.compose.material:material:$compose"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose"
+    implementation "androidx.compose.material:material-icons-extended:$compose"
+    implementation "androidx.compose.material3:material3:$material3"
+    implementation "androidx.activity:activity-compose:$activity_compose"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle"
 
     // Navigation Components
-    implementation "androidx.navigation:navigation-compose:2.5.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.1"
+    implementation "androidx.navigation:navigation-compose:$navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
 
     // Accompanist
     implementation "com.google.accompanist:accompanist-pager:0.24.6-alpha"
@@ -119,12 +129,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
-    // Activity KTX for viewModels()
-    implementation "androidx.activity:activity-ktx:1.5.1"
-
     // Dagger Hilt
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     implementation "com.google.dagger:hilt-android:2.43.2"
     kapt "com.google.dagger:hilt-android-compiler:2.43.2"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
@@ -135,7 +141,7 @@ dependencies {
         exclude module: "play-services-safetynet"
     }
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
-    implementation "com.google.android.gms:play-services-auth:20.2.0"
+    implementation "com.google.android.gms:play-services-auth:20.3.0"
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
@@ -145,7 +151,7 @@ dependencies {
     implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
 
     // Ads
-    implementation "com.google.android.gms:play-services-ads:21.1.0"
+    implementation "com.google.android.gms:play-services-ads:21.2.0"
     implementation 'com.adcolony:sdk:4.7.1'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 
@@ -153,20 +159,19 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Other
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
     implementation 'io.coil-kt:coil-compose:1.4.0'
 
     // Ktor
-    implementation "io.ktor:ktor-client-core:$ktor_version"
-    implementation "io.ktor:ktor-client-cio:$ktor_version"
-    implementation "io.ktor:ktor-client-auth:$ktor_version"
-    implementation "io.ktor:ktor-client-serialization:$ktor_version"
-    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
-    implementation "io.ktor:ktor-serialization-gson:$ktor_version"
+    implementation "io.ktor:ktor-client-core:$ktor"
+    implementation "io.ktor:ktor-client-cio:$ktor"
+    implementation "io.ktor:ktor-client-auth:$ktor"
+    implementation "io.ktor:ktor-client-serialization:$ktor"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor"
+    implementation "io.ktor:ktor-serialization-gson:$ktor"
 //    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
-    implementation "io.ktor:ktor-client-logging:$ktor_version"
-    implementation "ch.qos.logback:logback-classic:1.2.11"
+    implementation "io.ktor:ktor-client-logging:$ktor"
+    implementation "ch.qos.logback:logback-classic:1.4.3"
 
     // Unit Test
     implementation "androidx.test:core:1.4.0"
@@ -174,18 +179,18 @@ dependencies {
     testImplementation "com.google.truth:truth:1.1.3"
     testImplementation "org.hamcrest:hamcrest-all:1.3"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation "org.robolectric:robolectric:4.5.1"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
     testImplementation "org.mockito:mockito-core:2.21.0"
 
     // Instrumental Test
     androidTestImplementation "junit:junit:4.13.2"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose"
     androidTestImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "androidx.test.ext:junit-ktx:1.1.3"
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.37'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
     androidTestImplementation "org.mockito:mockito-core:2.21.0"

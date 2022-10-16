@@ -18,8 +18,9 @@ import com.kakeibo.R
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchEvent
 import com.kakeibo.feature_main.presentation.item_search.ItemSearchViewModel
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.of
 import com.kakeibo.util.UtilDate.toYMDString
-import kotlinx.datetime.LocalDate
+import java.util.*
 
 @Composable
 fun SearchCardDateRange(
@@ -42,17 +43,17 @@ fun SearchCardDateRange(
             Button(
                 modifier = Modifier.weight(1f),
                 onClick = {
-                    val todaysDate = UtilDate.getTodaysLocalDate()
+                    val todaysDate = Calendar.getInstance()
                     DatePickerDialog(
                         context,
                         { _: DatePicker, y: Int, m: Int, d: Int ->
-                            viewModel.onEvent(ItemSearchEvent.DateFromSelected(
-                                LocalDate(y, m + 1, d)
-                            ))
+                            viewModel.onEvent(
+                                ItemSearchEvent.DateFromSelected(Calendar.getInstance().of(y, m, d))
+                            )
                         },
-                        todaysDate.year,
-                        todaysDate.monthNumber - 1,
-                        todaysDate.dayOfMonth
+                        todaysDate.get(Calendar.YEAR),
+                        todaysDate.get(Calendar.MONTH),
+                        todaysDate.get(Calendar.DAY_OF_MONTH)
                     ).show()
                 }
             ) {
@@ -65,17 +66,17 @@ fun SearchCardDateRange(
             Button(
                 modifier = Modifier.weight(1f),
                 onClick = {
-                    val todaysDate = UtilDate.getTodaysLocalDate()
+                    val todaysDate = Calendar.getInstance()
                     DatePickerDialog(
                         context,
                         { _: DatePicker, y: Int, m: Int, d: Int ->
-                            viewModel.onEvent(ItemSearchEvent.DateToSelected(
-                                LocalDate(y, m + 1, d)
-                            ))
+                            viewModel.onEvent(
+                                ItemSearchEvent.DateToSelected(Calendar.getInstance().of(y, m, d))
+                            )
                         },
-                        todaysDate.year,
-                        todaysDate.monthNumber - 1,
-                        todaysDate.dayOfMonth
+                        todaysDate.get(Calendar.YEAR),
+                        todaysDate.get(Calendar.MONTH),
+                        todaysDate.get(Calendar.DAY_OF_MONTH)
                     ).show()
                 }
             ) {

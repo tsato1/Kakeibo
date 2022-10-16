@@ -76,7 +76,7 @@ fun CategoryRearrangeScreen(
     val countRemove = rememberSaveable { mutableStateOf(0) }
     val countAdd = rememberSaveable { mutableStateOf(0) }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(viewModel.eventFlow, scaffoldState.snackbarHostState) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is CategoryRearrangeViewModel.UiEvent.ShowSnackbar -> {

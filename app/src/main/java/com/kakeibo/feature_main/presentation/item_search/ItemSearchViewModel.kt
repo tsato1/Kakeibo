@@ -12,6 +12,8 @@ import com.kakeibo.feature_main.domain.models.SearchModel
 import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
 import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
+import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toYMDString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -122,8 +124,8 @@ class ItemSearchViewModel @Inject constructor(
                     for (chosenSearchCriterion in searchCriteriaListsState.value.chosenSearchCriteria) {
                         when (chosenSearchCriterion) {
                             is SearchCriterion.TypeDateRange -> {
-                                searchModel.fromDate = _searchCardDateRangeState.value.from.toString()
-                                searchModel.toDate = _searchCardDateRangeState.value.to.toString()
+                                searchModel.fromDate = _searchCardDateRangeState.value.from.toYMDString(UtilDate.DATE_FORMAT_DB)
+                                searchModel.toDate = _searchCardDateRangeState.value.to.toYMDString(UtilDate.DATE_FORMAT_DB)
                             }
                             is SearchCriterion.TypeAmount -> {
                                 searchModel.fromAmount = _searchCardAmountState.value.from

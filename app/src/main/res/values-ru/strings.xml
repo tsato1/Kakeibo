@@ -173,8 +173,12 @@
     <string name="category_name_colon">Название категории:</string>
     <string name="category_detail">Детали категории:</string>
     <string name="next_step">Следующий шаг</string>
-    <string name="about">О</string>
     <string name="calendar">Календарь</string>
     <string name="chart">Диаграмма</string>
     <string name="list">Список</string>
+    <string name="clear_cache">Очистить кэш</string>
+    <string name="app_stores_user_cache">Kakeibo хранит пользовательские данные в кеше, чтобы в следующий раз легко подключиться к Google. Вы хотите очистить кеш?</string>
+    <string name="canceled">Отменено</string>
+    <string name="cleare_cache_success">Кэш успешно очищен</string>
+    <string name="cleare_cache_failure">Не удалось очистить кеш</string>
 </resources>

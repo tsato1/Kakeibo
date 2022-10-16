@@ -174,8 +174,12 @@
     <string name="category_name_colon">Nombre de la categoría:</string>
     <string name="category_detail">Detalle de la categoría:</string>
     <string name="next_step">Próximo paso</string>
-    <string name="about">Sobre</string>
     <string name="calendar">Calendario</string>
     <string name="chart">Cuadro</string>
     <string name="list">Lista</string>
+    <string name="clear_cache">Limpiar cache</string>
+    <string name="app_stores_user_cache">Kakeibo almacena los datos del usuario en caché para conectarse fácilmente a Google la próxima vez. ¿Quieres borrar el caché?</string>
+    <string name="canceled">Cancelado</string>
+    <string name="cleare_cache_success">Caché borrado con éxito</string>
+    <string name="cleare_cache_failure">No se pudo borrar el caché</string>
 </resources>

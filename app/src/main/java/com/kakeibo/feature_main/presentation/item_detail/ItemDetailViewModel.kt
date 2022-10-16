@@ -17,6 +17,7 @@ import com.kakeibo.feature_main.presentation.common.DateViewModel
 import com.kakeibo.feature_main.presentation.item_detail.item_input.DisplayedCategoryListState
 import com.kakeibo.util.UtilCurrency
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toYMDString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,7 +33,7 @@ class ItemDetailViewModel @Inject constructor(
     private val displayedCategoryUseCases: DisplayedCategoryUseCases,
     val appPreferences: AppPreferences,
     savedStateHandle: SavedStateHandle
-) : DateViewModel() {
+) : DateViewModel(savedStateHandle) {
 
     val dateFormatIndex = appPreferences.getDateFormatIndex()
     val fractionDigits = appPreferences.getFractionDigits()
@@ -97,8 +98,7 @@ class ItemDetailViewModel @Inject constructor(
         }
     }
 
-    override fun onDateChanged() {
-    }
+    override fun onDateChanged() {}
 
     fun onEvent(event: ItemDetailEvent) {
         when (event) {
@@ -138,12 +138,12 @@ class ItemDetailViewModel @Inject constructor(
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
                                 categoryCode = itemCategoryCodeState.value,
                                 memo = itemMemoState.value.text,
-                                eventDate = localEventDate.value,
+                                eventDate = cal.value.toYMDString(UtilDate.DATE_FORMAT_DB),
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
                             ),
                             syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
                         )
-                        _eventFlow.emit(UiEvent.Save(localEventDate.value, focusItemId))
+                        _eventFlow.emit(UiEvent.Save(cal.value.toYMDString(UtilDate.DATE_FORMAT_DB), focusItemId))
                     }
                     catch (e: ItemEntity.InvalidItemException) {
                         _eventFlow.emit(

@@ -6,43 +6,51 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.Constants.ITEM_BASE_URL
-import com.kakeibo.core.data.remote.AuthApi
-import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.constants.PrepDB
-import com.kakeibo.core.data.local.*
+import com.kakeibo.core.data.local.AppDatabase
+import com.kakeibo.core.data.local.CategoryDao
+import com.kakeibo.core.data.local.CategoryDspDao
+import com.kakeibo.core.data.local.KkbAppDao
 import com.kakeibo.core.data.preferences.AppPreferences
-import com.kakeibo.core.data.remote.*
-import com.kakeibo.auth.data.AuthRepositoryImpl
+import com.kakeibo.core.data.preferences.AppPreferencesImpl
+import com.kakeibo.core.data.remote.AuthApi
+import com.kakeibo.core.data.remote.AuthApiImpl
+import com.kakeibo.core.data.remote.BasicAuthInterceptor
+import com.kakeibo.core.data.remote.ItemApi
+import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
+import com.kakeibo.core.domain.repositories.KkbAppRepository
+import com.kakeibo.core.domain.use_cases.KkbAppUseCases
+import com.kakeibo.core.domain.use_cases.kkbapp.GetKkbAppUseCase
+import com.kakeibo.core.domain.use_cases.kkbapp.InsertKkbAppUseCase
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
 import com.kakeibo.feature_main.domain.repositories.DisplayedCategoryRepository
 import com.kakeibo.feature_main.domain.repositories.DisplayedItemRepository
 import com.kakeibo.feature_main.domain.repositories.SearchRepository
-import com.kakeibo.feature_main.domain.use_cases.*
+import com.kakeibo.feature_main.domain.use_cases.DisplayedCategoryUseCases
+import com.kakeibo.feature_main.domain.use_cases.DisplayedItemUseCases
+import com.kakeibo.feature_main.domain.use_cases.SearchUseCases
 import com.kakeibo.feature_main.domain.use_cases.use_case_input.InsertItemUseCase
-import com.kakeibo.feature_main.domain.use_cases.use_case_list.*
+import com.kakeibo.feature_main.domain.use_cases.use_case_list.DeleteItemUseCase
+import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetAllItemsUseCase
+import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetItemByIdUseCase
+import com.kakeibo.feature_main.domain.use_cases.use_case_list.GetSpecificItemsUseCase
 import com.kakeibo.feature_main.domain.use_cases.use_case_search.*
 import com.kakeibo.feature_settings.data.repositories.CategoryRearrangeRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.CustomCategoryRepositoryImpl
 import com.kakeibo.feature_settings.data.repositories.ItemRepositoryImpl
-import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
-import com.kakeibo.auth.domain.repositories.AuthRepository
 import com.kakeibo.feature_settings.domain.repositories.CategoryRearrangeRepository
 import com.kakeibo.feature_settings.domain.repositories.CustomCategoryRepository
 import com.kakeibo.feature_settings.domain.repositories.ItemRepository
-import com.kakeibo.core.domain.repositories.KkbAppRepository
-import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
 import com.kakeibo.feature_settings.domain.use_cases.CategoryRearrangeUseCases
+import com.kakeibo.feature_settings.domain.use_cases.CustomCategoryUseCases
 import com.kakeibo.feature_settings.domain.use_cases.ItemUseCases
-import com.kakeibo.core.domain.use_cases.KkbAppUseCases
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_detail.GetCustomCategoryByIdUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_detail.InsertCustomCategoryUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.DeleteCustomCategoryUseCase
 import com.kakeibo.feature_settings.domain.use_cases.custom_category_list.GetAllCustomCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.items.DeleteAllItemsUseCase
-import com.kakeibo.core.domain.use_cases.kkbapp.GetKkbAppUseCase
-import com.kakeibo.core.domain.use_cases.kkbapp.InsertKkbAppUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.GetNonDisplayedCategoriesUseCase
 import com.kakeibo.feature_settings.domain.use_cases.rearrange_displayed_categories.UpdateDisplayedCategoriesUseCase
@@ -52,14 +60,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.statement.*
-import io.ktor.serialization.gson.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -71,35 +71,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideHttpClient(
-        prefs: AppPreferences
-    ): HttpClient {
-        return HttpClient(CIO) {
-            install(Logging)
-            install(Auth) {
-                bearer{
-                    println("asdf coming here!!!  " + prefs.getAccessToken())
-                    BearerTokens(
-                        accessToken = prefs.getAccessToken(),
-                        refreshToken = prefs.getRefreshToken()
-                    )
-                }
-            }
-            install(ContentNegotiation) {
-                gson()
-            }
-            HttpResponseValidator {
-                validateResponse { response: HttpResponse ->
-                    when (response.status.value) {
-                        491, 492, 493, 494 -> throw ServiceException(response.status.value)
-                    }
-                }
-            }
-        }
-    }
 
     @Provides
     @Singleton
@@ -123,21 +94,6 @@ object AppModule {
             .build()
             .create(ItemApi::class.java)
     }
-//
-//    @Singleton
-//    @Provides
-//    fun provideAuthApi(basicAuthInterceptor: BasicAuthInterceptor): AuthApi {
-//        val client = OkHttpClient.Builder()
-//            .addInterceptor(basicAuthInterceptor)
-//            .build()
-//
-//        return Retrofit.Builder()
-//            .baseUrl(AUTH_BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .client(client)
-//            .build()
-//            .create(AuthApi::class.java)
-//    }
 
     @Provides
     @Singleton
@@ -192,16 +148,6 @@ object AppModule {
     /*
     Repositories
      */
-    @Singleton
-    @Provides
-    fun provideAuthRepository(
-        @ApplicationContext context: Context,
-        authApi: AuthApi,
-        prefs: AppPreferences
-    ): AuthRepository {
-        return AuthRepositoryImpl(context, authApi, prefs)
-    }
-
     @Singleton
     @Provides
     fun provideKkbAppRepository(db: AppDatabase): KkbAppRepository {

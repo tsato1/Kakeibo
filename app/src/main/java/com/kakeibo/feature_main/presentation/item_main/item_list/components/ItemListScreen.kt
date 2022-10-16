@@ -22,14 +22,15 @@ import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.feature_main.presentation.common.components.*
+import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.item_main.ItemMainViewModel
 import com.kakeibo.feature_main.presentation.item_main.components.BottomBar
-import com.kakeibo.feature_main.presentation.item_main.ItemMainEvent
 import com.kakeibo.feature_main.presentation.util.Screen
 import com.kakeibo.util.UtilDate
+import com.kakeibo.util.UtilDate.toCalendar
 import com.kakeibo.util.UtilDate.toYMDString
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.datetime.DateTimeUnit
+import java.util.*
 import kotlin.math.roundToInt
 
 @Composable
@@ -48,9 +49,9 @@ fun ItemListScreen(
     val openSearchDetailDialog = remember { mutableStateOf(false) }
     val openExitSearchDialog = remember { mutableStateOf(false) }
 
-    val itemListState = viewModel.expandableItemListState.value
+    val itemListState by viewModel.expandableItemListState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel.eventFlow, scaffoldState.snackbarHostState) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemMainViewModel.UiEvent.ShowSnackbar -> {
@@ -66,7 +67,7 @@ fun ItemListScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
                 if (searchId != 0L || reload) {
-                    viewModel.onEvent(ItemMainEvent.LoadItems(searchId, focusDate, focusItemId))
+                    viewModel.onEvent(ItemMainEvent.LoadItems(searchId, focusDate.toCalendar(), focusItemId))
                 }
             }
         }
@@ -109,10 +110,10 @@ fun ItemListScreen(
                             onDragEnd = {
                                 when {
                                     offsetX > 200 -> {
-                                        viewModel.plus(-1, DateTimeUnit.MONTH)
+                                        viewModel.plus(Calendar.MONTH, -1)
                                     }
                                     offsetX < -200 -> {
-                                        viewModel.plus(1, DateTimeUnit.MONTH)
+                                        viewModel.plus(Calendar.MONTH, 1)
                                     }
                                 }
                                 offsetX = 0f
@@ -183,7 +184,7 @@ fun ItemListScreen(
            },
            onConfirmButtonClick = {
                navController.navigate(Screen.ItemListScreen.route +
-                       "?searchId=${0L}/?focusDate=${UtilDate.getTodaysLocalDate().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
+                       "?searchId=${0L}/?focusDate=${Calendar.getInstance().toYMDString(UtilDate.DATE_FORMAT_DB)}/?focusItemId=${-1L}/?reload=${true}")
                viewModel.onEvent(ItemMainEvent.ExitSearchMode)
                openExitSearchDialog.value = false
            }

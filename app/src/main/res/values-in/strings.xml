@@ -176,4 +176,9 @@
     <string name="calendar">Kalender</string>
     <string name="chart">Bagan</string>
     <string name="list">Daftar</string>
+    <string name="clear_cache">Hapus cache</string>
+    <string name="app_stores_user_cache">Kakeibo menyimpan data pengguna dalam cache agar mudah terhubung ke Google di lain waktu. Apakah Anda ingin menghapus cache?</string>
+    <string name="canceled">Dibatalkan</string>
+    <string name="cleare_cache_success">Berhasil membersihkan cache</string>
+    <string name="cleare_cache_failure">Gagal menghapus cache</string>
 </resources>
