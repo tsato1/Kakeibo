@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
-import com.kakeibo.core.presentation.components.BannerAds
+//import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.domain.models.DisplayedItemModel
@@ -368,10 +368,10 @@ fun ItemChartScreen(
                 }
             }
             if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
-                BannerAds(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    adId = stringResource(id = R.string.main_banner_ad)
-                )
+//                BannerAds(
+//                    modifier = Modifier.align(Alignment.BottomCenter),
+//                    adId = stringResource(id = R.string.main_banner_ad)
+//                )
             }
         }
     }

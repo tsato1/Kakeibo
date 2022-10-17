@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import com.firebase.ui.auth.AuthUI
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
-import com.kakeibo.core.presentation.components.BannerAds
+//import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.feature_main.presentation.common.FirebaseViewModel
 import com.kakeibo.feature_settings.presentation.util.Screen
@@ -237,9 +237,9 @@ fun SettingsListScreen(
         }
         Spacer(modifier = Modifier.weight(1f))
         if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
-            BannerAds(
-                adId = stringResource(id = R.string.settings_banner_ad)
-            )
+//            BannerAds(
+//                adId = stringResource(id = R.string.settings_banner_ad)
+//            )
         }
     }
 

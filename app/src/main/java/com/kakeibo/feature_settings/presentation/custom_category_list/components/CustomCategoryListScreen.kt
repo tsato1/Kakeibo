@@ -24,7 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
-import com.kakeibo.core.presentation.components.BannerAds
+//import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.feature_settings.domain.util.CustomCategoryListOrder
 import com.kakeibo.feature_settings.presentation.custom_category_list.CustomCategoryListEvent
 import com.kakeibo.feature_settings.presentation.custom_category_list.CustomCategoryListViewModel
@@ -165,9 +165,9 @@ fun CustomCategoryListScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
-                BannerAds(
-                    adId = stringResource(id = R.string.main_banner_ad)
-                )
+//                BannerAds(
+//                    adId = stringResource(id = R.string.main_banner_ad)
+//                )
             }
         }
     }

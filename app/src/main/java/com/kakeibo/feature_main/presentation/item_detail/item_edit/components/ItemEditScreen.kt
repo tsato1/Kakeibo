@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
-import com.kakeibo.core.presentation.components.BannerAds
+//import com.kakeibo.core.presentation.components.BannerAds
 import com.kakeibo.core.presentation.components.CategoryIcon
 import com.kakeibo.core.presentation.components.DialogCard
 import com.kakeibo.core.presentation.components.TransparentHintTextField
@@ -209,9 +209,9 @@ fun ItemEditScreen(
                 )
             }
             if (viewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
-                BannerAds(
-                    adId = stringResource(id = R.string.main_banner_ad)
-                )
+//                BannerAds(
+//                    adId = stringResource(id = R.string.main_banner_ad)
+//                )
             }
         }
     }

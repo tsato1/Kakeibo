@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
+//import com.google.android.gms.ads.AdRequest
+//import com.google.android.gms.ads.AdView
+//import com.google.android.gms.ads.MobileAds
 import com.kakeibo.R
 import com.kakeibo.core.data.constants.ConstKkbAppDB
 import com.kakeibo.feature_settings.domain.models.CategoryModel
@@ -41,12 +41,12 @@ class CategoryReorderActivity : AppCompatActivity() {
         }
 
         /* ads  */
-        if (_categoryViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
-            MobileAds.initialize(this) {}
-            val adView: AdView = findViewById(R.id.ad_view)
-            val adRequest = AdRequest.Builder().build()
-            adView.loadAd(adRequest)
-        }
+//        if (_categoryViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+//            MobileAds.initialize(this) {}
+//            val adView: AdView = findViewById(R.id.ad_view)
+//            val adRequest = AdRequest.Builder().build()
+//            adView.loadAd(adRequest)
+//        }
 
         _recyclerView = findViewById(R.id.rcv_grid)
         _nextBtn = findViewById(R.id.btn_next)

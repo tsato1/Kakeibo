@@ -151,9 +151,9 @@ dependencies {
     implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
 
     // Ads
-    implementation "com.google.android.gms:play-services-ads:21.2.0"
-    implementation 'com.adcolony:sdk:4.7.1'
-    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+//    implementation "com.google.android.gms:play-services-ads:21.2.0"
+//    implementation 'com.adcolony:sdk:4.7.1'
+//    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'

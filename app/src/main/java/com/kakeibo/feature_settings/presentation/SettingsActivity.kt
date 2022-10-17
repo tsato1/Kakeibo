@@ -23,12 +23,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.adcolony.sdk.AdColony
-import com.adcolony.sdk.AdColonyAdSize
-import com.adcolony.sdk.AdColonyAdView
-import com.adcolony.sdk.AdColonyAdViewListener
+//import com.adcolony.sdk.AdColony
+//import com.adcolony.sdk.AdColonyAdSize
+//import com.adcolony.sdk.AdColonyAdView
+//import com.adcolony.sdk.AdColonyAdViewListener
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.android.gms.ads.MobileAds
+//import com.google.android.gms.ads.MobileAds
 import com.kakeibo.feature_settings.presentation.custom_category_detail.components.CustomCategoryDetailScreen
 import com.kakeibo.feature_settings.presentation.custom_category_list.components.CustomCategoryListScreen
 import com.kakeibo.feature_settings.presentation.settings_list.components.SettingsListScreen
@@ -50,13 +50,13 @@ class SettingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         /* ads */
-        MobileAds.initialize(this) { }
-        val adViewListener: AdColonyAdViewListener = object : AdColonyAdViewListener() {
-            override fun onRequestFilled(ad: AdColonyAdView) {
-                /** Add this ad object to whatever layout you have set up for this placement  */
-            }
-        }
-        AdColony.requestAdView(getString(R.string.main_banner_ad_zone_id), adViewListener, AdColonyAdSize.BANNER)
+//        MobileAds.initialize(this) { }
+//        val adViewListener: AdColonyAdViewListener = object : AdColonyAdViewListener() {
+//            override fun onRequestFilled(ad: AdColonyAdView) {
+//                /** Add this ad object to whatever layout you have set up for this placement  */
+//            }
+//        }
+//        AdColony.requestAdView(getString(R.string.main_banner_ad_zone_id), adViewListener, AdColonyAdSize.BANNER)
 
         setContent {
             KakeiboTheme {

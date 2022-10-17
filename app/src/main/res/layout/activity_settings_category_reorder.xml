@@ -54,17 +54,20 @@
             android:textColor="@color/color_black"
             android:background="@color/color_background"
             android:contentDescription="@string/next"
-            app:layout_constraintBottom_toTopOf="@+id/ad_view"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/ad_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/category_reorder_banner_ad"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <!--            app:layout_constraintBottom_toTopOf="@+id/ad_view"-->
+
+
+
+        <!--        <com.google.android.gms.ads.AdView-->
+<!--            xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+<!--            android:id="@+id/ad_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            ads:adSize="BANNER"-->
+<!--            ads:adUnitId="@string/category_reorder_banner_ad"/>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

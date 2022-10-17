@@ -23,15 +23,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.adcolony.sdk.*
+//import com.adcolony.sdk.*
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+//import com.google.android.gms.ads.AdRequest
+//import com.google.android.gms.ads.LoadAdError
+//import com.google.android.gms.ads.MobileAds
+//import com.google.android.gms.ads.interstitial.InterstitialAd
+//import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -87,7 +87,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private var interstitialAd: InterstitialAd? = null
+//    private var interstitialAd: InterstitialAd? = null
 
     private val firebaseViewModel: FirebaseViewModel by viewModels()
     private val itemMainViewModel: ItemMainViewModel by viewModels()
@@ -105,37 +105,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         /* ads */
-        MobileAds.initialize(this) { }
-        val adRequest = AdRequest.Builder().build()
-        var adUnitId = getString(R.string.upload_ad)
-        if (BuildConfig.DEBUG) { /* in debug mode */
-            adUnitId = "ca-app-pub-3940256099942544/1033173712"
-        }
-        InterstitialAd.load(this, adUnitId, adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdLoaded(ad: InterstitialAd) {
-                interstitialAd = ad
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-
-            }
-        })
-
-        /* Ad Colony */
-        val adViewListener: AdColonyAdViewListener = object : AdColonyAdViewListener() {
-            override fun onRequestFilled(ad: AdColonyAdView) {
-                /** Add this ad object to whatever layout you have set up for this placement  */
-            }
-        }
-        AdColony.requestAdView(getString(R.string.main_banner_ad_zone_id), adViewListener, AdColonyAdSize.BANNER)
-
-        AdColony.configure(this, getString(R.string.admob_app_id))
-        val interstitialListener: AdColonyInterstitialListener = object : AdColonyInterstitialListener() {
-            override fun onRequestFilled(ad: AdColonyInterstitial) {
-                /* Store and use this ad object to show your ad when appropriate */
-            }
-        }
-        AdColony.requestInterstitial(getString(R.string.upload_ad_zone_id), interstitialListener)
+//        MobileAds.initialize(this) { }
+//        val adRequest = AdRequest.Builder().build()
+//        var adUnitId = getString(R.string.upload_ad)
+//        if (BuildConfig.DEBUG) { /* in debug mode */
+//            adUnitId = "ca-app-pub-3940256099942544/1033173712"
+//        }
+//        InterstitialAd.load(this, adUnitId, adRequest, object : InterstitialAdLoadCallback() {
+//            override fun onAdLoaded(ad: InterstitialAd) {
+//                interstitialAd = ad
+//            }
+//
+//            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+//
+//            }
+//        })
+//
+//        /* Ad Colony */
+//        val adViewListener: AdColonyAdViewListener = object : AdColonyAdViewListener() {
+//            override fun onRequestFilled(ad: AdColonyAdView) {
+//                /** Add this ad object to whatever layout you have set up for this placement  */
+//            }
+//        }
+//        AdColony.requestAdView(getString(R.string.main_banner_ad_zone_id), adViewListener, AdColonyAdSize.BANNER)
+//
+//        AdColony.configure(this, getString(R.string.admob_app_id))
+//        val interstitialListener: AdColonyInterstitialListener = object : AdColonyInterstitialListener() {
+//            override fun onRequestFilled(ad: AdColonyInterstitial) {
+//                /* Store and use this ad object to show your ad when appropriate */
+//            }
+//        }
+//        AdColony.requestInterstitial(getString(R.string.upload_ad_zone_id), interstitialListener)
 
         setContent {
             KakeiboTheme {
@@ -360,9 +360,9 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this, R.string.file_created, Toast.LENGTH_LONG).show()
 
                         /* ads */
-                        if (interstitialAd != null) {
-                            interstitialAd?.show(this)
-                        }
+//                        if (interstitialAd != null) {
+//                            interstitialAd?.show(this)
+//                        }
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
