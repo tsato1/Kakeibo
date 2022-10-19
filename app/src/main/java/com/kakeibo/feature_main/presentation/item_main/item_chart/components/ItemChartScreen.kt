@@ -40,6 +40,7 @@ import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilDate
 import com.kakeibo.util.UtilDate.toYMDString
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -238,8 +239,7 @@ fun ItemChartScreen(
                                                         .times(BigDecimal(100))
                                                         .divide(
                                                             itemChartState.value.incomeTotal.toBigDecimal(),
-                                                            0,
-                                                            BigDecimal.ROUND_HALF_DOWN
+                                                            RoundingMode.HALF_DOWN
                                                         )
                                                 }%",
                                                 textAlign = TextAlign.End
@@ -346,8 +346,7 @@ fun ItemChartScreen(
                                                         .times(BigDecimal(100))
                                                         .divide(
                                                             itemChartState.value.expenseTotal.toBigDecimal(),
-                                                            0,
-                                                            BigDecimal.ROUND_HALF_DOWN
+                                                            RoundingMode.HALF_DOWN
                                                         )
                                                 }%",
                                                 textAlign = TextAlign.End

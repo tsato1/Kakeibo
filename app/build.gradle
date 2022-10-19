@@ -19,7 +19,7 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 75
+        versionCode 78
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
@@ -137,9 +137,7 @@ dependencies {
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
-    implementation ('com.google.firebase:firebase-auth-ktx') {
-        exclude module: "play-services-safetynet"
-    }
+    implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation "com.google.android.gms:play-services-auth:20.3.0"
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
@@ -195,4 +193,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
     androidTestImplementation "org.mockito:mockito-core:2.21.0"
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.43.2'
+}
+configurations.all {
+    exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
 }

@@ -134,60 +134,60 @@ fun DrawerContent(
                 )
             }
         }
-        if (isAuthorized.value) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = {
-//                            authViewModel.onEvent(AuthViewModel.AuthUiEvent.Logout)
-                            scope.launch { scaffoldState.drawerState.close() }
-                        }
-                    )
-                    .height(45.dp)
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Logout,
-                    contentDescription = stringResource(id = R.string.sign_out),
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(7.dp))
-                Text(
-                    text = stringResource(id = R.string.sign_out),
-                    color = Color.Black
-                )
-            }
-        }
-        else {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = {
-//                            navController.navigate(Screen.AuthScreen.route)
-                            scope.launch {
-                                scaffoldState.drawerState.close()
-                            }
-                        }
-                    )
-                    .height(45.dp)
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Login,
-                    contentDescription = stringResource(id = R.string.sign_in),
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(7.dp))
-                Text(
-                    text = stringResource(id = R.string.sign_in),
-                    color = Color.Black
-                )
-            }
-        }
+//        if (isAuthorized.value) {
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .clickable(
+//                        onClick = {
+////                            authViewModel.onEvent(AuthViewModel.AuthUiEvent.Logout)
+//                            scope.launch { scaffoldState.drawerState.close() }
+//                        }
+//                    )
+//                    .height(45.dp)
+//                    .padding(horizontal = 10.dp, vertical = 4.dp)
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Logout,
+//                    contentDescription = stringResource(id = R.string.sign_out),
+//                    modifier = Modifier.size(24.dp)
+//                )
+//                Spacer(modifier = Modifier.width(7.dp))
+//                Text(
+//                    text = stringResource(id = R.string.sign_out),
+//                    color = Color.Black
+//                )
+//            }
+//        }
+//        else {
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .clickable(
+//                        onClick = {
+////                            navController.navigate(Screen.AuthScreen.route)
+//                            scope.launch {
+//                                scaffoldState.drawerState.close()
+//                            }
+//                        }
+//                    )
+//                    .height(45.dp)
+//                    .padding(horizontal = 10.dp, vertical = 4.dp)
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Login,
+//                    contentDescription = stringResource(id = R.string.sign_in),
+//                    modifier = Modifier.size(24.dp)
+//                )
+//                Spacer(modifier = Modifier.width(7.dp))
+//                Text(
+//                    text = stringResource(id = R.string.sign_in),
+//                    color = Color.Black
+//                )
+//            }
+//        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
