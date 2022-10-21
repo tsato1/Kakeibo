@@ -41,3 +41,4 @@ obj/
 app/src/main/res/values/secrets.xml
 app/google-services.json
 app/src/main/res/values/secrets.xml
+app/src/main/google-services.json
