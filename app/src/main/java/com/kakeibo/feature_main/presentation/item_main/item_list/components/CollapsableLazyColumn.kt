@@ -154,7 +154,6 @@ fun CollapsableLazyColumn(
                 if (!collapsed) {
                     items(expandableItem.children) { child ->
                         val dropdownMenuExpanded = rememberSaveable { mutableStateOf(false) }
-                        val rememberedItem = remember { mutableStateOf(child) }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -172,9 +171,9 @@ fun CollapsableLazyColumn(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             CategoryIcon(
-                                code = rememberedItem.value.categoryCode,
-                                drawable = rememberedItem.value.categoryDrawable,
-                                image = rememberedItem.value.categoryImage
+                                code = child.categoryCode,
+                                drawable = child.categoryDrawable,
+                                image = child.categoryImage
                             )
                             Column(
                                 modifier = Modifier
