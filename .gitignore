@@ -40,6 +40,3 @@ obj/
 #secrets
 app/src/main/res/values/secrets.xml
 app/google-services.json
-app/src/main/res/values/secrets.xml
-app/src/main/google-services.json
-this line was added to purge a file committed in the past
