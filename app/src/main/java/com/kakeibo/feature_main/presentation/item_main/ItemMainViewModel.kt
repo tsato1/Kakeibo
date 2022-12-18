@@ -292,7 +292,11 @@ class ItemMainViewModel @Inject constructor(
                     index += 1
                     iDate.add(Calendar.DAY_OF_MONTH, 1)
                 }
-                while (index <= 42) { /* In Calendar Screen, the number of items shown is 42 */
+                /*
+                calendarItemList has to have at least 42 items
+                as the number of items shown is 42 in Calendar Screen.
+                 */
+                while (index <= 42) {
                     calendarItemList.add(
                         index,
                         CalendarItem(
