@@ -24,16 +24,6 @@ fun CategoryIcon(
     image: ByteArray?,
     size: Dp = dimensionResource(id = R.dimen.new_category_drawable_size)
 ) {
-    /* Invalid Resource ID */
-    if (UtilDrawing.getDrawableIdFromIconName(LocalContext.current, drawable) == 0) {
-        Icon(
-            modifier = modifier,
-            painter = painterResource(id = R.mipmap.ic_mikan),
-            contentDescription = "Icon Not Found",
-            tint= Color.Unspecified
-        )
-    }
-
     when {
         code < 0 -> {
             Icon(
@@ -44,6 +34,17 @@ fun CategoryIcon(
             )
         }
         code < UtilCategory.CUSTOM_CATEGORY_CODE_START -> {
+            /* Invalid Resource ID */
+            if (UtilDrawing.getDrawableIdFromIconName(LocalContext.current, drawable) == 0) {
+                Icon(
+                    modifier = modifier,
+                    painter = painterResource(id = R.mipmap.ic_mikan),
+                    contentDescription = "Icon Not Found",
+                    tint= Color.Unspecified
+                )
+                return
+            }
+
             Image(
                 modifier = modifier.size(size),
                 painter = painterResource(
