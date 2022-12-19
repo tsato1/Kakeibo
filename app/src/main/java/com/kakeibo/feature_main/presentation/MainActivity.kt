@@ -43,6 +43,9 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.kakeibo.BuildConfig
 import com.kakeibo.Constants
 import com.kakeibo.R
@@ -89,6 +92,8 @@ class MainActivity : ComponentActivity() {
 
 //    private var interstitialAd: InterstitialAd? = null
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private val firebaseViewModel: FirebaseViewModel by viewModels()
     private val itemMainViewModel: ItemMainViewModel by viewModels()
 
@@ -103,6 +108,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /* Firebase Analytics */
+        firebaseAnalytics = Firebase.analytics
 
         /* ads */
 //        MobileAds.initialize(this) { }
