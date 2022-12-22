@@ -19,7 +19,7 @@ android {
         applicationId "com.kakeibo"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 80
+        versionCode 81
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
@@ -100,19 +100,14 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager-indicators:0.24.6-alpha"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.24.6-alpha"
 
-    // Material Design
-//    implementation 'com.google.android.material:material:1.7.0-alpha03'????
-
-    // MotionLayout
-//    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'?????
-
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-//    implementation "androidx.security:security-crypto:1.1.0-alpha03" //??????????
+    // In-app updates
+    implementation "com.google.android.play:app-update:2.0.1"
+    implementation "com.google.android.play:app-update-ktx:2.0.1"
 
     // Room
     implementation "androidx.room:room-runtime:2.4.3"
