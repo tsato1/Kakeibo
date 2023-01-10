@@ -40,7 +40,7 @@ fun ItemListScreen(
     viewModel: ItemMainViewModel,
     searchId: Long,
     focusDate: String,
-    focusItemId: Long,
+    focusItemId: String,
     reload: Boolean
 ) {
     val scaffoldState = rememberScaffoldState()

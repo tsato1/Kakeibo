@@ -11,7 +11,7 @@ data class ExpandableItem(
 
 }
 
-fun List<DisplayedItemModel>.containsAt(id: Long): Int = run {
+fun List<DisplayedItemModel>.containsAt(id: String): Int = run {
     var counter = 0
     for (ele in this) {
         if (ele.id == id) return counter

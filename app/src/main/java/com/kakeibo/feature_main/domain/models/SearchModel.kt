@@ -37,7 +37,7 @@ data class SearchModel(
      */
     fun toQuery(): String {
         var out = "SELECT " +
-                ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
+                ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + "," +
                 ConstItemDB.COL_AMOUNT + "," +
                 ConstItemDB.COL_CURRENCY_CODE + "," +
                 ConstItemDB.COL_CATEGORY_CODE + "," +

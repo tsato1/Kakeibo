@@ -32,7 +32,7 @@ class DisplayedItemRepositoryImpl(
         dao.getAllItems() // todo
     }
 
-    override suspend fun getItemById(id: Long): DisplayedItemModel? = withContext(Dispatchers.IO) {
+    override suspend fun getItemById(id: String): DisplayedItemModel? = withContext(Dispatchers.IO) {
         dao.getItemById(id)?.toDisplayedItemModel().also { displayedItemModel ->
             displayedItemModel?.let {
                 if (it.categoryCode < UtilCategory.CUSTOM_CATEGORY_CODE_START) {
@@ -106,7 +106,7 @@ class DisplayedItemRepositoryImpl(
             }
         }
 
-    override suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int =
+    override suspend fun deleteItemById(id: String, syncWithRemote: Int): Int =
         withContext(Dispatchers.IO) {
             val response = if (syncWithRemote == 1) {
                 try {
@@ -151,7 +151,7 @@ class DisplayedItemRepositoryImpl(
         }
     }
 
-    override suspend fun deleteLocallyDeletedItemId(id: Long) = withContext(Dispatchers.IO) {
+    override suspend fun deleteLocallyDeletedItemId(id: String) = withContext(Dispatchers.IO) {
         dao.deleteLocallyDeletedItemId(id)
     }
 

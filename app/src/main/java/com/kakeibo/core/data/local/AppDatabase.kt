@@ -99,5 +99,12 @@ abstract class AppDatabase : RoomDatabase() {
                 PrepDB7.migrate_9_10(database)
             }
         }
+
+        @VisibleForTesting
+        val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                PrepDB7.migrate_10_11(database)
+            }
+        }
     }
 }

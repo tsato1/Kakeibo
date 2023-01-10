@@ -4,7 +4,7 @@ import com.kakeibo.core.data.local.entities.ItemEntity
 import java.math.BigDecimal
 
 data class DisplayedItemModel(
-    val id: Long?,
+    val id: String?,
     val amount: String,
     val currencyCode: String,
     val categoryCode: Int,
@@ -26,7 +26,7 @@ data class DisplayedItemModel(
     fun toItemEntity(): ItemEntity {
 
         return ItemEntity(
-            id = id ?: 0,
+            uuid = "",
             amount = BigDecimal(amount.replace(',', '.')), // converter will do .multiply(BigDecimal(1000)).toLong()
             currencyCode = currencyCode,
             categoryCode = categoryCode,

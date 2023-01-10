@@ -6,6 +6,6 @@ import java.util.Calendar
 sealed class ItemMainEvent {
     data class DeleteItem(val displayedItemModel: DisplayedItemModel) : ItemMainEvent()
     object RestoreItem : ItemMainEvent()
-    data class LoadItems(val searchId: Long, val focusDate: Calendar, val focusItemId: Long) : ItemMainEvent()
+    data class LoadItems(val searchId: Long, val focusDate: Calendar, val focusItemId: String) : ItemMainEvent()
     object ExitSearchMode : ItemMainEvent()
 }

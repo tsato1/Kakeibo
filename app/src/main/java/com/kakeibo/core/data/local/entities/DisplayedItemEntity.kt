@@ -8,7 +8,7 @@ import com.kakeibo.feature_main.domain.models.DisplayedItemModel
 import java.math.BigDecimal
 
 data class DisplayedItemEntity(
-    val _id: Long?,
+    val _id: String?,
     val amount: BigDecimal,
     @ColumnInfo(name = ConstItemDB.COL_CURRENCY_CODE) val currencyCode: String,
     @ColumnInfo(name = ConstItemDB.COL_CATEGORY_CODE) val categoryCode: Int,

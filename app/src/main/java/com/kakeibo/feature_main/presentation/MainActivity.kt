@@ -82,6 +82,8 @@ import javax.inject.Inject
 //when saving an item, pass the month to list screen viewmodel to open that month's data
 //string: "export is initiated"
 
+//todo db: _id -> uuid,  item_is_syned rename to is_synced
+
 //todo keyboard goes away
 //todo typography
 //todo input : accept comma and period
@@ -212,7 +214,7 @@ class MainActivity : ComponentActivity() {
                                 ItemMainEvent.LoadItems(
                                     0L,
                                     Calendar.getInstance(),
-                                    -1L
+                                    "-1"
                                 )
                             )
 
@@ -475,7 +477,7 @@ fun ScreenController(
         ) {
             val searchId = it.arguments?.getLong("searchId") ?: 0L
             val focusDate = it.arguments?.getString("focusDate") ?: ""
-            val focusItemId = it.arguments?.getLong("focusItemId") ?: -1L
+            val focusItemId = it.arguments?.getString("focusItemId") ?: "-1"
             val reload = it.arguments?.getBoolean("reload") ?: false
             ItemListScreen(
                 navController = navController,

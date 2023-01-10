@@ -9,7 +9,7 @@ interface DisplayedItemRepository {
 
     fun getAllItems(): Flow<Resource<List<DisplayedItemModel>>>
 
-    suspend fun getItemById(id: Long): DisplayedItemModel?
+    suspend fun getItemById(id: String): DisplayedItemModel?
 
     fun getSpecificItems(query: String, args: List<String>, syncWithRemote: Int): Flow<Resource<List<DisplayedItemModel>>>
 
@@ -17,10 +17,10 @@ interface DisplayedItemRepository {
 
     suspend fun insertItems(itemEntityList: List<ItemEntity>, syncWithRemote: Int)
 
-    suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int
+    suspend fun deleteItemById(id: String, syncWithRemote: Int): Int
 
     suspend fun syncItems(syncWithRemote: Int)
 
-    suspend fun deleteLocallyDeletedItemId(id: Long)
+    suspend fun deleteLocallyDeletedItemId(id: String)
 
 }

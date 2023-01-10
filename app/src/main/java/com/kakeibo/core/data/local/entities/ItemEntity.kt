@@ -9,9 +9,9 @@ import java.math.BigDecimal
 
 @Entity(tableName = "items")
 class ItemEntity {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = ConstItemDB.COL_ID)
-    var id: Long = 0
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = ConstItemDB.COL_UUID)
+    var uuid: String = ""
         private set
 
     @ColumnInfo(name = ConstItemDB.COL_AMOUNT)
@@ -45,7 +45,7 @@ class ItemEntity {
     var isSynced = false
 
     constructor(
-        id: Long,
+        uuid: String,
         amount: BigDecimal,
         currencyCode: String,
         categoryCode: Int,
@@ -54,7 +54,7 @@ class ItemEntity {
         updateDate: String,
         isSynced: Boolean
     ) {
-        this.id = id
+        this.uuid = uuid
         this.amount = amount
         this.currencyCode = currencyCode
         this.categoryCode = categoryCode

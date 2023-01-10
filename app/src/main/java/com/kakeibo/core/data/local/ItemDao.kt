@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface ItemDao {
 
     @Query("SELECT " +
-            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
+            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + "," +
             ConstItemDB.COL_AMOUNT + "," +
             ConstItemDB.COL_CURRENCY_CODE + "," +
             ConstItemDB.COL_CATEGORY_CODE + "," +
@@ -38,7 +38,7 @@ interface ItemDao {
     suspend fun getAllItems(): List<DisplayedItemEntity>
 
     @Query("SELECT " +
-            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + "," +
+            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + "," +
             ConstItemDB.COL_AMOUNT + "," +
             ConstItemDB.COL_CURRENCY_CODE + "," +
             ConstItemDB.COL_CATEGORY_CODE + "," +
@@ -58,8 +58,8 @@ interface ItemDao {
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
-            " WHERE " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + " = :id")
-    suspend fun getItemById(id: Long): DisplayedItemEntity?
+            " WHERE " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + " = :id")
+    suspend fun getItemById(id: String): DisplayedItemEntity?
 
     @RawQuery(observedEntities = [ItemEntity::class, CategoryEntity::class])
     fun getSpecificItems(query: SupportSQLiteQuery): Flow<List<DisplayedItemEntity>>
@@ -67,8 +67,8 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(itemEntity: ItemEntity): Long
 
-    @Query("DELETE FROM " + ConstItemDB.TABLE_NAME + " WHERE " + ConstItemDB.COL_ID + " = :id")
-    suspend fun deleteItemById(id: Long): Int // returns the number of rows affected by the query
+    @Query("DELETE FROM " + ConstItemDB.TABLE_NAME + " WHERE " + ConstItemDB.COL_UUID + " = :id")
+    suspend fun deleteItemById(id: String): Int // returns the number of rows affected by the query
 
     @Query("DELETE FROM items")
     suspend fun deleteAllItems(): Int
@@ -83,7 +83,7 @@ interface ItemDao {
 
     @Query("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
             " WHERE " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " = :deletedItemId")
-    suspend fun deleteLocallyDeletedItemId(deletedItemId: Long)
+    suspend fun deleteLocallyDeletedItemId(deletedItemId: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocallyDeletedItemId(locallyDeletedItemId: LocallyDeletedItemIdEntity)

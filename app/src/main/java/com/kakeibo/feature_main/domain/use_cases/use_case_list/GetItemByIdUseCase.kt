@@ -7,7 +7,7 @@ class GetItemByIdUseCase(
     private val repository: DisplayedItemRepository
 ) {
 
-    suspend operator fun invoke(id: Long): DisplayedItemModel? {
+    suspend operator fun invoke(id: String): DisplayedItemModel? {
         return repository.getItemById(id)
     }
 

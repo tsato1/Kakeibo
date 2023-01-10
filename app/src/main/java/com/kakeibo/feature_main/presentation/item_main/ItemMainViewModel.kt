@@ -50,8 +50,8 @@ class ItemMainViewModel @Inject constructor(
     val searchModel: State<SearchModel?> = _searchModel
 
     /* used for expanding the expandableList and scrolling to this item*/
-    private val _focusItemIdState = mutableStateOf(savedStateHandle["focusItemId"] ?: -1L)
-    val focusItemIdState: State<Long> = _focusItemIdState
+    private val _focusItemIdState = mutableStateOf(savedStateHandle["focusItemId"] ?: "-1")
+    val focusItemIdState: State<String> = _focusItemIdState
 
     private val _calendarFromDate = mutableStateOf(Calendar.getInstance())
     val calendarFromDate: State<Calendar> = _calendarFromDate
@@ -194,7 +194,7 @@ class ItemMainViewModel @Inject constructor(
                 _searchId.value = 0L
                 resetToToday()
                 savedStateHandle["focusItemId"] = -1L
-                _focusItemIdState.value = -1L
+                _focusItemIdState.value = "-1"
                 loadThisMonthData()
             }
         }

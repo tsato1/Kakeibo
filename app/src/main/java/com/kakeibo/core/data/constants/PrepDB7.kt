@@ -1,9 +1,11 @@
 package com.kakeibo.core.data.constants
 
+import ConstItemDB
 import android.annotation.SuppressLint
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilCurrency
+import java.util.UUID
 import kotlin.math.absoluteValue
 
 @SuppressLint("Range")
@@ -619,5 +621,49 @@ object PrepDB7 {
                 " ADD COLUMN " + ConstCategoryDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
         database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
                 " (" + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER PRIMARY KEY NOT NULL);")
+    }
+
+    fun migrate_10_11(database: SupportSQLiteDatabase) {
+        //todo do this later
+//        database.execSQL("ALTER TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " RENAME TO " + ConstLocallyDeletedItemIdDB.TABLE_NAME + "_old;")
+//        database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " (" +
+//                "${ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID} TEXT NOT NULL PRIMARY KEY")
+
+        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME + " RENAME TO " + ConstItemDB.TABLE_NAME + "_old;")
+        database.execSQL("CREATE TABLE " + ConstItemDB.TABLE_NAME + " (" +
+                "${ConstItemDB.COL_UUID} TEXT NOT NULL PRIMARY KEY," +
+                "    amount INTEGER NOT NULL," +
+                "    currency_code TEXT NOT NULL DEFAULT '---'," +
+                "    category_code INTEGER AS Int NOT NULL DEFAULT 0," +
+                "    memo TEXT NOT NULL," +
+                "    event_date TEXT NOT NULL," +
+                "    update_date TEXT NOT NULL," +
+                "    item_is_synced INTEGER AS Boolean NOT NULL DEFAULT 0")
+        database.execSQL("INSERT INTO " + ConstItemDB.TABLE_NAME + " (" +
+                ConstItemDB.COL_AMOUNT + "," +
+                ConstItemDB.COL_CURRENCY_CODE + "," +
+                ConstItemDB.COL_CATEGORY_CODE + "," +
+                ConstItemDB.COL_MEMO + "," +
+                ConstItemDB.COL_EVENT_DATE + "," +
+                ConstItemDB.COL_UPDATE_DATE + ")" +
+                " SELECT " +
+                ConstItemDB.COL_AMOUNT + "," +
+                ConstItemDB.COL_CURRENCY_CODE + "," +
+                ConstItemDB.COL_CATEGORY_CODE + "," +
+                ConstItemDB.COL_MEMO + "," +
+                ConstItemDB.COL_EVENT_DATE + "," +
+                ConstItemDB.COL_UPDATE_DATE  + " FROM " + ConstItemDB.TABLE_NAME + "_old;")
+        database.execSQL("DROP TABLE " + ConstCategoryDB.TABLE_NAME + "_old;")
+
+        /* fill in the uuid column */
+        val cursorItem = database.query(
+            ("SELECT uuid FROM " + ConstItemDB.TABLE_NAME)
+        )
+        if (cursorItem.moveToFirst()) {
+            do {
+                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME +
+                        " SET uuid =" + UUID.randomUUID().toString())
+            } while (cursorItem.moveToNext())
+        }
     }
 }

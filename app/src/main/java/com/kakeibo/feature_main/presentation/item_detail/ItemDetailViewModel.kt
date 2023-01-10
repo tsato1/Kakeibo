@@ -38,8 +38,8 @@ class ItemDetailViewModel @Inject constructor(
     val dateFormatIndex = appPreferences.getDateFormatIndex()
     val fractionDigits = appPreferences.getFractionDigits()
 
-    private val _currentItemId = mutableStateOf(-1L)
-    val currentItemId: State<Long> = _currentItemId
+    private val _currentItemId = mutableStateOf("-1")
+    val currentItemId: State<String> = _currentItemId
 
     private val _itemAmount = mutableStateOf(TextFieldState(hint = "Enter amount"))
     val itemAmountState: State<TextFieldState> = _itemAmount
@@ -70,11 +70,11 @@ class ItemDetailViewModel @Inject constructor(
     init {
         loadCategories()
 
-        savedStateHandle.get<Long>("itemId")?.let { itemId ->
-            if (itemId != -1L) {
+        savedStateHandle.get<String>("itemId")?.let { itemId ->
+            if (itemId != "-1") {
                 viewModelScope.launch {
                     displayedItemUseCases.getItemByIdUseCase(itemId)?.also { item ->
-                        _currentItemId.value = item.id ?: -1L
+                        _currentItemId.value = item.id ?: "-1"
 
                         updateLocalEventDate(item.eventDate)
 
@@ -133,7 +133,7 @@ class ItemDetailViewModel @Inject constructor(
                     try {
                         val focusItemId = displayedItemUseCases.insertItemUseCase(
                             displayedItemModel = DisplayedItemModel(
-                                id = if (currentItemId.value == -1L) 0 else currentItemId.value,
+                                id = if (currentItemId.value == "-1") "0" else currentItemId.value,
                                 amount = itemAmountState.value.text,
                                 currencyCode = UtilCurrency.CURRENCY_NONE,
                                 categoryCode = itemCategoryCodeState.value,

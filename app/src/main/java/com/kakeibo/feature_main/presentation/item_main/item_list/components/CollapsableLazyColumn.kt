@@ -57,7 +57,7 @@ fun CollapsableLazyColumn(
     val clickedItem = remember {
         mutableStateOf(
             DisplayedItemModel(
-                0L, "", "", 0, "", "", ""
+                "0", "", "", 0, "", "", ""
             )
         )
     }
@@ -66,7 +66,7 @@ fun CollapsableLazyColumn(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is ItemMainViewModel.UiEvent.LoadingCompleted -> {
-                    if (viewModel.focusItemIdState.value != -1L) {
+                    if (viewModel.focusItemIdState.value != "-1") {
                         listState.animateScrollToItem(viewModel.focusItemIdState.value.toInt())
                     }
                 }
