@@ -106,7 +106,7 @@ class DisplayedItemRepositoryImpl(
             }
         }
 
-    override suspend fun deleteItemById(id: Long, syncWithRemote: Int): Int =
+    override suspend fun deleteItemById(id: String, syncWithRemote: Int): Int =
         withContext(Dispatchers.IO) {
             val response = if (syncWithRemote == 1) {
                 try {
@@ -151,7 +151,7 @@ class DisplayedItemRepositoryImpl(
         }
     }
 
-    override suspend fun deleteLocallyDeletedItemId(id: Long) = withContext(Dispatchers.IO) {
+    override suspend fun deleteLocallyDeletedItemId(id: String) = withContext(Dispatchers.IO) {
         dao.deleteLocallyDeletedItemId(id)
     }
 

@@ -44,6 +44,10 @@ class ItemEntity {
     @ColumnInfo(name = ConstItemDB.COL_IS_SYNCED)
     var isSynced = false
 
+    @ColumnInfo(name = ConstItemDB.COL_UUID)
+    var uuid = ""
+        private set
+
     constructor(
         id: Long,
         amount: BigDecimal,
@@ -52,7 +56,8 @@ class ItemEntity {
         memo: String,
         eventDate: String,
         updateDate: String,
-        isSynced: Boolean
+        isSynced: Boolean,
+        uuid: String
     ) {
         this.id = id
         this.amount = amount
@@ -62,6 +67,7 @@ class ItemEntity {
         this.eventDate = eventDate
         this.updateDate = updateDate
         this.isSynced = isSynced
+        this.uuid = uuid
     }
 
     /* called from TabFragment1 before getting saved  */
@@ -73,7 +79,8 @@ class ItemEntity {
         memo: String,
         eventDate: String,
         updateDate: String,
-        isSynced: Boolean
+        isSynced: Boolean,
+        uuid: String
     ) {
         this.amount = amount
         this.currencyCode = currencyCode
@@ -82,6 +89,7 @@ class ItemEntity {
         this.eventDate = eventDate
         this.updateDate = updateDate
         this.isSynced = isSynced
+        this.uuid = uuid
     }
 
     class InvalidItemException(message: String): Exception(message)

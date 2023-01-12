@@ -21,6 +21,7 @@ interface ItemDao {
             ConstItemDB.COL_MEMO + "," +
             ConstItemDB.COL_EVENT_DATE + "," +
             ConstItemDB.COL_UPDATE_DATE + "," +
+            ConstItemDB.COL_UUID + "," +
             ConstCategoryDB.COL_NAME + "," +
             ConstCategoryDB.COL_COLOR + "," +
             ConstCategoryDB.COL_SIGN + "," +
@@ -45,6 +46,7 @@ interface ItemDao {
             ConstItemDB.COL_MEMO + "," +
             ConstItemDB.COL_EVENT_DATE + "," +
             ConstItemDB.COL_UPDATE_DATE + "," +
+            ConstItemDB.COL_UUID + "," +
             ConstCategoryDB.COL_NAME + "," +
             ConstCategoryDB.COL_COLOR + "," +
             ConstCategoryDB.COL_SIGN + "," +
@@ -68,7 +70,7 @@ interface ItemDao {
     suspend fun insertItem(itemEntity: ItemEntity): Long
 
     @Query("DELETE FROM " + ConstItemDB.TABLE_NAME + " WHERE " + ConstItemDB.COL_ID + " = :id")
-    suspend fun deleteItemById(id: Long): Int // returns the number of rows affected by the query
+    suspend fun deleteItemById(id: String): Int // returns the number of rows affected by the query
 
     @Query("DELETE FROM items")
     suspend fun deleteAllItems(): Int
@@ -83,7 +85,7 @@ interface ItemDao {
 
     @Query("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
             " WHERE " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " = :deletedItemId")
-    suspend fun deleteLocallyDeletedItemId(deletedItemId: Long)
+    suspend fun deleteLocallyDeletedItemId(deletedItemId: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocallyDeletedItemId(locallyDeletedItemId: LocallyDeletedItemIdEntity)

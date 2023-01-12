@@ -11,4 +11,5 @@ object ConstItemDB {
     const val COL_EVENT_DATE = "event_date"
     const val COL_UPDATE_DATE = "update_date"
     const val COL_IS_SYNCED = "item_is_synced"// added on version 10
+    const val COL_UUID = "uuid"
 }

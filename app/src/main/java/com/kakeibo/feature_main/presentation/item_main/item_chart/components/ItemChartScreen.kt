@@ -403,7 +403,7 @@ fun ItemChartScreen(
     val clickedItem = remember {
         mutableStateOf(
             DisplayedItemModel(
-                0L, "", "", 0, "", "", ""
+                0L, "", "", 0, "", "", "", ""
             )
         )
     }

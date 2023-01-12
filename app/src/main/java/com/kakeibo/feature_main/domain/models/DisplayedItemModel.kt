@@ -11,6 +11,7 @@ data class DisplayedItemModel(
     val memo: String,
     val eventDate: String,
     val updateDate: String,
+    val uuid: String,
     var categoryName: String = "Category Name",
     val categoryColor: Int = 0,
     val categorySign: Int = 0,
@@ -33,7 +34,8 @@ data class DisplayedItemModel(
             memo = memo,
             eventDate = eventDate,
             updateDate = updateDate,
-            isSynced = itemIsSynced
+            isSynced = itemIsSynced,
+            uuid = uuid
         )
 
     }

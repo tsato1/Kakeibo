@@ -44,6 +44,7 @@ data class SearchModel(
                 ConstItemDB.COL_MEMO + "," +
                 ConstItemDB.COL_EVENT_DATE + "," +
                 ConstItemDB.COL_UPDATE_DATE + "," +
+                ConstItemDB.COL_UUID + "," +
                 ConstCategoryDB.COL_NAME + "," +
                 ConstCategoryDB.COL_COLOR + "," +
                 ConstCategoryDB.COL_SIGN + "," +

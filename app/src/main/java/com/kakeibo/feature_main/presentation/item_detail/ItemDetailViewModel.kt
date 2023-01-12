@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -139,7 +140,8 @@ class ItemDetailViewModel @Inject constructor(
                                 categoryCode = itemCategoryCodeState.value,
                                 memo = itemMemoState.value.text,
                                 eventDate = cal.value.toYMDString(UtilDate.DATE_FORMAT_DB),
-                                updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS)
+                                updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS),
+                                uuid = UUID.randomUUID().toString()
                             ),
                             syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
                         )
