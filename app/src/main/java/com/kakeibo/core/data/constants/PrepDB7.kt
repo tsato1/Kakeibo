@@ -626,21 +626,11 @@ object PrepDB7 {
     fun migrate_10_11(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " RENAME TO " + ConstLocallyDeletedItemIdDB.TABLE_NAME + "_old;")
         database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " (" +
-                "${ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID} TEXT NOT NULL PRIMARY KEY)")
+                "${ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_UUID} TEXT NOT NULL PRIMARY KEY)")
         database.execSQL("DROP TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + "_old;")
 
         database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME + " ADD COLUMN " + ConstItemDB.COL_UUID + " TEXT NOT NULL DEFAULT '';")
-//        database.execSQL("CREATE TABLE " + ConstItemDB.TABLE_NAME + " (" +
-//                "${ConstItemDB.COL_UUID} TEXT NOT NULL PRIMARY KEY," +
-//                "amount INTEGER NOT NULL," +
-//                "currency_code TEXT NOT NULL DEFAULT '---'," +
-//                "category_code INTEGER NOT NULL DEFAULT 0," +
-//                "memo TEXT NOT NULL," +
-//                "event_date TEXT NOT NULL," +
-//                "update_date TEXT NOT NULL," +
-//                "item_is_synced INTEGER NOT NULL DEFAULT 0" + " )"
-//        )
-//        /* fill in the uuid column */
+        /* fill in the uuid column */
         val cursorItem = database.query(
             ("SELECT ${ConstItemDB.COL_ID}, ${ConstItemDB.COL_UUID} FROM " + ConstItemDB.TABLE_NAME)
         )
@@ -650,26 +640,5 @@ object PrepDB7 {
                 database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME +  " SET uuid = '${UUID.randomUUID()}' WHERE ${ConstItemDB.COL_ID} = $id;")
             } while (cursorItem.moveToNext())
         }
-//
-//        database.execSQL("INSERT INTO " + ConstItemDB.TABLE_NAME + " (" +
-//                "uuid," +
-//                ConstItemDB.COL_AMOUNT + "," +
-//                ConstItemDB.COL_CURRENCY_CODE + "," +
-//                ConstItemDB.COL_CATEGORY_CODE + "," +
-//                ConstItemDB.COL_MEMO + "," +
-//                ConstItemDB.COL_EVENT_DATE + "," +
-//                ConstItemDB.COL_UPDATE_DATE + "," +
-//                ConstItemDB.COL_IS_SYNCED + ")" +
-//                " SELECT " +
-//                "'"+ UUID.randomUUID().toString()+"'" + ","+
-//                ConstItemDB.COL_AMOUNT + "," +
-//                ConstItemDB.COL_CURRENCY_CODE + "," +
-//                ConstItemDB.COL_CATEGORY_CODE + "," +
-//                ConstItemDB.COL_MEMO + "," +
-//                ConstItemDB.COL_EVENT_DATE + "," +
-//                ConstItemDB.COL_UPDATE_DATE  + "," +
-//                ConstItemDB.COL_IS_SYNCED + " FROM " + ConstItemDB.TABLE_NAME + "_old;")
-//        database.execSQL("DROP TABLE " + ConstCategoryDB.TABLE_NAME + "_old;")
-
     }
 }

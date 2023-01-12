@@ -106,11 +106,11 @@ class DisplayedItemRepositoryImpl(
             }
         }
 
-    override suspend fun deleteItemById(id: String, syncWithRemote: Int): Int =
+    override suspend fun deleteItemById(uuid: String, syncWithRemote: Int): Int =
         withContext(Dispatchers.IO) {
             val response = if (syncWithRemote == 1) {
                 try {
-                    api.deleteItem(DeleteItemRequest(id))
+                    api.deleteItem(DeleteItemRequest(uuid))
                 } catch (e: Exception) {
                     null
                 }
@@ -118,12 +118,12 @@ class DisplayedItemRepositoryImpl(
                 null
             }
 
-            val affectedRows = dao.deleteItemById(id)
+            val affectedRows = dao.deleteItemById(uuid)
 
             if (response == null || !response.isSuccessful) {
-                dao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(id))
+                dao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(uuid))
             } else {
-                deleteLocallyDeletedItemId(id)
+                deleteLocallyDeletedItemId(uuid)
             }
 
             affectedRows
@@ -132,7 +132,7 @@ class DisplayedItemRepositoryImpl(
     private var currentItemsResponse: Response<List<ItemEntity>>? = null
     override suspend fun syncItems(syncWithRemote: Int): Unit = withContext(Dispatchers.IO) {
         dao.getAllLocallyDeletedItemIds().onEach { locallyDeletedItemIdEntity -> // sync with server
-            deleteItemById(locallyDeletedItemIdEntity.deletedItemId, syncWithRemote)
+            deleteItemById(locallyDeletedItemIdEntity.deletedItemUUID, syncWithRemote)
         }
 
         dao.getAllUnsyncedItems().onEach { itemEntity ->
@@ -151,8 +151,8 @@ class DisplayedItemRepositoryImpl(
         }
     }
 
-    override suspend fun deleteLocallyDeletedItemId(id: String) = withContext(Dispatchers.IO) {
-        dao.deleteLocallyDeletedItemId(id)
+    override suspend fun deleteLocallyDeletedItemId(uuid: String) = withContext(Dispatchers.IO) {
+        dao.deleteLocallyDeletedItemId(uuid)
     }
 
 }
