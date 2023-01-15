@@ -1,5 +1,12 @@
 package com.kakeibo.feature_main.presentation
 
+//import com.adcolony.sdk.*
+//import com.google.android.gms.ads.AdRequest
+//import com.google.android.gms.ads.LoadAdError
+//import com.google.android.gms.ads.MobileAds
+//import com.google.android.gms.ads.interstitial.InterstitialAd
+//import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+//import com.google.api.client.extensions.android.http.AndroidHttp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,15 +31,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-//import com.adcolony.sdk.*
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.pager.ExperimentalPagerApi
-//import com.google.android.gms.ads.AdRequest
-//import com.google.android.gms.ads.LoadAdError
-//import com.google.android.gms.ads.MobileAds
-//import com.google.android.gms.ads.interstitial.InterstitialAd
-//import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -42,15 +45,14 @@ import com.google.android.gms.tasks.Task
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
-import com.kakeibo.BuildConfig
 import com.kakeibo.Constants
 import com.kakeibo.R
 import com.kakeibo.core.data.preferences.AppPreferences
@@ -93,6 +95,7 @@ import javax.inject.Inject
 @ExperimentalPagerApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val TAG = "MainActivity"
 
 //    private var interstitialAd: InterstitialAd? = null
 
@@ -111,12 +114,37 @@ class MainActivity : ComponentActivity() {
     private var currPassword: String? = null
 
     private val REQUEST_CODE_INAPP_UPDATE = 100
+    private val REQUEST_FIREBASE_SIGNIN = 101
+    private val REQUEST_GOOGLE_SIGNIN = 102
+    private val REQUEST_ONE_TAP_SIGNIN = 103
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityReenter(requestCode, data)
         if (requestCode == REQUEST_CODE_INAPP_UPDATE) {
             if (resultCode != RESULT_OK) {
                 processInAppUpdate()
+            }
+        }
+        if (requestCode == REQUEST_FIREBASE_SIGNIN) {
+            if (resultCode == RESULT_OK) {
+                firebaseViewModel.updateFirebaseUser()
+            }
+            else {
+                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_LONG).show()
+            }
+        }
+        if (requestCode == REQUEST_GOOGLE_SIGNIN) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    val task: Task<GoogleSignInAccount> =
+                        GoogleSignIn.getSignedInAccountFromIntent(data)
+                    task.getResult(ApiException::class.java).also {
+                        connectToGDrive(it)
+                    }
+                } catch (e: ApiException) {
+                    Log.d(TAG, "$e")
+                }
             }
         }
     }
@@ -313,7 +341,8 @@ class MainActivity : ComponentActivity() {
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build()
-        signInLauncherFirebase.launch(intent)
+        startActivityForResult(intent, REQUEST_FIREBASE_SIGNIN)
+//        signInLauncherFirebase.launch(intent)
     }
 
     private val signInLauncherFirebase = registerForActivityResult(
@@ -353,7 +382,8 @@ class MainActivity : ComponentActivity() {
             .requestScopes(Scope(DriveScopes.DRIVE_FILE))
             .build()
         GoogleSignIn.getClient(this, signInOptions).also {
-            googleSignInLauncher.launch(it.signInIntent)
+            startActivityForResult(it.signInIntent, REQUEST_GOOGLE_SIGNIN)
+//            googleSignInLauncher.launch(it.signInIntent)
         }
     }
 
@@ -382,7 +412,7 @@ class MainActivity : ComponentActivity() {
                 it.selectedAccount = googleAccount.account
             }
 
-        val googleDriveService = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+        val googleDriveService = Drive.Builder(NetHttpTransport(), GsonFactory(), credential)
             .setApplicationName("Drive API Migration")
             .build()
 
@@ -436,7 +466,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenController(
     navController: NavHostController,
-    itemMainViewModel: ItemMainViewModel
+    itemMainViewModel: ItemMainViewModel,
 ) {
     NavHost(
         navController = navController,
