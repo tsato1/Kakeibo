@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 11,
-    "identityHash": "6fc489ee82e9e6a19f185712968dd1cb",
+    "identityHash": "b352d929dcb4d5691c8843d540ab1c85",
     "entities": [
       {
         "tableName": "kkbapp",
@@ -451,19 +451,19 @@
         "foreignKeys": []
       },
       {
-        "tableName": "locally_deleted_item_ids",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`deleted_item_id` TEXT NOT NULL, PRIMARY KEY(`deleted_item_id`))",
+        "tableName": "locallyDeletedItemIdEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`deletedItemUUID` TEXT NOT NULL, PRIMARY KEY(`deletedItemUUID`))",
         "fields": [
           {
-            "fieldPath": "deletedItemId",
-            "columnName": "deleted_item_id",
+            "fieldPath": "deletedItemUUID",
+            "columnName": "deletedItemUUID",
             "affinity": "TEXT",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "deleted_item_id"
+            "deletedItemUUID"
           ],
           "autoGenerate": false
         },
@@ -474,7 +474,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6fc489ee82e9e6a19f185712968dd1cb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b352d929dcb4d5691c8843d540ab1c85')"
     ]
   }
 }

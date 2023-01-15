@@ -619,15 +619,14 @@ object PrepDB7 {
                 " ADD COLUMN " + ConstItemDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
         database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME +
                 " ADD COLUMN " + ConstCategoryDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
-        database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
+        database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME_OLD +
                 " (" + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER PRIMARY KEY NOT NULL);")
     }
 
     fun migrate_10_11(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " RENAME TO " + ConstLocallyDeletedItemIdDB.TABLE_NAME + "_old;")
+        database.execSQL("DROP TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME_OLD + ";")
         database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " (" +
                 "${ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_UUID} TEXT NOT NULL PRIMARY KEY)")
-        database.execSQL("DROP TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + "_old;")
 
         database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME + " ADD COLUMN " + ConstItemDB.COL_UUID + " TEXT NOT NULL DEFAULT '';")
         /* fill in the uuid column */

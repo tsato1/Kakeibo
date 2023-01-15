@@ -8,6 +8,6 @@ import com.kakeibo.core.data.constants.ConstLocallyDeletedItemIdDB
 @Entity(tableName = ConstLocallyDeletedItemIdDB.TABLE_NAME)
 data class LocallyDeletedItemIdEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID)
+    @ColumnInfo(name = ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_UUID)
     val deletedItemUUID: String
 )

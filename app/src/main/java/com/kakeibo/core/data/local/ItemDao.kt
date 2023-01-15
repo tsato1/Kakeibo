@@ -84,7 +84,7 @@ interface ItemDao {
     suspend fun getAllLocallyDeletedItemIds(): List<LocallyDeletedItemIdEntity>
 
     @Query("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME +
-            " WHERE " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " = :deletedItemUUID")
+            " WHERE " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_UUID + " = :deletedItemUUID")
     suspend fun deleteLocallyDeletedItemId(deletedItemUUID: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
