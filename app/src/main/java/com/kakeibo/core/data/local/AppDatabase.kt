@@ -9,23 +9,23 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.BuildConfig
 import com.kakeibo.core.data.constants.PrepDB7
 import com.kakeibo.core.data.local.entities.*
-import com.kakeibo.feature_subscriptions.Subscription
+//import com.kakeibo.feature_subscriptions.Subscription
 
 @Database(
     entities = [
-        KkbAppEntity::class,
+//        KkbAppEntity::class,
         ItemEntity::class,
         CategoryDspEntity::class,
         CategoryEntity::class,
         SearchEntity::class,
-        Subscription::class,
+//        Subscription::class,
         LocallyDeletedItemIdEntity::class],
     version = BuildConfig.versionDB,
     exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract val kkbAppDao: KkbAppDao
+//    abstract val kkbAppDao: KkbAppDao
     abstract val itemDao: ItemDao
     abstract val categoryDao: CategoryDao
     abstract val categoryDspDao: CategoryDspDao

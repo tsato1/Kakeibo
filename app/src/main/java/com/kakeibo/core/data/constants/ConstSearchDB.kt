@@ -1,7 +1,8 @@
 package com.kakeibo.core.data.constants
 
 object ConstSearchDB {
-    const val TABLE_NAME = "searches"
+    const val TABLE_NAME_OLD = "searches"
+    const val TABLE_NAME = "searchEntity"
     const val COL_ID = "_id"
     const val COL_FROM_DATE = "from_date"
     const val COL_TO_DATE = "to_date"
@@ -13,4 +14,5 @@ object ConstSearchDB {
     const val COL_FROM_UPDATE_DATE = "from_update_date"
     const val COL_TO_UPDATE_DATE = "to_update_date"
     const val COL_SAVED_DATE = "saved_date"
+    const val COL_UUID = "uuid"
 }

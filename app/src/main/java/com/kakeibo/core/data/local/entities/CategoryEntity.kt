@@ -9,7 +9,7 @@ import com.kakeibo.core.data.constants.ConstCategoryDB
 import com.kakeibo.feature_main.domain.models.DisplayedCategoryModel
 import com.kakeibo.feature_settings.domain.models.CategoryModel
 
-@Entity(tableName = "categories")
+@Entity(tableName = ConstCategoryDB.TABLE_NAME)
 class CategoryEntity(
     id: Long,
     @ColumnInfo(name = ConstCategoryDB.COL_CODE, defaultValue = "0") var code: Int,
@@ -23,7 +23,8 @@ class CategoryEntity(
     @ColumnInfo(name = ConstCategoryDB.COL_SAVED_DATE, defaultValue = "") var savedDate: String,
     @ColumnInfo(name = ConstCategoryDB.COL_IS_SYNCED, defaultValue = "0")
     @Expose(deserialize = false, serialize = false) // this val will be ignored in Retrofit communication
-    var isSynced: Boolean = false
+    var isSynced: Boolean = false,
+    var uuid: String = ""
 ) {
 
     @PrimaryKey(autoGenerate = true)
@@ -43,7 +44,8 @@ class CategoryEntity(
             parent = parent,
             description = description,
             savedDate = savedDate,
-            isSynced = isSynced
+            isSynced = isSynced,
+            uuid = uuid
         )
     }
 
@@ -59,7 +61,8 @@ class CategoryEntity(
             parent = parent,
             description = description,
             savedDate = savedDate,
-            isSynced = isSynced
+            isSynced = isSynced,
+            uuid = uuid
         )
     }
 }

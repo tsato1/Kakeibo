@@ -96,7 +96,8 @@ class CategoryReorderActivity : AppCompatActivity() {
                             image = it.category.image,
                             parent = it.category.parent,
                             description = it.category.description,
-                            savedDate = it.category.savedDate
+                            savedDate = it.category.savedDate,
+                            uuid = it.category.uuid
                         )
                     }
                 )

@@ -1,7 +1,8 @@
 package com.kakeibo.core.data.constants
 
 object ConstCategoryDB {
-    const val TABLE_NAME = "categories"
+    const val TABLE_NAME_OLD = "categories"
+    const val TABLE_NAME = "categoryEntity" // from db version 12
     const val COL_ID = "_id"
     const val COL_CODE = "code"
     const val COL_NAME = "name" //deprecated on dbv=6 // re-added on dbv=7
@@ -18,4 +19,5 @@ object ConstCategoryDB {
     const val COL_VAL3 = "val3"
     const val COL_SAVED_DATE = "saved_date" //default=""
     const val COL_IS_SYNCED = "category_is_synced" // added on version 10
+    const val COL_UUID = "uuid"
 }

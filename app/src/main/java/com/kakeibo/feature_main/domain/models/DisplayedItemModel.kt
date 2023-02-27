@@ -21,7 +21,8 @@ data class DisplayedItemModel(
     val categoryDescription: String = "Category Description",
     val categorySavedDate: String = "Category Saved Date",
     val itemIsSynced: Boolean = false,
-    val categoryIsSynced: Boolean = false
+    val categoryIsSynced: Boolean = false,
+    val categoryUUID: String = ""
 ) {
 
     fun toItemEntity(): ItemEntity {

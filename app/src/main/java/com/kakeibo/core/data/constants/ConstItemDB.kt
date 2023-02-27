@@ -1,5 +1,6 @@
 object ConstItemDB {
-    const val TABLE_NAME = "items"
+    const val TABLE_NAME_OLD = "items"
+    const val TABLE_NAME = "itemEntity" // from db version 12
     const val COL_ID = "_id"
     const val COL_AMOUNT = "amount"
     const val COL_CURRENCY_CODE = "currency_code"

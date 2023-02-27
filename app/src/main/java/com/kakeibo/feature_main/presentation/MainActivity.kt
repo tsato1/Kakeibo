@@ -34,8 +34,6 @@ import androidx.navigation.navArgument
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -117,6 +115,7 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_FIREBASE_SIGNIN = 101
     private val REQUEST_GOOGLE_SIGNIN = 102
     private val REQUEST_ONE_TAP_SIGNIN = 103
+    private val REQUEST_CREATE_DOCUMENT = 104
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -144,6 +143,28 @@ class MainActivity : ComponentActivity() {
                     }
                 } catch (e: ApiException) {
                     Log.d(TAG, "$e")
+                }
+            }
+        }
+        if (requestCode == REQUEST_CREATE_DOCUMENT) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    data?.data?.let {
+                        contentResolver.openOutputStream(it)?.let { os ->
+                            val content = UtilFiles.getFileValue(UtilFiles.FILE_NAME, this)
+                            os.write(content!!.toByteArray())
+                            os.close()
+
+                            Toast.makeText(this, R.string.file_created, Toast.LENGTH_LONG).show()
+
+                            /* ads */
+//                        if (interstitialAd != null) {
+//                            interstitialAd?.show(this)
+//                        }
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -298,6 +319,7 @@ class MainActivity : ComponentActivity() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            print("asdf")
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 appUpdateManager.startUpdateFlowForResult(
                     appUpdateInfo,
@@ -418,7 +440,8 @@ class MainActivity : ComponentActivity() {
 
         DriveServiceHelper(googleDriveService).also { helper ->
             helper.createFilePickerIntent().also {
-                requestCreateDocument.launch(it)
+                startActivityForResult(it, REQUEST_CREATE_DOCUMENT)
+//                requestCreateDocument.launch(it)
             }
 //            when (mOrderType) {
 //                ImportExportActivity.OrderType.EXPORT -> {

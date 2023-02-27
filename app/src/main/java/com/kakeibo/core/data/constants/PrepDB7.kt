@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kakeibo.util.UtilCategory
 import com.kakeibo.util.UtilCurrency
-import java.util.*
 import kotlin.math.absoluteValue
 
 @SuppressLint("Range")
@@ -22,7 +21,7 @@ object PrepDB7 {
          * No categories table at db version == 4
          * creating one for db version == 5 so that it can be modified on migrate_5_7
          */
-        database.execSQL("CREATE TABLE " + ConstCategoryDB.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstCategoryDB.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
                 ConstCategoryDB.COL_COLOR + " INTEGER NOT NULL DEFAULT 0," +
@@ -43,7 +42,7 @@ object PrepDB7 {
                 15 -> 11
                 else -> location
             }
-            database.execSQL("INSERT INTO " + ConstCategoryDB.TABLE_NAME + " (" +
+            database.execSQL("INSERT INTO " + ConstCategoryDB.TABLE_NAME_OLD + " (" +
                     ConstCategoryDB.COL_LOCATION + ", " +
                     ConstCategoryDB.COL_CODE + ") " +
                     " VALUES(" + location + ", " + code + ")")
@@ -98,8 +97,8 @@ object PrepDB7 {
         database.execSQL("CREATE TABLE IF NOT EXISTS subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER NOT NULL, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
 
         /* items table */
-        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME + " RENAME TO " + ConstItemDB.TABLE_NAME + "_old;")
-        database.execSQL("CREATE TABLE " + ConstItemDB.TABLE_NAME + " (" +
+        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME_OLD + " RENAME TO " + ConstItemDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("CREATE TABLE " + ConstItemDB.TABLE_NAME_OLD + " (" +
                 ConstItemDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstItemDB.COL_AMOUNT + " INTEGER NOT NULL," +
                 ConstItemDB.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_NONE + "', " +  // for new items, currency_code is none
@@ -107,7 +106,7 @@ object PrepDB7 {
                 ConstItemDB.COL_MEMO + " TEXT NOT NULL," +
                 ConstItemDB.COL_EVENT_DATE + " TEXT NOT NULL," +
                 ConstItemDB.COL_UPDATE_DATE + " TEXT NOT NULL);")
-        database.execSQL("INSERT INTO " + ConstItemDB.TABLE_NAME + " (" +
+        database.execSQL("INSERT INTO " + ConstItemDB.TABLE_NAME_OLD + " (" +
                 ConstItemDB.COL_ID + "," +
                 ConstItemDB.COL_AMOUNT + "," +
                 ConstItemDB.COL_CURRENCY_CODE + "," +  // for old items, take over the previous currency_code
@@ -122,9 +121,9 @@ object PrepDB7 {
                 ConstItemDB.COL_CATEGORY_CODE + "," +
                 ConstItemDB.COL_MEMO + "," +
                 ConstItemDB.COL_EVENT_DATE + "," +
-                ConstItemDB.COL_UPDATE_DATE + " FROM " + ConstItemDB.TABLE_NAME + "_old;")
-        database.execSQL("DROP TABLE " + ConstItemDB.TABLE_NAME + "_old;")
-        val cursorItem = database.query("SELECT * FROM " + ConstItemDB.TABLE_NAME)
+                ConstItemDB.COL_UPDATE_DATE + " FROM " + ConstItemDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("DROP TABLE " + ConstItemDB.TABLE_NAME_OLD + "_old;")
+        val cursorItem = database.query("SELECT * FROM " + ConstItemDB.TABLE_NAME_OLD)
         if (cursorItem.moveToFirst()) {
             do {
                 val id = cursorItem.getInt(cursorItem.getColumnIndex(ConstItemDB.COL_ID))
@@ -132,7 +131,7 @@ object PrepDB7 {
                 val amount = cursorItem.getInt(cursorItem.getColumnIndex(ConstItemDB.COL_AMOUNT))
                 if (code != 0) { // set value to negative only for expense // category_code == 0 is Income
                     database.execSQL(
-                            ("UPDATE " + ConstItemDB.TABLE_NAME +
+                            ("UPDATE " + ConstItemDB.TABLE_NAME_OLD +
                                     " SET " + ConstItemDB.COL_AMOUNT + "=-" + amount + // set to negative
                                     " WHERE " + ConstItemDB.COL_ID + "=" + id))
                 }
@@ -143,22 +142,22 @@ object PrepDB7 {
          * CategoryDsp table
          * NO CategoryDsp table at db version = 5
          */
-        database.execSQL("CREATE TABLE " + ConstCategoryDspDB.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE " + ConstCategoryDspDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDspDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstCategoryDspDB.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
                 ConstCategoryDspDB.COL_CODE + " INTEGER NOT NULL DEFAULT 0);")
-        database.execSQL("INSERT INTO " + ConstCategoryDspDB.TABLE_NAME + " (" +
+        database.execSQL("INSERT INTO " + ConstCategoryDspDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDspDB.COL_ID + "," +
                 ConstCategoryDspDB.COL_LOCATION + "," +
                 ConstCategoryDspDB.COL_CODE + ") " +
                 " SELECT " +
                 ConstCategoryDB.COL_ID + "," +
                 ConstCategoryDB.COL_CODE + "," +
-                ConstCategoryDB.COL_LOCATION + " FROM " + ConstCategoryDB.TABLE_NAME)
+                ConstCategoryDB.COL_LOCATION + " FROM " + ConstCategoryDB.TABLE_NAME_OLD)
 
         /* Category table  */
-        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME + " RENAME TO " + ConstCategoryDB.TABLE_NAME + "_old;")
-        database.execSQL("CREATE TABLE " + ConstCategoryDB.TABLE_NAME + " (" +
+        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " RENAME TO " + ConstCategoryDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("CREATE TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstCategoryDB.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
                 ConstCategoryDB.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
@@ -169,7 +168,7 @@ object PrepDB7 {
                 ConstCategoryDB.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
                 ConstCategoryDB.COL_DESCRIPTION + " TEXT NOT NULL DEFAULT ''," +
                 ConstCategoryDB.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');")
-        database.execSQL("INSERT INTO " + ConstCategoryDB.TABLE_NAME + " (" +
+        database.execSQL("INSERT INTO " + ConstCategoryDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDB.COL_ID + "," +
                 ConstCategoryDB.COL_CODE + "," +
                 // not inserting for name
@@ -186,10 +185,10 @@ object PrepDB7 {
                 ConstCategoryDB.COL_COLOR + "," +
                 "''," +  // COL_DRAWABLE is now TEXT
                 ConstCategoryDB.COL_DESCRIPTION + "," +
-                ConstCategoryDB.COL_SAVED_DATE + " FROM " + ConstCategoryDB.TABLE_NAME + "_old;")
-        database.execSQL("DROP TABLE " + ConstCategoryDB.TABLE_NAME + "_old;")
+                ConstCategoryDB.COL_SAVED_DATE + " FROM " + ConstCategoryDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("DROP TABLE " + ConstCategoryDB.TABLE_NAME_OLD + "_old;")
         val cursor = database.query(
-                ("SELECT * FROM " + ConstCategoryDB.TABLE_NAME +
+                ("SELECT * FROM " + ConstCategoryDB.TABLE_NAME_OLD +
                         " WHERE " + ConstCategoryDB.COL_CODE + "<" + UtilCategory.CUSTOM_CATEGORY_CODE_START +
                         " ORDER BY " + ConstCategoryDB.COL_CODE))
         if (cursor.moveToFirst()) {
@@ -265,7 +264,7 @@ object PrepDB7 {
                 } else {
                     continue
                 }
-                database.execSQL("UPDATE " + ConstCategoryDB.TABLE_NAME +
+                database.execSQL("UPDATE " + ConstCategoryDB.TABLE_NAME_OLD +
                                 " SET "
                                 + ConstCategoryDB.COL_COLOR + "=" + color + ","
                                 + ConstCategoryDB.COL_DRAWABLE + "='" + drawableName + "',"
@@ -320,8 +319,8 @@ object PrepDB7 {
         database.execSQL("CREATE TABLE IF NOT EXISTS subscriptions (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, subscriptionStatusJson TEXT, subAlreadyOwned INTEGER NOT NULL, isLocalPurchase INTEGER NOT NULL, sku TEXT, purchaseToken TEXT, isEntitlementActive INTEGER NOT NULL, willRenew INTEGER NOT NULL, activeUntilMillisec INTEGER NOT NULL, isFreeTrial INTEGER NOT NULL, isGracePeriod INTEGER NOT NULL, isAccountHold INTEGER NOT NULL)")
 
         /* items table  */
-        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME + " RENAME TO " + ConstItemDB.TABLE_NAME + "_old;")
-        database.execSQL("CREATE TABLE " + ConstItemDB.TABLE_NAME + " (" +
+        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME_OLD + " RENAME TO " + ConstItemDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("CREATE TABLE " + ConstItemDB.TABLE_NAME_OLD + " (" +
                 ConstItemDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstItemDB.COL_AMOUNT + " INTEGER NOT NULL," +
                 ConstItemDB.COL_CURRENCY_CODE + " TEXT NOT NULL DEFAULT '" + UtilCurrency.CURRENCY_NONE + "', " +  // for new items, currency_code is none
@@ -329,7 +328,7 @@ object PrepDB7 {
                 ConstItemDB.COL_MEMO + " TEXT NOT NULL," +
                 ConstItemDB.COL_EVENT_DATE + " TEXT NOT NULL," +
                 ConstItemDB.COL_UPDATE_DATE + " TEXT NOT NULL);")
-        database.execSQL("INSERT INTO " + ConstItemDB.TABLE_NAME + " (" +
+        database.execSQL("INSERT INTO " + ConstItemDB.TABLE_NAME_OLD + " (" +
                 ConstItemDB.COL_ID + "," +
                 ConstItemDB.COL_AMOUNT + "," +
                 ConstItemDB.COL_CURRENCY_CODE + "," +  // for old items, take over the previous currency_code
@@ -344,22 +343,22 @@ object PrepDB7 {
                 ConstItemDB.COL_CATEGORY_CODE + "," +
                 ConstItemDB.COL_MEMO + "," +
                 ConstItemDB.COL_EVENT_DATE + "," +
-                ConstItemDB.COL_UPDATE_DATE + " FROM " + ConstItemDB.TABLE_NAME + "_old;")
-        database.execSQL("DROP TABLE " + ConstItemDB.TABLE_NAME + "_old;")
+                ConstItemDB.COL_UPDATE_DATE + " FROM " + ConstItemDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("DROP TABLE " + ConstItemDB.TABLE_NAME_OLD + "_old;")
         val cursorItem = database.query(
-                ("SELECT " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + ", " +
+                ("SELECT " + ConstItemDB.TABLE_NAME_OLD + "." + ConstItemDB.COL_ID + ", " +
                         ConstItemDB.COL_AMOUNT + ", " +
                         ConstItemDB.COL_CATEGORY_CODE + ", " +
                         ConstCategoryDB.COL_COLOR +
-                        " FROM " + ConstItemDB.TABLE_NAME +
-                        " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
+                        " FROM " + ConstItemDB.TABLE_NAME_OLD +
+                        " INNER JOIN " + ConstCategoryDB.TABLE_NAME_OLD +
                         " ON " + ConstCategoryDB.COL_CODE + "=" + ConstItemDB.COL_CATEGORY_CODE +
                         " WHERE " + ConstCategoryDB.COL_COLOR + "=" + UtilCategory.CATEGORY_COLOR_EXPENSE))
         if (cursorItem.moveToFirst()) {
             do {
                 val id = cursorItem.getInt(cursorItem.getColumnIndex(ConstItemDB.COL_ID))
                 val amount = cursorItem.getLong(cursorItem.getColumnIndex(ConstItemDB.COL_AMOUNT))
-                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME +
+                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME_OLD +
                                 " SET " + ConstItemDB.COL_AMOUNT + "=" + ((-1) * amount) + // set to negative
                                 " WHERE " + ConstItemDB.COL_ID + "=" + id)
             } while (cursorItem.moveToNext())
@@ -369,8 +368,8 @@ object PrepDB7 {
          * Category table
          * For category-related: Just changing the schema. No new column
          */
-        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME + " RENAME TO " + ConstCategoryDB.TABLE_NAME + "_old;")
-        database.execSQL("CREATE TABLE " + ConstCategoryDB.TABLE_NAME + " (" +
+        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " RENAME TO " + ConstCategoryDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("CREATE TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstCategoryDB.COL_CODE + " INTEGER NOT NULL DEFAULT 0," +
                 ConstCategoryDB.COL_NAME + " TEXT NOT NULL DEFAULT ''," +
@@ -381,7 +380,7 @@ object PrepDB7 {
                 ConstCategoryDB.COL_PARENT + " INTEGER NOT NULL DEFAULT -1," +
                 ConstCategoryDB.COL_DESCRIPTION + " TEXT NOT NULL DEFAULT ''," +
                 ConstCategoryDB.COL_SAVED_DATE + " TEXT NOT NULL DEFAULT '');")
-        database.execSQL("INSERT INTO " + ConstCategoryDB.TABLE_NAME + " (" +
+        database.execSQL("INSERT INTO " + ConstCategoryDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDB.COL_ID + "," +
                 ConstCategoryDB.COL_CODE + "," +
                 ConstCategoryDB.COL_COLOR + "," +
@@ -400,10 +399,10 @@ object PrepDB7 {
                 ConstCategoryDB.COL_IMAGE + "," +
                 ConstCategoryDB.COL_PARENT + "," +
                 ConstCategoryDB.COL_DESCRIPTION + "," +
-                ConstCategoryDB.COL_SAVED_DATE + " FROM " + ConstCategoryDB.TABLE_NAME + "_old;")
-        database.execSQL("DROP TABLE " + ConstCategoryDB.TABLE_NAME + "_old;")
+                ConstCategoryDB.COL_SAVED_DATE + " FROM " + ConstCategoryDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("DROP TABLE " + ConstCategoryDB.TABLE_NAME_OLD + "_old;")
         val cursor = database.query(
-                ("SELECT * FROM " + ConstCategoryDB.TABLE_NAME +
+                ("SELECT * FROM " + ConstCategoryDB.TABLE_NAME_OLD +
                         " WHERE " + ConstCategoryDB.COL_CODE + "<" + UtilCategory.CUSTOM_CATEGORY_CODE_START +
                         " ORDER BY " + ConstCategoryDB.COL_CODE))
         if (cursor.moveToFirst()) {
@@ -487,7 +486,7 @@ object PrepDB7 {
                     continue
                 }
                 database.execSQL(
-                        ("UPDATE " + ConstCategoryDB.TABLE_NAME +
+                        ("UPDATE " + ConstCategoryDB.TABLE_NAME_OLD +
                                 " SET "
                                 + ConstCategoryDB.COL_DRAWABLE + "='" + drawableName + "',"
                                 + ConstCategoryDB.COL_NAME + "='" + categoryName + "'" +
@@ -550,7 +549,7 @@ object PrepDB7 {
                 }
                 if ("" == name) continue
                 database.execSQL(
-                        ("UPDATE " + ConstCategoryDB.TABLE_NAME +
+                        ("UPDATE " + ConstCategoryDB.TABLE_NAME_OLD +
                                 " SET " + ConstCategoryDB.COL_NAME + "= '" + name + "'" +
                                 " WHERE " + ConstCategoryDB.COL_CODE + "=" + code))
             } while (c.moveToNext())
@@ -558,20 +557,20 @@ object PrepDB7 {
         database.execSQL("DROP TABLE IF EXISTS " + ConstCategoryLanDB.TABLE_NAME)
 
         /* CategoryDsp table  */
-        database.execSQL("ALTER TABLE " + ConstCategoryDspDB.TABLE_NAME + " RENAME TO " + ConstCategoryDspDB.TABLE_NAME + "_old;")
-        database.execSQL("CREATE TABLE IF NOT EXISTS " + ConstCategoryDspDB.TABLE_NAME + " (" +
+        database.execSQL("ALTER TABLE " + ConstCategoryDspDB.TABLE_NAME_OLD + " RENAME TO " + ConstCategoryDspDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + ConstCategoryDspDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDspDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstCategoryDspDB.COL_LOCATION + " INTEGER NOT NULL DEFAULT 0," +
                 ConstCategoryDspDB.COL_CODE + " INTEGER NOT NULL DEFAULT 0);")
-        database.execSQL("INSERT INTO " + ConstCategoryDspDB.TABLE_NAME + " (" +
+        database.execSQL("INSERT INTO " + ConstCategoryDspDB.TABLE_NAME_OLD + " (" +
                 ConstCategoryDspDB.COL_ID + "," +
                 ConstCategoryDspDB.COL_CODE + "," +
                 ConstCategoryDspDB.COL_LOCATION + ") " +
                 " SELECT " +
                 ConstCategoryDspDB.COL_ID + "," +
                 "CAST (" + ConstCategoryDspDB.COL_CODE + " AS INTEGER)," +
-                ConstCategoryDspDB.COL_LOCATION + " FROM " + ConstCategoryDspDB.TABLE_NAME + "_old;")
-        database.execSQL("DROP TABLE " + ConstCategoryDspDB.TABLE_NAME + "_old;")
+                ConstCategoryDspDB.COL_LOCATION + " FROM " + ConstCategoryDspDB.TABLE_NAME_OLD + "_old;")
+        database.execSQL("DROP TABLE " + ConstCategoryDspDB.TABLE_NAME_OLD + "_old;")
     }
 
     fun migrate_7_8(database: SupportSQLiteDatabase) {
@@ -585,22 +584,22 @@ object PrepDB7 {
         set the negative amount to positive
          */
         val cursorItem = database.query(
-            ("SELECT " + ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_ID + ", " +
+            ("SELECT " + ConstItemDB.TABLE_NAME_OLD + "." + ConstItemDB.COL_ID + ", " +
                     ConstItemDB.COL_AMOUNT + ", " +
                     ConstItemDB.COL_CATEGORY_CODE +
-                    " FROM " + ConstItemDB.TABLE_NAME)
+                    " FROM " + ConstItemDB.TABLE_NAME_OLD)
         )
         if (cursorItem.moveToFirst()) {
             do {
                 val id = cursorItem.getInt(cursorItem.getColumnIndex(ConstItemDB.COL_ID))
                 val amount = cursorItem.getLong(cursorItem.getColumnIndex(ConstItemDB.COL_AMOUNT))
-                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME +
+                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME_OLD +
                         " SET " + ConstItemDB.COL_AMOUNT + "=" + (amount.absoluteValue) + // set to positive
                         " WHERE " + ConstItemDB.COL_ID + "=" + id)
             } while (cursorItem.moveToNext())
         }
 
-        database.execSQL("CREATE TABLE " + ConstSearchDB.TABLE_NAME + " (" +
+        database.execSQL("CREATE TABLE " + ConstSearchDB.TABLE_NAME_OLD + " (" +
                 ConstSearchDB.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ConstSearchDB.COL_FROM_DATE + " TEXT, " +
                 ConstSearchDB.COL_TO_DATE + " TEXT, " +
@@ -615,29 +614,61 @@ object PrepDB7 {
     }
 
     fun migrate_9_10(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME +
+        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME_OLD +
                 " ADD COLUMN " + ConstItemDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
-        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME +
+        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME_OLD +
                 " ADD COLUMN " + ConstCategoryDB.COL_IS_SYNCED + " INTEGER NOT NULL DEFAULT 0;")
         database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME_OLD +
                 " (" + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER PRIMARY KEY NOT NULL);")
     }
 
     fun migrate_10_11(database: SupportSQLiteDatabase) {
+        /* locallyDeletedItemIdEntity table */
         database.execSQL("DROP TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME_OLD + ";")
         database.execSQL("CREATE TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " (" +
                 "${ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_UUID} TEXT NOT NULL PRIMARY KEY)")
 
-        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME + " ADD COLUMN " + ConstItemDB.COL_UUID + " TEXT NOT NULL DEFAULT '';")
+        /* itemEntity table */
+        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME_OLD + " ADD COLUMN " + ConstItemDB.COL_UUID + " TEXT NOT NULL DEFAULT '';")
         /* fill in the uuid column */
         val cursorItem = database.query(
-            ("SELECT ${ConstItemDB.COL_ID}, ${ConstItemDB.COL_UUID} FROM " + ConstItemDB.TABLE_NAME)
+            ("SELECT ${ConstItemDB.COL_ID}, ${ConstItemDB.COL_UUID} FROM " + ConstItemDB.TABLE_NAME_OLD)
         )
         if (cursorItem.moveToFirst()) {
             do {
                 val id = cursorItem.getInt(cursorItem.getColumnIndex(ConstItemDB.COL_ID))
-                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME +  " SET uuid = '${UUID.randomUUID()}' WHERE ${ConstItemDB.COL_ID} = $id;")
+                database.execSQL("UPDATE " + ConstItemDB.TABLE_NAME_OLD +  " SET uuid = '' WHERE ${ConstItemDB.COL_ID} = $id;")
             } while (cursorItem.moveToNext())
         }
+        database.execSQL("ALTER TABLE " + ConstItemDB.TABLE_NAME_OLD + " RENAME TO " + ConstItemDB.TABLE_NAME + ";")
+
+        /* categoryEntity table */
+        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " ADD COLUMN " + ConstCategoryDB.COL_UUID + " TEXT NOT NULL DEFAULT '';")
+        /* fill in the uuid column */
+        val cursorItem2 = database.query(
+            ("SELECT ${ConstCategoryDB.COL_ID}, ${ConstCategoryDB.COL_CODE}, ${ConstCategoryDB.COL_UUID} FROM " + ConstCategoryDB.TABLE_NAME_OLD)
+        )
+        if (cursorItem2.moveToFirst()) {
+            do {
+                val id = cursorItem2.getInt(cursorItem2.getColumnIndex(ConstCategoryDB.COL_ID))
+                val code = cursorItem2.getInt(cursorItem2.getColumnIndex(ConstCategoryDB.COL_CODE))
+                if (code < UtilCategory.CUSTOM_CATEGORY_CODE_START) continue
+                database.execSQL("UPDATE " + ConstCategoryDB.TABLE_NAME_OLD +  " SET uuid = '' WHERE ${ConstCategoryDB.COL_ID} = $id;")
+            } while (cursorItem2.moveToNext())
+        }
+        database.execSQL("ALTER TABLE " + ConstCategoryDB.TABLE_NAME_OLD + " RENAME TO " + ConstCategoryDB.TABLE_NAME + ";")
+
+        /* categoryDsp table */
+        database.execSQL("ALTER TABLE " + ConstCategoryDspDB.TABLE_NAME_OLD + " RENAME TO " + ConstCategoryDspDB.TABLE_NAME + ";")
+
+        /* subscription table */
+        database.execSQL(/* sql = */ "DROP TABLE IF EXISTS subscriptions")
+
+        /* search table*/
+        database.execSQL("ALTER TABLE " + ConstSearchDB.TABLE_NAME_OLD + " ADD COLUMN " + ConstSearchDB.COL_UUID + " TEXT NOT NULL DEFAULT '';")
+        database.execSQL("ALTER TABLE " + ConstSearchDB.TABLE_NAME_OLD + " RENAME TO " + ConstSearchDB.TABLE_NAME + ";")
+
+        /* Kkbapp table */
+        database.execSQL("DROP TABLE ${ConstKkbAppDB.TABLE_KKBAPP}")
     }
 }

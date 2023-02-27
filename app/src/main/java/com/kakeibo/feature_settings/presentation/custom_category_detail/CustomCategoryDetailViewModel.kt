@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -97,7 +98,8 @@ class CustomCategoryDetailViewModel @Inject constructor(
                                 parent = UtilCategory.CATEGORY_PARENT_NON,
                                 description = "",
                                 savedDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS),
-                                isSynced = false
+                                isSynced = false,
+                                uuid = ""
                             )
                         )
                         _eventFlow.emit(UiEvent.Save)

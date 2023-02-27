@@ -8,7 +8,7 @@ import com.kakeibo.BuildConfig
 import com.kakeibo.R
 import com.kakeibo.core.data.local.entities.CategoryDspEntity
 import com.kakeibo.core.data.local.entities.CategoryEntity
-import com.kakeibo.core.data.local.entities.KkbAppEntity
+//import com.kakeibo.core.data.local.entities.KkbAppEntity
 import com.kakeibo.util.UtilCategory
 import java.util.*
 
@@ -187,7 +187,7 @@ object PrepDB {
             values.put(ConstCategoryDB.COL_DESCRIPTION, "")
             values.put(ConstCategoryDB.COL_SAVED_DATE, "")
             //            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
-            db.insert(ConstCategoryDB.TABLE_NAME, OnConflictStrategy.REPLACE, values)
+            db.insert(ConstCategoryDB.TABLE_NAME_OLD, OnConflictStrategy.REPLACE, values)
             val values2 = ContentValues()
             values2.put(ConstCategoryLanDB.COL_CODE, category.code)
             values2.put(ConstCategoryLanDB.COL_NAME, "")
@@ -570,7 +570,7 @@ object PrepDB {
 //            values1.put(CategoryDBAdapter.COL_VAL3, 0);
             values1.put(ConstCategoryDB.COL_SAVED_DATE, "")
             //            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values1);
-            db.insert(ConstCategoryDB.TABLE_NAME, OnConflictStrategy.REPLACE, values1)
+            db.insert(ConstCategoryDB.TABLE_NAME_OLD, OnConflictStrategy.REPLACE, values1)
             val values2 = ContentValues()
             values2.put(ConstCategoryLanDB.COL_CODE, list[i].code)
             values2.put(ConstCategoryLanDB.COL_ENG, list[i].eng)
@@ -595,13 +595,13 @@ object PrepDB {
             values3.put(ConstCategoryDspDB.COL_LOCATION, list[i].location)
             values3.put(ConstCategoryDspDB.COL_CODE, list[i].code)
             //            db.insertOrThrow(CategoryDspDBAdapter.TABLE_NAME, null, values3);
-            db.insert(ConstCategoryDspDB.TABLE_NAME, OnConflictStrategy.REPLACE, values3)
+            db.insert(ConstCategoryDspDB.TABLE_NAME_OLD, OnConflictStrategy.REPLACE, values3)
         }
     }
 
     fun addMoreCategories(db: SupportSQLiteDatabase) {
         /*** change color column of Income from 0 to 1  */
-        val query = "UPDATE " + ConstCategoryDB.TABLE_NAME +
+        val query = "UPDATE " + ConstCategoryDB.TABLE_NAME_OLD +
                 " SET " + ConstCategoryDB.COL_COLOR + "=1" +
                 " WHERE " + ConstCategoryDB.COL_CODE + "=0;"
         db.execSQL(query)
@@ -783,7 +783,7 @@ object PrepDB {
             values.put(ConstCategoryDB.COL_DESCRIPTION, "")
             values.put(ConstCategoryDB.COL_SAVED_DATE, "")
             //            db.insertOrThrow(CategoryDBAdapter.TABLE_NAME, null, values);
-            db.insert(ConstCategoryDB.TABLE_NAME, OnConflictStrategy.REPLACE, values)
+            db.insert(ConstCategoryDB.TABLE_NAME_OLD, OnConflictStrategy.REPLACE, values)
             val values1 = ContentValues()
             values1.put(ConstCategoryLanDB.COL_CODE, c.code)
             values1.put(ConstCategoryLanDB.COL_ARA, c.ara)
@@ -979,7 +979,7 @@ object PrepDB {
             values.put(ConstCategoryDB.COL_SUB_CATEGORIES, 0)
             values.put(ConstCategoryDB.COL_DESCRIPTION, "")
             values.put(ConstCategoryDB.COL_SAVED_DATE, "")
-            db.insertOrThrow(ConstCategoryDB.TABLE_NAME, null, values)
+            db.insertOrThrow(ConstCategoryDB.TABLE_NAME_OLD, null, values)
             val values2 = ContentValues()
             values2.put(ConstCategoryLanDB.COL_CODE, category.code)
             values2.put(ConstCategoryLanDB.COL_NAME, "")
@@ -1360,7 +1360,7 @@ object PrepDB {
             values1.put(ConstCategoryDB.COL_VAL2, 0)
             values1.put(ConstCategoryDB.COL_VAL3, 0)
             values1.put(ConstCategoryDB.COL_SAVED_DATE, "")
-            db.insertOrThrow(ConstCategoryDB.TABLE_NAME, null, values1)
+            db.insertOrThrow(ConstCategoryDB.TABLE_NAME_OLD, null, values1)
             val values2 = ContentValues()
             values2.put(ConstCategoryLanDB.COL_CODE, list[i].code)
             values2.put(ConstCategoryLanDB.COL_ENG, list[i].eng)
@@ -1383,13 +1383,13 @@ object PrepDB {
             val values3 = ContentValues()
             values3.put(ConstCategoryDspDB.COL_LOCATION, list[i].location)
             values3.put(ConstCategoryDspDB.COL_CODE, list[i].code)
-            db.insertOrThrow(ConstCategoryDspDB.TABLE_NAME, null, values3)
+            db.insertOrThrow(ConstCategoryDspDB.TABLE_NAME_OLD, null, values3)
         }
     }
 
     fun addMoreCategories(db: SQLiteDatabase) {
         /*** change color column of Income from 0 to 1  */
-        val query = "UPDATE " + ConstCategoryDB.TABLE_NAME +
+        val query = "UPDATE " + ConstCategoryDB.TABLE_NAME_OLD +
                 " SET " + ConstCategoryDB.COL_COLOR + "=1" +
                 " WHERE " + ConstCategoryDB.COL_CODE + "=0;"
         db.execSQL(query)
@@ -1570,7 +1570,7 @@ object PrepDB {
             values.putNull(ConstCategoryDB.COL_IMAGE)
             values.put(ConstCategoryDB.COL_DESCRIPTION, "")
             values.put(ConstCategoryDB.COL_SAVED_DATE, "")
-            db.insertOrThrow(ConstCategoryDB.TABLE_NAME, null, values)
+            db.insertOrThrow(ConstCategoryDB.TABLE_NAME_OLD, null, values)
             val values1 = ContentValues()
             values1.put(ConstCategoryLanDB.COL_CODE, c.code)
             values1.put(ConstCategoryLanDB.COL_ARA, c.ara)
@@ -1673,17 +1673,17 @@ object PrepDB {
         return out
     }
 
-    fun initKkbAppTable() : KkbAppEntity {
-        return KkbAppEntity(
-            1,
-            "",
-            "",
-            "",
-            BuildConfig.versionDB,
-            -1,
-            0,
-            "",
-            "",
-            "")
-    }
+//    fun initKkbAppTable() : KkbAppEntity {
+//        return KkbAppEntity(
+//            1,
+//            "",
+//            "",
+//            "",
+//            BuildConfig.versionDB,
+//            -1,
+//            0,
+//            "",
+//            "",
+//            "")
+//    }
 }

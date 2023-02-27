@@ -3,9 +3,10 @@ package com.kakeibo.core.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.kakeibo.core.data.constants.ConstSearchDB
 import com.kakeibo.feature_main.domain.models.SearchModel
 
-@Entity(tableName = "searches")
+@Entity(tableName = ConstSearchDB.TABLE_NAME)
 class SearchEntity(
     @PrimaryKey(autoGenerate = true) val _id: Long,
     @ColumnInfo(name = "from_date") val fromDate: String? = null,
@@ -16,7 +17,8 @@ class SearchEntity(
     @ColumnInfo(name = "category_name") val categoryName: String? = null,
     val memo: String? = null,
     @ColumnInfo(name = "from_update_date") val fromUpdateDate: String? = null,
-    @ColumnInfo(name = "to_update_date") val toUpdateDate: String? = null
+    @ColumnInfo(name = "to_update_date") val toUpdateDate: String? = null,
+    val uuid: String = ""
 ) {
 
     fun toSearchModel(): SearchModel {
@@ -30,7 +32,8 @@ class SearchEntity(
             categoryName = categoryName,
             memo = memo,
             fromUpdateDate = fromUpdateDate,
-            toUpdateDate = toUpdateDate
+            toUpdateDate = toUpdateDate,
+            uuid = uuid
         )
     }
 

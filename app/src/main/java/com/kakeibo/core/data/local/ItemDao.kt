@@ -1,5 +1,6 @@
 package com.kakeibo.core.data.local
 
+import ConstItemDB
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.kakeibo.core.data.constants.ConstCategoryDB
@@ -21,7 +22,7 @@ interface ItemDao {
             ConstItemDB.COL_MEMO + "," +
             ConstItemDB.COL_EVENT_DATE + "," +
             ConstItemDB.COL_UPDATE_DATE + "," +
-            ConstItemDB.COL_UUID + "," +
+            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + "," +
             ConstCategoryDB.COL_NAME + "," +
             ConstCategoryDB.COL_COLOR + "," +
             ConstCategoryDB.COL_SIGN + "," +
@@ -31,7 +32,8 @@ interface ItemDao {
             ConstCategoryDB.COL_DESCRIPTION + "," +
             ConstCategoryDB.COL_SAVED_DATE + "," +
             ConstItemDB.COL_IS_SYNCED + "," +
-            ConstCategoryDB.COL_IS_SYNCED +
+            ConstCategoryDB.COL_IS_SYNCED + "," +
+            ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_UUID +
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
@@ -46,7 +48,7 @@ interface ItemDao {
             ConstItemDB.COL_MEMO + "," +
             ConstItemDB.COL_EVENT_DATE + "," +
             ConstItemDB.COL_UPDATE_DATE + "," +
-            ConstItemDB.COL_UUID + "," +
+            ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + "," +
             ConstCategoryDB.COL_NAME + "," +
             ConstCategoryDB.COL_COLOR + "," +
             ConstCategoryDB.COL_SIGN + "," +
@@ -56,7 +58,8 @@ interface ItemDao {
             ConstCategoryDB.COL_DESCRIPTION + "," +
             ConstCategoryDB.COL_SAVED_DATE + "," +
             ConstItemDB.COL_IS_SYNCED + "," +
-            ConstCategoryDB.COL_IS_SYNCED +
+            ConstCategoryDB.COL_IS_SYNCED + "," +
+            ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_UUID +
             " FROM " + ConstItemDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
             " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +
@@ -72,7 +75,7 @@ interface ItemDao {
     @Query("DELETE FROM " + ConstItemDB.TABLE_NAME + " WHERE " + ConstItemDB.COL_ID + " = :id")
     suspend fun deleteItemById(id: String): Int // returns the number of rows affected by the query
 
-    @Query("DELETE FROM items")
+    @Query("DELETE FROM ${ConstItemDB.TABLE_NAME}")
     suspend fun deleteAllItems(): Int
 
     /* For Locally-Deleted Items */

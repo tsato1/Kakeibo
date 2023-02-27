@@ -141,7 +141,7 @@ class ItemDetailViewModel @Inject constructor(
                                 memo = itemMemoState.value.text,
                                 eventDate = cal.value.toYMDString(UtilDate.DATE_FORMAT_DB),
                                 updateDate = UtilDate.getCurrentMoment(UtilDate.DATE_FORMAT_DB_KMS),
-                                uuid = UUID.randomUUID().toString()
+                                uuid = ""
                             ),
                             syncWithRemote = kkbAppModelState.value.kkbAppModel.intVal3
                         )

@@ -68,7 +68,7 @@ class SettingsListViewModel @Inject constructor(
             }
             is SettingsListEvent.ShowAds -> {
                 viewModelScope.launch {
-                    val result = super.showAds()
+                    val result = -1L //super.showAds()
 
                     if (result == 1L) { /* success (result should be 1L because the first row id is 1) */
                         _eventFlow.emit(

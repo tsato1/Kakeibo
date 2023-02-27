@@ -1,5 +1,6 @@
 package com.kakeibo.core.data.local.entities
 
+import ConstItemDB
 import androidx.annotation.NonNull
 import androidx.room.*
 import com.google.gson.annotations.Expose
@@ -7,7 +8,7 @@ import com.kakeibo.core.data.local.Converters
 import com.kakeibo.util.UtilCurrency
 import java.math.BigDecimal
 
-@Entity(tableName = "items")
+@Entity(tableName = ConstItemDB.TABLE_NAME)
 class ItemEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ConstItemDB.COL_ID)

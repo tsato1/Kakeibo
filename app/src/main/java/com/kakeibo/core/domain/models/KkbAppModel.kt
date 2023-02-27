@@ -1,6 +1,6 @@
 package com.kakeibo.core.domain.models
 
-import com.kakeibo.core.data.local.entities.KkbAppEntity
+//import com.kakeibo.core.data.local.entities.KkbAppEntity
 
 data class KkbAppModel(
     val id: Long = 1,
@@ -14,18 +14,18 @@ data class KkbAppModel(
     val strVal2: String = "",
     val strVal3: String = ""
 ) {
-    fun toKkbAppEntity(): KkbAppEntity {
-        return KkbAppEntity(
-            id = id,
-            name = name,
-            type = type,
-            updateDate = updateDate,
-            valInt1 = intVal1,
-            valInt2 = intVal2,
-            valInt3 = intVal3,
-            valStr1 = strVal1,
-            valStr2 = strVal2,
-            valStr3 = strVal3
-        )
-    }
+//    fun toKkbAppEntity(): KkbAppEntity {
+//        return KkbAppEntity(
+//            id = id,
+//            name = name,
+//            type = type,
+//            updateDate = updateDate,
+//            valInt1 = intVal1,
+//            valInt2 = intVal2,
+//            valInt3 = intVal3,
+//            valStr1 = strVal1,
+//            valStr2 = strVal2,
+//            valStr3 = strVal3
+//        )
+//    }
 }

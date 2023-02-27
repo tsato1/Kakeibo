@@ -10,18 +10,18 @@ import com.kakeibo.core.data.constants.PrepDB
 import com.kakeibo.core.data.local.AppDatabase
 import com.kakeibo.core.data.local.CategoryDao
 import com.kakeibo.core.data.local.CategoryDspDao
-import com.kakeibo.core.data.local.KkbAppDao
+//import com.kakeibo.core.data.local.KkbAppDao
 import com.kakeibo.core.data.preferences.AppPreferences
 import com.kakeibo.core.data.preferences.AppPreferencesImpl
 import com.kakeibo.core.data.remote.AuthApi
 import com.kakeibo.core.data.remote.AuthApiImpl
 import com.kakeibo.core.data.remote.BasicAuthInterceptor
 import com.kakeibo.core.data.remote.ItemApi
-import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
+//import com.kakeibo.core.data.repositories.KkbAppRepositoryImpl
 import com.kakeibo.core.domain.repositories.KkbAppRepository
-import com.kakeibo.core.domain.use_cases.KkbAppUseCases
+//import com.kakeibo.core.domain.use_cases.KkbAppUseCases
 import com.kakeibo.core.domain.use_cases.kkbapp.GetKkbAppUseCase
-import com.kakeibo.core.domain.use_cases.kkbapp.InsertKkbAppUseCase
+//import com.kakeibo.core.domain.use_cases.kkbapp.InsertKkbAppUseCase
 import com.kakeibo.feature_main.data.repositories.DisplayedCategoryRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.DisplayedItemRepositoryImpl
 import com.kakeibo.feature_main.data.repositories.SearchRepositoryImpl
@@ -99,7 +99,7 @@ object AppModule {
     @Singleton
     fun provideAppDatabase(
         app: Application,
-        providerKkbAppDao: Provider<KkbAppDao>,
+//        providerKkbAppDao: Provider<KkbAppDao>,
         providerCategoryDao: Provider<CategoryDao>,
         providerCategoryDspDao: Provider<CategoryDspDao>
     ): AppDatabase {
@@ -109,7 +109,7 @@ object AppModule {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         MainScope().launch {
-                            providerKkbAppDao.get().insert(PrepDB.initKkbAppTable())
+//                            providerKkbAppDao.get().insert(PrepDB.initKkbAppTable())
                             providerCategoryDao.get().insertCategories(PrepDB.prepCategoryStatuses())
                             providerCategoryDspDao.get().insertCategoryDsps(PrepDB.prepDspCategoryStatuses())
                         }
@@ -134,9 +134,9 @@ object AppModule {
     /*
     kkbAppDao, categoryDao, and categoryDspDao are used in the providing db function above
      */
-    @Singleton
-    @Provides
-    fun provideKkbAppDao(db: AppDatabase) = db.kkbAppDao
+//    @Singleton
+//    @Provides
+//    fun provideKkbAppDao(db: AppDatabase) = db.kkbAppDao
 
     @Singleton
     @Provides
@@ -149,11 +149,11 @@ object AppModule {
     /*
     Repositories
      */
-    @Singleton
-    @Provides
-    fun provideKkbAppRepository(db: AppDatabase): KkbAppRepository {
-        return KkbAppRepositoryImpl(db.kkbAppDao)
-    }
+//    @Singleton
+//    @Provides
+//    fun provideKkbAppRepository(db: AppDatabase): KkbAppRepository {
+//        return KkbAppRepositoryImpl(db.kkbAppDao)
+//    }
 
     @Provides
     @Singleton
@@ -201,14 +201,14 @@ object AppModule {
     /*
     Usecases
      */
-    @Provides
-    @Singleton
-    fun provideKkbAppUseCases(repository: KkbAppRepository): KkbAppUseCases {
-        return KkbAppUseCases(
-            getKkbAppUseCase = GetKkbAppUseCase(repository),
-            insertKkbAppUseCase = InsertKkbAppUseCase(repository)
-        )
-    }
+//    @Provides
+//    @Singleton
+//    fun provideKkbAppUseCases(repository: KkbAppRepository): KkbAppUseCases {
+//        return KkbAppUseCases(
+//            getKkbAppUseCase = GetKkbAppUseCase(repository),
+//            insertKkbAppUseCase = InsertKkbAppUseCase(repository)
+//        )
+//    }
 
     @Provides
     @Singleton

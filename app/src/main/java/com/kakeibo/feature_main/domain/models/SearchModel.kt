@@ -14,7 +14,8 @@ data class SearchModel(
     var categoryName: String? = null,
     var memo: String? = null,
     var fromUpdateDate: String? = null,
-    var toUpdateDate: String? = null
+    var toUpdateDate: String? = null,
+    var uuid: String = ""
 ) {
 
     fun toSearchEntity(): SearchEntity {
@@ -28,7 +29,8 @@ data class SearchModel(
             categoryName = categoryName,
             memo = memo,
             fromUpdateDate = fromUpdateDate,
-            toUpdateDate = toUpdateDate
+            toUpdateDate = toUpdateDate,
+            uuid = uuid
         )
     }
 
@@ -44,7 +46,7 @@ data class SearchModel(
                 ConstItemDB.COL_MEMO + "," +
                 ConstItemDB.COL_EVENT_DATE + "," +
                 ConstItemDB.COL_UPDATE_DATE + "," +
-                ConstItemDB.COL_UUID + "," +
+                ConstItemDB.TABLE_NAME + "." + ConstItemDB.COL_UUID + "," +
                 ConstCategoryDB.COL_NAME + "," +
                 ConstCategoryDB.COL_COLOR + "," +
                 ConstCategoryDB.COL_SIGN + "," +
@@ -52,7 +54,8 @@ data class SearchModel(
                 ConstCategoryDB.COL_IMAGE + "," +
                 ConstCategoryDB.COL_PARENT + "," +
                 ConstCategoryDB.COL_DESCRIPTION + "," +
-                ConstCategoryDB.COL_SAVED_DATE +
+                ConstCategoryDB.COL_SAVED_DATE + "," +
+                ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_UUID +
                 " FROM " + ConstItemDB.TABLE_NAME +
                 " INNER JOIN " + ConstCategoryDB.TABLE_NAME +
                 " ON " + ConstItemDB.COL_CATEGORY_CODE + " = " + ConstCategoryDB.COL_CODE +

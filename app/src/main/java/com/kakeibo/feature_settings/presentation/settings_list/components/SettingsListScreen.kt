@@ -148,11 +148,11 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+//                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 navController.navigate(Screen.CustomCategoryListScreen.route)
-                            } else {
-                                openConfirmAdsDialog.value = true
-                            }
+//                            } else {
+//                                openConfirmAdsDialog.value = true
+//                            }
                         }
                 ) {
                     Text(
@@ -164,11 +164,11 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+//                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 navController.navigate(Screen.CategoryRearrangeScreen.route)
-                            } else {
-                                openConfirmAdsDialog.value = true
-                            }
+//                            } else {
+//                                openConfirmAdsDialog.value = true
+//                            }
                         }
                 ) {
                     Text(
@@ -180,16 +180,16 @@ fun SettingsListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
+//                            if (settingsListViewModel.kkbAppModelState.value.kkbAppModel.intVal2 == ConstKkbAppDB.AD_SHOW) {
                                 context.startActivity(
                                     Intent(
                                         context,
                                         CategoryReorderActivity::class.java
                                     )
                                 )
-                            } else {
-                                openConfirmAdsDialog.value = true
-                            }
+//                            } else {
+//                                openConfirmAdsDialog.value = true
+//                            }
                         }
                 ) {
                     Text(

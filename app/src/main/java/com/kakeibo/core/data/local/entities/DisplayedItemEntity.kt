@@ -29,7 +29,7 @@ data class DisplayedItemEntity(
     val itemIsSynced: Boolean = false,
     @ColumnInfo(name = ConstCategoryDB.COL_IS_SYNCED)
     @Expose(deserialize = false, serialize = false) // this val will be ignored in Retrofit communication
-    val categoryIsSynced: Boolean = false
+    val categoryIsSynced: Boolean = false,
 ) {
 
     fun toDisplayedItemModel(): DisplayedItemModel {
@@ -51,7 +51,7 @@ data class DisplayedItemEntity(
             categoryDescription = categoryDescription,
             categorySavedDate = categorySavedDate,
             itemIsSynced = itemIsSynced,
-            categoryIsSynced = categoryIsSynced
+            categoryIsSynced = categoryIsSynced,
         )
     }
 

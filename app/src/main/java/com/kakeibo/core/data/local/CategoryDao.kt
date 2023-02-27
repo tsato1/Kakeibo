@@ -33,7 +33,8 @@ interface CategoryDao {
             ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_PARENT + "," +
             ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_DESCRIPTION + "," +
             ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_SAVED_DATE + "," +
-            ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_IS_SYNCED +
+            ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_IS_SYNCED + "," +
+            ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_UUID +
             " FROM " + ConstCategoryDB.TABLE_NAME +
             " INNER JOIN " + ConstCategoryDspDB.TABLE_NAME +
             " ON " + ConstCategoryDB.TABLE_NAME + "." + ConstCategoryDB.COL_CODE +

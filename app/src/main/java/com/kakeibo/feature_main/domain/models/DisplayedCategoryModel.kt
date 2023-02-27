@@ -13,5 +13,6 @@ class DisplayedCategoryModel(
     val parent: Int = CATEGORY_INVALID,
     val description: String = "",
     val savedDate: String = "",
-    var isSynced: Boolean = false
+    var isSynced: Boolean = false,
+    val uuid: String = ""
 )
