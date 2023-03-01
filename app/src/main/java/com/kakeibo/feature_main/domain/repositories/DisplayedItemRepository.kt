@@ -17,7 +17,7 @@ interface DisplayedItemRepository {
 
     suspend fun insertItems(itemEntityList: List<ItemEntity>, syncWithRemote: Int)
 
-    suspend fun deleteItemById(uuid: String, syncWithRemote: Int): Int
+    suspend fun deleteItem(id: Long, uuid: String, syncWithRemote: Int): Int
 
     suspend fun syncItems(syncWithRemote: Int)
 

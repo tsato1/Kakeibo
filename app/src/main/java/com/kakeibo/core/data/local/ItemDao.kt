@@ -73,7 +73,7 @@ interface ItemDao {
     suspend fun insertItem(itemEntity: ItemEntity): Long
 
     @Query("DELETE FROM " + ConstItemDB.TABLE_NAME + " WHERE " + ConstItemDB.COL_ID + " = :id")
-    suspend fun deleteItemById(id: String): Int // returns the number of rows affected by the query
+    suspend fun deleteItemById(id: Long): Int // returns the number of rows affected by the query
 
     @Query("DELETE FROM ${ConstItemDB.TABLE_NAME}")
     suspend fun deleteAllItems(): Int

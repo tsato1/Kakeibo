@@ -10,12 +10,13 @@ class DeleteItemUseCase(
 
     @Throws(ItemEntity.ItemNotFoundException::class)
     suspend operator fun invoke(displayedItemModel: DisplayedItemModel, syncWithRemote: Int): Int {
-
-        return displayedItemModel.uuid?.let {
-            displayedItemRepository.deleteItemById(it, syncWithRemote)
-        } ?: throw ItemEntity.ItemNotFoundException(
-            "The item was not found in database. Deletion not executed."
-        )
+        return displayedItemModel.id?.let {
+            displayedItemRepository.deleteItem(
+                it,
+                displayedItemModel.uuid,
+                syncWithRemote
+            )
+        } ?: -1
     }
 
 }

@@ -106,25 +106,32 @@ class DisplayedItemRepositoryImpl(
             }
         }
 
-    override suspend fun deleteItemById(uuid: String, syncWithRemote: Int): Int =
+    override suspend fun deleteItem(id: Long, uuid: String, syncWithRemote: Int): Int =
         withContext(Dispatchers.IO) {
-            val response = if (syncWithRemote == 1) {
-                try {
-                    api.deleteItem(DeleteItemRequest(uuid))
-                } catch (e: Exception) {
-                    null
-                }
-            } else {
-                null
-            }
+//            val response = if (syncWithRemote == 1) {
+//                try {
+//                    api.deleteItem(DeleteItemRequest(uuid))
+//                } catch (e: Exception) {
+//                    null
+//                }
+//            } else {
+//                null
+//            }
 
-            val affectedRows = dao.deleteItemById(uuid)
+            val affectedRows = dao.deleteItemById(id)
 
-            if (response == null || !response.isSuccessful) {
-                dao.insertLocallyDeletedItemId(LocallyDeletedItemIdEntity(uuid))
-            } else {
-                deleteLocallyDeletedItemId(uuid)
-            }
+//            if (response == null || !response.isSuccessful) {
+//                item.id?.let {
+//                    dao.insertLocallyDeletedItemId(
+//                        LocallyDeletedItemIdEntity(
+//                            deletedItemUUID = item.uuid,
+//                            deletedItemId = it
+//                        )
+//                    )
+//                }
+//            } else {
+//                deleteLocallyDeletedItemId(item.uuid)
+//            }
 
             affectedRows
         }
@@ -132,7 +139,11 @@ class DisplayedItemRepositoryImpl(
     private var currentItemsResponse: Response<List<ItemEntity>>? = null
     override suspend fun syncItems(syncWithRemote: Int): Unit = withContext(Dispatchers.IO) {
         dao.getAllLocallyDeletedItemIds().onEach { locallyDeletedItemIdEntity -> // sync with server
-            deleteItemById(locallyDeletedItemIdEntity.deletedItemUUID, syncWithRemote)
+            deleteItem(
+                id = locallyDeletedItemIdEntity.deletedItemId,
+                uuid = locallyDeletedItemIdEntity.deletedItemUUID,
+                syncWithRemote
+            )
         }
 
         dao.getAllUnsyncedItems().onEach { itemEntity ->

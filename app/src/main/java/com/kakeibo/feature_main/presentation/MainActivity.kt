@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityReenter(requestCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_INAPP_UPDATE) {
             if (resultCode != RESULT_OK) {
                 processInAppUpdate()

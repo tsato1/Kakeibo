@@ -671,4 +671,9 @@ object PrepDB7 {
         /* Kkbapp table */
         database.execSQL("DROP TABLE ${ConstKkbAppDB.TABLE_KKBAPP}")
     }
+
+    fun migrate_11_12(database: SupportSQLiteDatabase) {
+        database.execSQL("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME)
+        database.execSQL("ALTER TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " ADD COLUMN " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER NOT NULL;")
+    }
 }

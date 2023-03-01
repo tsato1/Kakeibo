@@ -13,13 +13,13 @@ android {
 
     def versionMajor = 6
     def versionMinor = 1
-    def versionDB = 11
+    def versionDB = 12
 
     defaultConfig {
         applicationId "com.kakeibo"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 82
+        versionCode 83
         versionName "${versionCode}.${versionMinor}.${versionDB}"
         /*** major.minor.db // minor:0=basic, 100=plus, 1000=plus plus ***/
 
