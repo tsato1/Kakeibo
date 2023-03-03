@@ -674,6 +674,6 @@ object PrepDB7 {
 
     fun migrate_11_12(database: SupportSQLiteDatabase) {
         database.execSQL("DELETE FROM " + ConstLocallyDeletedItemIdDB.TABLE_NAME)
-        database.execSQL("ALTER TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " ADD COLUMN " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER NOT NULL;")
+        database.execSQL("ALTER TABLE " + ConstLocallyDeletedItemIdDB.TABLE_NAME + " ADD COLUMN " + ConstLocallyDeletedItemIdDB.COL_DELETED_ITEM_ID + " INTEGER NOT NULL DEFAULT 0;")
     }
 }
